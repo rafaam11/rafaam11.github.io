@@ -1,24 +1,15 @@
 # rafaam11.github.io
 
-개발과 일상을 기록하는 개인 블로그.
+JinminKim의 개인 포트폴리오 사이트.
 
 **URL:** https://rafaam11.github.io
 
-## Stack
+## 로컬 프리뷰
 
-- [Hugo](https://gohugo.io/) + [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme
-- Deployed via GitHub Actions → GitHub Pages
-- Comments powered by [Utterances](https://utteranc.es/)
+별도 빌드 없이 `index.html`을 브라우저에서 바로 열면 됩니다.
 
-## Local Development
+## 수정 방법
 
-```bash
-# Hugo Extended 설치 필요 (Windows)
-winget install Hugo.Hugo.Extended
+`index.html` 내 `<!-- TODO -->` 주석을 찾아 실제 내용으로 채우세요.
 
-# submodule 초기화 (최초 clone 후)
-git submodule update --init --recursive
-
-# 로컬 서버 실행
-hugo server -D
-```
+Built with [startbootstrap-resume](https://github.com/StartBootstrap/startbootstrap-resume).
