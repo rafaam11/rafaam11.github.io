@@ -1,0 +1,152 @@
+:root {
+    --cs-primary: #bd5d38;
+    --cs-dark: #1a1a2e;
+    --cs-text: #343a40;
+    --cs-muted: #6c757d;
+    --cs-border: #dee2e6;
+}
+
+/* ── Layout ── */
+body {
+    font-family: "Muli", -apple-system, sans-serif;
+    color: var(--cs-text);
+}
+
+.cs-nav {
+    background: var(--cs-primary);
+    padding: 0.6rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.cs-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-family: "Saira Extra Condensed", sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+}
+
+.cs-nav a:hover { opacity: 0.85; }
+
+/* ── Hero ── */
+.cs-hero {
+    background: var(--cs-dark);
+    color: #fff;
+    padding: 3.5rem 1.5rem 3rem;
+}
+
+.cs-hero h1 {
+    font-family: "Saira Extra Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.cs-hero .cs-meta {
+    color: var(--cs-primary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cs-hero .badge {
+    font-size: 0.78rem;
+    font-weight: 400;
+    background: rgba(189, 93, 56, 0.8) !important;
+}
+
+/* ── Content sections ── */
+.cs-section {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--cs-border);
+}
+
+.cs-section:last-child { border-bottom: none; }
+
+.cs-section h2 {
+    font-family: "Saira Extra Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--cs-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.2rem;
+    padding-left: 0.8rem;
+    border-left: 4px solid var(--cs-primary);
+}
+
+.cs-section h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+}
+
+/* ── Meta table ── */
+.cs-meta-table {
+    background: #f8f9fa;
+    border-radius: 0.4rem;
+    padding: 1rem 1.2rem;
+}
+
+.cs-meta-table table { margin: 0; font-size: 0.9rem; }
+.cs-meta-table th { color: var(--cs-muted); font-weight: 600; width: 5rem; padding: 0.3rem 0.5rem 0.3rem 0; border: none; }
+.cs-meta-table td { padding: 0.3rem 0; border: none; }
+
+/* ── Achievement banner ── */
+.cs-achievement {
+    background: linear-gradient(135deg, #fff8f5 0%, #ffeee7 100%);
+    border-left: 4px solid var(--cs-primary);
+    border-radius: 0 0.4rem 0.4rem 0;
+    padding: 0.8rem 1rem;
+    margin-top: 1rem;
+    font-size: 0.92rem;
+}
+
+.cs-achievement i { color: var(--cs-primary); margin-right: 0.4rem; }
+
+/* ── Placeholder ── */
+.cs-placeholder {
+    background: #f8f9fa;
+    border: 2px dashed var(--cs-border);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    color: var(--cs-muted);
+    font-size: 0.9rem;
+}
+
+/* ── Tech stack badges ── */
+.cs-tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.cs-tech-grid .badge {
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: #e9ecef !important;
+    color: var(--cs-text) !important;
+    padding: 0.4em 0.75em;
+}
+
+/* ── Footer ── */
+.cs-footer {
+    background: var(--cs-dark);
+    color: #aaa;
+    padding: 1.2rem;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.cs-footer a { color: var(--cs-primary); text-decoration: none; }
+.cs-footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .cs-hero h1 { font-size: 1.7rem; }
+    .cs-section h2 { font-size: 1.3rem; }
+}
