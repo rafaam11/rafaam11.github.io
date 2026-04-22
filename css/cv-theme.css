@@ -100,3 +100,18 @@
   flex-shrink: 0;
   vertical-align: middle;
 }
+
+/* Inner achievement sub-labels (Publications / Awards / Patents / Certifications inside each entry) */
+.cv-entry-label {
+  display:        block;
+  font-size:      0.60rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.20em;
+  color:          #b0bec5;
+  margin:         1.1rem 0 0.4rem 0;
+}
+
+.cv-entry-list {
+  font-size: 0.875rem;
+}
