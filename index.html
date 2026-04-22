@@ -14,6 +14,7 @@
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/cv-theme.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -26,8 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#experience">Experience &amp; Education</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#projects">Projects</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#publications">Publications</a></li>
@@ -61,10 +61,13 @@
                 </div>
             </section>
             <hr class="m-0" />
-            <!-- Experience-->
+            <!-- Experience & Education (merged) -->
             <section class="resume-section" id="experience">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">Experience</h2>
+                    <h2 class="mb-5">Experience &amp; Education</h2>
+
+                    <!-- Work Experience -->
+                    <span class="cv-sub-label">Work Experience</span>
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                         <div class="flex-grow-1">
                             <h3 class="mb-0">Research Engineer · SW Development</h3>
@@ -78,29 +81,31 @@
                         </div>
                         <div class="flex-shrink-0"><span class="text-primary">2023.02 – 현재</span></div>
                     </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- Education-->
-            <section class="resume-section" id="education">
-                <div class="resume-section-content">
-                    <h2 class="mb-5">Education</h2>
+
+                    <!-- Education -->
+                    <span class="cv-sub-label">Education</span>
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">DGIST (대구경북과학기술원)</h3>
-                            <div class="subheading mb-3">M.S. · Robotics and Mechatronics Engineering</div>
-                            <div>Surgical Robotics &amp; Augmented Reality Lab. (지도교수: 홍재성 / Jaesung Hong)</div>
-                            <div class="mt-1">Research Fields: Augmented Reality (AR) · Computer Vision · Surgical Guide · Image Registration</div>
-                            <p class="mt-2 mb-0"><em>Thesis: Virtual Jawbone Reduction Planning based on Dental Occlusion for Mandibular Fracture Surgery</em></p>
+                        <div class="flex-grow-1 d-flex align-items-start gap-3">
+                            <div class="edu-badge dgist">DGIST</div>
+                            <div class="edu-entry-body">
+                                <h3 class="mb-0">DGIST (대구경북과학기술원)</h3>
+                                <div class="subheading mb-3">M.S. · Robotics and Mechatronics Engineering</div>
+                                <div><a href="https://sr.dgist.ac.kr/" target="_blank" rel="noopener">Surgical Robotics &amp; Augmented Reality Lab.</a> (지도교수: 홍재성 / Jaesung Hong)</div>
+                                <div class="mt-1">Research Fields: Augmented Reality (AR) · Computer Vision · Surgical Guide · Image Registration</div>
+                                <p class="mt-2 mb-0"><em>Thesis: Virtual Jawbone Reduction Planning based on Dental Occlusion for Mandibular Fracture Surgery</em></p>
+                            </div>
                         </div>
                         <div class="flex-shrink-0"><span class="text-primary">2021.03 – 2023.02</span></div>
                     </div>
                     <div class="d-flex flex-column flex-md-row justify-content-between">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">금오공과대학교 (Kumoh National Institute of Technology)</h3>
-                            <div class="subheading mb-3">B.S. · Mechanical System Engineering</div>
-                            <div>System &amp; Vision Lab. — 학부 연구생 (2019 – 2020)</div>
-                            <div class="mt-1">동아리: The Turtleship Myth / 거북선 신화 (2015 – 2021) · 교육기부 우수 동아리 선정 (2019, 교육부)</div>
+                        <div class="flex-grow-1 d-flex align-items-start gap-3">
+                            <div class="edu-badge kit">KIT</div>
+                            <div class="edu-entry-body">
+                                <h3 class="mb-0">금오공과대학교 (Kumoh National Institute of Technology)</h3>
+                                <div class="subheading mb-3">B.S. · Mechanical System Engineering</div>
+                                <div><a href="https://sites.google.com/view/kumohsvl/" target="_blank" rel="noopener">System &amp; Vision Lab.</a> — 학부 연구생 (2019 – 2020)</div>
+                                <div class="mt-1">동아리: <a href="https://www.instagram.com/turtleship.myth/" target="_blank" rel="noopener">The Turtleship Myth / 거북선 신화</a> (2015 – 2021) · 교육기부 우수 동아리 선정 (2019, 교육부)</div>
+                            </div>
                         </div>
                         <div class="flex-shrink-0"><span class="text-primary">2015.03 – 2021.02</span></div>
                     </div>
