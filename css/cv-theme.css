@@ -1,0 +1,92 @@
+/* ─────────────────────────────────────────────────────────
+   cv-theme.css  —  American academic CV style overrides
+   Applied on top of startbootstrap-resume styles.css
+───────────────────────────────────────────────────────── */
+
+/* 1. Primary colour: terracotta → professional navy */
+:root {
+  --bs-primary:     #1e3a5f;
+  --bs-primary-rgb: 30, 58, 95;
+  --bs-orange:      #1e3a5f;   /* resume template maps orange ↔ primary */
+}
+
+/* 2. Section headings: compact, small-caps, underlined rule */
+.resume-section .resume-section-content > h2 {
+  font-size:      0.72rem !important;
+  font-weight:    700     !important;
+  letter-spacing: 0.26em  !important;
+  text-transform: uppercase !important;
+  color:          #1a1a1a !important;
+  border-bottom:  1.5px solid #1e3a5f !important;
+  padding-bottom: 0.45rem !important;
+  margin-bottom:  2rem    !important;
+}
+
+/* 3. Subheading: remove ALL-CAPS / heavy letter-spacing, use muted slate */
+.subheading {
+  font-family:    "Muli", -apple-system, sans-serif !important;
+  font-size:      0.87rem !important;
+  font-weight:    700     !important;
+  text-transform: none    !important;
+  letter-spacing: 0.01em  !important;
+  color:          #546e7a !important;
+}
+
+/* 4. Social icons: use new primary */
+.social-icon {
+  background-color: #1e3a5f !important;
+}
+
+/* 5. About name: tighten tracking for more formal feel */
+#about h1 { letter-spacing: -0.01em; }
+
+/* ─── Merged Experience & Education section ─── */
+
+/* Subsection labels: "Work Experience" / "Education" */
+.cv-sub-label {
+  display:        block;
+  font-family:    "Muli", sans-serif;
+  font-size:      0.68rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color:          #90a4ae;
+  margin:         0 0 0.9rem 0;
+}
+.cv-sub-label + .cv-sub-label,
+.d-flex + .cv-sub-label {
+  margin-top: 1.8rem;
+}
+
+/* University badge (CSS-only logo placeholder) */
+.edu-badge {
+  width:         54px;
+  height:        54px;
+  border-radius: 5px;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  font-family:   "Saira Extra Condensed", sans-serif;
+  font-weight:   700;
+  font-size:     0.72rem;
+  color:         #fff;
+  text-align:    center;
+  line-height:   1.3;
+  flex-shrink:   0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  user-select:   none;
+}
+
+.edu-badge.dgist {
+  /* DGIST official blue */
+  background: linear-gradient(145deg, #003087 0%, #1565c0 100%);
+}
+
+.edu-badge.kit {
+  /* Kumoh NIT navy */
+  background: linear-gradient(145deg, #1b2d6b 0%, #2e4099 100%);
+}
+
+/* Keep logo badge top-aligned with text on all screen sizes */
+.edu-entry-body { min-width: 0; }
