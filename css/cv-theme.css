@@ -91,3 +91,12 @@
 
 /* Keep logo badge top-aligned with text on all screen sizes */
 .edu-entry-body { min-width: 0; }
+
+/* Inline lab / club logos */
+.lab-logo {
+  height: 22px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
