@@ -63,6 +63,7 @@
   width:         54px;
   height:        54px;
   border-radius: 5px;
+  object-fit:    contain;
   display:       flex;
   align-items:   center;
   justify-content: center;
