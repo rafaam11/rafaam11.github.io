@@ -1,35 +1,86 @@
 :root {
     --cs-primary: #bd5d38;
     --cs-dark: #1a1a2e;
+    --cs-navy: #1e3a5f;
     --cs-text: #343a40;
     --cs-muted: #6c757d;
     --cs-border: #dee2e6;
+    --cs-sidebar-w: 220px;
 }
 
-/* ── Layout ── */
+/* ── Base ── */
 body {
     font-family: "Muli", -apple-system, sans-serif;
     color: var(--cs-text);
 }
 
-.cs-nav {
-    background: var(--cs-primary);
-    padding: 0.6rem 1.5rem;
-    position: sticky;
+/* ── Sidebar ── */
+.cs-sidebar {
+    width: var(--cs-sidebar-w);
+    background: var(--cs-navy);
+    position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
 }
 
-.cs-nav a {
+.cs-sidebar-home {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
     color: #fff;
     text-decoration: none;
     font-family: "Saira Extra Condensed", sans-serif;
+    font-size: 1.05rem;
     font-weight: 500;
-    font-size: 1.1rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    transition: color 0.15s;
+}
+.cs-sidebar-home:hover { color: #90caf9; }
+
+.cs-sidebar-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: rgba(255,255,255,0.35);
+    padding: 1rem 1.2rem 0.4rem;
 }
 
-.cs-nav a:hover { opacity: 0.85; }
+.cs-sidebar-nav { flex: 1; }
+
+.cs-sidebar-item {
+    display: block;
+    color: rgba(255,255,255,0.62);
+    text-decoration: none;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    padding: 0.55rem 1.2rem;
+    transition: background 0.15s, color 0.15s;
+}
+.cs-sidebar-item:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    text-decoration: none;
+}
+.cs-sidebar-item.active {
+    background: rgba(255,255,255,0.13);
+    color: #fff;
+    font-weight: 700;
+    border-left: 3px solid #90caf9;
+    padding-left: calc(1.2rem - 3px);
+}
+
+/* ── Main content (offset for sidebar) ── */
+.cs-main {
+    margin-left: var(--cs-sidebar-w);
+}
 
 /* ── Hero ── */
 .cs-hero {
@@ -147,6 +198,14 @@ body {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+    .cs-sidebar {
+        width: 100%;
+        height: auto;
+        position: sticky;
+        flex-direction: column;
+    }
+    .cs-sidebar-nav { display: none; }
+    .cs-main { margin-left: 0; }
     .cs-hero h1 { font-size: 1.7rem; }
     .cs-section h2 { font-size: 1.3rem; }
 }
