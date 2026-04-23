@@ -304,46 +304,83 @@
             <section class="resume-section" id="skills">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Skills</h2>
-                    <div class="subheading mb-3">Research &amp; Implementation Focus</div>
-                    <ul class="fa-ul mb-4">
-                        <li><span class="fa-li"><i class="fas fa-cube"></i></span><strong>3D Pose Estimation</strong> — Point-cloud의 Homogeneous Transformation Matrix (4×4) 적용</li>
-                        <li><span class="fa-li"><i class="fas fa-vr-cardboard"></i></span><strong>VR/AR</strong> — 3차원 공간 좌표 기반 오브젝트 인터랙션</li>
-                        <li><span class="fa-li"><i class="fas fa-arrows-to-dot"></i></span><strong>Sensor Fusion</strong> — Unity · Isaac Sim · 3D Slicer 간 Cross-domain 데이터 통신</li>
-                        <li><span class="fa-li"><i class="fas fa-diagram-project"></i></span><strong>3D Point-cloud Registration</strong> — PCA · ICP · CLPSO 기반 수학적 최적화</li>
-                        <li><span class="fa-li"><i class="fas fa-industry"></i></span><strong>Smart Factory</strong> — Isaac Sim 기반 AGV · AMR · Robot Arm · Drone · Forklift 자동화</li>
-                    </ul>
-                    <div class="subheading mb-3">Programming Languages</div>
-                    <ul class="list-inline dev-icons">
-                        <li class="list-inline-item"><i class="fab fa-python" title="Python"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-js-square" title="JavaScript"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-git-alt" title="Git"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-linux" title="Linux"></i></li>
-                    </ul>
-                    <ul class="fa-ul mb-4">
-                        <li><span class="fa-li"><i class="fas fa-code"></i></span>C# · Python · C/C++</li>
-                    </ul>
-                    <div class="subheading mb-3">Main Frameworks / Tools</div>
-                    <ul class="fa-ul mb-4">
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Unity · Isaac Sim · ROS2 · MRTK · FastAPI</li>
-                    </ul>
-                    <div class="subheading mb-3">3D / Medical / XR</div>
-                    <ul class="fa-ul mb-4">
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>3D Slicer · HoloLens · Meta Quest · Galaxy XR · Open3D · OpenCV · Blender · MeshMixer</li>
-                    </ul>
-                    <div class="subheading mb-3">CAD / Hardware / Simulation</div>
-                    <ul class="fa-ul mb-4">
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>SolidWorks · OnShape · CATIA · AutoCAD · ANSYS (FLUENT · Workbench) · LabVIEW · Arduino · Dynamixel</li>
-                    </ul>
-                    <div class="subheading mb-3">Others &amp; AI Tools</div>
-                    <ul class="fa-ul mb-4">
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>MATLAB · CMake · Figma · Drawio</li>
-                        <li><span class="fa-li"><i class="fas fa-robot"></i></span>GitHub Copilot · GPT-4o</li>
-                    </ul>
-                    <div class="subheading mb-3">Spoken Languages</div>
-                    <ul class="fa-ul mb-0">
-                        <li><span class="fa-li"><i class="fas fa-language text-primary"></i></span><strong>Korean</strong> — Native</li>
-                        <li><span class="fa-li"><i class="fas fa-language text-primary"></i></span><strong>English</strong> — Intermediate</li>
-                        <li><span class="fa-li"><i class="fas fa-language text-primary"></i></span><strong>Japanese</strong> — JLPT N2 (2021.01, JAPAN EDUCATIONAL EXCHANGES AND SERVICES)</li>
+
+                    <!-- Research Focus 카드 -->
+                    <span class="cv-sub-label">Research &amp; Implementation Focus</span>
+                    <div class="focus-grid mb-5">
+                        <div class="focus-card">
+                            <i class="fas fa-cube focus-icon"></i>
+                            <div class="focus-title">3D Pose Estimation</div>
+                            <div class="focus-desc">Point-cloud의 Homogeneous Transformation Matrix (4×4) 적용</div>
+                        </div>
+                        <div class="focus-card">
+                            <i class="fas fa-vr-cardboard focus-icon"></i>
+                            <div class="focus-title">VR / AR</div>
+                            <div class="focus-desc">3차원 공간 좌표 기반 오브젝트 인터랙션</div>
+                        </div>
+                        <div class="focus-card">
+                            <i class="fas fa-arrows-to-dot focus-icon"></i>
+                            <div class="focus-title">Sensor Fusion</div>
+                            <div class="focus-desc">Unity · Isaac Sim · 3D Slicer 간 Cross-domain 데이터 통신</div>
+                        </div>
+                        <div class="focus-card">
+                            <i class="fas fa-diagram-project focus-icon"></i>
+                            <div class="focus-title">3D Point-cloud Registration</div>
+                            <div class="focus-desc">PCA · ICP · CLPSO 기반 수학적 최적화</div>
+                        </div>
+                        <div class="focus-card">
+                            <i class="fas fa-industry focus-icon"></i>
+                            <div class="focus-title">Smart Factory</div>
+                            <div class="focus-desc">Isaac Sim 기반 AGV · AMR · Robot Arm · Drone · Forklift 자동화</div>
+                        </div>
+                    </div>
+
+                    <!-- Toolbox: 티어별 칩 -->
+                    <span class="cv-sub-label">Toolbox</span>
+
+                    <div class="tier-label tier-core-label">Core · 매일/매주 실전</div>
+                    <div class="tool-chips mb-4">
+                        <span class="tool-chip core"><i class="fab fa-unity"></i> Unity</span>
+                        <span class="tool-chip core"><i class="fas fa-cube"></i> 3D Slicer</span>
+                        <span class="tool-chip core"><i class="fas fa-glasses"></i> HoloLens</span>
+                        <span class="tool-chip core"><i class="fas fa-vr-cardboard"></i> Meta Quest / Galaxy XR</span>
+                        <span class="tool-chip core"><i class="fas fa-layer-group"></i> Open3D · OpenCV</span>
+                        <span class="tool-chip core"><i class="fas fa-hand-pointer"></i> MRTK</span>
+                        <span class="tool-chip core"><i class="fab fa-git-alt"></i> Git</span>
+                        <span class="tool-chip core"><i class="fas fa-robot"></i> Claude Code</span>
+                        <span class="tool-chip core"><i class="fas fa-terminal"></i> Codex</span>
+                        <span class="tool-chip core"><i class="fab fa-github"></i> GitHub Copilot</span>
+                        <span class="tool-chip core"><i class="fas fa-arrow-pointer"></i> Cursor</span>
+                    </div>
+
+                    <div class="tier-label tier-proficient-label">Proficient · 프로젝트 구현 경험</div>
+                    <div class="tool-chips mb-4">
+                        <span class="tool-chip proficient"><i class="fab fa-python"></i> Python</span>
+                        <span class="tool-chip proficient"><i class="fas fa-code"></i> C#</span>
+                        <span class="tool-chip proficient"><i class="fas fa-code"></i> C/C++</span>
+                        <span class="tool-chip proficient"><i class="fas fa-industry"></i> Isaac Sim</span>
+                        <span class="tool-chip proficient"><i class="fas fa-robot"></i> ROS2</span>
+                        <span class="tool-chip proficient"><i class="fas fa-server"></i> FastAPI</span>
+                        <span class="tool-chip proficient"><i class="fas fa-cubes"></i> Blender · MeshMixer</span>
+                        <span class="tool-chip proficient"><i class="fas fa-drafting-compass"></i> SolidWorks · OnShape</span>
+                    </div>
+
+                    <div class="tier-label tier-familiar-label">Familiar · 학습 · 단발성 사용</div>
+                    <div class="tool-chips mb-5">
+                        <span class="tool-chip familiar"><i class="fab fa-js-square"></i> JavaScript</span>
+                        <span class="tool-chip familiar"><i class="fab fa-linux"></i> Linux</span>
+                        <span class="tool-chip familiar"><i class="fas fa-microchip"></i> Arduino · Dynamixel</span>
+                        <span class="tool-chip familiar"><i class="fas fa-square-root-variable"></i> MATLAB</span>
+                        <span class="tool-chip familiar"><i class="fas fa-hammer"></i> CMake</span>
+                        <span class="tool-chip familiar"><i class="fab fa-figma"></i> Figma · Drawio</span>
+                    </div>
+
+                    <!-- Spoken Languages -->
+                    <span class="cv-sub-label">Spoken Languages</span>
+                    <ul class="lang-list">
+                        <li><span class="lang-name">Korean</span><span class="lang-bar" data-level="5"></span><span class="lang-caption">Native</span></li>
+                        <li><span class="lang-name">English</span><span class="lang-bar" data-level="3"></span><span class="lang-caption">Intermediate</span></li>
+                        <li><span class="lang-name">Japanese</span><span class="lang-bar" data-level="3"></span><span class="lang-caption">JLPT N2 (2021.01)</span></li>
                     </ul>
                 </div>
             </section>

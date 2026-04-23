@@ -190,3 +190,91 @@
   color:#1e3a5f; background:#eef2f7; border-radius:3px;
 }
 .keyword-tag i { font-size:.8rem; opacity:.75; }
+
+/* ─── Skills section ─── */
+
+/* Research Focus cards */
+.focus-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:.85rem; max-width:780px;
+}
+.focus-card {
+  padding:1.1rem 1rem 1rem;
+  background:#fff; border:1px solid #e3e8ec;
+  border-left:3px solid #1e3a5f; border-radius:4px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.focus-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(30,58,95,.08);
+}
+.focus-card .focus-icon {
+  display:block;
+  color:#1e3a5f; font-size:1.1rem; margin-bottom:.55rem;
+}
+.focus-card .focus-title {
+  font-weight:700; font-size:.95rem; color:#1a1a1a;
+  margin-bottom:.25rem;
+}
+.focus-card .focus-desc {
+  font-size:.8rem; line-height:1.5; color:#546e7a;
+}
+
+/* Tier labels */
+.tier-label {
+  display:inline-block;
+  padding:.25rem .7rem; margin:0 0 .85rem 0;
+  font-size:.65rem; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  border-radius:3px;
+}
+.tier-core-label       { background:#1e3a5f; color:#fff; }
+.tier-proficient-label { background:#e3ebf3; color:#1e3a5f; margin-top:.5rem; }
+.tier-familiar-label   { background:#f4f6f8; color:#90a4ae; border:1px solid #e3e8ec; margin-top:.5rem; }
+
+/* Tool chips (3 proficiency variants) */
+.tool-chips { display:flex; flex-wrap:wrap; gap:.45rem; }
+.tool-chip {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.4rem .85rem;
+  font-size:.78rem; font-weight:600;
+  border-radius:3px;
+  transition:transform .15s ease;
+}
+.tool-chip:hover { transform:translateY(-1px); }
+.tool-chip i { font-size:.82rem; }
+
+.tool-chip.core       { background:#1e3a5f; color:#fff; }
+.tool-chip.core i     { color:#ffd54f; }
+
+.tool-chip.proficient   { background:#eef2f7; color:#1e3a5f; }
+.tool-chip.proficient i { color:#1e3a5f; opacity:.8; }
+
+.tool-chip.familiar     { background:transparent; color:#78909c; border:1px solid #cfd8dc; }
+.tool-chip.familiar i   { color:#90a4ae; }
+
+/* Spoken Languages level bars */
+.lang-list { list-style:none; padding:0; margin:0; }
+.lang-list li {
+  display:flex; align-items:center; gap:1rem;
+  padding:.35rem 0; font-size:.88rem;
+}
+.lang-list .lang-name {
+  flex:0 0 100px; font-weight:700; color:#1a1a1a;
+}
+.lang-list .lang-bar {
+  flex:0 0 140px; height:8px;
+  background:#eceff1; border-radius:999px;
+  position:relative; overflow:hidden;
+}
+.lang-list .lang-bar::before {
+  content:""; position:absolute; left:0; top:0; bottom:0;
+  background:#1e3a5f; border-radius:999px;
+  width:calc(var(--level,0) * 20%);
+}
+.lang-list .lang-bar[data-level="3"] { --level:3; }
+.lang-list .lang-bar[data-level="5"] { --level:5; }
+.lang-list .lang-caption {
+  font-size:.78rem; color:#78909c; font-weight:500;
+}
