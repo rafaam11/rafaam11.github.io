@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"C:\\Users\\uiop3\\Desktop\\3_Hobby_ws\\rafaam11.github.io\" && git status --porcelain | grep -q . && git add -A && git commit -m \"Auto-commit: $(date +'%Y-%m-%d %H:%M')\" && git push origin main || true",
+            "shell": "bash",
+            "timeout": 60,
+            "statusMessage": "변경사항 커밋·푸시 중..."
+          }
+        ]
+      }
+    ]
+  }
+}
