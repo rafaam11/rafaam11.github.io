@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="실시간 영상유도 수술을 위한 혼합현실 Surgical Twin Applicator — Digitrack · 한국전기연구원(KERI)" />
+    <meta name="description" content="마커 기반 Vuforia AR 기술을 활용한 안드로이드 3차원 공간 거리측정 앱 — 개인 프로젝트" />
     <meta name="author" content="JinminKim" />
-    <title>혼합현실 Surgical Twin Applicator · JinminKim</title>
+    <title>마커기반 3차원 AR 거리측정기 · JinminKim</title>
     <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
@@ -23,10 +23,10 @@
             <a href="../radioactive-digital-twin/" class="cs-sidebar-item">방사능 디지털트윈</a>
             <a href="../c-arm-navigation/" class="cs-sidebar-item">C-Arm CT 내비게이션</a>
             <a href="../orthognathic-ar/" class="cs-sidebar-item">악교정 수술 AR</a>
-            <a href="../surgical-twin/" class="cs-sidebar-item active">Surgical Twin</a>
+            <a href="../surgical-twin/" class="cs-sidebar-item">Surgical Twin</a>
             <a href="../oral-facial-ar/" class="cs-sidebar-item">구강악안면 AR</a>
             <a href="../mandibular-fracture/" class="cs-sidebar-item">턱뼈 골절복원</a>
-            <a href="../ar-distance-meter/" class="cs-sidebar-item">AR 거리측정기</a>
+            <a href="../ar-distance-meter/" class="cs-sidebar-item active">AR 거리측정기</a>
             <a href="../quadruped-robot/" class="cs-sidebar-item">4족 보행 로봇</a>
         </nav>
     </aside>
@@ -34,14 +34,14 @@
 
     <header class="cs-hero">
         <div class="container">
-            <h1>실시간 영상유도 수술용 혼합현실 Surgical Twin Applicator</h1>
-            <p class="cs-meta">Digitrack Inc. · 한국전기연구원(KERI) &nbsp;|&nbsp; 2023.07 – 2023.11</p>
+            <h1>마커기반 3차원 AR 거리측정기</h1>
+            <p class="cs-meta">개인 프로젝트 &nbsp;|&nbsp; 2021.03 – 2021.09</p>
             <div class="d-flex flex-wrap gap-2">
                 <span class="badge">Unity</span>
-                <span class="badge">HoloLens 2</span>
-                <span class="badge">MRTK</span>
-                <span class="badge">Optical Tracker</span>
-                <span class="badge">Registration</span>
+                <span class="badge">Android</span>
+                <span class="badge">Vuforia</span>
+                <span class="badge">C#</span>
+                <span class="badge">Linear Algebra</span>
             </div>
         </div>
     </header>
@@ -52,19 +52,18 @@
             <h2>Overview</h2>
             <div class="row g-4">
                 <div class="col-md-7">
-                    <p>한국전기연구원(KERI) 의뢰 개발용역. 실시간 영상유도 수술 환경에서 HoloLens 2를 통해 3D 가상 수술 기구 모델(surgical twin)을 수술 공간에 정확히 오버레이하는 혼합현실 애플리케이션을 개발했다. 광학 추적 시스템이 실측한 기구 위치를 실시간으로 HoloLens 좌표계에 등록하여, 의사가 실제 환자 신체와 가상 계획을 동시에 볼 수 있게 한다.</p>
+                    <p>마커 기반 Vuforia AR 기술을 활용해 안드로이드 환경에서 3차원 공간상 두 점 간의 거리를 증강현실로 측정하는 앱을 개발했다. 각 마커의 월드 좌표를 Vuforia로 추출하고 선형대수(유클리드 거리)를 이용해 실시간으로 거리를 계산·표시한다.</p>
                     <div class="cs-achievement">
-                        <i class="fas fa-bolt"></i> 5개월 내 PoC 완성 (기여 95%)
+                        <i class="fas fa-bolt"></i> 단독 개발 (기여 100%)
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="cs-meta-table">
                         <table class="table table-borderless">
-                            <tr><th>소속</th><td>Digitrack Inc.</td></tr>
-                            <tr><th>발주</th><td>한국전기연구원(KERI)</td></tr>
-                            <tr><th>기간</th><td>2023.07 – 2023.11 (5개월)</td></tr>
-                            <tr><th>기여</th><td>95%</td></tr>
-                            <tr><th>역할</th><td>Unity HoloLens 개발, 광학 추적 등록, 실시간 렌더링</td></tr>
+                            <tr><th>유형</th><td>개인 프로젝트</td></tr>
+                            <tr><th>기간</th><td>2021.03 – 2021.09 (7개월)</td></tr>
+                            <tr><th>기여</th><td>100%</td></tr>
+                            <tr><th>역할</th><td>전체 설계 및 구현</td></tr>
                         </table>
                     </div>
                 </div>
@@ -75,7 +74,7 @@
             <h2>Problem</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 영상유도 수술에서 실시간 3D 가이던스의 필요성, 2D 영상 기반 접근법의 한계
+                작성 예정 — 물리적 측정 도구 없이 3D 공간에서 정확한 거리를 측정하는 문제
             </div>
         </section>
 
@@ -83,7 +82,7 @@
             <h2>Approach</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — Optical Tracker → HoloLens 좌표계 등록(Registration) 파이프라인, 실시간 렌더링 구조
+                작성 예정 — Vuforia 마커 인식, 월드 좌표 변환, 유클리드 거리 계산, Unity UI 표시
             </div>
         </section>
 
@@ -91,7 +90,7 @@
             <h2>Result</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 등록 정확도(RMSE), 레이턴시, KERI 검수 결과
+                작성 예정 — 측정 오차, 사용 환경 및 제한사항
             </div>
         </section>
 
@@ -99,8 +98,7 @@
             <h2>Visuals</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-image fa-2x mb-3 d-block"></i>
-                이미지 추가 예정 — Tracker–HoloLens 등록 파이프라인 다이어그램, HoloLens MR 뷰 스크린샷<br>
-                <small class="text-muted mt-1 d-block">※ 공개 가능 자산 확인 후 게시 예정</small>
+                이미지 추가 예정 — 앱 실행 화면, 마커 인식 및 거리 표시 스크린샷
             </div>
         </section>
 
@@ -108,25 +106,18 @@
             <h2>Tech Stack</h2>
             <div class="row g-3">
                 <div class="col-sm-6 col-md-4">
-                    <h3>MR / XR</h3>
+                    <h3>AR / Mobile</h3>
                     <div class="cs-tech-grid">
                         <span class="badge">Unity</span>
-                        <span class="badge">HoloLens 2</span>
-                        <span class="badge">MRTK</span>
+                        <span class="badge">Vuforia</span>
+                        <span class="badge">Android</span>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <h3>Tracking</h3>
+                    <h3>Development</h3>
                     <div class="cs-tech-grid">
-                        <span class="badge">Optical Tracker</span>
-                        <span class="badge">Registration (ICP)</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>Communication</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">TCP/IP</span>
                         <span class="badge">C#</span>
+                        <span class="badge">Linear Algebra</span>
                     </div>
                 </div>
             </div>
@@ -138,16 +129,14 @@
                 <div class="col-md-6">
                     <h3>Team</h3>
                     <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — Unity HoloLens 개발 및 추적 등록 (기여 95%)</li>
-                        <li>소속사: Digitrack Inc.</li>
-                        <li>발주: 한국전기연구원(KERI)</li>
+                        <li><strong>JinminKim</strong> — 단독 개발 (기여 100%)</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <h3>Timeline</h3>
                     <ul class="list-unstyled">
-                        <li>2023.07 — 과제 시작</li>
-                        <li>2023.11 — 납품 완료</li>
+                        <li>2021.03 — 개발 시작</li>
+                        <li>2021.09 — 완성</li>
                     </ul>
                 </div>
             </div>
