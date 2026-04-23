@@ -118,43 +118,38 @@
 
 /* ─── About section enhancements ─── */
 
-.about-chips { display:flex; flex-wrap:wrap; gap:.55rem; margin-bottom:1.6rem; }
+.about-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:2rem; }
 .about-chip {
   display:inline-flex; align-items:center; gap:.45rem;
-  padding:.35rem .75rem;
-  font-size:.8rem; color:#546e7a;
+  padding:.32rem .75rem;
+  font-size:.78rem; color:#546e7a;
   background:#f4f6f8; border:1px solid #e3e8ec; border-radius:999px;
 }
-.about-chip i { color:#1e3a5f; font-size:.75rem; }
+.about-chip i { color:#1e3a5f; font-size:.72rem; }
+
+#about .lead { line-height:1.75; color:#37474f; }
 
 .lead-en {
-  font-size:.92rem; font-style:italic; color:#78909c;
-  margin-bottom:2.5rem;
+  font-size:.9rem; font-style:italic; color:#90a4ae;
+  margin-bottom:2.75rem;
 }
 
 .highlight-grid {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr));
-  gap:.75rem; max-width:640px; margin-bottom:2.5rem;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+  gap:.85rem; max-width:640px; margin-bottom:2.75rem;
 }
 .highlight-badge {
   display:flex; flex-direction:column; align-items:center;
-  padding:.85rem .5rem;
+  padding:1rem .5rem;
   background:#fff; border:1px solid #e3e8ec; border-top:3px solid #1e3a5f;
   border-radius:4px;
 }
 .highlight-badge .num {
   font-family:"Saira Extra Condensed",sans-serif;
-  font-size:1.75rem; font-weight:700; color:#1e3a5f; line-height:1;
+  font-size:1.85rem; font-weight:700; color:#1e3a5f; line-height:1;
 }
 .highlight-badge .lbl {
-  margin-top:.25rem;
-  font-size:.68rem; font-weight:700; letter-spacing:.15em;
+  margin-top:.35rem;
+  font-size:.66rem; font-weight:700; letter-spacing:.18em;
   text-transform:uppercase; color:#90a4ae;
-}
-
-.keyword-tags { display:flex; flex-wrap:wrap; gap:.45rem; margin-bottom:2.5rem; }
-.keyword-tag {
-  display:inline-block; padding:.3rem .7rem;
-  font-size:.78rem; font-weight:600;
-  color:#1e3a5f; background:#eef2f7; border-radius:3px;
 }
