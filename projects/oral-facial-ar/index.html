@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="실시간 영상유도 수술을 위한 혼합현실 Surgical Twin Applicator — Digitrack · 한국전기연구원(KERI)" />
+    <meta name="description" content="구강악안면 수술을 위한 AI 기반 AR 수술 시스템 개발 — DGIST Surgical Robotics & AR Lab · 산업통상자원부 · 메가젠임플란트 · 한림대 성심병원" />
     <meta name="author" content="JinminKim" />
-    <title>혼합현실 Surgical Twin Applicator · JinminKim</title>
+    <title>구강악안면 수술 AI 기반 AR 수술 시스템 · JinminKim</title>
     <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
@@ -23,8 +23,8 @@
             <a href="../radioactive-digital-twin/" class="cs-sidebar-item">방사능 디지털트윈</a>
             <a href="../c-arm-navigation/" class="cs-sidebar-item">C-Arm CT 내비게이션</a>
             <a href="../orthognathic-ar/" class="cs-sidebar-item">악교정 수술 AR</a>
-            <a href="../surgical-twin/" class="cs-sidebar-item active">Surgical Twin</a>
-            <a href="../oral-facial-ar/" class="cs-sidebar-item">구강악안면 AR</a>
+            <a href="../surgical-twin/" class="cs-sidebar-item">Surgical Twin</a>
+            <a href="../oral-facial-ar/" class="cs-sidebar-item active">구강악안면 AR</a>
             <a href="../mandibular-fracture/" class="cs-sidebar-item">턱뼈 골절복원</a>
             <a href="../ar-distance-meter/" class="cs-sidebar-item">AR 거리측정기</a>
             <a href="../quadruped-robot/" class="cs-sidebar-item">4족 보행 로봇</a>
@@ -34,14 +34,14 @@
 
     <header class="cs-hero">
         <div class="container">
-            <h1>실시간 영상유도 수술용 혼합현실 Surgical Twin Applicator</h1>
-            <p class="cs-meta">Digitrack Inc. · 한국전기연구원(KERI) &nbsp;|&nbsp; 2023.07 – 2023.11</p>
+            <h1>구강악안면 수술을 위한 AI 기반 AR 수술 시스템 개발</h1>
+            <p class="cs-meta">DGIST Surgical Robotics &amp; AR Lab · 산업통상자원부 / 메가젠임플란트 &nbsp;|&nbsp; 2021.06 – 2023.05</p>
             <div class="d-flex flex-wrap gap-2">
                 <span class="badge">Unity</span>
                 <span class="badge">HoloLens 2</span>
                 <span class="badge">MRTK</span>
-                <span class="badge">Optical Tracker</span>
-                <span class="badge">Registration</span>
+                <span class="badge">3D Slicer</span>
+                <span class="badge">Python</span>
             </div>
         </div>
     </header>
@@ -52,19 +52,17 @@
             <h2>Overview</h2>
             <div class="row g-4">
                 <div class="col-md-7">
-                    <p>한국전기연구원(KERI) 의뢰 개발용역. 실시간 영상유도 수술 환경에서 HoloLens 2를 통해 3D 가상 수술 기구 모델(surgical twin)을 수술 공간에 정확히 오버레이하는 혼합현실 애플리케이션을 개발했다. 광학 추적 시스템이 실측한 기구 위치를 실시간으로 HoloLens 좌표계에 등록하여, 의사가 실제 환자 신체와 가상 계획을 동시에 볼 수 있게 한다.</p>
-                    <div class="cs-achievement">
-                        <i class="fas fa-bolt"></i> 5개월 내 PoC 완성 (기여 95%)
-                    </div>
+                    <p>구강악안면(구강·얼굴·턱) 수술 분야에서 인공지능 기반의 수술 계획 수립과 증강현실 수술 지원 시스템을 개발한다. AI가 CT 데이터에서 수술 계획을 자동 제안하고, HoloLens AR 내비게이션이 수술실에서 실시간 가이던스를 제공한다. 메가젠임플란트 주관, 한림대학교 성심병원 공동 참여 산업통상자원부 과제.</p>
                 </div>
                 <div class="col-md-5">
                     <div class="cs-meta-table">
                         <table class="table table-borderless">
-                            <tr><th>소속</th><td>Digitrack Inc.</td></tr>
-                            <tr><th>발주</th><td>한국전기연구원(KERI)</td></tr>
-                            <tr><th>기간</th><td>2023.07 – 2023.11 (5개월)</td></tr>
-                            <tr><th>기여</th><td>95%</td></tr>
-                            <tr><th>역할</th><td>Unity HoloLens 개발, 광학 추적 등록, 실시간 렌더링</td></tr>
+                            <tr><th>소속</th><td>DGIST Surgical Robotics &amp; AR Lab</td></tr>
+                            <tr><th>발주</th><td>산업통상자원부</td></tr>
+                            <tr><th>주관</th><td>메가젠임플란트</td></tr>
+                            <tr><th>협력</th><td>한림대학교 성심병원</td></tr>
+                            <tr><th>기간</th><td>2021.06 – 2023.05 (24개월)</td></tr>
+                            <tr><th>역할</th><td>AR 수술 내비게이션 Unity 개발</td></tr>
                         </table>
                     </div>
                 </div>
@@ -75,7 +73,7 @@
             <h2>Problem</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 영상유도 수술에서 실시간 3D 가이던스의 필요성, 2D 영상 기반 접근법의 한계
+                작성 예정 — 구강악안면 수술의 정밀도 요구사항, 기존 수술 계획 도구의 한계
             </div>
         </section>
 
@@ -83,7 +81,7 @@
             <h2>Approach</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — Optical Tracker → HoloLens 좌표계 등록(Registration) 파이프라인, 실시간 렌더링 구조
+                작성 예정 — AI 수술 계획 → 광학 추적 등록 → HoloLens AR 유도 전체 워크플로우
             </div>
         </section>
 
@@ -91,7 +89,7 @@
             <h2>Result</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 등록 정확도(RMSE), 레이턴시, KERI 검수 결과
+                작성 예정 — 등록 정확도, 임상 피드백, 검증 결과
             </div>
         </section>
 
@@ -99,8 +97,8 @@
             <h2>Visuals</h2>
             <div class="cs-placeholder">
                 <i class="fas fa-image fa-2x mb-3 d-block"></i>
-                이미지 추가 예정 — Tracker–HoloLens 등록 파이프라인 다이어그램, HoloLens MR 뷰 스크린샷<br>
-                <small class="text-muted mt-1 d-block">※ 공개 가능 자산 확인 후 게시 예정</small>
+                이미지 추가 예정 — 워크플로우 다이어그램, HoloLens 뷰 스크린샷<br>
+                <small class="text-muted mt-1 d-block">※ 환자 CT 데이터 미포함 (합성 팬텀만 사용)</small>
             </div>
         </section>
 
@@ -108,7 +106,7 @@
             <h2>Tech Stack</h2>
             <div class="row g-3">
                 <div class="col-sm-6 col-md-4">
-                    <h3>MR / XR</h3>
+                    <h3>AR / XR</h3>
                     <div class="cs-tech-grid">
                         <span class="badge">Unity</span>
                         <span class="badge">HoloLens 2</span>
@@ -116,17 +114,11 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <h3>Tracking</h3>
+                    <h3>Surgical Planning</h3>
                     <div class="cs-tech-grid">
-                        <span class="badge">Optical Tracker</span>
-                        <span class="badge">Registration (ICP)</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>Communication</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">TCP/IP</span>
-                        <span class="badge">C#</span>
+                        <span class="badge">3D Slicer</span>
+                        <span class="badge">Python</span>
+                        <span class="badge">DICOM</span>
                     </div>
                 </div>
             </div>
@@ -138,16 +130,16 @@
                 <div class="col-md-6">
                     <h3>Team</h3>
                     <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — Unity HoloLens 개발 및 추적 등록 (기여 95%)</li>
-                        <li>소속사: Digitrack Inc.</li>
-                        <li>발주: 한국전기연구원(KERI)</li>
+                        <li><strong>JinminKim</strong> — AR 수술 내비게이션 Unity 개발</li>
+                        <li>소속: DGIST Surgical Robotics &amp; AR Lab</li>
+                        <li>주관: 메가젠임플란트 / 협력: 한림대학교 성심병원</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <h3>Timeline</h3>
                     <ul class="list-unstyled">
-                        <li>2023.07 — 과제 시작</li>
-                        <li>2023.11 — 납품 완료</li>
+                        <li>2021.06 — 과제 시작</li>
+                        <li>2023.05 — 과제 종료</li>
                     </ul>
                 </div>
             </div>
