@@ -151,11 +151,11 @@
 /* Career Highlights grid — now with icons */
 .highlight-grid {
   display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
-  gap:.85rem; max-width:680px; margin-bottom:2.75rem;
+  gap:.85rem; max-width:680px; margin-bottom:3.5rem;
 }
 .highlight-badge {
   display:flex; flex-direction:column; align-items:center;
-  padding:1rem .5rem .9rem;
+  padding:1.1rem .5rem 1rem;
   background:#fff; border:1px solid #e3e8ec; border-top:3px solid #1e3a5f;
   border-radius:4px;
   transition:transform .15s ease, box-shadow .15s ease;
@@ -166,17 +166,20 @@
 }
 .highlight-badge .badge-icon {
   font-size:1rem; color:#1e3a5f; opacity:.55;
-  margin-bottom:.4rem;
+  margin-bottom:.55rem;
 }
 .highlight-badge .num {
   font-family:"Saira Extra Condensed",sans-serif;
   font-size:1.95rem; font-weight:700; color:#1e3a5f; line-height:1;
 }
 .highlight-badge .lbl {
-  margin-top:.35rem;
+  margin-top:.65rem;
   font-size:.66rem; font-weight:700; letter-spacing:.18em;
   text-transform:uppercase; color:#90a4ae;
 }
+
+/* Extra breathing room before the Core Keywords label */
+.highlight-grid + .cv-sub-label { margin-top:.5rem; }
 
 /* Core Keyword tags — icon + label */
 .keyword-tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:2.5rem; }
