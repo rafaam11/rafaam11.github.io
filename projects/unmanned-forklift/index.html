@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="무인지게차(AGV) 자율운반 디지털트윈 시스템 — 인식·실시간 제어·디지털트윈을 아우르는 산업 자율화 · Digitrack" />
+    <meta name="author" content="JinminKim" />
+    <title>무인지게차(AGV) 자율운반 디지털트윈 시스템 · JinminKim</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../css/case-study.css" rel="stylesheet" />
+</head>
+<body>
+    <aside class="cs-sidebar">
+        <a href="../../#projects" class="cs-sidebar-home"><i class="fas fa-chevron-left"></i> Home</a>
+        <nav class="cs-sidebar-nav">
+            <div class="cs-sidebar-label">Projects</div>
+            <a href="../unmanned-forklift/" class="cs-sidebar-item active">무인지게차 디지털트윈</a>
+            <a href="../rtms-navigation/" class="cs-sidebar-item">rTMS 내비게이션</a>
+            <a href="../life-careverse/" class="cs-sidebar-item">Life Careverse</a>
+            <a href="../radioactive-digital-twin/" class="cs-sidebar-item">방사능 디지털트윈</a>
+            <a href="../c-arm-navigation/" class="cs-sidebar-item">C-Arm CT 내비게이션</a>
+            <a href="../orthognathic-ar/" class="cs-sidebar-item">악교정 수술 AR</a>
+            <a href="../surgical-twin/" class="cs-sidebar-item">Surgical Twin</a>
+            <a href="../oral-facial-ar/" class="cs-sidebar-item">구강악안면 AR</a>
+            <a href="../mandibular-fracture/" class="cs-sidebar-item">턱뼈 골절복원</a>
+            <a href="../ar-distance-meter/" class="cs-sidebar-item">AR 거리측정기</a>
+            <a href="../quadruped-robot/" class="cs-sidebar-item">4족 보행 로봇</a>
+        </nav>
+    </aside>
+    <div class="cs-main">
+
+    <header class="cs-hero">
+        <div class="container">
+            <h1>무인지게차(AGV) 자율운반 디지털트윈 시스템</h1>
+            <p class="cs-meta">Digitrack Inc. · 산업 자동화(무인지게차 / AGV) &nbsp;|&nbsp; 2024 – 현재 <span class="badge bg-success ms-2" style="font-size:0.7rem;">진행 중</span></p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge">C++23</span>
+                <span class="badge">Zenoh Pub/Sub</span>
+                <span class="badge">BehaviorTree</span>
+                <span class="badge">ToF + RGB Fusion</span>
+                <span class="badge">Isaac Sim Digital Twin</span>
+                <span class="badge">DL 6-DOF Pose</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="cs-section">
+            <h2>Overview</h2>
+            <div class="row g-4">
+                <div class="col-md-7">
+                    <p>산업 현장의 지게차를 자율 운반 차량(AGV)으로 운용하기 위한 <strong>인식–실시간 제어–디지털트윈</strong> 통합 시스템이다. 카메라·센서로 적재 대상(파렛)을 인식해 3차원 위치·자세를 추정하고, 실시간 제어 소프트웨어가 자율 주행·정렬·적재를 수행하며, 동일한 통신 구조의 디지털트윈으로 시뮬레이션 검증과 현장 적용을 잇는다.</p>
+                    <p>비전(인식), 실시간 제어, 시뮬레이션의 세 축을 하나의 메시지 통신 구조로 묶어, <strong>시뮬레이터에서 검증한 동작을 실제 장비에 그대로 적용(sim-to-real)</strong>하는 것을 목표로 설계했다. 개발에 그치지 않고 고객 현장에 설치·시운전·안정화까지 직접 수행했다.</p>
+                </div>
+                <div class="col-md-5">
+                    <div class="cs-meta-table">
+                        <table class="table table-borderless">
+                            <tr><th>소속</th><td>Digitrack Inc.</td></tr>
+                            <tr><th>분야</th><td>산업 자동화 · 무인지게차(AGV)</td></tr>
+                            <tr><th>기간</th><td>2024 – 현재</td></tr>
+                            <tr><th>역할</th><td>인식 파이프라인 · 실시간 제어 SW · 디지털트윈 · 현장 적용</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cs-section">
+            <h2>Problem</h2>
+            <p>산업용 무인지게차는 (1) 다양한 위치·각도로 놓인 적재 대상을 빠르고 정확하게 인식해야 하고, (2) 안전을 위해 결정적(deterministic)인 실시간 제어가 보장돼야 하며, (3) 실제 장비에서의 시험은 비용·위험이 크다. 인식·제어·검증이 분리된 채 개발되면 통합 단계에서 비용이 급증한다. 세 영역을 공통 인터페이스로 묶고, 시뮬레이션에서 미리 검증해 실기 적용 위험을 낮추는 구조가 필요했다.</p>
+        </section>
+
+        <section class="cs-section">
+            <h2>Approach</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h3>① 인식 (Perception)</h3>
+                    <p>ToF 카메라와 RGB(Basler) 카메라를 융합해 3D 점군을 생성하고, 딥러닝 객체탐지로 적재 대상의 6-DOF 포즈(x·y·z·yaw·roll)를 추정한다. Foundation Model(SAM3) 기반 분할을 파이프라인에 통합해 데이터 구축 비용을 줄였다.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>② 실시간 제어 (Control)</h3>
+                    <p>C++23으로 30ms 주기의 결정적 제어 루프를 구현하고, Zenoh 기반 브로커리스 Pub/Sub(ROS2 스타일) 통신과 계층형 아키텍처(Service → Communication → Control → Hardware), BehaviorTree 임무 계획, 장애 시 즉시 안전 정지(Fail-Safe)를 적용했다.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>③ 디지털트윈 (Digital Twin)</h3>
+                    <p>Isaac Sim 기반 디지털트윈을 실제 제어망과 <strong>동일한 메시지 통신</strong>으로 연동해, 시뮬레이터에서 인식·제어 동작을 검증한 뒤 실기에 적용하는 sim-to-real 루프를 구성했다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cs-section">
+            <h2>Result</h2>
+            <ul>
+                <li>초기 정렬 인식 단계 약 <strong>500–700ms</strong> 처리 달성 (초기 정렬 + 정밀 정렬 2단계 구조, 정밀 정렬은 경량 모델로 실시간 처리)</li>
+                <li>Foundation Model·커스텀 학습 모델 통합으로 직접 어노테이션 대비 <strong>1개월 이상의 개발 기간·비용 절감</strong></li>
+                <li>인식–제어–디지털트윈을 단일 통신 구조로 통합, 시뮬레이터–실기 검증 루프 확보</li>
+                <li>고객 현장 설치·캘리브레이션·시운전·안정화 및 양산 적용</li>
+            </ul>
+        </section>
+
+        <section class="cs-section">
+            <h2>Visuals</h2>
+            <div class="cs-placeholder">
+                <i class="fas fa-image fa-2x mb-3 d-block"></i>
+                이미지 추가 예정 — 인식 파이프라인, Isaac Sim 디지털트윈, 제어 아키텍처 다이어그램<br>
+                <small class="text-muted mt-1 d-block">※ 공개 가능 자산 범위 확인 후 게시 예정</small>
+            </div>
+        </section>
+
+        <section class="cs-section">
+            <h2>Tech Stack</h2>
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-3">
+                    <h3>Perception</h3>
+                    <div class="cs-tech-grid">
+                        <span class="badge">ToF + RGB Fusion</span>
+                        <span class="badge">3D Point Cloud</span>
+                        <span class="badge">DL 6-DOF Pose</span>
+                        <span class="badge">SAM3</span>
+                        <span class="badge">OpenVINO</span>
+                        <span class="badge">OpenCV · Open3D · VTK</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h3>Control &amp; Realtime</h3>
+                    <div class="cs-tech-grid">
+                        <span class="badge">C++23</span>
+                        <span class="badge">Zenoh Pub/Sub</span>
+                        <span class="badge">BehaviorTree</span>
+                        <span class="badge">30ms Loop · Fail-Safe</span>
+                        <span class="badge">Eigen · OSQP</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h3>Digital Twin &amp; Sim</h3>
+                    <div class="cs-tech-grid">
+                        <span class="badge">Isaac Sim</span>
+                        <span class="badge">Python</span>
+                        <span class="badge">Sim-to-Real</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h3>Infrastructure</h3>
+                    <div class="cs-tech-grid">
+                        <span class="badge">Qt</span>
+                        <span class="badge">CMake · Conan</span>
+                        <span class="badge">InfluxDB</span>
+                        <span class="badge">Windows · Linux</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cs-section">
+            <h2>Credits &amp; Timeline</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h3>Role</h3>
+                    <ul class="list-unstyled">
+                        <li><strong>JinminKim</strong> — 인식 파이프라인 · 실시간 제어 SW · 디지털트윈 · 현장 적용</li>
+                        <li>소속사: Digitrack Inc.</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3>Timeline</h3>
+                    <ul class="list-unstyled">
+                        <li>2024 — 개발 착수</li>
+                        <li>현재 — 고객 현장 적용 및 고도화 진행 중</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="cs-footer">
+        <a href="../../#projects">← Back to Portfolio</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub @rafaam11</a>
+    </footer>
+
+    </div><!-- /cs-main -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
