@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Jinmin Kim — Projects. Surgical navigation, digital-twin, XR, and autonomous-robot projects." />
+        <meta name="author" content="JinminKim" />
+        <title>Projects · Jinmin Kim</title>
+        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <link href="../css/styles.css" rel="stylesheet" />
+        <link href="../css/cv-theme.css" rel="stylesheet" />
+        <link href="../css/site.css" rel="stylesheet" />
+    </head>
+    <body data-base="../" data-page="projects">
+        <header id="site-nav"></header>
+
+        <main class="page">
+            <h2 class="section-title">Projects</h2>
+            <p class="section-note">제목을 클릭하면 각 프로젝트의 상세 페이지로 이동합니다. (총 12개 · 직장 · 개인 · 학부)</p>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="unmanned-forklift/">무인지게차(AGV) 자율운반 디지털트윈 시스템</a></h3>
+                    <div class="subheading mb-2">C++23 · Zenoh Pub/Sub · BehaviorTree · ToF + RGB Fusion · Isaac Sim · DL 6-DOF Pose</div>
+                    <p>산업용 무인지게차(AGV)의 <strong>인식–실시간 제어–디지털트윈</strong>을 아우르는 자율운반 시스템 (Digitrack). ToF+RGB(Basler) 센서 융합으로 적재 대상의 3D 점군을 만들고 딥러닝으로 6-DOF 포즈를 추정, <strong>C++23·Zenoh 브로커리스 Pub/Sub</strong> 기반 30ms 실시간 제어 루프와 <strong>BehaviorTree</strong> 임무 계획으로 자율 운반을 수행. <strong>Isaac Sim 디지털트윈</strong>을 실제 제어망과 동일 통신으로 연동해 sim-to-real 검증.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2024 – 현재</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="rtms-navigation/">뇌졸중 환자 장애개선 및 뇌가소성 촉진을 위한 rTMS 내비게이션 통합시스템 및 치료 프로토콜 개발</a></h3>
+                    <div class="subheading mb-2">Surgical Navigation · Digital Twin</div>
+                    <p>보건복지부 과제 (Digitrack). 계명대 동산병원 주관, AT&amp;C 공동. 반복 경두개자기자극(rTMS) 치료를 위한 뇌내 타깃 지점 내비게이션 시스템과 치료 프로토콜 개발.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2024.07 – 현재</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="life-careverse/">Life Careverse — 확장현실 기반 케어 플랫폼</a></h3>
+                    <div class="subheading mb-2">Unity · Meta Quest · MRTK · PUN2 · FastAPI</div>
+                    <p>보건복지부 과제 (Digitrack · 기여 100%). 삼성서울병원 주관. 치료 전주기 환자 만족도 및 치료 효과 향상을 위한 XR 케어 플랫폼 개발 및 실증. Meta Quest 기반 멀티플레이어 XR 환경 구현.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2023.07 – 현재</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="radioactive-digital-twin/">방사능 오염 시설 정화를 위한 디지털트윈 기반 훈련 시뮬레이터 개발</a></h3>
+                    <div class="subheading mb-2">Isaac Sim · ROS2 · Linux · Dynamics</div>
+                    <p>산업통상자원부 과제 (Digitrack · 기여 70%). 한국원자력연구원(KAERI) 주관, 아르곤국립연구소(ANL) 공동. 방사성 오염 환경에서 로봇을 활용한 제염 작업 훈련용 Isaac Sim 기반 디지털트윈 시뮬레이터.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2024.02 – 2025.02</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="c-arm-navigation/">3D Navigation 융합형 저선량 C-Arm CT 시스템 개발</a></h3>
+                    <div class="subheading mb-2">Surgical Navigation · 3D Slicer</div>
+                    <p>범부처전주기의료기기연구사업 (Digitrack). 제노레이 주관, 서울대학교병원·울산대·이화여대·ETRI 공동. 저선량 C-Arm CT와 3D Navigation을 융합한 수술 지원 시스템 개발.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2024.07 – 2024.12</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="orthognathic-ar/">악교정 수술을 위한 AI 기반 수술 계획 및 AR 수술 내비게이션 시스템 개발</a></h3>
+                    <div class="subheading mb-2">Unity · HoloLens · 3D Slicer · MRTK · Optical Tracker · Python · Dynamixel</div>
+                    <p>범부처전주기의료기기연구개발사업단 과제 (Digitrack 주관 · 기여 30%). 대구첨단의료복합단지재단 공동. K-Medi Hub · 삼성서울병원 협력. AI 기반 치료 계획과 HoloLens AR 수술 내비게이션 시스템 개발.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2023.10 – 2024.12</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="surgical-twin/">실시간 영상유도 수술용 혼합현실 Surgical Twin Applicator 개발</a></h3>
+                    <div class="subheading mb-2">Unity · HoloLens · MRTK · Optical Tracker · Registration</div>
+                    <p>개발용역 (Digitrack · 기여 95%). 한국전기연구원(KERI) 발주. 실시간 영상유도 수술 환경에서 혼합현실을 구현하는 surgical twin applicator 개발.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2023.07 – 2023.11</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="oral-facial-ar/">구강악안면 수술을 위한 AI 기반 AR 수술 시스템 개발</a></h3>
+                    <div class="subheading mb-2">Surgical Navigation · 3D Slicer</div>
+                    <p>산업통상자원부 과제 (DGIST). 메가젠임플란트 주관, 한림대 성심병원 공동. 구강악안면 수술 분야에서 인공지능 기반의 증강현실 수술 지원 시스템 개발.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2021.06 – 2023.05</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="mandibular-fracture/">턱뼈 골절복원 최적화 시뮬레이터</a></h3>
+                    <div class="subheading mb-2">Python · Open3D · 3D Slicer · OpenCV · Optimization</div>
+                    <p>DGIST 석사 졸업연구 (기여 90%). 한림대 성심병원 협력. 하악골 골절 수술을 위한 치아 교합 기반 가상 골절 복원 최적화 모델 개발. → SCI(e) 저널 출판 · 2023 대한의료로봇학회 우수논문상 수상.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2021.12 – 2023.02</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="llm-wiki/">LLM Wiki — AI 기반 개인 지식 시스템</a></h3>
+                    <div class="subheading mb-2">TypeScript · Python · PostgreSQL · Docker · LLM Agent · MCP</div>
+                    <p>개인 지식을 <strong>AI가 인제스트·연결·발행</strong>하는 LLM wiki 시스템을 자체 설계·개발한 개인 프로젝트. Notion 입력 → AI 정제·연결 → 정적 wiki·블로그 발행 파이프라인을 TypeScript·Python 풀스택과 PostgreSQL·Docker로 구현. AI 코딩 에이전트(Claude Code)·MCP·커스텀 워크플로 자동화를 적극 활용.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2026.04 – 현재</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="ar-distance-meter/">마커기반 3차원 AR 거리측정기</a></h3>
+                    <div class="subheading mb-2">Unity · Android · Vuforia · Linear Algebra</div>
+                    <p>개인 프로젝트 (기여 100%). 마커 기반 Vuforia AR 기술을 활용해 안드로이드 환경에서 3차원 공간상 두 점 간의 거리를 증강현실로 측정하는 앱 개발.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2021.03 – 2021.09</span></div>
+            </div>
+
+            <div class="proj-item d-flex flex-column flex-md-row justify-content-between">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0"><a href="quadruped-robot/">5절 링크 구조를 가진 4족 보행 로봇</a></h3>
+                    <div class="subheading mb-2">MATLAB · OnShape · SolidWorks · Arduino · Mathematics</div>
+                    <p>금오공과대학교 학부 졸업연구 (기여 90%). DGIST 동계 인턴 프로그램 수료. 5절 링크 메커니즘을 이용한 4족 보행 로봇 설계 및 제작. → 특허 출원 (10-2021-0008332) · 2020 KIT 엔지니어링 페어 장려상 수상.</p>
+                </div>
+                <div class="flex-shrink-0"><span class="proj-period">2020.04 – 2021.01</span></div>
+            </div>
+        </main>
+
+        <footer id="site-footer"></footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../js/nav.js"></script>
+    </body>
+</html>
