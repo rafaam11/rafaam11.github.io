@@ -1,0 +1,305 @@
+/* ─────────────────────────────────────────────────────────
+   site.css  —  Multi-page top-nav layout (al-folio inspired)
+   Loaded on top of styles.css (Bootstrap + base) and
+   cv-theme.css (navy academic design tokens / components).
+   New top-level pages avoid #sideNav / section.resume-section
+   so the resume template's sidebar layout never triggers.
+───────────────────────────────────────────────────────── */
+
+:root {
+  --navy:     #1e3a5f;
+  --ink:      #1a1a1a;
+  --slate:    #546e7a;
+  --muted:    #90a4ae;
+  --line:     #e3e8ec;
+  --bg-soft:  #f4f6f8;
+  --bg-chip:  #eef2f7;
+}
+
+/* ─── Top navigation bar ─── */
+.topnav {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  padding: .35rem 0;
+  box-shadow: 0 1px 3px rgba(30, 58, 95, .04);
+}
+.topnav .navbar-brand {
+  font-family: "Saira Extra Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: .01em;
+  color: var(--navy);
+}
+.topnav .navbar-brand:hover { color: var(--ink); }
+.topnav .nav-link {
+  font-family: "Muli", sans-serif;
+  font-weight: 700;
+  font-size: .76rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--slate);
+  padding: .45rem .9rem !important;
+}
+.topnav .nav-link:hover,
+.topnav .nav-link:focus { color: var(--navy); }
+.topnav .nav-link.active {
+  color: var(--navy);
+  box-shadow: inset 0 -2px 0 var(--navy);
+}
+.topnav .navbar-toggler {
+  border-color: var(--line);
+  padding: .3rem .55rem;
+}
+
+/* ─── Page shell ─── */
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+.page-narrow { max-width: 820px; }
+
+/* Academic underlined section heading (class form of cv-theme h2) */
+.section-title {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1.5px solid var(--navy);
+  padding-bottom: .45rem;
+  margin: 3rem 0 1.6rem;
+}
+.section-title:first-of-type,
+.page > .section-title:first-child { margin-top: 0; }
+.section-note {
+  font-size: .82rem;
+  color: var(--slate);
+  margin: -0.8rem 0 1.6rem;
+}
+
+/* ─── Home hero ─── */
+.hero {
+  display: flex;
+  gap: 2.2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+.hero-photo {
+  width: 168px;
+  height: 168px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 20px rgba(30, 58, 95, .10);
+  flex-shrink: 0;
+}
+.hero-body { flex: 1; min-width: 280px; }
+.hero-name {
+  font-family: "Saira Extra Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1.03;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin: 0 0 .4rem;
+}
+.hero-name .text-primary { color: var(--navy) !important; }
+.hero .social-icons { margin-top: 1.2rem; }
+.hero .social-icons .social-icon {
+  height: 2.6rem;
+  width: 2.6rem;
+  font-size: 1.1rem;
+  margin-right: 1rem;
+}
+
+/* Research-journey narrative paragraph */
+.narrative {
+  font-size: .96rem;
+  line-height: 1.85;
+  color: #37474f;
+}
+.narrative strong { color: var(--navy); font-weight: 700; }
+
+/* ─── News feed timeline ─── */
+.news-list { list-style: none; margin: 0; padding: 0; }
+.news-item {
+  display: flex;
+  gap: 1.1rem;
+  padding: .75rem 0;
+  border-bottom: 1px dashed var(--line);
+}
+.news-item:last-child { border-bottom: 0; }
+.news-date {
+  flex: 0 0 88px;
+  font-family: "Muli", sans-serif;
+  font-weight: 700;
+  font-size: .8rem;
+  color: var(--navy);
+  padding-top: .05rem;
+}
+.news-body { font-size: .9rem; line-height: 1.55; color: #37474f; }
+.news-body a { color: var(--navy); }
+.news-body .news-tag {
+  display: inline-block;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-left: .4rem;
+}
+
+/* ─── Repositories ─── */
+.repo-group { margin-bottom: 2rem; }
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: .9rem;
+}
+.repo-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--navy);
+  border-radius: 5px;
+  padding: 1rem 1.1rem;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.repo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 95, .08);
+}
+.repo-name {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 700;
+  font-size: .98rem;
+  color: var(--ink);
+}
+.repo-name i { color: var(--navy); font-size: .9rem; }
+.repo-name a { color: var(--ink); text-decoration: none; }
+.repo-name a:hover { color: var(--navy); }
+.repo-lang {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--muted);
+  margin: .3rem 0 .5rem;
+}
+.repo-desc { font-size: .82rem; line-height: 1.55; color: var(--slate); }
+.repo-badge {
+  display: inline-block;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .12rem .45rem;
+  border-radius: 3px;
+  background: var(--bg-soft);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  margin-left: .35rem;
+  vertical-align: middle;
+}
+.repo-badge.public { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* ─── Projects index (reuses existing card markup) ─── */
+.proj-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.proj-item:last-child { border-bottom: 0; }
+.proj-item h3 { font-size: 1.12rem; margin-bottom: .15rem; }
+.proj-item h3 a { color: var(--ink); text-decoration: none; }
+.proj-item h3 a:hover { color: var(--navy); text-decoration: underline; }
+.proj-item .proj-period {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--navy);
+  white-space: nowrap;
+}
+.proj-item p { font-size: .88rem; line-height: 1.7; color: #455a64; margin-bottom: 0; }
+
+/* ─── Skills section (defines classes the markup uses; previously unstyled) ─── */
+.focus-list {
+  list-style: none;
+  margin: 0 0 .5rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: .85rem;
+}
+.focus-item {
+  display: flex;
+  gap: .8rem;
+  align-items: flex-start;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--navy);
+  border-radius: 4px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.focus-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 95, .08);
+}
+.focus-item-icon { color: var(--navy); font-size: 1.05rem; margin-top: .15rem; flex-shrink: 0; }
+.focus-item-title { font-weight: 700; font-size: .92rem; color: var(--ink); }
+.focus-item-desc { font-size: .78rem; line-height: 1.5; color: var(--slate); margin-top: .15rem; }
+
+.domain-rows { display: flex; flex-direction: column; gap: 0; }
+.domain-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: .65rem 0;
+  border-bottom: 1px dashed var(--line);
+}
+.domain-row:last-child { border-bottom: 0; }
+.domain-header { flex: 0 0 180px; display: flex; align-items: center; gap: .55rem; }
+.domain-icon { color: var(--navy); font-size: .95rem; width: 1.2rem; text-align: center; }
+.domain-name { font-weight: 700; font-size: .85rem; color: var(--ink); }
+.domain-tools { display: flex; flex-wrap: wrap; gap: .4rem; flex: 1; min-width: 220px; }
+.tool-tag {
+  display: inline-block;
+  padding: .32rem .72rem;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--bg-chip);
+  border-radius: 3px;
+}
+.tool-tag--accent { background: var(--navy); color: #fff; }
+
+/* ─── Footer ─── */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 2.2rem 1.25rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: .8rem;
+}
+.site-footer .foot-social { margin-bottom: .7rem; }
+.site-footer .foot-social a {
+  color: var(--slate);
+  font-size: 1.15rem;
+  margin: 0 .55rem;
+  transition: color .15s ease;
+}
+.site-footer .foot-social a:hover { color: var(--navy); }
+.site-footer .foot-meta { font-size: .74rem; color: var(--muted); }
+
+/* ─── Responsive ─── */
+@media (max-width: 575.98px) {
+  .page { padding: 2rem 1.1rem 3rem; }
+  .hero-name { font-size: 2.4rem; }
+  .hero-photo { width: 130px; height: 130px; }
+  .news-date { flex-basis: 70px; font-size: .75rem; }
+  .domain-header { flex-basis: 100%; }
+  .proj-item .proj-period { margin-top: .2rem; }
+}
