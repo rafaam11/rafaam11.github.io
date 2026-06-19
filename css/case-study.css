@@ -168,6 +168,25 @@ body {
     font-size: 0.9rem;
 }
 
+/* ── Figure (diagrams) ── */
+.cs-figure {
+    margin: 0 0 0.5rem;
+    text-align: center;
+}
+.cs-figure img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--cs-border);
+    border-radius: 0.5rem;
+    background: #fff;
+    padding: 0.6rem;
+}
+.cs-figure figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--cs-muted);
+}
+
 /* ── Tech stack badges ── */
 .cs-tech-grid {
     display: flex;

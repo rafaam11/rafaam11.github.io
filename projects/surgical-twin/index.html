@@ -83,10 +83,11 @@
 
         <section class="cs-section">
             <h2>Approach</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — Optical Tracker → HoloLens 좌표계 등록(Registration) 파이프라인, 실시간 렌더링 구조
-            </div>
+            <p>CT 세그멘테이션 3D 모델(가상 환자)과 스테레오비전 트래커로 측정한 마커·트래커·수술도구·환자마커의 위치 관계를 <strong>다중 좌표계 정합(4×4 강체변환)</strong>으로 합성해, <strong>CT 좌표계 기준 수술도구의 실시간 포즈</strong>를 산출한다. 이를 실제와 동일한 환자 디지털트윈 위에 표현하고 HoloLens로 가시화하는 파이프라인이다.</p>
+            <figure class="cs-figure">
+                <img src="../../assets/diagrams/nav-digitaltwin-pipeline.svg" alt="수술 내비게이션에서 환자 디지털트윈, HoloLens AR로 이어지는 다중 좌표계 정합 파이프라인 다이어그램" loading="lazy" />
+                <figcaption>센서·입력 → 다중 좌표계 정합(4×4) → 디지털트윈·AR 가시화 파이프라인</figcaption>
+            </figure>
         </section>
 
         <section class="cs-section">
@@ -99,11 +100,11 @@
 
         <section class="cs-section">
             <h2>Visuals</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-image fa-2x mb-3 d-block"></i>
-                이미지 추가 예정 — Tracker–HoloLens 등록 파이프라인 다이어그램, HoloLens MR 뷰 스크린샷<br>
-                <small class="text-muted mt-1 d-block">※ 공개 가능 자산 확인 후 게시 예정</small>
-            </div>
+            <figure class="cs-figure">
+                <img src="../../assets/diagrams/hololens-ar-concept.svg" alt="HoloLens로 실제 환자 옆에 가상환자 홀로그램을 띄워 추적 수술도구·숨은 신경·수술계획 가이드를 보여주는 개념도" loading="lazy" />
+                <figcaption>HoloLens MR 뷰 개념 — 실제 환자와 가상환자(디지털트윈)에 추적 수술도구를 동시 표시</figcaption>
+            </figure>
+            <p class="text-muted small mt-2 mb-0">※ 개념 다이어그램. 실제 과제 화면·임상 사진은 비공개.</p>
         </section>
 
         <section class="cs-section">

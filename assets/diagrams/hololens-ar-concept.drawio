@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="29.7.9">
+  <diagram name="hololens-ar-concept">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1180" pageHeight="620" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="HoloLens AR 환자 디지털트윈 — 술자 시야" style="text;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;fontColor=#222222;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1100" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tracker" value="스테레오비전 트래커&#xa;(마커 · 수술도구 6-DOF 실시간 측정)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="340" y="60" width="360" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="surgeon" value="술자&#xa;· HoloLens 2 착용" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="190" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mr" value="HoloLens MR 뷰 (술자 시야)" style="swimlane;startSize=34;html=1;fontStyle=1;fontSize=14;fillColor=#fbfaf7;strokeColor=#9673a6;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="300" y="200" width="840" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="real" value="실제 환자&#xa;+ 추적 수술도구&#xa;(스테레오비전 트래킹)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" vertex="1" parent="mr">
+          <mxGeometry x="40" y="80" width="320" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="virtual" value="가상환자 홀로그램 = 환자 디지털트윈&#xa;&#xa;• 숨은 신경 · 혈관 표시&#xa;• 수술계획 가이드 오버레이&#xa;• 가상 수술도구 (실제와 동일 위치)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;verticalAlign=top;spacingLeft=14;spacingTop=14;" vertex="1" parent="mr">
+          <mxGeometry x="440" y="70" width="360" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="도구 위치" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;exitX=0.4;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tracker" target="real">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="도구 위치" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tracker" target="virtual">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="실시간 정합 · 오버레이" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;startArrow=classic;startFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="real" target="virtual">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="MR 뷰 동시 관찰" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="surgeon" target="mr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
