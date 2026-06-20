@@ -122,34 +122,97 @@
 }
 .narrative strong { color: var(--navy); font-weight: 700; }
 
-/* ─── News feed timeline ─── */
-.news-list { list-style: none; margin: 0; padding: 0; }
-.news-item {
-  display: flex;
-  gap: 1.1rem;
-  padding: .75rem 0;
-  border-bottom: 1px dashed var(--line);
+/* ─── News — vertical timeline (rail + dots) ─── */
+.news-list { list-style: none; margin: 0; padding: 0; position: relative; }
+/* continuous rail behind the dots */
+.news-list::before {
+  content: "";
+  position: absolute;
+  top: .9rem;
+  bottom: .9rem;
+  left: 72px;
+  width: 2px;
+  background: var(--line);
 }
-.news-item:last-child { border-bottom: 0; }
+.news-item {
+  position: relative;
+  display: flex;
+  gap: 0;
+  padding: .7rem 0;
+}
+/* node dot on the rail */
+.news-item::before {
+  content: "";
+  position: absolute;
+  left: 68px;
+  top: .9rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--navy);
+  z-index: 1;
+}
 .news-date {
-  flex: 0 0 88px;
+  flex: 0 0 72px;
+  padding-right: .9rem;
   font-family: "Muli", sans-serif;
   font-weight: 700;
   font-size: .8rem;
   color: var(--navy);
-  padding-top: .05rem;
+  padding-top: .02rem;
 }
-.news-body { font-size: .9rem; line-height: 1.55; color: #37474f; }
-.news-body a { color: var(--navy); }
-.news-body .news-tag {
-  display: inline-block;
-  font-size: .6rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
+.news-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 1.6rem;
+  font-size: .92rem;
+  line-height: 1.5;
+  color: #37474f;
+}
+.news-body a { color: var(--navy); font-weight: 700; }
+.news-body a:hover { text-decoration: underline; }
+/* project tech / partner / period sub-line */
+.news-meta {
+  margin-top: .25rem;
+  font-size: .78rem;
+  line-height: 1.5;
   color: var(--muted);
-  margin-left: .4rem;
 }
+.news-period { color: var(--slate); font-weight: 600; white-space: nowrap; }
+
+/* lighter milestone nodes (career / education / paper / patent / award) */
+.news-item.is-milestone { padding: .5rem 0; }
+.news-item.is-milestone::before {
+  width: 7px;
+  height: 7px;
+  left: 69px;
+  border-color: var(--muted);
+}
+.news-item.is-milestone .news-body { font-size: .88rem; }
+
+/* type tag chips */
+.news-tag {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .12rem .45rem;
+  margin-left: .45rem;
+  border-radius: 4px;
+  background: var(--bg-chip);
+  color: var(--slate);
+  white-space: nowrap;
+}
+.news-tag + .news-tag { margin-left: .3rem; }
+.news-tag.is-project { background: #eaf0f7; color: var(--navy); }
+.news-tag.is-paper   { background: #e3f3f0; color: #0f766e; }
+.news-tag.is-patent  { background: #f5edda; color: #92702a; }
+.news-tag.is-award   { background: #f7ecdb; color: #b7791f; }
+.news-tag.is-career  { background: #eef1f3; color: #546e7a; }
+.news-tag.is-edu     { background: #ecebf7; color: #4f46e5; }
 
 /* ─── Repositories ─── */
 .repo-group { margin-bottom: 2rem; }
@@ -299,7 +362,11 @@
   .page { padding: 2rem 1.1rem 3rem; }
   .hero-name { font-size: 2.4rem; }
   .hero-photo { width: 130px; height: 130px; }
-  .news-date { flex-basis: 70px; font-size: .75rem; }
+  .news-date { flex-basis: 56px; font-size: .75rem; padding-right: .5rem; }
+  .news-body { padding-left: 1.1rem; }
+  .news-list::before { left: 56px; }
+  .news-item::before { left: 52px; }
+  .news-item.is-milestone::before { left: 53px; }
   .domain-header { flex-basis: 100%; }
   .proj-item .proj-period { margin-top: .2rem; }
 }
