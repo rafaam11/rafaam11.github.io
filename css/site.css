@@ -214,22 +214,70 @@
 .news-tag.is-career  { background: #eef1f3; color: #546e7a; }
 .news-tag.is-edu     { background: #ecebf7; color: #4f46e5; }
 
-/* ─── Projects index (reuses existing card markup) ─── */
-.proj-item {
-  padding: 1.5rem 0;
+/* ─── Projects index (Featured cards + More list) ─── */
+.proj-chip {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 600;
+  background: var(--bg-chip);
+  color: var(--navy);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: .15rem .45rem;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 1rem;
+}
+.featured-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--navy);
+  border-radius: 6px;
+  padding: 1.1rem 1.2rem;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.featured-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(30, 58, 95, .08);
+}
+.fc-eyebrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .5rem;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .45rem;
+}
+.featured-card h3 { font-size: 1.04rem; font-weight: 800; margin-bottom: .3rem; }
+.featured-card h3 a { color: var(--ink); text-decoration: none; }
+.featured-card h3 a:hover { color: var(--navy); }
+.fc-role { font-size: .77rem; font-weight: 700; color: var(--navy); margin-bottom: .45rem; }
+.fc-desc { font-size: .84rem; line-height: 1.55; color: var(--slate); margin-bottom: .65rem; }
+.fc-tech { display: flex; flex-wrap: wrap; gap: .3rem; }
+
+.more-list { margin-top: .25rem; }
+.more-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem 0;
   border-bottom: 1px solid var(--line);
 }
-.proj-item:last-child { border-bottom: 0; }
-.proj-item h3 { font-size: 1.12rem; margin-bottom: .15rem; }
-.proj-item h3 a { color: var(--ink); text-decoration: none; }
-.proj-item h3 a:hover { color: var(--navy); text-decoration: underline; }
-.proj-item .proj-period {
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--navy);
-  white-space: nowrap;
-}
-.proj-item p { font-size: .88rem; line-height: 1.7; color: #455a64; margin-bottom: 0; }
+.more-item:last-child { border-bottom: 0; }
+.mi-main { flex-grow: 1; }
+.more-item h3 { font-size: .96rem; font-weight: 700; margin-bottom: .22rem; }
+.more-item h3 a { color: var(--ink); text-decoration: none; }
+.more-item h3 a:hover { color: var(--navy); }
+.mi-role { font-size: .76rem; font-weight: 700; color: var(--navy); }
+.mi-tech { font-size: .76rem; color: var(--slate); }
+.mi-period { font-size: .78rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
 
 /* ─── Skills section (defines classes the markup uses; previously unstyled) ─── */
 .focus-list {
