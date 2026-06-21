@@ -6,7 +6,7 @@
  *
  * Each page declares two attributes on <body>:
  *   data-base   relative path back to site root ("" on root, "../" one level deep)
- *   data-page   active page key: home | cv | projects | engineering
+ *   data-page   active page key: home | cv | research | projects
  * and provides empty placeholders:
  *   <header id="site-nav"></header> ... <footer id="site-footer"></footer>
  */
@@ -22,9 +22,9 @@
   var home = base + (isFile ? 'index.html' : '');
   if (home === '') home = './'; // avoid empty href on the home page over http(s)
   var links = [
-    { key: 'cv',           label: 'CV',           href: dir('cv/') },
-    { key: 'projects',     label: 'Projects',     href: dir('projects/') },
-    { key: 'engineering',  label: 'Engineering',  href: dir('engineering/') }
+    { key: 'cv',           label: 'CV',              href: dir('cv/') },
+    { key: 'research',     label: 'Research Fields', href: dir('research/') },
+    { key: 'projects',     label: 'Projects',        href: dir('projects/') }
   ];
 
   /* ── Navigation ── */
