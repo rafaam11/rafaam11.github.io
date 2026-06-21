@@ -401,20 +401,37 @@
 .focus-item-title { font-weight: 700; font-size: .92rem; color: var(--ink); }
 .focus-item-desc { font-size: .78rem; line-height: 1.5; color: var(--slate); margin-top: .15rem; overflow-wrap: anywhere; }
 
-.domain-rows { display: flex; flex-direction: column; gap: 0; }
-.domain-row {
+/* Toolbox legend */
+.toolbox-legend {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
-  padding: .65rem 0;
+  gap: .4rem;
+  margin: 0 0 1.1rem;
+  font-size: .76rem;
+  color: var(--slate);
+}
+.toolbox-legend .tool-tag { cursor: default; }
+.legend-divider { width: 1px; height: 1rem; background: var(--line); margin: 0 .35rem; }
+
+/* Toolbox — domain groups (vertical block: head row + chips below) */
+.domain-rows { display: flex; flex-direction: column; gap: 0; }
+.domain-group {
+  padding: .95rem 0;
   border-bottom: 1px dashed var(--line);
 }
-.domain-row:last-child { border-bottom: 0; }
-.domain-header { flex: 0 0 180px; display: flex; align-items: center; gap: .55rem; }
-.domain-icon { color: var(--navy); font-size: .95rem; width: 1.2rem; text-align: center; }
-.domain-name { font-weight: 700; font-size: .85rem; color: var(--ink); }
-.domain-tools { display: flex; flex-wrap: wrap; gap: .4rem; flex: 1; min-width: 220px; }
+.domain-group:last-child { border-bottom: 0; }
+.domain-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .15rem .55rem;
+  margin-bottom: .6rem;
+}
+.domain-icon { color: var(--navy); font-size: .95rem; width: 1.2rem; text-align: center; align-self: center; }
+.domain-name { font-weight: 700; font-size: .9rem; color: var(--ink); }
+.domain-caption { font-size: .76rem; color: var(--slate); }
+.domain-tools { display: flex; flex-wrap: wrap; gap: .4rem; }
 .tool-tag {
   display: inline-block;
   padding: .32rem .72rem;
@@ -424,7 +441,7 @@
   background: var(--bg-chip);
   border-radius: 3px;
 }
-.tool-tag--accent { background: var(--navy); color: #fff; }
+.tool-tag--core { background: var(--navy); color: #fff; }
 
 /* ─── Footer ─── */
 .site-footer {
@@ -454,6 +471,5 @@
   .news-list::before { left: 56px; }
   .news-item::before { left: 52px; }
   .news-item.is-milestone::before { left: 53px; }
-  .domain-header { flex-basis: 100%; }
   .proj-item .proj-period { margin-top: .2rem; }
 }
