@@ -1,230 +1,186 @@
-:root {
-    --cs-primary: #bd5d38;
-    --cs-dark: #1a1a2e;
-    --cs-navy: #1e3a5f;
-    --cs-text: #343a40;
-    --cs-muted: #6c757d;
-    --cs-border: #dee2e6;
-    --cs-sidebar-w: 220px;
+/* ─────────────────────────────────────────────────────────
+   case-study.css  —  Project detail (case study) pages.
+   Loaded on top of styles.css (Bootstrap) + cv-theme.css +
+   site.css. Shares the top nav (js/nav.js) and footer with the
+   main site, and reuses its navy design tokens (--navy/--ink/…).
+───────────────────────────────────────────────────────── */
+
+/* Centered content column, matched to the main site width.
+   Custom (not Bootstrap .container) so widths stay consistent
+   and Bootstrap .row negative margins never overflow. */
+.cs-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
 }
 
-/* ── Base ── */
-body {
-    font-family: "Muli", -apple-system, sans-serif;
-    color: var(--cs-text);
-}
-
-/* ── Sidebar ── */
-.cs-sidebar {
-    width: var(--cs-sidebar-w);
-    background: var(--cs-navy);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
-}
-
-.cs-sidebar-home {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    color: #fff;
-    text-decoration: none;
-    font-family: "Saira Extra Condensed", sans-serif;
-    font-size: 1.05rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    padding: 1rem 1.2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    transition: color 0.15s;
-}
-.cs-sidebar-home:hover { color: #90caf9; }
-
-.cs-sidebar-label {
-    font-size: 0.58rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: rgba(255,255,255,0.35);
-    padding: 1rem 1.2rem 0.4rem;
-}
-
-.cs-sidebar-nav { flex: 1; }
-
-.cs-sidebar-item {
-    display: block;
-    color: rgba(255,255,255,0.62);
-    text-decoration: none;
-    font-size: 0.78rem;
-    line-height: 1.4;
-    padding: 0.55rem 1.2rem;
-    transition: background 0.15s, color 0.15s;
-}
-.cs-sidebar-item:hover {
-    background: rgba(255,255,255,0.08);
-    color: #fff;
-    text-decoration: none;
-}
-.cs-sidebar-item.active {
-    background: rgba(255,255,255,0.13);
-    color: #fff;
-    font-weight: 700;
-    border-left: 3px solid #90caf9;
-    padding-left: calc(1.2rem - 3px);
-}
-
-/* ── Main content (offset for sidebar) ── */
-.cs-main {
-    margin-left: var(--cs-sidebar-w);
-}
-
-/* ── Hero ── */
+/* ── Hero (navy) ── */
 .cs-hero {
-    background: var(--cs-dark);
-    color: #fff;
-    padding: 3.5rem 1.5rem 3rem;
+  background: var(--navy);
+  color: #fff;
+  padding: 2.8rem 0 2.4rem;
 }
-
 .cs-hero h1 {
-    font-family: "Saira Extra Condensed", sans-serif;
-    font-weight: 700;
-    font-size: 2.4rem;
-    margin-bottom: 0.5rem;
+  font-family: "Saira Extra Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 2.3rem;
+  letter-spacing: .01em;
+  margin-bottom: .5rem;
 }
-
 .cs-hero .cs-meta {
-    color: var(--cs-primary);
-    font-size: 1rem;
-    margin-bottom: 1rem;
+  color: #c7d4e2;
+  font-size: .94rem;
+  margin-bottom: 1rem;
 }
-
+.cs-hero .cs-status {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .12rem .5rem;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, .16);
+  color: #fff;
+  margin-left: .4rem;
+  vertical-align: middle;
+}
+.cs-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
 .cs-hero .badge {
-    font-size: 0.78rem;
-    font-weight: 400;
-    background: rgba(189, 93, 56, 0.8) !important;
+  font-size: .76rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, .14) !important;
+  color: #fff !important;
+  padding: .42em .7em;
 }
 
 /* ── Content sections ── */
+.cs-content {
+  padding-top: 1.4rem;
+  padding-bottom: 3rem;
+}
 .cs-section {
-    padding: 2.5rem 0;
-    border-bottom: 1px solid var(--cs-border);
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--line);
 }
-
-.cs-section:last-child { border-bottom: none; }
-
+.cs-section:last-of-type { border-bottom: none; }
 .cs-section h2 {
-    font-family: "Saira Extra Condensed", sans-serif;
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: var(--cs-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 1.2rem;
-    padding-left: 0.8rem;
-    border-left: 4px solid var(--cs-primary);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1.5px solid var(--navy);
+  padding-bottom: .45rem;
+  margin-bottom: 1.3rem;
 }
-
 .cs-section h3 {
-    font-size: 1.05rem;
-    font-weight: 800;
-    margin-bottom: 0.4rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: .4rem;
+}
+.cs-section p { line-height: 1.7; color: var(--slate); }
+.cs-section ul { color: var(--slate); line-height: 1.7; }
+.cs-section strong { color: var(--ink); }
+
+/* ── TL;DR lead line ── */
+.cs-tldr {
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 1rem;
 }
 
-/* ── Meta table ── */
+/* ── At-a-glance meta table ── */
 .cs-meta-table {
-    background: #f8f9fa;
-    border-radius: 0.4rem;
-    padding: 1rem 1.2rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: .4rem;
+  padding: 1rem 1.2rem;
 }
-
-.cs-meta-table table { margin: 0; font-size: 0.9rem; }
-.cs-meta-table th { color: var(--cs-muted); font-weight: 600; width: 5rem; padding: 0.3rem 0.5rem 0.3rem 0; border: none; }
-.cs-meta-table td { padding: 0.3rem 0; border: none; }
+.cs-meta-table table { margin: 0; width: 100%; font-size: .88rem; }
+.cs-meta-table th {
+  color: var(--muted);
+  font-weight: 700;
+  width: 5.5rem;
+  padding: .3rem .6rem .3rem 0;
+  border: none;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.cs-meta-table td { padding: .3rem 0; border: none; color: var(--slate); }
 
 /* ── Achievement banner ── */
 .cs-achievement {
-    background: linear-gradient(135deg, #fff8f5 0%, #ffeee7 100%);
-    border-left: 4px solid var(--cs-primary);
-    border-radius: 0 0.4rem 0.4rem 0;
-    padding: 0.8rem 1rem;
-    margin-top: 1rem;
-    font-size: 0.92rem;
+  background: var(--bg-chip);
+  border-left: 3px solid var(--navy);
+  border-radius: 0 .4rem .4rem 0;
+  padding: .7rem 1rem;
+  margin-top: 1rem;
+  font-size: .9rem;
+  color: var(--slate);
 }
-
-.cs-achievement i { color: var(--cs-primary); margin-right: 0.4rem; }
-
-/* ── Placeholder ── */
-.cs-placeholder {
-    background: #f8f9fa;
-    border: 2px dashed var(--cs-border);
-    border-radius: 0.5rem;
-    padding: 2rem;
-    text-align: center;
-    color: var(--cs-muted);
-    font-size: 0.9rem;
-}
+.cs-achievement i { color: var(--navy); margin-right: .4rem; }
 
 /* ── Figure (diagrams) ── */
-.cs-figure {
-    margin: 0 0 0.5rem;
-    text-align: center;
-}
+.cs-figure { margin: 0 0 .5rem; text-align: center; }
 .cs-figure img {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid var(--cs-border);
-    border-radius: 0.5rem;
-    background: #fff;
-    padding: 0.6rem;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  background: #fff;
+  padding: .6rem;
 }
 .cs-figure figcaption {
-    margin-top: 0.6rem;
-    font-size: 0.85rem;
-    color: var(--cs-muted);
+  margin-top: .6rem;
+  font-size: .85rem;
+  color: var(--muted);
 }
 
 /* ── Tech stack badges ── */
-.cs-tech-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
+.cs-tech-grid { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .4rem; }
 .cs-tech-grid .badge {
-    font-size: 0.85rem;
-    font-weight: 500;
-    background: #e9ecef !important;
-    color: var(--cs-text) !important;
-    padding: 0.4em 0.75em;
+  font-size: .78rem;
+  font-weight: 600;
+  background: var(--bg-chip) !important;
+  color: var(--navy) !important;
+  border: 1px solid var(--line);
+  padding: .4em .7em;
 }
 
-/* ── Footer ── */
-.cs-footer {
-    background: var(--cs-dark);
-    color: #aaa;
-    padding: 1.2rem;
-    text-align: center;
-    font-size: 0.85rem;
+/* ── Pager (prev / next + back to Projects) ── */
+.cs-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.8rem 0 .25rem;
+  margin-top: .5rem;
+  border-top: 1px solid var(--line);
 }
-
-.cs-footer a { color: var(--cs-primary); text-decoration: none; }
-.cs-footer a:hover { text-decoration: underline; }
+.cs-pager a {
+  text-decoration: none;
+  color: var(--slate);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.cs-pager a:hover { color: var(--navy); }
+.cs-pager .cs-pager-back {
+  letter-spacing: .04em;
+}
+.cs-pager-side { display: flex; gap: 1.1rem; }
+.cs-pager-side .cs-pager-empty { color: var(--muted); opacity: .5; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-    .cs-sidebar {
-        width: 100%;
-        height: auto;
-        position: sticky;
-        flex-direction: column;
-    }
-    .cs-sidebar-nav { display: none; }
-    .cs-main { margin-left: 0; }
-    .cs-hero h1 { font-size: 1.7rem; }
-    .cs-section h2 { font-size: 1.3rem; }
+  .cs-hero { padding: 2rem 0 1.8rem; }
+  .cs-hero h1 { font-size: 1.7rem; }
+  .cs-pager { gap: .6rem; }
 }
