@@ -401,19 +401,6 @@
 .focus-item-title { font-weight: 700; font-size: .92rem; color: var(--ink); }
 .focus-item-desc { font-size: .78rem; line-height: 1.5; color: var(--slate); margin-top: .15rem; overflow-wrap: anywhere; }
 
-/* Toolbox legend */
-.toolbox-legend {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: .4rem;
-  margin: 0 0 1.1rem;
-  font-size: .76rem;
-  color: var(--slate);
-}
-.toolbox-legend .tool-tag { cursor: default; }
-.legend-divider { width: 1px; height: 1rem; background: var(--line); margin: 0 .35rem; }
-
 /* Toolbox — domain groups (vertical block: head row + chips below) */
 .domain-rows { display: flex; flex-direction: column; gap: 0; }
 .domain-group {
@@ -433,7 +420,9 @@
 .domain-caption { font-size: .76rem; color: var(--slate); }
 .domain-tools { display: flex; flex-wrap: wrap; gap: .4rem; }
 .tool-tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
   padding: .32rem .72rem;
   font-size: .76rem;
   font-weight: 600;
@@ -442,6 +431,16 @@
   border-radius: 3px;
 }
 .tool-tag--core { background: var(--navy); color: #fff; }
+/* Per-tool brand logo (Simple Icons); color baked per chip state in the URL */
+.tool-logo { width: .95em; height: .95em; object-fit: contain; flex-shrink: 0; }
+/* Fallback mark for tools without an official logo — inherits chip text color */
+.tool-logo--fb {
+  width: .58em; height: .58em;
+  margin: 0 .18em;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: .45;
+}
 
 /* ─── Footer ─── */
 .site-footer {
