@@ -3,43 +3,26 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="치아 교합 기반 가상 하악골 골절 복원 최적화 모델 — DGIST 석사 졸업연구 · SCI(e) Journal 2024" />
+    <meta name="description" content="치아 교합 기반 가상 하악골 골절 복원 최적화 모델 — DGIST 석사 졸업연구 · SCI(e) Q1 출판 · 우수논문상" />
     <meta name="author" content="JinminKim" />
-    <title>턱뼈 골절복원 최적화 시뮬레이터 · JinminKim</title>
+    <title>턱뼈 골절복원 최적화 시뮬레이터 · Jinmin Kim</title>
     <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="../../css/cv-theme.css" rel="stylesheet" />
+    <link href="../../css/site.css" rel="stylesheet" />
     <link href="../../css/case-study.css" rel="stylesheet" />
 </head>
-<body>
-    <aside class="cs-sidebar">
-        <a href="../../#projects" class="cs-sidebar-home"><i class="fas fa-chevron-left"></i> Home</a>
-        <nav class="cs-sidebar-nav">
-            <div class="cs-sidebar-label">Projects</div>
-            <a href="../unmanned-forklift/" class="cs-sidebar-item">무인지게차 디지털트윈</a>
-            <a href="../rtms-navigation/" class="cs-sidebar-item">rTMS 내비게이션</a>
-            <a href="../life-careverse/" class="cs-sidebar-item">Life Careverse</a>
-            <a href="../radioactive-digital-twin/" class="cs-sidebar-item">방사능 디지털트윈</a>
-            <a href="../c-arm-navigation/" class="cs-sidebar-item">C-Arm CT 내비게이션</a>
-            <a href="../orthognathic-ar/" class="cs-sidebar-item">악교정 수술 AR</a>
-            <a href="../surgical-twin/" class="cs-sidebar-item">Surgical Twin</a>
-            <a href="../oral-facial-ar/" class="cs-sidebar-item">구강악안면 AR</a>
-            <a href="../mandibular-fracture/" class="cs-sidebar-item active">턱뼈 골절복원</a>
-            <a href="../llm-wiki/" class="cs-sidebar-item">LLM Wiki</a>
-            <a href="../ar-distance-meter/" class="cs-sidebar-item">AR 거리측정기</a>
-            <a href="../quadruped-robot/" class="cs-sidebar-item">4족 보행 로봇</a>
-        </nav>
-    </aside>
-    <div class="cs-main">
+<body data-base="../../" data-page="projects">
+    <header id="site-nav"></header>
 
-    <!-- Hero -->
-    <header class="cs-hero">
-        <div class="container">
+    <section class="cs-hero">
+        <div class="cs-wrap">
             <h1>턱뼈 골절복원 최적화 시뮬레이터</h1>
             <p class="cs-meta">DGIST Surgical Robotics &amp; AR Lab · 한림대 성심병원 &nbsp;|&nbsp; 2021.12 – 2023.02</p>
-            <div class="d-flex flex-wrap gap-2">
+            <div class="cs-badges">
                 <span class="badge">Python</span>
                 <span class="badge">Open3D</span>
                 <span class="badge">3D Slicer</span>
@@ -47,18 +30,16 @@
                 <span class="badge">Optimization</span>
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- Main content -->
-    <main class="container">
+    <main class="cs-wrap cs-content">
 
-        <!-- Overview -->
         <section class="cs-section">
             <h2>Overview</h2>
             <div class="row g-4">
                 <div class="col-md-7">
-                    <p>하악골(턱뼈) 골절 수술 시 의사는 골편을 원래 위치로 복원한 뒤 금속판으로 고정해야 한다. 그러나 수술 전 복원 위치를 3D 영상으로 미리 계획하는 도구가 없어, 수술실에서 경험에 의존한 수작업으로 결정된다.</p>
-                    <p>본 연구에서는 치아 교합(치아가 맞물리는 기하학적 관계)을 구속 조건으로 활용하는 최적화 알고리즘을 설계하여, 수술 전 CT 데이터만으로 골절 복원 위치를 자동 계산하는 Python 기반 시뮬레이터를 개발했다.</p>
+                    <p class="cs-tldr">치아 교합을 구속 조건으로 활용해 수술 전 CT만으로 하악골 골절 복원 위치를 자동 계산하는 최적화 시뮬레이터를 <strong>알고리즘 설계부터 구현까지 주도(기여 90%)</strong>한 석사 졸업연구. <strong>SCI(e) Q1 출판 + 우수논문상</strong>.</p>
+                    <p>하악골(턱뼈) 골절 수술 시 의사는 골편을 원래 위치로 복원한 뒤 금속판으로 고정해야 한다. 본 연구는 치아가 맞물리는 기하학적 관계(교합)를 활용하는 최적화 알고리즘을 설계해, 경험 의존 수작업을 객관적·정량적 계획으로 대체한다.</p>
                     <div class="cs-achievement">
                         <i class="fas fa-trophy"></i> SCI(e) <em>Journal of Imaging Informatics in Medicine</em> 2024 (IF 4.2 · Q1) 출판<br>
                         <i class="fas fa-award mt-1"></i> 2023 대한의료로봇학회 우수논문상
@@ -66,59 +47,50 @@
                 </div>
                 <div class="col-md-5">
                     <div class="cs-meta-table">
-                        <table class="table table-borderless">
+                        <table>
                             <tr><th>소속</th><td>DGIST Surgical Robotics &amp; AR Lab</td></tr>
-                            <tr><th>발주</th><td>한림대학교 성심병원</td></tr>
+                            <tr><th>협력</th><td>한림대학교 성심병원</td></tr>
                             <tr><th>기간</th><td>2021.12 – 2023.02</td></tr>
-                            <tr><th>기여</th><td>90%</td></tr>
-                            <tr><th>역할</th><td>알고리즘 설계, Python 구현, 3D 시각화, 임상 검증</td></tr>
+                            <tr><th>기여</th><td>90% (석사 졸업연구)</td></tr>
+                            <tr><th>역할</th><td>알고리즘 설계 · Python 구현 · 3D 시각화 · 임상 검증</td></tr>
                         </table>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Problem -->
         <section class="cs-section">
             <h2>Problem</h2>
-            <!-- TODO: 문제 배경, 기존 방법의 한계, 임상적 필요성을 서술 -->
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 기존 수술 계획 워크플로우의 한계와 임상적 필요성
-            </div>
+            <p>하악골 골절 복원은 수술 전 복원 위치를 3D 영상으로 미리 계획하는 도구가 없어, 수술실에서 의사의 경험에 의존한 수작업으로 결정된다. 그 결과 <strong>재현성과 정밀도에 편차</strong>가 생기며, 객관적 근거에 기반한 복원 계획이 어렵다. 수술 전 CT만으로 복원 위치를 정량적으로 제시하는 방법이 필요했다.</p>
         </section>
 
-        <!-- Approach -->
         <section class="cs-section">
             <h2>Approach</h2>
-            <!-- TODO: 알고리즘 다이어그램, 수식, 단계별 파이프라인 설명 -->
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 치아 교합 모델링 방법, 최적화 수식, Open3D 기반 파이프라인
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h3>① 교합 모델링</h3>
+                    <p>치아가 맞물리는 기하학적 관계(arch line 기반 교합)를 모델링해, 복원이 만족해야 할 구속 조건으로 정의했다.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>② 최적화</h3>
+                    <p>골편 점군을 교합 구속 아래 정합·최적화해, 해부학적으로 타당한 골절 복원 위치(강체 변환)를 산출한다.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>③ 시각화·검증</h3>
+                    <p>Open3D·3D Slicer로 복원 결과를 시각화하고, 임상 협력으로 타당성을 검증했다.</p>
+                </div>
             </div>
         </section>
 
-        <!-- Result -->
         <section class="cs-section">
             <h2>Result</h2>
-            <!-- TODO: 정량 지표, before/after 비교, 논문 결과 요약 -->
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 복원 오차 수치, before/after 정합 결과, 임상 의사 피드백
-            </div>
+            <ul>
+                <li>치아 교합 구속 기반 <strong>자동 복원 모델</strong>로 수술 전 CT만으로 골절 복원 위치를 정량 계획</li>
+                <li>경험 의존 수작업 대비 <strong>객관적·재현 가능한</strong> 복원 계획 제시</li>
+                <li>ACCAS 2022 국제학회 발표 → <strong>SCI(e) Q1 저널 출판(2024)</strong> → 2023 대한의료로봇학회 <strong>우수논문상</strong></li>
+            </ul>
         </section>
 
-        <!-- Visuals -->
-        <section class="cs-section">
-            <h2>Visuals</h2>
-            <!-- TODO: 알고리즘 다이어그램 이미지, 3D Slicer 스크린샷, before/after 시각화 -->
-            <div class="cs-placeholder">
-                <i class="fas fa-image fa-2x mb-3 d-block"></i>
-                이미지 추가 예정 — Open3D/Slicer 스크린샷, 최적화 결과 시각화
-            </div>
-        </section>
-
-        <!-- Tech Stack -->
         <section class="cs-section">
             <h2>Tech Stack</h2>
             <div class="row g-3">
@@ -147,12 +119,11 @@
             </div>
         </section>
 
-        <!-- Credits & Timeline -->
         <section class="cs-section">
-            <h2>Credits &amp; Timeline</h2>
+            <h2>Role &amp; Timeline</h2>
             <div class="row g-4">
                 <div class="col-md-6">
-                    <h3>Team</h3>
+                    <h3>Role</h3>
                     <ul class="list-unstyled">
                         <li><strong>JinminKim</strong> — 알고리즘 설계 및 전체 구현 (기여 90%)</li>
                         <li>지도교수: 홍재성 (DGIST Surgical Robotics &amp; AR Lab)</li>
@@ -166,22 +137,26 @@
                         <li>2022.06 — 최적화 알고리즘 프로토타입</li>
                         <li>2022.11 — ACCAS 2022 국제학회 발표</li>
                         <li>2023.02 — 석사 졸업논문 제출</li>
-                        <li>2024.02 — SCI(e) 저널 출판</li>
                         <li>2023.09 — 대한의료로봇학회 우수논문상</li>
+                        <li>2024.02 — SCI(e) 저널 출판</li>
                     </ul>
                 </div>
             </div>
         </section>
 
+        <nav class="cs-pager">
+            <a class="cs-pager-back" href="../">← Projects</a>
+            <div class="cs-pager-side">
+                <a class="cs-pager-prev" href="../oral-facial-ar/">← 구강악안면 AR</a>
+                <a class="cs-pager-next" href="../llm-wiki/">LLM Wiki →</a>
+            </div>
+        </nav>
+
     </main>
 
-    <footer class="cs-footer">
-        <a href="../../#projects">← Back to Portfolio</a>
-        &nbsp;·&nbsp;
-        <a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub @rafaam11</a>
-    </footer>
+    <footer id="site-footer"></footer>
 
-    </div><!-- /cs-main -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/nav.js"></script>
 </body>
 </html>

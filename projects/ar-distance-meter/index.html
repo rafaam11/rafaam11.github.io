@@ -3,42 +3,26 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="마커 기반 Vuforia AR 기술을 활용한 안드로이드 3차원 공간 거리측정 앱 — 개인 프로젝트" />
+    <meta name="description" content="마커 기반 Vuforia AR로 안드로이드에서 3차원 공간 거리를 측정하는 앱 — 개인 프로젝트 (단독 개발)" />
     <meta name="author" content="JinminKim" />
-    <title>마커기반 3차원 AR 거리측정기 · JinminKim</title>
+    <title>마커기반 3차원 AR 거리측정기 · Jinmin Kim</title>
     <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="../../css/cv-theme.css" rel="stylesheet" />
+    <link href="../../css/site.css" rel="stylesheet" />
     <link href="../../css/case-study.css" rel="stylesheet" />
 </head>
-<body>
-    <aside class="cs-sidebar">
-        <a href="../../#projects" class="cs-sidebar-home"><i class="fas fa-chevron-left"></i> Home</a>
-        <nav class="cs-sidebar-nav">
-            <div class="cs-sidebar-label">Projects</div>
-            <a href="../unmanned-forklift/" class="cs-sidebar-item">무인지게차 디지털트윈</a>
-            <a href="../rtms-navigation/" class="cs-sidebar-item">rTMS 내비게이션</a>
-            <a href="../life-careverse/" class="cs-sidebar-item">Life Careverse</a>
-            <a href="../radioactive-digital-twin/" class="cs-sidebar-item">방사능 디지털트윈</a>
-            <a href="../c-arm-navigation/" class="cs-sidebar-item">C-Arm CT 내비게이션</a>
-            <a href="../orthognathic-ar/" class="cs-sidebar-item">악교정 수술 AR</a>
-            <a href="../surgical-twin/" class="cs-sidebar-item">Surgical Twin</a>
-            <a href="../oral-facial-ar/" class="cs-sidebar-item">구강악안면 AR</a>
-            <a href="../mandibular-fracture/" class="cs-sidebar-item">턱뼈 골절복원</a>
-            <a href="../llm-wiki/" class="cs-sidebar-item">LLM Wiki</a>
-            <a href="../ar-distance-meter/" class="cs-sidebar-item active">AR 거리측정기</a>
-            <a href="../quadruped-robot/" class="cs-sidebar-item">4족 보행 로봇</a>
-        </nav>
-    </aside>
-    <div class="cs-main">
+<body data-base="../../" data-page="projects">
+    <header id="site-nav"></header>
 
-    <header class="cs-hero">
-        <div class="container">
+    <section class="cs-hero">
+        <div class="cs-wrap">
             <h1>마커기반 3차원 AR 거리측정기</h1>
-            <p class="cs-meta">개인 프로젝트 &nbsp;|&nbsp; 2021.03 – 2021.09</p>
-            <div class="d-flex flex-wrap gap-2">
+            <p class="cs-meta">개인 프로젝트 · Personal Project &nbsp;|&nbsp; 2021.03 – 2021.09</p>
+            <div class="cs-badges">
                 <span class="badge">Unity</span>
                 <span class="badge">Android</span>
                 <span class="badge">Vuforia</span>
@@ -46,61 +30,30 @@
                 <span class="badge">Linear Algebra</span>
             </div>
         </div>
-    </header>
+    </section>
 
-    <main class="container">
+    <main class="cs-wrap cs-content">
 
         <section class="cs-section">
             <h2>Overview</h2>
             <div class="row g-4">
                 <div class="col-md-7">
-                    <p>마커 기반 Vuforia AR 기술을 활용해 안드로이드 환경에서 3차원 공간상 두 점 간의 거리를 증강현실로 측정하는 앱을 개발했다. 각 마커의 월드 좌표를 Vuforia로 추출하고 선형대수(유클리드 거리)를 이용해 실시간으로 거리를 계산·표시한다.</p>
+                    <p class="cs-tldr">마커 기반 Vuforia AR로 안드로이드에서 3차원 공간상 두 점 간 거리를 증강현실로 측정하는 앱을 <strong>단독 개발(100%)</strong>했다.</p>
+                    <p>각 마커의 월드 좌표를 Vuforia로 추출하고 선형대수(유클리드 거리)로 실시간 거리를 계산·표시한다.</p>
                     <div class="cs-achievement">
                         <i class="fas fa-bolt"></i> 단독 개발 (기여 100%)
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="cs-meta-table">
-                        <table class="table table-borderless">
+                        <table>
                             <tr><th>유형</th><td>개인 프로젝트</td></tr>
                             <tr><th>기간</th><td>2021.03 – 2021.09 (7개월)</td></tr>
-                            <tr><th>기여</th><td>100%</td></tr>
+                            <tr><th>기여</th><td>100% (단독)</td></tr>
                             <tr><th>역할</th><td>전체 설계 및 구현</td></tr>
                         </table>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Problem</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 물리적 측정 도구 없이 3D 공간에서 정확한 거리를 측정하는 문제
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Approach</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — Vuforia 마커 인식, 월드 좌표 변환, 유클리드 거리 계산, Unity UI 표시
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Result</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 측정 오차, 사용 환경 및 제한사항
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Visuals</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-image fa-2x mb-3 d-block"></i>
-                이미지 추가 예정 — 앱 실행 화면, 마커 인식 및 거리 표시 스크린샷
             </div>
         </section>
 
@@ -125,34 +78,19 @@
             </div>
         </section>
 
-        <section class="cs-section">
-            <h2>Credits &amp; Timeline</h2>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h3>Team</h3>
-                    <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — 단독 개발 (기여 100%)</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h3>Timeline</h3>
-                    <ul class="list-unstyled">
-                        <li>2021.03 — 개발 시작</li>
-                        <li>2021.09 — 완성</li>
-                    </ul>
-                </div>
+        <nav class="cs-pager">
+            <a class="cs-pager-back" href="../">← Projects</a>
+            <div class="cs-pager-side">
+                <a class="cs-pager-prev" href="../llm-wiki/">← LLM Wiki</a>
+                <a class="cs-pager-next" href="../quadruped-robot/">4족 보행 로봇 →</a>
             </div>
-        </section>
+        </nav>
 
     </main>
 
-    <footer class="cs-footer">
-        <a href="../../#projects">← Back to Portfolio</a>
-        &nbsp;·&nbsp;
-        <a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub @rafaam11</a>
-    </footer>
+    <footer id="site-footer"></footer>
 
-    </div><!-- /cs-main -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/nav.js"></script>
 </body>
 </html>

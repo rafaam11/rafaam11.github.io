@@ -3,72 +3,56 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="확장현실 기반 환자 케어 플랫폼 — Digitrack · 보건복지부 · 삼성서울병원, Unity · Meta Quest · PUN2 · FastAPI" />
+    <meta name="description" content="Life Careverse — 확장현실 기반 환자 케어 플랫폼 (단독 개발) · Digitrack · 보건복지부 · 삼성서울병원, Unity · Meta Quest · PUN2 · FastAPI" />
     <meta name="author" content="JinminKim" />
-    <title>Life Careverse — 확장현실 케어 플랫폼 · JinminKim</title>
+    <title>Life Careverse — 확장현실 케어 플랫폼 · Jinmin Kim</title>
     <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="../../css/cv-theme.css" rel="stylesheet" />
+    <link href="../../css/site.css" rel="stylesheet" />
     <link href="../../css/case-study.css" rel="stylesheet" />
 </head>
-<body>
-    <aside class="cs-sidebar">
-        <a href="../../#projects" class="cs-sidebar-home"><i class="fas fa-chevron-left"></i> Home</a>
-        <nav class="cs-sidebar-nav">
-            <div class="cs-sidebar-label">Projects</div>
-            <a href="../unmanned-forklift/" class="cs-sidebar-item">무인지게차 디지털트윈</a>
-            <a href="../rtms-navigation/" class="cs-sidebar-item">rTMS 내비게이션</a>
-            <a href="../life-careverse/" class="cs-sidebar-item active">Life Careverse</a>
-            <a href="../radioactive-digital-twin/" class="cs-sidebar-item">방사능 디지털트윈</a>
-            <a href="../c-arm-navigation/" class="cs-sidebar-item">C-Arm CT 내비게이션</a>
-            <a href="../orthognathic-ar/" class="cs-sidebar-item">악교정 수술 AR</a>
-            <a href="../surgical-twin/" class="cs-sidebar-item">Surgical Twin</a>
-            <a href="../oral-facial-ar/" class="cs-sidebar-item">구강악안면 AR</a>
-            <a href="../mandibular-fracture/" class="cs-sidebar-item">턱뼈 골절복원</a>
-            <a href="../llm-wiki/" class="cs-sidebar-item">LLM Wiki</a>
-            <a href="../ar-distance-meter/" class="cs-sidebar-item">AR 거리측정기</a>
-            <a href="../quadruped-robot/" class="cs-sidebar-item">4족 보행 로봇</a>
-        </nav>
-    </aside>
-    <div class="cs-main">
+<body data-base="../../" data-page="projects">
+    <header id="site-nav"></header>
 
-    <header class="cs-hero">
-        <div class="container">
+    <section class="cs-hero">
+        <div class="cs-wrap">
             <h1>Life Careverse — 확장현실 기반 케어 플랫폼</h1>
-            <p class="cs-meta">Digitrack Inc. · 보건복지부 / 삼성서울병원 &nbsp;|&nbsp; 2023.07 – 현재</p>
-            <div class="d-flex flex-wrap gap-2">
+            <p class="cs-meta">Digitrack Inc. · 보건복지부 / 삼성서울병원 &nbsp;|&nbsp; 2023.07 – 현재 <span class="cs-status">진행 중</span></p>
+            <div class="cs-badges">
                 <span class="badge">Unity</span>
                 <span class="badge">Meta Quest</span>
                 <span class="badge">MRTK</span>
                 <span class="badge">PUN2</span>
                 <span class="badge">FastAPI</span>
-                <span class="badge">Python</span>
             </div>
         </div>
-    </header>
+    </section>
 
-    <main class="container">
+    <main class="cs-wrap cs-content">
 
         <section class="cs-section">
             <h2>Overview</h2>
             <div class="row g-4">
                 <div class="col-md-7">
-                    <p>치료 전주기(입원 전·중·후)에 걸쳐 환자의 만족도와 치료 효과를 높이기 위한 XR 케어 플랫폼. 환자는 Meta Quest 헤드셋을 착용하고 의료진·다른 환자와 함께하는 멀티플레이어 XR 환경에 입장한다. FastAPI 백엔드가 세션 상태·의료 기록·콘텐츠를 관리하고, Photon Unity Networking(PUN2)이 실시간 멀티플레이어 동기화를 담당한다.</p>
+                    <p class="cs-tldr">치료 전주기에 걸쳐 환자 만족도와 치료 효과를 높이는 멀티플레이어 XR 케어 플랫폼을 <strong>기획부터 배포까지 단독 개발(기여 100%)</strong>했다.</p>
+                    <p>환자는 Meta Quest 헤드셋을 착용하고 의료진·다른 환자와 함께하는 멀티플레이어 XR 환경에 입장한다. FastAPI 백엔드가 세션 상태·기록·콘텐츠를 관리하고, Photon Unity Networking(PUN2)이 실시간 멀티플레이어 동기화를 담당한다.</p>
                     <div class="cs-achievement">
-                        <i class="fas fa-star"></i> 단독 개발 (기여 100%) — 기획부터 배포까지 전체 스택 담당
+                        <i class="fas fa-star"></i> 단독 개발 (기여 100%) — XR 클라이언트·백엔드·네트워킹 전체 스택 담당
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="cs-meta-table">
-                        <table class="table table-borderless">
+                        <table>
                             <tr><th>소속</th><td>Digitrack Inc.</td></tr>
                             <tr><th>발주</th><td>보건복지부</td></tr>
                             <tr><th>협력</th><td>삼성서울병원</td></tr>
                             <tr><th>기간</th><td>2023.07 – 현재</td></tr>
-                            <tr><th>기여</th><td>100%</td></tr>
-                            <tr><th>역할</th><td>Unity XR 개발, FastAPI 백엔드, PUN2 멀티플레이어</td></tr>
+                            <tr><th>기여</th><td>100% (단독)</td></tr>
+                            <tr><th>역할</th><td>Unity XR · FastAPI 백엔드 · PUN2 멀티플레이어</td></tr>
                         </table>
                     </div>
                 </div>
@@ -77,35 +61,34 @@
 
         <section class="cs-section">
             <h2>Problem</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 입원 환자의 고립감·치료 참여도 문제, 기존 디지털 치료 도구의 한계
-            </div>
+            <p>입원·치료 환자는 고립감과 낮은 치료 참여도를 겪기 쉽고, 기존 디지털 치료 도구는 대체로 단방향·비몰입적이다. 치료 전주기에서 <strong>환자–의료진–환자 간 상호작용과 몰입</strong>을 제공해 만족도와 치료 효과를 함께 끌어올리는 환경이 필요했다.</p>
         </section>
 
         <section class="cs-section">
             <h2>Approach</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 아키텍처(Unity ↔ FastAPI ↔ PUN2), 세션 흐름, XR 인터랙션 설계
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h3>① XR 클라이언트</h3>
+                    <p>Unity·MRTK로 Meta Quest 기반 몰입형 케어 콘텐츠와 3D 공간 인터랙션을 구현했다.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>② 멀티플레이어</h3>
+                    <p>Photon PUN2로 의료진·환자가 같은 XR 공간에 함께 입장하는 실시간 멀티플레이어 동기화를 구성했다.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>③ 백엔드</h3>
+                    <p>FastAPI로 세션 상태·사용 기록·콘텐츠를 관리하는 서버를 구축해 클라이언트와 연동했다.</p>
+                </div>
             </div>
         </section>
 
         <section class="cs-section">
             <h2>Result</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-pen-to-square fa-2x mb-3 d-block"></i>
-                작성 예정 — 실증 결과, 환자 만족도 지표, 삼성서울병원 피드백
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Visuals</h2>
-            <div class="cs-placeholder">
-                <i class="fas fa-image fa-2x mb-3 d-block"></i>
-                이미지 추가 예정 — Meta Quest 데모 영상, PUN2 아키텍처 다이어그램, FastAPI 백엔드 도식<br>
-                <small class="text-muted mt-1 d-block">※ 환자 데이터 미포함. 공개 가능 자산 확인 후 게시 예정</small>
-            </div>
+            <ul>
+                <li>Meta Quest 기반 <strong>멀티플레이어 XR 케어 환경</strong>을 풀스택 단독 구현</li>
+                <li>삼성서울병원과 <strong>실증</strong> 진행 — 치료 전주기 환자 만족도·치료 효과 향상을 목표로 검증</li>
+                <li>기획·클라이언트·백엔드·네트워킹을 1인 개발로 통합 운용</li>
+            </ul>
         </section>
 
         <section class="cs-section">
@@ -117,7 +100,6 @@
                         <span class="badge">Unity</span>
                         <span class="badge">Meta Quest</span>
                         <span class="badge">MRTK</span>
-                        <span class="badge">PUN2</span>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
@@ -139,35 +121,39 @@
         </section>
 
         <section class="cs-section">
-            <h2>Credits &amp; Timeline</h2>
+            <h2>Role &amp; Timeline</h2>
             <div class="row g-4">
                 <div class="col-md-6">
-                    <h3>Team</h3>
+                    <h3>Role</h3>
                     <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — 단독 개발 (기여 100%)</li>
+                        <li><strong>JinminKim</strong> — 단독 개발 (기여 100%, 전체 스택)</li>
                         <li>소속사: Digitrack Inc.</li>
-                        <li>발주: 보건복지부 / 삼성서울병원 주관</li>
+                        <li>발주: 보건복지부 / 삼성서울병원 협력</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <h3>Timeline</h3>
                     <ul class="list-unstyled">
                         <li>2023.07 — 과제 시작</li>
-                        <li>진행 중</li>
+                        <li>현재 — 실증·고도화 진행 중</li>
                     </ul>
                 </div>
             </div>
         </section>
 
+        <nav class="cs-pager">
+            <a class="cs-pager-back" href="../">← Projects</a>
+            <div class="cs-pager-side">
+                <a class="cs-pager-prev" href="../rtms-navigation/">← rTMS 내비게이션</a>
+                <a class="cs-pager-next" href="../radioactive-digital-twin/">방사능 디지털트윈 →</a>
+            </div>
+        </nav>
+
     </main>
 
-    <footer class="cs-footer">
-        <a href="../../#projects">← Back to Portfolio</a>
-        &nbsp;·&nbsp;
-        <a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub @rafaam11</a>
-    </footer>
+    <footer id="site-footer"></footer>
 
-    </div><!-- /cs-main -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/nav.js"></script>
 </body>
 </html>
