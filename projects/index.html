@@ -19,124 +19,111 @@
 
         <main class="page">
             <h2 class="section-title">Projects</h2>
-            <p class="section-note">인식·실시간 제어·디지털트윈부터 수술 내비게이션·XR·AI 에이전트까지 — 총 12개. 카드를 누르면 각 프로젝트 상세(케이스 스터디)로 이동합니다. 역할·기여를 함께 표기했습니다.</p>
+            <p class="section-note">인식·실시간 제어·디지털트윈부터 수술 내비게이션·XR·AI 에이전트까지 — 총 12개. 프로젝트명을 누르면 상세(케이스 스터디)로 이동합니다. 기관·협력, 본인 기여·역할, 기간, 관련 기술을 함께 정리했습니다.</p>
 
-            <span class="cv-sub-label">Featured</span>
-            <div class="featured-grid">
+            <div class="proj-table-wrap">
+                <table class="proj-table">
+                    <thead>
+                        <tr>
+                            <th>프로젝트</th>
+                            <th>기관 · 협력</th>
+                            <th>기여 · 역할</th>
+                            <th>기간</th>
+                            <th>관련 기술</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="proj-group-row"><td colspan="5">Featured</td></tr>
 
-                <div class="featured-card">
-                    <div class="fc-eyebrow"><span>로봇 · 산업 자동화</span><span>2024 – 현재</span></div>
-                    <h3><a href="unmanned-forklift/">무인지게차(AGV) 자율운반 디지털트윈</a></h3>
-                    <div class="fc-role">팀 5명 · 인식(비전)·디지털트윈·장애물/안전 담당</div>
-                    <p class="fc-desc">ToF+RGB 센서융합으로 적재 대상의 6-DOF 포즈를 추정하고, Isaac Sim 디지털트윈을 실제 제어망과 동일 통신으로 연동(sim-to-real). Fail-Safe 안전 레이어까지 직접 담당.</p>
-                    <div class="fc-tech">
-                        <span class="proj-chip">C++23</span><span class="proj-chip">ToF+RGB Fusion</span><span class="proj-chip">DL 6-DOF Pose</span><span class="proj-chip">Isaac Sim</span><span class="proj-chip">Fail-Safe</span>
-                    </div>
-                </div>
+                        <tr>
+                            <td class="pt-title"><a href="unmanned-forklift/">무인지게차(AGV) 자율운반 디지털트윈</a><span class="pt-domain">로봇 · 산업 자동화</span></td>
+                            <td class="pt-org">Digitrack Inc.</td>
+                            <td class="pt-role">팀 5명 · 인식·디지털트윈·장애물/안전</td>
+                            <td class="pt-period">2024 – 현재</td>
+                            <td class="pt-tech"><span class="proj-chip">C++23</span><span class="proj-chip">ToF+RGB Fusion</span><span class="proj-chip">6-DOF Pose</span><span class="proj-chip">Isaac Sim</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="rtms-navigation/">뇌졸중 rTMS 내비게이션 통합시스템</a><span class="pt-domain">의료 내비게이션</span></td>
+                            <td class="pt-org">Digitrack · 보건복지부 / 계명대 동산병원 / AT&amp;C</td>
+                            <td class="pt-role">내비게이션 SW 주도</td>
+                            <td class="pt-period">2024.07 – 현재</td>
+                            <td class="pt-tech"><span class="proj-chip">3D Slicer</span><span class="proj-chip">Registration</span><span class="proj-chip">Surgical Nav</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="life-careverse/">Life Careverse — 확장현실 케어 플랫폼</a><span class="pt-domain">XR · 의료</span></td>
+                            <td class="pt-org">Digitrack · 보건복지부 / 삼성서울병원</td>
+                            <td class="pt-role">단독 100% · 풀스택</td>
+                            <td class="pt-period">2023.07 – 현재</td>
+                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">Meta Quest</span><span class="proj-chip">PUN2</span><span class="proj-chip">FastAPI</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="surgical-twin/">혼합현실 Surgical Twin Applicator</a><span class="pt-domain">의료 MR · 내비게이션</span></td>
+                            <td class="pt-org">Digitrack · 한국전기연구원(KERI)</td>
+                            <td class="pt-role">Applicator 전반 · 기여 95%</td>
+                            <td class="pt-period">2023.07 – 2023.11</td>
+                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">Optical Tracker</span><span class="proj-chip">Registration</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="mandibular-fracture/">턱뼈 골절복원 최적화 시뮬레이터</a><span class="pt-domain">의료 · 연구</span></td>
+                            <td class="pt-org">DGIST · 한림대 성심병원</td>
+                            <td class="pt-role">석사 졸업연구 90% · SCI(e) Q1 + 수상</td>
+                            <td class="pt-period">2021.12 – 2023.02</td>
+                            <td class="pt-tech"><span class="proj-chip">Python</span><span class="proj-chip">Open3D</span><span class="proj-chip">3D Slicer</span><span class="proj-chip">Optimization</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="llm-wiki/">LLM Wiki — AI 기반 개인 지식 시스템</a><span class="pt-domain">AI 에이전트 · 풀스택</span></td>
+                            <td class="pt-org">개인 프로젝트</td>
+                            <td class="pt-role">전체 설계·개발 100%</td>
+                            <td class="pt-period">2026.04 – 현재</td>
+                            <td class="pt-tech"><span class="proj-chip">TypeScript</span><span class="proj-chip">Python</span><span class="proj-chip">PostgreSQL</span><span class="proj-chip">MCP</span></td>
+                        </tr>
 
-                <div class="featured-card">
-                    <div class="fc-eyebrow"><span>의료 내비게이션</span><span>2024.07 – 현재</span></div>
-                    <h3><a href="rtms-navigation/">뇌졸중 rTMS 내비게이션 통합시스템</a></h3>
-                    <div class="fc-role">내비게이션 SW 주도 개발</div>
-                    <p class="fc-desc">뇌 영상 기반 자극 타깃 정의 → 환자 정합 → 실시간 코일 가이드로, rTMS 치료의 타깃팅 재현성·정밀도를 높이는 3D Slicer 내비게이션을 주도 개발.</p>
-                    <div class="fc-tech">
-                        <span class="proj-chip">3D Slicer</span><span class="proj-chip">Image Registration</span><span class="proj-chip">Surgical Navigation</span>
-                    </div>
-                </div>
+                        <tr class="proj-group-row"><td colspan="5">More Projects</td></tr>
 
-                <div class="featured-card">
-                    <div class="fc-eyebrow"><span>XR · 의료</span><span>2023.07 – 현재</span></div>
-                    <h3><a href="life-careverse/">Life Careverse — 확장현실 케어 플랫폼</a></h3>
-                    <div class="fc-role">단독 개발 100% · 풀스택</div>
-                    <p class="fc-desc">Meta Quest 기반 멀티플레이어 XR 케어 환경을 기획부터 배포까지 단독 개발. Unity·MRTK 클라이언트, PUN2 멀티플레이어, FastAPI 백엔드 전체 스택.</p>
-                    <div class="fc-tech">
-                        <span class="proj-chip">Unity</span><span class="proj-chip">Meta Quest</span><span class="proj-chip">PUN2</span><span class="proj-chip">FastAPI</span>
-                    </div>
-                </div>
-
-                <div class="featured-card">
-                    <div class="fc-eyebrow"><span>의료 MR · 내비게이션</span><span>2023.07 – 2023.11</span></div>
-                    <h3><a href="surgical-twin/">혼합현실 Surgical Twin Applicator</a></h3>
-                    <div class="fc-role">MR Applicator 전반 주도 · 기여 95%</div>
-                    <p class="fc-desc">광학 추적 기구 위치를 HoloLens 좌표계에 실시간 등록해 가상 수술도구·계획을 환자 위에 오버레이. 다중 좌표계 정합(4×4) 파이프라인으로 5개월 내 PoC 완성.</p>
-                    <div class="fc-tech">
-                        <span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">Optical Tracker</span><span class="proj-chip">Registration</span>
-                    </div>
-                </div>
-
-                <div class="featured-card">
-                    <div class="fc-eyebrow"><span>의료 · 연구</span><span>2021.12 – 2023.02</span></div>
-                    <h3><a href="mandibular-fracture/">턱뼈 골절복원 최적화 시뮬레이터</a></h3>
-                    <div class="fc-role">석사 졸업연구 90% · SCI(e) Q1 + 우수논문상</div>
-                    <p class="fc-desc">치아 교합을 구속 조건으로 활용해 수술 전 CT만으로 하악골 골절 복원 위치를 자동 계산하는 최적화 모델. 알고리즘 설계부터 구현·임상 검증까지 주도.</p>
-                    <div class="fc-tech">
-                        <span class="proj-chip">Python</span><span class="proj-chip">Open3D</span><span class="proj-chip">3D Slicer</span><span class="proj-chip">Optimization</span>
-                    </div>
-                </div>
-
-                <div class="featured-card">
-                    <div class="fc-eyebrow"><span>AI 에이전트 · 풀스택</span><span>2026.04 – 현재</span></div>
-                    <h3><a href="llm-wiki/">LLM Wiki — AI 기반 개인 지식 시스템</a></h3>
-                    <div class="fc-role">전체 설계·개발 100% · 개인</div>
-                    <p class="fc-desc">지식을 AI가 인제스트·연결·발행하는 파이프라인을 자체 구축. AI 코딩 에이전트·MCP·커스텀 Skill로 반복 워크플로를 자동화(계획 우선·검증 루프).</p>
-                    <div class="fc-tech">
-                        <span class="proj-chip">TypeScript</span><span class="proj-chip">Python</span><span class="proj-chip">PostgreSQL</span><span class="proj-chip">MCP</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <span class="cv-sub-label">More Projects</span>
-            <div class="more-list">
-
-                <div class="more-item">
-                    <div class="mi-main">
-                        <h3><a href="radioactive-digital-twin/">방사능 정화 디지털트윈 훈련 시뮬레이터</a></h3>
-                        <div><span class="mi-role">초기 디지털트윈 셋업(이후 인계)</span> <span class="mi-tech">· Isaac Sim · ROS2 · KAERI/ANL</span></div>
-                    </div>
-                    <span class="mi-period">2024.02 – 2026.07</span>
-                </div>
-
-                <div class="more-item">
-                    <div class="mi-main">
-                        <h3><a href="c-arm-navigation/">3D Navigation 융합 저선량 C-Arm CT</a></h3>
-                        <div><span class="mi-role">3D 내비게이션 일부 기능</span> <span class="mi-tech">· 3D Slicer · C-Arm CT · 제노레이</span></div>
-                    </div>
-                    <span class="mi-period">2024.07 – 2024.12</span>
-                </div>
-
-                <div class="more-item">
-                    <div class="mi-main">
-                        <h3><a href="orthognathic-ar/">악교정 수술 AI 계획 + AR 내비게이션</a></h3>
-                        <div><span class="mi-role">HoloLens AR 파트(기여 30%)</span> <span class="mi-tech">· Unity · HoloLens 2 · MRTK</span></div>
-                    </div>
-                    <span class="mi-period">2023.10 – 2024.12</span>
-                </div>
-
-                <div class="more-item">
-                    <div class="mi-main">
-                        <h3><a href="oral-facial-ar/">구강악안면 AI 기반 AR 수술 시스템</a></h3>
-                        <div><span class="mi-role">AR 내비게이션 초기·보조</span> <span class="mi-tech">· Unity · HoloLens 2 · 3D Slicer</span></div>
-                    </div>
-                    <span class="mi-period">2021.06 – 2023.05</span>
-                </div>
-
-                <div class="more-item">
-                    <div class="mi-main">
-                        <h3><a href="ar-distance-meter/">마커기반 3차원 AR 거리측정기</a></h3>
-                        <div><span class="mi-role">단독 개발 100%</span> <span class="mi-tech">· Unity · Vuforia · Android</span></div>
-                    </div>
-                    <span class="mi-period">2021.03 – 2021.09</span>
-                </div>
-
-                <div class="more-item">
-                    <div class="mi-main">
-                        <h3><a href="quadruped-robot/">5절 링크 4족 보행 로봇</a></h3>
-                        <div><span class="mi-role">학부 졸업 90% · 특허 + 수상</span> <span class="mi-tech">· MATLAB · SolidWorks · Arduino</span></div>
-                    </div>
-                    <span class="mi-period">2020.04 – 2021.01</span>
-                </div>
-
+                        <tr>
+                            <td class="pt-title"><a href="radioactive-digital-twin/">방사능 정화 디지털트윈 훈련 시뮬레이터</a><span class="pt-domain">로봇 · 시뮬레이션</span></td>
+                            <td class="pt-org">Digitrack · 산업부 / KAERI / ANL</td>
+                            <td class="pt-role">초기 디지털트윈 셋업 후 인계</td>
+                            <td class="pt-period">2024.02 – 2026.07</td>
+                            <td class="pt-tech"><span class="proj-chip">Isaac Sim</span><span class="proj-chip">ROS2</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="c-arm-navigation/">3D Navigation 융합 저선량 C-Arm CT</a><span class="pt-domain">의료 내비게이션</span></td>
+                            <td class="pt-org">Digitrack · 제노레이 / 서울대병원 외</td>
+                            <td class="pt-role">3D 내비게이션 일부 기능</td>
+                            <td class="pt-period">2024.07 – 2024.12</td>
+                            <td class="pt-tech"><span class="proj-chip">3D Slicer</span><span class="proj-chip">C-Arm CT</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="orthognathic-ar/">악교정 수술 AI 계획 + AR 내비게이션</a><span class="pt-domain">의료 AR</span></td>
+                            <td class="pt-org">Digitrack · K-Medi Hub / 삼성서울병원</td>
+                            <td class="pt-role">HoloLens AR 파트 · 기여 30%</td>
+                            <td class="pt-period">2023.10 – 2024.12</td>
+                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">MRTK</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="oral-facial-ar/">구강악안면 AI 기반 AR 수술 시스템</a><span class="pt-domain">의료 AR</span></td>
+                            <td class="pt-org">DGIST · 산업부 / 메가젠 / 한림대 성심병원</td>
+                            <td class="pt-role">AR 내비게이션 초기·보조</td>
+                            <td class="pt-period">2021.06 – 2023.05</td>
+                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">3D Slicer</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="ar-distance-meter/">마커기반 3차원 AR 거리측정기</a><span class="pt-domain">개인 · AR</span></td>
+                            <td class="pt-org">개인 프로젝트</td>
+                            <td class="pt-role">단독 100%</td>
+                            <td class="pt-period">2021.03 – 2021.09</td>
+                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">Vuforia</span><span class="proj-chip">Android</span></td>
+                        </tr>
+                        <tr>
+                            <td class="pt-title"><a href="quadruped-robot/">5절 링크 4족 보행 로봇</a><span class="pt-domain">학부 · 로봇</span></td>
+                            <td class="pt-org">금오공과대학교 · DGIST 동계 인턴</td>
+                            <td class="pt-role">학부 졸업 90% · 특허 + 수상</td>
+                            <td class="pt-period">2020.04 – 2021.01</td>
+                            <td class="pt-tech"><span class="proj-chip">MATLAB</span><span class="proj-chip">SolidWorks</span><span class="proj-chip">Arduino</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </main>
 
