@@ -26,6 +26,7 @@
   font-size: 2.3rem;
   letter-spacing: .01em;
   margin-bottom: .5rem;
+  color: #fff; /* override styles.css h1 { color:#343a40 } on the navy hero */
 }
 .cs-hero .cs-meta {
   color: #c7d4e2;
