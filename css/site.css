@@ -393,9 +393,10 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(30, 58, 95, .08);
 }
+.focus-item > div { min-width: 0; } /* let the text column shrink so long dot-joined tokens wrap instead of overflowing */
 .focus-item-icon { color: var(--navy); font-size: 1.05rem; margin-top: .15rem; flex-shrink: 0; }
 .focus-item-title { font-weight: 700; font-size: .92rem; color: var(--ink); }
-.focus-item-desc { font-size: .78rem; line-height: 1.5; color: var(--slate); margin-top: .15rem; }
+.focus-item-desc { font-size: .78rem; line-height: 1.5; color: var(--slate); margin-top: .15rem; overflow-wrap: anywhere; }
 
 .domain-rows { display: flex; flex-direction: column; gap: 0; }
 .domain-row {
