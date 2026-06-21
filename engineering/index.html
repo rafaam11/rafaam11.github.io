@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Jinmin Kim — Engineering. Real-time robotics control, 3D perception & sensor fusion, digital twin / sim-to-real, and protocol/ICD design across industrial robots and surgical navigation." />
+        <meta name="author" content="JinminKim" />
+        <title>Engineering · Jinmin Kim</title>
+        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <link href="../css/styles.css" rel="stylesheet" />
+        <link href="../css/cv-theme.css" rel="stylesheet" />
+        <link href="../css/site.css" rel="stylesheet" />
+    </head>
+    <body data-base="../" data-page="engineering">
+        <header id="site-nav"></header>
+
+        <main class="page">
+            <h2 class="section-title">Engineering</h2>
+            <p class="section-note">산업용 로봇·의료 내비게이션 시스템을 <strong>인식 → 실시간 제어 → 디지털트윈 → 통신</strong>에 걸쳐 설계·구현한 엔지니어링 역량입니다. 사내·고객 과제 특성상 <strong>코드는 비공개</strong>이며, 아래는 시스템 아키텍처·스택·역할 중심으로 정리했습니다. · 프로필: <a href="https://github.com/rafaam11" target="_blank" rel="noopener">github.com/rafaam11</a></p>
+
+            <!-- Perception & Sensor Fusion -->
+            <div class="repo-group">
+                <span class="cv-sub-label">3D 인식 &amp; 센서 융합 · Perception &amp; Sensor Fusion</span>
+                <div class="repo-grid">
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-cube"></i> DtScanProgram (DtScanV2)</div>
+                        <div class="repo-lang">C++ · Qt6 · CUDA</div>
+                        <div class="repo-role">역할 · 적재 대상 인식 파이프라인 설계·구현</div>
+                        <div class="repo-desc">ToF+RGB(Basler) 센서융합 → 3D 점군 → 딥러닝 <strong>6-DOF 포즈 추정</strong>으로 AGV 파렛 감지. OpenVINO · OpenCV 4.10 · Open3D · VTK, SAM3 사이드카.</div>
+                    </div>
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-bone"></i> 턱뼈 골절복원 최적화</div>
+                        <div class="repo-lang">Python · Open3D · OpenCV</div>
+                        <div class="repo-role">성과 · SCI(e) 출판 · 2023 대한의료로봇학회 우수논문상</div>
+                        <div class="repo-desc">하악골 골절 수술을 위한 <strong>3D 점군·치아 교합 기반</strong> 가상 복원 최적화 모델. DGIST 석사 졸업연구.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Control & Robotics -->
+            <div class="repo-group">
+                <span class="cv-sub-label">실시간 제어 &amp; 로보틱스 · Real-time Control &amp; Robotics</span>
+                <div class="repo-grid">
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-microchip"></i> dotori_rcs</div>
+                        <div class="repo-lang">C++23 · Zenoh · BehaviorTree</div>
+                        <div class="repo-role">역할 · AGV 실시간 제어 코어 아키텍처·구현</div>
+                        <div class="repo-desc">Zenoh 브로커리스 Pub/Sub(ROS2 스타일) 위에서 <strong>30ms 실시간 제어 루프</strong>와 BehaviorTree 임무계획을 구동. HAL(CAN/ZAPI · UDP/Wire · DIO), Fail-Safe, Eigen · OSQP, InfluxDB, Conan · CMake.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Digital Twin & Sim-to-Real -->
+            <div class="repo-group">
+                <span class="cv-sub-label">디지털트윈 &amp; Sim-to-Real · Digital Twin</span>
+                <div class="repo-grid">
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-clone"></i> dotori_isaacsim</div>
+                        <div class="repo-lang">Python · Isaac Sim 5.1</div>
+                        <div class="repo-role">역할 · 시뮬레이터–실선 연동(HILS) 설계</div>
+                        <div class="repo-desc"><code>dotori_network</code>로 <strong>실제 제어망과 동일 통신</strong>을 연동해 디지털트윈에서 제어 로직을 그대로 검증하는 sim-to-real 환경.</div>
+                    </div>
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-radiation"></i> 방사능 정화 훈련 시뮬레이터</div>
+                        <div class="repo-lang">Isaac Sim · ROS2 · Dynamics</div>
+                        <div class="repo-role">역할 · 디지털트윈 시뮬레이터 개발(기여 70%)</div>
+                        <div class="repo-desc">방사성 오염 환경에서 로봇 제염 작업을 훈련하는 Isaac Sim 기반 디지털트윈. 한국원자력연구원(KAERI) 주관, 아르곤국립연구소(ANL) 공동.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Systems Integration & Protocols -->
+            <div class="repo-group">
+                <span class="cv-sub-label">시스템 통합 &amp; 프로토콜 · Systems Integration &amp; ICD</span>
+                <div class="repo-grid">
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-network-wired"></i> dotori_network</div>
+                        <div class="repo-lang">Python · Pub/Sub SDK</div>
+                        <div class="repo-role">역할 · 생태계 ICD/시퀀스 설계 기반</div>
+                        <div class="repo-desc">메시지 정의 · Node · Pub/Sub SDK. dotori 생태계(제어·인식·디지털트윈) 전반의 <strong>인터페이스 규약(ICD)</strong>과 통신 시퀀스를 정의.</div>
+                    </div>
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-ethernet"></i> NeuroPilot — 통신 프로토콜</div>
+                        <div class="repo-lang">TCP/IP · Binary Packet</div>
+                        <div class="repo-role">역할 · 바이너리 패킷 프로토콜 ICD 설계</div>
+                        <div class="repo-desc">3D Slicer 내비게이션과 장비 간 <strong>TCP/IP 바이너리 패킷</strong>(STX / Len / Tag / Data / Checksum / ETX) 프로토콜을 설계해 안정적 실시간 연동을 확보.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Surgical Navigation Platforms -->
+            <div class="repo-group">
+                <span class="cv-sub-label">의료 내비게이션 플랫폼 · Surgical Navigation Platforms</span>
+                <div class="repo-grid">
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-compass"></i> neuropilot_develop</div>
+                        <div class="repo-lang">Python · 3D Slicer</div>
+                        <div class="repo-role">역할 · 뉴로 내비게이션 + AI 분할 통합</div>
+                        <div class="repo-desc">3D Slicer 기반 NeuroPilot 뉴로 내비게이션. AI segmentation 모델 군(CNet / HNet / PNet / SSNet)을 통합해 자동 분할–정합을 지원.</div>
+                    </div>
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-crosshairs"></i> SMCNavi</div>
+                        <div class="repo-lang">C++ · Python · CMake</div>
+                        <div class="repo-role">역할 · 통합 내비게이션 · 3D Slicer 커스텀 빌드</div>
+                        <div class="repo-desc">삼성서울병원 가상병원 과제용 통합 내비게이션. 3D Slicer를 <strong>대형 코드베이스</strong> 위에서 커스텀 빌드.</div>
+                    </div>
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-bullseye"></i> MarkerEditor_sharp</div>
+                        <div class="repo-lang">C# · C++</div>
+                        <div class="repo-role">역할 · 광학 트래킹 마커 에디터 개발</div>
+                        <div class="repo-desc">수술 내비게이션용 광학 트래킹 마커를 정의·편집하는 도구.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Agent & Automation -->
+            <div class="repo-group">
+                <span class="cv-sub-label">AI 에이전트 &amp; 자동화 · AI Agent &amp; Automation</span>
+                <div class="repo-grid">
+                    <div class="repo-card">
+                        <div class="repo-name"><i class="fas fa-robot"></i> <a href="../projects/llm-wiki/">LLM-wiki</a> <span class="repo-badge public">Project</span></div>
+                        <div class="repo-lang">TypeScript · Python · PostgreSQL · Docker</div>
+                        <div class="repo-role">역할 · 시스템 전체 설계·개발(개인 프로젝트)</div>
+                        <div class="repo-desc">개인 지식을 AI가 <strong>인제스트·연결·발행</strong>하는 LLM wiki를 자체 구축. AI 코딩 에이전트 · MCP · 커스텀 워크플로 자동화 파이프라인. <a href="../projects/llm-wiki/">프로젝트 상세 →</a></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer id="site-footer"></footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../js/nav.js"></script>
+    </body>
+</html>

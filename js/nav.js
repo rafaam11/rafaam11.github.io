@@ -6,7 +6,7 @@
  *
  * Each page declares two attributes on <body>:
  *   data-base   relative path back to site root ("" on root, "../" one level deep)
- *   data-page   active page key: home | cv | projects | repositories
+ *   data-page   active page key: home | cv | projects | engineering
  * and provides empty placeholders:
  *   <header id="site-nav"></header> ... <footer id="site-footer"></footer>
  */
@@ -24,7 +24,7 @@
   var links = [
     { key: 'cv',           label: 'CV',           href: dir('cv/') },
     { key: 'projects',     label: 'Projects',     href: dir('projects/') },
-    { key: 'repositories', label: 'Repositories', href: dir('repositories/') }
+    { key: 'engineering',  label: 'Engineering',  href: dir('engineering/') }
   ];
 
   /* ── Navigation ── */
