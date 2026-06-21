@@ -214,7 +214,7 @@
 .news-tag.is-career  { background: #eef1f3; color: #546e7a; }
 .news-tag.is-edu     { background: #ecebf7; color: #4f46e5; }
 
-/* ─── Projects index (Featured cards + More list) ─── */
+/* ─── Projects index (structured table) ─── */
 .proj-chip {
   display: inline-block;
   font-size: .68rem;
@@ -223,61 +223,57 @@
   color: var(--navy);
   border: 1px solid var(--line);
   border-radius: 3px;
-  padding: .15rem .45rem;
+  padding: .12rem .42rem;
+  margin: 0 .15rem .15rem 0;
 }
 
-.featured-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 1rem;
+.proj-table-wrap { overflow-x: auto; }
+.proj-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
 }
-.featured-card {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--navy);
-  border-radius: 6px;
-  padding: 1.1rem 1.2rem;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-.featured-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(30, 58, 95, .08);
-}
-.fc-eyebrow {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: .5rem;
-  font-size: .66rem;
+.proj-table thead th {
+  text-align: left;
+  font-size: .64rem;
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: .45rem;
+  padding: .5rem .7rem;
+  border-bottom: 1.5px solid var(--navy);
+  white-space: nowrap;
 }
-.featured-card h3 { font-size: 1.04rem; font-weight: 800; margin-bottom: .3rem; }
-.featured-card h3 a { color: var(--ink); text-decoration: none; }
-.featured-card h3 a:hover { color: var(--navy); }
-.fc-role { font-size: .77rem; font-weight: 700; color: var(--navy); margin-bottom: .45rem; }
-.fc-desc { font-size: .84rem; line-height: 1.55; color: var(--slate); margin-bottom: .65rem; }
-.fc-tech { display: flex; flex-wrap: wrap; gap: .3rem; }
-
-.more-list { margin-top: .25rem; }
-.more-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: .85rem 0;
+.proj-table td {
+  padding: .7rem .7rem;
   border-bottom: 1px solid var(--line);
+  vertical-align: top;
 }
-.more-item:last-child { border-bottom: 0; }
-.mi-main { flex-grow: 1; }
-.more-item h3 { font-size: .96rem; font-weight: 700; margin-bottom: .22rem; }
-.more-item h3 a { color: var(--ink); text-decoration: none; }
-.more-item h3 a:hover { color: var(--navy); }
-.mi-role { font-size: .76rem; font-weight: 700; color: var(--navy); }
-.mi-tech { font-size: .76rem; color: var(--slate); }
-.mi-period { font-size: .78rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.proj-table tbody tr:hover td { background: var(--bg-soft); }
+.proj-group-row td,
+.proj-table tbody tr.proj-group-row:hover td {
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--navy);
+  background: var(--bg-chip);
+  padding: .42rem .7rem;
+}
+.pt-title { font-weight: 700; min-width: 12rem; }
+.pt-title a { color: var(--ink); text-decoration: none; }
+.pt-title a:hover { color: var(--navy); }
+.pt-domain { display: block; font-size: .7rem; font-weight: 400; color: var(--muted); margin-top: .12rem; }
+.pt-org { color: var(--slate); min-width: 9rem; }
+.pt-role { color: var(--navy); font-weight: 600; min-width: 9rem; }
+.pt-period { color: var(--slate); white-space: nowrap; }
+.pt-tech { min-width: 9rem; }
+
+@media (max-width: 768px) {
+  .proj-table { font-size: .8rem; }
+  .proj-table thead th,
+  .proj-table td { padding: .5rem .5rem; }
+}
 
 /* ─── Skills section (defines classes the markup uses; previously unstyled) ─── */
 .focus-list {
