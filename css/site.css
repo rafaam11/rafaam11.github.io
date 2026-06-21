@@ -431,15 +431,14 @@
   border-radius: 3px;
 }
 .tool-tag--core { background: var(--navy); color: #fff; }
-/* Per-tool brand logo (Simple Icons); color baked per chip state in the URL */
+/* Per-tool brand logo (Simple Icons); color baked per chip state in the URL.
+   Fixed square box so every chip's icon shares the same footprint. */
 .tool-logo { width: .95em; height: .95em; object-fit: contain; flex-shrink: 0; }
-/* Fallback mark for tools without an official logo — inherits chip text color */
+/* Fallback mark for tools without an official logo — same box as a logo,
+   rendered as a subtle centered dot that inherits the chip text color. */
 .tool-logo--fb {
-  width: .58em; height: .58em;
-  margin: 0 .18em;
-  border-radius: 2px;
-  background: currentColor;
-  opacity: .45;
+  background: radial-gradient(circle, currentColor 0 30%, transparent 33%);
+  opacity: .5;
 }
 
 /* ─── Footer ─── */
