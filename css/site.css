@@ -378,6 +378,9 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: .85rem;
 }
+/* Fixed 2-column variant (Contact services: 2+2 instead of auto-fit 3+1) */
+.focus-list--2col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 575.98px) { .focus-list--2col { grid-template-columns: 1fr; } }
 .focus-item {
   display: flex;
   gap: .8rem;
