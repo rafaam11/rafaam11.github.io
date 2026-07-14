@@ -77,7 +77,7 @@
   }
 
   function capabilityAtlasHtml(data, base, isFile) {
-    return data.capabilities.map(function (capability) {
+    return data.capabilities.map(function (capability, capabilityIndex) {
       var related = data.projects.filter(function (project) {
         return project.primaryCapability === capability.key || project.crossCapabilities.indexOf(capability.key) !== -1;
       });
@@ -88,12 +88,14 @@
         return '<span>' + escapeHtml(method) + '</span>';
       }).join('');
       return '<article class="capability-card capability-card--' + escapeHtml(capability.key) + '">' +
+        '<span class="capability-number">0' + (capabilityIndex + 1) + '</span>' +
         '<div class="capability-label">Capability</div>' +
         '<h3>' + escapeHtml(capability.title) + '</h3>' +
         '<p>' + escapeHtml(capability.summary) + '</p>' +
         '<div class="capability-methods" aria-label="Methods">' + methods + '</div>' +
         '<p class="capability-validation"><strong>How I validate</strong> ' + escapeHtml(capability.validation) + '</p>' +
         '<div class="capability-links" aria-label="Related projects">' + links + '</div>' +
+        '<span class="capability-meta">' + related.length + ' related project' + (related.length === 1 ? '' : 's') + '</span>' +
       '</article>';
     }).join('');
   }
@@ -112,10 +114,10 @@
           return '<span>' + escapeHtml(label) + '</span>';
         }).join('');
         return '<article class="project-card">' +
-          '<div class="project-topline"><span class="status-pill status-pill--' + escapeHtml(project.evidenceState) + '">' + escapeHtml(project.status) + '</span><span>' + escapeHtml(project.period) + '</span></div>' +
+          '<div class="project-topline"><span class="status-pill status-pill--' + escapeHtml(project.evidenceState) + '" data-state="' + escapeHtml(project.evidenceState) + '">' + escapeHtml(project.status) + '</span><span class="project-period">' + escapeHtml(project.period) + '</span></div>' +
           '<h3><a href="' + escapeHtml(directoryHref('', [project.slug], isFile)) + '">' + escapeHtml(project.title) + '</a></h3>' +
           '<p class="project-problem">' + escapeHtml(project.problemSummary) + '</p>' +
-          '<p class="project-owned"><strong>Owned</strong> ' + escapeHtml(project.ownedRole) + '</p>' +
+          '<p class="project-owned project-role"><strong>Owned</strong> ' + escapeHtml(project.ownedRole) + '</p>' +
           '<p class="project-evidence"><strong>Evidence</strong> ' + escapeHtml(project.verifiedEvidence) + '</p>' +
           '<div class="project-tags">' + tags + '</div>' +
         '</article>';

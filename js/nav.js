@@ -6,7 +6,7 @@
  *
  * Each page declares two attributes on <body>:
  *   data-base   relative path back to site root ("" on root, "../" one level deep)
- *   data-page   active page key: home | cv | research | projects | contact
+ *   data-page   active page key: home | projects | capabilities | cv | contact
  * and provides empty placeholders:
  *   <header id="site-nav"></header> ... <footer id="site-footer"></footer>
  */
@@ -22,9 +22,9 @@
   var home = base + (isFile ? 'index.html' : '');
   if (home === '') home = './'; // avoid empty href on the home page over http(s)
   var links = [
-    { key: 'cv',           label: 'CV',              href: dir('cv/') },
-    { key: 'research',     label: 'Research Fields', href: dir('research/') },
     { key: 'projects',     label: 'Projects',        href: dir('projects/') },
+    { key: 'capabilities', label: 'Capabilities',    href: dir('research/') },
+    { key: 'cv',           label: 'CV',              href: dir('cv/') },
     { key: 'contact',      label: 'Contact',         href: dir('contact/') }
   ];
 
@@ -67,7 +67,7 @@
       '<a href="https://www.linkedin.com/in/rlawlsals" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>' +
       '<a href="mailto:uiop3847@naver.com" aria-label="Email"><i class="fas fa-envelope"></i></a>' +
     '</div>' +
-    '<div class="foot-meta">© ' + year + ' Jinmin Kim · Research Engineer · Daegu, Korea</div>';
+    '<div class="foot-meta">© ' + year + ' Jinmin Kim · 3D Spatial Computing · Research Engineer · Daegu, Korea</div>';
 
   var footMount = document.getElementById('site-footer');
   if (footMount) {
