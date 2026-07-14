@@ -128,3 +128,23 @@ test('site stylesheet defines the approved atlas and chapter components', () => 
     assert.match(css, new RegExp(className.replace('.', '\\.')));
   }
 });
+
+test('CV frames current experience as owned decisions and evidenced change', () => {
+  const html = read('cv/index.html');
+  assert.match(html, /Hands-on technical-lead IC/);
+  assert.match(html, />Owned</);
+  assert.match(html, />Changed</);
+  assert.match(html, />Evidence</);
+  assert.match(html, /3–4 months → 1–2 weeks/);
+  assert.match(html, /Weekly → monthly/);
+  assert.doesNotMatch(html, /기여도\s*\d+\s*%/);
+});
+
+test('Contact speaks to senior R&D hiring without overpromising', () => {
+  const html = read('contact/index.html');
+  assert.match(html, /senior R&amp;D teams/i);
+  assert.match(html, /hands-on technical-lead IC/i);
+  assert.doesNotMatch(html, /end-to-end/i);
+  assert.doesNotMatch(html, /1–2일/);
+  assert.doesNotMatch(html, /within (?:one|two|1|2) business days/i);
+});
