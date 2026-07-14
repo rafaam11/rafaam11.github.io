@@ -332,7 +332,7 @@ git add README.md AGENTS.md CLAUDE.md docs/superpowers/plans/2026-07-15-3d-syste
 git commit -m "docs: align portfolio maintenance guidance"
 ```
 
-- [ ] **Step 6: Final clean-state verification**
+- [x] **Step 6: Final clean-state verification**
 
 Run:
 
