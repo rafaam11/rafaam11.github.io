@@ -76,3 +76,55 @@ test('mountAll fills supported portfolio mount points', () => {
   assert.match(atlasNode.innerHTML, /capability-card/);
   assert.match(chaptersNode.innerHTML, /project-card/);
 });
+
+function read(relativePath) {
+  return fs.readFileSync(path.join(root, relativePath), 'utf8');
+}
+
+test('navigation leads with Projects and Capabilities', () => {
+  const nav = read('js/nav.js');
+  const projectsIndex = nav.indexOf("label: 'Projects'");
+  const capabilitiesIndex = nav.indexOf("label: 'Capabilities'");
+  const cvIndex = nav.indexOf("label: 'CV'");
+  const contactIndex = nav.indexOf("label: 'Contact'");
+
+  assert.equal(projectsIndex >= 0, true);
+  assert.equal(projectsIndex < capabilitiesIndex, true);
+  assert.equal(capabilitiesIndex < cvIndex, true);
+  assert.equal(cvIndex < contactIndex, true);
+  assert.match(nav, /3D Spatial Computing · Research Engineer/);
+});
+
+test('Home implements the Pure Capability Atlas hierarchy', () => {
+  const html = read('index.html');
+  assert.match(html, /data-portfolio="capability-atlas"/);
+  assert.match(html, /I turn uncertain 3D spatial problems into systems teams can test, trust, and extend\./);
+  assert.match(html, /3–4 months → 1–2 weeks/);
+  assert.match(html, /Weekly → monthly/);
+  assert.match(html, /4–5 micro-PoCs/);
+  assert.equal(html.indexOf('data-portfolio="capability-atlas"') < html.indexOf('Proven Impact'), true);
+  assert.equal(html.indexOf('portfolio-data.js') < html.indexOf('portfolio-render.js'), true);
+});
+
+test('Projects uses capability chapters without Featured hierarchy', () => {
+  const html = read('projects/index.html');
+  assert.match(html, /data-portfolio="project-chapters"/);
+  assert.doesNotMatch(html, />Featured</);
+  assert.doesNotMatch(html, />More Projects</);
+  assert.equal(html.indexOf('portfolio-data.js') < html.indexOf('portfolio-render.js'), true);
+});
+
+test('Research route is presented as Capabilities', () => {
+  const html = read('research/index.html');
+  assert.match(html, /data-page="capabilities"/);
+  assert.match(html, /<title>Capabilities · Jinmin Kim<\/title>/);
+  assert.match(html, /What I solve/);
+  assert.match(html, /How I validate/);
+});
+
+test('site stylesheet defines the approved atlas and chapter components', () => {
+  const css = read('css/site.css');
+  for (const className of ['.hero-kicker', '.hero-statement', '.capability-atlas', '.capability-card', '.impact-strip', '.work-principles', '.project-chapter', '.project-grid', '.project-card']) {
+    assert.match(css, new RegExp(className.replace('.', '\\.')));
+  }
+});

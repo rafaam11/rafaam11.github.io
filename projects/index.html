@@ -1,135 +1,43 @@
 <!DOCTYPE html>
-<html lang="ko">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="Jinmin Kim — Projects. Autonomous robotics, surgical navigation, digital-twin, XR, and AI-agent projects." />
-        <meta name="author" content="JinminKim" />
-        <title>Projects · Jinmin Kim</title>
-        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
-        <link href="../css/styles.css" rel="stylesheet" />
-        <link href="../css/cv-theme.css" rel="stylesheet" />
-        <link href="../css/site.css" rel="stylesheet" />
-    </head>
-    <body data-base="../" data-page="projects">
-        <header id="site-nav"></header>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Twelve 3D spatial computing projects by Jinmin Kim, organized by transferable engineering capability." />
+    <meta name="author" content="Jinmin Kim" />
+    <title>Projects · Jinmin Kim</title>
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" type="text/css" />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="../css/cv-theme.css" rel="stylesheet" />
+    <link href="../css/site.css" rel="stylesheet" />
+</head>
+<body data-base="../" data-page="projects">
+    <header id="site-nav"></header>
 
-        <main class="page">
-            <h2 class="section-title">Projects</h2>
-            <p class="section-note">인식·실시간 제어·디지털트윈부터 수술 내비게이션·XR·AI 에이전트까지 — 총 12개. 프로젝트명을 누르면 상세(케이스 스터디)로 이동합니다. 기관·협력, 본인 기여·역할, 기간, 관련 기술을 함께 정리했습니다.</p>
-
-            <div class="proj-table-wrap">
-                <table class="proj-table">
-                    <thead>
-                        <tr>
-                            <th>프로젝트</th>
-                            <th>기관 · 협력</th>
-                            <th>기여 · 역할</th>
-                            <th>기간</th>
-                            <th>관련 기술</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="proj-group-row"><td colspan="5">Featured</td></tr>
-
-                        <tr>
-                            <td class="pt-title"><a href="unmanned-forklift/">무인지게차(AGV) 자율운반 디지털트윈</a><span class="pt-domain">로봇 · 산업 자동화</span></td>
-                            <td class="pt-org">Digitrack Inc.</td>
-                            <td class="pt-role">팀 5명 · 인식·디지털트윈·장애물/안전</td>
-                            <td class="pt-period">2024 – 현재</td>
-                            <td class="pt-tech"><span class="proj-chip">C++23</span><span class="proj-chip">ToF+RGB Fusion</span><span class="proj-chip">6-DOF Pose</span><span class="proj-chip">Isaac Sim</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="rtms-navigation/">뇌졸중 rTMS 내비게이션 통합시스템</a><span class="pt-domain">의료 내비게이션</span></td>
-                            <td class="pt-org">Digitrack · 보건복지부 / 계명대 동산병원 / AT&amp;C</td>
-                            <td class="pt-role">내비게이션 SW 주도</td>
-                            <td class="pt-period">2024.07 – 현재</td>
-                            <td class="pt-tech"><span class="proj-chip">3D Slicer</span><span class="proj-chip">Registration</span><span class="proj-chip">Surgical Nav</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="life-careverse/">Life Careverse — 확장현실 케어 플랫폼</a><span class="pt-domain">XR · 의료</span></td>
-                            <td class="pt-org">Digitrack · 보건복지부 / 삼성서울병원</td>
-                            <td class="pt-role">단독 100% · 풀스택</td>
-                            <td class="pt-period">2023.07 – 현재</td>
-                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">Meta Quest</span><span class="proj-chip">PUN2</span><span class="proj-chip">FastAPI</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="surgical-twin/">혼합현실 Surgical Twin Applicator</a><span class="pt-domain">의료 MR · 내비게이션</span></td>
-                            <td class="pt-org">Digitrack · 한국전기연구원(KERI)</td>
-                            <td class="pt-role">Applicator 전반 · 기여 95%</td>
-                            <td class="pt-period">2023.07 – 2023.11</td>
-                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">Optical Tracker</span><span class="proj-chip">Registration</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="mandibular-fracture/">턱뼈 골절복원 최적화 시뮬레이터</a><span class="pt-domain">의료 · 연구</span></td>
-                            <td class="pt-org">DGIST · 한림대 성심병원</td>
-                            <td class="pt-role">석사 졸업연구 90% · SCI(e) Q1 + 수상</td>
-                            <td class="pt-period">2021.12 – 2023.02</td>
-                            <td class="pt-tech"><span class="proj-chip">Python</span><span class="proj-chip">Open3D</span><span class="proj-chip">3D Slicer</span><span class="proj-chip">Optimization</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="llm-wiki/">LLM Wiki — AI 기반 개인 지식 시스템</a><span class="pt-domain">AI 에이전트 · 풀스택</span></td>
-                            <td class="pt-org">개인 프로젝트</td>
-                            <td class="pt-role">전체 설계·개발 100%</td>
-                            <td class="pt-period">2026.04 – 현재</td>
-                            <td class="pt-tech"><span class="proj-chip">TypeScript</span><span class="proj-chip">Python</span><span class="proj-chip">PostgreSQL</span><span class="proj-chip">MCP</span></td>
-                        </tr>
-
-                        <tr class="proj-group-row"><td colspan="5">More Projects</td></tr>
-
-                        <tr>
-                            <td class="pt-title"><a href="radioactive-digital-twin/">방사능 정화 디지털트윈 훈련 시뮬레이터</a><span class="pt-domain">로봇 · 시뮬레이션</span></td>
-                            <td class="pt-org">Digitrack · 산업부 / KAERI / ANL</td>
-                            <td class="pt-role">초기 디지털트윈 셋업 후 인계</td>
-                            <td class="pt-period">2024.02 – 2026.07</td>
-                            <td class="pt-tech"><span class="proj-chip">Isaac Sim</span><span class="proj-chip">ROS2</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="c-arm-navigation/">3D Navigation 융합 저선량 C-Arm CT</a><span class="pt-domain">의료 내비게이션</span></td>
-                            <td class="pt-org">Digitrack · 제노레이 / 서울대병원 외</td>
-                            <td class="pt-role">3D 내비게이션 일부 기능</td>
-                            <td class="pt-period">2024.07 – 2024.12</td>
-                            <td class="pt-tech"><span class="proj-chip">3D Slicer</span><span class="proj-chip">C-Arm CT</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="orthognathic-ar/">악교정 수술 AI 계획 + AR 내비게이션</a><span class="pt-domain">의료 AR</span></td>
-                            <td class="pt-org">Digitrack · K-Medi Hub / 삼성서울병원</td>
-                            <td class="pt-role">HoloLens AR 파트 · 기여 30%</td>
-                            <td class="pt-period">2023.10 – 2024.12</td>
-                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">MRTK</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="oral-facial-ar/">구강악안면 AI 기반 AR 수술 시스템</a><span class="pt-domain">의료 AR</span></td>
-                            <td class="pt-org">DGIST · 산업부 / 메가젠 / 한림대 성심병원</td>
-                            <td class="pt-role">AR 내비게이션 초기·보조</td>
-                            <td class="pt-period">2021.06 – 2023.05</td>
-                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">HoloLens 2</span><span class="proj-chip">3D Slicer</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="ar-distance-meter/">마커기반 3차원 AR 거리측정기</a><span class="pt-domain">개인 · AR</span></td>
-                            <td class="pt-org">개인 프로젝트</td>
-                            <td class="pt-role">단독 100%</td>
-                            <td class="pt-period">2021.03 – 2021.09</td>
-                            <td class="pt-tech"><span class="proj-chip">Unity</span><span class="proj-chip">Vuforia</span><span class="proj-chip">Android</span></td>
-                        </tr>
-                        <tr>
-                            <td class="pt-title"><a href="quadruped-robot/">5절 링크 4족 보행 로봇</a><span class="pt-domain">학부 · 로봇</span></td>
-                            <td class="pt-org">금오공과대학교 · DGIST 동계 인턴</td>
-                            <td class="pt-role">학부 졸업 90% · 특허 + 수상</td>
-                            <td class="pt-period">2020.04 – 2021.01</td>
-                            <td class="pt-tech"><span class="proj-chip">MATLAB</span><span class="proj-chip">SolidWorks</span><span class="proj-chip">Arduino</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+    <main class="page page-projects">
+        <header class="page-intro">
+            <p class="hero-kicker">Project Atlas</p>
+            <h1>Projects by capability</h1>
+            <p class="page-lead">Twelve projects, grouped by the engineering capability they demonstrate. Each case study separates the decisions I owned from the outcome delivered with the team.</p>
+            <div class="legend" aria-label="Evidence-state legend">
+                <span><i class="legend-dot is-verified"></i> Verified</span>
+                <span><i class="legend-dot is-ongoing"></i> Ongoing</span>
+                <span><i class="legend-dot is-research"></i> Research</span>
             </div>
-        </main>
+        </header>
 
-        <footer id="site-footer"></footer>
+        <div data-portfolio="project-chapters">
+            <p class="portfolio-fallback">Loading project chapters…</p>
+        </div>
+    </main>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../js/nav.js"></script>
-    </body>
+    <footer id="site-footer"></footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/portfolio-data.js"></script>
+    <script src="../js/portfolio-render.js"></script>
+    <script src="../js/nav.js"></script>
+</body>
 </html>
