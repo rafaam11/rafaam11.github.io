@@ -584,8 +584,9 @@
 .legend-dot.is-research { background: var(--evidence); }
 
 .project-chapter { margin-bottom: 4.8rem; }
-.chapter-heading { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: .9rem; align-items: start; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--ink); }
+.chapter-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem; align-items: end; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--ink); }
 .chapter-heading > span { color: var(--evidence); font: 700 .78rem/1 Georgia, serif; }
+.chapter-heading > div > span { display: block; margin-bottom: .35rem; color: var(--muted); font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .chapter-heading h2 { margin: 0 0 .35rem; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 400; text-transform: none; }
 .chapter-heading p { margin: 0; color: var(--slate); font-size: .79rem; }
 .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
@@ -658,5 +659,5 @@
   .hero-actions { align-items: stretch; flex-direction: column; }
   .evidence-list a { grid-template-columns: 1fr auto; }
   .evidence-list span { grid-column: 1 / -1; }
-  .chapter-heading { grid-template-columns: 38px 1fr; }
+  .chapter-heading { grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; }
 }

@@ -102,6 +102,8 @@ test('Home implements the Pure Capability Atlas hierarchy', () => {
   assert.match(html, /3–4 months → 1–2 weeks/);
   assert.match(html, /Weekly → monthly/);
   assert.match(html, /4–5 micro-PoCs/);
+  assert.match(html, /profile_square\.webp/);
+  assert.equal(fs.existsSync(path.join(root, 'assets', 'img', 'profile_square.webp')), true);
   assert.equal(html.indexOf('data-portfolio="capability-atlas"') < html.indexOf('Proven Impact'), true);
   assert.equal(html.indexOf('portfolio-data.js') < html.indexOf('portfolio-render.js'), true);
 });
@@ -155,6 +157,7 @@ test('all project details use the Decision Timeline attribution contract', () =>
     const html = read(`projects/${project.slug}/index.html`);
     for (const label of requiredLabels) assert.match(html, new RegExp(label), `${project.slug}: missing ${label}`);
     assert.match(html, /class="decision-timeline"/, `${project.slug}: missing decision timeline`);
+    assert.match(html, new RegExp(project.period.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `${project.slug}: period differs from canonical data`);
     assert.doesNotMatch(html, /기여도\s*\d+\s*%/, `${project.slug}: contains contribution percentage`);
   }
 });
