@@ -24,69 +24,15 @@
             <p class="page-lead">My work moves across medical XR, robotics, and industrial autonomy, but the underlying job stays consistent: define the coordinate problem, make uncertainty visible, gather evidence, and integrate only what survives validation.</p>
         </header>
 
-        <section class="capability-detail" id="registration-navigation">
-            <div class="capability-detail-heading">
-                <span class="capability-index">01</span>
-                <div><p>Geometry foundation</p><h2>3D Registration &amp; Navigation</h2></div>
-            </div>
-            <div class="capability-detail-grid">
-                <div><h3>What I solve</h3><p>Transform camera, medical-image, tracker, and world coordinates into a traceable spatial chain that supports navigation rather than a convincing-looking overlay.</p></div>
-                <div><h3>How I validate</h3><p>I derive the transforms, isolate each SDK or tracker dependency in a micro-PoC, visualize residual errors, and verify the full chain against domain-specific scenarios.</p></div>
-            </div>
-            <p class="evidence-links"><strong>Evidence:</strong> <a href="../projects/surgical-twin/">Surgical Twin</a> · <a href="../projects/rtms-navigation/">rTMS Navigation</a> · <a href="../projects/mandibular-fracture/">Mandibular Fracture Navigation</a> · <a href="../projects/c-arm-navigation/">C-arm Navigation</a></p>
-        </section>
-
-        <section class="capability-detail" id="sensor-perception">
-            <div class="capability-detail-heading">
-                <span class="capability-index">02</span>
-                <div><p>Sensing under constraints</p><h2>Sensor Perception &amp; Safety</h2></div>
-            </div>
-            <div class="capability-detail-grid">
-                <div><h3>What I solve</h3><p>Determine where depth, vision, and obstacle sensors are trustworthy—and how their uncertainty should change system behavior.</p></div>
-                <div><h3>How I validate</h3><p>I expose regions of interest, noise waveforms, blind spots, coordinate frames, and safety-gate decisions through visual overlays before field deployment.</p></div>
-            </div>
-            <p class="evidence-links"><strong>Evidence:</strong> <a href="../projects/unmanned-forklift/">Unmanned Forklift</a> · <a href="../projects/quadruped-robot/">Quadruped Robot</a></p>
-        </section>
-
-        <section class="capability-detail" id="digital-twin">
-            <div class="capability-detail-heading">
-                <span class="capability-index">03</span>
-                <div><p>Evidence before field cost</p><h2>Digital Twin &amp; Validation</h2></div>
-            </div>
-            <div class="capability-detail-grid">
-                <div><h3>What I solve</h3><p>Move expensive, slow, or hazardous verification into a repeatable environment without pretending simulation replaces reality.</p></div>
-                <div><h3>How I validate</h3><p>I encode the decisions that matter—sensor coverage, safety gates, coordinate behavior, or route constraints—then use field tests to close the remaining gap.</p></div>
-            </div>
-            <p class="evidence-links"><strong>Evidence:</strong> <a href="../projects/radioactive-digital-twin/">Radioactive Facility Digital Twin</a> · <a href="../projects/unmanned-forklift/">LiteSim for Unmanned Forklift</a></p>
-        </section>
-
-        <section class="capability-detail" id="clinical-xr">
-            <div class="capability-detail-heading">
-                <span class="capability-index">04</span>
-                <div><p>Domain translation</p><h2>Clinical-to-XR Translation</h2></div>
-            </div>
-            <div class="capability-detail-grid">
-                <div><h3>What I solve</h3><p>Convert clinical language, instrument workflows, and anatomical decision points into interaction flows and spatial software requirements.</p></div>
-                <div><h3>How I validate</h3><p>I show working 3D prototypes early, confirm the scenario with domain experts, and progress through approval, adoption, or research validation as appropriate.</p></div>
-            </div>
-            <p class="evidence-links"><strong>Evidence:</strong> <a href="../projects/life-careverse/">Life Careverse</a> · <a href="../projects/orthognathic-ar/">Orthognathic AR</a> · <a href="../projects/oral-facial-ar/">Oral &amp; Facial AR</a> · <a href="../projects/ar-distance-meter/">AR Distance Meter</a></p>
-        </section>
-
-        <section class="capability-detail" id="ai-tool-building">
-            <div class="capability-detail-heading">
-                <span class="capability-index">05</span>
-                <div><p>Engineering leverage</p><h2>AI-Enabled Tool Building</h2></div>
-            </div>
-            <div class="capability-detail-grid">
-                <div><h3>What I solve</h3><p>Remove the UI, binding, data-structure, and repetitive implementation bottlenecks that delay an engineering decision.</p></div>
-                <div><h3>How I validate</h3><p>I retain human ownership of context, requirements, architecture, acceptance criteria, and PR review while agents accelerate implementation and documentation.</p></div>
-            </div>
-            <p class="evidence-links"><strong>Evidence:</strong> <a href="../projects/llm-wiki/">LLM Wiki</a> · sensor-validation tools · PR and planning governance used by the development team</p>
-        </section>
+        <div data-portfolio="capability-details">
+            <p class="portfolio-fallback">The capability details—including What I solve and How I validate—require JavaScript. <a href="../projects/index.html" data-root-dir="projects/">Browse all project case studies</a>.</p>
+        </div>
     </main>
 
     <footer id="site-footer"></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/portfolio-data.js"></script>
+    <script src="../js/portfolio-render.js"></script>
     <script src="../js/nav.js"></script>
 </body>
 </html>

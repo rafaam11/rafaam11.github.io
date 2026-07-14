@@ -4,8 +4,8 @@ const path = require('node:path');
 const data = require('../js/portfolio-data.js');
 const render = require('../js/portfolio-render.js');
 
-const contributionPattern = /\b(?:30|90|95|100)\s*%/;
-const privatePartnerPattern = /Digitrack|DIGITRACK|삼성서울병원|KERI|KAERI|HD현대|Hyundai|계명대학교 동산병원|계명대 동산병원/i;
+const contributionPattern = render.policy.contributionPercentagePattern;
+const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 
 function publicPortfolioFiles(rootDir) {
   return [
