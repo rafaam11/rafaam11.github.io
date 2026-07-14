@@ -42,6 +42,9 @@ test('shared metadata contains no contribution percentages or private partner na
   const serialized = JSON.stringify(data);
   assert.doesNotMatch(serialized, contributionPercentagePattern);
   assert.doesNotMatch(serialized, render.policy.prohibitedPartnerPattern);
+  for (const privatePartner of ['울산대', '이화여대']) {
+    assert.match(privatePartner, render.policy.prohibitedPartnerPattern, `${privatePartner}: missing privacy policy variant`);
+  }
 });
 
 test('policy rejects arbitrary contribution percentages but permits evidence rates', () => {
@@ -168,6 +171,9 @@ test('Projects uses capability chapters without Featured hierarchy', () => {
   assert.doesNotMatch(html, />Featured</);
   assert.doesNotMatch(html, />More Projects</);
   assert.equal(html.indexOf('portfolio-data.js') < html.indexOf('portfolio-render.js'), true);
+  for (const project of data.projects) {
+    assert.match(html, new RegExp(`href="${project.slug}/index\\.html"`), `${project.slug}: missing static fallback link`);
+  }
 });
 
 test('Research route is presented as Capabilities', () => {

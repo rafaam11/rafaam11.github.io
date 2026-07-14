@@ -613,6 +613,9 @@ button:focus-visible {
 .project-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .8rem; }
 .project-tags span { padding: .22rem .4rem; color: var(--slate); background: var(--bg-soft); font-size: .62rem; }
 .portfolio-fallback, .portfolio-error { padding: 1rem; color: var(--slate); background: var(--bg-soft); font-size: .8rem; }
+.portfolio-fallback p:last-child { margin-bottom: 0; }
+.fallback-project-list { columns: 2; gap: 1.5rem; margin: .75rem 0; padding-left: 1.1rem; }
+.fallback-project-list li { break-inside: avoid; margin-bottom: .35rem; }
 .portfolio-error { color: #8a3131; }
 
 .page-capabilities { max-width: 920px; }
@@ -648,6 +651,7 @@ button:focus-visible {
 .contact-context a { color: var(--navy); font-weight: 700; }
 
 @media (max-width: 767.98px) {
+  .fallback-project-list { columns: 1; }
   .hero-editorial { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 3.5rem; }
   .hero-editorial .hero-photo { width: 138px; height: 138px; }
   .capability-atlas, .project-grid, .capability-detail-grid { grid-template-columns: 1fr; }
