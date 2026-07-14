@@ -1,157 +1,26 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="실시간 영상유도 수술을 위한 혼합현실 Surgical Twin Applicator (Applicator 전반 주도) — Digitrack · 한국전기연구원(KERI)" />
-    <meta name="author" content="JinminKim" />
-    <title>혼합현실 Surgical Twin Applicator · Jinmin Kim</title>
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
-    <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="../../css/cv-theme.css" rel="stylesheet" />
-    <link href="../../css/site.css" rel="stylesheet" />
-    <link href="../../css/case-study.css" rel="stylesheet" />
-</head>
-<body data-base="../../" data-page="projects">
-    <header id="site-nav"></header>
-
-    <section class="cs-hero">
-        <div class="cs-wrap">
-            <h1>실시간 영상유도 수술용 혼합현실 Surgical Twin Applicator</h1>
-            <p class="cs-meta">Digitrack Inc. · 한국전기연구원(KERI) &nbsp;|&nbsp; 2023.07 – 2023.11</p>
-            <div class="cs-badges">
-                <span class="badge">Unity</span>
-                <span class="badge">HoloLens 2</span>
-                <span class="badge">MRTK</span>
-                <span class="badge">Optical Tracker</span>
-                <span class="badge">Registration</span>
-            </div>
-        </div>
-    </section>
-
-    <main class="cs-wrap cs-content">
-
-        <section class="cs-section">
-            <h2>Overview</h2>
-            <div class="row g-4">
-                <div class="col-md-7">
-                    <p class="cs-tldr">HoloLens 2로 가상 수술 기구·계획을 실제 수술 공간에 정확히 겹쳐 보여주는 혼합현실 Applicator를 <strong>전반 주도 개발(기여 95%)</strong>해 5개월 내 PoC를 완성했다.</p>
-                    <p>한국전기연구원(KERI) 의뢰 개발용역. 광학 추적 시스템이 실측한 기구 위치를 실시간으로 HoloLens 좌표계에 등록하여, 의사가 실제 환자 신체와 가상 계획(디지털트윈)을 동시에 볼 수 있게 한다.</p>
-                    <div class="cs-achievement">
-                        <i class="fas fa-bolt"></i> 5개월 내 PoC 완성 (기여 95%)
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="cs-meta-table">
-                        <table>
-                            <tr><th>소속</th><td>Digitrack Inc.</td></tr>
-                            <tr><th>발주</th><td>한국전기연구원(KERI)</td></tr>
-                            <tr><th>기간</th><td>2023.07 – 2023.11 (5개월)</td></tr>
-                            <tr><th>기여</th><td>95%</td></tr>
-                            <tr><th>역할</th><td>MR Applicator 전반 (Unity·HoloLens·추적 등록·실시간 렌더링)</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Problem</h2>
-            <p>영상유도 수술에서 의사는 2D 의료영상과 실제 3D 술야를 머릿속으로 정합해야 해 인지 부하와 오차가 따른다. 수술도구의 현재 위치와 수술 계획을 <strong>실제 환자 위에 3D로 겹쳐</strong> 실시간으로 보여주는 혼합현실 가이던스가 있으면 직관성과 정확성을 높일 수 있다.</p>
-        </section>
-
-        <section class="cs-section">
-            <h2>Approach</h2>
-            <p>CT 세그멘테이션 3D 모델(가상 환자)과 스테레오비전 트래커로 측정한 마커·수술도구·환자마커의 위치 관계를 <strong>다중 좌표계 정합(4×4 강체변환)</strong>으로 합성해, <strong>CT 좌표계 기준 수술도구의 실시간 포즈</strong>를 산출한다. 이를 실제와 동일한 환자 디지털트윈 위에 표현하고 HoloLens로 가시화하는 파이프라인이다.</p>
-            <figure class="cs-figure">
-                <img src="../../assets/diagrams/nav-digitaltwin-pipeline.svg" alt="수술 내비게이션에서 환자 디지털트윈, HoloLens AR로 이어지는 다중 좌표계 정합 파이프라인 다이어그램" loading="lazy" />
-                <figcaption>센서·입력 → 다중 좌표계 정합(4×4) → 디지털트윈·AR 가시화 파이프라인</figcaption>
-            </figure>
-        </section>
-
-        <section class="cs-section">
-            <h2>Result</h2>
-            <ul>
-                <li>광학 추적 기구 위치를 HoloLens 좌표계에 <strong>실시간 등록</strong>해 가상 수술도구를 환자 위에 오버레이하는 MR 파이프라인 구현</li>
-                <li>발주처(KERI) 대상 <strong>5개월 내 PoC 완성·납품</strong></li>
-                <li>실제·가상 환자(디지털트윈)와 추적 도구를 동시 표시하는 영상유도 컨셉 검증</li>
-            </ul>
-        </section>
-
-        <section class="cs-section">
-            <h2>Visuals</h2>
-            <figure class="cs-figure">
-                <img src="../../assets/diagrams/hololens-ar-concept.svg" alt="HoloLens로 실제 환자 옆에 가상환자 홀로그램을 띄워 추적 수술도구·숨은 신경·수술계획 가이드를 보여주는 개념도" loading="lazy" />
-                <figcaption>HoloLens MR 뷰 개념 — 실제 환자와 가상환자(디지털트윈)에 추적 수술도구를 동시 표시</figcaption>
-            </figure>
-            <p class="text-muted small mt-2 mb-0">※ 개념 다이어그램. 실제 과제 화면·임상 사진은 비공개.</p>
-        </section>
-
-        <section class="cs-section">
-            <h2>Tech Stack</h2>
-            <div class="row g-3">
-                <div class="col-sm-6 col-md-4">
-                    <h3>MR / XR</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">Unity</span>
-                        <span class="badge">HoloLens 2</span>
-                        <span class="badge">MRTK</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>Tracking</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">Optical Tracker</span>
-                        <span class="badge">Registration (4×4)</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>Communication</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">TCP/IP</span>
-                        <span class="badge">C#</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Role &amp; Timeline</h2>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h3>Role</h3>
-                    <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — MR Applicator 전반 (기여 95%)</li>
-                        <li>소속사: Digitrack Inc.</li>
-                        <li>발주: 한국전기연구원(KERI)</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h3>Timeline</h3>
-                    <ul class="list-unstyled">
-                        <li>2023.07 — 과제 시작</li>
-                        <li>2023.11 — PoC 납품 완료</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <nav class="cs-pager">
-            <a class="cs-pager-back" href="../">← Projects</a>
-            <div class="cs-pager-side">
-                <a class="cs-pager-prev" href="../orthognathic-ar/">← 악교정 수술 AR</a>
-                <a class="cs-pager-next" href="../oral-facial-ar/">구강악안면 AR →</a>
-            </div>
-        </nav>
-
-    </main>
-
-    <footer id="site-footer"></footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../js/nav.js"></script>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Decision timeline for an XR surgical-navigation system integrating medical-image, camera, tracker, and HoloLens coordinate frames." />
+<title>XR Surgical Navigation · Jinmin Kim</title><link rel="icon" href="../../assets/img/favicon.ico" />
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" /><link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" />
+<link href="../../css/styles.css" rel="stylesheet" /><link href="../../css/cv-theme.css" rel="stylesheet" /><link href="../../css/site.css" rel="stylesheet" /><link href="../../css/case-study.css" rel="stylesheet" />
+</head><body data-base="../../" data-page="projects">
+<header id="site-nav"></header>
+<section class="cs-hero cs-hero--editorial"><div class="cs-wrap"><p class="hero-kicker">3D Registration &amp; Navigation</p><h1>XR Surgical Navigation</h1><p class="cs-hero-summary">I converted a difficult multi-coordinate and unfamiliar-SDK problem into small proofs, selected the viable functions, and integrated the complete navigation path without external outsourcing.</p><p class="cs-meta"><span class="evidence-state">Verified</span> 2023.07 – 2023.11 · Medical XR R&amp;D</p><div class="cs-badges"><span class="badge">Rigid Registration</span><span class="badge">HoloLens 2</span><span class="badge">Unity</span><span class="badge">Optical Tracking</span></div></div></section>
+<main class="cs-wrap cs-content">
+<section class="cs-section"><h2>At a glance</h2><div class="case-overview"><div><p class="cs-tldr">The hard part was not rendering a hologram. It was preserving a trustworthy spatial chain across camera, medical-image, patient, instrument, and HoloLens coordinates while learning a specialized SDK quickly enough to meet the program goal.</p><figure class="cs-figure"><img src="../../assets/diagrams/nav-digitaltwin-pipeline.svg" alt="Coordinate registration pipeline from tracking inputs to a surgical digital twin and XR display" /><figcaption>The spatial chain was derived and tested before the final overlay was trusted.</figcaption></figure></div><dl class="case-facts"><div><dt>My responsibility</dt><dd>Coordinate mathematics, SDK probes, filtering decision, integration, and demonstration</dd></div><div><dt>Evidence</dt><dd>Demonstration and review passed; quantitative program objective achieved</dd></div><div><dt>Constraint</dt><dd>Specialized SDK and domain integration with no suitable internal precedent</dd></div></dl></div></section>
+<section class="cs-section"><h2>Decision Timeline</h2><div class="decision-timeline">
+<article class="decision-step"><span class="decision-label">Uncertainty</span><h3>Could every coordinate frame be made consistent?</h3><p>Camera, medical-image, rigid-body, patient, instrument, and headset frames each had different conventions. A visually plausible overlay could still be mathematically wrong.</p></article>
+<article class="decision-step"><span class="decision-label">Probe</span><h3>Break the SDK into parallel micro-PoCs</h3><p>I created four to five small services for eye tracking, screen-space validation, data transfer, and other critical SDK behavior. Most feature feasibility checks took one to two days.</p></article>
+<article class="decision-step"><span class="decision-label">Evidence</span><h3>Raw gaze points were unstable</h3><p>Visualized samples showed that normal eye motion produced large jumps. I treated far-out observations as noise relative to the recent ten-frame mean.</p></article>
+<article class="decision-step"><span class="decision-label">Decision</span><h3>Filter before interaction and derive transforms explicitly</h3><p>I excluded samples too far from the current window mean and implemented the coordinate chain from rigid-transform equations rather than relying on implicit engine behavior.</p></article>
+<article class="decision-step"><span class="decision-label">Integration</span><h3>Merge only the proven SDK functions</h3><p>Validated probes were integrated into the main surgical-navigation software. Final integration typically took one to two weeks after selection.</p></article>
+<article class="decision-step decision-step--outcome"><span class="decision-label">Verified Outcome</span><h3>Accepted demonstration, achieved objective</h3><p>The system passed demonstration and review, met the quantitative project goal, appeared in the final report, and received favorable evaluation during the formal demonstration.</p></article>
+</div></section>
+<section class="cs-section"><div class="attribution-grid"><article><h2>My Decisions</h2><ul><li>Defined the coordinate frames and derived the transform chain.</li><li>Selected and ran the micro-PoC strategy.</li><li>Introduced the gaze filtering rule from observed data.</li><li>Selected proven SDK functions and led final integration.</li></ul></article><article><h2>Team Result</h2><ul><li>The project kept its specialized development in-house.</li><li>The team could adopt critical headset functions with concrete evidence.</li><li>The formal program objective and acceptance milestone were achieved.</li></ul></article></div></section>
+<section class="cs-section"><div class="limitation-note"><h2>Current Status</h2><p>Completed and formally demonstrated. A follow-on program was not pursued because the company shifted its strategic focus from medical to industrial systems; this is not presented as production clinical deployment.</p></div></section>
+<nav class="cs-pager case-pager"><a href="../index.html">← All projects</a><a href="../../research/index.html">Registration capability →</a></nav>
+</main><footer id="site-footer"></footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script><script src="../../js/nav.js"></script>
+</body></html>

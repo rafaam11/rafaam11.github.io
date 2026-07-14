@@ -185,3 +185,56 @@
   .cs-hero h1 { font-size: 1.7rem; }
   .cs-pager { gap: .6rem; }
 }
+
+/* ── Evidence-led decision timeline ── */
+.cs-hero--editorial {
+  padding: 3.5rem 0 3rem;
+  background: #182f4c;
+  border-bottom: 4px solid var(--evidence);
+}
+.cs-hero--editorial .hero-kicker { color: #e3bd78; }
+.cs-hero--editorial h1 { max-width: 780px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; line-height: 1.15; text-transform: none; }
+.cs-hero-summary { max-width: 760px; margin: 1rem 0; color: #d6e0ea; font-size: 1rem; line-height: 1.7; }
+.evidence-state { display: inline-block; margin-right: .55rem; padding: .24rem .5rem; color: #fff; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.25); border-radius: 2px; font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+
+.case-overview { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(230px, .8fr); gap: 2rem; }
+.case-overview p { color: var(--slate); line-height: 1.75; }
+.case-facts { margin: 0; padding: 1rem 1.15rem; background: var(--bg-soft); border-top: 2px solid var(--navy); }
+.case-facts div { padding: .55rem 0; border-bottom: 1px solid var(--line); }
+.case-facts div:last-child { border-bottom: 0; }
+.case-facts dt { color: var(--muted); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+.case-facts dd { margin: .15rem 0 0; color: var(--ink); font-size: .79rem; line-height: 1.5; }
+
+.decision-timeline { position: relative; margin: .5rem 0 0; padding-left: 46px; }
+.decision-timeline::before { content: ""; position: absolute; top: 8px; bottom: 8px; left: 13px; width: 1px; background: var(--line); }
+.decision-step { position: relative; padding: 0 0 2rem; }
+.decision-step:last-child { padding-bottom: .3rem; }
+.decision-step::before { content: ""; position: absolute; top: 5px; left: -39px; width: 13px; height: 13px; background: #fff; border: 2px solid var(--evidence); border-radius: 50%; }
+.decision-label { display: block; margin-bottom: .35rem; color: var(--evidence); font-size: .64rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.decision-step h3 { margin: 0 0 .35rem; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; font-weight: 400; }
+.decision-step p { margin: 0; max-width: 760px; font-size: .85rem; }
+.decision-step--outcome { padding: 1.1rem 1.2rem 1.1rem; background: var(--evidence-soft); }
+.decision-step--outcome::before { top: 1.35rem; }
+
+.attribution-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.attribution-grid article { padding: 1.25rem; background: #fff; border: 1px solid var(--line); border-top: 3px solid var(--navy); }
+.attribution-grid h2 { margin-bottom: .8rem; border: 0; color: var(--navy); font-family: Georgia, "Times New Roman", serif; font-size: 1.2rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.attribution-grid li { margin-bottom: .5rem; font-size: .8rem; }
+.attribution-grid li:last-child { margin-bottom: 0; }
+
+.responsibility-boundary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+.responsibility-boundary article { padding: 1rem; background: var(--bg-soft); }
+.responsibility-boundary h3 { color: var(--evidence); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+.responsibility-boundary p { margin: 0; font-size: .79rem; }
+
+.limitation-note { padding: 1.25rem 1.4rem; background: #f7f8f9; border-left: 3px solid var(--muted); }
+.limitation-note h2 { margin: 0 0 .55rem; border: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.limitation-note p { margin: 0; font-size: .82rem; }
+.case-pager { border-top-color: var(--ink); }
+.case-pager a { color: var(--navy); }
+
+@media (max-width: 767.98px) {
+  .case-overview, .attribution-grid, .responsibility-boundary { grid-template-columns: 1fr; }
+  .decision-timeline { padding-left: 38px; }
+  .decision-step::before { left: -31px; }
+}

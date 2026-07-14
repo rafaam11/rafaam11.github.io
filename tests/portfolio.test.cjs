@@ -148,3 +148,29 @@ test('Contact speaks to senior R&D hiring without overpromising', () => {
   assert.doesNotMatch(html, /1–2일/);
   assert.doesNotMatch(html, /within (?:one|two|1|2) business days/i);
 });
+
+test('all project details use the Decision Timeline attribution contract', () => {
+  const requiredLabels = ['Uncertainty', 'Probe', 'Evidence', 'Decision', 'Integration', 'Verified Outcome', 'My Decisions', 'Team Result', 'Current Status'];
+  for (const project of data.projects) {
+    const html = read(`projects/${project.slug}/index.html`);
+    for (const label of requiredLabels) assert.match(html, new RegExp(label), `${project.slug}: missing ${label}`);
+    assert.match(html, /class="decision-timeline"/, `${project.slug}: missing decision timeline`);
+    assert.doesNotMatch(html, /기여도\s*\d+\s*%/, `${project.slug}: contains contribution percentage`);
+  }
+});
+
+test('AI-assisted case studies state the human and agent boundary', () => {
+  const html = read('projects/llm-wiki/index.html');
+  assert.match(html, /data-ai-assisted="true"/);
+  assert.match(html, /Human-owned/);
+  assert.match(html, /AI-assisted/);
+  assert.match(html, /PR review/);
+  assert.match(html, /planning SSOT/);
+});
+
+test('case-study stylesheet defines decision and attribution components', () => {
+  const css = read('css/case-study.css');
+  for (const className of ['.decision-timeline', '.decision-step', '.decision-label', '.attribution-grid', '.limitation-note', '.case-pager']) {
+    assert.match(css, new RegExp(className.replace('.', '\\.')));
+  }
+});

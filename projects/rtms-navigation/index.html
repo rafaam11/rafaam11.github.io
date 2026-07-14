@@ -1,147 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="뇌졸중 환자 장애개선 및 뇌가소성 촉진을 위한 rTMS 내비게이션 통합시스템 — Digitrack · 보건복지부 · 계명대 동산병원" />
-    <meta name="author" content="JinminKim" />
-    <title>뇌졸중 rTMS 내비게이션 통합시스템 · Jinmin Kim</title>
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
-    <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="../../css/cv-theme.css" rel="stylesheet" />
-    <link href="../../css/site.css" rel="stylesheet" />
-    <link href="../../css/case-study.css" rel="stylesheet" />
-</head>
-<body data-base="../../" data-page="projects">
-    <header id="site-nav"></header>
-
-    <section class="cs-hero">
-        <div class="cs-wrap">
-            <h1>뇌졸중 장애개선·뇌가소성 rTMS 내비게이션 통합시스템</h1>
-            <p class="cs-meta">Digitrack Inc. · 보건복지부 / 계명대학교 동산병원 &nbsp;|&nbsp; 2024.07 – 현재 <span class="cs-status">진행 중</span></p>
-            <div class="cs-badges">
-                <span class="badge">Surgical Navigation</span>
-                <span class="badge">3D Slicer</span>
-                <span class="badge">Image Registration</span>
-                <span class="badge">rTMS</span>
-            </div>
-        </div>
-    </section>
-
-    <main class="cs-wrap cs-content">
-
-        <section class="cs-section">
-            <h2>Overview</h2>
-            <div class="row g-4">
-                <div class="col-md-7">
-                    <p class="cs-tldr">반복 경두개자기자극(rTMS) 치료 시 뇌 내 정확한 타깃 지점을 실시간으로 안내하는 <strong>내비게이션 시스템(SW)을 주도 개발</strong>한 과제. 계명대학교 동산병원 주관, AT&amp;C 공동.</p>
-                    <p>뇌졸중 후 장애 개선 및 뇌가소성 촉진을 목적으로, 환자별 뇌 영상에서 정의한 자극 타깃을 등록(정합)하고, 시술 중 코일 위치·자세를 타깃에 맞추도록 가이드하는 내비게이션 통합시스템과 치료 프로토콜을 개발한다.</p>
-                </div>
-                <div class="col-md-5">
-                    <div class="cs-meta-table">
-                        <table>
-                            <tr><th>소속</th><td>Digitrack Inc.</td></tr>
-                            <tr><th>발주</th><td>보건복지부</td></tr>
-                            <tr><th>주관</th><td>계명대학교 동산병원</td></tr>
-                            <tr><th>협력</th><td>AT&amp;C</td></tr>
-                            <tr><th>기간</th><td>2024.07 – 현재</td></tr>
-                            <tr><th>역할</th><td>내비게이션 시스템(SW) 주도 개발</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Problem</h2>
-            <p>rTMS는 두피 위에서 자기 코일로 특정 뇌 영역을 자극하지만, 타깃 위치를 정확히 안내하는 수단이 없으면 시술자 경험에 의존하게 되어 <strong>반복 시술 간 재현성과 정밀도</strong>가 떨어진다. 환자마다 뇌 해부 구조가 달라 동일한 외부 좌표가 같은 뇌 영역을 가리키지 않으므로, 환자별 영상에 기반한 <strong>개인화된 타깃팅과 실시간 코일 가이드</strong>가 필요했다.</p>
-        </section>
-
-        <section class="cs-section">
-            <h2>Approach</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <h3>① 타깃 정의</h3>
-                    <p>환자 뇌 영상(MRI 등)에서 자극할 타깃 지점을 정의하고, 3D Slicer 기반 도구로 시각화한다.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>② 환자 정합(Registration)</h3>
-                    <p>영상 좌표계와 실제 환자·추적 장비 좌표계를 정합해, 영상에서 정의한 타깃을 실제 공간에 대응시킨다.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>③ 실시간 내비 가이드</h3>
-                    <p>추적된 코일의 위치·자세를 타깃 기준으로 실시간 표시해, 시술자가 정확한 지점·각도로 코일을 정렬하도록 안내한다.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Result</h2>
-            <ul>
-                <li>3D Slicer 기반 <strong>내비게이션 시스템</strong>을 주도 개발 — 타깃 시각화 + 실시간 코일 가이드 구현</li>
-                <li>환자별 영상 기반 타깃팅으로 시술의 <strong>재현성·정밀도</strong> 향상을 지향</li>
-                <li>현재 진행 중 과제 — 임상 적용·치료 프로토콜 검증 단계 (정량 지표는 과제 종료 후 갱신 예정)</li>
-            </ul>
-        </section>
-
-        <section class="cs-section">
-            <h2>Tech Stack</h2>
-            <div class="row g-3">
-                <div class="col-sm-6 col-md-4">
-                    <h3>Navigation</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">3D Slicer</span>
-                        <span class="badge">Surgical Navigation</span>
-                        <span class="badge">Image Registration</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>Platform</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">Python</span>
-                        <span class="badge">Optical Tracking</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Role &amp; Timeline</h2>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h3>Role</h3>
-                    <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — 내비게이션 시스템(SW) 주도 개발</li>
-                        <li>소속사: Digitrack Inc.</li>
-                        <li>주관: 계명대학교 동산병원 / 협력: AT&amp;C</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h3>Timeline</h3>
-                    <ul class="list-unstyled">
-                        <li>2024.07 — 과제 시작</li>
-                        <li>현재 — 시스템 개발·임상 적용 진행 중</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <nav class="cs-pager">
-            <a class="cs-pager-back" href="../">← Projects</a>
-            <div class="cs-pager-side">
-                <a class="cs-pager-prev" href="../unmanned-forklift/">← 무인지게차</a>
-                <a class="cs-pager-next" href="../life-careverse/">Life Careverse →</a>
-            </div>
-        </nav>
-
-    </main>
-
-    <footer id="site-footer"></footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../js/nav.js"></script>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="description" content="Decision timeline for an optical-tracking rTMS navigation research prototype." />
+<title>rTMS Navigation · Jinmin Kim</title><link rel="icon" href="../../assets/img/favicon.ico" /><script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" /><link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" /><link href="../../css/styles.css" rel="stylesheet" /><link href="../../css/cv-theme.css" rel="stylesheet" /><link href="../../css/site.css" rel="stylesheet" /><link href="../../css/case-study.css" rel="stylesheet" />
+</head><body data-base="../../" data-page="projects"><header id="site-nav"></header>
+<section class="cs-hero cs-hero--editorial"><div class="cs-wrap"><p class="hero-kicker">3D Registration &amp; Navigation</p><h1>rTMS Optical-Tracking Navigation</h1><p class="cs-hero-summary">A research prototype for registering patient anatomy, a tracked stimulation coil, and a planned target in one traceable coordinate model.</p><p class="cs-meta"><span class="evidence-state">Research</span> 2023.02 – 2023.07 · Navigation prototype</p><div class="cs-badges"><span class="badge">Optical Tracking</span><span class="badge">3D Slicer</span><span class="badge">VTK</span><span class="badge">Python</span></div></div></section>
+<main class="cs-wrap cs-content"><section class="cs-section"><h2>At a glance</h2><div class="case-overview"><p class="cs-tldr">The technical question was whether live coil pose, patient registration, and medical-image targets could be made legible enough for research navigation without hiding coordinate assumptions inside the UI.</p><dl class="case-facts"><div><dt>My responsibility</dt><dd>Coordinate model, tracked-object integration, navigation visualization</dd></div><div><dt>Evidence</dt><dd>Working research prototype and repeatable navigation flow</dd></div><div><dt>State</dt><dd>Research—not a clinical outcome claim</dd></div></dl></div></section>
+<section class="cs-section"><h2>Decision Timeline</h2><div class="decision-timeline">
+<article class="decision-step"><span class="decision-label">Uncertainty</span><h3>Can the planned target and live coil share a reliable frame?</h3><p>Tracker measurements, image coordinates, and patient anatomy needed an explicit relationship before guidance could be meaningful.</p></article>
+<article class="decision-step"><span class="decision-label">Probe</span><h3>Isolate tracking and visualization</h3><p>I first connected tracked rigid bodies to a simple 3D scene, then tested image-space registration and target visualization separately.</p></article>
+<article class="decision-step"><span class="decision-label">Evidence</span><h3>The transform chain was observable</h3><p>Rendering each intermediate frame made axis and reference mistakes visible before they reached the full navigation view.</p></article>
+<article class="decision-step"><span class="decision-label">Decision</span><h3>Keep registration explicit</h3><p>I represented tracker-to-patient and patient-to-image transforms as distinct steps and exposed their result in the interface.</p></article>
+<article class="decision-step"><span class="decision-label">Integration</span><h3>Combine medical planning and live pose</h3><p>The validated tracking path was integrated with 3D Slicer/VTK visualization for target-relative coil guidance.</p></article>
+<article class="decision-step decision-step--outcome"><span class="decision-label">Verified Outcome</span><h3>Research navigation flow demonstrated</h3><p>The prototype supported repeatable visualization of the planned target and tracked coil within the registered patient model.</p></article>
+</div></section>
+<section class="cs-section"><div class="attribution-grid"><article><h2>My Decisions</h2><ul><li>Separated the coordinate transforms.</li><li>Chose intermediate-frame visualization as the debugging method.</li><li>Integrated tracking with the medical-image interface.</li></ul></article><article><h2>Team Result</h2><ul><li>The research team gained a concrete navigation prototype.</li><li>Coordinate assumptions became inspectable rather than implicit.</li></ul></article></div></section>
+<section class="cs-section"><div class="limitation-note"><h2>Current Status</h2><p>Completed as a research prototype. The evidence supports technical feasibility and a repeatable flow, not clinical efficacy or commercial deployment.</p></div></section>
+<nav class="cs-pager case-pager"><a href="../index.html">← All projects</a><a href="../../research/index.html">Registration capability →</a></nav></main><footer id="site-footer"></footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script><script src="../../js/nav.js"></script></body></html>
