@@ -1,155 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="LLM Wiki — AI가 지식을 인제스트·연결·발행하는 개인 지식 시스템 자체 설계·개발 (TypeScript · Python · PostgreSQL · Docker · MCP)" />
-    <meta name="author" content="JinminKim" />
-    <title>LLM Wiki — AI 기반 개인 지식 시스템 · Jinmin Kim</title>
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" />
-    <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="../../css/cv-theme.css" rel="stylesheet" />
-    <link href="../../css/site.css" rel="stylesheet" />
-    <link href="../../css/case-study.css" rel="stylesheet" />
-</head>
-<body data-base="../../" data-page="projects">
-    <header id="site-nav"></header>
-
-    <section class="cs-hero">
-        <div class="cs-wrap">
-            <h1>LLM Wiki — AI 기반 개인 지식 시스템</h1>
-            <p class="cs-meta">개인 프로젝트 · Personal Project &nbsp;|&nbsp; 2026.04 – 현재 <span class="cs-status">진행 중</span></p>
-            <div class="cs-badges">
-                <span class="badge">TypeScript</span>
-                <span class="badge">Python</span>
-                <span class="badge">PostgreSQL</span>
-                <span class="badge">Docker</span>
-                <span class="badge">LLM Agent</span>
-                <span class="badge">MCP</span>
-            </div>
-        </div>
-    </section>
-
-    <main class="cs-wrap cs-content">
-
-        <section class="cs-section">
-            <h2>Overview</h2>
-            <div class="row g-4">
-                <div class="col-md-7">
-                    <p class="cs-tldr">흩어진 개인 지식을 <strong>AI가 인제스트·연결·발행</strong>하는 LLM 기반 지식 시스템을 <strong>전체 설계·개발(100%)</strong>한 개인 프로젝트.</p>
-                    <p>입력(Notion Inbox) → AI 정제·연결 → 정적 wiki·블로그 발행으로 이어지는 파이프라인을 구축해, 정보가 쌓이기만 하던 기존 PKM의 한계를 넘어 <strong>AI가 읽고 연결할 수 있는 형태의 지식</strong>으로 자동 정제한다. AI 코딩 에이전트(Claude Code)를 직접 구성해 커스텀 Skill·슬래시 커맨드로 반복 워크플로를 자동화하고, MCP 서버로 외부 도구를 연동하며, 원칙·컨텍스트 문서(CLAUDE.md)로 일관·재현성을 확보하는 <strong>계획 우선·검증 루프</strong>를 적용했다.</p>
-                </div>
-                <div class="col-md-5">
-                    <div class="cs-meta-table">
-                        <table>
-                            <tr><th>유형</th><td>개인 프로젝트</td></tr>
-                            <tr><th>기간</th><td>2026.04 – 현재</td></tr>
-                            <tr><th>역할</th><td>전체 설계·개발 (100%)</td></tr>
-                            <tr><th>핵심</th><td>AI 지식 파이프라인 · 에이전트 자동화</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Problem</h2>
-            <p>기존 PKM(Notion·Obsidian 등)은 정보가 쌓이기만 하고 연결·재사용은 결국 사람이 수작업으로 해야 한다. 개인 지식을 <strong>AI가 읽고 자동으로 연결·발행</strong>할 수 있는 구조가 없으면, 메모는 늘어나도 활용도는 떨어진다. 캡처부터 발행까지를 잇는 AI 중심 파이프라인이 필요했다.</p>
-        </section>
-
-        <section class="cs-section">
-            <h2>Approach</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <h3>Ingest</h3>
-                    <p>휘발성 캡처 → 주간 결산 → Notion Inbox로 모인 메모를 정해진 경로로 수집한다.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>Connect</h3>
-                    <p>AI가 수집분을 정제·연결하고, 합성 게이트(문헌 스캔 → 승격 제안)를 거쳐 정적 지식으로 만든다.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>Publish</h3>
-                    <p>정제된 지식을 wiki·블로그·모바일 소비 형태로 발행하는 출력 흐름을 자동화한다.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Result</h2>
-            <ul>
-                <li>Notion Inbox → AI 정제·연결 → 정적 wiki/블로그 <strong>자동 발행 파이프라인</strong> 구동</li>
-                <li>AI 코딩 에이전트·MCP·커스텀 Skill로 반복 워크플로를 <strong>자동화</strong>(계획 우선·검증 루프)</li>
-                <li>풀스택(TypeScript·Python·PostgreSQL·Docker)을 1인 설계·개발로 통합 운용 — 진행 중</li>
-            </ul>
-        </section>
-
-        <section class="cs-section">
-            <h2>Tech Stack</h2>
-            <div class="row g-3">
-                <div class="col-sm-6 col-md-4">
-                    <h3>App</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">TypeScript</span>
-                        <span class="badge">Python</span>
-                        <span class="badge">HTML / CSS</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>Data &amp; Infra</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">PostgreSQL</span>
-                        <span class="badge">Docker</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <h3>AI / Automation</h3>
-                    <div class="cs-tech-grid">
-                        <span class="badge">LLM Agent</span>
-                        <span class="badge">Claude Code</span>
-                        <span class="badge">MCP</span>
-                        <span class="badge">Custom Skills</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cs-section">
-            <h2>Role &amp; Timeline</h2>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h3>Role</h3>
-                    <ul class="list-unstyled">
-                        <li><strong>JinminKim</strong> — 전체 설계·개발 (100%, 개인 프로젝트)</li>
-                        <li>AI 코딩 에이전트·MCP·커스텀 워크플로 직접 구성</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h3>Timeline</h3>
-                    <ul class="list-unstyled">
-                        <li>2026.04 — 설계·개발 착수</li>
-                        <li>현재 — 파이프라인 운용·고도화 진행 중</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <nav class="cs-pager">
-            <a class="cs-pager-back" href="../">← Projects</a>
-            <div class="cs-pager-side">
-                <a class="cs-pager-prev" href="../mandibular-fracture/">← 턱뼈 골절복원</a>
-                <a class="cs-pager-next" href="../ar-distance-meter/">AR 거리측정기 →</a>
-            </div>
-        </nav>
-
-    </main>
-
-    <footer id="site-footer"></footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../js/nav.js"></script>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="description" content="Decision timeline and responsibility boundary for an AI-assisted personal knowledge system." />
+<title>LLM Wiki · Jinmin Kim</title><link rel="icon" href="../../assets/img/favicon.ico" /><script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" /><link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" /><link href="../../css/styles.css" rel="stylesheet" /><link href="../../css/cv-theme.css" rel="stylesheet" /><link href="../../css/site.css" rel="stylesheet" /><link href="../../css/case-study.css" rel="stylesheet" />
+</head><body data-base="../../" data-page="projects" data-ai-assisted="true"><header id="site-nav"></header>
+<section class="cs-hero cs-hero--editorial"><div class="cs-wrap"><p class="hero-kicker">AI-Enabled Tool Building</p><h1>LLM Wiki</h1><p class="cs-hero-summary">A personal system that ingests scattered notes and sources, places them into an intentional knowledge structure, and makes them retrievable for later research and tool building.</p><p class="cs-meta"><span class="evidence-state">Ongoing</span> 2026.04 – Present · Personal system</p><div class="cs-badges"><span class="badge">TypeScript</span><span class="badge">Python</span><span class="badge">PostgreSQL</span><span class="badge">LLM Agents</span><span class="badge">MCP</span></div></div></section>
+<main class="cs-wrap cs-content"><section class="cs-section"><h2>At a glance</h2><div class="case-overview"><p class="cs-tldr">The problem was not collecting more information. It was that news, papers, thoughts, links, knowledge, and tasks accumulated in different places and were rarely reused.</p><dl class="case-facts"><div><dt>My responsibility</dt><dd>Problem definition, information model, workflow, acceptance rules, review and operation</dd></div><div><dt>Evidence</dt><dd>Operating personal ingestion and retrieval workflow</dd></div><div><dt>State</dt><dd>Ongoing; long-term reuse impact not yet measured</dd></div></dl></div></section>
+<section class="cs-section"><h2>Decision Timeline</h2><div class="decision-timeline">
+<article class="decision-step"><span class="decision-label">Uncertainty</span><h3>Where should a new item live, and will it ever be useful again?</h3><p>Automatic news and paper collection, personal thoughts, and video links produced a data flood without a reliable reuse path.</p></article>
+<article class="decision-step"><span class="decision-label">Probe</span><h3>Run ingestion on a bounded inbox</h3><p>I tested periodic agent ingestion that classifies an item, proposes a destination, and retains enough context for later retrieval.</p></article>
+<article class="decision-step"><span class="decision-label">Evidence</span><h3>Structured placement made retrieval practical</h3><p>The running system can surface source material for exploration and can provide context when I need to build a work-automation tool.</p></article>
+<article class="decision-step"><span class="decision-label">Decision</span><h3>Treat planning context as a first-class artifact</h3><p>I use a master Markdown document as the planning SSOT and require the agent to interview me when context is missing.</p></article>
+<article class="decision-step"><span class="decision-label">Integration</span><h3>Apply human review gates to agent implementation</h3><p>PR review, explicit human-owned checks, reusable implementation skills, and validated merges keep generated work coherent.</p></article>
+<article class="decision-step decision-step--outcome"><span class="decision-label">Verified Outcome</span><h3>A working personal knowledge loop</h3><p>The system continuously ingests, organizes, and retrieves material for my own research and automation work. It is operating, but the long-term reuse effect is still being observed.</p></article>
+</div></section>
+<section class="cs-section"><h2>Responsibility boundary</h2><div class="responsibility-boundary"><article><h3>Human-owned</h3><p>I define the problem, information model, destination logic, requirements context, architecture, acceptance criteria, review items, and final merge decision.</p></article><article><h3>AI-assisted</h3><p>Agents accelerate UI, data structures, binding, repetitive implementation, document updates, and ingestion proposals within the rules I provide.</p></article></div></section>
+<section class="cs-section"><div class="attribution-grid"><article><h2>My Decisions</h2><ul><li>Defined the capture-to-reuse problem and workflow.</li><li>Established the planning SSOT and context-interview rule.</li><li>Defined PR review and human-owned acceptance gates.</li><li>Designed how agents are allowed to implement.</li></ul></article><article><h2>Team Result</h2><ul><li>This is a personal system built and operated by me with AI agents.</li><li>The workflow provides reusable context for research and tool building.</li><li>No human team contribution is implied by multiple automated author identities.</li></ul></article></div></section>
+<section class="cs-section"><div class="limitation-note"><h2>Current Status</h2><p>Ongoing personal infrastructure. The ingestion loop works, but it has not operated long enough for a defensible comparison of long-term knowledge reuse, maintenance cost, or productivity.</p></div></section>
+<nav class="cs-pager case-pager"><a href="../index.html">← All projects</a><a href="../../research/index.html">AI tool-building capability →</a></nav></main><footer id="site-footer"></footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script><script src="../../js/nav.js"></script></body></html>
