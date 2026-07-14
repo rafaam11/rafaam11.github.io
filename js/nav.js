@@ -28,10 +28,23 @@
     { key: 'contact',      label: 'Contact',         href: dir('contact/') }
   ];
 
+  // Authored directory links keep an explicit index.html fallback for file://,
+  // then switch to clean directory URLs when served over HTTP(S).
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-root-dir]'), function (link) {
+    link.setAttribute('href', dir(link.getAttribute('data-root-dir')));
+  });
+  if (!isFile) {
+    Array.prototype.forEach.call(document.querySelectorAll('a[href$="/index.html"], a[href="index.html"]'), function (link) {
+      link.setAttribute('href', link.getAttribute('href').replace(/index\.html$/, ''));
+    });
+  }
+
   /* ── Navigation ── */
   var navItems = links.map(function (l) {
     return '<li class="nav-item">' +
-      '<a class="nav-link' + (l.key === current ? ' active' : '') + '" href="' + l.href + '">' +
+      '<a class="nav-link' + (l.key === current ? ' active' : '') + '" href="' + l.href + '"' +
+      (l.key === current ? ' aria-current="page"' : '') + '>' +
+      (l.key === current ? '<span class="visually-hidden">Current page: </span>' : '') +
       l.label + '</a></li>';
   }).join('');
 
@@ -48,7 +61,7 @@
           '<ul class="navbar-nav ms-auto align-items-md-center">' +
             navItems +
             '<li class="nav-item">' +
-              '<a class="nav-link" href="https://github.com/rafaam11" target="_blank" rel="noopener">' +
+              '<a class="nav-link" href="https://github.com/rafaam11" target="_blank" rel="noopener" aria-label="GitHub">' +
                 '<i class="fab fa-github"></i><span class="d-md-none"> GitHub</span>' +
               '</a></li>' +
           '</ul>' +

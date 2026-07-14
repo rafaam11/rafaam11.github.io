@@ -1,7 +1,7 @@
 # 3D Systems Portfolio Redesign
 
-Date: 2026-07-15  
-Status: Approved design, pending written-spec review  
+Date: 2026-07-15
+Status: Approved design, pending written-spec review
 Companion audit: `docs/superpowers/specs/2026-07-15-portfolio-positioning-audit.md`
 
 ## Objective
@@ -16,9 +16,9 @@ Redesign the static portfolio so a senior R&D hiring manager can understand, wit
 
 ## Audience and Positioning
 
-Primary audience: hiring managers for senior R&D and applied physical-system roles.  
-Desired role: hands-on technical-lead IC, without people-management positioning.  
-Primary identity: domain-first 3D spatial-computing research engineer.  
+Primary audience: hiring managers for senior R&D and applied physical-system roles.
+Desired role: hands-on technical-lead IC, without people-management positioning.
+Primary identity: domain-first 3D spatial-computing research engineer.
 Secondary differentiator: AI-accelerated development and reusable validation tooling.
 
 ### Positioning Statement
@@ -285,4 +285,3 @@ Update `AGENTS.md`, `CLAUDE.md`, and `README.md` to reflect:
 - No public exposure of private LLM Wiki notes or detailed ingestion internals
 - No claim that ongoing governance or greenfield architecture has already produced long-term maintenance benefits
 - No redesign that replaces the established academic portfolio character with a generic AI-startup aesthetic
-
