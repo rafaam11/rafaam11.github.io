@@ -6,24 +6,108 @@ const render = require('../js/portfolio-render.js');
 
 const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
+const siteUrl = 'https://rafaam11.github.io/';
+
+function portfolioRoutes() {
+  return [
+    { route: '', file: 'index.html' },
+    { route: 'projects/', file: 'projects/index.html' },
+    { route: 'research/', file: 'research/index.html' },
+    { route: 'cv/', file: 'cv/index.html', allowsNamedEmployer: true },
+    { route: 'contact/', file: 'contact/index.html' }
+  ].concat(data.projects.map((project) => ({
+    route: `projects/${project.slug}/`,
+    file: `projects/${project.slug}/index.html`
+  })));
+}
 
 function publicPortfolioFiles(rootDir) {
-  return [
-    'index.html',
-    'projects/index.html',
-    'research/index.html',
-    'contact/index.html'
-  ].concat(data.projects.map((project) => `projects/${project.slug}/index.html`))
-    .map((relativePath) => ({ relativePath, absolutePath: path.join(rootDir, relativePath) }));
+  return portfolioRoutes().flatMap((page) => [
+    {
+      relativePath: page.file,
+      absolutePath: path.join(rootDir, page.file),
+      route: page.route,
+      locale: 'ko',
+      allowsNamedEmployer: Boolean(page.allowsNamedEmployer)
+    },
+    {
+      relativePath: path.join('en', page.file),
+      absolutePath: path.join(rootDir, 'en', page.file),
+      route: page.route,
+      locale: 'en',
+      allowsNamedEmployer: Boolean(page.allowsNamedEmployer)
+    }
+  ]);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function localAnchorErrors(file, html, rootDir) {
+  const errors = [];
+  const pageDirectory = path.posix.dirname('/' + file.relativePath.replace(/\\/g, '/'));
+  for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"[^>]*>/g)) {
+    const href = match[1];
+    if (/^(?:https?:|mailto:|tel:|#)/.test(href)) continue;
+    const localHref = href.split(/[?#]/, 1)[0];
+    const resolved = path.posix.normalize(path.posix.join(pageDirectory, localHref));
+    if (file.locale === 'en' && resolved !== '/en' && !resolved.startsWith('/en/')) {
+      errors.push(`${file.relativePath}: English link leaves /en/: ${href}`);
+    }
+    if (file.locale === 'ko' && (resolved === '/en' || resolved.startsWith('/en/'))) {
+      errors.push(`${file.relativePath}: Korean link enters /en/: ${href}`);
+    }
+    if (localHref.endsWith('index.html')) {
+      const target = path.join(rootDir, resolved.replace(/^\//, '').replace(/\//g, path.sep));
+      if (!fs.existsSync(target)) errors.push(`${file.relativePath}: missing local link target ${href}`);
+    }
+  }
+  return errors;
+}
+
+function staticPageErrors(file, html, rootDir) {
+  const errors = [];
+  const koreanUrl = siteUrl + file.route;
+  const englishUrl = siteUrl + 'en/' + file.route;
+  const canonicalUrl = file.locale === 'en' ? englishUrl : koreanUrl;
+  const expectedLang = file.locale;
+
+  if (!new RegExp(`<html lang="${expectedLang}">`).test(html)) {
+    errors.push(`${file.relativePath}: expected html lang ${expectedLang}.`);
+  }
+  if (!new RegExp(`data-lang="${expectedLang}"`).test(html)) {
+    errors.push(`${file.relativePath}: expected data-lang ${expectedLang}.`);
+  }
+  if (!new RegExp(`data-route="${escapeRegExp(file.route)}"`).test(html)) {
+    errors.push(`${file.relativePath}: semantic route does not match ${file.route}.`);
+  }
+  if (!new RegExp(`<link rel="canonical" href="${escapeRegExp(canonicalUrl)}"`).test(html)) {
+    errors.push(`${file.relativePath}: canonical URL does not match locale route.`);
+  }
+  if (!new RegExp(`hreflang="ko" href="${escapeRegExp(koreanUrl)}"`).test(html) ||
+      !new RegExp(`hreflang="en" href="${escapeRegExp(englishUrl)}"`).test(html) ||
+      !new RegExp(`hreflang="x-default" href="${escapeRegExp(koreanUrl)}"`).test(html)) {
+    errors.push(`${file.relativePath}: incomplete hreflang pair.`);
+  }
+  if (html.indexOf('site-i18n.js') === -1 || html.indexOf('site-i18n.js') > html.indexOf('nav.js')) {
+    errors.push(`${file.relativePath}: site-i18n.js must load before nav.js.`);
+  }
+  if (html.includes('portfolio-render.js') && html.indexOf('site-i18n.js') > html.indexOf('portfolio-render.js')) {
+    errors.push(`${file.relativePath}: site-i18n.js must load before portfolio-render.js.`);
+  }
+  return errors.concat(localAnchorErrors(file, html, rootDir));
 }
 
 function validatePortfolio(rootDir) {
   const errors = render.validatePortfolioData(data).slice();
 
   for (const project of data.projects) {
-    const relativePath = `projects/${project.slug}/index.html`;
-    if (!fs.existsSync(path.join(rootDir, relativePath))) {
-      errors.push(`${relativePath}: missing project detail page.`);
+    for (const prefix of ['', 'en']) {
+      const relativePath = path.join(prefix, 'projects', project.slug, 'index.html');
+      if (!fs.existsSync(path.join(rootDir, relativePath))) {
+        errors.push(`${relativePath}: missing project detail page.`);
+      }
     }
   }
 
@@ -36,9 +120,10 @@ function validatePortfolio(rootDir) {
     if (contributionPattern.test(html)) {
       errors.push(`${file.relativePath}: contains a contribution percentage.`);
     }
-    if (privatePartnerPattern.test(html)) {
+    if (!file.allowsNamedEmployer && privatePartnerPattern.test(html)) {
       errors.push(`${file.relativePath}: contains a nonpublic partner or company-project name.`);
     }
+    errors.push(...staticPageErrors(file, html, rootDir));
   }
 
   return errors;
@@ -51,8 +136,8 @@ if (require.main === module) {
     for (const error of errors) process.stderr.write(`- ${error}\n`);
     process.exitCode = 1;
   } else {
-    process.stdout.write(`Portfolio validation passed: ${data.projects.length} projects, ${data.capabilities.length} capabilities.\n`);
+    process.stdout.write(`Portfolio validation passed: ${data.projects.length} projects, ${data.capabilities.length} capabilities, ${publicPortfolioFiles(rootDir).length} localized pages.\n`);
   }
 }
 
-module.exports = { publicPortfolioFiles, validatePortfolio };
+module.exports = { portfolioRoutes, publicPortfolioFiles, validatePortfolio };
