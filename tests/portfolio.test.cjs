@@ -18,11 +18,11 @@ test('portfolio data and renderer modules exist', () => {
 const data = require('../js/portfolio-data.js');
 const render = require('../js/portfolio-render.js');
 
-test('canonical data contains five capabilities and twelve projects', () => {
+test('canonical data contains five capabilities and thirteen projects', () => {
   assert.equal(data.capabilities.length, 5);
   assert.equal(data.impactMetrics.length, 3);
-  assert.equal(data.projects.length, 12);
-  assert.equal(new Set(data.projects.map((project) => project.slug)).size, 12);
+  assert.equal(data.projects.length, 13);
+  assert.equal(new Set(data.projects.map((project) => project.slug)).size, 13);
 });
 
 test('every project has a valid capability, evidence state, and local route', () => {
@@ -67,7 +67,7 @@ test('renderers produce the five-card atlas and twelve-card capability chapters'
 
   assert.equal((atlas.match(/class="capability-card/g) || []).length, 5);
   assert.equal((chapters.match(/class="project-chapter/g) || []).length, 5);
-  assert.equal((chapters.match(/class="project-card/g) || []).length, 12);
+  assert.equal((chapters.match(/class="project-card/g) || []).length, 13);
   assert.equal((render.capabilityDetailsHtml(data, '../').match(/class="capability-detail"/g) || []).length, 5);
   assert.match(atlas, /3D Registration &amp; Navigation/);
   assert.doesNotMatch(chapters, /Featured|More Projects/);
@@ -107,7 +107,7 @@ test('mountAll skips a malformed project while preserving valid content', () => 
   const originalWarn = console.warn;
   console.warn = () => {};
   try { render.mountAll(fakeDocument, malformed); } finally { console.warn = originalWarn; }
-  assert.equal((chaptersNode.innerHTML.match(/class="project-card/g) || []).length, 11);
+  assert.equal((chaptersNode.innerHTML.match(/class="project-card/g) || []).length, 12);
   assert.doesNotMatch(chaptersNode.innerHTML, /portfolio-error/);
 });
 
