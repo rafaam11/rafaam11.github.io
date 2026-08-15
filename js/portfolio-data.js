@@ -125,10 +125,10 @@
         evidenceState: 'ongoing',
         primaryCapability: 'perception',
         crossCapabilities: ['digital-twin'],
-        problemSummary: 'Validate perception, obstacle response, and safety behavior without relying on every physical-forklift test.',
-        ownedRole: 'Owns SafetyGate, vision recognition, LiDAR/ToF obstacle sensing, and module-level LiteSim validators.',
-        verifiedEvidence: 'LiteSim expanded from a personal tool to team-wide use; approximate travel changed from weekly to monthly.',
-        tech: ['C++23', 'ToF', 'LiDAR', '3D vision', 'Isaac Sim', 'LiteSim'],
+        problemSummary: 'Deliver perception, safety, and loading-vision behavior for an in-house unmanned-forklift solution deployed at real production sites.',
+        ownedRole: 'Owns safety-policy management, sensor bridging over a Zenoh-based network, truck-loading vision (ToF+RGB with SAM-family PoC), and LiteSim validators.',
+        verifiedEvidence: 'Second field contract delivered with our fork-control, obstacle-detection, and vision modules; a full in-house RCS deployment is ongoing at another plant.',
+        tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'LiDAR', '3D vision', 'LiteSim'],
         links: []
       },
       {
@@ -213,6 +213,20 @@
         ownedRole: 'Designed and implemented the complete geometry prototype as a personal project.',
         verifiedEvidence: 'Working prototype completed; no accuracy, adoption, or continuing-use claim is made.',
         tech: ['Unity', 'Vuforia', 'Android', 'C#', 'Linear algebra'],
+        links: []
+      },
+      {
+        slug: 'respiratory-surface-guidance',
+        title: 'Surface-guided Respiratory Tracking',
+        period: '2026.06 – present',
+        status: 'Research',
+        evidenceState: 'research',
+        primaryCapability: 'registration',
+        crossCapabilities: ['perception'],
+        problemSummary: 'Track patient breathing with 3D surface imaging and register it to 4DCT for radiotherapy guidance.',
+        ownedRole: 'Owns the surface-tracking and 4DCT registration workstream within a large national radiotherapy research program.',
+        verifiedEvidence: 'Early-stage research assignment; no clinical or quantitative outcome is claimed yet.',
+        tech: ['3D surface imaging', '4DCT', 'Image registration', 'Python'],
         links: []
       },
       {

@@ -62,8 +62,8 @@
     if (!Array.isArray(data.impactMetrics) || data.impactMetrics.length !== 3) {
       errors.push('Portfolio data must contain exactly three impact metrics.');
     }
-    if (!Array.isArray(data.projects) || data.projects.length !== 12) {
-      errors.push('Portfolio data must contain exactly twelve projects.');
+    if (!Array.isArray(data.projects) || data.projects.length !== 13) {
+      errors.push('Portfolio data must contain exactly thirteen projects.');
       return errors;
     }
 
