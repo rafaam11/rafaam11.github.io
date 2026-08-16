@@ -323,7 +323,8 @@ function localAnchorErrors(file, html, rootDir) {
     if (/^(?:https?:|mailto:|tel:|#)/.test(href)) continue;
     const localHref = href.split(/[?#]/, 1)[0];
     const resolved = path.posix.normalize(path.posix.join(pageDirectory, localHref));
-    if (file.locale === 'en' && resolved !== '/en' && !resolved.startsWith('/en/')) {
+    const isSharedAsset = resolved === '/assets' || resolved.startsWith('/assets/');
+    if (file.locale === 'en' && !isSharedAsset && resolved !== '/en' && !resolved.startsWith('/en/')) {
       errors.push(`${file.relativePath}: English link leaves /en/: ${href}`);
     }
     if (file.locale === 'ko' && (resolved === '/en' || resolved.startsWith('/en/'))) {

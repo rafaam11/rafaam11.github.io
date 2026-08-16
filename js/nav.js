@@ -51,33 +51,24 @@
       '</div>';
 
     return '<a class="ss-skip-link" href="#main-content">' + escapeHtml(copy.skipToContent) + '</a>' +
-    '<nav class="navbar navbar-expand-md navbar-light topnav sticky-top ss-site-nav" aria-label="' + escapeHtml(copy.primaryNavigation) + '">' +
-      '<div class="container">' +
-        '<a class="navbar-brand" href="' + escapeHtml(i18n.routeHref(base, locale, home.route, isFile)) + '">Jinmin Kim</a>' +
-        '<div class="collapse navbar-collapse" id="siteNavLinks">' +
-          '<ul class="navbar-nav ms-auto align-items-md-center">' + navItems +
-            '<li class="nav-item"><a class="nav-link" href="https://github.com/rafaam11" target="_blank" rel="noopener" aria-label="GitHub">' +
-              '<i class="fab fa-github"></i><span class="d-md-none"> GitHub</span></a></li>' +
-          '</ul>' +
-        '</div>' +
+    '<nav class="td-site-nav" aria-label="' + escapeHtml(copy.primaryNavigation) + '">' +
+      '<div class="td-site-nav__inner">' +
+        '<a class="td-site-nav__brand" href="' + escapeHtml(i18n.routeHref(base, locale, home.route, isFile)) + '">Jinmin Kim</a>' +
+        '<ul class="td-site-nav__links">' + navItems + '</ul>' +
         languageSwitch +
-        '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNavLinks" ' +
-          'aria-controls="siteNavLinks" aria-expanded="false" aria-label="' + escapeHtml(copy.toggleNavigation) + '">' +
-          '<span class="navbar-toggler-icon"></span>' +
-        '</button>' +
       '</div>' +
     '</nav>';
   }
 
   function footerHtml(locale) {
     var normalized = i18n.normalizeLocale(locale);
-    return '<div class="ss-site-footer ss-site-footer__inner">' +
-      '<div class="foot-social ss-site-footer__channels">' +
-      '<a href="https://github.com/rafaam11" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>' +
-      '<a href="https://www.linkedin.com/in/rlawlsals" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>' +
-      '<a href="mailto:uiop3847@naver.com" aria-label="Email"><i class="fas fa-envelope"></i></a>' +
-      '</div>' +
-      '<div class="foot-meta ss-site-footer__meta">© 2026 Jinmin Kim · ' + escapeHtml(i18n.ui[normalized].footer) + '</div>' +
+    var collaboration = normalized === 'en'
+      ? 'Joint development across registration, sensing, medical workflows, and working software.'
+      : '정합, 센싱, 의료 워크플로, 동작하는 소프트웨어를 연결하는 공동개발.';
+    return '<div class="td-site-footer__inner">' +
+      '<div><strong>Jinmin Kim</strong><p>' + escapeHtml(collaboration) + '</p></div>' +
+      '<div class="td-site-footer__links"><a href="mailto:uiop3847@naver.com">Email</a><a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub</a></div>' +
+      '<div class="td-site-footer__meta">© 2026 · ' + escapeHtml(i18n.ui[normalized].footer) + '</div>' +
     '</div>';
   }
 
@@ -110,7 +101,7 @@
 
     var footMount = doc.getElementById('site-footer');
     if (footMount) {
-      footMount.className = 'site-footer ss-site-footer';
+      footMount.className = 'td-site-footer';
       footMount.innerHTML = footerHtml(locale);
     }
   }
