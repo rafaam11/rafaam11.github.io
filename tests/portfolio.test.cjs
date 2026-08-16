@@ -15,6 +15,7 @@ const render = require('../js/portfolio-render.js');
 const i18n = require('../js/site-i18n.js');
 const nav = require('../js/nav.js');
 const validator = require('../scripts/validate-portfolio.cjs');
+const pdfSource = require('../scripts/portfolio-pdf-source.cjs');
 
 const slugs = [
   'surgical-navigation',
@@ -186,7 +187,6 @@ function copyTask6Surface(targetRoot) {
     'assets/img/favicon.ico',
     'css/site.css',
     'css/spatial-signal.css',
-    'css/case-study.css',
     'css/cv-pdf.css',
     'js/site-i18n.js',
     'js/portfolio-data.js',
@@ -198,6 +198,23 @@ function copyTask6Surface(targetRoot) {
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.copyFileSync(path.join(root, relativePath), target);
   }
+
+  // Task 6 fixtures isolate page contracts from the intentionally stale published PDF digest.
+  const register = validator.readEvidenceRegister(targetRoot);
+  assert.deepEqual(register.errors, []);
+  const evidence = register.entries.map((entry) => ({
+    id: entry.id,
+    project: entry.project,
+    type: entry.type,
+    state: entry.state,
+    source: entry.source,
+    note: entry.note
+  }));
+  const cv = JSON.parse(fs.readFileSync(path.join(targetRoot, 'data', 'public-cv.json'), 'utf8'));
+  const manifestPath = path.join(targetRoot, 'output', 'pdf', 'manifest.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  manifest.sourceDigest = pdfSource.pdfSourceDigest(pdfSource.canonicalPdfSource(data, evidence, cv));
+  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 }
 
 function trackedFiles(pathspec) {
@@ -1440,7 +1457,7 @@ test('Task 3 Contact asks joint-development partners for problem, data or sensor
 });
 
 test('Task 3 technical-document CSS exposes the instrument palette, grid, provenance, focus, and reduced motion', () => {
-  const css = [read('css/site.css'), read('css/case-study.css'), read('css/spatial-signal.css')].join('\n');
+  const css = [read('css/site.css'), read('css/spatial-signal.css')].join('\n');
   for (const value of ['#eef1ef', '#fbfcfb', '#101715', '#586560', '#b9c4c0', '#0c6b5e', '#a94b32']) assert.match(css, new RegExp(value, 'i'));
   assert.match(css, /--td-max:\s*1240px/);
   assert.match(css, /repeat\(12,\s*minmax\(0,\s*1fr\)\)/);
@@ -1453,13 +1470,12 @@ test('Task 3 technical-document CSS exposes the instrument palette, grid, proven
 
 test('Task 3 review technical-document CSS stays narrow, touch, and reduced-motion safe', () => {
   const siteCss = read('css/site.css');
-  const caseCss = read('css/case-study.css');
   const spatialCss = read('css/spatial-signal.css');
   assert.ok(cssRuleBodies(siteCss, '.td-site-nav .nav-link').some((body) => /min-height\s*:\s*44px/.test(body)));
-  assert.ok(cssRuleBodies(caseCss, '.td-pdf-cta > a').some((body) => /min-height\s*:\s*44px/.test(body)));
+  assert.ok(cssRuleBodies(spatialCss, '.td-pdf-cta > a').some((body) => /min-height\s*:\s*44px/.test(body)));
   assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(max-width:\s*700px\)/i)
     .some((body) => /\.td-project-row[\s\S]*grid-template-columns:\s*1fr/.test(body)));
-  assert.ok(cssAtRuleBodies(caseCss, /@media\s*\(max-width:\s*760px\)/i)
+  assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(max-width:\s*760px\)/i)
     .some((body) => /\.td-case-block[\s\S]*grid-column:\s*1\s*\/\s*-1/.test(body)));
   assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(prefers-reduced-motion:\s*reduce\)/i)
     .some((body) => /\.td-shell\s+\*[\s\S]*animation:\s*none\s*!important[\s\S]*transition-duration:\s*\.01ms\s*!important/.test(body)));
@@ -2672,9 +2688,7 @@ test('Task 6 validator enforces page metadata, shared mounts, and route-specific
       [baseline.replace('data-page="projects"', 'data-page="capabilities"'), /unsupported data-page|expected data-page/i],
       [baseline.replace('<header id="site-nav"></header>', ''), /missing shared navigation mount/i],
       [baseline.replace('<footer id="site-footer"></footer>', ''), /missing shared footer mount/i],
-      [baseline.replace('<link rel="stylesheet" href="../../css/case-study.css">', ''), /missing required local stylesheet.*case-study\.css/i],
       [baseline.replace('<script src="../../js/portfolio-data.js"></script>', ''), /missing required local script.*portfolio-data\.js/i],
-      [baseline.replace('<link rel="stylesheet" href="../../css/case-study.css">', '<!-- <link rel="stylesheet" href="../../css/case-study.css"> -->'), /missing required local stylesheet.*case-study\.css/i],
       [baseline.replace('<script src="../../js/portfolio-data.js"></script>', '<style>/* <script src="../../js/portfolio-data.js"></script> */</style>'), /missing required local script.*portfolio-data\.js/i],
       [baseline.replace('../../css/site.css', '../../css/styles.css'), /legacy dependency|missing required local stylesheet.*site\.css/i]
     ];
@@ -3669,4 +3683,74 @@ test('Integrated review marks a project-section nav item as a location, not the 
   });
   assert.match(html, /href="\.\.\/\.\.\/projects\/"[^>]*aria-current="location"[^>]*>[\s\S]*?프로젝트</);
   assert.doesNotMatch(html, /href="\.\.\/\.\.\/projects\/"[^>]*aria-current="page"/);
+});
+
+test('Task 6 follow-up keeps a compact runtime-only technical-document CSS contract', () => {
+  const siteCss = read('css/site.css');
+  const spatialCss = read('css/spatial-signal.css');
+  const css = `${siteCss}\n${spatialCss}`;
+  const violations = [];
+
+  const ssClasses = [...new Set([...css.matchAll(/\.((?:ss)-[a-z0-9_-]+)/gi)].map((match) => match[1]))].sort();
+  if (JSON.stringify(ssClasses) !== JSON.stringify(['ss-skip-link'])) {
+    violations.push(`unexpected Spatial Signal classes: ${ssClasses.join(', ')}`);
+  }
+  for (const [label, pattern] of [
+    ['Bootstrap navigation', /\.(?:topnav|navbar(?:-[a-z0-9_-]+)?)(?![a-z0-9_-])/i],
+    ['legacy page system', /\.(?:page-home|page-projects|page-capabilities|hero-editorial|capability-atlas|project-chapter|status-pill)(?![a-z0-9_-])/i],
+    ['legacy case system', /\.(?:cs-|case-overview|decision-timeline|case-pager)/i],
+    ['legacy Spatial Signal variables', /--ss-[a-z0-9_-]+/i]
+  ]) {
+    if (pattern.test(css)) violations.push(label);
+  }
+  if (siteCss.split(/\r?\n/).length > 160) violations.push('site.css remains larger than the shared runtime shell');
+  if (spatialCss.split(/\r?\n/).length > 380) violations.push('spatial-signal.css remains larger than the technical runtime surface');
+
+  for (const selector of [
+    '.td-shell',
+    '.td-site-nav',
+    '.td-site-footer',
+    '.td-shell .ss-skip-link',
+    '.td-site-nav .language-switch',
+    '.hero-kicker',
+    '.td-home-hero',
+    '.td-project-row',
+    '.td-contact-brief',
+    '.td-case',
+    '.td-pdf-cta > a'
+  ]) {
+    if (!cssRuleBodies(css, selector).length) violations.push(`missing runtime selector ${selector}`);
+  }
+  for (const pattern of [
+    /:focus-visible/,
+    /@media\s*\(prefers-reduced-motion:\s*reduce\)/i,
+    /@media\s*\(max-width:\s*900px\)/i,
+    /@media\s*\(max-width:\s*760px\)/i,
+    /@media\s*\(max-width:\s*700px\)/i
+  ]) {
+    if (!pattern.test(css)) violations.push(`missing runtime contract ${pattern}`);
+  }
+  assert.deepEqual(violations, []);
+});
+
+test('Task 6 follow-up removes the dead case stylesheet and visual fallback metadata', () => {
+  const violations = [];
+  const caseCssPath = path.join(root, 'css', 'case-study.css');
+  if (fs.existsSync(caseCssPath)) violations.push('css/case-study.css still exists');
+
+  for (const slug of slugs) {
+    for (const relativePath of [`projects/${slug}/index.html`, `en/projects/${slug}/index.html`]) {
+      if (/case-study\.css/i.test(read(relativePath))) violations.push(`${relativePath}: case-study.css dependency`);
+    }
+  }
+  if (/case-study\.css/i.test(read('scripts/validate-portfolio.cjs'))) {
+    violations.push('validator still requires case-study.css');
+  }
+  for (const project of data.projects) {
+    if (Object.prototype.hasOwnProperty.call(project, 'visualKey')) violations.push(`${project.slug}: visualKey`);
+  }
+  const rendererSource = read('js/portfolio-render.js');
+  if (/fallbackVisualKeys|project\.visualKey/.test(rendererSource)) violations.push('renderer visual fallback contract');
+
+  assert.deepEqual(violations, []);
 });

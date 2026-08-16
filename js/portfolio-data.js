@@ -134,7 +134,6 @@
       capabilityKeys: ['registration', 'medical-navigation', 'xr-engineering'],
       route: 'projects/surgical-navigation/',
       tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink'],
-      visualKey: 'nav-digitaltwin-pipeline',
       media: {
         lead: { id: 'surgical-navigation-demo', type: 'video', status: 'pending-approval' },
         video: { id: 'surgical-navigation-demo', type: 'video', status: 'pending-approval' },
@@ -196,7 +195,7 @@
     project({
       slug: 'mandibular-fracture', tier: 'medical-core', period: '2021.12 – 2023.02', evidenceState: 'verified', lifecycleState: 'completed',
       capabilityKeys: ['registration', 'medical-navigation'], route: 'projects/mandibular-fracture/',
-      tech: ['Python', 'Open3D', 'OpenCV', 'SciPy', 'PCA', 'ICP', 'CLPSO', '3D Slicer'], visualKey: 'coordinate-signal',
+      tech: ['Python', 'Open3D', 'OpenCV', 'SciPy', 'PCA', 'ICP', 'CLPSO', '3D Slicer'],
       media: {
         lead: { id: 'mandibular-presentation-award', type: 'image', status: 'pending-approval' },
         references: [{ id: 'mandibular-publication', type: 'publication', status: 'approved', publicPath: 'https://link.springer.com/article/10.1007/s10278-024-01014-z' }]
@@ -252,7 +251,7 @@
     project({
       slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
-      tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'], visualKey: 'hololens-ar-concept',
+      tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'],
       media: { lead: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, video: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, poster: { id: 'life-careverse-multiuser-poster', type: 'image', status: 'pending-approval' } },
       pdf: { ko: 'assets/pdfs/life-careverse-ko.pdf', en: 'assets/pdfs/life-careverse-en.pdf' },
       pdfSequence: {
@@ -304,7 +303,7 @@
     project({
       slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'prototype', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
-      tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'], visualKey: 'coordinate-signal',
+      tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'],
       media: { lead: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, video: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, poster: { id: 'rtms-prototype-poster', type: 'image', status: 'pending-approval' } },
       pdf: { ko: 'assets/pdfs/rtms-navigation-ko.pdf', en: 'assets/pdfs/rtms-navigation-en.pdf' },
       pdfSequence: {
@@ -356,7 +355,7 @@
     project({
       slug: 'unmanned-forklift', tier: 'industrial-spotlight', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['sensor-fusion', 'registration'], route: 'projects/unmanned-forklift/',
-      tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'], visualKey: 'forklift-sim-to-real',
+      tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'],
       media: { lead: { id: 'forklift-registration-pointcloud', type: 'image', status: 'pending-approval' } },
       pdf: { ko: 'assets/pdfs/unmanned-forklift-ko.pdf', en: 'assets/pdfs/unmanned-forklift-en.pdf' },
       pdfSequence: {
@@ -408,7 +407,7 @@
     project({
       slug: 'ai-build-lab', tier: 'ai-build-lab', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['ai-product-engineering'], route: 'projects/ai-build-lab/',
-      tech: ['Electron', 'TypeScript', 'Node.js', 'Cloudflare', 'GitHub Actions', 'Agent workflows'], visualKey: 'decision-signal',
+      tech: ['Electron', 'TypeScript', 'Node.js', 'Cloudflare', 'GitHub Actions', 'Agent workflows'],
       media: {
         lead: { id: 'multi-cli-work-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' },
         references: [{ id: 'daegu-bus-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/public-transportation-info' }]
