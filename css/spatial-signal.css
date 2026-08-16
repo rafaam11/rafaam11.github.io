@@ -1700,6 +1700,7 @@
 .td-shell h1 { font-size: var(--td-display); }
 .td-shell h2 { font-size: var(--td-section); }
 .td-shell h3 { font-size: var(--td-title); }
+.td-shell .td-case-block h2 { font-size: var(--td-title); }
 
 .td-eyebrow,
 .td-status,
@@ -1815,8 +1816,12 @@
 .td-home-project > a { display: block; height: 100%; text-decoration: none; }
 .td-home-project h3 { margin: 0; padding: 1rem; line-height: 1.35; }
 .td-home-project__visual { margin: 0; overflow: hidden; border-bottom: 1px solid var(--td-line); }
+.td-home-project__image { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform 180ms ease; }
 .td-home-project__fallback { display: grid; align-content: end; gap: .5rem; aspect-ratio: 4 / 3; padding: 1rem; background: var(--td-paper); transition: transform 180ms ease; }
+.td-home-project__caption { margin: 0; padding: .7rem 1rem; color: var(--td-muted); border-top: 1px solid var(--td-line); font-size: .875rem; }
 .td-home-project__fallback span { color: var(--td-signal); font: var(--td-mono); }
+.td-home-project:hover .td-home-project__image,
+.td-home-project:focus-within .td-home-project__image,
 .td-home-project:hover .td-home-project__fallback,
 .td-home-project:focus-within .td-home-project__fallback { transform: scale(1.015); }
 .td-home-project:hover,
