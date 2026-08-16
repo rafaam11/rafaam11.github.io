@@ -1,5 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -1139,13 +1140,13 @@ test('Spatial Signal CSS resets every Home heading to the sans case-preserving s
   assert.match(headingRule[2], /text-transform:\s*none/, 'Home heading reset must disable legacy uppercase');
 });
 
-test('Spatial Signal hero title preserves Korean words while allowing normal wrapping', () => {
+test('Spatial Signal hero title preserves Korean words with safe overflow wrapping', () => {
   assert.equal(fs.existsSync(spatialSignalCssPath), true, 'missing css/spatial-signal.css');
   const css = fs.readFileSync(spatialSignalCssPath, 'utf8');
   const heroTitleRule = css.match(/(?:^|})\s*\.ss-hero__title\s*\{([^}]*)\}/m);
   assert.ok(heroTitleRule, 'missing base .ss-hero__title rule');
   assert.match(heroTitleRule[1], /word-break:\s*keep-all/, 'hero title must keep Korean words intact');
-  assert.match(heroTitleRule[1], /overflow-wrap:\s*normal/, 'hero title must use normal overflow wrapping');
+  assert.match(heroTitleRule[1], /overflow-wrap:\s*break-word/, 'hero title must wrap an otherwise overflowing token');
   assert.doesNotMatch(heroTitleRule[1], /overflow-wrap:\s*anywhere/, 'hero title must not split Korean words with overflow-wrap: anywhere');
 });
 
@@ -1207,7 +1208,7 @@ test('Spatial Signal narrow evidence controls wrap selectors and reserve a stop-
   );
 });
 
-test('Spatial Signal technical labels remain at least .70rem for readability', () => {
+test('Spatial Signal technical labels map to the 13px label or 14px small token', () => {
   assert.equal(fs.existsSync(spatialSignalCssPath), true, 'missing css/spatial-signal.css');
   const css = fs.readFileSync(spatialSignalCssPath, 'utf8');
   const labels = [
@@ -1223,12 +1224,11 @@ test('Spatial Signal technical labels remain at least .70rem for readability', (
     ['capability validation', '.ss-home .capability-validation strong']
   ];
   const violations = labels.flatMap(([label, selector]) => {
-    const fontSizes = cssRuleBodies(css, selector)
-      .flatMap((body) => [...body.matchAll(/font-size\s*:\s*([\d.]+)rem/g)].map((match) => Number(match[1])));
-    if (!fontSizes.length) return `${label}: missing rem font-size declaration for ${selector}`;
-    return fontSizes.filter((size) => size < .70).map((size) => `${label}: ${size}rem < .70rem`);
+    const sizes = cssRuleBodies(css, selector)
+      .flatMap((body) => [...body.matchAll(/font-size\s*:\s*(var\(--ss-type-(?:label|small)\))/g)].map((match) => match[1]));
+    return sizes.length ? [] : `${label}: missing label/small token for ${selector}`;
   });
-  assert.deepEqual(violations, [], 'technical labels must remain readable at .70rem or larger');
+  assert.deepEqual(violations, [], 'technical labels must remain readable at 13px or larger');
 });
 
 test('bilingual Home registration traces retain the same decorative empty-span sequence', () => {
@@ -1945,6 +1945,535 @@ test('Home HoloLens evidence alt describes the actual surgeon-view public diagra
     assert.ok(image, `${file}: missing HoloLens public evidence image`);
     for (const expected of expectations[locale]) {
       assert.match(image.alt, expected, `${file}: HoloLens alt must describe the actual surgeon-view evidence diagram`);
+    }
+  }
+});
+
+// Stage 3A contracts: only the five Registration case-study pairs move to the
+// Spatial Signal case shell in this batch. The protected-copy hashes are taken
+// from the deployed Stage 2 baseline after removing markup and normalizing
+// whitespace, so layout refactors remain free while evidence and attribution do
+// not silently change.
+const stage3ARegistrationCases = [
+  {
+    slug: 'surgical-twin',
+    state: 'verified',
+    visual: 'nav-digitaltwin-pipeline',
+    status: { ko: '검증 완료', en: 'Verified' },
+    alt: { ko: [/좌표/, /수술/], en: [/coordinate/i, /surgical/i] }
+  },
+  {
+    slug: 'rtms-navigation',
+    state: 'ongoing',
+    visual: 'coordinate-signal',
+    status: { ko: '진행 중', en: 'Ongoing' },
+    alt: { ko: [/좌표계/, /잔차/], en: [/frames?\s+[AB]/i, /residual/i] }
+  },
+  {
+    slug: 'mandibular-fracture',
+    state: 'verified',
+    visual: 'coordinate-signal',
+    status: { ko: '검증된 연구', en: 'Verified research' },
+    alt: { ko: [/좌표계/, /잔차/], en: [/frames?\s+[AB]/i, /residual/i] }
+  },
+  {
+    slug: 'c-arm-navigation',
+    state: 'research',
+    visual: 'research-protocol',
+    status: { ko: '연구', en: 'Research' },
+    alt: { ko: [/프로토콜/, /한계/], en: [/protocol/i, /limit/i] }
+  },
+  {
+    slug: 'respiratory-surface-guidance',
+    state: 'research',
+    visual: 'coordinate-signal',
+    status: { ko: '연구', en: 'Research' },
+    alt: { ko: [/좌표계/, /잔차/], en: [/frames?\s+[AB]/i, /residual/i] }
+  }
+];
+
+const stage3AProtectedCopyHashes = {
+  'projects/surgical-twin/index.html': ['2b370ad74f99e476b3c831caee413849d03285d2a40cd9e7f50ac3acbc4fed5b', 'e5d483d4ad9fc64e4c1ce0204e16feff57351d8fee0fc2591deed374548d5925', '086854e59bb9667f07e8b356e67e9305bef806a0e8fbc3cf9b209ae3826f3c7f'],
+  'en/projects/surgical-twin/index.html': ['26430acfb2b3e081a2d5fbe67f2611b0473a9457f2e5994bdfacf283d148073a', 'b3e0e3cf43cbb113434277accab944b55da384ec2249e7c47a399548d3a473cf', '97296623b297fad2d68fbcf7b97a4288a0c09a60ed6a344949e6d4da4a4b8faf'],
+  'projects/rtms-navigation/index.html': ['3a9a69333059a99a217850c0f6ab836dc2eb41c9c413061dbfb05cf9711caa56', '1e1a6b7040ba113d6abed2ec8ff78a63564da03289df2ff9b275e8292a0a6e88', 'f8c8732f567039de9453808aca6b05d2ca12d6bed787eca1835ffe4eb3738754'],
+  'en/projects/rtms-navigation/index.html': ['0e28c9d8f91ead6266d31445c1b927979308926fa10d81aebde49c879488071c', '8ab406afcb8d53d42649aed9e4c85e02b24b0dc398711ee4536b713cc52224d5', 'bf380f2826d81efff159201a70d0c28fc62b3157d1a2b02fa083b1cae5c653e1'],
+  'projects/mandibular-fracture/index.html': ['bb5b8610fc9e46d688b3a94af801f3636fa2301ae669a016bc05a393bc8711fe', 'ccb3ad6ef60c91a5933804cee6c41fa7f9bed269ad039b053819c0fe40b084f9', '82f65b39cf0e90f379e8249a214f4d3cf3f909275c18f88fc50b5764a2bba3f0'],
+  'en/projects/mandibular-fracture/index.html': ['21e6670e89b56c3475f252d37da668a777131f71b5f4d5dac1c2cfcfa4fda720', '2b9eddc258a690eebbf0ff5e2b337c8fca53d143fe5812f807b1cb986c2a663a', 'e038a3257e027ae266d4b09fc4844480539105337b69301f5a32020bb8de5386'],
+  'projects/c-arm-navigation/index.html': ['73de8c057b52b64b6ac299c4453dffa0fcf3fd9bce82d9e2b107faa04884385b', '4ceb5c22b1cb744990db71de9b1eaacc5b76bcc55d5bbad714898b837bc441fc', '47e551837373c480415d401900c90bb01b82961d51685c136efdcc26949ec5c7'],
+  'en/projects/c-arm-navigation/index.html': ['8b280cb21de026b38294d498b499935473d5b1da437ac831d280503e810951d4', '2f516e28bc185beb07797ca82629c5d8a18579909e597d13203be53f4cce47f8', '31372e28cac5715dd316f3f217ea4436e4790552f5e25f5ecbeb107208f7bb42'],
+  'projects/respiratory-surface-guidance/index.html': ['73d4b80d2c19f2591ebf34a60c6ebdc43dde1f33e812559e930af48777d9a459', '0970c5d657f1b9be8160e40f6202389fc060158f97c36476c0ab1d17119ad399', '0791e531e7a91db07696762f54b57fb7a98e50f126e59c871baa544fec77df26'],
+  'en/projects/respiratory-surface-guidance/index.html': ['35715dfb35dcf7c48132b08e8030f17c9f3fc4c6e3fee132aaec9e2cd82c58e9', 'd91d4a295d60ece9c2f18ce9039976cbfa47a56da6611f943e2ee8386896dde2', '84a2d536993570bd7b50dbdb4b72874dbfeb976996e12e9e5c2952307515b89b']
+};
+
+function stage3APages() {
+  return stage3ARegistrationCases.flatMap((caseStudy) => ['ko', 'en'].map((locale) => {
+    const english = locale === 'en';
+    const file = `${english ? 'en/' : ''}projects/${caseStudy.slug}/index.html`;
+    const base = english ? '../../../' : '../../';
+    return {
+      ...caseStudy,
+      locale,
+      file,
+      base,
+      navLabel: english ? 'Case study navigation' : '프로젝트 사례 탐색',
+      statusLabel: caseStudy.status[locale],
+      visualSource: `${base}assets/diagrams/${caseStudy.visual}${english ? '-en' : ''}.svg`
+    };
+  }));
+}
+
+function stage3ElementByClass(html, className) {
+  const opening = [...html.matchAll(/<([a-z][\w:-]*)\b[^>]*\bclass="([^"]*)"[^>]*>/gi)]
+    .find((match) => match[2].trim().split(/\s+/).includes(className));
+  if (!opening) return null;
+  const tagName = opening[1];
+  const tagPattern = new RegExp(`<\\/?${tagName}\\b[^>]*>`, 'gi');
+  tagPattern.lastIndex = opening.index;
+  let depth = 0;
+  for (let tag = tagPattern.exec(html); tag; tag = tagPattern.exec(html)) {
+    const closing = /^<\//.test(tag[0]);
+    const selfClosing = /\/\s*>$/.test(tag[0]);
+    if (closing) depth--;
+    else if (!selfClosing) depth++;
+    if (depth === 0) {
+      const innerStart = opening.index + opening[0].length;
+      return {
+        opening: opening[0],
+        outer: html.slice(opening.index, tagPattern.lastIndex),
+        inner: html.slice(innerStart, tag.index)
+      };
+    }
+  }
+  return null;
+}
+
+function stage3Attribute(openingTag, name) {
+  return openingTag.match(new RegExp(`\\b${name}="([^"]*)"`, 'i'))?.[1];
+}
+
+function stage3NormalizedText(html) {
+  return html
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&ndash;|&#8211;/gi, '–')
+    .replace(/&mdash;|&#8212;/gi, '—')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function stage3AtRuleBodies(css, atRule) {
+  const flags = atRule.flags.includes('g') ? atRule.flags : atRule.flags + 'g';
+  const pattern = new RegExp(atRule.source, flags);
+  const bodies = [];
+  for (let match = pattern.exec(css); match; match = pattern.exec(css)) {
+    const openingBrace = css.indexOf('{', match.index);
+    let depth = 0;
+    for (let index = openingBrace; index < css.length; index++) {
+      if (css[index] === '{') depth++;
+      if (css[index] === '}' && --depth === 0) {
+        bodies.push(css.slice(openingBrace + 1, index));
+        break;
+      }
+    }
+  }
+  return bodies;
+}
+
+test('Stage 3A Registration pages put the sole hero heading inside a scoped main shell', () => {
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    assert.match(html, /<body\b[^>]*\bclass="[^"]*\bss-case\b/, `${page.file}: body needs the scoped ss-case shell`);
+    assert.equal((html.match(/<h1\b/gi) || []).length, 1, `${page.file}: must keep exactly one h1`);
+    const main = html.match(/<main\b[^>]*\bid="main-content"[^>]*>[\s\S]*?<\/main>/i)?.[0];
+    assert.ok(main, `${page.file}: missing main-content`);
+    assert.match(main, /^<main\b[^>]*\btabindex="-1"/i, `${page.file}: main must remain a keyboard skip target`);
+    assert.match(main, /^<main\b[^>]*\bclass="[^"]*\bss-case-main\b/i, `${page.file}: main needs ss-case-main`);
+    const hero = stage3ElementByClass(main, 'ss-case-hero');
+    assert.ok(hero, `${page.file}: hero must move inside main and expose ss-case-hero`);
+    assert.match(hero.outer, /<h1\b[^>]*>[\s\S]*?<\/h1>/i, `${page.file}: case hero must own the page h1`);
+    assert.equal(main.indexOf(hero.outer) < main.indexOf('decision-timeline'), true, `${page.file}: hero must precede the detailed timeline`);
+    assert.equal(html.indexOf('<main') < html.indexOf('<h1'), true, `${page.file}: h1 remains outside main`);
+  }
+});
+
+test('Stage 3A Registration heroes expose localized evidence state and a decorative Registration Trace', () => {
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    const main = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i)?.[0] || '';
+    const hero = stage3ElementByClass(main, 'ss-case-hero');
+    assert.ok(hero, `${page.file}: missing ss-case-hero`);
+
+    const status = stage3ElementByClass(hero.outer, 'ss-case-status');
+    assert.ok(status, `${page.file}: visible state needs ss-case-status`);
+    assert.equal(stage3Attribute(status.opening, 'data-ss-state'), page.state, `${page.file}: visible state must expose canonical ${page.state}`);
+    assert.equal(stage3NormalizedText(status.inner), page.statusLabel, `${page.file}: state label is not localized`);
+
+    const trace = stage3ElementByClass(hero.outer, 'ss-case-trace');
+    assert.ok(trace, `${page.file}: hero needs an Evidence Registration Trace hook`);
+    assert.equal(stage3Attribute(trace.opening, 'aria-hidden'), 'true', `${page.file}: decorative trace must be hidden from assistive technology`);
+    assert.equal(stage3Attribute(trace.opening, 'data-ss-state'), page.state, `${page.file}: trace must expose canonical ${page.state}`);
+    assert.equal(stage3NormalizedText(trace.inner), '', `${page.file}: decorative trace must contain no readable copy`);
+    const traceSpans = [...trace.inner.matchAll(/<span\b[^>]*\bclass="([^"]*)"[^>]*>([\s\S]*?)<\/span>/gi)];
+    assert.equal(traceSpans.length >= 3, true, `${page.file}: trace needs multiple structural checkpoints`);
+    assert.equal(traceSpans.some((span) => span[1].split(/\s+/).includes('ss-case-trace__node')), true, `${page.file}: trace needs node hooks`);
+    assert.equal(traceSpans.some((span) => span[1].split(/\s+/).includes('ss-case-trace__segment')), true, `${page.file}: trace needs segment hooks`);
+    for (const span of traceSpans) assert.equal(stage3NormalizedText(span[2]), '', `${page.file}: trace checkpoint must remain empty and decorative`);
+  }
+});
+
+test('Stage 3A Registration pages provide localized named case navigation with file-safe links', () => {
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    const navigation = stage3ElementByClass(html, 'ss-case-nav');
+    assert.ok(navigation, `${page.file}: missing ss-case-nav`);
+    assert.equal(stage3Attribute(navigation.opening, 'aria-label'), page.navLabel, `${page.file}: case navigation needs a localized accessible name`);
+    const links = [...navigation.inner.matchAll(/<a\b[^>]*\bhref="([^"]+)"[^>]*>[\s\S]*?<\/a>/gi)];
+    assert.equal(links.length >= 2, true, `${page.file}: named case navigation needs at least two destinations`);
+    for (const link of links) {
+      const href = link[1];
+      if (/^(?:https?:|mailto:|#)/i.test(href)) continue;
+      assert.match(href, /index\.html(?:[?#].*)?$/, `${page.file}: local case-navigation link must remain file:// safe: ${href}`);
+    }
+  }
+});
+
+test('Stage 3A adjacent case links use the canonical destination name for the active locale', () => {
+  for (const page of stage3APages()) {
+    const navigation = stage3ElementByClass(read(page.file), 'ss-case-nav');
+    assert.ok(navigation, `${page.file}: missing ss-case-nav`);
+    for (const link of navigation.inner.matchAll(/<a\b[^>]*\bhref="\.\.\/([^/]+)\/index\.html"[^>]*>([\s\S]*?)<\/a>/gi)) {
+      const destination = data.projects.find((project) => project.slug === link[1]);
+      assert.ok(destination, `${page.file}: unknown adjacent project ${link[1]}`);
+      const localizedTitle = destination.translations[page.locale].title;
+      const conciseTitle = page.locale === 'ko' ? localizedTitle.replace(/\s*\([^)]*\)\s*$/, '') : localizedTitle;
+      assert.equal(
+        stage3NormalizedText(link[2]).includes(conciseTitle),
+        true,
+        `${page.file}: adjacent link ${link[1]} must include canonical ${page.locale} title “${conciseTitle}”`
+      );
+    }
+  }
+});
+
+test('Stage 3A Registration evidence frames use localized public diagrams and intrinsic dimensions', () => {
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    const figure = stage3ElementByClass(html, 'ss-case-evidence');
+    assert.ok(figure, `${page.file}: missing public evidence figure`);
+    assert.match(
+      figure.inner,
+      /^\s*<picture\b[^>]*\bclass="[^"]*\bss-case-evidence__picture\b[^"]*"[^>]*>[\s\S]*?<img\b[^>]*>[\s\S]*?<\/picture>\s*<figcaption\b[^>]*\bclass="[^"]*\bss-case-evidence__caption\b[^"]*"[^>]*>[\s\S]*?<\/figcaption>\s*$/i,
+      `${page.file}: evidence must retain figure > picture > img + figcaption nesting`
+    );
+    const image = figure.inner.match(/<img\b[^>]*>/i)?.[0];
+    assert.ok(image, `${page.file}: evidence picture is missing its image`);
+    assert.match(image, /\bclass="[^"]*\bss-case-evidence__image\b/, `${page.file}: evidence image needs its scoped hook`);
+    assert.equal(stage3Attribute(image, 'src'), page.visualSource, `${page.file}: wrong localized file-protocol evidence path`);
+    assert.equal(stage3Attribute(image, 'width'), '1180', `${page.file}: evidence image needs intrinsic width`);
+    assert.equal(stage3Attribute(image, 'height'), '664', `${page.file}: evidence image needs intrinsic height`);
+    assert.equal(stage3Attribute(image, 'loading'), 'lazy', `${page.file}: below-hero evidence should load lazily`);
+    assert.equal(stage3Attribute(image, 'decoding'), 'async', `${page.file}: evidence should decode asynchronously`);
+    const alt = stage3Attribute(image, 'alt');
+    assert.equal(Boolean(alt), true, `${page.file}: evidence image needs descriptive alt text`);
+    for (const expected of page.alt[page.locale]) assert.match(alt, expected, `${page.file}: alt text does not describe the mapped public diagram`);
+    const resolvedAsset = path.resolve(path.dirname(path.join(root, page.file)), page.visualSource);
+    assert.equal(fs.existsSync(resolvedAsset), true, `${page.file}: evidence asset does not resolve under file://`);
+
+    const caption = stage3ElementByClass(figure.outer, 'ss-case-evidence__caption');
+    assert.ok(caption, `${page.file}: evidence needs a visible caption`);
+    const captionText = stage3NormalizedText(caption.inner);
+    if (page.locale === 'ko') {
+      assert.match(alt, /[가-힣]/, `${page.file}: Korean alt must be localized`);
+      assert.match(captionText, /공개 근거 다이어그램/, `${page.file}: Korean caption must identify public evidence`);
+      assert.match(captionText, /제품 스크린샷이 아닌/, `${page.file}: Korean caption must not imply a product screenshot`);
+    } else {
+      assert.doesNotMatch(alt + captionText, /[가-힣]/, `${page.file}: English evidence accessibility copy contains Korean`);
+      assert.match(captionText, /public evidence diagram/i, `${page.file}: English caption must identify public evidence`);
+      assert.match(captionText, /not a product screenshot/i, `${page.file}: English caption must not imply a product screenshot`);
+    }
+  }
+});
+
+test('Stage 3A evidence frames share the at-a-glance lead column with their summary', () => {
+  for (const page of stage3APages()) {
+    const overview = stage3ElementByClass(read(page.file), 'case-overview');
+    assert.ok(overview, `${page.file}: missing case-overview`);
+    const figure = stage3ElementByClass(overview.inner, 'ss-case-evidence');
+    assert.ok(figure, `${page.file}: evidence frame must stay inside the common at-a-glance grid`);
+    assert.match(
+      overview.inner,
+      /^\s*<div\b[^>]*>[\s\S]*\bclass="[^"]*\bcs-tldr\b[^"]*"[\s\S]*\bclass="[^"]*\bss-case-evidence\b[^"]*"[\s\S]*<\/div>\s*<dl\b[^>]*\bclass="[^"]*\bcase-facts\b/i,
+      `${page.file}: at-a-glance must keep summary + evidence beside the facts panel`
+    );
+  }
+});
+
+test('Stage 3A Registration redesign preserves detailed decision, attribution, and limitation copy', () => {
+  const protectedClasses = ['decision-timeline', 'attribution-grid', 'limitation-note'];
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    const hashes = protectedClasses.map((className) => {
+      const block = stage3ElementByClass(html, className);
+      assert.ok(block, `${page.file}: missing protected ${className} body`);
+      return crypto.createHash('sha256').update(stage3NormalizedText(block.inner)).digest('hex');
+    });
+    assert.deepEqual(
+      hashes,
+      stage3AProtectedCopyHashes[page.file],
+      `${page.file}: detailed Decision Timeline, My Decisions / Team Result, or limitation copy changed from the Stage 2 baseline`
+    );
+  }
+});
+
+test('Stage 3A Registration pages retain explicit ownership, limitation, and privacy boundaries', () => {
+  const claimAnchors = {
+    'projects/surgical-twin/index.html': [/임상 운영 배포로 표현하지 않습니다/],
+    'en/projects/surgical-twin/index.html': [/not presented as production clinical deployment/i],
+    'projects/rtms-navigation/index.html': [/임상 효능이나 상용 배포를 의미하지 않습니다/],
+    'en/projects/rtms-navigation/index.html': [/not clinical efficacy or commercial deployment/i],
+    'projects/mandibular-fracture/index.html': [/일상 임상 사용을 주장하지 않습니다/],
+    'en/projects/mandibular-fracture/index.html': [/does not claim routine clinical use/i],
+    'projects/c-arm-navigation/index.html': [/제한된 기여 범위만 다룹니다/, /전체 시스템 아키텍처, 임상 검증, 정확도 인증, 운영 배포는[^.]*범위 밖입니다/],
+    'en/projects/c-arm-navigation/index.html': [/bounded contribution, not the full imaging or navigation system/i, /Full-system architecture, clinical validation, accuracy certification, and production deployment are outside the scope attributed to me/i],
+    'projects/respiratory-surface-guidance/index.html': [/파트너 기관이 치료 하드웨어와 임상 프로토콜을 담당합니다/, /프로그램 전체 결과를 개인 성과로 귀속하지 않습니다/],
+    'en/projects/respiratory-surface-guidance/index.html': [/Partner organizations own the delivery hardware and clinical protocol/i, /Program-level outcomes are not attributed as personal results/i]
+  };
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    for (const anchor of claimAnchors[page.file]) assert.match(html, anchor, `${page.file}: deep attribution or limitation claim was lost`);
+    assert.doesNotMatch(html, contributionPercentagePattern, `${page.file}: contains a contribution percentage`);
+    assert.doesNotMatch(html, render.policy.prohibitedPartnerPattern, `${page.file}: exposes a prohibited partner identity`);
+  }
+});
+
+test('Stage 3A case CSS remains trailing, scoped, keyboard-visible, touch-safe, and narrow-safe', () => {
+  for (const page of stage3APages()) {
+    const stylesheets = [...read(page.file).matchAll(/<link\b[^>]*\bhref="([^"]+\.css)"[^>]*>/gi)].map((match) => match[1]);
+    assert.equal(stylesheets.at(-1), `${page.base}css/spatial-signal.css`, `${page.file}: Spatial Signal must remain the final authored stylesheet`);
+  }
+
+  const css = read('css/spatial-signal.css');
+  for (const hook of ['main', 'hero', 'trace', 'status', 'evidence', 'nav']) {
+    assert.match(css, new RegExp(`body\\.ss-case[^,{]*\\.ss-case-${hook}\\b`), `Spatial Signal CSS needs a body.ss-case-scoped ss-case-${hook} rule`);
+  }
+  for (const state of ['verified', 'ongoing', 'research']) {
+    assert.match(css, new RegExp(`body\\.ss-case[^,{]*\\.ss-case-status\\[data-ss-state="${state}"\\]`), `case status needs an explicit ${state} state selector`);
+  }
+
+  const navTargetRule = [...css.matchAll(/(?:^|})\s*([^@}{][^{]+)\{([^{}]*)\}/gm)]
+    .find((match) => match[1].split(',').some((selector) => /body\.ss-case\b/.test(selector) && /\.ss-case-nav\b[^,{]*\ba\b/.test(selector)) && /\bmin-height\s*:/.test(match[2]));
+  assert.ok(navTargetRule, 'case navigation links need a scoped touch-target rule');
+  for (const property of ['min-width', 'min-height']) {
+    const values = [...navTargetRule[2].matchAll(new RegExp(`\\b${property}\\s*:\\s*(\\d+(?:\\.\\d+)?)px`, 'g'))].map((match) => Number(match[1]));
+    assert.equal(values.some((value) => value >= 44), true, `case navigation links require ${property}: at least 44px`);
+  }
+  assert.match(css, /body\.ss-case[^,{]*:focus-visible/, 'case-study controls need a body.ss-case-scoped visible focus rule');
+
+  const imageRules = [...css.matchAll(/(?:^|})\s*([^@}{][^{]+)\{([^{}]*)\}/gm)]
+    .filter((match) => match[1].split(',').some((selector) => /body\.ss-case\b/.test(selector) && /\.ss-case-evidence__image\b/.test(selector)))
+    .map((match) => match[2]).join('\n');
+  assert.match(imageRules, /\bmax-width\s*:\s*100%/, 'case evidence image must shrink within a 320px viewport');
+  assert.match(imageRules, /\bheight\s*:\s*auto/, 'case evidence image must preserve its aspect ratio');
+
+  const narrowBodies = stage3AtRuleBodies(css, /@media\s*\(max-width:\s*(?:340|480)px\)/i);
+  assert.equal(narrowBodies.some((body) => /body\.ss-case\b/.test(body) && /(?:min-width\s*:\s*0|grid-template-columns\s*:\s*minmax\(0,\s*1fr\)|padding-inline)/.test(body)), true, 'case shell needs a 320px-safe responsive hook');
+  const reducedMotionBodies = stage3AtRuleBodies(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/i);
+  assert.equal(reducedMotionBodies.some((body) => /body\.ss-case\b/.test(body) && /(?:transition-duration\s*:\s*\.01ms|animation\s*:\s*none)/.test(body)), true, 'case shell needs a reduced-motion override');
+});
+
+test('Spatial Signal exposes one seven-token typography scale and only approved weights', () => {
+  const css = read('css/spatial-signal.css');
+  const tokens = {
+    '--ss-type-display': 'clamp(2.125rem, calc(1.6rem + 2.2vw), 3.25rem)',
+    '--ss-type-section': 'clamp(1.5rem, calc(1.3rem + .8vw), 2rem)',
+    '--ss-type-title': 'clamp(1.125rem, calc(1.05rem + .25vw), 1.25rem)',
+    '--ss-type-lead': 'clamp(1.0625rem, calc(1rem + .15vw), 1.125rem)',
+    '--ss-type-body': '1rem',
+    '--ss-type-small': '.875rem',
+    '--ss-type-label': '.8125rem'
+  };
+
+  for (const [token, value] of Object.entries(tokens)) {
+    const declarations = [...css.matchAll(new RegExp(`${token}\\s*:\\s*([^;]+)`, 'g'))];
+    assert.equal(declarations.length, 1, `${token} must be declared exactly once`);
+    assert.equal(declarations[0][1].trim(), value, `${token} does not match the approved scale`);
+  }
+
+  const sizeDeclarations = [...css.matchAll(/font-size\s*:\s*([^;]+);/g)].map((match) => match[1].trim());
+  const allowedSizeReferences = new Set(Object.keys(tokens).map((token) => `var(${token})`));
+  assert.deepEqual(
+    sizeDeclarations.filter((value) => !allowedSizeReferences.has(value.replace(/\s*!important$/, ''))),
+    [],
+    'every Spatial Signal font-size must map to one approved type token'
+  );
+
+  const weights = [...css.matchAll(/font-weight\s*:\s*(\d+)\s*;/g)].map((match) => Number(match[1]));
+  assert.deepEqual(
+    [...new Set(weights)].filter((weight) => ![400, 500, 600, 700].includes(weight)),
+    [],
+    'Spatial Signal must use only the approved 400/500/600/700 weights'
+  );
+});
+
+test('Spatial Signal body token wins the retained important Home validation rule', () => {
+  const legacyCss = read('css/site.css');
+  const css = read('css/spatial-signal.css');
+  assert.match(
+    legacyCss,
+    /\.capability-validation\s*\{[^}]*font-size\s*:\s*\.75rem\s*!important/,
+    'test fixture expects the retained legacy important declaration'
+  );
+  const validationRules = cssRuleBodies(css, '.ss-home .capability-validation');
+  assert.match(
+    validationRules.join('\n'),
+    /font-size\s*:\s*var\(--ss-type-body\)\s*!important/,
+    'the trailing Spatial Signal contract must beat legacy .75rem !important without editing legacy CSS'
+  );
+});
+
+test('Spatial Signal maps semantic text roles to the shared typography scale', () => {
+  const css = read('css/spatial-signal.css');
+  const roleSelectors = {
+    display: [
+      '.ss-hero__title',
+      'body.ss-projects .ss-discovery-hero__title',
+      'body.ss-capabilities .ss-discovery-hero__title',
+      'body.ss-case .ss-case-hero__title'
+    ],
+    section: [
+      '.ss-section-title',
+      'body.ss-projects .ss-project-chapter__header h2',
+      'body.ss-capabilities .ss-capability-panel__header h2',
+      'body.ss-case .cs-section > h2'
+    ],
+    title: [
+      '.ss-home .capability-card h3',
+      '.ss-evidence-slide__title',
+      'body.ss-projects .ss-project-card__title',
+      'body.ss-capabilities .ss-capability-panel__item h3',
+      'body.ss-case .decision-step h3',
+      'body.ss-case .limitation-note h2'
+    ],
+    lead: [
+      '.ss-hero__support',
+      'body.ss-projects .ss-discovery-hero__lead',
+      'body.ss-capabilities .ss-discovery-hero__lead',
+      'body.ss-case .ss-case-hero .cs-hero-summary'
+    ],
+    body: [
+      '.ss-home',
+      'body.ss-projects',
+      'body.ss-capabilities',
+      'body.ss-case',
+      'body.ss-projects .ss-project-card__fact',
+      'body.ss-case .case-facts dd'
+    ],
+    small: [
+      '.ss-site-nav__link',
+      '.ss-button',
+      '.ss-evidence-slide__caption',
+      'body.ss-projects .ss-project-card__caption',
+      'body.ss-case .ss-case-evidence__caption',
+      'body.ss-case .ss-case-nav a'
+    ],
+    label: [
+      '.ss-eyebrow',
+      '.ss-site-footer .ss-site-footer__meta',
+      'body.ss-projects .ss-status',
+      'body.ss-capabilities .ss-capability-panel__eyebrow',
+      'body.ss-case .ss-case-status',
+      'body.ss-case .ss-case-hero .cs-badges .badge'
+    ]
+  };
+
+  for (const [role, selectors] of Object.entries(roleSelectors)) {
+    for (const selector of selectors) {
+      const rules = cssRuleBodies(css, selector);
+      assert.equal(rules.length > 0, true, `${selector}: missing ${role} typography rule`);
+      assert.match(rules.join('\n'), new RegExp(`font-size\\s*:\\s*var\\(--ss-type-${role}\\)`), `${selector}: must use ${role}`);
+    }
+  }
+
+  for (const selector of roleSelectors.display) {
+    const rules = cssRuleBodies(css, selector).join('\n');
+    assert.match(rules, /line-height\s*:\s*1\.1/, `${selector}: display line-height must be 1.1`);
+    assert.match(rules, /font-weight\s*:\s*700/, `${selector}: display weight must be 700`);
+    assert.match(rules, /text-wrap\s*:\s*balance/, `${selector}: display text must balance`);
+    assert.match(rules, /word-break\s*:\s*keep-all/, `${selector}: display text must preserve Korean words`);
+  }
+
+  for (const selector of roleSelectors.lead) {
+    const rules = cssRuleBodies(css, selector).join('\n');
+    assert.match(rules, /max-width\s*:\s*60ch/, `${selector}: lead measure must stay within 60ch`);
+  }
+});
+
+test('Spatial Signal keeps every route H1 on one continuous display curve', () => {
+  const css = read('css/spatial-signal.css');
+  const mediaBodies = stage3AtRuleBodies(css, /@media\s*[^\{]+/i);
+  const h1Selectors = [
+    /\.ss-hero__title/,
+    /body\.ss-projects\s+\.ss-discovery-hero__title/,
+    /body\.ss-capabilities\s+\.ss-discovery-hero__title/,
+    /body\.ss-case\s+\.ss-case-hero(?:\s+h1|__title)/
+  ];
+  const breakpointOverrides = mediaBodies.flatMap((body) => h1Selectors
+    .filter((selector) => new RegExp(`${selector.source}[^\\{]*\\{[^}]*font-size`, 'i').test(body))
+    .map((selector) => selector.source));
+  assert.deepEqual(breakpointOverrides, [], 'H1 font-size must not be redefined inside breakpoints');
+
+  const koreanRules = cssRuleBodies(css, '[data-lang="ko"] .ss-hero__title').join('\n')
+    + cssRuleBodies(css, 'body.ss-case[data-lang="ko"] .ss-case-hero__title').join('\n');
+  const englishRules = cssRuleBodies(css, '[data-lang="en"] .ss-hero__title').join('\n')
+    + cssRuleBodies(css, 'body.ss-case[data-lang="en"] .ss-case-hero__title').join('\n');
+  assert.match(koreanRules, /letter-spacing\s*:\s*-\.02em/, 'Korean H1 tracking must be -.02em');
+  assert.match(englishRules, /letter-spacing\s*:\s*-\.03em/, 'English H1 tracking must be -.03em');
+});
+
+test('Spatial Signal final reduced-motion guard wins the complete shell cascade', () => {
+  const css = read('css/spatial-signal.css');
+  const reducedMotionBodies = stage3AtRuleBodies(css, /@media\s*\(prefers-reduced-motion\s*:\s*reduce\)/i);
+  const shellGuards = reducedMotionBodies.filter((body) => /\.ss-shell\s+\*/.test(body));
+  assert.equal(shellGuards.length > 0, true, 'the complete Spatial Signal shell needs a final reduced-motion guard');
+
+  const guard = shellGuards.at(-1);
+  assert.match(guard, /scroll-behavior\s*:\s*auto\s*!important/, 'smooth scrolling must be disabled');
+  assert.match(guard, /animation\s*:\s*none\s*!important/, 'animations must be disabled');
+  assert.match(guard, /transition-duration\s*:\s*\.01ms\s*!important/, 'transitions must collapse even against more specific rules');
+  assert.match(guard, /transition-delay\s*:\s*0ms\s*!important/, 'transition delays must be removed');
+});
+
+test('Stage 3A desktop fact labels reserve an unbroken English responsibility column', () => {
+  const css = read('css/spatial-signal.css');
+  const factRowRules = cssRuleBodies(css, 'body.ss-case .case-facts div').join('\n');
+  assert.match(
+    factRowRules,
+    /grid-template-columns\s*:\s*minmax\(7rem,\s*\.42fr\)\s+minmax\(0,\s*1fr\)/,
+    'desktop fact rows must fit the longest English label before emergency wrapping'
+  );
+});
+
+test('Stage 3A Korean case H1 separates its English translation without adding a second heading', () => {
+  for (const page of stage3APages()) {
+    const html = read(page.file);
+    const heading = html.match(/<h1\b([^>]*)>([\s\S]*?)<\/h1>/i);
+    assert.ok(heading, `${page.file}: missing case H1`);
+    assert.match(heading[1], /\bclass="[^"]*\bss-case-hero__title\b/, `${page.file}: H1 needs the shared title hook`);
+
+    const translation = stage3ElementByClass(heading[2], 'ss-case-hero__title-translation');
+    if (page.locale === 'ko') {
+      assert.ok(translation, `${page.file}: Korean H1 must contain a translation span`);
+      assert.equal(stage3Attribute(translation.opening, 'lang'), 'en', `${page.file}: translation must declare lang=en`);
+      assert.notEqual(stage3NormalizedText(translation.inner), '', `${page.file}: translation cannot be empty`);
+      assert.equal((heading[2].match(/ss-case-hero__title-translation/g) || []).length, 1, `${page.file}: translation span must be unique`);
+    } else {
+      assert.equal(translation, null, `${page.file}: English H1 must not add a translation line`);
     }
   }
 });
