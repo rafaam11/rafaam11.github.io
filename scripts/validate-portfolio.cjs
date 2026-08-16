@@ -10,6 +10,11 @@ const {
   canonicalPdfSource,
   pdfSourceDigest
 } = require('./portfolio-pdf-source.cjs');
+const {
+  extractPublicCvSummary,
+  publicPiiFindings,
+  renderPublicCvSummary
+} = require('./public-cv-summary.cjs');
 
 const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
@@ -723,13 +728,10 @@ function publicCvDataErrors(candidate) {
   } catch {
     errors.push('Public CV data must be JSON serializable.');
   }
+  for (const finding of publicPiiFindings(candidate)) {
+    errors.push(`Public CV data contains prohibited private PII (${finding}).`);
+  }
   const prohibitedPatterns = [
-    /(?:\+82[\s().-]*(?:0[\s().-]*)?10|\(?010\)?)[\s().-]*\d{3,4}[\s.-]*\d{4}(?=$|[^0-9])/,
-    /(?:만\s*)?\d{1,3}\s*세(?![가-힣])/,
-    /(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])/,
-    /[가-힣]{2,12}(?:특별자치도|도|광역시|특별시)\s+[가-힣]{1,12}(?:시|군|구)(?![가-힣])/,
-    /[가-힣]{2,12}(?:시|군|구)\s+[가-힣]{1,12}(?:구|읍|면|동|로|길)(?![가-힣])/,
-    /[가-힣]{2,20}(?:읍|면|동|로|길)\s*\d{1,5}(?:-\d{1,5})?(?![0-9])/,
     /\b10-\d{4}-\d+\b/,
     /\b(?:age|salary|professor|advisor|patient|hospital|customer|street address|home address)\b/i,
     /나이|연봉|지도교수|환자|병원|고객|자택|거주지|주소/,
@@ -1094,6 +1096,19 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     if (!/<section[^>]+data-cv-summary[^>]+aria-labelledby=/.test(html) || !/<ol\b/.test(html) || !/<ul\b/.test(html) || !/<dl\b/.test(html)) {
       errors.push(`${relativePage}: missing visible semantic HTML CV summary.`);
     }
+    const htmlPii = publicPiiFindings(html);
+    if (htmlPii.length) errors.push(`${relativePage}: CV HTML public surface contains prohibited private PII (${htmlPii.join('; ')}).`);
+    if (sourceResult.cv !== undefined) {
+      try {
+        const actualSummary = extractPublicCvSummary(html);
+        const expectedSummary = renderPublicCvSummary(sourceResult.cv, locale).envelope;
+        if (actualSummary !== expectedSummary) {
+          errors.push(`${relativePage}: semantic HTML CV summary does not match canonical public CV data.`);
+        }
+      } catch (error) {
+        errors.push(`${relativePage}: semantic HTML CV summary cannot be derived from canonical public CV data (${error instanceof Error ? error.message : String(error)}).`);
+      }
+    }
   }
   return errors;
 }
@@ -1233,6 +1248,7 @@ module.exports = {
   evidenceDirectoryErrors,
   imageDimensions,
   portfolioDataErrors,
+  publicPiiFindings,
   publicCvDataErrors,
   pdfArtifactErrors,
   visualAssetErrors,
