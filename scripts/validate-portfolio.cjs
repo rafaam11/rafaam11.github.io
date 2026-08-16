@@ -93,10 +93,14 @@ function parseEvidenceRegister(content) {
   const errors = [];
   const seen = new Set();
   const lines = String(content || '').split(/\r?\n/);
+  const nonTableLines = [];
 
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index].trim();
-    if (!line.startsWith('|')) continue;
+    if (!line.startsWith('|')) {
+      nonTableLines.push(lines[index]);
+      continue;
+    }
     const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
     if (cells[0] === 'Evidence ID' || cells.every((cell) => /^:?-+:?$/.test(cell))) continue;
     if (cells.length !== 6) {
@@ -114,11 +118,13 @@ function parseEvidenceRegister(content) {
   }
 
   if (entries.length === 0) errors.push('Evidence register contains no entries.');
-  return { entries, errors };
+  return { entries, errors, nonTableProse: nonTableLines.join('\n') };
 }
 
 function proseContainsLocalPath(value) {
-  const withoutHttpsUrls = String(value || '').replace(/https:\/\/[^\s|<>"']+/gi, ' HTTPS_URL ');
+  const withoutHttpsUrls = String(value || '').replace(/https:\/\/[^\s|<>"']+/gi, (token) => (
+    isSafeHttpsUrl(token) ? ' HTTPS_URL ' : token
+  ));
   return proseLocalPathPatterns.some((pattern) => pattern.test(withoutHttpsUrls));
 }
 
@@ -134,6 +140,9 @@ function readEvidenceRegister(rootDir) {
   }
   const content = fs.readFileSync(inspection.filePath, 'utf8');
   const parsed = parseEvidenceRegister(content);
+  if (proseContainsLocalPath(parsed.nonTableProse)) {
+    parsed.errors.push('Evidence register non-table prose contains a private source path or restricted source label.');
+  }
   for (const entry of parsed.entries) {
     if (proseContainsLocalPath(entry.note)) {
       parsed.errors.push(`${entry.id}: provenance or usage contains a private source path or restricted source label.`);
@@ -145,7 +154,8 @@ function readEvidenceRegister(rootDir) {
 }
 
 function isSafeHttpsUrl(value) {
-  if (typeof value !== 'string' || !/^https:\/\//i.test(value)) return false;
+  const authority = typeof value === 'string' && value.match(/^https:\/\/([^/?#\s]+)(?:[/?#]|$)/i)?.[1];
+  if (!authority || value !== value.trim() || value.includes('\\') || authority.endsWith(':')) return false;
   try {
     const parsed = new URL(value);
     return parsed.protocol === 'https:' && !parsed.username && !parsed.password && Boolean(parsed.hostname);
