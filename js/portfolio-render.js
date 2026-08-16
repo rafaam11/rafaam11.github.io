@@ -20,6 +20,8 @@
   var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'unmanned-forklift', 'ai-build-lab'];
   var blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
   var mediaTypes = ['video', 'image', 'repository', 'publication'];
+  var leadMediaTypes = ['video', 'image', 'repository'];
+  var referenceMediaTypes = ['repository', 'publication'];
   var fallbackVisualKeys = ['nav-digitaltwin-pipeline', 'coordinate-signal', 'hololens-ar-concept', 'forklift-sim-to-real', 'decision-signal'];
   var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
   var projectTranslationFields = [
@@ -37,6 +39,7 @@
       mediaPending: '공개 승인 대기',
       fallback: '실제 근거 미디어는 승인 후 공개합니다.',
       pendingAccessible: '공개 시각 자료 승인 대기: 실제 데모 또는 사진을 표시하지 않습니다.',
+      representativeAccessible: '대표 기술 패널: 실제 데모 또는 사진을 표시하지 않습니다.',
       personalRole: '개인 역할',
       teamResult: '팀 결과',
       period: '기간',
@@ -58,6 +61,7 @@
       mediaPending: 'Pending approval',
       fallback: 'Actual evidence media will be published only after approval.',
       pendingAccessible: 'Public visual pending approval; no actual demo or photograph is shown.',
+      representativeAccessible: 'Representative technical panel; no actual demo or photograph is shown.',
       personalRole: 'Personal role',
       teamResult: 'Team result',
       period: 'Period',
@@ -140,6 +144,21 @@
     return typeof value === 'string' && value === value.trim() && isSafeHttpUrl(value);
   }
 
+  function publicPathname(value) {
+    if (isSafeHttpUrl(value)) {
+      try { return new URL(value).pathname; } catch (error) { return ''; }
+    }
+    return String(value || '');
+  }
+
+  function isImagePath(value) {
+    return /\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(publicPathname(value));
+  }
+
+  function isVideoPath(value) {
+    return /\.(?:mp4|webm)$/i.test(publicPathname(value));
+  }
+
   function assetHref(base, publicPath) {
     var value = String(publicPath || '');
     if (!isSafePublicPath(value)) return '';
@@ -211,16 +230,23 @@
     return errors;
   }
 
-  function mediaItemErrors(item, label) {
+  function mediaItemErrors(item, label, allowedTypes) {
     var errors = [];
     if (!item || typeof item !== 'object') return [label + ': media item must be an object.'];
     if (typeof item.id !== 'string' || !item.id) errors.push(label + ': media item requires a stable id.');
     if (!mediaTypes.includes(item.type)) errors.push(label + ': unknown media type.');
+    else if (allowedTypes && !allowedTypes.includes(item.type)) errors.push(label + ': unsupported ' + item.type + ' media type for this slot.');
     if (!['approved', 'pending-approval'].includes(item.status)) errors.push(label + ': unknown media status.');
     var hasPublicPath = typeof item.publicPath === 'string' && item.publicPath.trim().length > 0;
     if (item.status === 'pending-approval' && hasPublicPath) errors.push(label + ': pending-approval media must not declare a public path.');
     if (item.status === 'approved' && !hasPublicPath) errors.push(label + ': approved media requires a public path.');
     if (hasPublicPath && !isSafePublicPath(item.publicPath)) errors.push(label + ': unsafe public path.');
+    if (item.status === 'approved' && hasPublicPath && item.type === 'image' && !isImagePath(item.publicPath)) {
+      errors.push(label + ': image media requires an image file.');
+    }
+    if (item.status === 'approved' && hasPublicPath && item.type === 'video' && !isVideoPath(item.publicPath)) {
+      errors.push(label + ': video media requires a video file.');
+    }
     return errors;
   }
 
@@ -320,15 +346,14 @@
         if (!project.media || !project.media.lead) {
           errors.push(slug + ': missing lead media declaration.');
         } else {
-          errors = errors.concat(mediaItemErrors(project.media.lead, slug + ' lead'));
-          ['video', 'poster'].forEach(function (key) {
-            if (project.media[key]) errors = errors.concat(mediaItemErrors(project.media[key], slug + ' ' + key));
-          });
+          errors = errors.concat(mediaItemErrors(project.media.lead, slug + ' lead', leadMediaTypes));
+          if (project.media.video) errors = errors.concat(mediaItemErrors(project.media.video, slug + ' video', ['video']));
+          if (project.media.poster) errors = errors.concat(mediaItemErrors(project.media.poster, slug + ' poster', ['image']));
           if (project.media.references !== undefined && !Array.isArray(project.media.references)) {
             errors.push(slug + ': media references must be an array.');
           } else {
             (project.media.references || []).forEach(function (item, index) {
-              errors = errors.concat(mediaItemErrors(item, slug + ' reference ' + index));
+              errors = errors.concat(mediaItemErrors(item, slug + ' reference ' + index, referenceMediaTypes));
             });
           }
         }
@@ -395,6 +420,20 @@
     '</div>';
   }
 
+  function isApprovedImage(item) {
+    return Boolean(item && item.type === 'image' && item.status === 'approved' &&
+      isSafePublicPath(item.publicPath) && isImagePath(item.publicPath));
+  }
+
+  function isApprovedVideo(item) {
+    return Boolean(item && item.type === 'video' && item.status === 'approved' &&
+      isSafePublicPath(item.publicPath) && isVideoPath(item.publicPath));
+  }
+
+  function isApprovedRepository(item) {
+    return Boolean(item && item.type === 'repository' && item.status === 'approved' && isSafeHttpUrl(item.publicPath));
+  }
+
   function evidenceMediaHtml(projectRecord, locale, base, isFile) {
     void isFile;
     var normalized = localeOf(locale);
@@ -407,10 +446,9 @@
       mediaCaption: sourceCopy.mediaCaption || projectRecord.mediaCaption || ''
     });
     var media = project.media && project.media.lead ? project.media.lead : {};
-    var approvedPoster = media.type === 'video' && project.media && project.media.poster &&
-      project.media.poster.status === 'approved' && isSafePublicPath(project.media.poster.publicPath) && project.media.poster.publicPath;
-    var renderable = media.status === 'approved' && isSafePublicPath(media.publicPath) &&
-      ['video', 'image', 'repository'].includes(media.type) && (media.type !== 'video' || approvedPoster);
+    var posterItem = project.media && project.media.poster;
+    var approvedPoster = isApprovedVideo(media) && isApprovedImage(posterItem) ? posterItem.publicPath : '';
+    var renderable = isApprovedImage(media) || isApprovedRepository(media) || Boolean(approvedPoster);
     var visual = '';
     if (!renderable) {
       visual = '<div class="td-evidence-placeholder" role="img" aria-label="' + escapeHtml(copy.pendingAccessible) + '">' +
@@ -441,17 +479,18 @@
     var normalized = localeOf(locale);
     var media = project.media && project.media.lead ? project.media.lead : {};
     var copy = pageCopy[normalized];
-    var approvedLead = media.status === 'approved' && isSafePublicPath(media.publicPath);
-    var approvedPoster = approvedLead && media.type === 'video' && project.media && project.media.poster &&
-      project.media.poster.status === 'approved' && isSafePublicPath(project.media.poster.publicPath);
-    var displayStatus = approvedLead && (media.type === 'image' || media.type === 'repository' || approvedPoster) ? 'approved' : 'pending-approval';
+    var approvedLeadImage = isApprovedImage(media);
+    var approvedLeadRepository = isApprovedRepository(media);
+    var posterItem = project.media && project.media.poster;
+    var approvedPoster = isApprovedVideo(media) && isApprovedImage(posterItem);
+    var displayStatus = approvedLeadImage || approvedLeadRepository || approvedPoster ? 'approved' : 'pending-approval';
     var visual = '';
-    if (approvedLead && media.type === 'image') {
+    if (approvedLeadImage) {
       visual = '<img class="td-home-project__image" src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' +
         escapeHtml(project.mediaAlt) + '" loading="lazy" decoding="async">';
     } else if (approvedPoster) {
       visual = '<img class="td-home-project__image td-home-project__poster" src="' +
-        escapeHtml(assetHref(base, project.media.poster.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) +
+        escapeHtml(assetHref(base, posterItem.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) +
         '" loading="lazy" decoding="async">';
     } else {
       var accessibleName = displayStatus === 'approved' ? project.mediaAlt : copy.pendingAccessible;
@@ -461,11 +500,8 @@
           '<strong>' + escapeHtml(label) + '</strong>' +
         '</div>';
     }
-    var caption = displayStatus === 'approved' && (media.type === 'image' || approvedPoster)
-      ? '<p class="td-home-project__caption">' + escapeHtml(project.mediaCaption) + '</p>'
-      : '';
     return '<figure class="td-home-project__visual" data-media-status="' + displayStatus + '">' +
-      visual + caption + mediaLedgerHtml(project, normalized, displayStatus) +
+      visual + mediaLedgerHtml(project, normalized, displayStatus) +
     '</figure>';
   }
 
@@ -480,7 +516,7 @@
     }).join('');
   }
 
-  function homeEvidenceMosaicHtml(data, locale) {
+  function homeEvidenceMosaicHtml(data, locale, base) {
     var normalized = localeOf(locale);
     var projects = validProjects(data, normalized);
     var definitions = normalized === 'en'
@@ -498,15 +534,27 @@
       var project = projects.find(function (item) { return item.slug === definition.slug; });
       if (!project) return '';
       var media = project.media && project.media.lead ? project.media.lead : {};
-      var pending = media.status !== 'approved' || !isSafePublicPath(media.publicPath);
-      return '<article class="td-mosaic-cell">' +
-        '<p class="td-mosaic-cell__label">' + escapeHtml(definition.label) + '</p>' +
-        '<div class="td-mosaic-cell__field" role="img" aria-label="' + escapeHtml(pending ? pageCopy[normalized].pendingAccessible : project.mediaAlt) + '">' +
+      var posterItem = project.media && project.media.poster;
+      var approvedImage = isApprovedImage(media) ? media : (isApprovedVideo(media) && isApprovedImage(posterItem) ? posterItem : null);
+      var displayStatus = approvedImage ? 'approved' : 'pending-approval';
+      var visual = '';
+      if (approvedImage) {
+        var imageClass = 'td-mosaic-cell__image' + (media.type === 'video' ? ' td-mosaic-cell__poster' : '');
+        visual = '<div class="td-mosaic-cell__field td-mosaic-cell__field--media"><img class="' + imageClass +
+          '" src="' + escapeHtml(assetHref(base, approvedImage.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) +
+          '" loading="lazy" decoding="async"></div>';
+      } else {
+        var accessibleName = media.status === 'approved' ? pageCopy[normalized].representativeAccessible : pageCopy[normalized].pendingAccessible;
+        visual = '<div class="td-mosaic-cell__field" role="img" aria-label="' + escapeHtml(accessibleName) + '">' +
           '<span>FRAME / ' + escapeHtml((media.type || 'evidence').toUpperCase()) + '</span>' +
           '<strong>' + escapeHtml(project.shortTitle) + '</strong>' +
           '<i aria-hidden="true"></i>' +
-        '</div>' +
-        mediaLedgerHtml(project, normalized) +
+        '</div>';
+      }
+      return '<article class="td-mosaic-cell">' +
+        '<p class="td-mosaic-cell__label">' + escapeHtml(definition.label) + '</p>' +
+        visual +
+        mediaLedgerHtml(project, normalized, displayStatus) +
       '</article>';
     }).join('');
   }
@@ -633,7 +681,7 @@
       });
     }
 
-    fill('[data-portfolio="home-evidence"]', function () { return homeEvidenceMosaicHtml(data, locale); });
+    fill('[data-portfolio="home-evidence"]', function () { return homeEvidenceMosaicHtml(data, locale, base); });
     fill('[data-portfolio="home-projects"]', function () { return homeProjectGalleryHtml(data, base, isFile, locale); });
     fill('[data-portfolio="capability-index"]', function () { return capabilityIndexHtml(data, locale); });
     fill('[data-portfolio="project-groups"]', function () { return projectGroupsHtml(data, base, isFile, locale); });

@@ -255,7 +255,7 @@ test('Task 3 Home renderer creates six ordered title-led links without card mark
   assert.doesNotMatch(html, /td-status|td-tech-list|project-summary|project-role/);
 });
 
-test('Task 3 review Home tiles render approved images with localized provenance', () => {
+test('Task 3 review Home tiles render approved images with alt and ledger only', () => {
   const candidate = clone(data);
   candidate.projects[0].media.lead = {
     id: 'surgical-navigation-public-image',
@@ -266,9 +266,8 @@ test('Task 3 review Home tiles render approved images with localized provenance'
   const html = render.homeProjectGalleryHtml(candidate, '../', true, 'en');
   const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
   assert.match(firstTile, /<img\b(?=[^>]*src="\.\.\/assets\/projects\/surgical-navigation\/lead\.webp")(?=[^>]*alt="Surgical-navigation demonstration connecting tracked equipment and medical-image models to a HoloLens spatial view\.")/);
-  assert.match(firstTile, /class="td-home-project__caption"[^>]*>The actual integrated demonstration will be published only after approval\.<\/p>/);
   assert.match(firstTile, /Public evidence[\s\S]*IMAGE[\s\S]*Surgical Navigation/);
-  assert.doesNotMatch(firstTile, /td-home-project__fallback/);
+  assert.doesNotMatch(firstTile, /td-home-project__fallback|td-home-project__caption|The actual integrated demonstration will be published only after approval\./);
 });
 
 test('Task 3 review Home video tiles use an approved poster without autoplay or inline video', () => {
@@ -307,6 +306,57 @@ test('Task 3 Home evidence mosaic and capability index follow the required data 
     assert.match(index, new RegExp(method));
   }
   assert.doesNotMatch(index, /rating|progress|capability-card/i);
+});
+
+test('Task 3 review hero mosaic renders approved images with truthful alt and ledger', () => {
+  const candidate = clone(data);
+  candidate.projects[1].media.lead = {
+    id: 'mandibular-public-image',
+    type: 'image',
+    status: 'approved',
+    publicPath: 'assets/projects/mandibular-fracture/lead.webp'
+  };
+  const html = render.homeEvidenceMosaicHtml(candidate, 'en', '../');
+  const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
+  assert.match(firstCell, /<img\b(?=[^>]*class="td-mosaic-cell__image")(?=[^>]*src="\.\.\/assets\/projects\/mandibular-fracture\/lead\.webp")(?=[^>]*alt="Presentation and award evidence for mandibular fracture reduction research\.")/);
+  assert.match(firstCell, /Verified[\s\S]*Public evidence[\s\S]*IMAGE[\s\S]*Mandibular Fracture Optimization/);
+  assert.doesNotMatch(firstCell, /role="img"|Representative technical panel|Pending approval/);
+});
+
+test('Task 3 review hero mosaic renders an approved video poster without inline playback', () => {
+  const candidate = clone(data);
+  candidate.projects[0].media.lead = {
+    id: 'surgical-navigation-public-video',
+    type: 'video',
+    status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/demo.mp4'
+  };
+  candidate.projects[0].media.video = clone(candidate.projects[0].media.lead);
+  candidate.projects[0].media.poster = {
+    id: 'surgical-navigation-public-poster',
+    type: 'image',
+    status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/poster.webp'
+  };
+  const html = render.homeEvidenceMosaicHtml(candidate, 'ko');
+  const secondCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][1]?.[0] || '';
+  assert.match(secondCell, /<img\b(?=[^>]*class="td-mosaic-cell__image td-mosaic-cell__poster")(?=[^>]*src="assets\/projects\/surgical-navigation\/poster\.webp")(?=[^>]*alt="추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연\.")/);
+  assert.match(secondCell, /진행 중[\s\S]*공개 근거[\s\S]*VIDEO[\s\S]*수술내비게이션/);
+  assert.doesNotMatch(secondCell, /<video\b|autoplay|demo\.mp4/);
+});
+
+test('Task 3 review hero mosaic labels a nonvisual approved lead as representative, not actual media', () => {
+  const candidate = clone(data);
+  candidate.projects[1].media.lead = {
+    id: 'mandibular-publication-lead',
+    type: 'repository',
+    status: 'approved',
+    publicPath: 'https://example.com/public-evidence'
+  };
+  const html = render.homeEvidenceMosaicHtml(candidate, 'en');
+  const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
+  assert.match(firstCell, /role="img" aria-label="Representative technical panel; no actual demo or photograph is shown\."/);
+  assert.doesNotMatch(firstCell, /<img\b|Presentation and award evidence for mandibular fracture reduction research\./);
 });
 
 test('Task 3 Home shells preserve exact thesis, section order, and six-link no-JS fallback', () => {
@@ -404,6 +454,51 @@ test('Task 3 review renderer validation matches the canonical render-required bo
     assert.deepEqual(rendererErrors, validator.portfolioDataErrors(candidate));
     assert.equal(render.caseStudyHtml(candidate, 'surgical-navigation', '../../', false, 'en'), '');
   }
+});
+
+test('Task 3 review canonical media validation enforces literal slot-compatible types', () => {
+  const mutations = [
+    [(candidate) => {
+      candidate.projects[1].media.lead = {
+        id: 'publication-as-lead', type: 'publication', status: 'approved',
+        publicPath: 'https://example.com/publication'
+      };
+    }, /lead: unsupported publication media type/i],
+    [(candidate) => { candidate.projects[0].media.video.type = 'image'; }, /video: unsupported image media type/i],
+    [(candidate) => { candidate.projects[0].media.poster.type = 'video'; }, /poster: unsupported video media type/i],
+    [(candidate) => {
+      candidate.projects[0].media.lead = {
+        id: 'approved-video', type: 'video', status: 'approved',
+        publicPath: 'assets/projects/surgical-navigation/demo.mp4'
+      };
+      candidate.projects[0].media.poster = {
+        id: 'mp4-poster', type: 'image', status: 'approved',
+        publicPath: 'assets/projects/surgical-navigation/poster.mp4'
+      };
+    }, /poster: image media requires an image file/i],
+    [(candidate) => { candidate.projects[1].media.references[0].type = 'image'; }, /reference 0: unsupported image media type/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const candidate = clone(data);
+    mutate(candidate);
+    const rendererErrors = render.dataErrors(candidate);
+    assert.match(rendererErrors.join(' '), expected);
+    assert.deepEqual(rendererErrors, validator.portfolioDataErrors(candidate));
+    assert.equal(render.homeProjectGalleryHtml(candidate, '', false, 'en'), '');
+  }
+
+  const malformedPoster = clone(data.projects[0]);
+  malformedPoster.media.lead = {
+    id: 'approved-video', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/demo.mp4'
+  };
+  malformedPoster.media.poster = {
+    id: 'video-poster', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/poster.mp4'
+  };
+  const directHtml = render.evidenceMediaHtml(malformedPoster, 'en', '../../', false);
+  assert.match(directHtml, /td-evidence-placeholder/);
+  assert.doesNotMatch(directHtml, /<video\b|poster\.mp4/);
 });
 
 test('Task 3 review renderer validation remains browser-UMD and CommonJS safe', () => {
