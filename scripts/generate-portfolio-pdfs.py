@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import re
 import shutil
@@ -110,6 +111,35 @@ def canonical_source_digest(payload: dict[str, Any]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def normalize_public_separators(value: str) -> str:
+    normalized = re.sub(r"[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]", " ", value)
+    normalized = re.sub(r"[\u200b-\u200d\u2060\ufeff]", "", normalized)
+    normalized = normalized.translate(str.maketrans({
+        "‐": "-", "‑": "-", "‒": "-", "–": "-", "—": "-", "−": "-",
+        "⁄": "/", "∕": "/", "／": "/",
+        "•": "·", "‧": "·", "・": "·",
+        "（": "(", "）": ")", "＋": "+",
+    }))
+    return re.sub(r"\s+", " ", normalized)
+
+
+def public_text_scan_variants(value: str) -> list[str]:
+    decoded = value
+    for _ in range(6):
+        next_value = html.unescape(decoded)
+        if next_value == decoded:
+            break
+        decoded = next_value
+    decoded = re.sub(r"&#(?:x)?[^;\s<]{1,24};?", " ", decoded, flags=re.I)
+    decoded = re.sub(r"&[a-z][a-z0-9]{0,31};?", " ", decoded, flags=re.I)
+    decoded = normalize_public_separators(decoded)
+    visible = re.sub(r"<!--[\s\S]*?-->", " ", decoded)
+    visible = re.sub(r"<[^>]*>", " ", visible)
+    visible = re.sub(r"<[^>]*$", " ", visible)
+    visible = normalize_public_separators(visible)
+    return list(dict.fromkeys([decoded, visible]))
+
+
 def public_pii_findings(value: Any) -> list[str]:
     strings: list[str] = []
     visited: set[int] = set()
@@ -138,16 +168,17 @@ def public_pii_findings(value: Any) -> list[str]:
     except Exception:
         return []
     findings: list[str] = []
-    for text in strings:
-        for label, pattern in PUBLIC_PII_PATTERNS:
-            try:
-                match = pattern.search(text)
-            except (TypeError, re.error):
-                match = None
-            if match:
-                finding = f"{label}: {match.group(0)}"
-                if finding not in findings:
-                    findings.append(finding)
+    for raw_text in strings:
+        for text in public_text_scan_variants(raw_text):
+            for label, pattern in PUBLIC_PII_PATTERNS:
+                try:
+                    match = pattern.search(text)
+                except (TypeError, re.error):
+                    match = None
+                if match:
+                    finding = f"{label}: {match.group(0)}"
+                    if finding not in findings:
+                        findings.append(finding)
     return findings
 
 
