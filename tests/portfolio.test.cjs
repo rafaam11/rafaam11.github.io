@@ -1076,7 +1076,7 @@ test('Task 3 Home evidence mosaic and capability index follow the required data 
   assert.doesNotMatch(index, /rating|progress|capability-card/i);
 });
 
-test('Task 3 review hero mosaic renders approved images with truthful alt and ledger', () => {
+test('Task 3 review hero mosaic renders approved images with truthful alt and title only', () => {
   const candidate = clone(data);
   candidate.projects[1].media.lead = {
     id: 'mandibular-public-image',
@@ -1088,8 +1088,8 @@ test('Task 3 review hero mosaic renders approved images with truthful alt and le
   const html = render.homeEvidenceMosaicHtml(candidate, 'en', '../');
   const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
   assert.match(firstCell, /<img\b(?=[^>]*class="td-mosaic-cell__image")(?=[^>]*src="\.\.\/assets\/projects\/mandibular-fracture\/lead\.webp")(?=[^>]*alt="Presentation and award evidence for mandibular fracture reduction research\.")/);
-  assert.match(firstCell, /Verified[\s\S]*Public evidence[\s\S]*IMAGE[\s\S]*Mandibular Fracture Optimization/);
-  assert.doesNotMatch(firstCell, /role="img"|Representative technical panel|Pending approval/);
+  assert.match(firstCell, /<h3 class="td-mosaic-cell__title">Mandibular Fracture Optimization<\/h3>/);
+  assert.doesNotMatch(firstCell, /role="img"|Representative technical panel|Pending approval|Public evidence|Verified|Completed|td-media-ledger|>IMAGE</);
 });
 
 test('Task 3 review hero mosaic renders an approved video poster without inline playback', () => {
@@ -1111,11 +1111,11 @@ test('Task 3 review hero mosaic renders an approved video poster without inline 
   const html = render.homeEvidenceMosaicHtml(candidate, 'ko');
   const secondCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][1]?.[0] || '';
   assert.match(secondCell, /<img\b(?=[^>]*class="td-mosaic-cell__image td-mosaic-cell__poster")(?=[^>]*src="assets\/projects\/surgical-navigation\/poster\.webp")(?=[^>]*alt="추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연\.")/);
-  assert.match(secondCell, /진행 중[\s\S]*공개 근거[\s\S]*VIDEO[\s\S]*수술내비게이션/);
-  assert.doesNotMatch(secondCell, /<video\b|autoplay|demo\.mp4/);
+  assert.match(secondCell, /<h3 class="td-mosaic-cell__title">수술내비게이션<\/h3>/);
+  assert.doesNotMatch(secondCell, /<video\b|autoplay|demo\.mp4|진행 중|공개 근거|td-media-ledger|>VIDEO</);
 });
 
-test('Task 3 review hero mosaic labels a nonvisual approved lead as representative, not actual media', () => {
+test('Task 3 review hero mosaic keeps a nonvisual lead as a title-only placeholder', () => {
   const candidate = clone(data);
   candidate.projects[1].media.lead = {
     id: 'mandibular-publication-lead',
@@ -1126,9 +1126,9 @@ test('Task 3 review hero mosaic labels a nonvisual approved lead as representati
   candidate.projects[1].pdfSequence.evidenceId = candidate.projects[1].media.lead.id;
   const html = render.homeEvidenceMosaicHtml(candidate, 'en');
   const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
-  assert.match(firstCell, /role="img" aria-label="Representative technical panel; no actual demo or photograph is shown\."/);
-  assert.match(firstCell, /Verified[\s\S]*Public evidence[\s\S]*REPOSITORY[\s\S]*Mandibular Fracture Optimization/);
-  assert.doesNotMatch(firstCell, /Pending approval/);
+  assert.match(firstCell, /<div class="td-mosaic-cell__field" aria-hidden="true"><i><\/i><\/div>/);
+  assert.match(firstCell, /<h3 class="td-mosaic-cell__title">Mandibular Fracture Optimization<\/h3>/);
+  assert.doesNotMatch(firstCell, /Verified|Completed|Public evidence|Pending approval|REPOSITORY|td-media-ledger/);
   assert.doesNotMatch(firstCell, /<img\b|Presentation and award evidence for mandibular fracture reduction research\./);
 });
 
@@ -1174,7 +1174,7 @@ test('Task 3 media renderer shows pending provenance without broken media', () =
   assert.doesNotMatch(html, /<(?:img|video)\b/i);
 });
 
-test('Task 3 review pending visual names disclose approval state without claiming an actual demo', () => {
+test('Task 3 review keeps pending disclosure on detail surfaces only', () => {
   const expectations = {
     ko: '공개 시각 자료 승인 대기: 실제 데모 또는 사진을 표시하지 않습니다.',
     en: 'Public visual pending approval; no actual demo or photograph is shown.'
@@ -1184,12 +1184,11 @@ test('Task 3 review pending visual names disclose approval state without claimin
     const detail = render.evidenceMediaHtml(project, locale, '../../', false);
     const home = render.homeProjectGalleryHtml(data, '', false, locale);
     const mosaic = render.homeEvidenceMosaicHtml(data, locale);
-    for (const [surface, html] of [['detail', detail], ['mosaic', mosaic]]) {
-      const accessibleNames = [...html.matchAll(/role="img"[^>]*aria-label="([^"]+)"/g)].map((match) => match[1]);
-      assert.ok(accessibleNames.includes(expectations[locale]), `${locale} ${surface}: pending accessible name missing`);
-      assert.equal(accessibleNames.some((name) => name.includes(project.translations[locale].mediaAlt)), false, `${locale} ${surface}: pending name claims desired media is shown`);
-    }
+    const accessibleNames = [...detail.matchAll(/role="img"[^>]*aria-label="([^"]+)"/g)].map((match) => match[1]);
+    assert.ok(accessibleNames.includes(expectations[locale]), `${locale} detail: pending accessible name missing`);
+    assert.equal(accessibleNames.some((name) => name.includes(project.translations[locale].mediaAlt)), false, `${locale} detail: pending name claims desired media is shown`);
     assert.doesNotMatch(home, /role="img"|aria-label=|data-media-status|td-media-ledger/, `${locale} home: title-only tiles must not expose evidence metadata`);
+    assert.doesNotMatch(mosaic, /role="img"|aria-label=|data-media-status|td-media-ledger|Pending approval|공개 승인 대기|>VIDEO<|>IMAGE</, `${locale} mosaic: Home must stay image-and-title only`);
     assert.match(detail, new RegExp(project.translations[locale].mediaCaption.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
 });
@@ -3536,4 +3535,138 @@ test('Task 6 review round 5 classifies same-origin stylesheet URL variants as on
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
+});
+
+test('Integrated review separates evidence maturity from project lifecycle', () => {
+  assert.deepEqual(data.projects.map((project) => [
+    project.slug,
+    project.evidenceState,
+    project.lifecycleState
+  ]), [
+    ['surgical-navigation', 'ongoing', 'ongoing'],
+    ['mandibular-fracture', 'verified', 'completed'],
+    ['life-careverse', 'ongoing', 'ongoing'],
+    ['rtms-navigation', 'prototype', 'ongoing'],
+    ['unmanned-forklift', 'ongoing', 'ongoing'],
+    ['ai-build-lab', 'ongoing', 'ongoing']
+  ]);
+
+  const projectsHtml = render.projectGroupsHtml(data, '', false, 'en');
+  assert.match(projectsHtml, /Verified · Completed/);
+  assert.match(projectsHtml, /Prototype · Ongoing/);
+  assert.doesNotMatch(projectsHtml, /Ongoing · Ongoing/);
+  const caseHtml = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'ko');
+  assert.match(caseHtml, />검증됨 · 완료</);
+
+  const missing = clone(data);
+  delete missing.projects[0].lifecycleState;
+  assert.match(validator.portfolioDataErrors(missing).join('\n'), /lifecycle state/i);
+  const unknown = clone(data);
+  unknown.projects[0].lifecycleState = 'paused';
+  assert.match(validator.portfolioDataErrors(unknown).join('\n'), /unknown lifecycle state/i);
+});
+
+test('Integrated review keeps the entire Home evidence mosaic image-and-title only', () => {
+  const pending = render.homeEvidenceMosaicHtml(data, 'en');
+  assert.equal(count(pending, 'class="td-mosaic-cell"'), 3);
+  assert.doesNotMatch(
+    pending,
+    /td-media-ledger|data-media-status|Pending approval|Public evidence|Verified|Ongoing|Prototype|Completed|FRAME \/|>VIDEO<|>IMAGE<|>REPOSITORY</
+  );
+
+  const candidate = clone(data);
+  candidate.projects[1].media.lead = {
+    id: 'mandibular-public-image',
+    type: 'image',
+    status: 'approved',
+    publicPath: 'assets/projects/mandibular-fracture/lead.webp'
+  };
+  candidate.projects[1].pdfSequence.evidenceId = candidate.projects[1].media.lead.id;
+  const approved = render.homeEvidenceMosaicHtml(candidate, 'en', '../');
+  assert.match(approved, /<img\b(?=[^>]*src="\.\.\/assets\/projects\/mandibular-fracture\/lead\.webp")/);
+  assert.doesNotMatch(approved, /td-media-ledger|Public evidence|Pending approval|Verified|Completed|>IMAGE</);
+
+  for (const relativePath of ['index.html', 'en/index.html']) {
+    const html = read(relativePath);
+    const mosaic = html.match(/<div class="td-home-hero__mosaic"[\s\S]*?<\/div>\s*<\/section>/)?.[0] || '';
+    assert.ok(mosaic, `${relativePath}: missing authored Home mosaic`);
+    assert.doesNotMatch(mosaic, /td-media-ledger|Pending approval|Public evidence|공개 승인 대기|공개 근거|Verified|Ongoing|Prototype|검증됨|진행 중|프로토타입|FRAME \/|>VIDEO<|>IMAGE</);
+  }
+});
+
+test('Integrated review rejects private project copy and keeps AI claims factual', () => {
+  assert.equal(
+    data.projects.find((project) => project.slug === 'ai-build-lab').translations.ko.role,
+    '문제 맥락, 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영 판단을 소유하고 AI를 구현 보조·증폭 수단으로 사용했습니다.'
+  );
+  assert.doesNotMatch(JSON.stringify(data.projects), /AI로 구현 속도를 높/i);
+
+  const mutations = [
+    'C:\\Users\\patient\\private\\raw\\scan.png',
+    '\\\\server\\share\\secret.dcm',
+    '010-1234-5678',
+    'PatientName: Hong Gil Dong',
+    'PatientID=CASE-001'
+  ];
+  for (const privateValue of mutations) {
+    const candidate = clone(data);
+    candidate.projects[0].translations.en.summary = privateValue;
+    assert.match(render.validatePortfolioData(candidate).join('\n'), /private|PII|patient|path|phone/i, privateValue);
+    assert.match(validator.portfolioDataErrors(candidate).join('\n'), /private|PII|patient|path|phone/i, privateValue);
+  }
+
+  const diagramLeak = clone(data);
+  diagramLeak.projects[0].pdfSequence.diagram.translations.en.nodes[0] = 'C:\\Users\\reviewer\\private\\raw\\frame.png';
+  assert.match(validator.portfolioDataErrors(diagramLeak).join('\n'), /private|path/i);
+});
+
+test('Integrated review scans authored visible HTML for private paths and PII', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-public-html-privacy-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const mutations = [
+      ['C:\\Users\\patient\\private\\raw\\scan.png', /private source path|local path/i],
+      ['010-1234-5678', /private PII|phone/i],
+      ['PatientName: Hong Gil Dong', /private PII|patient/i]
+    ];
+    for (const [privateValue, expected] of mutations) {
+      fs.writeFileSync(homePath, baseline.replace('</main>', `<p>${privateValue}</p></main>`));
+      assert.match(validator.validatePortfolio(temporaryRoot).join('\n'), expected, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Integrated review forbids private resume source documents from the public tree', () => {
+  assert.equal(typeof validator.forbiddenSourceDocumentErrors, 'function');
+  assert.deepEqual(validator.forbiddenSourceDocumentErrors(root), []);
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-source-docs-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const sourceDirectory = path.join(temporaryRoot, 'docs', '이력서');
+    fs.mkdirSync(sourceDirectory, { recursive: true });
+    fs.writeFileSync(path.join(sourceDirectory, '지원서-원본.md'), 'private resume source');
+    fs.writeFileSync(path.join(temporaryRoot, 'application-original.docx'), 'private resume source');
+    const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+    assert.match(errors, /private source document.*docs\/이력서\/지원서-원본\.md/i);
+    assert.match(errors, /private source document.*application-original\.docx/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Integrated review marks a project-section nav item as a location, not the current page', () => {
+  const html = nav.navigationHtml({
+    base: '../../',
+    current: 'projects',
+    locale: 'ko',
+    route: 'projects/mandibular-fracture/',
+    isFile: false
+  });
+  assert.match(html, /href="\.\.\/\.\.\/projects\/"[^>]*aria-current="location"[^>]*>[\s\S]*?프로젝트</);
+  assert.doesNotMatch(html, /href="\.\.\/\.\.\/projects\/"[^>]*aria-current="page"/);
 });

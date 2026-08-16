@@ -33,9 +33,10 @@
     var links = routes.filter(function (descriptor) { return descriptor.navigation === 'link'; });
     var navItems = links.map(function (link) {
       var active = link.page === current;
+      var currentKind = active ? (route === link.route ? 'page' : 'location') : '';
       return '<li class="nav-item">' +
         '<a class="nav-link' + (active ? ' active' : '') + '" href="' + escapeHtml(i18n.routeHref(base, locale, link.route, isFile)) + '"' +
-        (active ? ' aria-current="page"' : '') + '>' +
+        (currentKind ? ' aria-current="' + currentKind + '"' : '') + '>' +
         (active ? '<span class="visually-hidden">' + escapeHtml(copy.currentPage) + '</span>' : '') +
         escapeHtml(copy[link.page]) + '</a></li>';
     }).join('');

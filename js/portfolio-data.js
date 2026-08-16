@@ -130,6 +130,7 @@
       tier: 'medical-core',
       period: '2023.07 – present',
       evidenceState: 'ongoing',
+      lifecycleState: 'ongoing',
       capabilityKeys: ['registration', 'medical-navigation', 'xr-engineering'],
       route: 'projects/surgical-navigation/',
       tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink'],
@@ -193,7 +194,7 @@
       ]
     }),
     project({
-      slug: 'mandibular-fracture', tier: 'medical-core', period: '2021.12 – 2023.02', evidenceState: 'verified',
+      slug: 'mandibular-fracture', tier: 'medical-core', period: '2021.12 – 2023.02', evidenceState: 'verified', lifecycleState: 'completed',
       capabilityKeys: ['registration', 'medical-navigation'], route: 'projects/mandibular-fracture/',
       tech: ['Python', 'Open3D', 'OpenCV', 'SciPy', 'PCA', 'ICP', 'CLPSO', '3D Slicer'], visualKey: 'coordinate-signal',
       media: {
@@ -225,7 +226,7 @@
           limitation: '준비된 연구 데이터셋의 결과이며 일상 임상 사용이나 단독 제1저자를 주장하지 않습니다.',
           collaboration: '임상 문제 해석, 알고리즘, 실험 설계, 논문 작성을 공동 연구로 수행했습니다.',
           mediaAlt: '하악골 골절 정복 연구의 학술대회 발표와 수상 근거.', mediaCaption: '발표·수상 미디어는 공개 승인 대기 중이며 게재 논문은 공개 참조할 수 있습니다.',
-          status: '검증됨', cardProblem: '모호한 정복 위치를 검증 가능한 3D 최적화 문제로 정의했습니다.', cardOwnedRole: '문제 정의부터 실험·논문까지 공동 리드했습니다.', cardEvidence: '발표·수상·Q1 SCIE 논문·정량 실험.', problemSummary: '교합 제약을 반영한 재현 가능한 정복 표적을 정의합니다.', ownedRole: '연구 파이프라인을 공동 리드한 공동 제1저자입니다.', verifiedEvidence: '학술대회 발표, 수상, Q1 SCIE 논문, 정량 실험.', visualAlt: '하악골 정복 정합과 최적화 근거.', visualCaption: '발표·수상 미디어는 승인 대기 중입니다.'
+          status: '검증됨 · 완료', cardProblem: '모호한 정복 위치를 검증 가능한 3D 최적화 문제로 정의했습니다.', cardOwnedRole: '문제 정의부터 실험·논문까지 공동 리드했습니다.', cardEvidence: '발표·수상·Q1 SCIE 논문·정량 실험.', problemSummary: '교합 제약을 반영한 재현 가능한 정복 표적을 정의합니다.', ownedRole: '연구 파이프라인을 공동 리드한 공동 제1저자입니다.', verifiedEvidence: '학술대회 발표, 수상, Q1 SCIE 논문, 정량 실험.', visualAlt: '하악골 정복 정합과 최적화 근거.', visualCaption: '발표·수상 미디어는 승인 대기 중입니다.'
         },
         en: {
           title: 'Mandibular Fracture Reduction Optimization', shortTitle: 'Mandibular Fracture Optimization', eyebrow: 'Medical Core · Verified Research',
@@ -238,7 +239,7 @@
           limitation: 'Results are from prepared research datasets; this does not claim routine clinical use or sole first authorship.',
           collaboration: 'Clinical interpretation, algorithm design, experiment design, and writing were conducted as joint research.',
           mediaAlt: 'Presentation and award evidence for mandibular fracture reduction research.', mediaCaption: 'Presentation and award media remains pending approval; the publication is publicly referenced.',
-          status: 'Verified', cardProblem: 'Frame an ambiguous reduction as a testable 3D optimization problem.', cardOwnedRole: 'Jointly led the pipeline from problem framing through experiments and paper.', cardEvidence: 'Conference, award, publication, and experiment evidence.', problemSummary: 'Use occlusion constraints to define a reproducible reduction target.', ownedRole: 'Jointly led the research pipeline and served as a co-first author.', verifiedEvidence: 'Presentations, award, Q1 SCIE paper, and quantitative experiments.', visualAlt: 'Mandibular registration and optimization evidence.', visualCaption: 'Presentation and award media remains pending approval.'
+          status: 'Verified · Completed', cardProblem: 'Frame an ambiguous reduction as a testable 3D optimization problem.', cardOwnedRole: 'Jointly led the pipeline from problem framing through experiments and paper.', cardEvidence: 'Conference, award, publication, and experiment evidence.', problemSummary: 'Use occlusion constraints to define a reproducible reduction target.', ownedRole: 'Jointly led the research pipeline and served as a co-first author.', verifiedEvidence: 'Presentations, award, Q1 SCIE paper, and quantitative experiments.', visualAlt: 'Mandibular registration and optimization evidence.', visualCaption: 'Presentation and award media remains pending approval.'
         }
       },
       blocks: [
@@ -249,7 +250,7 @@
       ]
     }),
     project({
-      slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing',
+      slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
       tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'], visualKey: 'hololens-ar-concept',
       media: { lead: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, video: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, poster: { id: 'life-careverse-multiuser-poster', type: 'image', status: 'pending-approval' } },
@@ -301,7 +302,7 @@
       ]
     }),
     project({
-      slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'prototype',
+      slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'prototype', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
       tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'], visualKey: 'coordinate-signal',
       media: { lead: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, video: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, poster: { id: 'rtms-prototype-poster', type: 'image', status: 'pending-approval' } },
@@ -329,7 +330,7 @@
           limitation: '연구 프로토타입이며 임상 효과, 정량 정확도, 상용 배포를 주장하지 않습니다.',
           collaboration: '추적 장치와 연구 워크플로 검토를 위해 도메인 전문가와 협업합니다.',
           mediaAlt: '실시간 코일 자세, 환자 정합, 의료영상 표적을 표시하는 Slicer 프로토타입 녹화.', mediaCaption: '동작 프로토타입 녹화는 공개 승인 대기 중입니다.',
-          status: '프로토타입', cardProblem: '추적·좌표 데이터를 반복 가능한 Slicer 흐름으로 바꿉니다.', cardOwnedRole: 'Slicer 구조·장치·좌표·UI·실험 환경을 리드했습니다.', cardEvidence: '동작하는 연구 프로토타입과 반복 실험 흐름.', problemSummary: '추적·좌표 데이터를 반복 가능한 내비게이션으로 바꿉니다.', ownedRole: 'Slicer 구조, 장치 연동, 좌표 흐름, UI를 리드했습니다.', verifiedEvidence: '동작하는 연구 프로토타입; 임상·정량 결과는 주장하지 않습니다.', visualAlt: 'Slicer 내비게이션 프로토타입.', visualCaption: '프로토타입 미디어는 승인 대기 중입니다.'
+          status: '프로토타입 · 진행 중', cardProblem: '추적·좌표 데이터를 반복 가능한 Slicer 흐름으로 바꿉니다.', cardOwnedRole: 'Slicer 구조·장치·좌표·UI·실험 환경을 리드했습니다.', cardEvidence: '동작하는 연구 프로토타입과 반복 실험 흐름.', problemSummary: '추적·좌표 데이터를 반복 가능한 내비게이션으로 바꿉니다.', ownedRole: 'Slicer 구조, 장치 연동, 좌표 흐름, UI를 리드했습니다.', verifiedEvidence: '동작하는 연구 프로토타입; 임상·정량 결과는 주장하지 않습니다.', visualAlt: 'Slicer 내비게이션 프로토타입.', visualCaption: '프로토타입 미디어는 승인 대기 중입니다.'
         },
         en: {
           title: 'rTMS Navigation Prototype', shortTitle: 'rTMS Navigation', eyebrow: 'Medical Core · Prototype',
@@ -342,7 +343,7 @@
           limitation: 'This is a research prototype and does not claim clinical efficacy, quantitative accuracy, or commercial deployment.',
           collaboration: 'Domain experts review the tracking hardware and research workflow.',
           mediaAlt: 'Slicer prototype recording showing live coil pose, patient registration, and medical-image targets.', mediaCaption: 'The working prototype recording remains pending approval.',
-          status: 'Prototype', cardProblem: 'Turn tracking and coordinate data into a repeatable Slicer workflow.', cardOwnedRole: 'Led Slicer structure, devices, coordinates, UI, and the experiment environment.', cardEvidence: 'Working research prototype and repeatable experiment flow.', problemSummary: 'Turn tracking and coordinate data into repeatable navigation.', ownedRole: 'Led Slicer structure, device integration, coordinate flow, and UI.', verifiedEvidence: 'A working research prototype; no clinical or quantitative outcome claim.', visualAlt: 'Slicer navigation prototype.', visualCaption: 'Prototype media remains pending approval.'
+          status: 'Prototype · Ongoing', cardProblem: 'Turn tracking and coordinate data into a repeatable Slicer workflow.', cardOwnedRole: 'Led Slicer structure, devices, coordinates, UI, and the experiment environment.', cardEvidence: 'Working research prototype and repeatable experiment flow.', problemSummary: 'Turn tracking and coordinate data into repeatable navigation.', ownedRole: 'Led Slicer structure, device integration, coordinate flow, and UI.', verifiedEvidence: 'A working research prototype; no clinical or quantitative outcome claim.', visualAlt: 'Slicer navigation prototype.', visualCaption: 'Prototype media remains pending approval.'
         }
       },
       blocks: [
@@ -353,7 +354,7 @@
       ]
     }),
     project({
-      slug: 'unmanned-forklift', tier: 'industrial-spotlight', period: '2024 – present', evidenceState: 'ongoing',
+      slug: 'unmanned-forklift', tier: 'industrial-spotlight', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['sensor-fusion', 'registration'], route: 'projects/unmanned-forklift/',
       tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'], visualKey: 'forklift-sim-to-real',
       media: { lead: { id: 'forklift-registration-pointcloud', type: 'image', status: 'pending-approval' } },
@@ -405,7 +406,7 @@
       ]
     }),
     project({
-      slug: 'ai-build-lab', tier: 'ai-build-lab', period: '2024 – present', evidenceState: 'ongoing',
+      slug: 'ai-build-lab', tier: 'ai-build-lab', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['ai-product-engineering'], route: 'projects/ai-build-lab/',
       tech: ['Electron', 'TypeScript', 'Node.js', 'Cloudflare', 'GitHub Actions', 'Agent workflows'], visualKey: 'decision-signal',
       media: {
@@ -434,7 +435,7 @@
           thesis: '직접 겪은 문제를 요구사항, 아키텍처, 수용 기준, 테스트 제품, 릴리스, 운영으로 바꾸고 AI는 구현을 증폭하는 수단으로 사용합니다.',
           summary: '로컬 지식 시스템, 멀티 CLI 데스크톱 앱, 대구 버스 정보 앱을 하나의 문제-제품 파이프라인으로 묶어 보여줍니다.',
           problem: '자주 겪는 마찰이 임시 스크립트로 남지 않고 반복 사용 가능한 제품 요구사항으로 바뀌어야 했습니다.',
-          role: '문제 맥락, 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영 판단을 소유하고 AI로 구현 속도를 높였습니다.',
+          role: '문제 맥락, 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영 판단을 소유하고 AI를 구현 보조·증폭 수단으로 사용했습니다.',
           teamResult: '공개 저장소와 릴리스 아티팩트는 확인 가능한 제품 결과이지만 사용자 수, 생산성, 유지보수 효과를 주장하지 않습니다.',
           evidence: 'multi-cli-work와 대구 버스 앱의 공개 저장소·테스트·릴리스를 근거로 삼고, 로컬 지식 시스템의 비공개 데이터는 배제합니다.',
           limitation: '로컬 지식 시스템의 원문·개인 데이터를 공개하지 않고 검증되지 않은 사용자·생산성 지표를 주장하지 않습니다.',
