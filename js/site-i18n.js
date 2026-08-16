@@ -11,7 +11,9 @@
         cv: 'CV',
         contact: '연락처',
         currentPage: '현재 페이지: ',
-        toggleNavigation: '내비게이션 열기',
+        skipToContent: '본문으로 건너뛰기',
+        primaryNavigation: '주요 탐색',
+        toggleNavigation: '메뉴 열기',
         languageSwitcher: '언어 선택',
         korean: '한국어',
         english: 'EN'
@@ -39,7 +41,9 @@
         cv: 'CV',
         contact: 'Contact',
         currentPage: 'Current page: ',
-        toggleNavigation: 'Toggle navigation',
+        skipToContent: 'Skip to main content',
+        primaryNavigation: 'Primary navigation',
+        toggleNavigation: 'Toggle menu',
         languageSwitcher: 'Choose language',
         korean: '한국어',
         english: 'EN'

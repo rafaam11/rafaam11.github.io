@@ -6,110 +6,161 @@
     <meta name="description" content="김진민은 불확실한 기하, 센싱, XR 문제를 검증 가능한 시스템으로 만드는 3D 공간 컴퓨팅 연구 엔지니어입니다." />
     <meta name="author" content="Jinmin Kim" />
     <link rel="canonical" href="https://rafaam11.github.io/" />
-<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/" />
-<link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/" />
-<link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/" />
-<title>김진민 · 3D 공간 컴퓨팅 (3D Spatial Computing)</title>
+    <link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/" />
+    <link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/" />
+    <title>김진민 · 3D 공간 컴퓨팅 (3D Spatial Computing)</title>
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" type="text/css" />
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/cv-theme.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link href="css/spatial-signal.css" rel="stylesheet" />
 </head>
-<body data-base="" data-page="home" data-lang="ko" data-route="">
+<body class="ss-shell ss-home" data-base="" data-page="home" data-lang="ko" data-route="">
     <header id="site-nav"></header>
 
-    <main class="page page-home">
-        <section class="hero hero-editorial" aria-labelledby="home-title">
-            <img class="hero-photo" src="assets/img/profile_square.webp" alt="김진민 프로필 사진" width="176" height="176" />
-            <div class="hero-body">
-                <p class="hero-kicker">3D 공간 컴퓨팅 · 연구 엔지니어 (Research Engineer)</p>
-                <h1 class="hero-name" id="home-title">Jinmin <span class="text-primary">Kim</span></h1>
-                <p class="hero-statement">불확실한 3D 공간 문제를 팀이 검증하고 신뢰하며 확장할 수 있는 시스템으로 만듭니다.</p>
-                <p class="hero-support">좌표 기하, 센싱, XR, 디지털 트윈, 도메인 워크플로를 넘나들며 모호한 문제를 검증된 소프트웨어로 연결하는 의사결정을 담당합니다.</p>
-                <div class="about-chips" aria-label="프로필 정보">
-                    <span class="about-chip"><i class="fas fa-location-dot" aria-hidden="true"></i> 대한민국 대구</span>
-                    <span class="about-chip"><i class="fas fa-code-branch" aria-hidden="true"></i> 실무형 테크니컬 리드 IC (Hands-on technical-lead IC)</span>
+    <main id="main-content" class="page ss-home-main" tabindex="-1">
+        <section class="ss-hero" aria-labelledby="home-title">
+            <div class="ss-hero__copy">
+                <p class="ss-eyebrow">3D SPATIAL COMPUTING · RESEARCH ENGINEER</p>
+                <h1 class="ss-hero__title" id="home-title">불확실한 3D 공간을, 검증 가능한 시스템으로.</h1>
+                <p class="ss-hero__support">좌표 정합, 센서 인지, XR, 디지털 트윈을 넘나들며 문제 정의부터 통합·검증까지 직접 책임지는 hands-on technical-lead IC입니다.</p>
+                <div class="ss-hero__actions">
+                    <a class="ss-button ss-button--primary" href="projects/index.html" data-root-dir="projects/">프로젝트에서 근거 보기</a>
+                    <a class="ss-button ss-button--quiet" href="cv/index.html" data-root-dir="cv/">CV 검토하기</a>
                 </div>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="projects/index.html" data-root-dir="projects/">프로젝트 보기</a>
-                    <a class="btn btn-outline-primary" href="cv/index.html" data-root-dir="cv/">CV 보기</a>
+            </div>
+            <div class="ss-hero__visual">
+                <div class="ss-registration-trace" data-ss-state="idle" aria-hidden="true">
+                    <span class="ss-registration-trace__grid"></span>
+                    <span class="ss-registration-trace__node"></span>
+                    <span class="ss-registration-trace__segment"></span>
+                    <span class="ss-registration-trace__node"></span>
+                    <span class="ss-registration-trace__segment"></span>
+                    <span class="ss-registration-trace__node"></span>
+                    <span class="ss-registration-trace__segment"></span>
+                    <span class="ss-registration-trace__node"></span>
+                </div>
+                <aside class="ss-trust-anchor" aria-label="프로필">
+                    <img class="ss-trust-anchor__photo" src="assets/img/profile_square.webp" alt="김진민 프로필 사진" width="176" height="176" />
+                    <div class="ss-trust-anchor__body">
+                        <p class="ss-trust-anchor__name">김진민 · Jinmin Kim</p>
+                        <p class="ss-trust-anchor__role">3D 공간 컴퓨팅 연구 엔지니어</p>
+                        <p class="ss-trust-anchor__location">대한민국 대구</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="ss-evidence-strip" data-ss-evidence-strip data-ss-state="idle" data-ss-interval="4800" aria-labelledby="evidence-title">
+            <div class="ss-evidence-strip__header ss-section-heading">
+                <div>
+                    <p class="ss-eyebrow">EVIDENCE REGISTRATION · 공개 가능한 근거</p>
+                    <h2 class="ss-section-title" id="evidence-title">결정이 시스템에 닿은 흔적.</h2>
+                </div>
+            </div>
+            <div class="ss-evidence-strip__stage">
+                <div class="ss-evidence-strip__slides" aria-label="공개 가능한 프로젝트 근거">
+                    <article class="ss-evidence-slide" id="ss-evidence-slide-1" data-ss-evidence-slide data-ss-slide="1" data-ss-state="active" aria-hidden="false">
+                        <figure class="ss-evidence-slide__visual">
+                            <picture><img src="assets/diagrams/nav-digitaltwin-pipeline.svg" alt="의료영상, 추적 도구, 혼합현실 좌표계를 연결하는 XR 수술 내비게이션 정합 파이프라인" width="1180" height="600" /></picture>
+                            <figcaption>
+                                <span class="ss-evidence-slide__state">검증됨</span>
+                                <span class="ss-evidence-slide__project">Surgical Twin</span>
+                                <h3 class="ss-evidence-slide__title">XR 수술 내비게이션</h3>
+                                <span class="ss-evidence-slide__caption">좌표 정합 · SDK 선별 · 통합 · 공식 시연 수용</span>
+                                <a class="ss-evidence-slide__link" href="projects/surgical-twin/index.html" data-root-dir="projects/surgical-twin/">프로젝트 근거 보기</a>
+                            </figcaption>
+                        </figure>
+                    </article>
+                    <article class="ss-evidence-slide" id="ss-evidence-slide-2" data-ss-evidence-slide data-ss-slide="2" data-ss-state="inactive" aria-hidden="false">
+                        <figure class="ss-evidence-slide__visual">
+                            <picture><img src="assets/diagrams/hololens-ar-concept.svg" alt="임상 상담과 수술 워크플로를 HoloLens 기반 XR 장면으로 번역한 개념도" width="1180" height="600" /></picture>
+                            <figcaption>
+                                <span class="ss-evidence-slide__state">진행 중</span>
+                                <span class="ss-evidence-slide__project">Life Careverse</span>
+                                <h3 class="ss-evidence-slide__title">임상 XR</h3>
+                                <span class="ss-evidence-slide__caption">임상 언어를 검토 가능한 상담·수술 시나리오로 번역</span>
+                                <a class="ss-evidence-slide__link" href="projects/life-careverse/index.html" data-root-dir="projects/life-careverse/">프로젝트 근거 보기</a>
+                            </figcaption>
+                        </figure>
+                    </article>
+                    <article class="ss-evidence-slide" id="ss-evidence-slide-3" data-ss-evidence-slide data-ss-slide="3" data-ss-state="inactive" aria-hidden="false">
+                        <figure class="ss-evidence-slide__visual">
+                            <picture><img src="assets/diagrams/forklift-sim-to-real.svg" alt="시뮬레이션에서 센서와 안전 게이트를 검증한 뒤 현장 무인지게차로 연결하는 흐름" width="1180" height="560" /></picture>
+                            <figcaption>
+                                <span class="ss-evidence-slide__state">진행 중</span>
+                                <span class="ss-evidence-slide__project">Unmanned Forklift</span>
+                                <h3 class="ss-evidence-slide__title">무인지게차 &amp; LiteSim</h3>
+                                <span class="ss-evidence-slide__caption">현장 투입 전 센서·안전 게이트를 팀이 검증하는 환경</span>
+                                <a class="ss-evidence-slide__link" href="projects/unmanned-forklift/index.html" data-root-dir="projects/unmanned-forklift/">프로젝트 근거 보기</a>
+                            </figcaption>
+                        </figure>
+                    </article>
+                </div>
+                <div class="ss-evidence-controls" role="group" aria-label="프로젝트 근거 선택">
+                    <button class="ss-evidence-control" type="button" data-ss-evidence-control data-ss-target="0" aria-controls="ss-evidence-slide-1" aria-pressed="true">01 Surgical Twin</button>
+                    <button class="ss-evidence-control" type="button" data-ss-evidence-control data-ss-target="1" aria-controls="ss-evidence-slide-2" aria-pressed="false">02 Life Careverse</button>
+                    <button class="ss-evidence-control" type="button" data-ss-evidence-control data-ss-target="2" aria-controls="ss-evidence-slide-3" aria-pressed="false">03 Unmanned Forklift</button>
+                    <button class="ss-evidence-stop" type="button" data-ss-evidence-stop aria-pressed="false">자동 전환 중지</button>
                 </div>
             </div>
         </section>
 
-        <section aria-labelledby="atlas-title">
-            <div class="section-heading-row">
+        <section class="ss-capabilities" aria-labelledby="capabilities-title">
+            <div class="ss-section-heading">
                 <div>
-                    <p class="section-eyebrow">역량 지도 (Capability Atlas)</p>
-                    <h2 class="section-display" id="atlas-title">내가 책임지고 해결할 수 있는 문제</h2>
+                    <p class="ss-eyebrow">05 TRANSFERABLE CAPABILITIES</p>
+                    <h2 class="ss-section-title" id="capabilities-title">반복해서 해결해 온 문제.</h2>
                 </div>
-                <a class="section-link" href="research/index.html" data-root-dir="research/">검증 방법 보기 <span aria-hidden="true">→</span></a>
+                <a class="ss-section-link" href="research/index.html" data-root-dir="research/">검증 방법 전체 보기 <span aria-hidden="true">→</span></a>
             </div>
-            <div class="capability-atlas" data-portfolio="capability-atlas">
+            <div class="ss-capabilities__grid capability-atlas" data-portfolio="capability-atlas">
                 <p class="portfolio-fallback">JavaScript가 역량 지도를 표시합니다. <a href="research/index.html" data-root-dir="research/">역량 요약을 읽거나</a> 또는 <a href="projects/index.html" data-root-dir="projects/">프로젝트 사례를 살펴보세요</a>.</p>
             </div>
         </section>
 
-        <section aria-labelledby="impact-title">
-            <p class="section-eyebrow">검증된 변화 (Proven Impact)</p>
-            <h2 class="section-display" id="impact-title">팀이 실제로 체감한 변화</h2>
-            <div class="impact-strip">
-                <article class="impact-card">
-                    <strong>약 3–4개월 → 1–2주</strong>
-                    <span>사람의 검토를 전제로 AI 지원 구현을 도입한 뒤 유사 센서 검증 도구의 예상 개발 기간입니다.</span>
-                </article>
-                <article class="impact-card">
-                    <strong>약 주 단위 → 월 단위</strong>
-                    <span>LiteSim으로 현장 전 센서 및 안전 게이트 검증을 수행한 뒤의 일반적인 출장 빈도입니다.</span>
-                </article>
-                <article class="impact-card">
-                    <strong>약 4–5개 micro-PoC</strong>
-                    <span>주 시스템 통합 전에 핵심 기능을 선별하기 위해 병렬로 수행한 HoloLens SDK 탐색입니다.</span>
-                </article>
+        <section class="ss-outcomes" aria-labelledby="outcomes-title">
+            <div class="ss-section-heading">
+                <div>
+                    <p class="ss-eyebrow">OUTCOME EVIDENCE</p>
+                    <h2 class="ss-section-title" id="outcomes-title">결과로 남은 변화.</h2>
+                </div>
+            </div>
+            <div class="ss-outcomes__grid">
+                <article class="ss-outcome"><strong class="ss-outcome__value">약 3–4개월 → 1–2주</strong><p class="ss-outcome__label">사람의 검토를 전제로 AI 지원 구현을 적용한 유사 센서 검증 도구의 예상 개발 기간</p></article>
+                <article class="ss-outcome"><strong class="ss-outcome__value">약 주 1회 → 월 1회</strong><p class="ss-outcome__label">LiteSim으로 현장 전 검증을 수행한 뒤의 일반적인 출장 빈도</p></article>
+                <article class="ss-outcome"><strong class="ss-outcome__value">약 4–5개 micro-PoC</strong><p class="ss-outcome__label">주 시스템 통합 전 핵심 기능을 선별한 HoloLens SDK 탐색</p></article>
             </div>
         </section>
 
-        <section aria-labelledby="work-title">
-            <p class="section-eyebrow">일하는 방식 (How I Work)</p>
-            <h2 class="section-display" id="work-title">빠른 근거, 명확한 책임</h2>
-            <div class="work-principles">
-                <article>
-                    <span class="principle-number">01</span>
-                    <h3>도메인을 번역합니다</h3>
-                    <p>임상, 로봇, 센싱 제약을 좌표 정의, 테스트 시나리오, 수용 기준으로 바꿉니다.</p>
-                </article>
-                <article>
-                    <span class="principle-number">02</span>
-                    <h3>확정하기 전에 탐색합니다</h3>
-                    <p>방향 전환 비용이 낮을 때 작은 병렬 PoC로 SDK, 센서, 통합 위험을 드러냅니다.</p>
-                </article>
-                <article>
-                    <span class="principle-number">03</span>
-                    <h3>도구로 확장합니다</h3>
-                    <p>AI 에이전트로 구현 처리량을 높이되 요구사항, 시스템 결정, 검토 게이트, merge 품질은 사람이 책임집니다.</p>
-                </article>
+        <section class="ss-decision-loop" aria-labelledby="decision-loop-title">
+            <div class="ss-section-heading">
+                <div>
+                    <p class="ss-eyebrow">DECISION LOOP · 01—03</p>
+                    <h2 class="ss-section-title" id="decision-loop-title">먼저 정의하고, 작게 검증하고, 시스템으로 연결합니다.</h2>
+                </div>
+            </div>
+            <div class="ss-decision-loop__grid">
+                <article class="ss-decision-step"><span class="ss-decision-step__index">01</span><h3>도메인을 번역합니다</h3><p>임상·로봇·센싱 제약을 좌표 정의, 테스트 시나리오, 수용 기준으로 바꿉니다.</p></article>
+                <article class="ss-decision-step"><span class="ss-decision-step__index">02</span><h3>확정하기 전에 탐색합니다</h3><p>방향 전환 비용이 낮을 때 작은 병렬 PoC로 SDK, 센서, 통합 위험을 드러냅니다.</p></article>
+                <article class="ss-decision-step"><span class="ss-decision-step__index">03</span><h3>검증된 것을 통합합니다</h3><p>AI로 구현 처리량을 높이되 요구사항, 시스템 결정, 검토 게이트, merge 품질은 사람이 책임집니다.</p></article>
             </div>
         </section>
 
-        <section class="home-evidence" aria-labelledby="evidence-title">
-            <p class="section-eyebrow">선별된 근거 (Selected Evidence)</p>
-            <h2 class="section-display" id="evidence-title">프로토타입에서 수용된 결과까지</h2>
-            <div class="evidence-list">
-                <a href="projects/surgical-twin/index.html" data-root-dir="projects/surgical-twin/">
-                    <span>XR 수술 내비게이션</span>
-                    <strong>정합, SDK 선별, 통합, 공식 시연 수용</strong>
-                </a>
-                <a href="projects/unmanned-forklift/index.html" data-root-dir="projects/unmanned-forklift/">
-                    <span>산업 자율주행</span>
-                    <strong>현장 배포 전에 개발팀이 도입한 LiteSim 검증</strong>
-                </a>
-                <a href="projects/life-careverse/index.html" data-root-dir="projects/life-careverse/">
-                    <span>임상 워크플로 전환</span>
-                    <strong>요구사항 승인, 소프트웨어 등록, 채택, 환자 동의 기반 연구 테스트 착수</strong>
-                </a>
+        <section class="ss-contact-cta" aria-labelledby="contact-cta-title">
+            <div class="ss-contact-cta__body">
+                <p class="ss-eyebrow">CONTACT · SENIOR R&amp;D</p>
+                <h2 class="ss-section-title" id="contact-cta-title">함께 검증할 어려운 공간 문제가 있나요?</h2>
+                <p>3D 정합, 센서 검증, 디지털 트윈, 임상 XR을 연결하는 hands-on technical-lead IC 역할을 찾고 있습니다.</p>
+            </div>
+            <div class="ss-contact-cta__actions">
+                <a class="ss-button ss-button--primary" href="contact/index.html" data-root-dir="contact/">연락하기</a>
+                <a class="ss-button ss-button--quiet" href="projects/index.html" data-root-dir="projects/">13개 프로젝트 보기</a>
             </div>
         </section>
     </main>
@@ -117,8 +168,9 @@
     <footer id="site-footer"></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/site-i18n.js"></script>
-<script src="js/portfolio-data.js"></script>
+    <script src="js/portfolio-data.js"></script>
     <script src="js/portfolio-render.js"></script>
     <script src="js/nav.js"></script>
+    <script src="js/spatial-signal.js"></script>
 </body>
 </html>

@@ -6,110 +6,188 @@
     <meta name="description" content="Jinmin Kim is a 3D spatial computing research engineer who turns uncertain geometry, sensing, and XR problems into testable systems." />
     <meta name="author" content="Jinmin Kim" />
     <link rel="canonical" href="https://rafaam11.github.io/en/" />
-<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/" />
-<link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/" />
-<link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/" />
-<title>Jinmin Kim · 3D Spatial Computing</title>
+    <link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/" />
+    <link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/" />
+    <title>Jinmin Kim · 3D Spatial Computing</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" type="text/css" />
     <link href="../css/styles.css" rel="stylesheet" />
     <link href="../css/cv-theme.css" rel="stylesheet" />
     <link href="../css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link href="../css/spatial-signal.css" rel="stylesheet" />
 </head>
-<body data-page="home" data-base="../" data-lang="en" data-route="">
+<body class="ss-shell ss-home" data-page="home" data-base="../" data-lang="en" data-route="">
     <header id="site-nav"></header>
 
-    <main class="page page-home">
-        <section class="hero hero-editorial" aria-labelledby="home-title">
-            <img class="hero-photo" src="../assets/img/profile_square.webp" alt="Portrait of Jinmin Kim" width="176" height="176" />
-            <div class="hero-body">
-                <p class="hero-kicker">3D Spatial Computing · Research Engineer</p>
-                <h1 class="hero-name" id="home-title">Jinmin <span class="text-primary">Kim</span></h1>
-                <p class="hero-statement">I turn uncertain 3D spatial problems into systems teams can test, trust, and extend.</p>
-                <p class="hero-support">I work across coordinate geometry, sensing, XR, digital twins, and domain workflows—owning the decisions that connect an ambiguous problem to validated software.</p>
-                <div class="about-chips" aria-label="Profile details">
-                    <span class="about-chip"><i class="fas fa-location-dot" aria-hidden="true"></i> Daegu, Korea</span>
-                    <span class="about-chip"><i class="fas fa-code-branch" aria-hidden="true"></i> Hands-on technical-lead IC</span>
+    <main id="main-content" class="page ss-home-main" tabindex="-1">
+        <section class="ss-hero" aria-labelledby="home-title">
+            <div class="ss-hero__copy">
+                <p class="ss-eyebrow">3D SPATIAL COMPUTING · RESEARCH ENGINEER</p>
+                <h1 class="ss-hero__title" id="home-title">Turn spatial uncertainty into systems teams can trust.</h1>
+                <p class="ss-hero__support">I work across registration, perception, XR, and digital twins as a hands-on technical-lead IC—owning problem framing, integration decisions, and verification.</p>
+                <div class="ss-hero__actions">
+                    <a class="ss-button ss-button--primary" href="projects/index.html" data-root-dir="projects/">See project evidence</a>
+                    <a class="ss-button ss-button--quiet" href="cv/index.html" data-root-dir="cv/">Review CV</a>
                 </div>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="projects/index.html" data-root-dir="projects/">View projects</a>
-                    <a class="btn btn-outline-primary" href="cv/index.html" data-root-dir="cv/">Read CV</a>
+            </div>
+            <div class="ss-hero__visual">
+                <div class="ss-registration-trace" data-ss-state="idle" aria-hidden="true">
+                    <span class="ss-registration-trace__grid"></span>
+                    <span class="ss-registration-trace__node"></span>
+                    <span class="ss-registration-trace__segment"></span>
+                    <span class="ss-registration-trace__node"></span>
+                    <span class="ss-registration-trace__segment"></span>
+                    <span class="ss-registration-trace__node"></span>
+                    <span class="ss-registration-trace__segment"></span>
+                    <span class="ss-registration-trace__node"></span>
+                </div>
+                <aside class="ss-trust-anchor" aria-label="Profile">
+                    <img class="ss-trust-anchor__photo" src="../assets/img/profile_square.webp" alt="Portrait of Jinmin Kim" width="176" height="176" />
+                    <div class="ss-trust-anchor__body">
+                        <p class="ss-trust-anchor__name">Jinmin Kim</p>
+                        <p class="ss-trust-anchor__role">3D Spatial Computing Research Engineer</p>
+                        <p class="ss-trust-anchor__location">Daegu, Korea</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="ss-evidence-strip" data-ss-evidence-strip data-ss-state="idle" data-ss-interval="4800" aria-labelledby="evidence-title">
+            <div class="ss-evidence-strip__header ss-section-heading">
+                <div>
+                    <p class="ss-eyebrow">EVIDENCE REGISTRATION · PUBLIC EVIDENCE</p>
+                    <h2 class="ss-section-title" id="evidence-title">Where decisions became working systems.</h2>
+                </div>
+            </div>
+            <div class="ss-evidence-strip__stage">
+                <div class="ss-evidence-strip__slides">
+                    <article class="ss-evidence-slide" id="ss-evidence-slide-1" data-ss-evidence-slide data-ss-slide="1" data-ss-state="active">
+                        <figure class="ss-evidence-slide__visual">
+                            <picture>
+                                <img src="../assets/diagrams/nav-digitaltwin-pipeline-en.svg" alt="Registration pipeline connecting medical imaging, tracked tools, and mixed-reality coordinates for XR surgical navigation" width="1180" height="600" />
+                            </picture>
+                            <figcaption class="ss-evidence-slide__meta">
+                                <span class="ss-evidence-slide__state">Verified</span>
+                                <span class="ss-evidence-slide__project">Surgical Twin</span>
+                                <h3 class="ss-evidence-slide__title">XR surgical navigation</h3>
+                                <span class="ss-evidence-slide__caption">Registration · SDK selection · integration · formal demonstration acceptance</span>
+                                <a class="ss-evidence-slide__link" href="projects/surgical-twin/index.html" data-root-dir="projects/surgical-twin/">View project evidence <span aria-hidden="true">→</span></a>
+                            </figcaption>
+                        </figure>
+                    </article>
+                    <article class="ss-evidence-slide" id="ss-evidence-slide-2" data-ss-evidence-slide data-ss-slide="2" data-ss-state="inactive">
+                        <figure class="ss-evidence-slide__visual">
+                            <picture>
+                                <img src="../assets/diagrams/hololens-ar-concept-en.svg" alt="Concept diagram translating clinical consultation and surgical workflows into a HoloLens XR scene" width="1180" height="600" />
+                            </picture>
+                            <figcaption class="ss-evidence-slide__meta">
+                                <span class="ss-evidence-slide__state">Ongoing</span>
+                                <span class="ss-evidence-slide__project">Life Careverse</span>
+                                <h3 class="ss-evidence-slide__title">Clinical XR</h3>
+                                <span class="ss-evidence-slide__caption">Clinical language translated into reviewable consultation and surgical scenarios</span>
+                                <a class="ss-evidence-slide__link" href="projects/life-careverse/index.html" data-root-dir="projects/life-careverse/">View project evidence <span aria-hidden="true">→</span></a>
+                            </figcaption>
+                        </figure>
+                    </article>
+                    <article class="ss-evidence-slide" id="ss-evidence-slide-3" data-ss-evidence-slide data-ss-slide="3" data-ss-state="inactive">
+                        <figure class="ss-evidence-slide__visual">
+                            <picture>
+                                <img src="../assets/diagrams/forklift-sim-to-real-en.svg" alt="Flow from simulated sensor and safety-gate validation to an unmanned forklift in the field" width="1180" height="560" />
+                            </picture>
+                            <figcaption class="ss-evidence-slide__meta">
+                                <span class="ss-evidence-slide__state">Ongoing</span>
+                                <span class="ss-evidence-slide__project">Unmanned Forklift</span>
+                                <h3 class="ss-evidence-slide__title">Unmanned Forklift &amp; LiteSim</h3>
+                                <span class="ss-evidence-slide__caption">A team validation environment for sensors and safety gates before field deployment</span>
+                                <a class="ss-evidence-slide__link" href="projects/unmanned-forklift/index.html" data-root-dir="projects/unmanned-forklift/">View project evidence <span aria-hidden="true">→</span></a>
+                            </figcaption>
+                        </figure>
+                    </article>
+                </div>
+                <div class="ss-evidence-controls" role="group" aria-label="Evidence selection">
+                    <button class="ss-evidence-control" type="button" data-ss-evidence-control data-ss-target="0" aria-controls="ss-evidence-slide-1" aria-pressed="true">01 Surgical Twin</button>
+                    <button class="ss-evidence-control" type="button" data-ss-evidence-control data-ss-target="1" aria-controls="ss-evidence-slide-2" aria-pressed="false">02 Life Careverse</button>
+                    <button class="ss-evidence-control" type="button" data-ss-evidence-control data-ss-target="2" aria-controls="ss-evidence-slide-3" aria-pressed="false">03 Unmanned Forklift</button>
+                    <button class="ss-evidence-stop" type="button" data-ss-evidence-stop aria-pressed="false">Stop automatic transitions</button>
                 </div>
             </div>
         </section>
 
-        <section aria-labelledby="atlas-title">
-            <div class="section-heading-row">
+        <section class="ss-capabilities" aria-labelledby="capabilities-title">
+            <div class="ss-section-heading">
                 <div>
-                    <p class="section-eyebrow">Capability Atlas</p>
-                    <h2 class="section-display" id="atlas-title">Problems I can own</h2>
+                    <p class="ss-eyebrow">05 TRANSFERABLE CAPABILITIES</p>
+                    <h2 class="ss-section-title" id="capabilities-title">Problem classes I repeatedly solve.</h2>
                 </div>
-                <a class="section-link" href="research/index.html" data-root-dir="research/">How I validate them <span aria-hidden="true">→</span></a>
+                <a class="ss-section-link" href="research/index.html" data-root-dir="research/">Explore validation methods <span aria-hidden="true">→</span></a>
             </div>
-            <div class="capability-atlas" data-portfolio="capability-atlas">
+            <div class="ss-capabilities__grid capability-atlas" data-portfolio="capability-atlas">
                 <p class="portfolio-fallback">JavaScript renders the capability map. <a href="research/index.html" data-root-dir="research/">Read the capability summary</a> or <a href="projects/index.html" data-root-dir="projects/">browse project case studies</a>.</p>
             </div>
         </section>
 
-        <section aria-labelledby="impact-title">
-            <p class="section-eyebrow">Proven Impact</p>
-            <h2 class="section-display" id="impact-title">Changes the team could feel</h2>
-            <div class="impact-strip">
-                <article class="impact-card">
-                    <strong>Approx. 3–4 months → 1–2 weeks</strong>
-                    <span>Comparable sensor-validation tool delivery after introducing AI-assisted implementation with human review.</span>
+        <section class="ss-outcomes" aria-labelledby="outcomes-title">
+            <div class="ss-section-heading">
+                <div>
+                    <p class="ss-eyebrow">OUTCOME EVIDENCE</p>
+                    <h2 class="ss-section-title" id="outcomes-title">Changes that held up in practice.</h2>
+                </div>
+            </div>
+            <div class="ss-outcomes__grid">
+                <article class="ss-outcome">
+                    <strong class="ss-outcome__value">Approx. 3–4 months → 1–2 weeks</strong>
+                    <p class="ss-outcome__label">Estimated delivery time for comparable sensor-validation tooling with AI-assisted implementation and human review</p>
                 </article>
-                <article class="impact-card">
-                    <strong>Approx. weekly → monthly</strong>
-                    <span>Typical field-trip cadence after LiteSim enabled pre-field sensor and safety-gate validation.</span>
+                <article class="ss-outcome">
+                    <strong class="ss-outcome__value">Approx. weekly → monthly</strong>
+                    <p class="ss-outcome__label">Typical field-trip cadence after LiteSim enabled pre-field validation</p>
                 </article>
-                <article class="impact-card">
-                    <strong>Approx. 4–5 micro-PoCs</strong>
-                    <span>Parallel HoloLens SDK probes used to select critical functions before main-system integration.</span>
+                <article class="ss-outcome">
+                    <strong class="ss-outcome__value">Approx. 4–5 micro-PoCs</strong>
+                    <p class="ss-outcome__label">HoloLens SDK probes used to select critical functions before main-system integration</p>
                 </article>
             </div>
         </section>
 
-        <section aria-labelledby="work-title">
-            <p class="section-eyebrow">How I Work</p>
-            <h2 class="section-display" id="work-title">Fast evidence, explicit ownership</h2>
-            <div class="work-principles">
-                <article>
-                    <span class="principle-number">01</span>
+        <section class="ss-decision-loop" aria-labelledby="decision-loop-title">
+            <div class="ss-section-heading">
+                <div>
+                    <p class="ss-eyebrow">DECISION LOOP · 01—03</p>
+                    <h2 class="ss-section-title" id="decision-loop-title">Define first. Probe small. Integrate what survives.</h2>
+                </div>
+            </div>
+            <div class="ss-decision-loop__grid">
+                <article class="ss-decision-step">
+                    <span class="ss-decision-step__index">01</span>
                     <h3>Translate the domain</h3>
-                    <p>I turn clinical, robotic, and sensing constraints into coordinate definitions, test scenarios, and acceptance criteria.</p>
+                    <p>Turn clinical, robotic, and sensing constraints into coordinate definitions, test scenarios, and acceptance criteria.</p>
                 </article>
-                <article>
-                    <span class="principle-number">02</span>
+                <article class="ss-decision-step">
+                    <span class="ss-decision-step__index">02</span>
                     <h3>Probe before committing</h3>
-                    <p>I build small, parallel PoCs to expose SDK, sensor, and integration risks while changing direction is still cheap.</p>
+                    <p>Use small parallel PoCs to expose SDK, sensor, and integration risks while changing direction is still cheap.</p>
                 </article>
-                <article>
-                    <span class="principle-number">03</span>
-                    <h3>Scale through tools</h3>
-                    <p>I use AI agents for implementation throughput while humans own requirements, system decisions, review gates, and merge quality.</p>
+                <article class="ss-decision-step">
+                    <span class="ss-decision-step__index">03</span>
+                    <h3>Integrate what survives</h3>
+                    <p>Use AI for implementation throughput while humans own requirements, system decisions, review gates, and merge quality.</p>
                 </article>
             </div>
         </section>
 
-        <section class="home-evidence" aria-labelledby="evidence-title">
-            <p class="section-eyebrow">Selected Evidence</p>
-            <h2 class="section-display" id="evidence-title">From prototype to accepted result</h2>
-            <div class="evidence-list">
-                <a href="projects/surgical-twin/index.html" data-root-dir="projects/surgical-twin/">
-                    <span>XR surgical navigation</span>
-                    <strong>Registration, SDK selection, integration, and formal demonstration acceptance</strong>
-                </a>
-                <a href="projects/unmanned-forklift/index.html" data-root-dir="projects/unmanned-forklift/">
-                    <span>Industrial autonomy</span>
-                    <strong>LiteSim validation adopted by the development team before field deployment</strong>
-                </a>
-                <a href="projects/life-careverse/index.html" data-root-dir="projects/life-careverse/">
-                    <span>Clinical translation</span>
-                    <strong>Requirements approval, software registration, adoption, and patient-consented research testing begun</strong>
-                </a>
+        <section class="ss-contact-cta" aria-labelledby="contact-cta-title">
+            <div class="ss-contact-cta__body">
+                <p class="ss-eyebrow">CONTACT · SENIOR R&amp;D</p>
+                <h2 class="ss-section-title" id="contact-cta-title">Have a difficult spatial problem to validate?</h2>
+                <p>I am looking for a hands-on technical-lead IC role connecting 3D registration, sensor validation, digital twins, and clinical XR.</p>
+            </div>
+            <div class="ss-contact-cta__actions">
+                <a class="ss-button ss-button--primary" href="contact/index.html" data-root-dir="contact/">Start a conversation</a>
+                <a class="ss-button ss-button--quiet" href="projects/index.html" data-root-dir="projects/">Browse 13 projects</a>
             </div>
         </section>
     </main>
@@ -117,8 +195,9 @@
     <footer id="site-footer"></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/site-i18n.js"></script>
-<script src="../js/portfolio-data.js"></script>
+    <script src="../js/portfolio-data.js"></script>
     <script src="../js/portfolio-render.js"></script>
     <script src="../js/nav.js"></script>
+    <script src="../js/spatial-signal.js"></script>
 </body>
 </html>
