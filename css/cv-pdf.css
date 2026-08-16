@@ -1,0 +1,89 @@
+/* Task 5 public PDF CV surface */
+.td-cv-page .td-cv-hero {
+  row-gap: 0;
+}
+
+.td-cv-page .td-cv-hero .td-cv-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 1.75rem;
+}
+
+.td-cv-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .65rem .9rem;
+  border: 1px solid var(--td-ink, #101715);
+  color: var(--td-ink, #101715);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.td-cv-actions a:first-child {
+  border-color: var(--td-signal, #0c6b5e);
+  background: var(--td-signal, #0c6b5e);
+  color: var(--td-paper, #fbfcfb);
+}
+
+.td-cv-document {
+  padding-top: clamp(3rem, 7vw, 6rem);
+}
+
+.td-cv-object {
+  display: block;
+  width: 100%;
+  height: min(82vh, 920px);
+  min-height: 560px;
+  border: 1px solid var(--td-line, #b9c4c0);
+  background: var(--td-soft, #eef1ef);
+}
+
+.td-cv-object p {
+  max-width: 58ch;
+  margin: 2rem;
+}
+
+.td-cv-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-top: 2rem;
+}
+
+.td-cv-preview-grid figure {
+  margin: 0;
+}
+
+.td-cv-preview-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--td-line, #b9c4c0);
+  background: #fff;
+}
+
+.td-cv-preview-grid figcaption {
+  padding-top: .6rem;
+  color: var(--td-muted, #586560);
+  font: .75rem/1.5 ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+@media (max-width: 700px) {
+  .td-cv-object {
+    height: 65vh;
+    min-height: 420px;
+  }
+
+  .td-cv-preview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .td-cv-actions a {
+    transition: none;
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "version": "2026-08-16",
+  "identity": {
+    "name": "Jinmin Kim",
+    "translations": {
+      "ko": {
+        "displayName": "김진민",
+        "headline": "3D 정합과 로봇 소프트웨어 엔지니어",
+        "summary": "의료 내비게이션에서 시작해 XR, 3D 정합, 다중 센서 통합으로 확장해 온 연구개발 엔지니어입니다. 좌표계와 알고리즘을 실제 장치, 사용자 인터페이스, 검증 흐름으로 연결합니다."
+      },
+      "en": {
+        "displayName": "Jinmin Kim",
+        "headline": "3D Registration and Robot Software Engineer",
+        "summary": "An R&D engineer whose work spans medical navigation, XR, 3D registration, and multi-sensor integration. I connect coordinate models and algorithms to physical devices, user interfaces, and explicit validation flows."
+      }
+    }
+  },
+  "contacts": [
+    {
+      "label": "Email",
+      "value": "uiop3847@naver.com",
+      "href": "mailto:uiop3847@naver.com"
+    },
+    {
+      "label": "GitHub",
+      "value": "github.com/rafaam11",
+      "href": "https://github.com/rafaam11"
+    },
+    {
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/rlawlsals",
+      "href": "https://www.linkedin.com/in/rlawlsals"
+    }
+  ],
+  "timeline": [
+    {
+      "period": "2023-02 - Present",
+      "organization": "DIGITRACK Inc.",
+      "translations": {
+        "ko": {
+          "role": "로봇SW 개발자",
+          "summary": "의료 내비게이션, XR, 3D 정합, 다중 센서 인지와 산업 시스템 통합 및 현장 검증을 구현합니다."
+        },
+        "en": {
+          "role": "Robot Software Engineer",
+          "summary": "Implement medical navigation, XR, 3D registration, multi-sensor perception, industrial system integration, and field validation."
+        }
+      }
+    },
+    {
+      "period": "2021-03 - 2023-02",
+      "organization": "DGIST",
+      "translations": {
+        "ko": {
+          "role": "로봇및기계전자공학 석사",
+          "summary": "하악골 골절 정복 최적화와 수술내비게이션, XR을 연구했습니다."
+        },
+        "en": {
+          "role": "M.S., Robotics and Mechatronics Engineering",
+          "summary": "Researched mandibular fracture reduction optimization, surgical navigation, and XR."
+        }
+      }
+    },
+    {
+      "period": "2020-07",
+      "organization": "UNIST U-SURF",
+      "translations": {
+        "ko": {
+          "role": "하계대학원 연구인턴",
+          "summary": "소프트로봇 논문 리딩과 자기력 실험을 수행했습니다."
+        },
+        "en": {
+          "role": "Summer Research Intern",
+          "summary": "Reviewed soft-robotics literature and conducted magnetic-force experiments."
+        }
+      }
+    },
+    {
+      "period": "2015-03 - 2021-02",
+      "organization": "Kumoh National Institute of Technology",
+      "translations": {
+        "ko": {
+          "role": "기계시스템공학 학사",
+          "summary": "시스템비전연구실 학부연구와 발명, 특허 활동을 수행했습니다."
+        },
+        "en": {
+          "role": "B.S., Mechanical System Engineering",
+          "summary": "Completed undergraduate system-vision research and invention activities."
+        }
+      }
+    }
+  ],
+  "capabilities": [
+    {
+      "translations": {
+        "ko": {
+          "title": "3D 정합 및 최적화",
+          "body": "PCA, ICP, CLPSO와 Open3D, OpenCV, SciPy를 사용해 특징점, 표면, 좌표계를 다뤘습니다."
+        },
+        "en": {
+          "title": "3D Registration and Optimization",
+          "body": "Used PCA, ICP, CLPSO, Open3D, OpenCV, and SciPy for feature, surface, and coordinate-system problems."
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "title": "의료 내비게이션 및 XR",
+          "body": "3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, PUN2, Photon Voice로 동작하는 애플리케이션을 구현했습니다."
+        },
+        "en": {
+          "title": "Medical Navigation and XR",
+          "body": "Built working applications with 3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, PUN2, and Photon Voice."
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "title": "로봇 및 센서 통합",
+          "body": "ROS 2, Unity, Isaac Sim, NDI 추적기, HoloLens 2, Meta Quest, RGB, ToF, LiDAR를 연결했습니다."
+        },
+        "en": {
+          "title": "Robot and Sensor Integration",
+          "body": "Integrated ROS 2, Unity, Isaac Sim, NDI tracking, HoloLens 2, Meta Quest, RGB, ToF, and LiDAR."
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "title": "응용 계층 개발",
+          "body": "Python, C#, C++로 알고리즘, XR 애플리케이션, API, ROS 2 패키지, 장치 인터페이스를 구현했습니다."
+        },
+        "en": {
+          "title": "Application-layer Engineering",
+          "body": "Used Python, C#, and C++ for algorithms, XR applications, APIs, ROS 2 packages, and device interfaces."
+        }
+      }
+    }
+  ],
+  "research": [
+    {
+      "year": "2024",
+      "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
+      "venue": "Journal of Imaging Informatics in Medicine, Q1 SCIE",
+      "role": "Joint first author",
+      "href": "https://link.springer.com/article/10.1007/s10278-024-01014-z"
+    },
+    {
+      "year": "2022",
+      "title": "Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery",
+      "venue": "ACCAS 2022",
+      "role": "International conference presentation"
+    }
+  ],
+  "achievements": {
+    "patentApplications": 7,
+    "patentGrants": 3,
+    "awardTotal": 9,
+    "asOf": "2026-08-16",
+    "selectedAwards": [
+      {
+        "year": "2024",
+        "translations": {
+          "ko": "의료메타버스학회 우수포스터상",
+          "en": "Best Poster Award, Korean Society of Medical Metaverse"
+        }
+      },
+      {
+        "year": "2023",
+        "translations": {
+          "ko": "대한의료로봇학회 우수논문상",
+          "en": "Best Paper Award, Korean Society of Medical Robotics"
+        }
+      },
+      {
+        "year": "2019",
+        "translations": {
+          "ko": "국제 TRIZ 경진대회 대상",
+          "en": "Grand Prize, International TRIZ Competition"
+        }
+      }
+    ]
+  },
+  "languages": [
+    {
+      "language": "Korean",
+      "translations": {
+        "ko": "한국어 - 모국어",
+        "en": "Korean - Native"
+      }
+    },
+    {
+      "language": "Japanese",
+      "translations": {
+        "ko": "일본어 - JLPT N2",
+        "en": "Japanese - JLPT N2"
+      }
+    }
+  ]
+}
