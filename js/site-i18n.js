@@ -53,6 +53,7 @@
         evidenceStates: {
           verified: '검증됨',
           ongoing: '진행 중',
+          prototype: '프로토타입',
           expected: '예상',
           research: '연구',
           completed: '완료'
@@ -90,6 +91,7 @@
         evidenceStates: {
           verified: 'Verified',
           ongoing: 'Ongoing',
+          prototype: 'Prototype',
           expected: 'Expected',
           research: 'Research',
           completed: 'Completed'
