@@ -50,6 +50,16 @@ ASCII_HYPHENS = str.maketrans({
     "—": "-",
     "−": "-",
 })
+PUBLIC_PII_PATTERNS = [
+    ("phone number", re.compile(r"(?:\+82[\s()./·-]*\(?0?10\)?|\(?010\)?)[\s()./·-]*\d{3,4}[\s()./·-]*\d{4}(?!\d)", re.I)),
+    ("explicit English age", re.compile(r"\b\d{1,3}(?:\s+years?\s+old|[-\s]year[-\s]old)\b", re.I)),
+    ("explicit Korean age", re.compile(r"(?:만\s*)?\d{1,3}\s*세(?![가-힣])", re.I)),
+    ("Korean address", re.compile(r"(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])", re.I)),
+    ("Korean address", re.compile(r"[가-힣]{2,12}(?:특별자치도|도|광역시|특별시)\s+[가-힣]{1,12}(?:시|군|구)(?![가-힣])", re.I)),
+    ("Korean address", re.compile(r"[가-힣]{2,12}(?:시|군|구)\s+[가-힣]{1,12}(?:구|읍|면|동|로|길)(?![가-힣])", re.I)),
+    ("Korean address", re.compile(r"[가-힣]{2,20}(?:읍|면|동|로|길)\s*\d{1,5}(?:-\d{1,5})?(?!\d)", re.I)),
+    ("romanized street address", re.compile(r"\b\d{1,5}(?:-\d{1,5})?\s+[A-Za-z][A-Za-z0-9.'-]*(?:\s+[A-Za-z][A-Za-z0-9.'-]*){0,3}(?:-ro|-gil|\s(?:Road|Rd\.?|Street|St\.?|Avenue|Ave\.?|Boulevard|Blvd\.?|Lane|Ln\.?|Drive|Dr\.?))\s*,\s*[A-Za-z][A-Za-z.'-]*(?:-gu|-gun|-si)\s*,\s*(?:Seoul|Busan|Daegu|Incheon|Gwangju|Daejeon|Ulsan|Sejong|[A-Za-z][A-Za-z.'-]*-do)\b", re.I)),
+]
 
 
 def clean_text(value: Any) -> str:
@@ -98,6 +108,47 @@ def canonical_source_digest(payload: dict[str, Any]) -> str:
     source = {key: value for key, value in payload.items() if key != "sourceDigest"}
     encoded = json.dumps(source, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def public_pii_findings(value: Any) -> list[str]:
+    strings: list[str] = []
+    visited: set[int] = set()
+
+    def collect(candidate: Any) -> None:
+        if isinstance(candidate, str):
+            strings.append(candidate)
+            return
+        if not isinstance(candidate, (dict, list, tuple)):
+            return
+        identity = id(candidate)
+        if identity in visited:
+            return
+        visited.add(identity)
+        if isinstance(candidate, dict):
+            for key, nested in candidate.items():
+                if isinstance(key, str):
+                    strings.append(key)
+                collect(nested)
+        else:
+            for nested in candidate:
+                collect(nested)
+
+    try:
+        collect(value)
+    except Exception:
+        return []
+    findings: list[str] = []
+    for text in strings:
+        for label, pattern in PUBLIC_PII_PATTERNS:
+            try:
+                match = pattern.search(text)
+            except (TypeError, re.error):
+                match = None
+            if match:
+                finding = f"{label}: {match.group(0)}"
+                if finding not in findings:
+                    findings.append(finding)
+    return findings
 
 
 def validate_cv(cv_value: Any) -> dict[str, Any]:
@@ -161,17 +212,8 @@ def validate_cv(cv_value: Any) -> dict[str, Any]:
         language = require_object(value, f"PDF input CV language {index}")
         require_text(language.get("language"), f"PDF input CV language {index} language")
         validate_localized_strings(language.get("translations"), f"PDF input CV language {index}")
-    serialized = json.dumps(cv, ensure_ascii=False)
-    private_patterns = [
-        r"(?:\+82[\s().-]*(?:0[\s().-]*)?10|\(?010\)?)[\s().-]*\d{3,4}[\s.-]*\d{4}(?=$|[^0-9])",
-        r"(?:만\s*)?\d{1,3}\s*세(?![가-힣])",
-        r"(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])",
-        r"[가-힣]{2,12}(?:특별자치도|도|광역시|특별시)\s+[가-힣]{1,12}(?:시|군|구)(?![가-힣])",
-        r"[가-힣]{2,12}(?:시|군|구)\s+[가-힣]{1,12}(?:구|읍|면|동|로|길)(?![가-힣])",
-        r"[가-힣]{2,20}(?:읍|면|동|로|길)\s*\d{1,5}(?:-\d{1,5})?(?![0-9])",
-    ]
-    require(not any(re.search(pattern, serialized) for pattern in private_patterns),
-            "PDF input CV contains an explicit age, phone number, or Korean address.")
+    findings = public_pii_findings(cv)
+    require(not findings, f"PDF input CV contains private age, phone, or address PII ({'; '.join(findings)}).")
     return cv
 
 

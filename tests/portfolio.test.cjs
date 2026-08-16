@@ -1510,6 +1510,205 @@ test('Task 5 CV pages expose a concise semantic HTML summary without relying on 
   }
 });
 
+test('Task 5 review round 2 rejects reviewer PII variants in public CV data without false positives', () => {
+  const approved = JSON.parse(read('data/public-cv.json'));
+  const reviewerVariants = [
+    '31 years old',
+    '31-year-old engineer',
+    '010/1234/5678',
+    '010·1234·5678',
+    '+82 (10) 1234-5678',
+    '123 Teheran-ro, Gangnam-gu, Seoul',
+    '31세',
+    '서울시 강남구'
+  ];
+  assert.deepEqual(validator.publicCvDataErrors(approved), []);
+  for (const privateValue of reviewerVariants) {
+    const candidate = clone(approved);
+    candidate.identity.translations.en.summary = privateValue;
+    assert.doesNotThrow(() => validator.publicCvDataErrors(candidate), privateValue);
+    assert.match(validator.publicCvDataErrors(candidate).join(' '), /private|prohibited|age|phone|address/i, privateValue);
+  }
+});
+
+test('Task 5 public PII scanner is total and permits approved dates, links, page labels, and technical hyphens', () => {
+  assert.equal(typeof validator.publicPiiFindings, 'function');
+  const cyclic = { safe: '3D registration' };
+  cyclic.self = cyclic;
+  for (const malformed of [null, undefined, 42, Symbol('safe'), cyclic, { nested: [null, { value: 'safe' }] }]) {
+    assert.doesNotThrow(() => validator.publicPiiFindings(malformed));
+  }
+  const safeValues = [
+    'https://link.springer.com/article/10.1007/s10278-024-01014-z',
+    '2023-02 - 2026-08-17',
+    '1 / 2',
+    'optimized jawbone-reduction model',
+    'joint-first-author evidence',
+    read('data/public-cv.json'),
+    read('cv/index.html'),
+    read('en/cv/index.html')
+  ];
+  for (const safeValue of safeValues) assert.deepEqual(validator.publicPiiFindings(safeValue), [], safeValue.slice?.(0, 80));
+});
+
+test('Task 5 PDF validator rejects reviewer PII variants injected into either public CV HTML page', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-cv-html-pii-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const variants = ['31 years old', '010/1234/5678', '010·1234·5678', '+82 (10) 1234-5678', '123 Teheran-ro, Gangnam-gu, Seoul', '서울시 강남구'];
+    for (const relativePath of ['cv/index.html', 'en/cv/index.html']) {
+      const htmlPath = path.join(temporaryRoot, relativePath);
+      const original = fs.readFileSync(htmlPath, 'utf8');
+      for (const privateValue of variants) {
+        fs.writeFileSync(htmlPath, original.replace('</main>', `<p>${privateValue}</p>\n  </main>`));
+        assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /CV HTML.*private|public surface.*PII/i, `${relativePath}: ${privateValue}`);
+      }
+      fs.writeFileSync(htmlPath, original);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 Python validate-only rejects expanded PII variants with controlled errors', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-python-pii-'));
+  try {
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const approved = JSON.parse(fs.readFileSync(input, 'utf8'));
+    const approvedResult = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'), '--input', input, '--validate-only'
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(approvedResult.status, 0, approvedResult.stderr || approvedResult.stdout);
+
+    for (const privateValue of ['31 years old', '31-year-old engineer', '010/1234/5678', '010·1234·5678', '+82 (10) 1234-5678', '123 Teheran-ro, Gangnam-gu, Seoul']) {
+      const payload = clone(approved);
+      payload.cv.identity.translations.en.summary = privateValue;
+      const source = { ...payload };
+      delete source.sourceDigest;
+      payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+      fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+      const result = childProcess.spawnSync(python, [
+        path.join(root, 'scripts', 'generate-portfolio-pdfs.py'), '--input', input, '--validate-only'
+      ], { cwd: root, encoding: 'utf8' });
+      assert.equal(result.status, 1, privateValue);
+      assert.match(result.stderr, /^PDF generation failed: [^\r\n]+\r?\n$/, privateValue);
+      assert.match(result.stderr, /age|phone|address|private/i, privateValue);
+      assert.doesNotMatch(result.stderr, /Traceback/, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 semantic CV renderer escapes canonical values and refuses unsafe public links', () => {
+  const summary = require('../scripts/public-cv-summary.cjs');
+  const cv = JSON.parse(read('data/public-cv.json'));
+  cv.identity.translations.en.displayName = '<img src=x onerror="alert(1)">';
+  cv.research[0].title = '<script>alert(1)</script>';
+  const rendered = summary.renderPublicCvSummary(cv, 'en');
+  assert.match(rendered.sourceDigest, /^[a-f0-9]{64}$/);
+  assert.match(rendered.summaryDigest, /^[a-f0-9]{64}$/);
+  assert.match(rendered.html, /&lt;img src=x onerror=&quot;alert\(1\)&quot;&gt;/);
+  assert.match(rendered.html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+  assert.doesNotMatch(rendered.html, /<img|<script>/i);
+
+  const unsafe = JSON.parse(read('data/public-cv.json'));
+  unsafe.research[0].href = 'javascript:alert(1)';
+  assert.throws(() => summary.renderPublicCvSummary(unsafe, 'en'), /safe HTTPS/i);
+});
+
+test('Task 5 summary refresh is deterministic, exact, and preserves unrelated page content', () => {
+  const summary = require('../scripts/public-cv-summary.cjs');
+  const cv = JSON.parse(read('data/public-cv.json'));
+  for (const locale of ['ko', 'en']) {
+    const relativePath = locale === 'ko' ? 'cv/index.html' : 'en/cv/index.html';
+    const html = read(relativePath);
+    assert.equal(summary.extractPublicCvSummary(html), summary.renderPublicCvSummary(cv, locale).envelope);
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-refresh-'));
+  try {
+    for (const relativePath of ['data/public-cv.json', 'cv/index.html', 'en/cv/index.html']) {
+      const target = path.join(temporaryRoot, relativePath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.copyFileSync(path.join(root, relativePath), target);
+    }
+    const koPath = path.join(temporaryRoot, 'cv/index.html');
+    const before = fs.readFileSync(koPath, 'utf8');
+    const envelope = summary.extractPublicCvSummary(before);
+    fs.writeFileSync(koPath, before.replace(envelope, envelope.replace('김진민', '오래된 요약')));
+    const result = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'public-cv-summary.cjs'), '--root', temporaryRoot, '--write'
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    const after = fs.readFileSync(koPath, 'utf8');
+    assert.equal(after.replace(summary.extractPublicCvSummary(after), ''), before.replace(envelope, ''));
+    assert.equal(summary.extractPublicCvSummary(after), summary.renderPublicCvSummary(cv, 'ko').envelope);
+    const second = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'public-cv-summary.cjs'), '--root', temporaryRoot, '--write'
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(second.status, 0, second.stderr || second.stdout);
+    assert.equal(fs.readFileSync(koPath, 'utf8'), after);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 validator rejects stale semantic HTML after a normal PDF regeneration', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-stale-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+    payload.cv.identity.translations.en.headline = 'Updated public engineering headline';
+    const source = { ...payload };
+    delete source.sourceDigest;
+    payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+    fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+    fs.writeFileSync(path.join(temporaryRoot, 'data', 'public-cv.json'), `${JSON.stringify(payload.cv, null, 2)}\n`);
+    const generation = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(generation.status, 0, generation.stderr || generation.stdout);
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /semantic HTML CV summary.*(?:stale|match)|does not match.*canonical/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 validator rejects HTML summary mutation and digest-only spoofing', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-spoof-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const htmlPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    const original = fs.readFileSync(htmlPath, 'utf8');
+    assert.match(original, /data-cv-summary-digest="[a-f0-9]{64}"/);
+
+    fs.writeFileSync(htmlPath, original.replace('Jinmin Kim · Public career summary', 'Mutated public career summary'));
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /semantic HTML CV summary.*(?:stale|match)|does not match.*canonical/i);
+
+    fs.writeFileSync(htmlPath, original.replace(/data-cv-summary-digest="[a-f0-9]{64}"/, `data-cv-summary-digest="${'0'.repeat(64)}"`));
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /semantic HTML CV summary.*(?:stale|match)|does not match.*canonical/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
 test('full validator scans live SVGs and passes the twenty-page public contract', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const live = validator.publicPortfolioVisualFiles(root);
