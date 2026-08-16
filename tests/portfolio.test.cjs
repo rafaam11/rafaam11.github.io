@@ -104,6 +104,32 @@ test('route contract generates only the four public pages and six canonical case
   assert.match(html, /href="\.\.\/\.\.\/\.\.\/en\/projects\/surgical-navigation\/index\.html"[^>]*aria-current="page"[^>]*>EN<\/a>/);
 });
 
+test('navigation and validation consume the localized route descriptors', () => {
+  assert.equal(Array.isArray(i18n.routeDescriptors), true, 'site i18n must expose the shared route descriptors');
+  const originalDescriptors = i18n.routeDescriptors;
+  const replacementDescriptors = originalDescriptors.map((descriptor) => (
+    descriptor.page === 'projects' && descriptor.route === 'projects/'
+      ? { ...descriptor, route: 'casework/', file: 'casework/index.html' }
+      : descriptor
+  ));
+
+  i18n.routeDescriptors = replacementDescriptors;
+  try {
+    const html = require('../js/nav.js').navigationHtml({
+      base: '../',
+      current: 'projects',
+      locale: 'en',
+      route: 'casework/',
+      isFile: false
+    });
+
+    assert.match(html, /href="\.\.\/en\/casework\/"/);
+    assert.deepEqual(validator.portfolioRoutes(), replacementDescriptors);
+  } finally {
+    i18n.routeDescriptors = originalDescriptors;
+  }
+});
+
 test('canonical data contains five capabilities and thirteen projects', () => {
   assert.equal(data.capabilities.length, 5);
   assert.equal(data.impactMetrics.length, 3);

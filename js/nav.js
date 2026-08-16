@@ -28,18 +28,16 @@
     var route = options.route || '';
     var isFile = Boolean(options.isFile);
     var copy = i18n.ui[locale].nav;
-    var links = [
-      { key: 'projects', label: copy.projects, route: 'projects/' },
-      { key: 'cv', label: copy.cv, route: 'cv/' },
-      { key: 'contact', label: copy.contact, route: 'contact/' }
-    ];
+    var routes = i18n.routeDescriptors;
+    var home = routes.find(function (descriptor) { return descriptor.navigation === 'brand'; });
+    var links = routes.filter(function (descriptor) { return descriptor.navigation === 'link'; });
     var navItems = links.map(function (link) {
-      var active = link.key === current;
+      var active = link.page === current;
       return '<li class="nav-item">' +
         '<a class="nav-link' + (active ? ' active' : '') + '" href="' + escapeHtml(i18n.routeHref(base, locale, link.route, isFile)) + '"' +
         (active ? ' aria-current="page"' : '') + '>' +
         (active ? '<span class="visually-hidden">' + escapeHtml(copy.currentPage) + '</span>' : '') +
-        escapeHtml(link.label) + '</a></li>';
+        escapeHtml(copy[link.page]) + '</a></li>';
     }).join('');
     var koreanHref = i18n.routeHref(base, 'ko', route, isFile);
     var englishHref = i18n.routeHref(base, 'en', route, isFile);
@@ -55,7 +53,7 @@
     return '<a class="ss-skip-link" href="#main-content">' + escapeHtml(copy.skipToContent) + '</a>' +
     '<nav class="navbar navbar-expand-md navbar-light topnav sticky-top ss-site-nav" aria-label="' + escapeHtml(copy.primaryNavigation) + '">' +
       '<div class="container">' +
-        '<a class="navbar-brand" href="' + escapeHtml(i18n.routeHref(base, locale, '', isFile)) + '">Jinmin Kim</a>' +
+        '<a class="navbar-brand" href="' + escapeHtml(i18n.routeHref(base, locale, home.route, isFile)) + '">Jinmin Kim</a>' +
         '<div class="collapse navbar-collapse" id="siteNavLinks">' +
           '<ul class="navbar-nav ms-auto align-items-md-center">' + navItems +
             '<li class="nav-item"><a class="nav-link" href="https://github.com/rafaam11" target="_blank" rel="noopener" aria-label="GitHub">' +
