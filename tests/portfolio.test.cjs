@@ -62,6 +62,48 @@ test('navigation builder keeps links inside the active locale and switches to th
   assert.match(html, /aria-label="Choose language"/);
 });
 
+test('route contract generates only the four public pages and six canonical case pairs', () => {
+  const expectedPages = ['home', 'projects', 'cv', 'contact'];
+  const expectedCaseSlugs = [
+    'surgical-navigation',
+    'mandibular-fracture',
+    'life-careverse',
+    'rtms-navigation',
+    'unmanned-forklift',
+    'ai-build-lab'
+  ];
+  const expectedRoutes = [
+    '',
+    'projects/',
+    'cv/',
+    'contact/',
+    ...expectedCaseSlugs.map((slug) => `projects/${slug}/`)
+  ];
+
+  assert.deepEqual(i18n.supportedNavigationPages, expectedPages);
+  assert.deepEqual(i18n.canonicalCaseSlugs, expectedCaseSlugs);
+  assert.deepEqual(validator.portfolioRoutes().map((page) => page.route), expectedRoutes);
+
+  const files = validator.publicPortfolioFiles(root);
+  assert.equal(files.length, 20);
+  assert.deepEqual(
+    files.filter((file) => file.locale === 'en').map((file) => file.route),
+    expectedRoutes,
+    'English routes must pair semantically with the Korean root routes'
+  );
+
+  const html = require('../js/nav.js').navigationHtml({
+    base: '../../../',
+    current: 'projects',
+    locale: 'en',
+    route: 'projects/surgical-navigation/',
+    isFile: true
+  });
+  assert.doesNotMatch(html, /Capabilities|research\//);
+  assert.match(html, /href="\.\.\/\.\.\/\.\.\/projects\/surgical-navigation\/index\.html"[^>]*>한국어<\/a>/);
+  assert.match(html, /href="\.\.\/\.\.\/\.\.\/en\/projects\/surgical-navigation\/index\.html"[^>]*aria-current="page"[^>]*>EN<\/a>/);
+});
+
 test('canonical data contains five capabilities and thirteen projects', () => {
   assert.equal(data.capabilities.length, 5);
   assert.equal(data.impactMetrics.length, 3);
@@ -127,15 +169,23 @@ test('missing Korean copy falls back to English at runtime but fails deployment 
   assert.match(render.validatePortfolioData(incomplete).join(' '), /missing ko translation for problemSummary/);
 });
 
-test('portfolio validator inventories all eighteen routes in both locales', () => {
+test('portfolio validator inventories the twenty-page final route contract before legacy removal', () => {
   const files = validator.publicPortfolioFiles(root);
-  assert.equal(files.length, 36);
-  assert.equal(new Set(files.map((file) => file.relativePath)).size, 36);
-  assert.deepEqual(validator.validatePortfolio(root), []);
+  assert.equal(files.length, 20);
+  assert.equal(new Set(files.map((file) => file.relativePath)).size, 20);
+  assert.deepEqual(
+    validator.validatePortfolio(root).filter((error) => /missing public page/.test(error)).map((error) => error.replace(/\\/g, '/')).sort(),
+    [
+      'en/projects/ai-build-lab/index.html: missing public page.',
+      'en/projects/surgical-navigation/index.html: missing public page.',
+      'projects/ai-build-lab/index.html: missing public page.',
+      'projects/surgical-navigation/index.html: missing public page.'
+    ]
+  );
 });
 
 test('localized pages never rewrite parent traversal into external asset URLs', () => {
-  for (const file of validator.publicPortfolioFiles(root)) {
+  for (const file of validator.publicPortfolioFiles(root).filter((file) => fs.existsSync(file.absolutePath))) {
     const html = fs.readFileSync(file.absolutePath, 'utf8');
     assert.doesNotMatch(html, /https?:\/\/[^"\s]*\/\.\.\//, `${file.relativePath}: malformed external URL`);
   }
@@ -218,7 +268,7 @@ function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
 }
 
-test('every portfolio route has paired Korean and English static metadata', () => {
+test('retained legacy static pages keep paired Korean and English metadata until Task 6 removal', () => {
   const routes = [
     { route: '', file: 'index.html' },
     { route: 'projects/', file: 'projects/index.html' },
@@ -273,18 +323,17 @@ test('English case studies use English-only diagram variants', () => {
   }
 });
 
-test('navigation leads with Projects and Capabilities', () => {
+test('navigation leads with Projects, CV, and Contact', () => {
   const nav = require('../js/nav.js');
   const html = nav.navigationHtml({ base: '', current: 'home', locale: 'en', route: '', isFile: true });
   const projectsIndex = html.indexOf('Projects');
-  const capabilitiesIndex = html.indexOf('Capabilities');
   const cvIndex = html.indexOf('>CV<');
   const contactIndex = html.indexOf('Contact');
 
   assert.equal(projectsIndex >= 0, true);
-  assert.equal(projectsIndex < capabilitiesIndex, true);
-  assert.equal(capabilitiesIndex < cvIndex, true);
+  assert.equal(projectsIndex < cvIndex, true);
   assert.equal(cvIndex < contactIndex, true);
+  assert.doesNotMatch(html, /Capabilities|research\//);
   assert.match(html, /href="en\/projects\/index\.html"/);
   assert.match(nav.footerHtml('en'), /3D Spatial Computing · Research Engineer/);
 });
@@ -576,9 +625,16 @@ const spatialSignalPath = path.join(root, 'js', 'spatial-signal.js');
 const spatialSignalCssPath = path.join(root, 'css', 'spatial-signal.css');
 
 function publicPortfolioHtmlFiles() {
-  return validator.publicPortfolioFiles(root).map((file) => ({
-    relativePath: file.relativePath,
-    html: fs.readFileSync(file.absolutePath, 'utf8')
+  const retainedRoutes = [
+    { file: 'index.html' },
+    { file: 'projects/index.html' },
+    { file: 'research/index.html' },
+    { file: 'cv/index.html' },
+    { file: 'contact/index.html' }
+  ].concat(data.projects.map((project) => ({ file: `projects/${project.slug}/index.html` })));
+  return retainedRoutes.flatMap(({ file }) => [file, path.join('en', file)]).map((relativePath) => ({
+    relativePath,
+    html: fs.readFileSync(path.join(root, relativePath), 'utf8')
   }));
 }
 
@@ -1685,7 +1741,7 @@ test('Stage 2 validator applies the evidence-asset privacy guard during full por
   const visualFiles = validator.publicPortfolioVisualFiles(root);
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-stage2-validator-'));
   try {
-    for (const file of validator.publicPortfolioFiles(root).concat(visualFiles)) {
+    for (const file of validator.publicPortfolioFiles(root).filter((file) => fs.existsSync(file.absolutePath)).concat(visualFiles)) {
       const target = path.join(temporaryRoot, file.relativePath);
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.copyFileSync(file.absolutePath, target);

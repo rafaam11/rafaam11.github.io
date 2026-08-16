@@ -30,7 +30,6 @@
     var copy = i18n.ui[locale].nav;
     var links = [
       { key: 'projects', label: copy.projects, route: 'projects/' },
-      { key: 'capabilities', label: copy.capabilities, route: 'research/' },
       { key: 'cv', label: copy.cv, route: 'cv/' },
       { key: 'contact', label: copy.contact, route: 'contact/' }
     ];
