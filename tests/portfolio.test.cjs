@@ -93,6 +93,23 @@ function copyTask5Surface(targetRoot) {
   }
 }
 
+function copyCvSummarySurface(targetRoot) {
+  for (const relativePath of ['data/public-cv.json', 'cv/index.html', 'en/cv/index.html']) {
+    const target = path.join(targetRoot, relativePath);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.copyFileSync(path.join(root, relativePath), target);
+  }
+}
+
+function cvSummaryTransactionArtifacts(targetRoot) {
+  return ['cv', path.join('en', 'cv')].flatMap((relativeDirectory) => {
+    const directory = path.join(targetRoot, relativeDirectory);
+    return fs.readdirSync(directory)
+      .filter((name) => name.includes('.public-cv-summary-'))
+      .map((name) => path.join(relativeDirectory, name));
+  });
+}
+
 function assertInOrder(haystack, values, label) {
   let previous = -1;
   for (const value of values) {
@@ -1704,6 +1721,143 @@ test('Task 5 validator rejects HTML summary mutation and digest-only spoofing', 
 
     fs.writeFileSync(htmlPath, original.replace(/data-cv-summary-digest="[a-f0-9]{64}"/, `data-cv-summary-digest="${'0'.repeat(64)}"`));
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /semantic HTML CV summary.*(?:stale|match)|does not match.*canonical/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 3 rejects ambiguous, duplicate, and displaced CV summary envelopes', () => {
+  const summary = require('../scripts/public-cv-summary.cjs');
+  const html = read('en/cv/index.html');
+  const envelope = summary.extractPublicCvSummary(html);
+  assert.equal(typeof envelope, 'string');
+  const startMarker = '<!-- PUBLIC CV SUMMARY:START -->';
+  const endMarker = '<!-- PUBLIC CV SUMMARY:END -->';
+  const ambiguous = [
+    html.replace(startMarker, `${startMarker}\n    ${startMarker}`),
+    html.replace(endMarker, `${endMarker}\n    ${endMarker}`),
+    html.replace('</main>', '<section data-cv-summary><h2>Extra summary</h2></section>\n  </main>'),
+    html.replace(/(<!-- PUBLIC CV SUMMARY:START -->\r?\n)(\s*<section[^>]+data-cv-summary[^>]*>\r?\n)/, '$2    $1')
+  ];
+  for (const candidate of ambiguous) {
+    assert.throws(() => summary.extractPublicCvSummary(candidate), /exactly one|ambiguous|enclose/i);
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-duplicate-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const htmlPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    fs.writeFileSync(htmlPath, html.replace('</main>', `${envelope.replaceAll('9 awards', '99 awards')}\n  </main>`));
+    assert.throws(() => summary.extractPublicCvSummary(fs.readFileSync(htmlPath, 'utf8')), /exactly one|ambiguous/i);
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /exactly one|ambiguous|semantic HTML CV summary/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 3 decodes entities and Unicode spacing before public-surface PII scanning', () => {
+  const encodedPii = [
+    '31&nbsp;years&nbsp;old',
+    '31&#32;years&#x20;old',
+    '31&amp;nbsp;years&amp;nbsp;old',
+    '010&#47;1234&#47;5678',
+    '010&#183;1234&#xB7;5678',
+    '+82&#32;&#40;10&#41;&#32;1234&#45;5678',
+    '123&nbsp;Teheran&#45;ro, Gangnam&#45;gu, Seoul',
+    '서울시&#x20;강남구',
+    `31\u202fyears\u00a0old`
+  ];
+  for (const privateValue of encodedPii) {
+    assert.match(validator.publicPiiFindings(privateValue).join(' '), /age|phone|address/i, privateValue);
+  }
+  const malformedEntity = '3D registration &nbsp &#xZZ; &#1114112; &bogus;';
+  assert.doesNotThrow(() => validator.publicPiiFindings(malformedEntity));
+  assert.deepEqual(validator.publicPiiFindings(malformedEntity), []);
+  assert.deepEqual(validator.publicPiiFindings(read('cv/index.html')), []);
+  assert.deepEqual(validator.publicPiiFindings(read('en/cv/index.html')), []);
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-entity-pii-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const htmlPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    const original = fs.readFileSync(htmlPath, 'utf8');
+    for (const privateValue of encodedPii) {
+      fs.writeFileSync(htmlPath, original.replace('</main>', `<p>${privateValue}</p>\n  </main>`));
+      assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /CV HTML public surface contains prohibited private PII/i, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 3 refresh preflights source PII and both marker envelopes before writing', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-preflight-'));
+  try {
+    copyCvSummarySurface(temporaryRoot);
+    const koPath = path.join(temporaryRoot, 'cv', 'index.html');
+    const enPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    const cvPath = path.join(temporaryRoot, 'data', 'public-cv.json');
+    const cv = JSON.parse(fs.readFileSync(cvPath, 'utf8'));
+    cv.identity.translations.en.summary = '31&nbsp;years&nbsp;old';
+    fs.writeFileSync(cvPath, `${JSON.stringify(cv, null, 2)}\n`);
+    const piiBefore = [sha256(koPath), sha256(enPath)];
+    const piiResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'public-cv-summary.cjs'), '--root', temporaryRoot, '--write'
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(piiResult.status, 1, piiResult.stderr || piiResult.stdout);
+    assert.match(piiResult.stderr, /^Public CV summary refresh failed: [^\r\n]+\r?\n$/);
+    assert.match(piiResult.stderr, /private|PII|age/i);
+    assert.doesNotMatch(piiResult.stderr, /at .*public-cv-summary|Traceback/i);
+    assert.deepEqual([sha256(koPath), sha256(enPath)], piiBefore);
+    assert.deepEqual(cvSummaryTransactionArtifacts(temporaryRoot), []);
+
+    fs.copyFileSync(path.join(root, 'data', 'public-cv.json'), cvPath);
+    const safeCv = JSON.parse(fs.readFileSync(cvPath, 'utf8'));
+    safeCv.identity.translations.ko.headline = '갱신되어야 할 안전한 공개 헤드라인';
+    safeCv.identity.translations.en.headline = 'Safe public headline that should be refreshed';
+    fs.writeFileSync(cvPath, `${JSON.stringify(safeCv, null, 2)}\n`);
+    fs.writeFileSync(enPath, fs.readFileSync(enPath, 'utf8').replace('<!-- PUBLIC CV SUMMARY:START -->', '<!-- MISSING PUBLIC CV SUMMARY START -->'));
+    const missingBefore = [sha256(koPath), sha256(enPath)];
+    const missingResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'public-cv-summary.cjs'), '--root', temporaryRoot, '--write'
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(missingResult.status, 1, missingResult.stderr || missingResult.stdout);
+    assert.match(missingResult.stderr, /exactly one|missing|marker/i);
+    assert.deepEqual([sha256(koPath), sha256(enPath)], missingBefore);
+    assert.deepEqual(cvSummaryTransactionArtifacts(temporaryRoot), []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 3 refresh rolls back both pages when the second staged replacement fails', () => {
+  const summary = require('../scripts/public-cv-summary.cjs');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-rollback-'));
+  try {
+    copyCvSummarySurface(temporaryRoot);
+    const cvPath = path.join(temporaryRoot, 'data', 'public-cv.json');
+    const cv = JSON.parse(fs.readFileSync(cvPath, 'utf8'));
+    cv.identity.translations.ko.headline = '원자적 갱신 검증용 공개 헤드라인';
+    cv.identity.translations.en.headline = 'Atomic refresh verification headline';
+    fs.writeFileSync(cvPath, `${JSON.stringify(cv, null, 2)}\n`);
+    const koPath = path.join(temporaryRoot, 'cv', 'index.html');
+    const enPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    const before = [sha256(koPath), sha256(enPath)];
+    let stagedReplacement = 0;
+    const renameFile = (source, target) => {
+      if (path.basename(source).includes('.public-cv-summary-') && source.endsWith('.tmp') && path.basename(target) === 'index.html') {
+        stagedReplacement += 1;
+        if (stagedReplacement === 2) throw new Error('simulated second staged replacement failure');
+      }
+      fs.renameSync(source, target);
+    };
+    assert.throws(
+      () => summary.refreshCvSummaries(temporaryRoot, { renameFile }),
+      /simulated second staged replacement failure|atomic CV summary refresh failed/i
+    );
+    assert.equal(stagedReplacement, 2);
+    assert.deepEqual([sha256(koPath), sha256(enPath)], before);
+    assert.deepEqual(cvSummaryTransactionArtifacts(temporaryRoot), []);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }

@@ -5,6 +5,14 @@ const path = require('node:path');
 const locales = ['ko', 'en'];
 const summaryStart = '<!-- PUBLIC CV SUMMARY:START -->';
 const summaryEnd = '<!-- PUBLIC CV SUMMARY:END -->';
+const htmlEntityMap = {
+  amp: '&',
+  apos: "'",
+  gt: '>',
+  lt: '<',
+  nbsp: '\u00a0',
+  quot: '"'
+};
 
 const publicPiiRules = [
   {
@@ -67,6 +75,25 @@ function collectStrings(value, output, seen) {
   }
 }
 
+function normalizePublicTextForScan(value) {
+  let text = String(value);
+  for (let pass = 0; pass < 3; pass += 1) {
+    const decoded = text
+      .replace(/&(?:amp|apos|gt|lt|nbsp|quot);/gi, (entity) => htmlEntityMap[entity.slice(1, -1).toLowerCase()])
+      .replace(/&#(?:x([0-9a-f]+)|(\d+));/gi, (entity, hexadecimal, decimal) => {
+        const codePoint = Number.parseInt(hexadecimal || decimal, hexadecimal ? 16 : 10);
+        if (!Number.isInteger(codePoint) || codePoint < 0 || codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return entity;
+        return String.fromCodePoint(codePoint);
+      });
+    if (decoded === text) break;
+    text = decoded;
+  }
+  return text
+    .replace(/[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/g, ' ')
+    .replace(/[\u200b-\u200d\u2060\ufeff]/g, '')
+    .replace(/[\u2010-\u2015\u2212]/g, '-');
+}
+
 function publicPiiFindings(value) {
   const strings = [];
   try {
@@ -75,7 +102,8 @@ function publicPiiFindings(value) {
     return [];
   }
   const findings = [];
-  for (const text of strings) {
+  for (const rawText of strings) {
+    const text = normalizePublicTextForScan(rawText);
     for (const rule of publicPiiRules) {
       let match;
       try {
@@ -295,30 +323,100 @@ ${awardHtml}
 }
 
 function extractPublicCvSummary(htmlValue) {
-  if (typeof htmlValue !== 'string') return null;
-  const start = htmlValue.indexOf(`${' '.repeat(4)}${summaryStart}`);
-  if (start === -1) return null;
-  const endMarker = `${' '.repeat(4)}${summaryEnd}`;
-  const end = htmlValue.indexOf(endMarker, start);
-  if (end === -1) return null;
-  return htmlValue.slice(start, end + endMarker.length);
+  if (typeof htmlValue !== 'string') throw new TypeError('CV HTML must be a string.');
+  const startCount = htmlValue.split(summaryStart).length - 1;
+  const endCount = htmlValue.split(summaryEnd).length - 1;
+  const summarySections = [...htmlValue.matchAll(/<([a-z][\w:-]*)\b[^>]*\bdata-cv-summary(?=\s|=|>)[^>]*>/gi)];
+  if (startCount !== 1 || endCount !== 1 || summarySections.length !== 1 || summarySections[0][1].toLowerCase() !== 'section') {
+    throw new Error(`CV HTML must contain exactly one start marker, one end marker, and one data-cv-summary section (found ${startCount}/${endCount}/${summarySections.length}).`);
+  }
+  const start = htmlValue.indexOf(summaryStart);
+  const end = htmlValue.indexOf(summaryEnd);
+  const summaryStartIndex = summarySections[0].index;
+  if (!(start < summaryStartIndex && summaryStartIndex < end)) {
+    throw new Error('CV summary markers must enclose exactly one data-cv-summary section.');
+  }
+  const enclosed = htmlValue.slice(start + summaryStart.length, end).trim();
+  if (!/^<section\b[^>]*\bdata-cv-summary(?=\s|=|>)[^>]*>[\s\S]*<\/section>$/i.test(enclosed)) {
+    throw new Error('CV summary markers must enclose exactly one complete data-cv-summary section.');
+  }
+  const startLine = htmlValue.lastIndexOf('\n', start - 1) + 1;
+  const endLine = htmlValue.indexOf('\n', end + summaryEnd.length);
+  if (!/^[ \t]*$/.test(htmlValue.slice(startLine, start)) || !/^[ \t]*(?:\r)?$/.test(htmlValue.slice(end + summaryEnd.length, endLine === -1 ? htmlValue.length : endLine))) {
+    throw new Error('CV summary markers must occupy their own lines.');
+  }
+  return htmlValue.slice(startLine, end + summaryEnd.length);
 }
 
-function refreshCvSummaries(rootDir) {
+function refreshCvSummaries(rootDir, options = {}) {
   const resolvedRoot = path.resolve(rootDir);
   const cv = JSON.parse(fs.readFileSync(path.join(resolvedRoot, 'data', 'public-cv.json'), 'utf8'));
-  const results = [];
-  for (const locale of locales) {
+  const sourcePii = publicPiiFindings(cv);
+  if (sourcePii.length) throw new Error(`Public CV data contains prohibited private PII (${sourcePii.join('; ')}).`);
+  const renderedByLocale = new Map(locales.map((locale) => {
+    const rendered = renderPublicCvSummary(cv, locale);
+    const renderedPii = publicPiiFindings(rendered.html);
+    if (renderedPii.length) throw new Error(`Rendered ${locale} public CV summary contains prohibited private PII (${renderedPii.join('; ')}).`);
+    if (extractPublicCvSummary(rendered.envelope) !== rendered.envelope) throw new Error(`Rendered ${locale} public CV summary has an invalid marker envelope.`);
+    return [locale, rendered];
+  }));
+  const pages = locales.map((locale) => {
     const filePath = path.join(resolvedRoot, locale === 'ko' ? path.join('cv', 'index.html') : path.join('en', 'cv', 'index.html'));
     const before = fs.readFileSync(filePath, 'utf8');
     const current = extractPublicCvSummary(before);
-    if (!current) throw new Error(`${path.relative(resolvedRoot, filePath)} is missing the public CV summary markers.`);
-    const expected = renderPublicCvSummary(cv, locale).envelope;
+    const expected = renderedByLocale.get(locale).envelope;
     const after = before.slice(0, before.indexOf(current)) + expected + before.slice(before.indexOf(current) + current.length);
-    fs.writeFileSync(filePath, after, 'utf8');
-    results.push({ locale, file: path.relative(resolvedRoot, filePath), changed: before !== after });
+    return { locale, filePath, before, after, changed: before !== after };
+  });
+  if (pages.every((page) => !page.changed)) {
+    return pages.map((page) => ({ locale: page.locale, file: path.relative(resolvedRoot, page.filePath), changed: false }));
   }
-  return results;
+
+  const transactionId = crypto.randomUUID();
+  for (const page of pages) {
+    page.tempPath = `${page.filePath}.public-cv-summary-${transactionId}-${page.locale}.tmp`;
+    page.backupPath = `${page.filePath}.public-cv-summary-${transactionId}-${page.locale}.bak`;
+    page.backedUp = false;
+    page.published = false;
+  }
+  const renameFile = typeof options.renameFile === 'function' ? options.renameFile : fs.renameSync;
+  const cleanup = () => {
+    for (const page of pages) {
+      for (const artifact of [page.tempPath, page.backupPath]) {
+        try {
+          fs.rmSync(artifact, { force: true });
+        } catch {
+          // A rollback error is reported separately; cleanup remains best effort.
+        }
+      }
+    }
+  };
+
+  try {
+    for (const page of pages) fs.writeFileSync(page.tempPath, page.after, { encoding: 'utf8', flag: 'wx' });
+    for (const page of pages) {
+      renameFile(page.filePath, page.backupPath);
+      page.backedUp = true;
+      renameFile(page.tempPath, page.filePath);
+      page.published = true;
+    }
+  } catch (error) {
+    const rollbackErrors = [];
+    for (const page of pages.slice().reverse()) {
+      try {
+        if (page.published) fs.rmSync(page.filePath, { force: true });
+        if (page.backedUp) renameFile(page.backupPath, page.filePath);
+      } catch (rollbackError) {
+        rollbackErrors.push(rollbackError instanceof Error ? rollbackError.message : String(rollbackError));
+      }
+    }
+    cleanup();
+    const detail = error instanceof Error ? error.message : String(error);
+    const rollbackDetail = rollbackErrors.length ? `; rollback failed: ${rollbackErrors.join('; ')}` : '';
+    throw new Error(`Atomic CV summary refresh failed: ${detail}${rollbackDetail}`);
+  }
+  cleanup();
+  return pages.map((page) => ({ locale: page.locale, file: path.relative(resolvedRoot, page.filePath), changed: page.changed }));
 }
 
 function main(argv) {
