@@ -1844,6 +1844,10 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     localEvidence.type = 'image';
     localEvidence.state = 'approved-public';
     localEvidence.source = 'assets/projects/surgical-navigation/approved-demo.png';
+    const imageProject = payload.projects.find((entry) => entry.slug === 'surgical-navigation');
+    imageProject.media.lead = {
+      id: localEvidence.id, type: 'image', status: 'approved', publicPath: localEvidence.source
+    };
     const source = clone(payload);
     delete source.sourceDigest;
     payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
@@ -1889,6 +1893,65 @@ test('Task 5 integrated review renders each middle block on its contracted page 
       assert.ok(pages[project.slug][1].includes(project.pdfSequence.diagram.translations.en.title), `${project.slug}: diagram title`);
     }
     assert.equal(pages.approvedImage, true, 'approved local image must be placed on evidence page');
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 integrated review embeds an approved poster instead of opening a video lead as an image', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-video-poster-'));
+  try {
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+
+    const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+    const project = payload.projects.find((entry) => entry.slug === 'surgical-navigation');
+    const videoPath = 'assets/projects/surgical-navigation/approved-demo.mp4';
+    const posterPath = 'assets/projects/surgical-navigation/approved-demo-poster.png';
+    project.media.lead = { id: 'surgical-navigation-demo', type: 'video', status: 'approved', publicPath: videoPath };
+    project.media.video = { ...project.media.lead };
+    project.media.poster = {
+      id: 'surgical-navigation-demo-poster', type: 'image', status: 'approved', publicPath: posterPath
+    };
+    for (const entry of payload.evidence) {
+      if (entry.id === project.media.lead.id) Object.assign(entry, { type: 'video', state: 'approved-public', source: videoPath });
+      if (entry.id === project.media.poster.id) Object.assign(entry, { type: 'image', state: 'approved-public', source: posterPath });
+    }
+    const source = clone(payload);
+    delete source.sourceDigest;
+    payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+    fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+
+    const video = path.join(temporaryRoot, ...videoPath.split('/'));
+    const poster = path.join(temporaryRoot, ...posterPath.split('/'));
+    fs.mkdirSync(path.dirname(video), { recursive: true });
+    fs.writeFileSync(video, validMp4());
+    fs.copyFileSync(path.join(root, 'assets', 'cv', 'jinmin-kim-cv-ko-page-1.png'), poster);
+
+    const generation = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(generation.status, 0, generation.stderr || generation.stdout);
+
+    const audit = childProcess.spawnSync(python, ['-c', [
+      'import sys',
+      'from pypdf import PdfReader',
+      'page = PdfReader(sys.argv[1]).pages[3]',
+      'xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
+      'print(any(ref.get_object().get("/Subtype") == "/Image" for ref in xobjects.values()))'
+    ].join('\n'), path.join(temporaryRoot, 'output', 'pdf', 'surgical-navigation-en.pdf')], {
+      cwd: root, encoding: 'utf8', timeout: 30_000
+    });
+    assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+    assert.equal(audit.stdout.trim(), 'True', 'approved video evidence must use its approved image poster in the PDF');
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
@@ -3676,6 +3739,35 @@ test('Integrated review rejects private project copy and keeps AI claims factual
   const diagramLeak = clone(data);
   diagramLeak.projects[0].pdfSequence.diagram.translations.en.nodes[0] = 'C:\\Users\\reviewer\\private\\raw\\frame.png';
   assert.match(validator.portfolioDataErrors(diagramLeak).join('\n'), /private|path/i);
+});
+
+test('Integrated review scans every rendered canonical data surface and requires public project URLs', () => {
+  const textMutations = [
+    ['project technology', (candidate) => { candidate.projects[0].tech[0] = 'C:\\Users\\patient\\private\\raw\\scan.dcm'; }],
+    ['capability method', (candidate) => { candidate.capabilities[0].methods[0] = 'C:\\Users\\patient\\private\\raw\\scan.dcm'; }],
+    ['capability translation', (candidate) => { candidate.capabilities[0].translations.en.title = 'PatientName: Jane Doe'; }],
+    ['capability age', (candidate) => { candidate.capabilities[0].translations.en.summary = '31-year-old engineer'; }],
+    ['tier phone', (candidate) => { candidate.tiers[0].translations.ko.label = '010-1234-5678'; }],
+    ['tier address', (candidate) => { candidate.tiers[0].translations.ko.label = '서울시 강남구'; }]
+  ];
+  for (const [label, mutate] of textMutations) {
+    const candidate = clone(data);
+    mutate(candidate);
+    assert.match(render.dataErrors(candidate).join('\n'), /private|PII|patient|path|phone|age|address/i, label);
+    assert.match(validator.portfolioDataErrors(candidate).join('\n'), /private|PII|patient|path|phone|age|address/i, label);
+  }
+
+  for (const href of [
+    'http://example.com/publication',
+    'https://localhost/internal',
+    'http://127.0.0.1/internal?source=C%3A%5CUsers%5Cname',
+    'https://example.com/?source=C:%5CUsers%5Cname%5Cprivate%5Craw%5Cscan.png'
+  ]) {
+    const candidate = clone(data);
+    candidate.projects[1].links[0].href = href;
+    assert.match(render.dataErrors(candidate).join('\n'), /unsafe project link/i, href);
+    assert.match(validator.portfolioDataErrors(candidate).join('\n'), /unsafe project link|public HTTPS|private-network|local source path/i, href);
+  }
 });
 
 test('Integrated review scans authored visible HTML for private paths and PII', () => {

@@ -3,7 +3,7 @@
   "sourceDigest": "dde290c085ab645be8b523d642428b21f1c9261a41763ac6d55c93a0204761d4",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
-  "generatorSha256": "d5b9dcb41311b5b6ca156f6b1905093830ab859753b4e10ac91b994855e6cc38",
+  "generatorSha256": "a11d1b653b4746131b1a227b7a23c0708e0411ef613309b46f62ccd2880ef4d8",
   "documents": [
     {
       "name": "surgical-navigation-ko.pdf",
