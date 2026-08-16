@@ -585,6 +585,37 @@ test('Task 4 review validates source and prose columns structurally without reje
   });
 });
 
+test('Task 4 review rejects a Unix source path in prepended non-table register prose', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  const leaked = `<!-- review source /tmp/company/capture.png -->\n${registerText}`;
+  withEvidenceRoot(leaked, (temporaryRoot) => {
+    assert.match(validator.readEvidenceRegister(temporaryRoot).errors.join(' '), /non-table prose.*private source path/i);
+  });
+});
+
+test('Task 4 review rejects a Windows source path in appended non-table register prose', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  const leaked = `${registerText}\n<!-- review source C:\\company\\capture.png -->`;
+  withEvidenceRoot(leaked, (temporaryRoot) => {
+    assert.match(validator.readEvidenceRegister(temporaryRoot).errors.join(' '), /non-table prose.*private source path/i);
+  });
+});
+
+test('Task 4 review removes only structurally valid HTTPS tokens from non-table prose checks', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  const safe = `<!-- public evidence https://example.com/study/raw/images -->\n${registerText}`;
+  withEvidenceRoot(safe, (temporaryRoot) => {
+    assert.deepEqual(validator.readEvidenceRegister(temporaryRoot).errors, []);
+  });
+
+  for (const token of ['https:///tmp/company/capture.png', 'https://example.com\\tmp\\capture.png', 'https://C:/company/capture.png']) {
+    const malformed = `<!-- review source ${token} -->\n${registerText}`;
+    withEvidenceRoot(malformed, (temporaryRoot) => {
+      assert.match(validator.readEvidenceRegister(temporaryRoot).errors.join(' '), /non-table prose.*private source path/i, token);
+    });
+  }
+});
+
 test('Task 3 review preserves literal tier and evidence-state mappings', () => {
   assert.deepEqual(data.tiers.map((tier) => [tier.key, tier.translations.ko.label, tier.translations.en.label]), [
     ['medical-core', '의료 코어', 'Medical Core'],
