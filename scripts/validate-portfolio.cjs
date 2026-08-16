@@ -20,6 +20,8 @@ const fallbackVisualKeys = [
 const evidenceRegisterRelativePath = path.join('assets', 'projects', 'EVIDENCE_REGISTER.md');
 const evidenceRegisterStates = new Set(['pending-review', 'approved-public', 'excluded']);
 const evidenceMediaTypes = new Set(['image', 'video', 'repository', 'publication']);
+const evidenceRegisterHeader = '| Evidence ID | Project | Media type | State | Public source | Provenance / usage |';
+const evidenceRegisterSeparator = '| --- | --- | --- | --- | --- | --- |';
 const localEvidenceExtensions = {
   image: new Set(['.png']),
   video: new Set(['.mp4', '.webm'])
@@ -94,6 +96,10 @@ function parseEvidenceRegister(content) {
   const seen = new Set();
   const lines = String(content || '').split(/\r?\n/);
   const nonTableLines = [];
+  const skippedNonEntryLines = [];
+  const headerIndexes = [];
+  const separatorIndexes = [];
+  const entryIndexes = [];
 
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index].trim();
@@ -102,11 +108,30 @@ function parseEvidenceRegister(content) {
       continue;
     }
     const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
-    if (cells[0] === 'Evidence ID' || cells.every((cell) => /^:?-+:?$/.test(cell))) continue;
-    if (cells.length !== 6) {
-      errors.push(`Evidence register line ${index + 1}: expected six table columns.`);
+    if (line === evidenceRegisterHeader) {
+      headerIndexes.push(index);
       continue;
     }
+    if (cells[0] === 'Evidence ID') {
+      errors.push(`Evidence register line ${index + 1}: expected the exact evidence register schema header.`);
+      skippedNonEntryLines.push(lines[index]);
+      continue;
+    }
+    if (line === evidenceRegisterSeparator) {
+      separatorIndexes.push(index);
+      continue;
+    }
+    if (cells.length > 0 && cells.every((cell) => /^:?-+:?$/.test(cell))) {
+      errors.push(`Evidence register line ${index + 1}: expected the exact six-cell evidence register separator.`);
+      skippedNonEntryLines.push(lines[index]);
+      continue;
+    }
+    if (cells.length !== 6) {
+      errors.push(`Evidence register line ${index + 1}: expected six table columns.`);
+      skippedNonEntryLines.push(lines[index]);
+      continue;
+    }
+    entryIndexes.push(index);
     const [id, project, type, state, source, note] = cells;
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) errors.push(`${id || `line ${index + 1}`}: invalid stable evidence id.`);
     if (seen.has(id)) errors.push(`${id}: duplicate evidence id.`);
@@ -117,8 +142,23 @@ function parseEvidenceRegister(content) {
     entries.push({ id, project, type, state, source, note });
   }
 
+  if (headerIndexes.length === 0) errors.push('Evidence register is missing exact evidence register schema header.');
+  if (headerIndexes.length > 1) errors.push('Evidence register contains a duplicate exact evidence register schema header.');
+  if (separatorIndexes.length === 0) errors.push('Evidence register is missing exact evidence register separator.');
+  if (separatorIndexes.length > 1) errors.push('Evidence register contains a duplicate exact evidence register separator.');
+  if (headerIndexes.length === 1 && separatorIndexes.length === 1 && separatorIndexes[0] !== headerIndexes[0] + 1) {
+    errors.push('The exact evidence register separator must immediately follow the schema header.');
+  }
+  if (separatorIndexes.length === 1 && entryIndexes.some((index) => index < separatorIndexes[0])) {
+    errors.push('Evidence register entries must follow the exact header and separator.');
+  }
   if (entries.length === 0) errors.push('Evidence register contains no entries.');
-  return { entries, errors, nonTableProse: nonTableLines.join('\n') };
+  return {
+    entries,
+    errors,
+    nonTableProse: nonTableLines.join('\n'),
+    skippedNonEntryProse: skippedNonEntryLines.join('\n')
+  };
 }
 
 function proseContainsLocalPath(value) {
@@ -142,6 +182,9 @@ function readEvidenceRegister(rootDir) {
   const parsed = parseEvidenceRegister(content);
   if (proseContainsLocalPath(parsed.nonTableProse)) {
     parsed.errors.push('Evidence register non-table prose contains a private source path or restricted source label.');
+  }
+  if (proseContainsLocalPath(parsed.skippedNonEntryProse)) {
+    parsed.errors.push('Evidence register skipped non-entry line contains a private source path or restricted source label.');
   }
   for (const entry of parsed.entries) {
     if (proseContainsLocalPath(entry.note)) {

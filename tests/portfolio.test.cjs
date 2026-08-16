@@ -616,6 +616,37 @@ test('Task 4 review removes only structurally valid HTTPS tokens from non-table 
   }
 });
 
+test('Task 4 review rejects the exact malicious first-cell header bypass from review', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  const header = '| Evidence ID | Project | Media type | State | Public source | Provenance / usage |';
+  const maliciousHeader = '| Evidence ID | Project | Media type | State | /tmp/company/capture.png | Provenance / usage |';
+  const mutated = registerText.replace(header, maliciousHeader);
+  withEvidenceRoot(mutated, (temporaryRoot) => {
+    const errors = validator.readEvidenceRegister(temporaryRoot).errors.join(' ');
+    assert.match(errors, /exact evidence register schema header/i);
+    assert.match(errors, /skipped non-entry line.*private source path/i);
+  });
+});
+
+test('Task 4 review requires one exact header and one exact adjacent six-cell separator', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  const header = '| Evidence ID | Project | Media type | State | Public source | Provenance / usage |';
+  const separator = '| --- | --- | --- | --- | --- | --- |';
+  const mutations = [
+    [registerText.replace(header, `${header}\n${header}`), /duplicate exact evidence register schema header/i],
+    [registerText.replace(header, ''), /missing exact evidence register schema header/i],
+    [registerText.replace(header, '| Evidence Key | Project | Media type | State | Public source | Provenance / usage |'), /missing exact evidence register schema header/i],
+    [registerText.replace(separator, ''), /missing exact evidence register separator/i],
+    [registerText.replace(separator, '| -- | --- | --- | --- | --- | --- |'), /exact six-cell evidence register separator/i],
+    [registerText.replace(separator, `${separator}\n${separator}`), /duplicate exact evidence register separator/i]
+  ];
+  for (const [mutated, expected] of mutations) {
+    withEvidenceRoot(mutated, (temporaryRoot) => {
+      assert.match(validator.readEvidenceRegister(temporaryRoot).errors.join(' '), expected);
+    });
+  }
+});
+
 test('Task 3 review preserves literal tier and evidence-state mappings', () => {
   assert.deepEqual(data.tiers.map((tier) => [tier.key, tier.translations.ko.label, tier.translations.en.label]), [
     ['medical-core', '의료 코어', 'Medical Core'],
