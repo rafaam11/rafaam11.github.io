@@ -26,14 +26,15 @@ const localEvidenceExtensions = {
 };
 const maxRasterBytes = 50 * 1024 * 1024;
 const maxDecodedRasterBytes = 100 * 1024 * 1024;
-const privateSourcePathPatterns = [
-  /(?:^|[\s"'`(=\[])[a-z]:[\\/][^\s|]*/im,
-  /(?:^|[\s"'`(=\[])\\\\[^\\/\s|]+[\\/][^\s|]*/im,
+const proseLocalPathPatterns = [
+  /[a-z]:[\\/][^\s|]*/i,
+  /\\\\[^\\/\s|]+[\\/][^\s|]*/i,
   /file:\/\/[^\s|]*/i,
-  /(?:^|[\s"'`(=\[])(?:\/Users\/|\/home\/)[^\s|]*/im,
-  /(?:^|[\s"'`(=\[])(?:\/mnt\/[a-z]\/)[^\s|]*/im,
+  /(?:^|[\s"'`(=:])\/(?!\/)[a-z0-9._~-]+(?:\/[a-z0-9._~%+-]+)*/im,
+  /(?:^|[\s"'`(=:])\.\.[\\/][^\s|]*/im,
   /\bpath\s*=\s*(?:"[^"]+"|'[^']+'|[^\s|]+)/i,
-  /(?:^|[\\/])(?:private|raw|extracted|manifest)(?=[\\/]|$)/im
+  /(?:^|[\\/])(?:private|raw|extracted|manifest)(?=[\\/]|$)/im,
+  /(?:^|[\s"'`(=:])(?:[a-z0-9._-]+[\\/])+(?:[a-z0-9._-]+\.[a-z0-9._-]+)(?=$|[\s|),.;])/im
 ];
 
 function portfolioRoutes() {
@@ -116,19 +117,27 @@ function parseEvidenceRegister(content) {
   return { entries, errors };
 }
 
+function proseContainsLocalPath(value) {
+  const withoutHttpsUrls = String(value || '').replace(/https:\/\/[^\s|<>"']+/gi, ' HTTPS_URL ');
+  return proseLocalPathPatterns.some((pattern) => pattern.test(withoutHttpsUrls));
+}
+
 function readEvidenceRegister(rootDir) {
   const registerPath = path.join(rootDir, evidenceRegisterRelativePath);
-  if (!fs.existsSync(registerPath)) {
+  const inspection = inspectExactLocalPath(rootDir, evidenceRegisterRelativePath.replace(/\\/g, '/'));
+  if (inspection.errors.length || !inspection.filePath || !fs.lstatSync(inspection.filePath).isFile()) {
     return {
       path: registerPath,
       entries: [],
-      errors: [`${evidenceRegisterRelativePath.replace(/\\/g, '/')}: missing public evidence register.`]
+      errors: [`${evidenceRegisterRelativePath.replace(/\\/g, '/')}: missing or unsafe public evidence register (${inspection.errors.join(' ')}).`]
     };
   }
-  const content = fs.readFileSync(registerPath, 'utf8');
+  const content = fs.readFileSync(inspection.filePath, 'utf8');
   const parsed = parseEvidenceRegister(content);
-  if (privateSourcePathPatterns.some((pattern) => pattern.test(content))) {
-    parsed.errors.push('Evidence register contains a private source path or restricted source label.');
+  for (const entry of parsed.entries) {
+    if (proseContainsLocalPath(entry.note)) {
+      parsed.errors.push(`${entry.id}: provenance or usage contains a private source path or restricted source label.`);
+    }
   }
   const prohibitedPartner = content.match(privatePartnerPattern)?.[0];
   if (prohibitedPartner) parsed.errors.push(`Evidence register contains a nonpublic partner or company-project name: ${prohibitedPartner}.`);
@@ -337,6 +346,9 @@ function approvedLocalEvidenceErrors(entry, rootDir) {
   if (!isSafePublicPath(source) || isSafeHttpsUrl(source)) {
     return [`${entry.id}: approved ${entry.type} requires a safe repository-relative source.`];
   }
+  if (normalizedSource.split('/').some((segment) => /^(?:private|raw|extracted|manifest)$/i.test(segment))) {
+    errors.push(`${entry.id}: approved local asset path contains a restricted source directory segment.`);
+  }
   if (!normalizedSource.startsWith(expectedPrefix)) {
     errors.push(`${entry.id}: approved local asset must resolve below its project directory.`);
   }
@@ -377,8 +389,8 @@ function evidenceRegistryErrors(candidate, rootDir) {
     if (!entriesById.has(entry.id)) entriesById.set(entry.id, entry);
     if (!i18n.canonicalCaseSlugs.includes(entry.project)) errors.push(`${entry.id}: unknown registered project.`);
     const hasSource = entry.source && entry.source !== '-';
-    if ((entry.state === 'pending-review' || entry.state === 'excluded') && hasSource) {
-      errors.push(`${entry.id}: ${entry.state} evidence must not declare a public source.`);
+    if ((entry.state === 'pending-review' || entry.state === 'excluded') && entry.source !== '-') {
+      errors.push(`${entry.id}: ${entry.state} evidence source must be exactly "-" and must not declare a public source.`);
     }
     if (entry.state === 'approved-public' && !hasSource) errors.push(`${entry.id}: approved-public evidence requires a public source.`);
     if (entry.state === 'approved-public' && ['repository', 'publication'].includes(entry.type) && !isSafeHttpsUrl(entry.source)) {
@@ -436,8 +448,56 @@ function evidenceRegistryErrors(candidate, rootDir) {
   return errors;
 }
 
-function evidenceDirectoryErrors(rootDir) {
+function evidenceRootInventoryErrors(rootDir) {
   const errors = [];
+  const relativeEvidenceRoot = path.posix.join('assets', 'projects');
+  const inspection = inspectExactLocalPath(rootDir, relativeEvidenceRoot);
+  if (inspection.errors.length || !inspection.filePath) {
+    return [`assets/projects: missing or unsafe evidence root (${inspection.errors.join(' ')}).`];
+  }
+  const evidenceRoot = inspection.filePath;
+  if (!fs.lstatSync(evidenceRoot).isDirectory()) return ['assets/projects: evidence root must be a directory.'];
+
+  const expectedDirectories = new Set(i18n.canonicalCaseSlugs);
+  const expectedItems = new Set(['EVIDENCE_REGISTER.md', ...expectedDirectories]);
+  const actualItems = fs.readdirSync(evidenceRoot, { withFileTypes: true });
+  const actualNames = new Set(actualItems.map((item) => item.name));
+  const repositoryRealPath = fs.realpathSync.native(path.resolve(rootDir));
+
+  for (const item of actualItems) {
+    const absoluteItem = path.join(evidenceRoot, item.name);
+    const stats = fs.lstatSync(absoluteItem);
+    if (!expectedItems.has(item.name)) {
+      const kind = item.isDirectory() ? 'directory' : item.isFile() ? 'file' : 'item';
+      errors.push(`${item.name}: unexpected evidence root ${kind}.`);
+      if (stats.isSymbolicLink()) errors.push(`${item.name}: unexpected evidence root item is a symbolic link or reparse point.`);
+      continue;
+    }
+    if (stats.isSymbolicLink()) {
+      errors.push(`${item.name}: symbolic link or reparse point is not allowed at the evidence root.`);
+      continue;
+    }
+    const realPath = fs.realpathSync.native(absoluteItem);
+    if (!isRelativePathInside(path.relative(repositoryRealPath, realPath))) {
+      errors.push(`${item.name}: evidence root item realpath escapes the repository.`);
+      continue;
+    }
+    if (item.name === 'EVIDENCE_REGISTER.md' && !item.isFile()) {
+      errors.push('EVIDENCE_REGISTER.md: evidence register must be a regular file.');
+    }
+    if (expectedDirectories.has(item.name) && !item.isDirectory()) {
+      errors.push(`${item.name}: canonical evidence root item must be a directory.`);
+    }
+  }
+
+  for (const expected of expectedItems) {
+    if (!actualNames.has(expected)) errors.push(`${expected}: missing required evidence root item.`);
+  }
+  return errors;
+}
+
+function evidenceDirectoryErrors(rootDir) {
+  const errors = evidenceRootInventoryErrors(rootDir);
   const register = readEvidenceRegister(rootDir);
   for (const slug of i18n.canonicalCaseSlugs) {
     const relativeProjectDirectory = path.posix.join('assets', 'projects', slug);
@@ -502,7 +562,7 @@ function evidenceDirectoryErrors(rootDir) {
       continue;
     }
     const readmeContent = fs.readFileSync(readme, 'utf8');
-    if (privateSourcePathPatterns.some((pattern) => pattern.test(readmeContent))) {
+    if (proseContainsLocalPath(readmeContent)) {
       errors.push(`${slug}/README.md: contains a private source path or restricted source label.`);
     }
     const prohibitedPartner = readmeContent.match(privatePartnerPattern)?.[0];
@@ -690,6 +750,7 @@ module.exports = {
   parseEvidenceRegister,
   readEvidenceRegister,
   evidenceRegistryErrors,
+  evidenceRootInventoryErrors,
   evidenceDirectoryErrors,
   imageDimensions,
   portfolioDataErrors,
