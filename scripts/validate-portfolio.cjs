@@ -20,13 +20,24 @@ const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const isSafePublicPath = render.isSafePublicPath;
 const siteUrl = 'https://rafaam11.github.io/';
-const fallbackVisualKeys = [
-  'nav-digitaltwin-pipeline',
-  'coordinate-signal',
-  'hololens-ar-concept',
-  'forklift-sim-to-real',
-  'decision-signal'
+const excludedProjectSlugs = [
+  'ar-distance-meter',
+  'c-arm-navigation',
+  'llm-wiki',
+  'oral-facial-ar',
+  'orthognathic-ar',
+  'quadruped-robot',
+  'radioactive-digital-twin',
+  'respiratory-surface-guidance',
+  'surgical-twin'
 ];
+const standaloneLegacyFiles = [
+  'js/scripts.js',
+  'js/spatial-signal.js',
+  'css/styles.css',
+  'css/cv-theme.css'
+];
+const ignoredHtmlInventoryRoots = new Set(['.git', '.superpowers', 'docs', 'node_modules', 'public']);
 const evidenceRegisterRelativePath = path.join('assets', 'projects', 'EVIDENCE_REGISTER.md');
 const evidenceRegisterStates = new Set(['pending-review', 'approved-public', 'excluded']);
 const evidenceMediaTypes = new Set(['image', 'video', 'repository', 'publication']);
@@ -59,6 +70,7 @@ function publicPortfolioFiles(rootDir) {
       relativePath: page.file,
       absolutePath: path.join(rootDir, page.file),
       route: page.route,
+      page: page.page,
       locale: 'ko',
       allowsNamedEmployer: Boolean(page.allowsNamedEmployer)
     },
@@ -66,30 +78,11 @@ function publicPortfolioFiles(rootDir) {
       relativePath: path.join('en', page.file),
       absolutePath: path.join(rootDir, 'en', page.file),
       route: page.route,
+      page: page.page,
       locale: 'en',
       allowsNamedEmployer: Boolean(page.allowsNamedEmployer)
     }
   ]);
-}
-
-function publishedPortfolioHtmlFiles(rootDir) {
-  const files = new Map(publicPortfolioFiles(rootDir).map((file) => [
-    file.relativePath.replace(/\\/g, '/'),
-    { relativePath: file.relativePath, absolutePath: file.absolutePath }
-  ]));
-  for (const relativePath of ['research/index.html', 'en/research/index.html']) {
-    files.set(relativePath, { relativePath, absolutePath: path.join(rootDir, relativePath) });
-  }
-  for (const projectRoot of ['projects', path.join('en', 'projects')]) {
-    const absoluteRoot = path.join(rootDir, projectRoot);
-    if (!fs.existsSync(absoluteRoot)) continue;
-    for (const entry of fs.readdirSync(absoluteRoot, { withFileTypes: true })) {
-      if (!entry.isDirectory()) continue;
-      const relativePath = path.join(projectRoot, entry.name, 'index.html');
-      files.set(relativePath.replace(/\\/g, '/'), { relativePath, absolutePath: path.join(rootDir, relativePath) });
-    }
-  }
-  return [...files.values()].filter((file) => fs.existsSync(file.absolutePath));
 }
 
 function isPathInsideRoot(rootDir, candidatePath) {
@@ -649,29 +642,8 @@ function publicPortfolioVisualFiles(rootDir) {
       absolutePath: path.join(rootDir, item.publicPath),
       evidenceId: item.id
     }));
-  const rendererFallbackFiles = [...new Set(data.projects
-    .map((project) => project.visualKey)
-    .filter((visualKey) => fallbackVisualKeys.includes(visualKey)))]
-    .flatMap((visualKey) => ['', '-en'].map((suffix) => {
-      const relativePath = path.join('assets', 'diagrams', `${visualKey}${suffix}.svg`);
-      return { relativePath, absolutePath: path.resolve(rootDir, relativePath), evidenceId: `renderer:${visualKey}` };
-    }));
-
-  const referencedFiles = [];
-  for (const file of publishedPortfolioHtmlFiles(rootDir)) {
-    const html = fs.readFileSync(file.absolutePath, 'utf8');
-    for (const match of html.matchAll(/\b(?:src|href)="([^"?#]+\.svg)(?:[?#][^"]*)?"/gi)) {
-      const href = match[1];
-      if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(href)) continue;
-      const absolutePath = path.resolve(path.dirname(file.absolutePath), href.replace(/\//g, path.sep));
-      const relativePath = path.relative(rootDir, absolutePath);
-      if (!relativePath || relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)) continue;
-      referencedFiles.push({ relativePath, absolutePath, evidenceId: `html:${file.relativePath}` });
-    }
-  }
-
   const unique = new Map();
-  for (const file of declaredFiles.concat(rendererFallbackFiles, referencedFiles)) {
+  for (const file of declaredFiles) {
     if (!isPathInsideRoot(rootDir, file.absolutePath)) continue;
     const key = file.relativePath.replace(/\\/g, '/').toLowerCase();
     if (!unique.has(key)) unique.set(key, file);
@@ -1156,24 +1128,228 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function localAnchorErrors(file, html, rootDir) {
+function toPosix(value) {
+  return String(value || '').replace(/\\/g, '/');
+}
+
+function decodedReference(value) {
+  let decoded = String(value || '').trim();
+  for (let index = 0; index < 4; index++) {
+    try {
+      const next = decodeURIComponent(decoded);
+      if (next === decoded) break;
+      decoded = next;
+    } catch {
+      return null;
+    }
+  }
+  return decoded.replace(/&amp;/gi, '&');
+}
+
+function htmlReferences(html) {
+  const references = [];
+  const allowedAttributes = {
+    a: new Set(['href']),
+    link: new Set(['href']),
+    script: new Set(['src']),
+    img: new Set(['src']),
+    source: new Set(['src']),
+    video: new Set(['poster']),
+    object: new Set(['data'])
+  };
+  for (const match of String(html || '').matchAll(/<(a|link|script|img|source|video|object)\b[^>]*?\b(href|src|data|poster)\s*=\s*(["'])(.*?)\3/gi)) {
+    const tag = match[1].toLowerCase();
+    const attribute = match[2].toLowerCase();
+    if (allowedAttributes[tag].has(attribute)) references.push({ tag, attribute, value: match[4] });
+  }
+  return references;
+}
+
+function inspectExactSitePath(rootDir, relativePath) {
+  const normalized = toPosix(relativePath).replace(/^\.\//, '');
+  const segments = normalized.split('/').filter(Boolean);
+  let current = path.resolve(rootDir);
+  for (const segment of segments) {
+    let names;
+    try {
+      names = fs.readdirSync(current);
+    } catch {
+      return { error: `${normalized}: missing local reference target.`, filePath: null };
+    }
+    if (!names.includes(segment)) {
+      if (names.some((name) => name.toLowerCase() === segment.toLowerCase())) {
+        return { error: `${normalized}: local reference must match exact filesystem case.`, filePath: null };
+      }
+      return { error: `${normalized}: missing local reference target.`, filePath: null };
+    }
+    current = path.join(current, segment);
+    let stats;
+    try {
+      stats = fs.lstatSync(current);
+    } catch {
+      return { error: `${normalized}: missing local reference target.`, filePath: null };
+    }
+    if (stats.isSymbolicLink()) {
+      return { error: `${normalized}: symbolic links are not allowed for local references.`, filePath: null };
+    }
+  }
+  return { error: '', filePath: current };
+}
+
+function localReferenceErrors(file, html, rootDir) {
   const errors = [];
-  const pageDirectory = path.posix.dirname('/' + file.relativePath.replace(/\\/g, '/'));
-  for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"[^>]*>/g)) {
-    const href = match[1];
-    if (/^(?:https?:|mailto:|tel:|#)/.test(href)) continue;
-    const localHref = href.split(/[?#]/, 1)[0];
-    const resolved = path.posix.normalize(path.posix.join(pageDirectory, localHref));
-    const isSharedAsset = resolved === '/assets' || resolved.startsWith('/assets/');
-    if (file.locale === 'en' && !isSharedAsset && resolved !== '/en' && !resolved.startsWith('/en/')) {
-      errors.push(`${file.relativePath}: English link leaves /en/: ${href}`);
+  const pageRelativePath = toPosix(file.relativePath);
+  const pageDirectory = path.posix.dirname(pageRelativePath);
+  for (const reference of htmlReferences(html)) {
+    const original = reference.value;
+    const decoded = decodedReference(original);
+    if (decoded === null) {
+      errors.push(`${file.relativePath}: malformed encoded ${reference.attribute} reference ${original}.`);
+      continue;
     }
-    if (file.locale === 'ko' && (resolved === '/en' || resolved.startsWith('/en/'))) {
-      errors.push(`${file.relativePath}: Korean link enters /en/: ${href}`);
+    if (!decoded || decoded.startsWith('#') || decoded.startsWith('?')) continue;
+    if (/^(?:mailto:|tel:)/i.test(decoded) && reference.tag === 'a') continue;
+    if (/^https:/i.test(decoded)) continue;
+    if (/^http:/i.test(decoded)) {
+      errors.push(`${file.relativePath}: external references must use HTTPS: ${original}`);
+      continue;
     }
-    if (localHref.endsWith('index.html')) {
-      const target = path.join(rootDir, resolved.replace(/^\//, '').replace(/\//g, path.sep));
-      if (!fs.existsSync(target)) errors.push(`${file.relativePath}: missing local link target ${href}`);
+    if (/^[a-z]:[\\/]/i.test(decoded)) {
+      errors.push(`${file.relativePath}: unsafe local reference uses a drive path: ${original}`);
+      continue;
+    }
+    if (/^(?:file:|javascript:|data:)/i.test(decoded) || /^\\\\|^\/\//.test(decoded)) {
+      errors.push(`${file.relativePath}: unsafe local reference uses a prohibited URL form: ${original}`);
+      continue;
+    }
+    if (/^[a-z][a-z0-9+.-]*:/i.test(decoded)) {
+      errors.push(`${file.relativePath}: unsafe local reference uses an unsupported scheme: ${original}`);
+      continue;
+    }
+    if (decoded.includes('\\') || decoded.startsWith('/')) {
+      errors.push(`${file.relativePath}: unsafe local reference is not file-compatible: ${original}`);
+      continue;
+    }
+
+    const localPath = decoded.split(/[?#]/, 1)[0];
+    const resolved = path.posix.normalize(path.posix.join(pageDirectory, localPath));
+    if (resolved === '..' || resolved.startsWith('../') || path.posix.isAbsolute(resolved)) {
+      errors.push(`${file.relativePath}: local reference path traversal escapes portfolio root: ${original}`);
+      continue;
+    }
+    const isSharedAsset = resolved === 'assets' || resolved.startsWith('assets/');
+    if (reference.tag === 'a' && file.locale === 'en' && !isSharedAsset && resolved !== 'en' && !resolved.startsWith('en/')) {
+      errors.push(`${file.relativePath}: English link leaves /en/: ${original}`);
+    }
+    if (reference.tag === 'a' && file.locale === 'ko' && (resolved === 'en' || resolved.startsWith('en/'))) {
+      errors.push(`${file.relativePath}: Korean link enters /en/: ${original}`);
+    }
+
+    let targetRelativePath = resolved;
+    if (localPath.endsWith('/')) targetRelativePath = path.posix.join(targetRelativePath, 'index.html');
+    let inspection = inspectExactSitePath(rootDir, targetRelativePath);
+    if (!inspection.error && inspection.filePath && fs.lstatSync(inspection.filePath).isDirectory()) {
+      targetRelativePath = path.posix.join(targetRelativePath, 'index.html');
+      inspection = inspectExactSitePath(rootDir, targetRelativePath);
+    }
+    if (inspection.error) errors.push(`${file.relativePath}: ${inspection.error}`);
+  }
+  return errors;
+}
+
+function pageDependencyErrors(file, html) {
+  const errors = [];
+  const relativePath = toPosix(file.relativePath);
+  const depth = relativePath.split('/').length - 1;
+  const base = '../'.repeat(depth);
+  const isCase = file.route.startsWith('projects/') && file.route !== 'projects/';
+  const requiredStyles = [`${base}css/site.css`, `${base}css/spatial-signal.css`];
+  if (isCase) requiredStyles.push(`${base}css/case-study.css`);
+  if (file.page === 'cv') requiredStyles.push(`${base}css/cv-pdf.css`);
+  const requiredScripts = [`${base}js/site-i18n.js`, `${base}js/nav.js`];
+  if (file.page === 'home' || file.page === 'projects') {
+    requiredScripts.splice(1, 0, `${base}js/portfolio-data.js`, `${base}js/portfolio-render.js`);
+  }
+
+  const styles = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*\bhref=(["'])(.*?)\1[^>]*>/gi)]
+    .map((match) => match[2]).filter((href) => !/^[a-z][a-z0-9+.-]*:/i.test(href));
+  const scripts = [...html.matchAll(/<script\b[^>]*\bsrc=(["'])(.*?)\1[^>]*>/gi)]
+    .map((match) => match[2]).filter((src) => !/^[a-z][a-z0-9+.-]*:/i.test(src));
+  for (const required of requiredStyles) {
+    if (!styles.includes(required)) errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
+  }
+  for (const unexpected of styles.filter((item) => !requiredStyles.includes(item))) {
+    errors.push(`${file.relativePath}: unexpected local stylesheet dependency ${unexpected}.`);
+  }
+  for (const required of requiredScripts) {
+    if (!scripts.includes(required)) errors.push(`${file.relativePath}: missing required local script ${required}.`);
+  }
+  for (const unexpected of scripts.filter((item) => !requiredScripts.includes(item))) {
+    errors.push(`${file.relativePath}: unexpected local script dependency ${unexpected}.`);
+  }
+  if (/bootstrap|fontawesome|fonts\.googleapis\.com|startbootstrap/i.test(html) ||
+      /(?:^|[\/"'])(?:styles|cv-theme)\.css(?:[?#"']|$)|spatial-signal\.js/i.test(html)) {
+    errors.push(`${file.relativePath}: contains an obsolete legacy dependency.`);
+  }
+  return errors;
+}
+
+function excludedRouteReferenceErrors(file, html) {
+  const errors = [];
+  for (const reference of htmlReferences(html)) {
+    const decoded = decodedReference(reference.value);
+    if (!decoded || /^(?:https:|mailto:|tel:|#)/i.test(decoded)) continue;
+    const routePath = decoded.split(/[?#]/, 1)[0].replace(/\\/g, '/').toLowerCase();
+    if (/(?:^|\/)research(?:\/|$)/.test(routePath)) {
+      errors.push(`${file.relativePath}: excluded route reference remains: ${reference.value}`);
+    }
+    for (const slug of excludedProjectSlugs) {
+      if (new RegExp(`(?:^|/)projects/${escapeRegExp(slug)}(?:/|$)`).test(routePath)) {
+        errors.push(`${file.relativePath}: excluded route reference remains: ${reference.value}`);
+      }
+    }
+  }
+  return errors;
+}
+
+function portfolioHtmlInventoryErrors(rootDir) {
+  const errors = [];
+  const expected = new Set(publicPortfolioFiles(rootDir).map((file) => toPosix(file.relativePath)));
+  const actual = [];
+  function visit(directory, relativeDirectory) {
+    if (!fs.existsSync(directory)) return;
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      if (!relativeDirectory && ignoredHtmlInventoryRoots.has(entry.name)) continue;
+      const relativePath = relativeDirectory ? `${relativeDirectory}/${entry.name}` : entry.name;
+      const absolutePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) visit(absolutePath, relativePath);
+      else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) actual.push(relativePath);
+    }
+  }
+  visit(path.resolve(rootDir), '');
+  for (const relativePath of actual) {
+    if (!expected.has(relativePath)) errors.push(`${relativePath}: unexpected public HTML page outside the canonical twenty-route inventory.`);
+  }
+  for (const relativePath of expected) {
+    if (!actual.includes(relativePath)) errors.push(`${relativePath}: missing canonical public HTML page.`);
+  }
+  for (const relativePath of standaloneLegacyFiles) {
+    if (fs.existsSync(path.join(rootDir, ...relativePath.split('/')))) {
+      errors.push(`${relativePath}: standalone legacy file must be removed.`);
+    }
+  }
+  const diagramsRoot = path.join(rootDir, 'assets', 'diagrams');
+  if (fs.existsSync(diagramsRoot)) {
+    const pending = [diagramsRoot];
+    while (pending.length) {
+      const directory = pending.pop();
+      for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+        const absolutePath = path.join(directory, entry.name);
+        if (entry.isDirectory()) pending.push(absolutePath);
+        else if (entry.isFile() && entry.name.toLowerCase().endsWith('.svg')) {
+          errors.push(`${toPosix(path.relative(rootDir, absolutePath))}: legacy SVG must be removed.`);
+        }
+      }
     }
   }
   return errors;
@@ -1195,6 +1371,15 @@ function staticPageErrors(file, html, rootDir) {
   if (!new RegExp(`data-route="${escapeRegExp(file.route)}"`).test(html)) {
     errors.push(`${file.relativePath}: semantic route does not match ${file.route}.`);
   }
+  const expectedBase = '../'.repeat(toPosix(file.relativePath).split('/').length - 1);
+  const actualBase = html.match(/<body\b[^>]*\bdata-base="([^"]*)"/i)?.[1];
+  if (actualBase !== expectedBase) errors.push(`${file.relativePath}: expected data-base="${expectedBase}".`);
+  const actualPage = html.match(/<body\b[^>]*\bdata-page="([^"]*)"/i)?.[1];
+  if (!i18n.supportedNavigationPages.includes(actualPage)) errors.push(`${file.relativePath}: unsupported data-page "${actualPage || ''}".`);
+  if (actualPage !== file.page) errors.push(`${file.relativePath}: expected data-page="${file.page}".`);
+  if (!/<header\b[^>]*\bid="site-nav"[^>]*><\/header>/i.test(html)) errors.push(`${file.relativePath}: missing shared navigation mount.`);
+  if (!/<footer\b[^>]*\bid="site-footer"[^>]*><\/footer>/i.test(html)) errors.push(`${file.relativePath}: missing shared footer mount.`);
+  if (!/<main\b[^>]*\bid="main-content"/i.test(html)) errors.push(`${file.relativePath}: missing main-content landmark.`);
   if (!new RegExp(`<link rel="canonical" href="${escapeRegExp(canonicalUrl)}"`).test(html)) {
     errors.push(`${file.relativePath}: canonical URL does not match locale route.`);
   }
@@ -1209,11 +1394,15 @@ function staticPageErrors(file, html, rootDir) {
   if (html.includes('portfolio-render.js') && html.indexOf('site-i18n.js') > html.indexOf('portfolio-render.js')) {
     errors.push(`${file.relativePath}: site-i18n.js must load before portfolio-render.js.`);
   }
-  return errors.concat(localAnchorErrors(file, html, rootDir));
+  errors.push(...pageDependencyErrors(file, html));
+  errors.push(...excludedRouteReferenceErrors(file, html));
+  errors.push(...localReferenceErrors(file, html, rootDir));
+  return errors;
 }
 
 function validatePortfolio(rootDir) {
   const errors = portfolioDataErrors(data).slice();
+  errors.push(...portfolioHtmlInventoryErrors(rootDir));
   errors.push(...evidenceRegistryErrors(data, rootDir));
   errors.push(...evidenceDirectoryErrors(rootDir));
   errors.push(...pdfArtifactErrors(rootDir));
@@ -1268,6 +1457,9 @@ module.exports = {
   portfolioRoutes,
   publicPortfolioFiles,
   publicPortfolioVisualFiles,
+  portfolioHtmlInventoryErrors,
+  localReferenceErrors,
+  pageDependencyErrors,
   parseEvidenceRegister,
   readEvidenceRegister,
   evidenceRegistryErrors,

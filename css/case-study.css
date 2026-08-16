@@ -1,13 +1,9 @@
 /* ─────────────────────────────────────────────────────────
-   case-study.css  —  Project detail (case study) pages.
-   Loaded on top of styles.css (Bootstrap) + cv-theme.css +
-   site.css. Shares the top nav (js/nav.js) and footer with the
-   main site, and reuses its navy design tokens (--navy/--ink/…).
+   case-study.css — project detail components loaded with
+   site.css and spatial-signal.css.
 ───────────────────────────────────────────────────────── */
 
-/* Centered content column, matched to the main site width.
-   Custom (not Bootstrap .container) so widths stay consistent
-   and Bootstrap .row negative margins never overflow. */
+/* Centered content column matched to the main site width. */
 .cs-wrap {
   max-width: 900px;
   margin: 0 auto;
@@ -186,7 +182,7 @@
   .cs-pager { gap: .6rem; }
 }
 
-/* ── Evidence-led decision timeline ── */
+/* ── Evidence-led case blocks ── */
 .cs-hero--editorial {
   padding: 3.5rem 0 3rem;
   background: #182f4c;

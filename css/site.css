@@ -1,9 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   site.css  —  Multi-page top-nav layout (al-folio inspired)
-   Loaded on top of styles.css (Bootstrap + base) and
-   cv-theme.css (navy academic design tokens / components).
-   New top-level pages avoid #sideNav / section.resume-section
-   so the resume template's sidebar layout never triggers.
+   site.css — shared multi-page navigation and layout layer.
 ───────────────────────────────────────────────────────── */
 
 :root {

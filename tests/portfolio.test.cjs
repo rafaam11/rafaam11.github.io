@@ -33,11 +33,22 @@ const capabilityKeys = [
 ];
 const tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
 const validPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
-const retainedLegacyProjectSlugs = [
-  'surgical-twin', 'rtms-navigation', 'mandibular-fracture', 'c-arm-navigation',
-  'unmanned-forklift', 'quadruped-robot', 'radioactive-digital-twin', 'life-careverse',
-  'orthognathic-ar', 'oral-facial-ar', 'ar-distance-meter',
-  'respiratory-surface-guidance', 'llm-wiki'
+const excludedProjectSlugs = [
+  'ar-distance-meter',
+  'c-arm-navigation',
+  'llm-wiki',
+  'oral-facial-ar',
+  'orthognathic-ar',
+  'quadruped-robot',
+  'radioactive-digital-twin',
+  'respiratory-surface-guidance',
+  'surgical-twin'
+];
+const standaloneLegacyFiles = [
+  'js/scripts.js',
+  'js/spatial-signal.js',
+  'css/styles.css',
+  'css/cv-theme.css'
 ];
 
 function read(relativePath) {
@@ -99,6 +110,54 @@ function copyCvSummarySurface(targetRoot) {
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.copyFileSync(path.join(root, relativePath), target);
   }
+}
+
+function copyTask6Surface(targetRoot) {
+  for (const file of canonicalPages()) {
+    const target = path.join(targetRoot, file.relativePath);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.copyFileSync(file.absolutePath, target);
+  }
+  for (const relativePath of [
+    'assets/projects',
+    'assets/pdfs',
+    'assets/cv',
+    'output/pdf'
+  ]) {
+    fs.cpSync(path.join(root, relativePath), path.join(targetRoot, relativePath), { recursive: true });
+  }
+  if (fs.existsSync(path.join(root, 'assets', 'diagrams'))) {
+    fs.cpSync(path.join(root, 'assets', 'diagrams'), path.join(targetRoot, 'assets', 'diagrams'), { recursive: true });
+  }
+  for (const relativePath of [
+    'data/public-cv.json',
+    'assets/img/favicon.ico',
+    'css/site.css',
+    'css/spatial-signal.css',
+    'css/case-study.css',
+    'css/cv-pdf.css',
+    'js/site-i18n.js',
+    'js/portfolio-data.js',
+    'js/portfolio-render.js',
+    'js/nav.js'
+  ]) {
+    const target = path.join(targetRoot, relativePath);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.copyFileSync(path.join(root, relativePath), target);
+  }
+}
+
+function trackedFiles(pathspec) {
+  const result = childProcess.spawnSync('git', ['-c', 'core.quotePath=false', 'ls-files', '-z', '--', pathspec], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  return result.stdout.split('\0')
+    .filter(Boolean)
+    .map((item) => item.replace(/\\/g, '/'))
+    .filter((item) => fs.existsSync(path.join(root, ...item.split('/'))))
+    .sort();
 }
 
 function cvSummaryTransactionArtifacts(targetRoot) {
@@ -1167,11 +1226,10 @@ test('Task 3 rebuilt pages exclude obsolete scripts and retain HTTP/file-safe me
   }
 });
 
-test('Task 3 review retains paired and file-safe CV and legacy routes until Task 6', () => {
+test('selected project and CV routes retain paired file-safe locale metadata', () => {
   const pages = [
-    { route: 'research/', file: 'research/index.html' },
     { route: 'cv/', file: 'cv/index.html' }
-  ].concat(retainedLegacyProjectSlugs.map((slug) => ({
+  ].concat(slugs.map((slug) => ({
     route: `projects/${slug}/`,
     file: `projects/${slug}/index.html`
   })));
@@ -2125,41 +2183,133 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
   }
 });
 
-test('full validator scans live SVGs and passes the twenty-page public contract', () => {
+test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
-  const live = validator.publicPortfolioVisualFiles(root);
-  assert.ok(live.some((item) => item.relativePath.replace(/\\/g, '/') === 'assets/diagrams/decision-signal.svg'));
-  assert.ok(live.some((item) => item.relativePath.replace(/\\/g, '/') === 'assets/diagrams/research-protocol.svg'));
-
-  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-svg-'));
-  try {
-    for (const file of canonicalPages()) {
-      const target = path.join(temporaryRoot, file.relativePath);
-      fs.mkdirSync(path.dirname(target), { recursive: true });
-      fs.copyFileSync(file.absolutePath, target);
-    }
-    const legacyFile = path.join('projects', 'c-arm-navigation', 'index.html');
-    fs.mkdirSync(path.join(temporaryRoot, path.dirname(legacyFile)), { recursive: true });
-    fs.copyFileSync(path.join(root, legacyFile), path.join(temporaryRoot, legacyFile));
-    for (const file of live) {
-      const target = path.join(temporaryRoot, file.relativePath);
-      fs.mkdirSync(path.dirname(target), { recursive: true });
-      fs.copyFileSync(file.absolutePath, target);
-    }
-    const targetSvg = path.join(temporaryRoot, 'assets', 'diagrams', 'decision-signal.svg');
-    fs.appendFileSync(targetSvg, '<text>Samsung Medical</text>');
-    const legacySvg = path.join(temporaryRoot, 'assets', 'diagrams', 'research-protocol.svg');
-    fs.appendFileSync(legacySvg, '<text>Samsung Medical</text>');
-    const errors = validator.validatePortfolio(temporaryRoot).map((error) => error.replace(/\\/g, '/'));
-    assert.ok(errors.some((error) => /decision-signal\.svg.*nonpublic partner.*Samsung Medical/i.test(error)));
-    assert.ok(errors.some((error) => /research-protocol\.svg.*nonpublic partner.*Samsung Medical/i.test(error)));
-  } finally {
-    fs.rmSync(temporaryRoot, { recursive: true, force: true });
-  }
+  assert.deepEqual(validator.publicPortfolioVisualFiles(root), []);
 });
 
 test('published localized pages never rewrite parent traversal into external URLs', () => {
   for (const file of canonicalPages().filter((item) => fs.existsSync(item.absolutePath))) {
     assert.doesNotMatch(fs.readFileSync(file.absolutePath, 'utf8'), /https?:\/\/[^"\s]*\/\.\.\//, file.relativePath);
+  }
+});
+
+test('Task 6 tracked site HTML inventory is exactly the twenty canonical localized routes', () => {
+  const expected = canonicalPages().map((file) => file.relativePath.replace(/\\/g, '/')).sort();
+  const actual = trackedFiles('*.html').filter((relativePath) => (
+    !relativePath.startsWith('public/') &&
+    !relativePath.startsWith('docs/') &&
+    !relativePath.startsWith('.superpowers/')
+  ));
+  assert.deepEqual(actual, expected);
+});
+
+test('Task 6 removes excluded routes, decorative diagrams, and standalone legacy bundles', () => {
+  for (const slug of excludedProjectSlugs) {
+    assert.equal(fs.existsSync(path.join(root, 'projects', slug, 'index.html')), false, `Korean legacy route remains: ${slug}`);
+    assert.equal(fs.existsSync(path.join(root, 'en', 'projects', slug, 'index.html')), false, `English legacy route remains: ${slug}`);
+  }
+  assert.equal(fs.existsSync(path.join(root, 'research', 'index.html')), false, 'Korean research route remains');
+  assert.equal(fs.existsSync(path.join(root, 'en', 'research', 'index.html')), false, 'English research route remains');
+  assert.deepEqual(trackedFiles('assets/diagrams/**'), []);
+  for (const relativePath of standaloneLegacyFiles) {
+    assert.equal(fs.existsSync(path.join(root, relativePath)), false, `standalone legacy file remains: ${relativePath}`);
+  }
+});
+
+test('Task 6 validator rejects unexpected pages and excluded route references while ignoring public output', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-inventory-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const publicPage = path.join(temporaryRoot, 'public', 'generated', 'index.html');
+    fs.mkdirSync(path.dirname(publicPage), { recursive: true });
+    fs.writeFileSync(publicPage, '<!doctype html><title>Generated output outside portfolio inventory</title>');
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+
+    const legacyPage = path.join(temporaryRoot, 'research', 'index.html');
+    fs.mkdirSync(path.dirname(legacyPage), { recursive: true });
+    fs.writeFileSync(legacyPage, '<!doctype html><title>Unexpected route</title>');
+    let errors = validator.validatePortfolio(temporaryRoot).join('\n').replace(/\\/g, '/');
+    assert.match(errors, /research\/index\.html.*unexpected public HTML page/i);
+
+    fs.rmSync(path.join(temporaryRoot, 'research'), { recursive: true, force: true });
+    const legacyBundle = path.join(temporaryRoot, 'css', 'styles.css');
+    fs.writeFileSync(legacyBundle, '/* obsolete */');
+    errors = validator.validatePortfolio(temporaryRoot).join('\n').replace(/\\/g, '/');
+    assert.match(errors, /css\/styles\.css.*standalone legacy file/i);
+    fs.rmSync(legacyBundle);
+
+    const legacySvg = path.join(temporaryRoot, 'assets', 'diagrams', 'legacy.svg');
+    fs.mkdirSync(path.dirname(legacySvg), { recursive: true });
+    fs.writeFileSync(legacySvg, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+    errors = validator.validatePortfolio(temporaryRoot).join('\n').replace(/\\/g, '/');
+    assert.match(errors, /assets\/diagrams\/legacy\.svg.*legacy SVG/i);
+    fs.rmSync(path.join(temporaryRoot, 'assets', 'diagrams'), { recursive: true, force: true });
+
+    const homePath = path.join(temporaryRoot, 'index.html');
+    fs.appendFileSync(homePath, '<a href="projects/c-arm-navigation/?view=old#case">Old route</a>');
+    errors = validator.validatePortfolio(temporaryRoot).join('\n').replace(/\\/g, '/');
+    assert.match(errors, /index\.html.*excluded route reference.*c-arm-navigation/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 validator resolves query and fragment targets and rejects unsafe or case-mismatched local references', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-links-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    fs.writeFileSync(homePath, baseline.replace('</main>', [
+      '<a href="projects/?tier=medical#cases">Directory index</a>',
+      '<img src="assets/img/favicon.ico?v=1#icon" alt="">',
+      '<a href="#main-content">Fragment</a>',
+      '<a href="mailto:public@example.com">Email</a>',
+      '<a href="tel:+820000000000">Telephone</a>',
+      '<a href="https://example.com/reference">HTTPS</a>',
+      '</main>'
+    ].join('')));
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+
+    const unsafeReferences = [
+      ['<a href="../../outside/index.html">Escape</a>', /path traversal|escapes portfolio root/i],
+      ['<a href="C:/private/demo.pdf">Drive</a>', /drive path|unsafe local reference/i],
+      ['<a href="file:///C:/private/demo.pdf">File URL</a>', /file URL|unsafe local reference/i],
+      ['<a href="javascript:alert(1)">Script URL</a>', /javascript.*unsafe|unsafe.*javascript/i],
+      ['<img src="assets/img/Favicon.ico" alt="">', /exact filesystem case/i]
+    ];
+    for (const [markup, expected] of unsafeReferences) {
+      fs.writeFileSync(homePath, baseline.replace('</main>', `${markup}</main>`));
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      assert.match(errors, expected, markup);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 validator enforces page metadata, shared mounts, and route-specific dependencies', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-contract-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const casePath = path.join(temporaryRoot, 'projects', 'surgical-navigation', 'index.html');
+    const baseline = fs.readFileSync(casePath, 'utf8');
+    const mutations = [
+      [baseline.replace('data-base="../../"', 'data-base="../"'), /expected data-base/i],
+      [baseline.replace('data-page="projects"', 'data-page="capabilities"'), /unsupported data-page|expected data-page/i],
+      [baseline.replace('<header id="site-nav"></header>', ''), /missing shared navigation mount/i],
+      [baseline.replace('<footer id="site-footer"></footer>', ''), /missing shared footer mount/i],
+      [baseline.replace('<link rel="stylesheet" href="../../css/case-study.css">', ''), /missing required local stylesheet.*case-study\.css/i],
+      [baseline.replace('<script src="../../js/portfolio-data.js"></script>', ''), /missing required local script.*portfolio-data\.js/i],
+      [baseline.replace('../../css/site.css', '../../css/styles.css'), /legacy dependency|missing required local stylesheet.*site\.css/i]
+    ];
+    for (const [html, expected] of mutations) {
+      fs.writeFileSync(casePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      assert.match(errors, expected);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
 });
