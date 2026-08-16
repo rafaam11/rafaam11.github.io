@@ -30,6 +30,12 @@ const capabilityKeys = [
   'ai-product-engineering'
 ];
 const tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
+const retainedLegacyProjectSlugs = [
+  'surgical-twin', 'rtms-navigation', 'mandibular-fracture', 'c-arm-navigation',
+  'unmanned-forklift', 'quadruped-robot', 'radioactive-digital-twin', 'life-careverse',
+  'orthognathic-ar', 'oral-facial-ar', 'ar-distance-meter',
+  'respiratory-surface-guidance', 'llm-wiki'
+];
 
 function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -54,6 +60,30 @@ function assertInOrder(haystack, values, label) {
 
 function canonicalPages() {
   return validator.publicPortfolioFiles(root);
+}
+
+function cssRuleBodies(css, selector) {
+  return [...css.matchAll(/(?:^|})\s*([^@}{][^{]+)\{([^{}]*)\}/gm)]
+    .filter((match) => match[1].split(',').some((candidate) => candidate.trim() === selector))
+    .map((match) => match[2]);
+}
+
+function cssAtRuleBodies(css, atRule) {
+  const flags = atRule.flags.includes('g') ? atRule.flags : atRule.flags + 'g';
+  const pattern = new RegExp(atRule.source, flags);
+  const bodies = [];
+  for (let match = pattern.exec(css); match; match = pattern.exec(css)) {
+    const openingBrace = css.indexOf('{', match.index);
+    let depth = 0;
+    for (let index = openingBrace; index < css.length; index++) {
+      if (css[index] === '{') depth++;
+      if (css[index] === '}' && --depth === 0) {
+        bodies.push(css.slice(openingBrace + 1, index));
+        break;
+      }
+    }
+  }
+  return bodies;
 }
 
 test('canonical data preserves the browser/CommonJS boundary and exact ordered portfolio', () => {
@@ -105,14 +135,51 @@ test('pending evidence remains pathless and approved evidence uses safe public p
     if (lead.status === 'approved') assert.equal(validator.portfolioDataErrors(data).length, 0);
   }
   const unsafePaths = [
-    'C:/private/raw/demo.png', '../private/demo.png', 'assets/projects/../private/demo.png',
-    'file:///C:/private/demo.png', 'javascript:alert(1)', 'data:text/plain,private'
+    'C:/private/raw/demo.png',
+    'C:\\private\\raw\\demo.png',
+    '\\\\server\\share\\demo.png',
+    '/assets/projects/demo.png',
+    '../private/raw/demo.png',
+    'assets/projects/../private/raw/demo.png',
+    'assets/%2e%2e/private/raw/demo.png',
+    'assets/%252e%252e/private/raw/demo.png',
+    'assets/projects%2f..%2fprivate/raw/demo.png',
+    'assets/private/raw/demo.png',
+    'assets/projects/private-demo.png',
+    'assets/projects/raw-export.png',
+    'file:///C:/private/raw/demo.png',
+    'javascript:alert(1)',
+    'data:text/plain,private'
   ];
   for (const publicPath of unsafePaths) {
     const candidate = clone(data);
     candidate.projects.at(-1).media.lead.publicPath = publicPath;
     assert.match(validator.portfolioDataErrors(candidate).join(' '), /unsafe public path/i);
   }
+});
+
+test('Task 3 review preserves literal tier and evidence-state mappings', () => {
+  assert.deepEqual(data.tiers.map((tier) => [tier.key, tier.translations.ko.label, tier.translations.en.label]), [
+    ['medical-core', '의료 코어', 'Medical Core'],
+    ['industrial-spotlight', '산업 스포트라이트', 'Industrial Spotlight'],
+    ['ai-build-lab', 'AI 빌드 랩', 'AI Build Lab']
+  ]);
+  assert.deepEqual(data.projects.map((project) => [project.slug, project.tier, project.evidenceState]), [
+    ['surgical-navigation', 'medical-core', 'ongoing'],
+    ['mandibular-fracture', 'medical-core', 'verified'],
+    ['life-careverse', 'medical-core', 'ongoing'],
+    ['rtms-navigation', 'medical-core', 'prototype'],
+    ['unmanned-forklift', 'industrial-spotlight', 'ongoing'],
+    ['ai-build-lab', 'ai-build-lab', 'ongoing']
+  ]);
+  assert.deepEqual(
+    ['verified', 'ongoing', 'prototype'].map((state) => [state, i18n.ui.ko.portfolio.evidenceStates[state], i18n.ui.en.portfolio.evidenceStates[state]]),
+    [
+      ['verified', '검증됨', 'Verified'],
+      ['ongoing', '진행 중', 'Ongoing'],
+      ['prototype', '프로토타입', 'Prototype']
+    ]
+  );
 });
 
 test('privacy and attribution policies reject private names and contribution percentages', () => {
@@ -188,6 +255,43 @@ test('Task 3 Home renderer creates six ordered title-led links without card mark
   assert.doesNotMatch(html, /td-status|td-tech-list|project-summary|project-role/);
 });
 
+test('Task 3 review Home tiles render approved images with localized provenance', () => {
+  const candidate = clone(data);
+  candidate.projects[0].media.lead = {
+    id: 'surgical-navigation-public-image',
+    type: 'image',
+    status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/lead.webp'
+  };
+  const html = render.homeProjectGalleryHtml(candidate, '../', true, 'en');
+  const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
+  assert.match(firstTile, /<img\b(?=[^>]*src="\.\.\/assets\/projects\/surgical-navigation\/lead\.webp")(?=[^>]*alt="Surgical-navigation demonstration connecting tracked equipment and medical-image models to a HoloLens spatial view\.")/);
+  assert.match(firstTile, /class="td-home-project__caption"[^>]*>The actual integrated demonstration will be published only after approval\.<\/p>/);
+  assert.match(firstTile, /Public evidence[\s\S]*IMAGE[\s\S]*Surgical Navigation/);
+  assert.doesNotMatch(firstTile, /td-home-project__fallback/);
+});
+
+test('Task 3 review Home video tiles use an approved poster without autoplay or inline video', () => {
+  const candidate = clone(data);
+  candidate.projects[0].media.lead = {
+    id: 'surgical-navigation-public-video',
+    type: 'video',
+    status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/demo.mp4'
+  };
+  candidate.projects[0].media.poster = {
+    id: 'surgical-navigation-public-poster',
+    type: 'image',
+    status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/poster.webp'
+  };
+  const html = render.homeProjectGalleryHtml(candidate, '', false, 'ko');
+  const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
+  assert.match(firstTile, /<img\b(?=[^>]*src="assets\/projects\/surgical-navigation\/poster\.webp")(?=[^>]*alt="추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연\.")/);
+  assert.match(firstTile, /공개 근거[\s\S]*VIDEO[\s\S]*수술내비게이션/);
+  assert.doesNotMatch(firstTile, /<video\b|autoplay|demo\.mp4/);
+});
+
 test('Task 3 Home evidence mosaic and capability index follow the required data order', () => {
   const mosaic = render.homeEvidenceMosaicHtml(data, 'en');
   assert.equal(count(mosaic, 'class="td-mosaic-cell"'), 3);
@@ -242,6 +346,25 @@ test('Task 3 media renderer shows pending provenance without broken media', () =
   assert.doesNotMatch(html, /<(?:img|video)\b/i);
 });
 
+test('Task 3 review pending visual names disclose approval state without claiming an actual demo', () => {
+  const expectations = {
+    ko: '공개 시각 자료 승인 대기: 실제 데모 또는 사진을 표시하지 않습니다.',
+    en: 'Public visual pending approval; no actual demo or photograph is shown.'
+  };
+  for (const locale of ['ko', 'en']) {
+    const project = data.projects[0];
+    const detail = render.evidenceMediaHtml(project, locale, '../../', false);
+    const home = render.homeProjectGalleryHtml(data, '', false, locale);
+    const mosaic = render.homeEvidenceMosaicHtml(data, locale);
+    for (const [surface, html] of [['detail', detail], ['home', home], ['mosaic', mosaic]]) {
+      const accessibleNames = [...html.matchAll(/role="img"[^>]*aria-label="([^"]+)"/g)].map((match) => match[1]);
+      assert.ok(accessibleNames.includes(expectations[locale]), `${locale} ${surface}: pending accessible name missing`);
+      assert.equal(accessibleNames.some((name) => name.includes(project.translations[locale].mediaAlt)), false, `${locale} ${surface}: pending name claims desired media is shown`);
+    }
+    assert.match(detail, new RegExp(project.translations[locale].mediaCaption.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+});
+
 test('Task 3 approved video contract is poster-led, click-to-play, and keyboard reachable', () => {
   const project = clone(data.projects[0]);
   project.media.lead = { id: 'approved-demo', type: 'video', status: 'approved', publicPath: 'assets/projects/demo.mp4' };
@@ -259,6 +382,53 @@ test('Task 3 approved video without an approved poster stays an honest fallback'
   const html = render.evidenceMediaHtml(project, 'en', '../../', false);
   assert.match(html, /td-evidence-placeholder/);
   assert.doesNotMatch(html, /<video\b|assets\/projects\/demo\.mp4/);
+});
+
+test('Task 3 review renderer validation matches the canonical render-required boundary', () => {
+  assert.equal(typeof render.dataErrors, 'function');
+  const mutations = [
+    [(candidate) => { delete candidate.projects[0].translations.en.thesis; }, /missing en translation for thesis/i],
+    [(candidate) => { delete candidate.projects[0].translations.ko.mediaAlt; }, /missing ko translation for mediaAlt/i],
+    [(candidate) => { delete candidate.projects[0].translations.en.mediaCaption; }, /missing en translation for mediaCaption/i],
+    [(candidate) => { delete candidate.projects[0].pdf; }, /missing PDF paths/i],
+    [(candidate) => { delete candidate.projects[0].media; }, /missing lead media declaration/i],
+    [(candidate) => { candidate.projects[0].blocks = []; }, /missing structural blocks/i],
+    [(candidate) => { candidate.projects[0].route = 'projects/../private/'; }, /invalid project route/i],
+    [(candidate) => { candidate.projects[0].tech = []; }, /missing technologies/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const candidate = clone(data);
+    mutate(candidate);
+    const rendererErrors = render.dataErrors(candidate);
+    assert.match(rendererErrors.join(' '), expected);
+    assert.deepEqual(rendererErrors, validator.portfolioDataErrors(candidate));
+    assert.equal(render.caseStudyHtml(candidate, 'surgical-navigation', '../../', false, 'en'), '');
+  }
+});
+
+test('Task 3 review renderer validation remains browser-UMD and CommonJS safe', () => {
+  const browser = { SiteI18n: i18n, URL };
+  vm.runInNewContext(fs.readFileSync(rendererPath, 'utf8'), browser);
+  assert.equal(typeof browser.PortfolioRender.dataErrors, 'function');
+  assert.equal(browser.PortfolioRender.dataErrors(data).length, 0);
+  assert.equal(render.dataErrors(data).length, 0);
+});
+
+test('Task 3 review rejects unsafe canonical project links before rendering', () => {
+  for (const href of [
+    'javascript:alert(1)',
+    'file:///C:/private/raw/notes.txt',
+    'data:text/html,private',
+    '../private/raw/notes.html',
+    '%2e%2e/private/raw/notes.html'
+  ]) {
+    const candidate = clone(data);
+    candidate.projects[1].links[0].href = href;
+    assert.match(render.dataErrors(candidate).join(' '), /unsafe project link/i, href);
+    assert.match(validator.portfolioDataErrors(candidate).join(' '), /unsafe project link/i, href);
+    assert.equal(render.caseStudyHtml(candidate, 'mandibular-fracture', '../../', false, 'en'), '', href);
+  }
+  assert.match(render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'en'), /href="https:\/\/link\.springer\.com\/article\/10\.1007\/s10278-024-01014-z"/);
 });
 
 test('Task 3 case renderer uses project-specific blocks and separates role from team result', () => {
@@ -345,6 +515,37 @@ test('Task 3 rebuilt pages exclude obsolete scripts and retain HTTP/file-safe me
   }
 });
 
+test('Task 3 review retains paired and file-safe CV and legacy routes until Task 6', () => {
+  const pages = [
+    { route: 'research/', file: 'research/index.html' },
+    { route: 'cv/', file: 'cv/index.html' }
+  ].concat(retainedLegacyProjectSlugs.map((slug) => ({
+    route: `projects/${slug}/`,
+    file: `projects/${slug}/index.html`
+  })));
+  for (const page of pages) {
+    const files = [page.file, `en/${page.file}`];
+    for (const [index, file] of files.entries()) {
+      assert.equal(fs.existsSync(path.join(root, file)), true, `${file}: missing paired route`);
+      const locale = index === 0 ? 'ko' : 'en';
+      const localePrefix = locale === 'en' ? 'en/' : '';
+      const html = read(file);
+      assert.match(html, new RegExp(`<html lang="${locale}">`), file);
+      assert.match(html, new RegExp(`data-lang="${locale}"`), file);
+      assert.match(html, new RegExp(`data-route="${page.route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`), file);
+      assert.match(html, new RegExp(`<link rel="canonical" href="https://rafaam11\\.github\\.io/${localePrefix}${page.route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`), file);
+      assert.match(html, /hreflang="ko"/);
+      assert.match(html, /hreflang="en"/);
+      assert.equal(html.indexOf('site-i18n.js') < html.indexOf('nav.js'), true, `${file}: i18n must precede nav`);
+      for (const match of html.matchAll(/href="([^"]+)"/g)) {
+        const href = match[1];
+        if (/^(?:https?:|mailto:|tel:|#)/.test(href)) continue;
+        assert.equal(href.endsWith('/'), false, `${file}: local directory link is not file-safe: ${href}`);
+      }
+    }
+  }
+});
+
 test('Task 3 Contact asks joint-development partners for problem, data or sensors, validation, and schedule', () => {
   const pages = [
     ['contact/index.html', [/공동개발/, /문제/, /데이터|센서/, /검증/, /일정/]],
@@ -371,10 +572,35 @@ test('Task 3 technical-document CSS exposes the instrument palette, grid, proven
   assert.doesNotMatch(technical, /gradient|box-shadow/i);
 });
 
+test('Task 3 review technical-document CSS stays narrow, touch, and reduced-motion safe', () => {
+  const siteCss = read('css/site.css');
+  const caseCss = read('css/case-study.css');
+  const spatialCss = read('css/spatial-signal.css');
+  assert.ok(cssRuleBodies(siteCss, '.td-site-nav .nav-link').some((body) => /min-height\s*:\s*44px/.test(body)));
+  assert.ok(cssRuleBodies(caseCss, '.td-pdf-cta > a').some((body) => /min-height\s*:\s*44px/.test(body)));
+  assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(max-width:\s*700px\)/i)
+    .some((body) => /\.td-project-row[\s\S]*grid-template-columns:\s*1fr/.test(body)));
+  assert.ok(cssAtRuleBodies(caseCss, /@media\s*\(max-width:\s*760px\)/i)
+    .some((body) => /\.td-case-block[\s\S]*grid-column:\s*1\s*\/\s*-1/.test(body)));
+  assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(prefers-reduced-motion:\s*reduce\)/i)
+    .some((body) => /\.td-shell\s+\*[\s\S]*animation:\s*none\s*!important[\s\S]*transition-duration:\s*\.01ms\s*!important/.test(body)));
+});
+
+test('Task 3 review case block title scale wins the trailing Spatial Signal cascade', () => {
+  const css = read('css/spatial-signal.css');
+  const generalRuleIndex = css.indexOf('.td-shell h2 { font-size: var(--td-section); }');
+  const overrideIndex = css.indexOf('.td-shell .td-case-block h2');
+  assert.ok(generalRuleIndex >= 0, 'expected the general technical-document H2 scale');
+  assert.ok(overrideIndex > generalRuleIndex, 'case block override must follow the general H2 rule');
+  assert.ok(cssRuleBodies(css, '.td-shell .td-case-block h2')
+    .some((body) => /font-size\s*:\s*var\(--td-title\)/.test(body)));
+});
+
 test('full validator scans live SVGs and passes the twenty-page public contract', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const live = validator.publicPortfolioVisualFiles(root);
   assert.ok(live.some((item) => item.relativePath.replace(/\\/g, '/') === 'assets/diagrams/decision-signal.svg'));
+  assert.ok(live.some((item) => item.relativePath.replace(/\\/g, '/') === 'assets/diagrams/research-protocol.svg'));
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-svg-'));
   try {
@@ -383,6 +609,9 @@ test('full validator scans live SVGs and passes the twenty-page public contract'
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.copyFileSync(file.absolutePath, target);
     }
+    const legacyFile = path.join('projects', 'c-arm-navigation', 'index.html');
+    fs.mkdirSync(path.join(temporaryRoot, path.dirname(legacyFile)), { recursive: true });
+    fs.copyFileSync(path.join(root, legacyFile), path.join(temporaryRoot, legacyFile));
     for (const file of live) {
       const target = path.join(temporaryRoot, file.relativePath);
       fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -390,7 +619,11 @@ test('full validator scans live SVGs and passes the twenty-page public contract'
     }
     const targetSvg = path.join(temporaryRoot, 'assets', 'diagrams', 'decision-signal.svg');
     fs.appendFileSync(targetSvg, '<text>Samsung Medical</text>');
-    assert.ok(validator.validatePortfolio(temporaryRoot).some((error) => /decision-signal\.svg.*nonpublic partner.*Samsung Medical/i.test(error.replace(/\\/g, '/'))));
+    const legacySvg = path.join(temporaryRoot, 'assets', 'diagrams', 'research-protocol.svg');
+    fs.appendFileSync(legacySvg, '<text>Samsung Medical</text>');
+    const errors = validator.validatePortfolio(temporaryRoot).map((error) => error.replace(/\\/g, '/'));
+    assert.ok(errors.some((error) => /decision-signal\.svg.*nonpublic partner.*Samsung Medical/i.test(error)));
+    assert.ok(errors.some((error) => /research-protocol\.svg.*nonpublic partner.*Samsung Medical/i.test(error)));
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
