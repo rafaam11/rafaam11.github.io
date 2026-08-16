@@ -8,11 +8,31 @@ const summaryEnd = '<!-- PUBLIC CV SUMMARY:END -->';
 const htmlEntityMap = {
   amp: '&',
   apos: "'",
+  bsol: '\\',
+  centerdot: '·',
+  colon: ':',
+  comma: ',',
+  emsp: ' ',
+  ensp: ' ',
   gt: '>',
+  hairsp: ' ',
+  hyphen: '-',
+  lpar: '(',
   lt: '<',
+  middot: '·',
+  minus: '-',
   nbsp: '\u00a0',
-  quot: '"'
+  newline: '\n',
+  period: '.',
+  plus: '+',
+  quot: '"',
+  rpar: ')',
+  semi: ';',
+  sol: '/',
+  tab: '\t',
+  thinsp: ' '
 };
+const knownHtmlEntityPattern = new RegExp(`&(${Object.keys(htmlEntityMap).sort((left, right) => right.length - left.length).join('|')});?`, 'gi');
 
 const publicPiiRules = [
   {
@@ -75,23 +95,40 @@ function collectStrings(value, output, seen) {
   }
 }
 
-function normalizePublicTextForScan(value) {
+function normalizePublicSeparators(value) {
+  return value
+    .replace(/[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/g, ' ')
+    .replace(/[\u200b-\u200d\u2060\ufeff]/g, '')
+    .replace(/[\u2010-\u2015\u2212]/g, '-')
+    .replace(/[\u2044\u2215\uff0f]/g, '/')
+    .replace(/[\u2022\u2027\u30fb]/g, '·')
+    .replace(/\uff08/g, '(')
+    .replace(/\uff09/g, ')')
+    .replace(/\uff0b/g, '+')
+    .replace(/\s+/g, ' ');
+}
+
+function publicTextScanVariants(value) {
   let text = String(value);
-  for (let pass = 0; pass < 3; pass += 1) {
+  for (let pass = 0; pass < 6; pass += 1) {
     const decoded = text
-      .replace(/&(?:amp|apos|gt|lt|nbsp|quot);/gi, (entity) => htmlEntityMap[entity.slice(1, -1).toLowerCase()])
-      .replace(/&#(?:x([0-9a-f]+)|(\d+));/gi, (entity, hexadecimal, decimal) => {
+      .replace(/&#(?:x([0-9a-f]{1,6})|(\d{1,7}));?/gi, (entity, hexadecimal, decimal) => {
         const codePoint = Number.parseInt(hexadecimal || decimal, hexadecimal ? 16 : 10);
-        if (!Number.isInteger(codePoint) || codePoint < 0 || codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return entity;
+        if (!Number.isInteger(codePoint) || codePoint < 1 || codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return ' ';
         return String.fromCodePoint(codePoint);
-      });
+      })
+      .replace(knownHtmlEntityPattern, (entity, name) => htmlEntityMap[name.toLowerCase()]);
     if (decoded === text) break;
     text = decoded;
   }
-  return text
-    .replace(/[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/g, ' ')
-    .replace(/[\u200b-\u200d\u2060\ufeff]/g, '')
-    .replace(/[\u2010-\u2015\u2212]/g, '-');
+  const decoded = normalizePublicSeparators(text
+    .replace(/&#(?:x)?[^;\s<]{1,24};?/gi, ' ')
+    .replace(/&[a-z][a-z0-9]{0,31};?/gi, ' '));
+  const visible = normalizePublicSeparators(decoded
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/<[^>]*$/g, ' '));
+  return [...new Set([decoded, visible])];
 }
 
 function publicPiiFindings(value) {
@@ -103,15 +140,16 @@ function publicPiiFindings(value) {
   }
   const findings = [];
   for (const rawText of strings) {
-    const text = normalizePublicTextForScan(rawText);
-    for (const rule of publicPiiRules) {
-      let match;
-      try {
-        match = text.match(rule.pattern);
-      } catch {
-        match = null;
+    for (const text of publicTextScanVariants(rawText)) {
+      for (const rule of publicPiiRules) {
+        let match;
+        try {
+          match = text.match(rule.pattern);
+        } catch {
+          match = null;
+        }
+        if (match) findings.push(`${rule.label}: ${match[0]}`);
       }
-      if (match) findings.push(`${rule.label}: ${match[0]}`);
     }
   }
   return [...new Set(findings)];
@@ -376,46 +414,83 @@ function refreshCvSummaries(rootDir, options = {}) {
   for (const page of pages) {
     page.tempPath = `${page.filePath}.public-cv-summary-${transactionId}-${page.locale}.tmp`;
     page.backupPath = `${page.filePath}.public-cv-summary-${transactionId}-${page.locale}.bak`;
+    page.restoreTempPath = `${page.filePath}.public-cv-summary-${transactionId}-${page.locale}.restore.tmp`;
     page.backedUp = false;
     page.published = false;
+    page.restored = false;
   }
   const renameFile = typeof options.renameFile === 'function' ? options.renameFile : fs.renameSync;
-  const cleanup = () => {
+  const syncFile = (filePath) => {
+    const descriptor = fs.openSync(filePath, 'r+');
+    try {
+      fs.fsyncSync(descriptor);
+    } finally {
+      fs.closeSync(descriptor);
+    }
+  };
+  const cleanup = (includeBackups) => {
+    const errors = [];
     for (const page of pages) {
-      for (const artifact of [page.tempPath, page.backupPath]) {
+      const artifacts = [page.tempPath, page.restoreTempPath];
+      if (includeBackups) artifacts.push(page.backupPath);
+      for (const artifact of artifacts) {
         try {
           fs.rmSync(artifact, { force: true });
-        } catch {
-          // A rollback error is reported separately; cleanup remains best effort.
+        } catch (error) {
+          errors.push(`${artifact}: ${error instanceof Error ? error.message : String(error)}`);
         }
       }
     }
+    return errors;
   };
 
+  let publicationError;
   try {
-    for (const page of pages) fs.writeFileSync(page.tempPath, page.after, { encoding: 'utf8', flag: 'wx' });
+    for (const page of pages) {
+      fs.writeFileSync(page.tempPath, page.after, { encoding: 'utf8', flag: 'wx' });
+      syncFile(page.tempPath);
+    }
     for (const page of pages) {
       renameFile(page.filePath, page.backupPath);
       page.backedUp = true;
+      syncFile(page.backupPath);
       renameFile(page.tempPath, page.filePath);
       page.published = true;
+      syncFile(page.filePath);
+    }
+    for (const page of pages) {
+      if (fs.readFileSync(page.filePath, 'utf8') !== page.after) throw new Error(`${page.filePath}: published CV summary verification failed.`);
     }
   } catch (error) {
+    publicationError = error;
+  }
+
+  if (publicationError) {
     const rollbackErrors = [];
-    for (const page of pages.slice().reverse()) {
+    for (const page of pages.slice().reverse().filter((candidate) => candidate.backedUp)) {
       try {
-        if (page.published) fs.rmSync(page.filePath, { force: true });
-        if (page.backedUp) renameFile(page.backupPath, page.filePath);
+        fs.copyFileSync(page.backupPath, page.restoreTempPath, fs.constants.COPYFILE_EXCL);
+        syncFile(page.restoreTempPath);
+        renameFile(page.restoreTempPath, page.filePath);
+        syncFile(page.filePath);
+        if (fs.readFileSync(page.filePath, 'utf8') !== page.before) throw new Error(`${page.filePath}: restored CV summary verification failed.`);
+        page.restored = true;
       } catch (rollbackError) {
-        rollbackErrors.push(rollbackError instanceof Error ? rollbackError.message : String(rollbackError));
+        rollbackErrors.push(`${page.filePath}: ${rollbackError instanceof Error ? rollbackError.message : String(rollbackError)}`);
       }
     }
-    cleanup();
-    const detail = error instanceof Error ? error.message : String(error);
-    const rollbackDetail = rollbackErrors.length ? `; rollback failed: ${rollbackErrors.join('; ')}` : '';
-    throw new Error(`Atomic CV summary refresh failed: ${detail}${rollbackDetail}`);
+    const detail = publicationError instanceof Error ? publicationError.message : String(publicationError);
+    if (rollbackErrors.length) {
+      const recoveryPaths = pages.filter((page) => page.backedUp && fs.existsSync(page.backupPath)).map((page) => page.backupPath);
+      const transactionArtifacts = pages.flatMap((page) => [page.tempPath, page.restoreTempPath, page.backupPath]).filter((artifact) => fs.existsSync(artifact));
+      throw new Error(`Atomic CV summary refresh failed: ${detail}; rollback failed: ${rollbackErrors.join('; ')}. Recovery backups preserved at: ${recoveryPaths.join(', ')}. Incomplete transaction artifacts preserved at: ${transactionArtifacts.join(', ')}.`);
+    }
+    const cleanupErrors = cleanup(true);
+    if (cleanupErrors.length) throw new Error(`Atomic CV summary refresh failed: ${detail}; rollback completed but cleanup failed: ${cleanupErrors.join('; ')}.`);
+    throw new Error(`Atomic CV summary refresh failed: ${detail}`);
   }
-  cleanup();
+  const cleanupErrors = cleanup(true);
+  if (cleanupErrors.length) throw new Error(`CV summary publication succeeded but transaction cleanup failed: ${cleanupErrors.join('; ')}.`);
   return pages.map((page) => ({ locale: page.locale, file: path.relative(resolvedRoot, page.filePath), changed: page.changed }));
 }
 

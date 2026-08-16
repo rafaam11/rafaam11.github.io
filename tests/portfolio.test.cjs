@@ -1845,7 +1845,7 @@ test('Task 5 review round 3 refresh rolls back both pages when the second staged
     const before = [sha256(koPath), sha256(enPath)];
     let stagedReplacement = 0;
     const renameFile = (source, target) => {
-      if (path.basename(source).includes('.public-cv-summary-') && source.endsWith('.tmp') && path.basename(target) === 'index.html') {
+      if (path.basename(source).includes('.public-cv-summary-') && source.endsWith('.tmp') && !source.endsWith('.restore.tmp') && path.basename(target) === 'index.html') {
         stagedReplacement += 1;
         if (stagedReplacement === 2) throw new Error('simulated second staged replacement failure');
       }
@@ -1858,6 +1858,144 @@ test('Task 5 review round 3 refresh rolls back both pages when the second staged
     assert.equal(stagedReplacement, 2);
     assert.deepEqual([sha256(koPath), sha256(enPath)], before);
     assert.deepEqual(cvSummaryTransactionArtifacts(temporaryRoot), []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 4 flattens browser-visible entity and markup PII splits conservatively', () => {
+  const privateValues = [
+    '31&nbsp years&nbsp old',
+    '31&#32years&#32old',
+    '31&Tab;years&Tab;old',
+    '010&sol;1234&sol;5678',
+    '010&middot;1234&middot;5678',
+    '31&amp;nbsp years&amp;nbsp old',
+    '010&amp;sol;1234&amp;sol;5678',
+    '31<span> years </span>old',
+    '010<span>/</span>1234<span>/</span>5678',
+    '123<span> Teheran-ro, </span>Gangnam-gu, Seoul',
+    '서울시<span> </span>강남구',
+    '31&mystery;years&mystery;old',
+    '010&mystery;1234&mystery;5678'
+  ];
+  for (const privateValue of privateValues) {
+    assert.match(validator.publicPiiFindings(privateValue).join(' '), /age|phone|address/i, privateValue);
+  }
+  for (const safeValue of [
+    'https://link.springer.com/article/10.1007/s10278-024-01014-z?view=full&tab=article',
+    'R&D engineer · 2023-02 - 2026-08-17 · 1 / 2 · joint-first-author',
+    read('data/public-cv.json'),
+    read('cv/index.html'),
+    read('en/cv/index.html')
+  ]) {
+    assert.deepEqual(validator.publicPiiFindings(safeValue), [], safeValue.slice(0, 100));
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-visible-pii-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const htmlPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    const original = fs.readFileSync(htmlPath, 'utf8');
+    for (const privateValue of privateValues) {
+      fs.writeFileSync(htmlPath, original.replace('</main>', `<p>${privateValue}</p>\n  </main>`));
+      assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /CV HTML public surface contains prohibited private PII/i, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 4 mirrors entity and markup PII normalization in Python validate-only', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-python-visible-pii-'));
+  try {
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const approved = JSON.parse(fs.readFileSync(input, 'utf8'));
+    const approvedResult = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'), '--input', input, '--validate-only'
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(approvedResult.status, 0, approvedResult.stderr || approvedResult.stdout);
+
+    for (const privateValue of [
+      '31&nbsp years&nbsp old',
+      '31&#32years&#32old',
+      '31&Tab;years&Tab;old',
+      '010&sol;1234&sol;5678',
+      '010&middot;1234&middot;5678',
+      '31&amp;nbsp years&amp;nbsp old',
+      '010&amp;sol;1234&amp;sol;5678',
+      '31<span> years </span>old',
+      '010<span>/</span>1234<span>/</span>5678'
+    ]) {
+      const payload = clone(approved);
+      payload.cv.identity.translations.en.summary = privateValue;
+      const source = { ...payload };
+      delete source.sourceDigest;
+      payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+      fs.writeFileSync(input, `${JSON.stringify(payload)}\n`);
+      const result = childProcess.spawnSync(python, [
+        path.join(root, 'scripts', 'generate-portfolio-pdfs.py'), '--input', input, '--validate-only'
+      ], { cwd: root, encoding: 'utf8' });
+      assert.equal(result.status, 1, privateValue);
+      assert.match(result.stderr, /^PDF generation failed: [^\r\n]+\r?\n$/, privateValue);
+      assert.match(result.stderr, /age|phone|address|private/i, privateValue);
+      assert.doesNotMatch(result.stderr, /Traceback/, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 4 preserves durable recovery backups when rollback restoration fails', () => {
+  const summary = require('../scripts/public-cv-summary.cjs');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-recovery-'));
+  try {
+    copyCvSummarySurface(temporaryRoot);
+    const cvPath = path.join(temporaryRoot, 'data', 'public-cv.json');
+    const cv = JSON.parse(fs.readFileSync(cvPath, 'utf8'));
+    cv.identity.translations.ko.headline = '복구 백업 보존 검증용 공개 헤드라인';
+    cv.identity.translations.en.headline = 'Durable recovery backup verification headline';
+    fs.writeFileSync(cvPath, `${JSON.stringify(cv, null, 2)}\n`);
+    const targets = [path.join(temporaryRoot, 'cv', 'index.html'), path.join(temporaryRoot, 'en', 'cv', 'index.html')];
+    const before = targets.map(sha256);
+    let stagedReplacement = 0;
+    let restorationFailure = 0;
+    const renameFile = (source, target) => {
+      const isTransaction = path.basename(source).includes('.public-cv-summary-');
+      if (isTransaction && source.endsWith('.tmp') && !source.endsWith('.restore.tmp') && path.basename(target) === 'index.html') {
+        stagedReplacement += 1;
+        if (stagedReplacement === 2) throw new Error('simulated second publish failure');
+      }
+      if (isTransaction && (source.endsWith('.bak') || source.endsWith('.restore.tmp')) && path.basename(target) === 'index.html') {
+        restorationFailure += 1;
+        if (restorationFailure === 1) throw new Error('simulated backup restoration failure');
+      }
+      fs.renameSync(source, target);
+    };
+    let failure;
+    assert.throws(() => summary.refreshCvSummaries(temporaryRoot, { renameFile }), (error) => {
+      failure = error;
+      return /recovery|rollback|restoration/i.test(error.message);
+    });
+    const recoveryArtifacts = cvSummaryTransactionArtifacts(temporaryRoot);
+    const backups = recoveryArtifacts.filter((relativePath) => relativePath.endsWith('.bak'));
+    assert.equal(backups.length, 2, failure?.message);
+    assert.ok(recoveryArtifacts.some((relativePath) => !relativePath.endsWith('.bak')), 'incomplete transaction artifacts must remain untouched until recovery completes');
+    for (const [index, locale] of ['ko', 'en'].entries()) {
+      const backupRelative = backups.find((relativePath) => relativePath.includes(`-${locale}.bak`));
+      assert.ok(backupRelative, locale);
+      const backupPath = path.join(temporaryRoot, backupRelative);
+      assert.equal(sha256(backupPath), before[index], locale);
+      const originalStillAvailable = (fs.existsSync(targets[index]) && sha256(targets[index]) === before[index]) || sha256(backupPath) === before[index];
+      assert.equal(originalStillAvailable, true, locale);
+      assert.ok(failure.message.includes(backupPath), failure.message);
+    }
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
