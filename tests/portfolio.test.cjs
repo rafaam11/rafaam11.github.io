@@ -2438,3 +2438,221 @@ test('Task 6 review round 1 scopes runtime metadata to exactly one real body sta
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
 });
+
+test('Task 6 review round 2 rejects spoofed or ambiguous structural, link, and script contracts', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-contract-round2-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const baselines = new Map([
+      ['index.html', fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8')],
+      ['projects/index.html', fs.readFileSync(path.join(temporaryRoot, 'projects', 'index.html'), 'utf8')],
+      ['projects/surgical-navigation/index.html', fs.readFileSync(path.join(temporaryRoot, 'projects', 'surgical-navigation', 'index.html'), 'utf8')],
+      ['cv/index.html', fs.readFileSync(path.join(temporaryRoot, 'cv', 'index.html'), 'utf8')],
+      ['contact/index.html', fs.readFileSync(path.join(temporaryRoot, 'contact', 'index.html'), 'utf8')]
+    ]);
+    const casePath = 'projects/surgical-navigation/index.html';
+    const caseCanonical = '<link rel="canonical" href="https://rafaam11.github.io/projects/surgical-navigation/">';
+    const caseKoAlternate = '<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/projects/surgical-navigation/">';
+    const caseData = '<script src="../../js/portfolio-data.js"></script>';
+    const homeData = '<script src="js/portfolio-data.js"></script>';
+    const homeRender = '<script src="js/portfolio-render.js"></script>';
+    const projectNav = '<script src="../js/nav.js"></script>';
+    const cvNav = '<script src="../js/nav.js"></script>';
+    const contactI18n = '<script src="../js/site-i18n.js"></script>';
+    const contactNav = '<script src="../js/nav.js"></script>';
+    const swap = (html, first, second) => html
+      .replace(first, '__TASK6_FIRST_SCRIPT__')
+      .replace(second, first)
+      .replace('__TASK6_FIRST_SCRIPT__', second);
+    const mutations = [
+      {
+        label: 'comment-only header mount',
+        relativePath: casePath,
+        mutate: (html) => html.replace('<header id="site-nav"></header>', '<!-- <header id="site-nav"></header> -->'),
+        expected: /expected exactly one real header#site-nav/i
+      },
+      {
+        label: 'script-text main mount',
+        relativePath: casePath,
+        mutate: (html) => html.replace('<main id="main-content"', '<script>const spoof = \'<main id="main-content">\';</script><section data-old-main'),
+        expected: /expected exactly one real main#main-content/i
+      },
+      {
+        label: 'style-text footer mount',
+        relativePath: casePath,
+        mutate: (html) => html.replace('<footer id="site-footer"></footer>', '<style>/* <footer id="site-footer"></footer> */</style>'),
+        expected: /expected exactly one real footer#site-footer/i
+      },
+      {
+        label: 'duplicate header mount',
+        relativePath: casePath,
+        mutate: (html) => html.replace('<header id="site-nav"></header>', '<header id="site-nav"></header><header id="site-nav"></header>'),
+        expected: /expected exactly one real header#site-nav/i
+      },
+      {
+        label: 'duplicate main mount',
+        relativePath: casePath,
+        mutate: (html) => html.replace('<main id="main-content"', '<main id="main-content"></main><main id="main-content"'),
+        expected: /expected exactly one real main#main-content/i
+      },
+      {
+        label: 'duplicate footer mount',
+        relativePath: casePath,
+        mutate: (html) => html.replace('<footer id="site-footer"></footer>', '<footer id="site-footer"></footer><footer id="site-footer"></footer>'),
+        expected: /expected exactly one real footer#site-footer/i
+      },
+      {
+        label: 'wrong real canonical plus correct comment',
+        relativePath: casePath,
+        mutate: (html) => html.replace(caseCanonical, `<link rel="canonical" href="https://rafaam11.github.io/"><!-- ${caseCanonical} -->`),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'duplicate canonical',
+        relativePath: casePath,
+        mutate: (html) => html.replace(caseCanonical, caseCanonical + caseCanonical),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'wrong real ko alternate plus correct comment',
+        relativePath: casePath,
+        mutate: (html) => html.replace(caseKoAlternate, `<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/projects/"><!-- ${caseKoAlternate} -->`),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      },
+      {
+        label: 'duplicate ko alternate',
+        relativePath: casePath,
+        mutate: (html) => html.replace(caseKoAlternate, caseKoAlternate + caseKoAlternate),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      },
+      {
+        label: 'Home render before data',
+        relativePath: 'index.html',
+        mutate: (html) => swap(html, homeData, homeRender),
+        expected: /exact parsed script sequence/i
+      },
+      {
+        label: 'Projects duplicate nav',
+        relativePath: 'projects/index.html',
+        mutate: (html) => html.replace(projectNav, projectNav + projectNav),
+        expected: /exact parsed script sequence/i
+      },
+      {
+        label: 'case duplicate data',
+        relativePath: casePath,
+        mutate: (html) => html.replace(caseData, caseData + caseData),
+        expected: /exact parsed script sequence/i
+      },
+      {
+        label: 'case missing data hidden in a comment',
+        relativePath: casePath,
+        mutate: (html) => html.replace(caseData, `<!-- ${caseData} -->`),
+        expected: /missing required local script.*portfolio-data\.js|exact parsed script sequence/i
+      },
+      {
+        label: 'CV duplicate nav',
+        relativePath: 'cv/index.html',
+        mutate: (html) => html.replace(cvNav, cvNav + cvNav),
+        expected: /exact parsed script sequence/i
+      },
+      {
+        label: 'Contact nav before i18n',
+        relativePath: 'contact/index.html',
+        mutate: (html) => swap(html, contactI18n, contactNav),
+        expected: /exact parsed script sequence/i
+      },
+      {
+        label: 'external script added to Home sequence',
+        relativePath: 'index.html',
+        mutate: (html) => html.replace('<script src="js/nav.js"></script>', '<script src="https://example.com/runtime.js"></script><script src="js/nav.js"></script>'),
+        expected: /exact parsed script sequence/i
+      },
+      {
+        label: 'valueless script src added to Home sequence',
+        relativePath: 'index.html',
+        mutate: (html) => html.replace('<script src="js/nav.js"></script>', '<script src></script><script src="js/nav.js"></script>'),
+        expected: /exact parsed script sequence/i
+      }
+    ];
+
+    const undetected = [];
+    for (const mutation of mutations) {
+      const baseline = baselines.get(mutation.relativePath);
+      const html = mutation.mutate(baseline);
+      assert.notEqual(html, baseline, `${mutation.label}: fixture mutation did not apply`);
+      const target = path.join(temporaryRoot, ...mutation.relativePath.split('/'));
+      fs.writeFileSync(target, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!mutation.expected.test(errors)) undetected.push(`${mutation.label}: ${errors || '<no errors>'}`);
+      fs.writeFileSync(target, baseline);
+    }
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 2 accepts valid parsed tag and attribute forms', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-parsed-forms-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const casePath = path.join(temporaryRoot, 'projects', 'surgical-navigation', 'index.html');
+    const baseline = fs.readFileSync(casePath, 'utf8');
+    const replacements = [
+      ['<header id="site-nav"></header>', '<HEADER ID=site-nav></HEADER>'],
+      ['<main id="main-content"', "<MAIN ID='main-content'"],
+      ['<footer id="site-footer"></footer>', '<FOOTER ID=site-footer></FOOTER>'],
+      ['<link rel="canonical" href="https://rafaam11.github.io/projects/surgical-navigation/">', "<LINK HREF='https://rafaam11.github.io/projects/surgical-navigation/' REL=canonical>"],
+      ['<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/projects/surgical-navigation/">', "<LINK HREF='https://rafaam11.github.io/projects/surgical-navigation/' HREFLANG=ko REL=alternate>"],
+      ['<link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/projects/surgical-navigation/">', '<LINK HREF=https://rafaam11.github.io/en/projects/surgical-navigation/ HREFLANG=en REL=alternate>'],
+      ['<link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/projects/surgical-navigation/">', "<LINK REL='alternate' HREFLANG=x-default HREF=https://rafaam11.github.io/projects/surgical-navigation/>"],
+      ['<script src="../../js/site-i18n.js"></script>', "<SCRIPT SRC='../../js/site-i18n.js'></SCRIPT>"],
+      ['<script src="../../js/portfolio-data.js"></script>', '<SCRIPT SRC=../../js/portfolio-data.js></SCRIPT>'],
+      ['<script src="../../js/portfolio-render.js"></script>', "<SCRIPT SRC='../../js/portfolio-render.js'></SCRIPT>"],
+      ['<script src="../../js/nav.js"></script>', '<SCRIPT SRC=../../js/nav.js></SCRIPT>']
+    ];
+    let html = baseline;
+    for (const [from, to] of replacements) {
+      assert.ok(html.includes(from), `fixture is missing ${from}`);
+      html = html.replace(from, to);
+    }
+    fs.writeFileSync(casePath, html);
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 2 rejects every real base element before reference resolution', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-base-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const home = validator.publicPortfolioFiles(temporaryRoot).find((file) => file.relativePath === 'index.html');
+    const variants = [
+      '<base href="projects/">',
+      "<base href='projects/'>",
+      '<base href=projects/>',
+      '<BASE HREF=projects/>',
+      '<base>'
+    ];
+    const undetected = [];
+    for (const markup of variants) {
+      const html = baseline.replace('</head>', `${markup}</head>`);
+      assert.deepEqual(validator.localReferenceErrors(home, html, temporaryRoot), [], `${markup}: reference resolution should remain clean`);
+      fs.writeFileSync(homePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!/real base elements? (?:are|is) not allowed|base element.*prohibited/i.test(errors)) {
+        undetected.push(`${markup}: ${errors || '<no errors>'}`);
+      }
+    }
+    assert.deepEqual(undetected, []);
+
+    const shadowOnly = baseline.replace('</head>', '<!-- <BASE HREF=projects/> --><script>const spoof = \'<base href="projects/">\';</script></head>');
+    fs.writeFileSync(homePath, shadowOnly);
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
