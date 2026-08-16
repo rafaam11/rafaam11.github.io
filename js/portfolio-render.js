@@ -16,6 +16,15 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (i18n) {
   var locales = ['ko', 'en'];
   var evidenceStates = ['verified', 'ongoing', 'expected', 'research', 'completed'];
+  var visualKeys = [
+    'nav-digitaltwin-pipeline',
+    'hololens-ar-concept',
+    'forklift-sim-to-real',
+    'coordinate-signal',
+    'decision-signal',
+    'simulation-signal',
+    'research-protocol'
+  ];
   var policy = {
     prohibitedPartnerPattern: /Digitrack|삼성서울병원|Samsung Medical|\b(?:KERI|KAERI|ANL|SNU|ETRI)\b|HD현대|Hyundai|계명대|동산병원|울산대|이화여대|Genoray|제노레이|Megagen|메가젠|Hallym|한림|Argonne|서울대학교|서울대/i,
     contributionPercentagePattern: /(?:(?:contribution|ownership|owned|responsibility|role|기여(?:도)?|역할|담당)[\s\S]{0,80}\b\d{1,3}(?:\.\d+)?\s*%|\b\d{1,3}(?:\.\d+)?\s*%[\s\S]{0,80}(?:contribution|ownership|owned|responsibility|role|기여(?:도)?|역할|담당))/i
@@ -51,8 +60,10 @@
           key: capability.key,
           title: translatedField(capability, 'title', normalized),
           summary: translatedField(capability, 'summary', normalized),
+          cardSummary: translatedField(capability, 'cardSummary', normalized),
           methods: capability.methods,
-          validation: translatedField(capability, 'validation', normalized)
+          validation: translatedField(capability, 'validation', normalized),
+          cardValidation: translatedField(capability, 'cardValidation', normalized)
         };
       }),
       impactMetrics: data.impactMetrics.map(function (metric) {
@@ -69,11 +80,17 @@
           period: project.period,
           status: translatedField(project, 'status', normalized),
           evidenceState: project.evidenceState,
+          visualKey: project.visualKey,
           primaryCapability: project.primaryCapability,
           crossCapabilities: project.crossCapabilities,
           problemSummary: translatedField(project, 'problemSummary', normalized),
           ownedRole: translatedField(project, 'ownedRole', normalized),
           verifiedEvidence: translatedField(project, 'verifiedEvidence', normalized),
+          cardProblem: translatedField(project, 'cardProblem', normalized),
+          cardOwnedRole: translatedField(project, 'cardOwnedRole', normalized),
+          cardEvidence: translatedField(project, 'cardEvidence', normalized),
+          visualAlt: translatedField(project, 'visualAlt', normalized),
+          visualCaption: translatedField(project, 'visualCaption', normalized),
           tech: project.tech,
           links: (project.links || []).map(function (link) {
             return { href: link.href, label: translatedField(link, 'label', normalized) };
@@ -99,14 +116,26 @@
   function projectValidationErrors(project, capabilityKeys) {
     var errors = [];
     var slug = project && project.slug ? project.slug : 'unknown-project';
-    var requiredStrings = ['slug', 'period', 'evidenceState', 'primaryCapability'];
+    var requiredStrings = ['slug', 'period', 'evidenceState', 'visualKey', 'primaryCapability'];
     if (!project || typeof project !== 'object') return [slug + ': project record must be an object.'];
     requiredStrings.forEach(function (field) {
       if (!project[field] || typeof project[field] !== 'string') errors.push(slug + ': missing required string ' + field + '.');
     });
-    errors = errors.concat(translationErrors(project, ['title', 'status', 'problemSummary', 'ownedRole', 'verifiedEvidence'], slug));
+    errors = errors.concat(translationErrors(project, [
+      'title',
+      'status',
+      'problemSummary',
+      'ownedRole',
+      'verifiedEvidence',
+      'cardProblem',
+      'cardOwnedRole',
+      'cardEvidence',
+      'visualAlt',
+      'visualCaption'
+    ], slug));
     if (capabilityKeys.indexOf(project.primaryCapability) === -1) errors.push(slug + ': invalid primary capability.');
     if (evidenceStates.indexOf(project.evidenceState) === -1) errors.push(slug + ': invalid evidence state.');
+    if (project.visualKey && visualKeys.indexOf(project.visualKey) === -1) errors.push(slug + ': invalid visual key.');
     if (!Array.isArray(project.crossCapabilities) || project.crossCapabilities.some(function (key) { return capabilityKeys.indexOf(key) === -1; })) {
       errors.push(slug + ': invalid cross capabilities.');
     }
@@ -126,10 +155,27 @@
     if (!localized.capabilities.length || !localized.projects.length) return [];
     var capabilityKeys = localized.capabilities.map(function (capability) { return capability.key; });
     return localized.projects.filter(function (project) {
-      var strings = ['slug', 'title', 'period', 'status', 'evidenceState', 'primaryCapability', 'problemSummary', 'ownedRole', 'verifiedEvidence'];
+      var strings = [
+        'slug',
+        'title',
+        'period',
+        'status',
+        'evidenceState',
+        'visualKey',
+        'primaryCapability',
+        'problemSummary',
+        'ownedRole',
+        'verifiedEvidence',
+        'cardProblem',
+        'cardOwnedRole',
+        'cardEvidence',
+        'visualAlt',
+        'visualCaption'
+      ];
       return strings.every(function (field) { return typeof project[field] === 'string' && project[field]; }) &&
         capabilityKeys.indexOf(project.primaryCapability) !== -1 &&
         evidenceStates.indexOf(project.evidenceState) !== -1 &&
+        visualKeys.indexOf(project.visualKey) !== -1 &&
         Array.isArray(project.crossCapabilities) &&
         project.crossCapabilities.every(function (key) { return capabilityKeys.indexOf(key) !== -1; }) &&
         Array.isArray(project.tech) && project.tech.length > 0;
@@ -151,7 +197,7 @@
     }
 
     data.capabilities.forEach(function (capability) {
-      errors = errors.concat(translationErrors(capability, ['title', 'summary', 'validation'], capability.key || 'unknown-capability'));
+      errors = errors.concat(translationErrors(capability, ['title', 'summary', 'validation', 'cardSummary', 'cardValidation'], capability.key || 'unknown-capability'));
       if (!Array.isArray(capability.methods) || !capability.methods.length) errors.push((capability.key || 'unknown-capability') + ': missing methods.');
     });
     data.impactMetrics.forEach(function (metric, index) {
@@ -191,9 +237,9 @@
         '<span class="capability-number">0' + (capabilityIndex + 1) + '</span>' +
         '<div class="capability-label">' + escapeHtml(copy.capability) + '</div>' +
         '<h3>' + escapeHtml(capability.title) + '</h3>' +
-        '<p>' + escapeHtml(capability.summary) + '</p>' +
+        '<p>' + escapeHtml(capability.cardSummary) + '</p>' +
         '<div class="capability-methods" aria-label="' + escapeHtml(copy.methods) + '">' + methods + '</div>' +
-        '<p class="capability-validation"><strong>' + escapeHtml(copy.howIValidate) + '</strong> ' + escapeHtml(capability.validation) + '</p>' +
+        '<p class="capability-validation"><strong>' + escapeHtml(copy.howIValidate) + '</strong> ' + escapeHtml(capability.cardValidation) + '</p>' +
         '<div class="capability-links" aria-label="' + escapeHtml(copy.relatedProjects) + '">' + links + '</div>' +
         '<span class="capability-meta">' + escapeHtml(copy.relatedProjectCount(related.length)) + '</span>' +
       '</article>';
@@ -205,7 +251,7 @@
     var copy = i18n.ui[normalized].portfolio;
     var localized = localizePortfolioData(data, normalized);
     var valid = validProjects(data, normalized);
-    return localized.capabilities.map(function (capability) {
+    return localized.capabilities.map(function (capability, capabilityIndex) {
       var projects = valid.filter(function (project) { return project.primaryCapability === capability.key; });
       var cards = projects.map(function (project) {
         var crossLabels = project.crossCapabilities.map(function (key) {
@@ -215,19 +261,22 @@
         var tags = [capability.title].concat(crossLabels).map(function (label) {
           return '<span>' + escapeHtml(label) + '</span>';
         }).join('');
-        return '<article class="project-card">' +
-          '<div class="project-topline"><span class="status-pill status-pill--' + escapeHtml(project.evidenceState) + '" data-state="' + escapeHtml(project.evidenceState) + '">' + escapeHtml(project.status) + '</span><span class="project-period">' + escapeHtml(project.period) + '</span></div>' +
-          '<h3><a href="' + escapeHtml(i18n.routeHref(base, normalized, 'projects/' + project.slug + '/', isFile)) + '">' + escapeHtml(project.title) + '</a></h3>' +
-          '<p class="project-problem">' + escapeHtml(project.problemSummary) + '</p>' +
-          '<p class="project-owned project-role"><strong>' + escapeHtml(copy.owned) + '</strong> ' + escapeHtml(project.ownedRole) + '</p>' +
-          '<p class="project-evidence"><strong>' + escapeHtml(copy.evidence) + '</strong> ' + escapeHtml(project.verifiedEvidence) + '</p>' +
+        var visualSrc = String(base || '') + 'assets/diagrams/' + project.visualKey + (normalized === 'en' ? '-en' : '') + '.svg';
+        return '<article class="project-card ss-project-card">' +
+          '<div class="project-topline ss-project-card__meta"><span class="status-pill status-pill--' + escapeHtml(project.evidenceState) + ' ss-status ss-status--' + escapeHtml(project.evidenceState) + '" data-state="' + escapeHtml(project.evidenceState) + '">' + escapeHtml(copy.evidenceStates[project.evidenceState]) + '</span><span class="project-period ss-project-card__period">' + escapeHtml(project.period) + '</span></div>' +
+          '<figure class="ss-project-card__figure"><img class="ss-project-card__image" src="' + escapeHtml(visualSrc) + '" alt="' + escapeHtml(project.visualAlt) + '" width="1180" height="664" loading="lazy" decoding="async"><figcaption class="ss-project-card__caption">' + escapeHtml(project.visualCaption) + '</figcaption></figure>' +
+          '<div class="ss-project-card__body"><h3 class="ss-project-card__title"><a href="' + escapeHtml(i18n.routeHref(base, normalized, 'projects/' + project.slug + '/', isFile)) + '">' + escapeHtml(project.title) + '</a></h3>' +
+          '<div class="project-facts ss-project-card__facts"><p class="project-problem ss-project-card__fact"><strong>' + escapeHtml(copy.problem) + '</strong> ' + escapeHtml(project.cardProblem) + '</p>' +
+          '<p class="project-owned project-role ss-project-card__fact"><strong>' + escapeHtml(copy.owned) + '</strong> ' + escapeHtml(project.cardOwnedRole) + '</p>' +
+          '<p class="project-evidence ss-project-card__fact"><strong>' + escapeHtml(copy.evidence) + '</strong> ' + escapeHtml(project.cardEvidence) + '</p></div>' +
           '<div class="project-tags">' + tags + '</div>' +
+          '</div>' +
         '</article>';
       }).join('');
-      return '<section class="project-chapter" id="capability-' + escapeHtml(capability.key) + '">' +
-        '<header class="chapter-heading"><div><span>' + escapeHtml(copy.capabilityChapter) + '</span><h2>' + escapeHtml(capability.title) + '</h2></div><span class="chapter-count">' + escapeHtml(copy.projectCount(projects.length)) + '</span></header>' +
-        '<p class="chapter-summary">' + escapeHtml(capability.summary) + '</p>' +
-        '<div class="project-grid">' + cards + '</div>' +
+      return '<section class="project-chapter ss-project-chapter" id="capability-' + escapeHtml(capability.key) + '">' +
+        '<div class="ss-project-chapter__rail"><header class="chapter-heading ss-project-chapter__header"><div><span class="ss-project-chapter__index">0' + (capabilityIndex + 1) + '</span><span class="ss-project-chapter__eyebrow">' + escapeHtml(copy.capabilityChapter) + '</span><h2>' + escapeHtml(capability.title) + '</h2></div><span class="chapter-count ss-project-chapter__count">' + escapeHtml(copy.projectCount(projects.length)) + '</span></header>' +
+        '<p class="chapter-summary ss-project-chapter__summary">' + escapeHtml(capability.summary) + '</p></div>' +
+        '<div class="project-grid ss-project-grid">' + cards + '</div>' +
       '</section>';
     }).join('');
   }
@@ -243,14 +292,14 @@
       });
       var methods = capability.methods.map(function (method) { return '<span>' + escapeHtml(method) + '</span>'; }).join('');
       var links = related.map(function (project) {
-        return '<a href="' + escapeHtml(i18n.routeHref(base, normalized, 'projects/' + project.slug + '/', isFile)) + '">' + escapeHtml(project.title) + '</a>';
-      }).join(' · ');
-      return '<section class="capability-detail" id="' + escapeHtml(capability.key) + '">' +
-        '<div class="capability-detail-heading"><span class="capability-index">0' + (index + 1) + '</span><div><p>' + escapeHtml(copy.transferableCapability) + '</p><h2>' + escapeHtml(capability.title) + '</h2></div></div>' +
-        '<div class="capability-detail-grid"><div><h3>' + escapeHtml(copy.whatISolve) + '</h3><p>' + escapeHtml(capability.summary) + '</p></div>' +
-        '<div><h3>' + escapeHtml(copy.howIValidate) + '</h3><p>' + escapeHtml(capability.validation) + '</p></div></div>' +
-        '<div class="capability-methods capability-detail-methods" aria-label="' + escapeHtml(copy.methods) + '">' + methods + '</div>' +
-        '<p class="evidence-links"><strong>' + escapeHtml(copy.evidence) + ':</strong> ' + links + '</p></section>';
+        return '<span class="ss-capability-panel__evidence-link"><a href="' + escapeHtml(i18n.routeHref(base, normalized, 'projects/' + project.slug + '/', isFile)) + '">' + escapeHtml(project.title) + '</a></span>';
+      }).join('');
+      return '<section class="capability-detail" id="' + escapeHtml(capability.key) + '"><div class="ss-capability-panel">' +
+        '<div class="capability-detail-heading ss-capability-panel__header"><span class="capability-index ss-capability-panel__index">0' + (index + 1) + '</span><div><p class="ss-capability-panel__eyebrow">' + escapeHtml(copy.transferableCapability) + '</p><h2>' + escapeHtml(capability.title) + '</h2></div></div>' +
+        '<div class="capability-detail-grid ss-capability-panel__matrix"><div class="ss-capability-panel__item"><h3>' + escapeHtml(copy.whatISolve) + '</h3><p>' + escapeHtml(capability.summary) + '</p></div>' +
+        '<div class="ss-capability-panel__item"><h3>' + escapeHtml(copy.howIValidate) + '</h3><p>' + escapeHtml(capability.validation) + '</p></div></div>' +
+        '<div class="capability-methods capability-detail-methods ss-capability-panel__methods" aria-label="' + escapeHtml(copy.methods) + '">' + methods + '</div>' +
+        '<p class="evidence-links ss-capability-panel__evidence"><strong>' + escapeHtml(copy.evidence) + ':</strong> ' + links + '</p></div></section>';
     }).join('');
   }
 

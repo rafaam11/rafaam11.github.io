@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 
 const root = path.join(__dirname, '..');
@@ -36,8 +37,10 @@ test('locale routing maps the same semantic page to Korean and English URLs', ()
 test('locale UI copy exposes navigation and portfolio labels in both languages', () => {
   assert.equal(i18n.ui.ko.nav.projects, '프로젝트');
   assert.equal(i18n.ui.en.nav.projects, 'Projects');
-  assert.equal(i18n.ui.ko.portfolio.owned, '담당');
-  assert.equal(i18n.ui.en.portfolio.owned, 'Owned');
+  assert.deepEqual(
+    { ko: i18n.ui.ko.portfolio.owned, en: i18n.ui.en.portfolio.owned },
+    { ko: '내 범위', en: 'My scope' }
+  );
 });
 
 test('navigation builder keeps links inside the active locale and switches to the matching route', () => {
@@ -406,6 +409,42 @@ test('Projects uses capability chapters without Featured hierarchy', () => {
   for (const project of data.projects) {
     assert.match(html, new RegExp(`href="${project.slug}/index\\.html"`), `${project.slug}: missing static fallback link`);
   }
+});
+
+test('authored Projects no-JS fallback labels mirror every canonical localized project title', () => {
+  const pages = [
+    ['projects/index.html', 'ko'],
+    ['en/projects/index.html', 'en']
+  ];
+  const errors = [];
+
+  for (const [file, locale] of pages) {
+    const list = read(file).match(/<ul\b(?=[^>]*\bclass="[^"]*\bfallback-project-list\b[^"]*")[^>]*>([\s\S]*?)<\/ul>/);
+    if (!list) {
+      errors.push(`${file}: missing no-JS fallback project list`);
+      continue;
+    }
+
+    const links = [...list[1].matchAll(/<a\b[^>]*\bhref="([^"/]+)\/index\.html"[^>]*>([\s\S]*?)<\/a>/g)];
+    const labelsBySlug = new Map(
+      links.map((match) => [
+        match[1],
+        match[2].replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim()
+      ])
+    );
+    const expectedSlugs = data.projects.map((project) => project.slug).sort();
+    const actualSlugs = [...labelsBySlug.keys()].sort();
+    if (links.length !== expectedSlugs.length || JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {
+      errors.push(`${file}: fallback list must expose every canonical project slug exactly once`);
+    }
+
+    errors.push(...data.projects.flatMap((project) => {
+      const actual = labelsBySlug.get(project.slug);
+      const expected = project.translations[locale].title;
+      return actual === expected ? [] : [`${file}: ${project.slug}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`];
+    }));
+  }
+  assert.deepEqual(errors, [], `stale no-JS fallback titles:\n${errors.join('\n')}`);
 });
 
 test('Research route is presented as Capabilities', () => {
@@ -1210,5 +1249,702 @@ test('bilingual Home registration traces retain the same decorative empty-span s
     const spans = [...trace[1].matchAll(/<span\b[^>]*\bclass="([^"]+)"[^>]*>([\s\S]*?)<\/span>/g)];
     assert.deepEqual(spans.map((span) => span[1]), expected, `${file}: registration trace child classes differ`);
     for (const span of spans) assert.equal(span[2].trim(), '', `${file}: decorative trace span must not contain visible text`);
+  }
+});
+
+// Stage 2 contracts: these fixtures deliberately use hand-derived, visibly distinct
+// short and detailed copy so a renderer cannot satisfy the card contract by reusing
+// the detailed case-study fields.
+const stage2VisualKeys = [
+  'nav-digitaltwin-pipeline',
+  'hololens-ar-concept',
+  'forklift-sim-to-real',
+  'coordinate-signal',
+  'decision-signal',
+  'simulation-signal',
+  'research-protocol'
+];
+
+const stage2VisualKeyBySlug = {
+  'surgical-twin': 'nav-digitaltwin-pipeline',
+  'rtms-navigation': 'coordinate-signal',
+  'mandibular-fracture': 'coordinate-signal',
+  'c-arm-navigation': 'research-protocol',
+  'unmanned-forklift': 'forklift-sim-to-real',
+  'quadruped-robot': 'decision-signal',
+  'radioactive-digital-twin': 'simulation-signal',
+  'life-careverse': 'hololens-ar-concept',
+  'orthognathic-ar': 'coordinate-signal',
+  'oral-facial-ar': 'research-protocol',
+  'ar-distance-meter': 'coordinate-signal',
+  'respiratory-surface-guidance': 'coordinate-signal',
+  'llm-wiki': 'decision-signal'
+};
+
+function stage2Fixture() {
+  const fixture = JSON.parse(JSON.stringify(data));
+  fixture.capabilities.forEach((capability, index) => {
+    for (const locale of ['ko', 'en']) {
+      capability.translations[locale].cardSummary = `${locale} card summary ${index + 1}`;
+      capability.translations[locale].cardValidation = `${locale} card validation ${index + 1}`;
+    }
+  });
+  fixture.projects.forEach((project, index) => {
+    project.visualKey = stage2VisualKeyBySlug[project.slug];
+    for (const locale of ['ko', 'en']) {
+      project.translations[locale].cardProblem = `${locale} card problem ${index + 1}`;
+      project.translations[locale].cardOwnedRole = `${locale} card owned role ${index + 1}`;
+      project.translations[locale].cardEvidence = `${locale} card evidence ${index + 1}`;
+      project.translations[locale].visualAlt = `${locale} visual alt ${index + 1}`;
+      project.translations[locale].visualCaption = `${locale} visual caption ${index + 1}`;
+    }
+  });
+  return fixture;
+}
+
+function hasStage2EvidenceStatePill(html, state, label) {
+  for (const match of html.matchAll(/<span\b([^>]*)>([^<]*)<\/span>/g)) {
+    const attributes = match[1];
+    const classAttributes = attributes.match(/(?:^|\s)class="[^"]*"/g) || [];
+    const classValue = attributes.match(/(?:^|\s)class="([^"]*)"/)?.[1];
+    const stateValue = attributes.match(/(?:^|\s)data-state="([^"]*)"/)?.[1];
+    if (match[2] !== label || stateValue !== state || classAttributes.length !== 1 || !classValue) continue;
+    const tokens = new Set(classValue.trim().split(/\s+/));
+    if (tokens.has('status-pill') && tokens.has('status-pill--' + state) && tokens.has('ss-status')) return true;
+  }
+  return false;
+}
+
+function hasStage2ClassHook(html, hook) {
+  return [...html.matchAll(/<[A-Za-z][^>]*\bclass="([^"]*)"[^>]*>/g)]
+    .some((match) => match[1].trim().split(/\s+/).includes(hook));
+}
+
+function svgColorToSixDigits(color) {
+  const upper = color.toUpperCase();
+  if (upper.length === 4) return '#' + upper.slice(1).split('').map((character) => character + character).join('');
+  return upper;
+}
+
+function hasSimpleSvgXmlShape(svg) {
+  const document = svg.trim().replace(/^<\?xml\b[^?]*\?>\s*/i, '');
+  if (!/^<svg\b[^>]*>[\s\S]*<\/svg>$/.test(document)) return false;
+  if ((document.match(/<svg\b/gi) || []).length !== 1 || (document.match(/<\/svg\s*>/gi) || []).length !== 1) return false;
+  if (/&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-f]+;)/i.test(document)) return false;
+  const tags = document.match(/<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>|<[^>]+>/g) || [];
+  const stack = [];
+  for (const tag of tags) {
+    if (tag.startsWith('<!--') || tag.startsWith('<![CDATA[') || tag.startsWith('<?')) continue;
+    const closing = tag.match(/^<\/([A-Za-z_][\w:.-]*)\s*>$/);
+    if (closing) {
+      if (stack.pop() !== closing[1]) return false;
+      continue;
+    }
+    const opening = tag.match(/^<([A-Za-z_][\w:.-]*)(?:\s+[^<>]*)?\/?\s*>$/);
+    if (!opening) return false;
+    const attributes = tag.slice(opening[1].length + 1, tag.endsWith('/>') ? -2 : -1);
+    if (/(?:^|\s)[\w:.-]+\s*=\s*(?!["'])/.test(attributes)) return false;
+    if (!tag.endsWith('/>')) stack.push(opening[1]);
+  }
+  return stack.length === 0;
+}
+
+function stage2NonFontGeometrySignature(svg) {
+  return (svg.match(/<\/?[A-Za-z_][\w:.-]*(?:\s+[^<>]*?)?\/?\s*>/g) || [])
+    .map((tag) => tag
+      .replace(/\s+font-(?:family|size|weight|style|variant|stretch)\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+      .replace(/\s+/g, ' ')
+      .replace(/\s+\/>$/, '/>')
+      .replace(/\s+>$/, '>'))
+    .join('\n');
+}
+
+const stage2ApprovedSvgPalette = new Set([
+  '#F7F6F2', '#FFFFFF', '#202522', '#66706B', '#D8DDD7', '#007E7A', '#005C5A', '#2E6FAE'
+]);
+
+test('Stage 2 canonical data supplies distinct localized card and visual fields for every record', () => {
+  for (const capability of data.capabilities) {
+    for (const locale of ['ko', 'en']) {
+      const translation = capability.translations[locale];
+      assert.equal(typeof translation.cardSummary, 'string', `${capability.key}: missing ${locale} cardSummary`);
+      assert.equal(typeof translation.cardValidation, 'string', `${capability.key}: missing ${locale} cardValidation`);
+      assert.notEqual(translation.cardSummary, translation.summary, `${capability.key}: ${locale} cardSummary must not duplicate detailed summary`);
+      assert.notEqual(translation.cardValidation, translation.validation, `${capability.key}: ${locale} cardValidation must not duplicate detailed validation`);
+    }
+  }
+  assert.deepEqual(Object.fromEntries(data.projects.map((project) => [project.slug, project.visualKey])), stage2VisualKeyBySlug);
+  for (const project of data.projects) {
+    for (const locale of ['ko', 'en']) {
+      const translation = project.translations[locale];
+      for (const field of ['cardProblem', 'cardOwnedRole', 'cardEvidence', 'visualAlt', 'visualCaption']) {
+        assert.equal(typeof translation[field], 'string', `${project.slug}: missing ${locale} ${field}`);
+        assert.notEqual(translation[field], '', `${project.slug}: empty ${locale} ${field}`);
+      }
+      assert.notEqual(translation.cardProblem, translation.problemSummary, `${project.slug}: ${locale} cardProblem must stay distinct from detail copy`);
+      assert.notEqual(translation.cardOwnedRole, translation.ownedRole, `${project.slug}: ${locale} cardOwnedRole must stay distinct from detail copy`);
+      assert.notEqual(translation.cardEvidence, translation.verifiedEvidence, `${project.slug}: ${locale} cardEvidence must stay distinct from detail copy`);
+    }
+  }
+});
+
+test('Stage 2 card evidence keeps renderer-owned labels out of localized values', () => {
+  const renderedLabelPrefix = {
+    ko: /^\s*근거\s*:/i,
+    en: /^\s*evidence\s*:/i
+  };
+  const violations = [];
+  for (const project of data.projects) {
+    for (const locale of ['ko', 'en']) {
+      const evidence = project.translations[locale].cardEvidence;
+      if (renderedLabelPrefix[locale].test(evidence)) {
+        violations.push(`${project.slug} ${locale}: cardEvidence must not repeat its rendered ${locale === 'ko' ? '근거:' : 'Evidence:'} label`);
+      }
+    }
+  }
+  assert.deepEqual(violations, [], 'localized card evidence label-prefix violations');
+});
+
+test('Stage 2 Life Careverse visual metadata describes the mapped surgeon-view evidence asset', () => {
+  const project = data.projects.find((item) => item.slug === 'life-careverse');
+  assert.ok(project, 'Life Careverse project is missing');
+  assert.equal(project.visualKey, 'hololens-ar-concept');
+
+  const expectations = {
+    ko: [
+      /(?:술자|집도의)(?:의)?\s*시야/,
+      /실제\s*환자/,
+      /추적(?:된|되는)?\s*수술\s*도구/,
+      /(?:가상\s*환자[\s\S]*(?:오버레이|정렬)|(?:오버레이|정렬)[\s\S]*가상\s*환자)/
+    ],
+    en: [
+      /surgeon(?:'s)?\s+view/i,
+      /real\s+patient/i,
+      /tracked\s+surgical\s+tool/i,
+      /(?:virtual[-\s]patient[\s\S]*(?:overlay|align)|(?:overlay|align)[\s\S]*virtual[-\s]patient)/i
+    ]
+  };
+  for (const locale of ['ko', 'en']) {
+    const translation = project.translations[locale];
+    for (const expected of expectations[locale]) {
+      assert.match(translation.visualAlt, expected, locale + ': visual alt must describe the actual surgeon-view diagram');
+    }
+  }
+  assert.match(project.translations.ko.visualCaption, /공개\s*근거\s*다이어그램/, 'Korean caption must identify public evidence');
+  assert.match(project.translations.ko.visualCaption, /제품\s*스크린샷이\s*아닌/, 'Korean caption must exclude a product screenshot');
+  assert.match(project.translations.en.visualCaption, /public evidence diagram/i, 'English caption must identify public evidence');
+  assert.match(project.translations.en.visualCaption, /not a product screenshot/i, 'English caption must exclude a product screenshot');
+});
+
+test('Stage 2 validation rejects missing card copy and an unknown or missing project visual key', () => {
+  const incompleteCapability = stage2Fixture();
+  delete incompleteCapability.capabilities[0].translations.ko.cardSummary;
+  assert.match(render.validatePortfolioData(incompleteCapability).join(' '), /missing ko translation for cardSummary/);
+
+  const incompleteProject = stage2Fixture();
+  delete incompleteProject.projects[0].translations.en.visualCaption;
+  assert.match(render.validatePortfolioData(incompleteProject).join(' '), /missing en translation for visualCaption/);
+
+  const invalidVisual = stage2Fixture();
+  invalidVisual.projects[0].visualKey = 'unapproved-visual';
+  assert.match(render.validatePortfolioData(invalidVisual).join(' '), /invalid visual key/);
+
+  const missingVisual = stage2Fixture();
+  delete missingVisual.projects[0].visualKey;
+  assert.match(render.validatePortfolioData(missingVisual).join(' '), /missing required string visualKey/);
+
+  assert.deepEqual(render.validatePortfolioData(data), []);
+});
+
+test('Stage 2 localization exposes card copy and visual metadata without changing renderer signatures', () => {
+  const fixture = stage2Fixture();
+  fixture.capabilities[0].translations.en.cardSummary = 'Card <summary> & signal.';
+  fixture.capabilities[0].translations.en.cardValidation = 'Card validation only.';
+  fixture.projects[0].translations.en.cardProblem = 'Problem <signal>.';
+  fixture.projects[0].translations.en.cardOwnedRole = 'Owned & scoped.';
+  fixture.projects[0].translations.en.cardEvidence = 'Evidence <checked>.';
+  fixture.projects[0].translations.en.visualAlt = 'Visual <alt>.';
+  fixture.projects[0].translations.en.visualCaption = 'Caption & proof.';
+
+  const localized = render.localizePortfolioData(fixture, 'en');
+  assert.equal(localized.capabilities[0].cardSummary, 'Card <summary> & signal.');
+  assert.equal(localized.capabilities[0].cardValidation, 'Card validation only.');
+  assert.deepEqual(
+    {
+      visualKey: localized.projects[0].visualKey,
+      cardProblem: localized.projects[0].cardProblem,
+      cardOwnedRole: localized.projects[0].cardOwnedRole,
+      cardEvidence: localized.projects[0].cardEvidence,
+      visualAlt: localized.projects[0].visualAlt,
+      visualCaption: localized.projects[0].visualCaption
+    },
+    {
+      visualKey: 'nav-digitaltwin-pipeline',
+      cardProblem: 'Problem <signal>.',
+      cardOwnedRole: 'Owned & scoped.',
+      cardEvidence: 'Evidence <checked>.',
+      visualAlt: 'Visual <alt>.',
+      visualCaption: 'Caption & proof.'
+    }
+  );
+  assert.equal(render.localizePortfolioData.length, 2);
+  assert.equal(render.capabilityAtlasHtml.length, 4);
+  assert.equal(render.projectChaptersHtml.length, 4);
+  assert.equal(render.capabilityDetailsHtml.length, 4);
+  assert.equal(render.mountAll.length, 2);
+});
+
+test('Stage 2 capability atlas uses compact card copy while details retain the detailed copy', () => {
+  const fixture = stage2Fixture();
+  fixture.capabilities[0].translations.en.summary = 'Detailed capability summary.';
+  fixture.capabilities[0].translations.en.validation = 'Detailed capability validation.';
+  fixture.capabilities[0].translations.en.cardSummary = 'Card <summary> & signal.';
+  fixture.capabilities[0].translations.en.cardValidation = 'Card validation only.';
+
+  const atlas = render.capabilityAtlasHtml(fixture, '', false, 'en');
+  const details = render.capabilityDetailsHtml(fixture, '', false, 'en');
+  assert.match(atlas, /Card &lt;summary&gt; &amp; signal\./);
+  assert.match(atlas, /Card validation only\./);
+  assert.doesNotMatch(atlas, /Detailed capability summary\.|Detailed capability validation\./);
+  assert.match(details, /Detailed capability summary\./);
+  assert.match(details, /Detailed capability validation\./);
+  assert.doesNotMatch(details, /Card &lt;summary&gt; &amp; signal\.|Card validation only\./);
+});
+
+test('Stage 2 project cards render localized evidence frames before their title and concise card copy', () => {
+  const fixture = stage2Fixture();
+  const project = fixture.projects[0];
+  project.period = '2099.01 – 2099.02';
+  project.translations.en.title = 'Stage <Two> Project';
+  project.translations.en.status = 'Lifecycle completed';
+  project.translations.en.problemSummary = 'Detailed problem that must not appear in the card.';
+  project.translations.en.ownedRole = 'Detailed owned role that must not appear in the card.';
+  project.translations.en.verifiedEvidence = 'Detailed evidence that must not appear in the card.';
+  project.translations.en.cardProblem = 'Problem <signal>.';
+  project.translations.en.cardOwnedRole = 'Owned & scoped.';
+  project.translations.en.cardEvidence = 'Evidence <checked>.';
+  project.translations.en.visualAlt = 'Visual <alt>.';
+  project.translations.en.visualCaption = 'Caption & proof.';
+
+  const cards = render.projectChaptersHtml(fixture, '../../', false, 'en');
+  const card = cards.match(/<article\b(?=[^>]*\bclass="[^"]*\bproject-card\b[^"]*")[^>]*>[\s\S]*?<\/article>/)?.[0];
+  assert.ok(card, 'missing the first project card');
+  const scopeLabelViolations = [
+    ['en', card, '<strong>My scope</strong> Owned &amp; scoped.'],
+    ['ko', render.projectChaptersHtml(fixture, '../../', false, 'ko'), '<strong>내 범위</strong> ko card owned role 1']
+  ].filter(([, html, expected]) => !html.includes(expected))
+    .map(([locale, , expected]) => locale + ' card is missing ' + expected);
+  assert.deepEqual(scopeLabelViolations, [], 'project cards must render the localized My scope label');
+  assert.match(
+    card,
+    /<figure\b(?=[^>]*\bclass="[^"]*\bss-project-card__figure\b[^"]*")[^>]*>\s*<img\b(?=[^>]*\bsrc="\.\.\/\.\.\/assets\/diagrams\/nav-digitaltwin-pipeline-en\.svg")(?=[^>]*\balt="Visual &lt;alt&gt;\.")(?=[^>]*\bwidth="1180")(?=[^>]*\bheight="664")(?=[^>]*\bloading="lazy")(?=[^>]*\bdecoding="async")[^>]*>\s*<figcaption\b[^>]*>Caption &amp; proof\.<\/figcaption>\s*<\/figure>/
+  );
+  const observableOrder = [
+    'data-state="verified"',
+    '2099.01 – 2099.02',
+    'ss-project-card__figure',
+    'Stage &lt;Two&gt; Project',
+    'Problem &lt;signal&gt;.',
+    'Owned &amp; scoped.',
+    'Evidence &lt;checked&gt;.'
+  ];
+  let previous = -1;
+  for (const expected of observableOrder) {
+    const current = card.indexOf(expected);
+    assert.ok(current > previous, `project card must render ${expected} after the preceding observable item`);
+    previous = current;
+  }
+  assert.doesNotMatch(card, /Detailed problem|Detailed owned role|Detailed evidence/);
+  assert.match(card, /href="\.\.\/\.\.\/en\/projects\/surgical-twin\/"/);
+  assert.match(render.projectChaptersHtml(fixture, '../../', true, 'en'), /href="\.\.\/\.\.\/en\/projects\/surgical-twin\/index\.html"/);
+});
+
+test('Stage 2 renderers expose every documented discovery and capability-panel hook', () => {
+  const fixture = stage2Fixture();
+  const chapters = render.projectChaptersHtml(fixture, '../../', false, 'en');
+  const projectHooks = [
+    'ss-project-chapter',
+    'ss-project-chapter__rail',
+    'ss-project-chapter__header',
+    'ss-project-chapter__index',
+    'ss-project-chapter__eyebrow',
+    'ss-project-chapter__count',
+    'ss-project-chapter__summary',
+    'ss-project-grid',
+    'ss-project-card',
+    'ss-project-card__meta',
+    'ss-project-card__period',
+    'ss-project-card__figure',
+    'ss-project-card__image',
+    'ss-project-card__caption',
+    'ss-project-card__body',
+    'ss-project-card__title',
+    'ss-project-card__facts',
+    'ss-project-card__fact'
+  ];
+  for (const hook of projectHooks) {
+    assert.equal(hasStage2ClassHook(chapters, hook), true, 'project chapters must expose ' + hook);
+  }
+
+  const details = render.capabilityDetailsHtml(fixture, '../../', false, 'en');
+  const panelHooks = [
+    'ss-capability-panel',
+    'ss-capability-panel__header',
+    'ss-capability-panel__index',
+    'ss-capability-panel__eyebrow',
+    'ss-capability-panel__matrix',
+    'ss-capability-panel__item',
+    'ss-capability-panel__methods',
+    'ss-capability-panel__evidence'
+  ];
+  for (const hook of panelHooks) {
+    assert.equal(hasStage2ClassHook(details, hook), true, 'capability details must expose ' + hook);
+  }
+  assert.match(
+    details,
+    /<div\b(?=[^>]*\bclass="[^"]*\bss-capability-panel__matrix\b[^"]*")[^>]*>\s*<div\b(?=[^>]*\bclass="[^"]*\bss-capability-panel__item\b[^"]*")[^>]*>\s*<h3>What I solve<\/h3>[\s\S]*?<\/div>\s*<div\b(?=[^>]*\bclass="[^"]*\bss-capability-panel__item\b[^"]*")[^>]*>\s*<h3>How I validate<\/h3>/,
+    'capability-panel matrix must contain named solve and validate cells in semantic order'
+  );
+});
+
+test('Stage 2 evidence-state labels are localized from evidenceState rather than lifecycle status', () => {
+  const fixture = stage2Fixture();
+  const expectedStateByProject = ['verified', 'ongoing', 'expected', 'research', 'completed'];
+  for (const [index, project] of fixture.projects.entries()) {
+    project.evidenceState = expectedStateByProject[index % expectedStateByProject.length];
+    project.translations.en.status = 'Lifecycle completed';
+    project.translations.ko.status = '수명주기 완료';
+  }
+  const englishLabels = {
+    verified: 'Verified', ongoing: 'Ongoing', expected: 'Expected', research: 'Research', completed: 'Completed'
+  };
+  const koreanLabels = {
+    verified: '검증됨', ongoing: '진행 중', expected: '예상', research: '연구', completed: '완료'
+  };
+  assert.deepEqual(i18n.ui.en.portfolio.evidenceStates, englishLabels);
+  assert.deepEqual(i18n.ui.ko.portfolio.evidenceStates, koreanLabels);
+  const englishCards = render.projectChaptersHtml(fixture, '', false, 'en');
+  const koreanCards = render.projectChaptersHtml(fixture, '', false, 'ko');
+  for (const [state, label] of Object.entries(englishLabels)) {
+    assert.equal(hasStage2EvidenceStatePill(englishCards, state, label), true, 'English ' + state + ' pill must contain status-pill, status-pill--' + state + ', and ss-status');
+  }
+  for (const [state, label] of Object.entries(koreanLabels)) {
+    assert.equal(hasStage2EvidenceStatePill(koreanCards, state, label), true, 'Korean ' + state + ' pill must contain status-pill, status-pill--' + state + ', and ss-status');
+  }
+  assert.doesNotMatch(englishCards, />Lifecycle completed<\//);
+  assert.doesNotMatch(koreanCards, />수명주기 완료<\//);
+});
+
+test('Stage 2 provides every shared visual key as a localized, privacy-safe SVG pair', () => {
+  const violations = [];
+  for (const visualKey of stage2VisualKeys) {
+    for (const suffix of ['', '-en']) {
+      const file = `assets/diagrams/${visualKey}${suffix}.svg`;
+      if (!fs.existsSync(path.join(root, file))) {
+        violations.push(`missing Stage 2 SVG ${file}`);
+        continue;
+      }
+      const partnerName = read(file).match(render.policy.prohibitedPartnerPattern)?.[0];
+      if (partnerName) violations.push(`${file}: Stage 2 evidence SVG must not disclose ${partnerName}`);
+    }
+  }
+  assert.deepEqual(violations, [], 'Stage 2 SVG privacy violations');
+});
+
+test('Stage 2 validator inventories only the canonical localized evidence SVG pairs', () => {
+  assert.equal(typeof validator.publicPortfolioVisualFiles, 'function', 'validator must expose publicPortfolioVisualFiles(root)');
+  const visualFiles = validator.publicPortfolioVisualFiles(root);
+  const expectedPaths = stage2VisualKeys.flatMap((key) => [
+    `assets/diagrams/${key}.svg`,
+    `assets/diagrams/${key}-en.svg`
+  ]).sort();
+  assert.equal(visualFiles.length, 14, 'validator must inventory exactly seven Korean/English visual pairs');
+  assert.deepEqual(
+    visualFiles.map((file) => file.relativePath.replace(/\\/g, '/')).sort(),
+    expectedPaths,
+    'validator must exclude detail/CV assets and inventory only canonical Stage 2 visuals'
+  );
+});
+
+test('Stage 2 validator exposes a pure evidence-asset privacy guard', () => {
+  assert.equal(typeof validator.visualAssetErrors, 'function', 'validator must expose visualAssetErrors for isolated SVG privacy checks');
+  const syntheticAsset = {
+    relativePath: 'assets/diagrams/hololens-ar-concept.svg',
+    content: '<svg xmlns="http://www.w3.org/2000/svg"><text>Digitrack</text></svg>'
+  };
+  const errors = validator.visualAssetErrors([syntheticAsset]);
+  assert.equal(
+    errors.some((error) => error.includes(syntheticAsset.relativePath) && /Digitrack/i.test(error)),
+    true,
+    'the isolated SVG guard must report prohibited partner text with its public relative path'
+  );
+});
+
+test('Stage 2 validator applies the evidence-asset privacy guard during full portfolio validation', () => {
+  assert.equal(typeof validator.publicPortfolioVisualFiles, 'function', 'validator must expose publicPortfolioVisualFiles(root)');
+  const visualFiles = validator.publicPortfolioVisualFiles(root);
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-stage2-validator-'));
+  try {
+    for (const file of validator.publicPortfolioFiles(root).concat(visualFiles)) {
+      const target = path.join(temporaryRoot, file.relativePath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.copyFileSync(file.absolutePath, target);
+    }
+    const syntheticRelativePath = 'assets/diagrams/hololens-ar-concept.svg';
+    fs.writeFileSync(
+      path.join(temporaryRoot, syntheticRelativePath),
+      '<svg xmlns="http://www.w3.org/2000/svg"><text>Digitrack</text></svg>'
+    );
+    const errors = validator.validatePortfolio(temporaryRoot);
+    assert.equal(
+      errors.some((error) => error.replace(/\\/g, '/').includes(syntheticRelativePath) && /Digitrack/i.test(error)),
+      true,
+      'validatePortfolio(root) must inspect canonical evidence SVG content, not only HTML pages'
+    );
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Stage 2 evidence SVGs have safe, localized, palette-bounded XML source with KO/EN geometry parity', () => {
+  const violations = [];
+  const forbiddenElement = /<\/?(?:script|foreignObject|image|animation|animate(?:Motion|Transform|Color)?|set|filter|(?:linear|radial)?gradient|style)\b/i;
+  const forbiddenAttribute = /\s(?:on[a-z]+|style)\s*=/i;
+  const externalReference = /(?:\b(?:href|xlink:href|src)\s*=\s*["']\s*(?:[a-z][a-z0-9+.-]*:|\/\/)|url\(\s*["']?\s*(?:[a-z][a-z0-9+.-]*:|\/\/))/i;
+  for (const visualKey of stage2VisualKeys) {
+    const localized = [];
+    for (const [suffix, locale] of [['', 'ko'], ['-en', 'en']]) {
+      const file = `assets/diagrams/${visualKey}${suffix}.svg`;
+      if (!fs.existsSync(path.join(root, file))) {
+        violations.push(`${file}: missing canonical localized SVG`);
+        continue;
+      }
+      const svg = read(file);
+      localized.push([file, svg]);
+      if (!hasSimpleSvgXmlShape(svg)) violations.push(`${file}: SVG source must be simply XML-well-formed`);
+      if (forbiddenElement.test(svg)) violations.push(`${file}: SVG source must not contain an executable, embedded-image, animation, filter, gradient, or style element`);
+      if (forbiddenAttribute.test(svg)) violations.push(`${file}: SVG source must not contain style or event-handler attributes`);
+      if (externalReference.test(svg)) violations.push(`${file}: SVG source must not load an external URL`);
+      if (locale === 'en' && /[가-힣]/.test(svg)) violations.push(`${file}: English evidence SVG must not contain Hangul`);
+      const unsupportedColors = (svg.match(/#[0-9a-fA-F]{3,8}\b/g) || [])
+        .map(svgColorToSixDigits)
+        .filter((color) => !stage2ApprovedSvgPalette.has(color));
+      const unsupportedPaints = [...svg.matchAll(/\b(?:fill|stroke|color)\s*=\s*["']([^"']+)["']/gi)]
+        .map((match) => match[1])
+        .filter((paint) => paint.toLowerCase() !== 'none' && !stage2ApprovedSvgPalette.has(svgColorToSixDigits(paint)));
+      const unsupportedPalette = [...new Set(unsupportedColors.concat(unsupportedPaints))];
+      if (unsupportedPalette.length) violations.push(`${file}: unsupported Stage 2 palette paint(s) ${unsupportedPalette.join(', ')}`);
+    }
+    if (localized.length === 2 && stage2NonFontGeometrySignature(localized[0][1]) !== stage2NonFontGeometrySignature(localized[1][1])) {
+      violations.push(`${visualKey}: Korean and English SVGs must retain identical element and non-font geometry`);
+    }
+  }
+  assert.deepEqual(violations, [], 'Stage 2 evidence SVG source contracts');
+});
+
+test('Stage 2 bilingual discovery pages keep route metadata and scripts while exposing scoped surfaces', () => {
+  const pages = [
+    ['projects/index.html', 'ko', 'projects', 'ss-projects', 'ss-projects__chapters'],
+    ['en/projects/index.html', 'en', 'projects', 'ss-projects', 'ss-projects__chapters'],
+    ['research/index.html', 'ko', 'capabilities', 'ss-capabilities', 'ss-capabilities__details'],
+    ['en/research/index.html', 'en', 'capabilities', 'ss-capabilities', 'ss-capabilities__details']
+  ];
+  for (const [file, locale, page, pageClass, mountClass] of pages) {
+    const html = read(file);
+    assert.match(html, new RegExp(`<body\\b[^>]*\\bclass="[^"]*\\b${pageClass}\\b`), `${file}: missing ${pageClass} page class`);
+    assert.match(html, new RegExp(`data-page="${page}"`), `${file}: changed page data attribute`);
+    assert.match(html, new RegExp(`data-lang="${locale}"`), `${file}: changed locale data attribute`);
+    assert.match(html, /data-route="(?:projects\/|research\/)"/, `${file}: changed route data attribute`);
+    assert.match(html, /<link rel="canonical" href="https:\/\/rafaam11\.github\.io\/(?:en\/)?(?:projects|research)\/" \/>/, `${file}: missing canonical`);
+    assert.match(html, /hreflang="ko"/, `${file}: missing Korean alternate`);
+    assert.match(html, /hreflang="en"/, `${file}: missing English alternate`);
+    assert.equal((html.match(/<h1\b/g) || []).length, 1, `${file}: must contain exactly one h1`);
+    assert.equal(html.indexOf('site-i18n.js') < html.indexOf('portfolio-data.js'), true, `${file}: i18n must precede data`);
+    assert.equal(html.indexOf('portfolio-data.js') < html.indexOf('portfolio-render.js'), true, `${file}: data must precede renderer`);
+    assert.match(html, new RegExp(`data-portfolio="(?:project-chapters|capability-details)"[^>]*\\bclass="[^"]*\\b${mountClass}\\b|class="[^"]*\\b${mountClass}\\b[^"]*"[^>]*data-portfolio="(?:project-chapters|capability-details)"`), `${file}: missing ${mountClass} mount class`);
+  }
+});
+
+test('Stage 2 mountAll keeps every existing mount point populated through the public renderer API', () => {
+  const fixture = stage2Fixture();
+  const atlasNode = { innerHTML: '' };
+  const chaptersNode = { innerHTML: '' };
+  const detailsNode = { innerHTML: '' };
+  const fakeDocument = {
+    querySelectorAll(selector) {
+      if (selector === '[data-portfolio="capability-atlas"]') return [atlasNode];
+      if (selector === '[data-portfolio="project-chapters"]') return [chaptersNode];
+      if (selector === '[data-portfolio="capability-details"]') return [detailsNode];
+      return [];
+    },
+    body: { getAttribute: (name) => name === 'data-lang' ? 'en' : '' },
+    location: { protocol: 'https:' }
+  };
+
+  render.mountAll(fakeDocument, fixture);
+  assert.match(atlasNode.innerHTML, /capability-card/);
+  assert.match(chaptersNode.innerHTML, /<figure\b[^>]*\bclass="[^"]*\bss-project-card__figure\b[^"]*"/);
+  assert.match(detailsNode.innerHTML, /capability-detail/);
+});
+
+test('Stage 2 regression: scoped navigation links meet the 44 by 44 pixel target gate', () => {
+  const css = fs.readFileSync(spatialSignalCssPath, 'utf8');
+  const navLinkRules = cssRuleBodies(css, '.ss-site-nav .nav-link');
+  const navLinkTargetRule = navLinkRules.find((body) => /\bmin-height\s*:\s*\d+(?:\.\d+)?px/.test(body));
+  assert.ok(navLinkTargetRule, 'navigation links need a shared scoped target rule');
+  for (const property of ['min-width', 'min-height']) {
+    const values = [...navLinkTargetRule.matchAll(new RegExp('\\b' + property + '\\s*:\\s*(\\d+(?:\\.\\d+)?)px', 'g'))]
+      .map((match) => Number(match[1]));
+    assert.equal(values.some((value) => value >= 44), true, `.ss-site-nav .nav-link requires ${property}: at least 44px`);
+  }
+});
+
+test('Stage 2 regression: bilingual Projects legends attach evidence state to each item parent', () => {
+  const pages = [
+    ['projects/index.html', 'ko'],
+    ['en/projects/index.html', 'en']
+  ];
+  for (const [file, locale] of pages) {
+    const html = read(file);
+    for (const state of ['verified', 'ongoing', 'research', 'completed']) {
+      assert.match(
+        html,
+        new RegExp('<[^>]+(?=[^>]*\\bclass="[^"]*\\bss-state-legend__item\\b[^"]*")(?=[^>]*\\bdata-state="' + state + '")[^>]*>'),
+        file + ': ' + locale + ' ' + state + ' legend item must own data-state'
+      );
+    }
+  }
+});
+
+test('Stage 2 regression: legend state markers use data-state rather than positional selectors', () => {
+  const css = fs.readFileSync(spatialSignalCssPath, 'utf8');
+  const legendRules = css.split('}').filter((rule) => /ss-state-legend__item/.test(rule)).join('}');
+  assert.doesNotMatch(legendRules, /nth-child/i, 'legend marker appearance must not depend on item order');
+  for (const state of ['verified', 'ongoing', 'research', 'completed']) {
+    assert.match(
+      legendRules,
+      new RegExp('\\.ss-state-legend__item\\[data-state="' + state + '"\\]::before'),
+      state + ': legend marker must have a data-state selector'
+    );
+  }
+});
+
+test('Stage 2 regression: project evidence diagrams preserve their full SVG frame', () => {
+  const css = fs.readFileSync(spatialSignalCssPath, 'utf8');
+  const imageRules = cssRuleBodies(css, 'body.ss-projects .ss-project-card__image');
+  assert.equal(imageRules.length, 1, 'project evidence image needs one scoped Stage 2 rule');
+  assert.match(imageRules[0], /object-fit\s*:\s*contain/, 'project evidence image must preserve the full SVG frame');
+  assert.doesNotMatch(imageRules[0], /object-fit\s*:\s*cover/, 'project evidence image must not crop its SVG frame');
+});
+
+test('Stage 2 regression: capability evidence links keep separators inside named wrappers', () => {
+  const details = render.capabilityDetailsHtml(data, '../../', false, 'en');
+  const evidenceBlocks = [...details.matchAll(/<p\b(?=[^>]*\bclass="[^"]*\bss-capability-panel__evidence\b[^"]*")[^>]*>([\s\S]*?)<\/p>/g)];
+  assert.equal(evidenceBlocks.length, 5, 'each capability needs one evidence-link block');
+  for (const [index, block] of evidenceBlocks.entries()) {
+    const content = block[1];
+    const linkCount = (content.match(/<a\b/g) || []).length;
+    const wrapperCount = (content.match(/<span\b(?=[^>]*\bclass="[^"]*\bss-capability-panel__evidence-link\b[^"]*")[^>]*>[\s\S]*?<\/span>/g) || []).length;
+    assert.equal(wrapperCount, linkCount, 'capability ' + (index + 1) + ': every evidence link needs a named wrapper');
+    assert.doesNotMatch(content, /\s·\s/, 'capability ' + (index + 1) + ': separators must be supplied by the wrapper/pseudo-element, not raw flex text');
+  }
+});
+
+test('Stage 2 regression: coordinate evidence diagrams make no canonical-state assertion', () => {
+  for (const file of ['coordinate-signal.svg', 'coordinate-signal-en.svg']) {
+    const svg = read('assets/diagrams/' + file);
+    assert.doesNotMatch(svg, /검증됨|VALIDATED/i, file + ': generic coordinate evidence must not claim a canonical verified state');
+  }
+});
+
+test('Stage 2 regression: every Stage 2 evidence SVG card remains legible at its 1180 by 664 card size', () => {
+  const visualKeys = stage2VisualKeys;
+  const violations = [];
+  for (const visualKey of visualKeys) {
+    for (const suffix of ['', '-en']) {
+      const file = 'assets/diagrams/' + visualKey + suffix + '.svg';
+      const svg = read(file);
+      if (!/<svg\b(?=[^>]*\bviewBox="0 0 1180 664")[^>]*>/.test(svg)) {
+        violations.push(file + ': SVG card must use the approved 1180 by 664 viewBox');
+      }
+      const fontSizes = [...svg.matchAll(/\bfont-size\s*(?:=|:)\s*["']?(\d+(?:\.\d+)?)(?:px)?/gi)].map((match) => Number(match[1]));
+      if (!fontSizes.length) violations.push(file + ': source must declare readable SVG text sizes');
+      if (fontSizes.some((size) => size < 30)) {
+        violations.push(file + ': all remaining SVG text must be at least 30px at card scale; found ' + fontSizes.join(', '));
+      }
+      if (fontSizes.some((size) => size >= 10 && size <= 12)) {
+        violations.push(file + ': no 10–12px microcopy may remain');
+      }
+    }
+  }
+  assert.deepEqual(violations, [], 'Stage 2 evidence SVG card-legibility violations');
+});
+
+function homeEvidenceImages(file) {
+  return [...read(file).matchAll(/<img\b([^>]*)\/?>/g)]
+    .map((match) => {
+      const attributes = match[1];
+      return {
+        src: attributes.match(/\bsrc="([^"]+)"/)?.[1],
+        alt: attributes.match(/\balt="([^"]*)"/)?.[1],
+        width: attributes.match(/\bwidth="(\d+)"/)?.[1],
+        height: attributes.match(/\bheight="(\d+)"/)?.[1]
+      };
+    })
+    .filter((image) => /(?:^|\/)assets\/diagrams\/(?:nav-digitaltwin-pipeline|hololens-ar-concept|forklift-sim-to-real)(?:-en)?\.svg$/.test(image.src || ''));
+}
+
+test('Home evidence images use the intrinsic dimensions of their six localized legacy SVG sources', () => {
+  const pages = [
+    ['index.html', 'ko'],
+    ['en/index.html', 'en']
+  ];
+  const violations = [];
+  for (const [file, locale] of pages) {
+    const images = homeEvidenceImages(file);
+    if (images.length !== 3) {
+      violations.push(`${file}: expected exactly three public legacy evidence images, found ${images.length}`);
+      continue;
+    }
+    for (const image of images) {
+      const relativeSource = image.src.replace(/^\.\.\//, '');
+      const svg = read(relativeSource);
+      const viewBox = svg.match(/<svg\b[^>]*\bviewBox="0 0 (\d+) (\d+)"[^>]*>/)?.slice(1).map(Number);
+      if (!viewBox) {
+        violations.push(`${file}: ${relativeSource} must expose a numeric SVG viewBox`);
+        continue;
+      }
+      if (viewBox[0] !== 1180 || viewBox[1] !== 664) {
+        violations.push(`${relativeSource}: expected the Stage 2 1180 by 664 evidence frame, got ${viewBox.join(' by ')}`);
+      }
+      if (Number(image.width) !== viewBox[0] || Number(image.height) !== viewBox[1]) {
+        violations.push(`${file}: ${image.src} intrinsic ${image.width} by ${image.height} must match source viewBox ${viewBox.join(' by ')}`);
+      }
+    }
+  }
+  assert.deepEqual(violations, [], 'Home evidence intrinsic-dimension contracts');
+});
+
+test('Home HoloLens evidence alt describes the actual surgeon-view public diagram in both locales', () => {
+  const expectations = {
+    ko: [
+      /(?:술자|집도의)(?:의)?\s*시야/,
+      /실제\s*환자/,
+      /추적(?:된|되는)?\s*수술\s*도구/,
+      /(?:가상\s*환자[\s\S]*(?:오버레이|정렬)|(?:오버레이|정렬)[\s\S]*가상\s*환자)/
+    ],
+    en: [
+      /surgeon(?:'s)?\s+view/i,
+      /real\s+patient/i,
+      /tracked\s+surgical\s+tool/i,
+      /(?:virtual[-\s]patient[\s\S]*(?:overlay|align)|(?:overlay|align)[\s\S]*virtual[-\s]patient)/i
+    ]
+  };
+  for (const [file, locale] of [['index.html', 'ko'], ['en/index.html', 'en']]) {
+    const image = homeEvidenceImages(file).find((item) => /hololens-ar-concept(?:-en)?\.svg$/.test(item.src));
+    assert.ok(image, `${file}: missing HoloLens public evidence image`);
+    for (const expected of expectations[locale]) {
+      assert.match(image.alt, expected, `${file}: HoloLens alt must describe the actual surgeon-view evidence diagram`);
+    }
   }
 });

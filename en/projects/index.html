@@ -19,38 +19,39 @@
     <link href="../../css/site.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet" /><link href="../../css/spatial-signal.css" rel="stylesheet" />
 </head>
-<body class="ss-shell" data-page="projects" data-base="../../" data-lang="en" data-route="projects/">
+<body class="ss-shell ss-projects" data-page="projects" data-base="../../" data-lang="en" data-route="projects/">
     <header id="site-nav"></header>
 
-    <main id="main-content" tabindex="-1" class="page page-projects">
-        <header class="page-intro">
-            <p class="hero-kicker">Project Atlas</p>
-            <h1>Projects by capability</h1>
-            <p class="page-lead">Thirteen projects, grouped by the engineering capability they demonstrate. Each case study separates the decisions I owned from the outcome delivered with the team.</p>
-            <div class="legend" aria-label="Evidence-state legend">
-                <span><i class="legend-dot is-verified"></i> Completed</span>
-                <span><i class="legend-dot is-ongoing"></i> Ongoing</span>
-                <span><i class="legend-dot is-research"></i> Research</span>
+    <main id="main-content" tabindex="-1" class="page page-projects ss-discovery-page">
+        <header class="page-intro ss-discovery-hero">
+            <p class="hero-kicker ss-discovery-hero__eyebrow">Project Atlas</p>
+            <h1 class="ss-discovery-hero__title">Projects by capability</h1>
+            <p class="page-lead ss-discovery-hero__lead">Thirteen projects can be scanned by problem, scope I owned, and evidence state. Each case study distinguishes my decisions from team results.</p>
+            <div class="legend ss-state-legend" aria-label="Evidence-state legend">
+                <span class="ss-state-legend__item" data-state="verified"><i class="legend-dot is-verified"></i> Verified</span>
+                <span class="ss-state-legend__item" data-state="ongoing"><i class="legend-dot is-ongoing"></i> Ongoing</span>
+                <span class="ss-state-legend__item" data-state="research"><i class="legend-dot is-research"></i> Research</span>
+                <span class="ss-state-legend__item" data-state="completed"><i class="legend-dot is-completed"></i> Completed</span>
             </div>
         </header>
 
-        <div data-portfolio="project-chapters">
+        <div class="ss-projects__chapters" data-portfolio="project-chapters">
             <div class="portfolio-fallback">
                 <p>JavaScript groups these case studies by capability. You can still open every project directly:</p>
                 <ul class="fallback-project-list">
-                    <li><a href="unmanned-forklift/index.html">Unmanned Forklift Safety &amp; Perception</a></li>
-                    <li><a href="surgical-twin/index.html">XR Surgical Navigation</a></li>
-                    <li><a href="rtms-navigation/index.html">rTMS Navigation</a></li>
+                    <li><a href="unmanned-forklift/index.html">Unmanned Forklift &amp; LiteSim</a></li>
+                    <li><a href="surgical-twin/index.html">Surgical Twin</a></li>
+                    <li><a href="rtms-navigation/index.html">Patient-specific rTMS Navigation</a></li>
                     <li><a href="respiratory-surface-guidance/index.html">Surface-guided Respiratory Tracking</a></li>
-                    <li><a href="mandibular-fracture/index.html">Mandibular Fracture Navigation</a></li>
-                    <li><a href="life-careverse/index.html">Life Careverse Consultation</a></li>
+                    <li><a href="mandibular-fracture/index.html">Mandibular Fracture Restoration</a></li>
+                    <li><a href="life-careverse/index.html">Life Careverse</a></li>
                     <li><a href="orthognathic-ar/index.html">Orthognathic AR Navigation</a></li>
-                    <li><a href="c-arm-navigation/index.html">C-arm Navigation Contribution</a></li>
-                    <li><a href="oral-facial-ar/index.html">Oral &amp; Facial AR Contribution</a></li>
-                    <li><a href="radioactive-digital-twin/index.html">Radioactive Digital Twin</a></li>
-                    <li><a href="quadruped-robot/index.html">Quadruped Robot Navigation</a></li>
-                    <li><a href="ar-distance-meter/index.html">AR Distance Meter</a></li>
-                    <li><a href="llm-wiki/index.html">LLM Wiki Knowledge System</a></li>
+                    <li><a href="c-arm-navigation/index.html">Low-dose C-Arm Navigation</a></li>
+                    <li><a href="oral-facial-ar/index.html">Oral-facial AR Surgery</a></li>
+                    <li><a href="radioactive-digital-twin/index.html">Remote Cleanup Digital Twin</a></li>
+                    <li><a href="quadruped-robot/index.html">Five-bar Quadruped Robot</a></li>
+                    <li><a href="ar-distance-meter/index.html">Marker-based AR Distance Meter</a></li>
+                    <li><a href="llm-wiki/index.html">LLM Wiki</a></li>
                 </ul>
                 <p><a href="../research/index.html" data-root-dir="research/">Browse the capability summary</a>.</p>
             </div>
