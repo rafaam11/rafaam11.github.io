@@ -2656,3 +2656,216 @@ test('Task 6 review round 2 rejects every real base element before reference res
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
 });
+
+test('Task 6 review round 3 rejects real inert containers without trusting their contents', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-inert-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const canonical = '<link rel="canonical" href="https://rafaam11.github.io/">';
+    const header = '<header id="site-nav"></header>';
+    const scripts = [
+      '  <script src="js/site-i18n.js"></script>',
+      '  <script src="js/portfolio-data.js"></script>',
+      '  <script src="js/portfolio-render.js"></script>',
+      '  <script src="js/nav.js"></script>'
+    ].join('\n');
+    assert.ok(baseline.includes(scripts), 'Home fixture must contain the exact dependency block');
+
+    const mutations = [
+      ['empty template', (html) => html.replace('</head>', '<template></template></head>')],
+      ['empty noscript', (html) => html.replace('</head>', '<noscript></noscript></head>')],
+      ['header mount inside template', (html) => html.replace(header, `<template>${header}</template>`)],
+      ['canonical inside template', (html) => html.replace(canonical, `<template>${canonical}</template>`)],
+      ['required scripts inside noscript', (html) => html.replace(scripts, `<noscript>${scripts}</noscript>`)]
+    ];
+    const undetected = [];
+    for (const [label, mutate] of mutations) {
+      const html = mutate(baseline);
+      assert.notEqual(html, baseline, `${label}: fixture mutation did not apply`);
+      fs.writeFileSync(homePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!/real (?:template|noscript).*not allowed|inert container.*(?:template|noscript)/i.test(errors)) {
+        undetected.push(`${label}: ${errors || '<no errors>'}`);
+      }
+    }
+    assert.deepEqual(undetected, []);
+
+    const shadowOnly = baseline.replace('</head>', [
+      '<!-- <template><header id="site-nav"></header></template> -->',
+      '<script>const shadow = \'<noscript><footer id="site-footer"></footer></noscript>\';</script>',
+      '</head>'
+    ].join(''));
+    fs.writeFileSync(homePath, shadowOnly);
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 3 requires unique contract IDs on their expected tags', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-contract-ids-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const casePath = path.join(temporaryRoot, 'projects', 'surgical-navigation', 'index.html');
+    const baseline = fs.readFileSync(casePath, 'utf8');
+    const mutations = [
+      {
+        label: 'wrong-tag site-nav alongside valid header',
+        mutate: (html) => html.replace('<header id="site-nav"></header>', '<div id="site-nav"></div><header id="site-nav"></header>'),
+        expected: /id="site-nav".*found 2|duplicate.*site-nav/i
+      },
+      {
+        label: 'wrong-tag-only site-nav',
+        mutate: (html) => html.replace('<header id="site-nav"></header>', '<div id="site-nav"></div>'),
+        expected: /id="site-nav".*(?:must belong|header)|real header#site-nav/i
+      },
+      {
+        label: 'duplicate site-nav attributes on one header',
+        mutate: (html) => html.replace('<header id="site-nav"></header>', '<header id="site-nav" id="site-nav"></header>'),
+        expected: /id="site-nav".*found 2|duplicate.*site-nav/i
+      },
+      {
+        label: 'wrong-tag main-content alongside valid main',
+        mutate: (html) => html.replace('<main id="main-content"', '<section id="main-content"></section><main id="main-content"'),
+        expected: /id="main-content".*found 2|duplicate.*main-content/i
+      },
+      {
+        label: 'wrong-tag-only main-content',
+        mutate: (html) => html.replace('<main id="main-content"', '<section id="main-content"'),
+        expected: /id="main-content".*(?:must belong|main)|real main#main-content/i
+      },
+      {
+        label: 'duplicate main-content mounts',
+        mutate: (html) => html.replace('<main id="main-content"', '<main id="main-content"></main><main id="main-content"'),
+        expected: /id="main-content".*found 2|duplicate.*main-content/i
+      },
+      {
+        label: 'wrong-tag site-footer alongside valid footer',
+        mutate: (html) => html.replace('<footer id="site-footer"></footer>', '<div id="site-footer"></div><footer id="site-footer"></footer>'),
+        expected: /id="site-footer".*found 2|duplicate.*site-footer/i
+      },
+      {
+        label: 'wrong-tag-only site-footer',
+        mutate: (html) => html.replace('<footer id="site-footer"></footer>', '<div id="site-footer"></div>'),
+        expected: /id="site-footer".*(?:must belong|footer)|real footer#site-footer/i
+      },
+      {
+        label: 'duplicate site-footer mounts',
+        mutate: (html) => html.replace('<footer id="site-footer"></footer>', '<footer id="site-footer"></footer><footer id="site-footer"></footer>'),
+        expected: /id="site-footer".*found 2|duplicate.*site-footer/i
+      }
+    ];
+
+    const undetected = [];
+    for (const mutation of mutations) {
+      const html = mutation.mutate(baseline);
+      assert.notEqual(html, baseline, `${mutation.label}: fixture mutation did not apply`);
+      fs.writeFileSync(casePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!mutation.expected.test(errors)) undetected.push(`${mutation.label}: ${errors || '<no errors>'}`);
+    }
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 3 enforces classic required scripts after all live mounts', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-script-contracts-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const scriptLines = [
+      '  <script src="js/site-i18n.js"></script>',
+      '  <script src="js/portfolio-data.js"></script>',
+      '  <script src="js/portfolio-render.js"></script>',
+      '  <script src="js/nav.js"></script>'
+    ];
+    const scriptBlock = scriptLines.join('\n');
+    assert.ok(baseline.includes(scriptBlock), 'Home fixture must contain the exact dependency block');
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+
+    const moveAllScriptsToHead = (html) => html
+      .replace(scriptBlock, '')
+      .replace('</head>', `${scriptBlock}</head>`);
+    const moveI18nBeforeBody = (html) => html
+      .replace(`${scriptLines[0]}\n`, '')
+      .replace('</head>', `${scriptLines[0]}</head>`);
+    const mutations = [
+      {
+        label: 'type override',
+        html: baseline.replace('<script src="js/site-i18n.js"></script>', '<script type=text/plain src="js/site-i18n.js"></script>'),
+        expected: /required local script.*site-i18n\.js.*classic executable/i
+      },
+      {
+        label: 'bare async',
+        html: baseline.replace('<script src="js/portfolio-data.js"></script>', '<script async src="js/portfolio-data.js"></script>'),
+        expected: /required local script.*portfolio-data\.js.*classic executable/i
+      },
+      {
+        label: 'valued defer',
+        html: baseline.replace('<script src="js/portfolio-render.js"></script>', '<script defer="false" src="js/portfolio-render.js"></script>'),
+        expected: /required local script.*portfolio-render\.js.*classic executable/i
+      },
+      {
+        label: 'bare nomodule',
+        html: baseline.replace('<script src="js/nav.js"></script>', '<script nomodule src="js/nav.js"></script>'),
+        expected: /required local script.*nav\.js.*classic executable/i
+      },
+      {
+        label: 'valued nomodule',
+        html: baseline.replace('<script src="js/nav.js"></script>', '<script nomodule=false src="js/nav.js"></script>'),
+        expected: /required local script.*nav\.js.*classic executable/i
+      },
+      {
+        label: 'all required scripts in head',
+        html: moveAllScriptsToHead(baseline),
+        expected: /required local script.*must appear after.*(?:footer|live mounts)/i
+      },
+      {
+        label: 'first required script before body and mounts',
+        html: moveI18nBeforeBody(baseline),
+        expected: /required local script.*site-i18n\.js.*must appear after.*(?:footer|live mounts)/i
+      }
+    ];
+
+    const undetected = [];
+    for (const mutation of mutations) {
+      assert.notEqual(mutation.html, baseline, `${mutation.label}: fixture mutation did not apply`);
+      fs.writeFileSync(homePath, mutation.html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!mutation.expected.test(errors)) undetected.push(`${mutation.label}: ${errors || '<no errors>'}`);
+    }
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 3 exposes exact source offsets for parsed real start tags', () => {
+  assert.equal(typeof validator.htmlStartTags, 'function');
+  const html = 'prefix<header id=site-nav></header>\n<script src=js/nav.js></script>';
+  const tags = validator.htmlStartTags(html);
+  assert.deepEqual(tags.map((tag) => ({
+    name: tag.name,
+    startOffset: tag.startOffset,
+    endOffset: tag.endOffset,
+    source: html.slice(tag.startOffset, tag.endOffset)
+  })), [
+    {
+      name: 'header',
+      startOffset: html.indexOf('<header'),
+      endOffset: html.indexOf('<header') + '<header id=site-nav>'.length,
+      source: '<header id=site-nav>'
+    },
+    {
+      name: 'script',
+      startOffset: html.indexOf('<script'),
+      endOffset: html.indexOf('<script') + '<script src=js/nav.js>'.length,
+      source: '<script src=js/nav.js>'
+    }
+  ]);
+});
