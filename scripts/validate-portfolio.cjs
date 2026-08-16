@@ -1137,20 +1137,99 @@ function toPosix(value) {
   return String(value || '').replace(/\\/g, '/');
 }
 
+const htmlAttributeNamedEntities = {
+  AMP: '&',
+  amp: '&',
+  apos: "'",
+  bsol: '\\',
+  bull: '\u2022',
+  centerdot: '\u00b7',
+  colon: ':',
+  comma: ',',
+  dash: '\u2010',
+  emsp: '\u2003',
+  ensp: '\u2002',
+  equals: '=',
+  GT: '>',
+  gt: '>',
+  hairsp: '\u200a',
+  hellip: '\u2026',
+  hyphen: '\u2010',
+  ldquo: '\u201c',
+  lpar: '(',
+  lsquo: '\u2018',
+  LT: '<',
+  lt: '<',
+  mdash: '\u2014',
+  middot: '\u00b7',
+  minus: '\u2212',
+  nbsp: '\u00a0',
+  ndash: '\u2013',
+  NewLine: '\n',
+  num: '#',
+  period: '.',
+  plus: '+',
+  quest: '?',
+  QUOT: '"',
+  quot: '"',
+  rdquo: '\u201d',
+  rpar: ')',
+  rsquo: '\u2019',
+  semi: ';',
+  sol: '/',
+  Tab: '\t',
+  thinsp: '\u2009'
+};
+const htmlNumericReferenceReplacements = {
+  0x80: 0x20ac,
+  0x82: 0x201a,
+  0x83: 0x0192,
+  0x84: 0x201e,
+  0x85: 0x2026,
+  0x86: 0x2020,
+  0x87: 0x2021,
+  0x88: 0x02c6,
+  0x89: 0x2030,
+  0x8a: 0x0160,
+  0x8b: 0x2039,
+  0x8c: 0x0152,
+  0x8e: 0x017d,
+  0x91: 0x2018,
+  0x92: 0x2019,
+  0x93: 0x201c,
+  0x94: 0x201d,
+  0x95: 0x2022,
+  0x96: 0x2013,
+  0x97: 0x2014,
+  0x98: 0x02dc,
+  0x99: 0x2122,
+  0x9a: 0x0161,
+  0x9b: 0x203a,
+  0x9c: 0x0153,
+  0x9e: 0x017e,
+  0x9f: 0x0178
+};
+const htmlAttributeCharacterReferencePattern = /&#(?:[xX]([0-9a-fA-F]+)|(\d+));?|&([A-Za-z][A-Za-z0-9]+);|&(amp|AMP|lt|LT|gt|GT|quot|QUOT|nbsp)(?![A-Za-z0-9=])/g;
+
 function decodeHtmlReferenceEntities(value) {
-  const named = { amp: '&', apos: "'", gt: '>', lt: '<', quot: '"' };
-  return String(value || '')
-    .replace(/&#(?:x([0-9a-f]+)|(\d+));?/gi, (match, hexadecimal, decimal) => {
-      const codePoint = Number.parseInt(hexadecimal || decimal, hexadecimal ? 16 : 10);
-      try {
-        return Number.isInteger(codePoint) && codePoint >= 0 && codePoint <= 0x10ffff
-          ? String.fromCodePoint(codePoint)
-          : match;
-      } catch {
-        return match;
+  return String(value || '').replace(
+    htmlAttributeCharacterReferencePattern,
+    (match, hexadecimal, decimal, named, legacyNamed) => {
+      if (hexadecimal !== undefined || decimal !== undefined) {
+        let codePoint = Number.parseInt(hexadecimal || decimal, hexadecimal !== undefined ? 16 : 10);
+        if (codePoint === 0 || codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) {
+          codePoint = 0xfffd;
+        } else if (Object.hasOwn(htmlNumericReferenceReplacements, codePoint)) {
+          codePoint = htmlNumericReferenceReplacements[codePoint];
+        }
+        return String.fromCodePoint(codePoint);
       }
-    })
-    .replace(/&(amp|apos|gt|lt|quot);?/gi, (match, name) => named[name.toLowerCase()] || match);
+      const name = named || legacyNamed;
+      return Object.hasOwn(htmlAttributeNamedEntities, name)
+        ? htmlAttributeNamedEntities[name]
+        : match;
+    }
+  );
 }
 
 function decodePercentReference(value) {
@@ -1181,7 +1260,7 @@ function absoluteUrlRawPath(value) {
 }
 
 function normalizedReference(value, reference) {
-  const original = decodeHtmlReferenceEntities(String(value || '').trim());
+  const original = String(value || '').trim();
   if (!original || original.startsWith('#') || original.startsWith('?')) return { kind: 'skip' };
   if (/^(?:mailto:|tel:)/i.test(original)) {
     return reference.tag === 'a' ? { kind: 'external' } : { kind: 'error', reason: 'unsupported scheme' };
@@ -1253,7 +1332,9 @@ function parseHtmlAttributes(source) {
         value = source.slice(valueStart, index);
       }
     }
-    attributes.push({ name, value, hasValue });
+    const rawValue = value;
+    if (hasValue) value = decodeHtmlReferenceEntities(value);
+    attributes.push({ name, value, rawValue, hasValue });
   }
   return attributes;
 }
@@ -1384,6 +1465,21 @@ function htmlAttributeOccurrences(tags, name, value) {
   return occurrences;
 }
 
+function hasExactValuedAttributes(tag, expectedNames) {
+  if (!tag || tag.attributes.length !== expectedNames.length) return false;
+  return expectedNames.every((name) => {
+    const matches = tag.attributes.filter((attribute) => attribute.name === name);
+    return matches.length === 1 && matches[0].hasValue;
+  });
+}
+
+function htmlAttributeSummary(tag) {
+  if (!tag || !tag.attributes.length) return '<none>';
+  return tag.attributes
+    .map((attribute) => attribute.hasValue ? attribute.name : `${attribute.name} (boolean)`)
+    .join(', ');
+}
+
 function inspectExactSitePath(rootDir, relativePath) {
   const normalized = toPosix(relativePath).replace(/^\.\//, '');
   const segments = normalized.split('/').filter(Boolean);
@@ -1471,17 +1567,41 @@ function pageDependencyErrors(file, html, parsedTags) {
   }
 
   const tags = parsedTags || htmlStartTags(html);
-  const styles = tags
-    .filter((tag) => tag.name === 'link' && String(htmlAttributeValue(tag, 'rel') || '')
-      .toLowerCase().split(/\s+/).includes('stylesheet'))
+  const relationTokens = (tag) => String(htmlAttributeValue(tag, 'rel') || '')
+    .trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const stylesheetTags = tags
+    .filter((tag) => tag.name === 'link' && relationTokens(tag).includes('stylesheet'));
+  const styles = stylesheetTags
     .map((tag) => htmlAttributeValue(tag, 'href'))
     .filter((href) => href !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(href));
   const scriptTags = tags
     .filter((tag) => tag.name === 'script' && tag.attributes.some((attribute) => attribute.name === 'src'));
   const scripts = scriptTags.map((tag) => htmlAttributeValue(tag, 'src') || '');
   const localScripts = scripts.filter((src) => !/^[a-z][a-z0-9+.-]*:/i.test(src));
+  for (const tag of stylesheetTags) {
+    const hrefAttributes = tag.attributes.filter((attribute) => attribute.name === 'href');
+    if (hrefAttributes.length !== 1 || !hrefAttributes[0].hasValue) {
+      errors.push(`${file.relativePath}: every parsed stylesheet link must contain exactly one valued href attribute (found ${htmlAttributeSummary(tag)}).`);
+    }
+  }
   for (const required of requiredStyles) {
-    if (!styles.includes(required)) errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
+    const candidates = tags.filter((tag) => tag.name === 'link' && tag.attributes.some((attribute) => (
+      attribute.name === 'href' && attribute.hasValue && attribute.value === required
+    )));
+    if (candidates.length === 0) {
+      errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
+      continue;
+    }
+    if (candidates.length !== 1) {
+      errors.push(`${file.relativePath}: required local stylesheet ${required} must appear exactly once (found ${candidates.length}).`);
+      continue;
+    }
+    const tag = candidates[0];
+    if (!hasExactValuedAttributes(tag, ['rel', 'href']) ||
+        String(htmlAttributeValue(tag, 'rel') || '').trim().toLowerCase() !== 'stylesheet' ||
+        htmlAttributeValue(tag, 'href') !== required) {
+      errors.push(`${file.relativePath}: required local stylesheet ${required} may use only one valued rel="stylesheet" and one valued href attribute (found ${htmlAttributeSummary(tag)}).`);
+    }
   }
   for (const unexpected of styles.filter((item) => !requiredStyles.includes(item))) {
     errors.push(`${file.relativePath}: unexpected local stylesheet dependency ${unexpected}.`);
@@ -1495,14 +1615,14 @@ function pageDependencyErrors(file, html, parsedTags) {
   if (scripts.length !== requiredScripts.length || scripts.some((item, index) => item !== requiredScripts[index])) {
     errors.push(`${file.relativePath}: expected exact parsed script sequence ${requiredScripts.join(' -> ')}; found ${scripts.join(' -> ') || '<none>'}.`);
   }
-  for (const tag of scriptTags) {
-    const source = htmlAttributeValue(tag, 'src') || '';
-    if (!requiredScripts.includes(source)) continue;
-    const forbidden = tag.attributes
-      .filter((attribute) => ['type', 'async', 'defer', 'nomodule'].includes(attribute.name))
-      .map((attribute) => attribute.name);
-    if (forbidden.length) {
-      errors.push(`${file.relativePath}: required local script ${source} must be a classic executable script without type, async, defer, or nomodule attributes (found ${[...new Set(forbidden)].join(', ')}).`);
+  for (const required of requiredScripts) {
+    const candidates = scriptTags.filter((tag) => tag.attributes.some((attribute) => (
+      attribute.name === 'src' && attribute.hasValue && attribute.value === required
+    )));
+    for (const tag of candidates) {
+      if (!hasExactValuedAttributes(tag, ['src']) || htmlAttributeValue(tag, 'src') !== required) {
+        errors.push(`${file.relativePath}: required local script ${required} must be a classic executable script with exactly one valued src attribute and no other attributes (found ${htmlAttributeSummary(tag)}).`);
+      }
     }
   }
   const liveMounts = pageMountContracts.map((contract) => {
