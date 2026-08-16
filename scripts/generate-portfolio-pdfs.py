@@ -20,6 +20,7 @@ import json
 import re
 import shutil
 import sys
+import uuid
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -34,6 +35,13 @@ EXPECTED_SLUGS = [
 ]
 LOCALES = ["ko", "en"]
 CONTACT_EMAIL = "uiop3847@naver.com"
+PUBLIC_SITE = {
+    "name": "Jinmin Kim",
+    "email": CONTACT_EMAIL,
+    "portfolio": "https://rafaam11.github.io",
+    "github": "https://github.com/rafaam11",
+    "linkedin": "https://www.linkedin.com/in/rlawlsals",
+}
 ASCII_HYPHENS = str.maketrans({
     "‐": "-",
     "‑": "-",
@@ -53,6 +61,211 @@ def require(condition: bool, message: str) -> None:
         raise ValueError(message)
 
 
+def require_object(value: Any, label: str) -> dict[str, Any]:
+    require(isinstance(value, dict), f"{label} must be an object.")
+    return value
+
+
+def require_array(value: Any, label: str, length: int | None = None) -> list[Any]:
+    require(isinstance(value, list), f"{label} must be an array.")
+    if length is not None:
+        require(len(value) == length, f"{label} must contain exactly {length} entries.")
+    return value
+
+
+def require_text(value: Any, label: str) -> str:
+    require(isinstance(value, str) and bool(value.strip()), f"{label} must be a non-empty string.")
+    return value
+
+
+def validate_translation_record(record: dict[str, Any], label: str, fields: list[str]) -> None:
+    translations = require_object(record.get("translations"), f"{label} translations")
+    require(set(translations) == set(LOCALES), f"{label} translations must contain exactly ko and en.")
+    for locale in LOCALES:
+        copy = require_object(translations.get(locale), f"{label} {locale} translation")
+        for field in fields:
+            require_text(copy.get(field), f"{label} {locale} {field}")
+
+
+def validate_localized_strings(value: Any, label: str) -> None:
+    translations = require_object(value, f"{label} translations")
+    require(set(translations) == set(LOCALES), f"{label} translations must contain exactly ko and en.")
+    for locale in LOCALES:
+        require_text(translations.get(locale), f"{label} {locale}")
+
+
+def canonical_source_digest(payload: dict[str, Any]) -> str:
+    source = {key: value for key, value in payload.items() if key != "sourceDigest"}
+    encoded = json.dumps(source, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def validate_cv(cv_value: Any) -> dict[str, Any]:
+    cv = require_object(cv_value, "PDF input public CV")
+    require(cv.get("version") == "2026-08-16", "PDF input requires the approved public CV version.")
+    identity = require_object(cv.get("identity"), "PDF input CV identity")
+    require(identity.get("name") == "Jinmin Kim", "PDF input CV identity must be Jinmin Kim.")
+    validate_translation_record(identity, "PDF input CV identity", ["displayName", "headline", "summary"])
+
+    contacts = require_array(cv.get("contacts"), "PDF input CV contacts", 3)
+    approved_contacts = {
+        "Email": ("uiop3847@naver.com", "mailto:uiop3847@naver.com"),
+        "GitHub": ("github.com/rafaam11", "https://github.com/rafaam11"),
+        "LinkedIn": ("linkedin.com/in/rlawlsals", "https://www.linkedin.com/in/rlawlsals"),
+    }
+    seen_contacts: set[str] = set()
+    for index, value in enumerate(contacts, start=1):
+        contact = require_object(value, f"PDF input CV contact {index}")
+        label = require_text(contact.get("label"), f"PDF input CV contact {index} label")
+        value_text = require_text(contact.get("value"), f"PDF input CV contact {index} value")
+        href = require_text(contact.get("href"), f"PDF input CV contact {index} href")
+        require(label in approved_contacts and label not in seen_contacts and approved_contacts[label] == (value_text, href),
+                f"PDF input CV contact {index} is not an approved public contact.")
+        seen_contacts.add(label)
+    require(seen_contacts == set(approved_contacts), "PDF input CV contacts must contain Email, GitHub, and LinkedIn.")
+
+    timeline = require_array(cv.get("timeline"), "PDF input CV timeline", 4)
+    for index, value in enumerate(timeline, start=1):
+        entry = require_object(value, f"PDF input CV timeline entry {index}")
+        require_text(entry.get("period"), f"PDF input CV timeline entry {index} period")
+        require_text(entry.get("organization"), f"PDF input CV timeline entry {index} organization")
+        validate_translation_record(entry, f"PDF input CV timeline entry {index}", ["role", "summary"])
+
+    capabilities = require_array(cv.get("capabilities"), "PDF input CV capabilities", 4)
+    for index, value in enumerate(capabilities, start=1):
+        validate_translation_record(require_object(value, f"PDF input CV capability {index}"),
+                                    f"PDF input CV capability {index}", ["title", "body"])
+
+    research_entries = require_array(cv.get("research"), "PDF input CV research", 2)
+    for index, value in enumerate(research_entries, start=1):
+        research = require_object(value, f"PDF input CV research entry {index}")
+        for field in ["year", "title", "venue", "role"]:
+            require_text(research.get(field), f"PDF input CV research entry {index} {field}")
+        if "href" in research:
+            href = require_text(research.get("href"), f"PDF input CV research entry {index} href")
+            require(href.startswith("https://"), f"PDF input CV research entry {index} href must use HTTPS.")
+
+    achievements = require_object(cv.get("achievements"), "PDF input CV achievements")
+    require(achievements.get("patentApplications") == 7 and achievements.get("patentGrants") == 3 and
+            achievements.get("awardTotal") == 9,
+            "PDF input CV achievement totals must remain 7 applications, 3 grants, and 9 awards.")
+    require_text(achievements.get("asOf"), "PDF input CV achievements asOf")
+    awards = require_array(achievements.get("selectedAwards"), "PDF input CV selected awards", 3)
+    for index, value in enumerate(awards, start=1):
+        award = require_object(value, f"PDF input CV selected award {index}")
+        require_text(award.get("year"), f"PDF input CV selected award {index} year")
+        validate_localized_strings(award.get("translations"), f"PDF input CV selected award {index}")
+
+    languages = require_array(cv.get("languages"), "PDF input CV languages", 2)
+    for index, value in enumerate(languages, start=1):
+        language = require_object(value, f"PDF input CV language {index}")
+        require_text(language.get("language"), f"PDF input CV language {index} language")
+        validate_localized_strings(language.get("translations"), f"PDF input CV language {index}")
+    serialized = json.dumps(cv, ensure_ascii=False)
+    private_patterns = [
+        r"(?:\+82[\s().-]*(?:0[\s().-]*)?10|\(?010\)?)[\s().-]*\d{3,4}[\s.-]*\d{4}(?=$|[^0-9])",
+        r"(?:만\s*)?\d{1,3}\s*세(?![가-힣])",
+        r"(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])",
+        r"[가-힣]{2,12}(?:특별자치도|도|광역시|특별시)\s+[가-힣]{1,12}(?:시|군|구)(?![가-힣])",
+        r"[가-힣]{2,12}(?:시|군|구)\s+[가-힣]{1,12}(?:구|읍|면|동|로|길)(?![가-힣])",
+        r"[가-힣]{2,20}(?:읍|면|동|로|길)\s*\d{1,5}(?:-\d{1,5})?(?![0-9])",
+    ]
+    require(not any(re.search(pattern, serialized) for pattern in private_patterns),
+            "PDF input CV contains an explicit age, phone number, or Korean address.")
+    return cv
+
+
+def validate_export_schema(payload: dict[str, Any]) -> None:
+    require(set(payload) == {"schemaVersion", "locales", "site", "capabilities", "tiers", "projects",
+                             "evidence", "cv", "sourceDigest"},
+            "PDF input must contain exactly the canonical source schema fields.")
+    require(payload.get("schemaVersion") == 1, "Unsupported PDF input schemaVersion.")
+    require(payload.get("locales") == LOCALES, "PDF input must declare ko and en locales in order.")
+    site = require_object(payload.get("site"), "PDF input site")
+    for field in ["name", "email", "portfolio", "github", "linkedin"]:
+        require_text(site.get(field), f"PDF input site {field}")
+    require(site == PUBLIC_SITE, "PDF input requires the exact public site and contact boundary.")
+
+    capabilities = require_array(payload.get("capabilities"), "PDF input capabilities", 5)
+    capability_keys: set[str] = set()
+    for index, value in enumerate(capabilities, start=1):
+        capability = require_object(value, f"PDF input capability {index}")
+        key = require_text(capability.get("key"), f"PDF input capability {index} key")
+        require(key not in capability_keys, f"PDF input capability key is duplicated: {key}.")
+        capability_keys.add(key)
+        validate_translation_record(capability, f"PDF input capability {index}", ["title"])
+
+    tiers = require_array(payload.get("tiers"), "PDF input tiers", 3)
+    tier_keys: set[str] = set()
+    for index, value in enumerate(tiers, start=1):
+        tier = require_object(value, f"PDF input tier {index}")
+        key = require_text(tier.get("key"), f"PDF input tier {index} key")
+        tier_keys.add(key)
+        validate_translation_record(tier, f"PDF input tier {index}", ["label"])
+
+    projects = require_array(payload.get("projects"), "PDF input projects", len(EXPECTED_SLUGS))
+    project_slugs: list[str] = []
+    project_copy_fields = [
+        "title", "shortTitle", "eyebrow", "thesis", "summary", "problem", "role",
+        "teamResult", "evidence", "limitation", "collaboration", "mediaCaption", "status", "ownedRole"
+    ]
+    for index, value in enumerate(projects, start=1):
+        project = require_object(value, f"PDF input project {index}")
+        slug = require_text(project.get("slug"), f"PDF input project {index} slug")
+        project_slugs.append(slug)
+        require_text(project.get("period"), f"PDF input project {slug} period")
+        tier = require_text(project.get("tier"), f"PDF input project {slug} tier")
+        require(tier in tier_keys, f"PDF input project {slug} has an unknown tier.")
+        keys = require_array(project.get("capabilityKeys"), f"PDF input project {slug} capabilityKeys")
+        require(bool(keys), f"PDF input project {slug} capabilityKeys must not be empty.")
+        for key in keys:
+            require(isinstance(key, str) and key in capability_keys,
+                    f"PDF input project {slug} contains an unknown capability key.")
+        tech = require_array(project.get("tech"), f"PDF input project {slug} tech")
+        for item in tech:
+            require_text(item, f"PDF input project {slug} tech item")
+        validate_translation_record(project, f"PDF input project {slug}", project_copy_fields)
+
+        blocks = require_array(project.get("blocks"), f"PDF input project {slug} blocks")
+        for block_index, block_value in enumerate(blocks, start=1):
+            block = require_object(block_value, f"PDF input project {slug} block {block_index}")
+            block_type = require_text(block.get("type"), f"PDF input project {slug} block {block_index} type")
+            translations = require_object(block.get("translations"), f"PDF input project {slug} block {block_index} translations")
+            for locale in LOCALES:
+                copy = require_object(translations.get(locale), f"PDF input project {slug} block {block_index} {locale}")
+                require_text(copy.get("heading"), f"PDF input project {slug} block {block_index} {locale} heading")
+                if block_type == "list":
+                    items = require_array(copy.get("items"), f"PDF input project {slug} block {block_index} {locale} items")
+                    require(bool(items), f"PDF input project {slug} block {block_index} {locale} items must not be empty.")
+                    for item in items:
+                        require_text(item, f"PDF input project {slug} block {block_index} {locale} item")
+                else:
+                    require_text(copy.get("body"), f"PDF input project {slug} block {block_index} {locale} body")
+
+        links = require_array(project.get("links"), f"PDF input project {slug} links")
+        for link_index, link_value in enumerate(links, start=1):
+            link = require_object(link_value, f"PDF input project {slug} link {link_index}")
+            href = require_text(link.get("href"), f"PDF input project {slug} link {link_index} href")
+            require(href.startswith("https://"), f"PDF input project {slug} link {link_index} must use HTTPS.")
+            validate_translation_record(link, f"PDF input project {slug} link {link_index}", ["label"])
+    require(project_slugs == EXPECTED_SLUGS, "PDF input must contain the six canonical projects in order.")
+
+    evidence_entries = require_array(payload.get("evidence"), "PDF input evidence")
+    for index, value in enumerate(evidence_entries, start=1):
+        entry = require_object(value, f"PDF input evidence entry {index}")
+        for field in ["id", "project", "type", "state", "source", "note"]:
+            require_text(entry.get(field), f"PDF input evidence entry {index} {field}")
+        require(entry["project"] in EXPECTED_SLUGS, f"PDF input evidence entry {index} has an unknown project.")
+        if entry["state"] == "approved-public":
+            require(entry["source"].startswith("https://"),
+                    f"PDF input evidence entry {index} approved source must use HTTPS.")
+
+    validate_cv(payload.get("cv"))
+    digest = require_text(payload.get("sourceDigest"), "PDF input sourceDigest")
+    require(bool(re.fullmatch(r"[a-f0-9]{64}", digest)), "PDF input sourceDigest must be lowercase SHA-256.")
+    require(digest == canonical_source_digest(payload), "PDF input source digest does not match its canonical content.")
+
+
 def load_export(file_path: Path) -> dict[str, Any]:
     require(file_path.is_file(), f"Missing PDF input: {file_path}")
     try:
@@ -60,20 +273,7 @@ def load_export(file_path: Path) -> dict[str, Any]:
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
         raise ValueError(f"Malformed PDF input: {error}") from error
     require(isinstance(payload, dict), "PDF input must be a JSON object.")
-    require(payload.get("schemaVersion") == 1, "Unsupported PDF input schemaVersion.")
-    require(payload.get("locales") == LOCALES, "PDF input must declare ko and en locales in order.")
-    projects = payload.get("projects")
-    require(isinstance(projects, list), "PDF input projects must be an array.")
-    require([project.get("slug") for project in projects if isinstance(project, dict)] == EXPECTED_SLUGS,
-            "PDF input must contain the six canonical projects in order.")
-    require(isinstance(payload.get("capabilities"), list) and len(payload["capabilities"]) == 5,
-            "PDF input must contain five capabilities.")
-    require(isinstance(payload.get("evidence"), list), "PDF input evidence must be an array.")
-    cv = payload.get("cv")
-    require(isinstance(cv, dict) and cv.get("version") == "2026-08-16",
-            "PDF input requires the approved public CV version.")
-    require(isinstance(payload.get("site"), dict) and payload["site"].get("email") == CONTACT_EMAIL,
-            "PDF input requires the public contact boundary.")
+    validate_export_schema(payload)
     serialized = json.dumps(payload, ensure_ascii=False)
     for pattern in [r"(?:^|[\s\"'(])(?:[A-Za-z]:[\\/]|\\\\)", r"file://", r"OneDrive", r"private[\\/]raw"]:
         require(not re.search(pattern, serialized, re.IGNORECASE), "PDF input exposes a private source path.")
@@ -702,8 +902,41 @@ def validate_pdf(dependencies: dict[str, Any], file_path: Path, expected_pages: 
     return {"pages": expected_pages, "links": link_count, "characters": len(extracted)}
 
 
-def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_dir: Path,
-                   cv_asset_root: Path) -> dict[str, Any]:
+def render_cv_previews(dependencies: dict[str, Any], cv_pdf_paths: dict[str, Path],
+                       cv_asset_root: Path) -> list[dict[str, Any]]:
+    fitz = dependencies["fitz"]
+    Image = dependencies["Image"]
+    previews: list[dict[str, Any]] = []
+    for locale in LOCALES:
+        document = fitz.open(str(cv_pdf_paths[locale]))
+        try:
+            require(len(document) == 2, f"CV preview source for {locale} must contain two pages.")
+            for index, page in enumerate(document):
+                pixmap = page.get_pixmap(matrix=fitz.Matrix(150 / 72, 150 / 72), alpha=False)
+                name = f"jinmin-kim-cv-{locale}-page-{index + 1}.png"
+                preview = cv_asset_root / name
+                pixmap.save(str(preview))
+                with Image.open(preview) as image:
+                    image.verify()
+                with Image.open(preview) as image:
+                    width, height = image.size
+                require(width > 0 and height > 0, f"{name}: invalid preview dimensions.")
+                previews.append({
+                    "path": f"assets/cv/{name}",
+                    "kind": "cv-preview",
+                    "locale": locale,
+                    "page": index + 1,
+                    "width": width,
+                    "height": height,
+                    "bytes": preview.stat().st_size,
+                    "sha256": sha256(preview),
+                })
+        finally:
+            document.close()
+    return previews
+
+
+def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_dir: Path) -> dict[str, Any]:
     fitz = dependencies["fitz"]
     Image = dependencies["Image"]
     ImageDraw = dependencies["ImageDraw"]
@@ -754,77 +987,174 @@ def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_d
         sheet.close()
         rendered.append({"pdf": pdf_path.name, "pages": len(page_images), "contactSheet": sheet_path.name})
 
-        if pdf_path.name in {"jinmin-kim-cv-ko.pdf", "jinmin-kim-cv-en.pdf"}:
-            locale = "ko" if pdf_path.stem.endswith("-ko") else "en"
-            cv_document = fitz.open(str(pdf_path))
-            for index, page in enumerate(cv_document):
-                pixmap = page.get_pixmap(matrix=fitz.Matrix(150 / 72, 150 / 72), alpha=False)
-                preview = cv_asset_root / f"jinmin-kim-cv-{locale}-page-{index + 1}.png"
-                pixmap.save(str(preview))
-            cv_document.close()
-
     manifest = {"renderer": "PyMuPDF fallback", "dpi": 120, "pageCount": page_total, "documents": rendered}
     (review_dir / "review-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return manifest
 
 
+def artifact_record(file_path: Path, relative_path: str, kind: str, **fields: Any) -> dict[str, Any]:
+    return {
+        "path": relative_path,
+        "kind": kind,
+        **fields,
+        "bytes": file_path.stat().st_size,
+        "sha256": sha256(file_path),
+    }
+
+
+def validate_staged_publication(dependencies: dict[str, Any], output_dir: Path,
+                                project_assets: Path, cv_assets: Path,
+                                manifest: dict[str, Any]) -> None:
+    expected_project_names = {f"{slug}-{locale}.pdf" for slug in EXPECTED_SLUGS for locale in LOCALES}
+    expected_cv_names = {f"jinmin-kim-cv-{locale}.pdf" for locale in LOCALES}
+    expected_preview_names = {
+        f"jinmin-kim-cv-{locale}-page-{page}.png" for locale in LOCALES for page in [1, 2]
+    }
+    require({item.name for item in output_dir.iterdir()} == expected_project_names | expected_cv_names | {"manifest.json"},
+            "Staged output/pdf contains an unexpected or missing artifact.")
+    require({item.name for item in project_assets.iterdir()} == expected_project_names,
+            "Staged assets/pdfs contains an unexpected or missing artifact.")
+    require({item.name for item in cv_assets.iterdir()} == expected_cv_names | expected_preview_names,
+            "Staged assets/cv contains an unexpected or missing artifact.")
+    manifest_path = output_dir / "manifest.json"
+    require(json.loads(manifest_path.read_text(encoding="utf-8")) == manifest,
+            "Staged PDF manifest did not round-trip.")
+    roots = {
+        "output/pdf/": output_dir,
+        "assets/pdfs/": project_assets,
+        "assets/cv/": cv_assets,
+    }
+    require(len(manifest["artifacts"]) == 32, "Staged PDF manifest must track exactly 32 artifacts.")
+    for artifact in manifest["artifacts"]:
+        prefix = next((value for value in roots if artifact["path"].startswith(value)), None)
+        require(prefix is not None, f"Manifest artifact has an invalid path: {artifact['path']}.")
+        file_path = roots[prefix] / artifact["path"][len(prefix):]
+        require(file_path.is_file(), f"Manifest artifact is missing: {artifact['path']}.")
+        require(file_path.stat().st_size == artifact["bytes"] and sha256(file_path) == artifact["sha256"],
+                f"Manifest artifact checksum mismatch: {artifact['path']}.")
+        if artifact["kind"] == "cv-preview":
+            with dependencies["Image"].open(file_path) as image:
+                require(image.size == (artifact["width"], artifact["height"]),
+                        f"Manifest preview dimensions mismatch: {artifact['path']}.")
+                image.verify()
+        else:
+            reader = dependencies["PdfReader"](str(file_path))
+            require(len(reader.pages) == artifact["pages"],
+                    f"Manifest PDF page mismatch: {artifact['path']}.")
+
+
+def atomic_swap_directories(publications: list[tuple[Path, Path]]) -> None:
+    token = uuid.uuid4().hex
+    states: list[tuple[Path, Path | None]] = []
+    try:
+        for target, staged in publications:
+            backup = target.parent / f".{target.name}.backup-{token}"
+            had_target = target.exists()
+            if had_target:
+                target.rename(backup)
+            try:
+                staged.rename(target)
+            except Exception:
+                if had_target and backup.exists():
+                    backup.rename(target)
+                raise
+            states.append((target, backup if had_target else None))
+    except Exception as error:
+        for target, backup in reversed(states):
+            if target.exists():
+                shutil.rmtree(target)
+            if backup and backup.exists():
+                backup.rename(target)
+        raise RuntimeError(f"Atomic PDF publication failed; previous artifacts restored: {error}") from error
+    for _, backup in states:
+        if backup and backup.exists():
+            shutil.rmtree(backup)
+
+
 def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: Path,
              publish_root: Path, review_dir: Path | None) -> dict[str, Any]:
-    output_dir.mkdir(parents=True, exist_ok=True)
     project_assets = publish_root / "assets" / "pdfs"
     cv_assets = publish_root / "assets" / "cv"
-    project_assets.mkdir(parents=True, exist_ok=True)
-    cv_assets.mkdir(parents=True, exist_ok=True)
+    targets = [output_dir, project_assets, cv_assets]
+    token = uuid.uuid4().hex
+    stages: list[Path] = []
+    for target in targets:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        stage = target.parent / f".{target.name}.stage-{token}"
+        stage.mkdir()
+        stages.append(stage)
+    staged_output, staged_projects, staged_cv = stages
     expected_names = [f"{slug}-{locale}.pdf" for slug in EXPECTED_SLUGS for locale in LOCALES]
     expected_names += [f"jinmin-kim-cv-{locale}.pdf" for locale in LOCALES]
-    for directory in [output_dir, project_assets, cv_assets]:
-        for existing in directory.glob("*.pdf"):
-            if existing.name in expected_names or directory in {output_dir, project_assets, cv_assets}:
-                existing.unlink()
+    documents: list[dict[str, Any]] = []
+    artifacts: list[dict[str, Any]] = []
+    try:
+        for project in payload["projects"]:
+            for locale in LOCALES:
+                name = f"{project['slug']}-{locale}.pdf"
+                output = staged_output / name
+                generate_project_pdf(dependencies, payload, project, locale, output)
+                qa = validate_pdf(dependencies, output, 6, localized(project, locale)["title"])
+                published = staged_projects / name
+                shutil.copyfile(output, published)
+                require(sha256(output) == sha256(published), f"{name}: staged checksum mismatch.")
+                documents.append({
+                    "name": name, "kind": "project", "slug": project["slug"], "locale": locale,
+                    "pages": qa["pages"], "links": qa["links"], "characters": qa["characters"],
+                    "bytes": output.stat().st_size, "sha256": sha256(output)
+                })
+                artifacts.append(artifact_record(
+                    output, f"output/pdf/{name}", "project-pdf", slug=project["slug"],
+                    locale=locale, pages=qa["pages"]
+                ))
+                artifacts.append(artifact_record(
+                    published, f"assets/pdfs/{name}", "project-pdf", slug=project["slug"],
+                    locale=locale, pages=qa["pages"]
+                ))
 
-    manifest_files: list[dict[str, Any]] = []
-    output_paths: list[Path] = []
-    for project in payload["projects"]:
+        cv_pdf_paths: dict[str, Path] = {}
         for locale in LOCALES:
-            name = f"{project['slug']}-{locale}.pdf"
-            output = output_dir / name
-            generate_project_pdf(dependencies, payload, project, locale, output)
-            qa = validate_pdf(dependencies, output, 6, localized(project, locale)["title"])
-            published = project_assets / name
+            name = f"jinmin-kim-cv-{locale}.pdf"
+            output = staged_output / name
+            generate_cv_pdf(dependencies, payload, locale, output)
+            qa = validate_pdf(dependencies, output, 2, localized(payload["cv"]["identity"], locale)["displayName"])
+            published = staged_cv / name
             shutil.copyfile(output, published)
-            require(sha256(output) == sha256(published), f"{name}: published checksum mismatch.")
-            output_paths.append(output)
-            manifest_files.append({
-                "name": name, "kind": "project", "slug": project["slug"], "locale": locale,
+            require(sha256(output) == sha256(published), f"{name}: staged checksum mismatch.")
+            cv_pdf_paths[locale] = published
+            documents.append({
+                "name": name, "kind": "cv", "locale": locale,
                 "pages": qa["pages"], "links": qa["links"], "characters": qa["characters"],
                 "bytes": output.stat().st_size, "sha256": sha256(output)
             })
+            artifacts.append(artifact_record(
+                output, f"output/pdf/{name}", "cv-pdf", locale=locale, pages=qa["pages"]
+            ))
+            artifacts.append(artifact_record(
+                published, f"assets/cv/{name}", "cv-pdf", locale=locale, pages=qa["pages"]
+            ))
 
-    for locale in LOCALES:
-        name = f"jinmin-kim-cv-{locale}.pdf"
-        output = output_dir / name
-        generate_cv_pdf(dependencies, payload, locale, output)
-        qa = validate_pdf(dependencies, output, 2, localized(payload["cv"]["identity"], locale)["displayName"])
-        published = cv_assets / name
-        shutil.copyfile(output, published)
-        require(sha256(output) == sha256(published), f"{name}: published checksum mismatch.")
-        output_paths.append(output)
-        manifest_files.append({
-            "name": name, "kind": "cv", "locale": locale,
-            "pages": qa["pages"], "links": qa["links"], "characters": qa["characters"],
-            "bytes": output.stat().st_size, "sha256": sha256(output)
-        })
+        artifacts.extend(render_cv_previews(dependencies, cv_pdf_paths, staged_cv))
+        artifacts.sort(key=lambda artifact: artifact["path"])
+        manifest = {
+            "schemaVersion": 2,
+            "sourceDigest": payload["sourceDigest"],
+            "generator": "scripts/generate-portfolio-pdfs.py",
+            "documents": documents,
+            "artifacts": artifacts,
+        }
+        (staged_output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        validate_staged_publication(dependencies, staged_output, staged_projects, staged_cv, manifest)
+        atomic_swap_directories(list(zip(targets, stages)))
+    finally:
+        for stage in stages:
+            if stage.exists():
+                shutil.rmtree(stage)
 
-    manifest = {
-        "schemaVersion": 1,
-        "contentVersion": payload["contentVersion"],
-        "generator": "scripts/generate-portfolio-pdfs.py",
-        "files": manifest_files,
-    }
-    (output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     if review_dir:
         review_dir.mkdir(parents=True, exist_ok=True)
-        manifest["review"] = render_reviews(dependencies, output_paths, review_dir, cv_assets)
+        final_paths = [output_dir / name for name in expected_names]
+        manifest["review"] = render_reviews(dependencies, final_paths, review_dir)
     return manifest
 
 
@@ -844,13 +1174,13 @@ def main(argv: list[str]) -> int:
         options.review_dir.resolve() if options.review_dir else None,
     )
     review_pages = manifest.get("review", {}).get("pageCount", 0)
-    print(f"Generated {len(manifest['files'])} PDFs ({sum(item['pages'] for item in manifest['files'])} pages); rendered {review_pages} review pages.")
+    print(f"Generated {len(manifest['documents'])} PDFs ({sum(item['pages'] for item in manifest['documents'])} pages); rendered {review_pages} review pages.")
     return 0
 
 
 if __name__ == "__main__":
     try:
         raise SystemExit(main(sys.argv[1:]))
-    except (OSError, RuntimeError, ValueError) as error:
+    except (IndexError, KeyError, OSError, RuntimeError, TypeError, ValueError) as error:
         print(f"PDF generation failed: {error}", file=sys.stderr)
         raise SystemExit(1)
