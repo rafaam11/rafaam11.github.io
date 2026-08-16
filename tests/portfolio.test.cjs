@@ -2302,6 +2302,8 @@ test('Task 6 validator enforces page metadata, shared mounts, and route-specific
       [baseline.replace('<footer id="site-footer"></footer>', ''), /missing shared footer mount/i],
       [baseline.replace('<link rel="stylesheet" href="../../css/case-study.css">', ''), /missing required local stylesheet.*case-study\.css/i],
       [baseline.replace('<script src="../../js/portfolio-data.js"></script>', ''), /missing required local script.*portfolio-data\.js/i],
+      [baseline.replace('<link rel="stylesheet" href="../../css/case-study.css">', '<!-- <link rel="stylesheet" href="../../css/case-study.css"> -->'), /missing required local stylesheet.*case-study\.css/i],
+      [baseline.replace('<script src="../../js/portfolio-data.js"></script>', '<style>/* <script src="../../js/portfolio-data.js"></script> */</style>'), /missing required local script.*portfolio-data\.js/i],
       [baseline.replace('../../css/site.css', '../../css/styles.css'), /legacy dependency|missing required local stylesheet.*site\.css/i]
     ];
     for (const [html, expected] of mutations) {
@@ -2309,6 +2311,129 @@ test('Task 6 validator enforces page metadata, shared mounts, and route-specific
       const errors = validator.validatePortfolio(temporaryRoot).join('\n');
       assert.match(errors, expected);
     }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 1 maps same-origin absolute URLs before local and excluded-route validation', () => {
+  const home = canonicalPages().find((file) => file.relativePath === 'index.html');
+  assert.deepEqual(validator.localReferenceErrors(home, [
+    '<a href="https://RAFAAM11.GITHUB.IO:443/projects/?tier=medical#cases">Projects</a>',
+    '<a href="//rafaam11.github.io:443/assets/cv/jinmin-kim-cv-ko.pdf?download=1#page=1">CV</a>',
+    '<a href="https://example.com/projects/c-arm-navigation/">External HTTPS</a>',
+    '<a href="//example.com/missing.html">External protocol-relative HTTPS</a>'
+  ].join(''), root), []);
+
+  const invalid = [
+    ['<a href="https://rafaam11.github.io/missing/index.html?view=all#top">Missing</a>', /missing local reference target/i],
+    ['<img src="https://RAFAAM11.GITHUB.IO:443/assets/img/Favicon.ico?cache=1#icon" alt="">', /exact filesystem case/i],
+    ['<a href="https://rafaam11.github.io/%2e%2e/private/index.html">Traversal</a>', /path traversal/i],
+    ['<a href="https://rafaam11.github.io\\missing\\index.html">Backslash</a>', /file-compatible/i]
+  ];
+  for (const [html, expected] of invalid) {
+    assert.match(validator.localReferenceErrors(home, html, root).join('\n'), expected, html);
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-origin-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const excludedUrls = [
+      'https://rafaam11.github.io/projects/c-arm-navigation?view=old#case',
+      '//RAFAAM11.GITHUB.IO:443/%70rojects/%63-arm-navigation%2Findex.html/?view=old#case'
+    ];
+    for (const href of excludedUrls) {
+      fs.writeFileSync(homePath, baseline.replace('</main>', `<a href="${href}">Old route</a></main>`));
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n').replace(/\\/g, '/');
+      assert.match(errors, /index\.html.*excluded route reference.*c-arm-navigation/i, href);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 1 parses real HTML reference attributes without comments or raw-text false positives', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-parser-'));
+  try {
+    const file = { relativePath: 'index.html', locale: 'ko' };
+    const html = [
+      '<!-- <iframe src=assets/comment-missing.html></iframe> -->',
+      '<script>const sample = "<video src=assets/script-missing.mp4 poster=assets/script-missing.png>"; const prefix = "</scripture><iframe src=assets/script-prefix-missing.html>";</script>',
+      '<style>.sample::after { content: "<img src=assets/style-missing.png>"; }</style>',
+      '<div href=assets/invalid-tag-missing.html src=assets/invalid-tag-missing.png></div>',
+      '<a href=assets/missing-link.html>Missing link</a>',
+      '<iframe src=\'assets/missing-frame.html\'><a href=assets/iframe-fallback-missing.html>Fallback</a></iframe>',
+      '<video src=assets/missing-video.mp4 poster=assets/missing-poster.png></video>',
+      '<source src=assets/missing-source.mp4>',
+      '<object data=assets/missing-object.pdf></object>',
+      '<script src=assets/missing-runtime.js></script>'
+    ].join('\n');
+    assert.deepEqual(validator.htmlReferences(html), [
+      { tag: 'a', attribute: 'href', value: 'assets/missing-link.html' },
+      { tag: 'iframe', attribute: 'src', value: 'assets/missing-frame.html' },
+      { tag: 'video', attribute: 'src', value: 'assets/missing-video.mp4' },
+      { tag: 'video', attribute: 'poster', value: 'assets/missing-poster.png' },
+      { tag: 'source', attribute: 'src', value: 'assets/missing-source.mp4' },
+      { tag: 'object', attribute: 'data', value: 'assets/missing-object.pdf' },
+      { tag: 'script', attribute: 'src', value: 'assets/missing-runtime.js' }
+    ]);
+    const errors = validator.localReferenceErrors(file, html, temporaryRoot).join('\n').replace(/\\/g, '/');
+    for (const expected of [
+      'missing-link.html',
+      'missing-frame.html',
+      'missing-video.mp4',
+      'missing-poster.png',
+      'missing-source.mp4',
+      'missing-object.pdf',
+      'missing-runtime.js'
+    ]) assert.match(errors, new RegExp(expected.replace('.', '\\.')));
+    for (const ignored of ['comment-missing', 'script-missing', 'script-prefix-missing', 'style-missing', 'invalid-tag-missing', 'iframe-fallback-missing']) {
+      assert.doesNotMatch(errors, new RegExp(ignored));
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 1 scopes runtime metadata to exactly one real body start tag', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-body-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const casePath = path.join(temporaryRoot, 'projects', 'surgical-navigation', 'index.html');
+    const baseline = fs.readFileSync(casePath, 'utf8');
+    const bodyStart = baseline.match(/<body\b[^>]*>/i)?.[0];
+    assert.ok(bodyStart);
+
+    fs.writeFileSync(casePath, baseline
+      .replace('data-lang="ko"', '')
+      .replace('</head>', '<meta data-lang="ko"></head>'));
+    let errors = validator.validatePortfolio(temporaryRoot).join('\n');
+    assert.match(errors, /expected body data-lang="ko"/i);
+
+    fs.writeFileSync(casePath, baseline
+      .replace('data-route="projects/surgical-navigation/"', '')
+      .replace('</main>', '<div data-route="projects/surgical-navigation/"></div></main>'));
+    errors = validator.validatePortfolio(temporaryRoot).join('\n');
+    assert.match(errors, /expected body data-route="projects\/surgical-navigation\/"/i);
+
+    fs.writeFileSync(casePath, baseline
+      .replace(bodyStart, `<div id="body-shell"${bodyStart.slice('<body'.length, -1)}>`)
+      .replace('</head>', `<!-- ${bodyStart} --><script>const spoof = '${bodyStart.replace(/'/g, '&#39;')}';</script></head>`));
+    errors = validator.validatePortfolio(temporaryRoot).join('\n');
+    assert.match(errors, /expected exactly one real body start tag/i);
+
+    fs.writeFileSync(casePath, baseline.replace('</body>', `${bodyStart}</body></body>`));
+    errors = validator.validatePortfolio(temporaryRoot).join('\n');
+    assert.match(errors, /expected exactly one real body start tag/i);
+
+    fs.writeFileSync(casePath, baseline
+      .replace('data-base="../../"', 'data-base=../../')
+      .replace('data-page="projects"', "data-page='projects'")
+      .replace('data-lang="ko"', 'data-lang=ko')
+      .replace('data-route="projects/surgical-navigation/"', "data-route='projects/surgical-navigation/'"));
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }

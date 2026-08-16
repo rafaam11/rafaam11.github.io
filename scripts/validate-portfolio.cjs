@@ -1132,8 +1132,24 @@ function toPosix(value) {
   return String(value || '').replace(/\\/g, '/');
 }
 
-function decodedReference(value) {
-  let decoded = String(value || '').trim();
+function decodeHtmlReferenceEntities(value) {
+  const named = { amp: '&', apos: "'", gt: '>', lt: '<', quot: '"' };
+  return String(value || '')
+    .replace(/&#(?:x([0-9a-f]+)|(\d+));?/gi, (match, hexadecimal, decimal) => {
+      const codePoint = Number.parseInt(hexadecimal || decimal, hexadecimal ? 16 : 10);
+      try {
+        return Number.isInteger(codePoint) && codePoint >= 0 && codePoint <= 0x10ffff
+          ? String.fromCodePoint(codePoint)
+          : match;
+      } catch {
+        return match;
+      }
+    })
+    .replace(/&(amp|apos|gt|lt|quot);?/gi, (match, name) => named[name.toLowerCase()] || match);
+}
+
+function decodePercentReference(value) {
+  let decoded = String(value || '');
   for (let index = 0; index < 4; index++) {
     try {
       const next = decodeURIComponent(decoded);
@@ -1143,26 +1159,210 @@ function decodedReference(value) {
       return null;
     }
   }
-  return decoded.replace(/&amp;/gi, '&');
+  return decoded;
+}
+
+function absoluteUrlRawPath(value) {
+  const authorityStart = value.startsWith('//') ? 2 : value.indexOf('://') + 3;
+  const pathSeparators = [value.indexOf('/', authorityStart), value.indexOf('\\', authorityStart)]
+    .filter((index) => index !== -1);
+  const pathStart = pathSeparators.length ? Math.min(...pathSeparators) : -1;
+  const queryStart = value.indexOf('?', authorityStart);
+  const fragmentStart = value.indexOf('#', authorityStart);
+  const candidates = [queryStart, fragmentStart].filter((index) => index !== -1);
+  const suffixStart = candidates.length ? Math.min(...candidates) : value.length;
+  if (pathStart === -1 || pathStart > suffixStart) return '/';
+  return value.slice(pathStart, suffixStart);
+}
+
+function normalizedReference(value, reference) {
+  const original = decodeHtmlReferenceEntities(String(value || '').trim());
+  if (!original || original.startsWith('#') || original.startsWith('?')) return { kind: 'skip' };
+  if (/^(?:mailto:|tel:)/i.test(original)) {
+    return reference.tag === 'a' ? { kind: 'external' } : { kind: 'error', reason: 'unsupported scheme' };
+  }
+  if (/^http:/i.test(original)) return { kind: 'error', reason: 'external references must use HTTPS' };
+  if (/^https:/i.test(original) || original.startsWith('//')) {
+    let parsed;
+    try {
+      parsed = new URL(original.startsWith('//') ? `https:${original}` : original);
+    } catch {
+      return { kind: 'error', reason: 'malformed absolute URL' };
+    }
+    if (parsed.protocol !== 'https:') return { kind: 'error', reason: 'external references must use HTTPS' };
+    const sameHost = parsed.hostname.toLowerCase() === 'rafaam11.github.io';
+    const samePort = !parsed.port || parsed.port === '443';
+    if (!sameHost || !samePort) return { kind: 'external' };
+    if (parsed.username || parsed.password) return { kind: 'error', reason: 'same-origin URL must not contain credentials' };
+    const decodedPath = decodePercentReference(absoluteUrlRawPath(original));
+    if (decodedPath === null) return { kind: 'error', reason: 'malformed encoded reference' };
+    if (decodedPath.includes('\\')) return { kind: 'error', reason: 'unsafe local reference is not file-compatible' };
+    const segments = decodedPath.split('/');
+    if (segments.includes('..')) return { kind: 'error', reason: 'local reference path traversal escapes portfolio root' };
+    return { kind: 'local', path: decodedPath.replace(/^\/+/, ''), rootRelative: true };
+  }
+  if (/^[a-z]:[\\/]/i.test(original)) return { kind: 'error', reason: 'unsafe local reference uses a drive path' };
+  if (/^(?:file:|javascript:|data:)/i.test(original) || /^\\\\/.test(original)) {
+    return { kind: 'error', reason: 'unsafe local reference uses a prohibited URL form' };
+  }
+  if (/^[a-z][a-z0-9+.-]*:/i.test(original)) return { kind: 'error', reason: 'unsafe local reference uses an unsupported scheme' };
+  if (original.includes('\\') || original.startsWith('/')) {
+    return { kind: 'error', reason: 'unsafe local reference is not file-compatible' };
+  }
+  const rawPath = original.split(/[?#]/, 1)[0];
+  const decodedPath = decodePercentReference(rawPath);
+  if (decodedPath === null) return { kind: 'error', reason: 'malformed encoded reference' };
+  return { kind: 'local', path: decodedPath, rootRelative: false };
+}
+
+function parseHtmlAttributes(source) {
+  const attributes = [];
+  let index = 0;
+  while (index < source.length) {
+    while (/\s/.test(source[index] || '')) index++;
+    if (index >= source.length || source[index] === '/') break;
+    const nameStart = index;
+    while (index < source.length && !/[\s=/>]/.test(source[index])) index++;
+    if (index === nameStart) {
+      index++;
+      continue;
+    }
+    const name = source.slice(nameStart, index).toLowerCase();
+    while (/\s/.test(source[index] || '')) index++;
+    let value = '';
+    let hasValue = false;
+    if (source[index] === '=') {
+      hasValue = true;
+      index++;
+      while (/\s/.test(source[index] || '')) index++;
+      const quote = source[index];
+      if (quote === '"' || quote === "'") {
+        index++;
+        const valueStart = index;
+        while (index < source.length && source[index] !== quote) index++;
+        value = source.slice(valueStart, index);
+        if (source[index] === quote) index++;
+      } else {
+        const valueStart = index;
+        while (index < source.length && !/[\s>]/.test(source[index])) index++;
+        value = source.slice(valueStart, index);
+      }
+    }
+    attributes.push({ name, value, hasValue });
+  }
+  return attributes;
+}
+
+function htmlTagEnd(source, start) {
+  let quote = '';
+  for (let index = start; index < source.length; index++) {
+    const character = source[index];
+    if (quote) {
+      if (character === quote) quote = '';
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '>') return index;
+  }
+  return -1;
+}
+
+function htmlRawClosingStart(lower, name, start) {
+  const prefix = `</${name}`;
+  let searchFrom = start;
+  while (searchFrom < lower.length) {
+    const candidate = lower.indexOf(prefix, searchFrom);
+    if (candidate === -1) return -1;
+    const boundary = lower[candidate + prefix.length];
+    if (boundary === undefined || /[\s/>]/.test(boundary)) return candidate;
+    searchFrom = candidate + prefix.length;
+  }
+  return -1;
+}
+
+function htmlStartTags(html) {
+  const source = String(html || '');
+  const lower = source.toLowerCase();
+  const rawTextTags = new Set(['iframe', 'noembed', 'noframes', 'script', 'style', 'textarea', 'title', 'xmp']);
+  const tags = [];
+  let index = 0;
+  while (index < source.length) {
+    const opening = source.indexOf('<', index);
+    if (opening === -1) break;
+    if (source.startsWith('<!--', opening)) {
+      const closing = source.indexOf('-->', opening + 4);
+      index = closing === -1 ? source.length : closing + 3;
+      continue;
+    }
+    if (source.startsWith('<![CDATA[', opening)) {
+      const closing = source.indexOf(']]>', opening + 9);
+      index = closing === -1 ? source.length : closing + 3;
+      continue;
+    }
+    if (source[opening + 1] === '!' || source[opening + 1] === '?' || source[opening + 1] === '/') {
+      const closing = htmlTagEnd(source, opening + 2);
+      index = closing === -1 ? source.length : closing + 1;
+      continue;
+    }
+    const nameMatch = source.slice(opening + 1).match(/^([A-Za-z][A-Za-z0-9:-]*)/);
+    if (!nameMatch) {
+      index = opening + 1;
+      continue;
+    }
+    const name = nameMatch[1].toLowerCase();
+    const nameEnd = opening + 1 + nameMatch[1].length;
+    const closing = htmlTagEnd(source, nameEnd);
+    if (closing === -1) break;
+    const raw = source.slice(opening, closing + 1);
+    tags.push({
+      name,
+      attributes: parseHtmlAttributes(source.slice(nameEnd, closing)),
+      raw
+    });
+    index = closing + 1;
+    if (rawTextTags.has(name) && !/\/\s*>$/.test(raw)) {
+      const rawClosing = htmlRawClosingStart(lower, name, index);
+      if (rawClosing === -1) break;
+      const rawClosingEnd = htmlTagEnd(source, rawClosing + name.length + 2);
+      index = rawClosingEnd === -1 ? source.length : rawClosingEnd + 1;
+    }
+  }
+  return tags;
 }
 
 function htmlReferences(html) {
   const references = [];
   const allowedAttributes = {
     a: new Set(['href']),
+    area: new Set(['href']),
+    base: new Set(['href']),
     link: new Set(['href']),
-    script: new Set(['src']),
+    audio: new Set(['src']),
+    embed: new Set(['src']),
+    iframe: new Set(['src']),
     img: new Set(['src']),
+    input: new Set(['src']),
+    script: new Set(['src']),
     source: new Set(['src']),
-    video: new Set(['poster']),
+    track: new Set(['src']),
+    video: new Set(['src', 'poster']),
     object: new Set(['data'])
   };
-  for (const match of String(html || '').matchAll(/<(a|link|script|img|source|video|object)\b[^>]*?\b(href|src|data|poster)\s*=\s*(["'])(.*?)\3/gi)) {
-    const tag = match[1].toLowerCase();
-    const attribute = match[2].toLowerCase();
-    if (allowedAttributes[tag].has(attribute)) references.push({ tag, attribute, value: match[4] });
+  for (const tag of htmlStartTags(html)) {
+    const allowed = allowedAttributes[tag.name];
+    if (!allowed) continue;
+    for (const attribute of tag.attributes) {
+      if (allowed.has(attribute.name) && attribute.hasValue) {
+        references.push({ tag: tag.name, attribute: attribute.name, value: attribute.value });
+      }
+    }
   }
   return references;
+}
+
+function htmlAttributeValue(tag, name) {
+  const attribute = tag && tag.attributes.find((candidate) => candidate.name === name);
+  return attribute && attribute.hasValue ? attribute.value : undefined;
 }
 
 function inspectExactSitePath(rootDir, relativePath) {
@@ -1202,37 +1402,17 @@ function localReferenceErrors(file, html, rootDir) {
   const pageDirectory = path.posix.dirname(pageRelativePath);
   for (const reference of htmlReferences(html)) {
     const original = reference.value;
-    const decoded = decodedReference(original);
-    if (decoded === null) {
-      errors.push(`${file.relativePath}: malformed encoded ${reference.attribute} reference ${original}.`);
-      continue;
-    }
-    if (!decoded || decoded.startsWith('#') || decoded.startsWith('?')) continue;
-    if (/^(?:mailto:|tel:)/i.test(decoded) && reference.tag === 'a') continue;
-    if (/^https:/i.test(decoded)) continue;
-    if (/^http:/i.test(decoded)) {
-      errors.push(`${file.relativePath}: external references must use HTTPS: ${original}`);
-      continue;
-    }
-    if (/^[a-z]:[\\/]/i.test(decoded)) {
-      errors.push(`${file.relativePath}: unsafe local reference uses a drive path: ${original}`);
-      continue;
-    }
-    if (/^(?:file:|javascript:|data:)/i.test(decoded) || /^\\\\|^\/\//.test(decoded)) {
-      errors.push(`${file.relativePath}: unsafe local reference uses a prohibited URL form: ${original}`);
-      continue;
-    }
-    if (/^[a-z][a-z0-9+.-]*:/i.test(decoded)) {
-      errors.push(`${file.relativePath}: unsafe local reference uses an unsupported scheme: ${original}`);
-      continue;
-    }
-    if (decoded.includes('\\') || decoded.startsWith('/')) {
-      errors.push(`${file.relativePath}: unsafe local reference is not file-compatible: ${original}`);
+    const normalized = normalizedReference(original, reference);
+    if (normalized.kind === 'skip' || normalized.kind === 'external') continue;
+    if (normalized.kind === 'error') {
+      errors.push(`${file.relativePath}: ${normalized.reason}: ${original}`);
       continue;
     }
 
-    const localPath = decoded.split(/[?#]/, 1)[0];
-    const resolved = path.posix.normalize(path.posix.join(pageDirectory, localPath));
+    const localPath = normalized.path;
+    const resolved = normalized.rootRelative
+      ? path.posix.normalize(localPath || '.')
+      : path.posix.normalize(path.posix.join(pageDirectory, localPath));
     if (resolved === '..' || resolved.startsWith('../') || path.posix.isAbsolute(resolved)) {
       errors.push(`${file.relativePath}: local reference path traversal escapes portfolio root: ${original}`);
       continue;
@@ -1245,7 +1425,7 @@ function localReferenceErrors(file, html, rootDir) {
       errors.push(`${file.relativePath}: Korean link enters /en/: ${original}`);
     }
 
-    let targetRelativePath = resolved;
+    let targetRelativePath = resolved === '.' ? 'index.html' : resolved;
     if (localPath.endsWith('/')) targetRelativePath = path.posix.join(targetRelativePath, 'index.html');
     let inspection = inspectExactSitePath(rootDir, targetRelativePath);
     if (!inspection.error && inspection.filePath && fs.lstatSync(inspection.filePath).isDirectory()) {
@@ -1271,10 +1451,16 @@ function pageDependencyErrors(file, html) {
     requiredScripts.splice(1, 0, `${base}js/portfolio-data.js`, `${base}js/portfolio-render.js`);
   }
 
-  const styles = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*\bhref=(["'])(.*?)\1[^>]*>/gi)]
-    .map((match) => match[2]).filter((href) => !/^[a-z][a-z0-9+.-]*:/i.test(href));
-  const scripts = [...html.matchAll(/<script\b[^>]*\bsrc=(["'])(.*?)\1[^>]*>/gi)]
-    .map((match) => match[2]).filter((src) => !/^[a-z][a-z0-9+.-]*:/i.test(src));
+  const tags = htmlStartTags(html);
+  const styles = tags
+    .filter((tag) => tag.name === 'link' && String(htmlAttributeValue(tag, 'rel') || '')
+      .toLowerCase().split(/\s+/).includes('stylesheet'))
+    .map((tag) => htmlAttributeValue(tag, 'href'))
+    .filter((href) => href !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(href));
+  const scripts = tags
+    .filter((tag) => tag.name === 'script')
+    .map((tag) => htmlAttributeValue(tag, 'src'))
+    .filter((src) => src !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(src));
   for (const required of requiredStyles) {
     if (!styles.includes(required)) errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
   }
@@ -1296,16 +1482,21 @@ function pageDependencyErrors(file, html) {
 
 function excludedRouteReferenceErrors(file, html) {
   const errors = [];
+  const pageDirectory = path.posix.dirname(toPosix(file.relativePath));
   for (const reference of htmlReferences(html)) {
-    const decoded = decodedReference(reference.value);
-    if (!decoded || /^(?:https:|mailto:|tel:|#)/i.test(decoded)) continue;
-    const routePath = decoded.split(/[?#]/, 1)[0].replace(/\\/g, '/').toLowerCase();
-    if (/(?:^|\/)research(?:\/|$)/.test(routePath)) {
-      errors.push(`${file.relativePath}: excluded route reference remains: ${reference.value}`);
+    const normalized = normalizedReference(reference.value, reference);
+    if (normalized.kind !== 'local') continue;
+    const resolved = normalized.rootRelative
+      ? path.posix.normalize(normalized.path || '.')
+      : path.posix.normalize(path.posix.join(pageDirectory, normalized.path));
+    const segments = resolved.toLowerCase().split('/').filter((segment) => segment && segment !== '.');
+    if (segments[0] === 'en') segments.shift();
+    if (segments[0] === 'research') {
+      errors.push(`${file.relativePath}: excluded route reference remains: ${reference.value} -> ${resolved}`);
     }
     for (const slug of excludedProjectSlugs) {
-      if (new RegExp(`(?:^|/)projects/${escapeRegExp(slug)}(?:/|$)`).test(routePath)) {
-        errors.push(`${file.relativePath}: excluded route reference remains: ${reference.value}`);
+      if (segments[0] === 'projects' && segments[1] === slug) {
+        errors.push(`${file.relativePath}: excluded route reference remains: ${reference.value} -> ${resolved}`);
       }
     }
   }
@@ -1365,16 +1556,17 @@ function staticPageErrors(file, html, rootDir) {
   if (!new RegExp(`<html lang="${expectedLang}">`).test(html)) {
     errors.push(`${file.relativePath}: expected html lang ${expectedLang}.`);
   }
-  if (!new RegExp(`data-lang="${expectedLang}"`).test(html)) {
-    errors.push(`${file.relativePath}: expected data-lang ${expectedLang}.`);
-  }
-  if (!new RegExp(`data-route="${escapeRegExp(file.route)}"`).test(html)) {
-    errors.push(`${file.relativePath}: semantic route does not match ${file.route}.`);
-  }
+  const bodyTags = htmlStartTags(html).filter((tag) => tag.name === 'body');
+  if (bodyTags.length !== 1) errors.push(`${file.relativePath}: expected exactly one real body start tag.`);
+  const body = bodyTags.length === 1 ? bodyTags[0] : null;
+  const actualLang = htmlAttributeValue(body, 'data-lang');
+  if (actualLang !== expectedLang) errors.push(`${file.relativePath}: expected body data-lang="${expectedLang}".`);
+  const actualRoute = htmlAttributeValue(body, 'data-route');
+  if (actualRoute !== file.route) errors.push(`${file.relativePath}: expected body data-route="${file.route}".`);
   const expectedBase = '../'.repeat(toPosix(file.relativePath).split('/').length - 1);
-  const actualBase = html.match(/<body\b[^>]*\bdata-base="([^"]*)"/i)?.[1];
+  const actualBase = htmlAttributeValue(body, 'data-base');
   if (actualBase !== expectedBase) errors.push(`${file.relativePath}: expected data-base="${expectedBase}".`);
-  const actualPage = html.match(/<body\b[^>]*\bdata-page="([^"]*)"/i)?.[1];
+  const actualPage = htmlAttributeValue(body, 'data-page');
   if (!i18n.supportedNavigationPages.includes(actualPage)) errors.push(`${file.relativePath}: unsupported data-page "${actualPage || ''}".`);
   if (actualPage !== file.page) errors.push(`${file.relativePath}: expected data-page="${file.page}".`);
   if (!/<header\b[^>]*\bid="site-nav"[^>]*><\/header>/i.test(html)) errors.push(`${file.relativePath}: missing shared navigation mount.`);
@@ -1458,6 +1650,7 @@ module.exports = {
   publicPortfolioFiles,
   publicPortfolioVisualFiles,
   portfolioHtmlInventoryErrors,
+  htmlReferences,
   localReferenceErrors,
   pageDependencyErrors,
   parseEvidenceRegister,
