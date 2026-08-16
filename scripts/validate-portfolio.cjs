@@ -850,8 +850,50 @@ function publicPortfolioVisualFiles(rootDir) {
   return [...unique.values()];
 }
 
+function collectPublicStrings(value, output = []) {
+  if (typeof value === 'string') {
+    output.push(value);
+  } else if (Array.isArray(value)) {
+    for (const item of value) collectPublicStrings(item, output);
+  } else if (value && typeof value === 'object') {
+    for (const nested of Object.values(value)) collectPublicStrings(nested, output);
+  }
+  return output;
+}
+
+function projectPublicText(project) {
+  const surfaces = [project?.translations];
+  for (const block of project?.blocks || []) surfaces.push(block?.translations);
+  for (const subcase of project?.subcases || []) surfaces.push(subcase?.translations);
+  for (const link of project?.links || []) surfaces.push(link?.translations);
+  surfaces.push(project?.pdfSequence?.diagram?.translations);
+  let text = collectPublicStrings(surfaces).join('\n');
+  for (let index = 0; index < 6; index += 1) {
+    const next = decodeHtmlReferenceEntities(text);
+    if (next === text) break;
+    text = next;
+  }
+  return text;
+}
+
+function projectPublicTextErrors(project) {
+  const slug = project?.slug || 'unknown-project';
+  const text = projectPublicText(project);
+  const errors = [];
+  if (proseContainsLocalPath(text)) errors.push(`${slug}: localized public copy contains a private source path.`);
+  for (const finding of publicPiiFindings(text)) {
+    errors.push(`${slug}: localized public copy contains prohibited private PII (${finding}).`);
+  }
+  if (/(?:\b(?:PatientName|PatientID|StudyInstanceUID|SOPInstanceUID)\b|환자(?:명|번호|ID))\s*[:=]/i.test(text)) {
+    errors.push(`${slug}: localized public copy contains a private patient identifier.`);
+  }
+  return errors;
+}
+
 function portfolioDataErrors(candidate) {
-  return render.validatePortfolioData(candidate);
+  const errors = render.validatePortfolioData(candidate).slice();
+  for (const project of candidate?.projects || []) errors.push(...projectPublicTextErrors(project));
+  return errors;
 }
 
 function publicCvDataErrors(candidate) {
@@ -1966,6 +2008,61 @@ function portfolioHtmlInventoryErrors(rootDir) {
   return errors;
 }
 
+function forbiddenSourceDocumentErrors(rootDir) {
+  const errors = [];
+  const ignoredDirectories = new Set(['.git', '.superpowers', 'node_modules']);
+  const sourceExtensions = new Set(['.doc', '.docx', '.hwp', '.hwpx', '.odt', '.pages', '.rtf']);
+  const sourceNamePattern = /(?:입사지원서|이력서|경력기술서|(?:resume|application)[-_. ]*(?:source|original))/i;
+  const pending = [path.resolve(rootDir)];
+  while (pending.length) {
+    const directory = pending.pop();
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      if (entry.isDirectory() && ignoredDirectories.has(entry.name)) continue;
+      const absolutePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        pending.push(absolutePath);
+        continue;
+      }
+      if (!entry.isFile()) continue;
+      const relativePath = toPosix(path.relative(rootDir, absolutePath));
+      const extension = path.extname(entry.name).toLowerCase();
+      const privateResumeDirectory = /(?:^|\/)docs\/이력서(?:\/|$)/i.test(relativePath);
+      if (sourceExtensions.has(extension) || privateResumeDirectory || sourceNamePattern.test(entry.name)) {
+        errors.push(`Private source document must not enter the public tree: ${relativePath}.`);
+      }
+    }
+  }
+  return errors;
+}
+
+function publicHtmlVisibleText(html) {
+  let visible = String(html || '')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<(script|style|title|textarea|xmp)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, ' ')
+    .replace(/<[^>]*>/g, ' ');
+  for (let index = 0; index < 6; index += 1) {
+    const next = decodeHtmlReferenceEntities(visible);
+    if (next === visible) break;
+    visible = next;
+  }
+  return visible;
+}
+
+function publicHtmlSurfaceErrors(file, html) {
+  const visible = publicHtmlVisibleText(html);
+  const errors = [];
+  if (proseContainsLocalPath(visible)) {
+    errors.push(`${file.relativePath}: visible public HTML contains a private source path or local path.`);
+  }
+  for (const finding of publicPiiFindings(visible)) {
+    errors.push(`${file.relativePath}: visible public HTML contains prohibited private PII (${finding}).`);
+  }
+  if (/(?:\b(?:PatientName|PatientID|StudyInstanceUID|SOPInstanceUID)\b|환자(?:명|번호|ID))\s*[:=]/i.test(visible)) {
+    errors.push(`${file.relativePath}: visible public HTML contains a private patient identifier.`);
+  }
+  return errors;
+}
+
 function staticPageErrors(file, html, rootDir) {
   const errors = [];
   const koreanUrl = siteUrl + file.route;
@@ -2029,6 +2126,7 @@ function staticPageErrors(file, html, rootDir) {
 
 function validatePortfolio(rootDir) {
   const errors = portfolioDataErrors(data).slice();
+  errors.push(...forbiddenSourceDocumentErrors(rootDir));
   errors.push(...portfolioHtmlInventoryErrors(rootDir));
   errors.push(...evidenceRegistryErrors(data, rootDir));
   errors.push(...evidenceDirectoryErrors(rootDir));
@@ -2046,6 +2144,7 @@ function validatePortfolio(rootDir) {
     if (!file.allowsNamedEmployer && privatePartnerPattern.test(html)) {
       errors.push(`${file.relativePath}: contains a nonpublic partner or company-project name.`);
     }
+    errors.push(...publicHtmlSurfaceErrors(file, html));
     errors.push(...staticPageErrors(file, html, rootDir));
   }
 
@@ -2085,6 +2184,7 @@ module.exports = {
   publicPortfolioFiles,
   publicPortfolioVisualFiles,
   portfolioHtmlInventoryErrors,
+  forbiddenSourceDocumentErrors,
   htmlStartTags,
   htmlReferences,
   localReferenceErrors,
