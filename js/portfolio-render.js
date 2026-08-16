@@ -18,6 +18,14 @@
   var capabilityKeys = ['registration', 'sensor-fusion', 'medical-navigation', 'xr-engineering', 'ai-product-engineering'];
   var tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
   var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'unmanned-forklift', 'ai-build-lab'];
+  var pdfDiagramKindsBySlug = {
+    'surgical-navigation': 'coordinate-chain',
+    'mandibular-fracture': 'optimization-loop',
+    'life-careverse': 'sync-topology',
+    'rtms-navigation': 'navigation-loop',
+    'unmanned-forklift': 'sensor-convergence',
+    'ai-build-lab': 'product-loop'
+  };
   var blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
   var mediaTypes = ['video', 'image', 'repository', 'publication'];
   var leadMediaTypes = ['video', 'image', 'repository'];
@@ -311,6 +319,7 @@
         errors.push('Portfolio projects must use the known ordered slugs.');
       }
       var seenSlugs = [];
+      var seenPdfDiagramKinds = [];
       data.projects.forEach(function (project) {
         var slug = project && project.slug ? project.slug : 'unknown-project';
         if (!project || typeof project !== 'object') {
@@ -364,6 +373,61 @@
           errors.push(slug + ': missing structural blocks.');
         } else {
           project.blocks.forEach(function (block) { errors = errors.concat(blockErrors(block, slug)); });
+        }
+        var sequence = project.pdfSequence;
+        if (!sequence || typeof sequence !== 'object' || Array.isArray(sequence)) {
+          errors.push(slug + ': missing PDF sequence contract.');
+        } else {
+          if (JSON.stringify(Object.keys(sequence).sort()) !== JSON.stringify(['diagram', 'evidenceId', 'middle'])) {
+            errors.push(slug + ': PDF sequence must contain exactly middle, evidenceId, and diagram.');
+          }
+          var blockKeys = Array.isArray(project.blocks) ? project.blocks.map(function (block) { return block && block.key; }) : [];
+          if (!Array.isArray(sequence.middle) || sequence.middle.length !== 4 ||
+              sequence.middle.some(function (key) { return typeof key !== 'string' || !key; }) ||
+              new Set(sequence.middle).size !== 4 ||
+              sequence.middle.some(function (key) { return !blockKeys.includes(key); })) {
+            errors.push(slug + ': PDF sequence must reference exactly four distinct known middle blocks.');
+          }
+          var mediaIds = [];
+          if (project.media && typeof project.media === 'object') {
+            ['lead', 'video', 'poster'].forEach(function (slot) {
+              if (project.media[slot] && typeof project.media[slot].id === 'string') mediaIds.push(project.media[slot].id);
+            });
+            (Array.isArray(project.media.references) ? project.media.references : []).forEach(function (item) {
+              if (item && typeof item.id === 'string') mediaIds.push(item.id);
+            });
+          }
+          if (typeof sequence.evidenceId !== 'string' || !sequence.evidenceId ||
+              !project.media || !project.media.lead || sequence.evidenceId !== project.media.lead.id ||
+              !mediaIds.includes(sequence.evidenceId)) {
+            errors.push(slug + ': PDF sequence evidenceId must reference the canonical lead media.');
+          }
+          var diagram = sequence.diagram;
+          if (!diagram || typeof diagram !== 'object' || Array.isArray(diagram)) {
+            errors.push(slug + ': missing PDF sequence diagram contract.');
+          } else {
+            if (JSON.stringify(Object.keys(diagram).sort()) !== JSON.stringify(['kind', 'translations'])) {
+              errors.push(slug + ': PDF sequence diagram must contain exactly kind and translations.');
+            }
+            if (diagram.kind !== pdfDiagramKindsBySlug[slug]) errors.push(slug + ': invalid PDF sequence diagram kind.');
+            if (seenPdfDiagramKinds.includes(diagram.kind)) errors.push(slug + ': PDF sequence diagram kind must be unique.');
+            if (typeof diagram.kind === 'string') seenPdfDiagramKinds.push(diagram.kind);
+            if (!diagram.translations || typeof diagram.translations !== 'object' || Array.isArray(diagram.translations) ||
+                JSON.stringify(Object.keys(diagram.translations).sort()) !== JSON.stringify(['en', 'ko'])) {
+              errors.push(slug + ': PDF sequence diagram translations must contain exactly ko and en.');
+            } else {
+              ['ko', 'en'].forEach(function (locale) {
+                var diagramCopy = diagram.translations[locale];
+                if (!diagramCopy || typeof diagramCopy !== 'object' || Array.isArray(diagramCopy) ||
+                    JSON.stringify(Object.keys(diagramCopy).sort()) !== JSON.stringify(['nodes', 'title']) ||
+                    typeof diagramCopy.title !== 'string' || !diagramCopy.title.trim() ||
+                    !Array.isArray(diagramCopy.nodes) || diagramCopy.nodes.length !== 4 ||
+                    diagramCopy.nodes.some(function (node) { return typeof node !== 'string' || !node.trim(); })) {
+                  errors.push(slug + ': ' + locale + ' PDF sequence diagram requires a title and exactly four nodes.');
+                }
+              });
+            }
+          }
         }
         if (project.links !== undefined && !Array.isArray(project.links)) {
           errors.push(slug + ': project links must be an array.');

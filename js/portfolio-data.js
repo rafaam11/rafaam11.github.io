@@ -140,6 +140,17 @@
         poster: { id: 'surgical-navigation-demo-poster', type: 'image', status: 'pending-approval' }
       },
       pdf: { ko: 'assets/pdfs/surgical-navigation-ko.pdf', en: 'assets/pdfs/surgical-navigation-en.pdf' },
+      pdfSequence: {
+        middle: ['coordinate-chain', 'spatial-feedback', 'demonstration-evidence', 'clinical-boundary'],
+        evidenceId: 'surgical-navigation-demo',
+        diagram: {
+          kind: 'coordinate-chain',
+          translations: {
+            ko: { title: '추적 좌표에서 공간 피드백까지', nodes: ['추적 장치', '영상·도구 좌표', '정합 상태', 'HoloLens 피드백'] },
+            en: { title: 'Tracking coordinates to spatial feedback', nodes: ['Tracking hardware', 'Image and tool frames', 'Registration state', 'HoloLens feedback'] }
+          }
+        }
+      },
       translations: {
         ko: {
           title: '수술내비게이션 시스템',
@@ -190,6 +201,17 @@
         references: [{ id: 'mandibular-publication', type: 'publication', status: 'approved', publicPath: 'https://link.springer.com/article/10.1007/s10278-024-01014-z' }]
       },
       pdf: { ko: 'assets/pdfs/mandibular-fracture-ko.pdf', en: 'assets/pdfs/mandibular-fracture-en.pdf' },
+      pdfSequence: {
+        middle: ['clinical-question', 'research-pipeline', 'published-evidence', 'research-boundary'],
+        evidenceId: 'mandibular-presentation-award',
+        diagram: {
+          kind: 'optimization-loop',
+          translations: {
+            ko: { title: '교합 제약 기반 최적화 검증 루프', nodes: ['교합 표적', '특징·표면', '최적화·시뮬레이션', '실험·논문'] },
+            en: { title: 'Occlusion-constrained optimization loop', nodes: ['Occlusion target', 'Features and surfaces', 'Optimization and simulation', 'Experiments and paper'] }
+          }
+        }
+      },
       links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '게재 논문' }, en: { label: 'Publication' } } }],
       translations: {
         ko: {
@@ -232,6 +254,17 @@
       tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'], visualKey: 'hololens-ar-concept',
       media: { lead: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, video: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, poster: { id: 'life-careverse-multiuser-poster', type: 'image', status: 'pending-approval' } },
       pdf: { ko: 'assets/pdfs/life-careverse-ko.pdf', en: 'assets/pdfs/life-careverse-en.pdf' },
+      pdfSequence: {
+        middle: ['shared-state', 'xr-application', 'multiuser-demo', 'adoption-boundary'],
+        evidenceId: 'life-careverse-multiuser-demo',
+        diagram: {
+          kind: 'sync-topology',
+          translations: {
+            ko: { title: '멀티유저 공유 상태 토폴로지', nodes: ['Quest 사용자', 'PUN2 공유 상태', 'Photon Voice', '시나리오·공간 UI'] },
+            en: { title: 'Multi-user shared-state topology', nodes: ['Quest users', 'PUN2 shared state', 'Photon Voice', 'Scenario and spatial UI'] }
+          }
+        }
+      },
       translations: {
         ko: {
           title: 'Life Careverse - 멀티유저 XR', shortTitle: 'Life Careverse', eyebrow: '의료 코어 · 멀티유저 XR',
@@ -273,6 +306,17 @@
       tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'], visualKey: 'coordinate-signal',
       media: { lead: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, video: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, poster: { id: 'rtms-prototype-poster', type: 'image', status: 'pending-approval' } },
       pdf: { ko: 'assets/pdfs/rtms-navigation-ko.pdf', en: 'assets/pdfs/rtms-navigation-en.pdf' },
+      pdfSequence: {
+        middle: ['slicer-architecture', 'coordinate-visibility', 'repeatable-prototype', 'prototype-boundary'],
+        evidenceId: 'rtms-prototype-recording',
+        diagram: {
+          kind: 'navigation-loop',
+          translations: {
+            ko: { title: '표적 가시화와 반복 내비게이션 루프', nodes: ['추적 입력', '좌표 변환', '의료영상 표적', 'Slicer UI'] },
+            en: { title: 'Target-visibility navigation loop', nodes: ['Tracking input', 'Coordinate transform', 'Medical-image target', 'Slicer UI'] }
+          }
+        }
+      },
       translations: {
         ko: {
           title: 'rTMS 내비게이션 프로토타입', shortTitle: 'rTMS 내비게이션', eyebrow: '의료 코어 · 프로토타입',
@@ -314,6 +358,17 @@
       tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'], visualKey: 'forklift-sim-to-real',
       media: { lead: { id: 'forklift-registration-pointcloud', type: 'image', status: 'pending-approval' } },
       pdf: { ko: 'assets/pdfs/unmanned-forklift-ko.pdf', en: 'assets/pdfs/unmanned-forklift-en.pdf' },
+      pdfSequence: {
+        middle: ['sensor-coordinate-chain', 'perception-to-policy', 'integration-evidence', 'field-boundary'],
+        evidenceId: 'forklift-registration-pointcloud',
+        diagram: {
+          kind: 'sensor-convergence',
+          translations: {
+            ko: { title: '다중 센서에서 안전 정책으로의 수렴', nodes: ['RGB·ToF·SAM3', 'LiDAR·NAV350 PCD', '로봇 위치·융합', '안전 정책·Zenoh'] },
+            en: { title: 'Multi-sensor convergence to safety policy', nodes: ['RGB, ToF, and SAM3', 'LiDAR and NAV350 PCD', 'Robot pose and fusion', 'Safety policy and Zenoh'] }
+          }
+        }
+      },
       translations: {
         ko: {
           title: '무인지게차 다중 센서 정합', shortTitle: '무인지게차 센서 정합', eyebrow: '산업 스포트라이트 · 다중 센서',
@@ -358,6 +413,17 @@
         references: [{ id: 'daegu-bus-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/public-transportation-info' }]
       },
       pdf: { ko: 'assets/pdfs/ai-build-lab-ko.pdf', en: 'assets/pdfs/ai-build-lab-en.pdf' },
+      pdfSequence: {
+        middle: ['problem-to-product', 'human-ai-boundary', 'public-product-proof', 'privacy-metric-boundary'],
+        evidenceId: 'multi-cli-work-repository',
+        diagram: {
+          kind: 'product-loop',
+          translations: {
+            ko: { title: '문제 발견에서 운영까지의 제품 루프', nodes: ['경험한 마찰', '요구사항·아키텍처', '테스트·수용', '릴리스·운영'] },
+            en: { title: 'Product loop from friction to operation', nodes: ['Experienced friction', 'Requirements and architecture', 'Tests and acceptance', 'Release and operation'] }
+          }
+        }
+      },
       links: [
         { href: 'https://github.com/rafaam11/multi-cli-work', translations: { ko: { label: 'multi-cli-work 저장소' }, en: { label: 'multi-cli-work repository' } } },
         { href: 'https://github.com/rafaam11/public-transportation-info', translations: { ko: { label: '대구 버스 앱 저장소' }, en: { label: 'Daegu bus app repository' } } }
