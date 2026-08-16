@@ -264,6 +264,29 @@ test('data validator accepts the canonical portfolio', () => {
   assert.deepEqual(validator.portfolioDataErrors(data), []);
 });
 
+test('visual fallback validation rejects traversal and inventory stays inside the repository root', () => {
+  const mutated = JSON.parse(JSON.stringify(data));
+  mutated.projects[0].visualKey = '../../../../outside/private/source';
+  assert.match(validator.portfolioDataErrors(mutated).join(' '), /invalid visual key/i);
+
+  const originalVisualKey = data.projects[0].visualKey;
+  data.projects[0].visualKey = '../../../../outside/private/source';
+  try {
+    const files = validator.publicPortfolioVisualFiles(root);
+    assert.equal(files.some((file) => {
+      const relativePath = path.relative(path.resolve(root), path.resolve(file.absolutePath));
+      return relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath);
+    }), false, 'visual inventory must not expose a path outside the repository root');
+    assert.equal(
+      files.some((file) => file.relativePath.replace(/\\/g, '/').includes('outside/private/source')),
+      false,
+      'traversal visualKey must not enter the public visual inventory'
+    );
+  } finally {
+    data.projects[0].visualKey = originalVisualKey;
+  }
+});
+
 test('data validator rejects incomplete, unknown, unsafe, and misleading canonical records', () => {
   const mutations = [
     ['missing locale copy', (copy) => { delete copy.projects[0].translations.ko.problem; }, /missing ko translation for problem/],
