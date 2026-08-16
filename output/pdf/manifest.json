@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "d8b994d7250ffa9a07ce82dccf32966c35b8ceae138a4da03ce0bc69a06b4040",
+  "sourceDigest": "dde290c085ab645be8b523d642428b21f1c9261a41763ac6d55c93a0204761d4",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
   "generatorSha256": "d5b9dcb41311b5b6ca156f6b1905093830ab859753b4e10ac91b994855e6cc38",
@@ -34,9 +34,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 10,
-      "characters": 2573,
-      "bytes": 183049,
-      "sha256": "e3619410484df829ab7bbc604064295c2970f4d3d780379ffea9b0e226ea1781"
+      "characters": 2583,
+      "bytes": 193735,
+      "sha256": "c2b27b5187c6ad50c360ed6ea85b50d43eff3b0cbe70c56ad1b95cb5078b9ed9"
     },
     {
       "name": "mandibular-fracture-en.pdf",
@@ -45,9 +45,9 @@
       "locale": "en",
       "pages": 6,
       "links": 10,
-      "characters": 5063,
-      "bytes": 78236,
-      "sha256": "5a103ac8c8bab103e8976c8ae5111c3c4a092d4524513f993d0ddbf688b9e756"
+      "characters": 5087,
+      "bytes": 78324,
+      "sha256": "58c0ccb1a7a35c7cc1d82389db592a99002efe1a484d3fe77eea3df6ac413576"
     },
     {
       "name": "life-careverse-ko.pdf",
@@ -78,9 +78,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 2479,
-      "bytes": 173839,
-      "sha256": "8efd39cc8862b1de7135391b6c798376dea913a2485edb1980d4d1bdf288e16c"
+      "characters": 2493,
+      "bytes": 175256,
+      "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
     },
     {
       "name": "rtms-navigation-en.pdf",
@@ -89,9 +89,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 4449,
-      "bytes": 76664,
-      "sha256": "3a0030d187dd9cbdac116ee8d9599f4794ea52a772d8c545b66514a737dc25f8"
+      "characters": 4469,
+      "bytes": 76796,
+      "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
     },
     {
       "name": "unmanned-forklift-ko.pdf",
@@ -122,9 +122,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 12,
-      "characters": 2935,
-      "bytes": 195889,
-      "sha256": "c070e79ce6f05ae1dc53c31296a20406576395e7e4220755906b914617fa2597"
+      "characters": 2951,
+      "bytes": 195322,
+      "sha256": "521987054fc05af3a07eb2b26a72a0c3a2dc010304826e528cd6f2fec8ee0561"
     },
     {
       "name": "ai-build-lab-en.pdf",
@@ -230,8 +230,8 @@
       "slug": "ai-build-lab",
       "locale": "ko",
       "pages": 6,
-      "bytes": 195889,
-      "sha256": "c070e79ce6f05ae1dc53c31296a20406576395e7e4220755906b914617fa2597"
+      "bytes": 195322,
+      "sha256": "521987054fc05af3a07eb2b26a72a0c3a2dc010304826e528cd6f2fec8ee0561"
     },
     {
       "path": "assets/pdfs/life-careverse-en.pdf",
@@ -257,8 +257,8 @@
       "slug": "mandibular-fracture",
       "locale": "en",
       "pages": 6,
-      "bytes": 78236,
-      "sha256": "5a103ac8c8bab103e8976c8ae5111c3c4a092d4524513f993d0ddbf688b9e756"
+      "bytes": 78324,
+      "sha256": "58c0ccb1a7a35c7cc1d82389db592a99002efe1a484d3fe77eea3df6ac413576"
     },
     {
       "path": "assets/pdfs/mandibular-fracture-ko.pdf",
@@ -266,8 +266,8 @@
       "slug": "mandibular-fracture",
       "locale": "ko",
       "pages": 6,
-      "bytes": 183049,
-      "sha256": "e3619410484df829ab7bbc604064295c2970f4d3d780379ffea9b0e226ea1781"
+      "bytes": 193735,
+      "sha256": "c2b27b5187c6ad50c360ed6ea85b50d43eff3b0cbe70c56ad1b95cb5078b9ed9"
     },
     {
       "path": "assets/pdfs/rtms-navigation-en.pdf",
@@ -275,8 +275,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 76664,
-      "sha256": "3a0030d187dd9cbdac116ee8d9599f4794ea52a772d8c545b66514a737dc25f8"
+      "bytes": 76796,
+      "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
     },
     {
       "path": "assets/pdfs/rtms-navigation-ko.pdf",
@@ -284,8 +284,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 173839,
-      "sha256": "8efd39cc8862b1de7135391b6c798376dea913a2485edb1980d4d1bdf288e16c"
+      "bytes": 175256,
+      "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
     },
     {
       "path": "assets/pdfs/surgical-navigation-en.pdf",
@@ -338,8 +338,8 @@
       "slug": "ai-build-lab",
       "locale": "ko",
       "pages": 6,
-      "bytes": 195889,
-      "sha256": "c070e79ce6f05ae1dc53c31296a20406576395e7e4220755906b914617fa2597"
+      "bytes": 195322,
+      "sha256": "521987054fc05af3a07eb2b26a72a0c3a2dc010304826e528cd6f2fec8ee0561"
     },
     {
       "path": "output/pdf/jinmin-kim-cv-en.pdf",
@@ -381,8 +381,8 @@
       "slug": "mandibular-fracture",
       "locale": "en",
       "pages": 6,
-      "bytes": 78236,
-      "sha256": "5a103ac8c8bab103e8976c8ae5111c3c4a092d4524513f993d0ddbf688b9e756"
+      "bytes": 78324,
+      "sha256": "58c0ccb1a7a35c7cc1d82389db592a99002efe1a484d3fe77eea3df6ac413576"
     },
     {
       "path": "output/pdf/mandibular-fracture-ko.pdf",
@@ -390,8 +390,8 @@
       "slug": "mandibular-fracture",
       "locale": "ko",
       "pages": 6,
-      "bytes": 183049,
-      "sha256": "e3619410484df829ab7bbc604064295c2970f4d3d780379ffea9b0e226ea1781"
+      "bytes": 193735,
+      "sha256": "c2b27b5187c6ad50c360ed6ea85b50d43eff3b0cbe70c56ad1b95cb5078b9ed9"
     },
     {
       "path": "output/pdf/rtms-navigation-en.pdf",
@@ -399,8 +399,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 76664,
-      "sha256": "3a0030d187dd9cbdac116ee8d9599f4794ea52a772d8c545b66514a737dc25f8"
+      "bytes": 76796,
+      "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
     },
     {
       "path": "output/pdf/rtms-navigation-ko.pdf",
@@ -408,8 +408,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 173839,
-      "sha256": "8efd39cc8862b1de7135391b6c798376dea913a2485edb1980d4d1bdf288e16c"
+      "bytes": 175256,
+      "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
     },
     {
       "path": "output/pdf/surgical-navigation-en.pdf",
