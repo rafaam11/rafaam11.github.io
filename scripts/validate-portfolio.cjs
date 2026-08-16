@@ -10,16 +10,7 @@ const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const siteUrl = 'https://rafaam11.github.io/';
 
 function portfolioRoutes() {
-  const topLevelPages = [
-    { route: '', file: 'index.html' },
-    { route: 'projects/', file: 'projects/index.html' },
-    { route: 'cv/', file: 'cv/index.html', allowsNamedEmployer: true },
-    { route: 'contact/', file: 'contact/index.html' }
-  ];
-  return topLevelPages.concat(i18n.canonicalCaseSlugs.map((slug) => ({
-    route: `projects/${slug}/`,
-    file: `projects/${slug}/index.html`
-  })));
+  return i18n.routeDescriptors;
 }
 
 function publicPortfolioFiles(rootDir) {

@@ -3,7 +3,6 @@
   if (typeof module === 'object' && module.exports) module.exports = value;
   root.SiteI18n = value;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
-  var supportedNavigationPages = ['home', 'projects', 'cv', 'contact'];
   var canonicalCaseSlugs = [
     'surgical-navigation',
     'mandibular-fracture',
@@ -12,6 +11,17 @@
     'unmanned-forklift',
     'ai-build-lab'
   ];
+  var routeDescriptors = [
+    { page: 'home', route: '', file: 'index.html', navigation: 'brand' },
+    { page: 'projects', route: 'projects/', file: 'projects/index.html', navigation: 'link' },
+    { page: 'cv', route: 'cv/', file: 'cv/index.html', navigation: 'link', allowsNamedEmployer: true },
+    { page: 'contact', route: 'contact/', file: 'contact/index.html', navigation: 'link' }
+  ].concat(canonicalCaseSlugs.map(function (slug) {
+    return { page: 'projects', route: 'projects/' + slug + '/', file: 'projects/' + slug + '/index.html' };
+  }));
+  var supportedNavigationPages = routeDescriptors
+    .filter(function (descriptor) { return Boolean(descriptor.navigation); })
+    .map(function (descriptor) { return descriptor.page; });
 
   var ui = {
     ko: {
@@ -111,6 +121,7 @@
     supportedLocales: ['ko', 'en'],
     supportedNavigationPages: supportedNavigationPages,
     canonicalCaseSlugs: canonicalCaseSlugs,
+    routeDescriptors: routeDescriptors,
     ui: ui,
     normalizeLocale: normalizeLocale,
     routeHref: routeHref
