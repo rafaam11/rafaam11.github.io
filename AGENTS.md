@@ -47,7 +47,6 @@ js/portfolio-render.js             # Home, Projects, and case renderer
 js/site-i18n.js                    # Canonical route descriptors and localized UI copy
 js/nav.js                          # Shared nav/footer; file:// and HTTP compatible
 css/site.css                       # Shared portfolio components
-css/case-study.css                 # Case-study components
 css/spatial-signal.css             # Active technical-document visual layer
 css/cv-pdf.css                     # CV viewer and page-preview layout
 assets/projects/EVIDENCE_REGISTER.md # Public evidence identifier and approval SSOT
