@@ -241,6 +241,9 @@
     if (item.status === 'pending-approval' && hasPublicPath) errors.push(label + ': pending-approval media must not declare a public path.');
     if (item.status === 'approved' && !hasPublicPath) errors.push(label + ': approved media requires a public path.');
     if (hasPublicPath && !isSafePublicPath(item.publicPath)) errors.push(label + ': unsafe public path.');
+    if (item.status === 'approved' && hasPublicPath && item.type === 'repository' && !isSafeHttpUrl(item.publicPath)) {
+      errors.push(label + ': repository media requires an HTTP(S) public URL.');
+    }
     if (item.status === 'approved' && hasPublicPath && item.type === 'image' && !isImagePath(item.publicPath)) {
       errors.push(label + ': image media requires an image file.');
     }
@@ -536,7 +539,7 @@
       var media = project.media && project.media.lead ? project.media.lead : {};
       var posterItem = project.media && project.media.poster;
       var approvedImage = isApprovedImage(media) ? media : (isApprovedVideo(media) && isApprovedImage(posterItem) ? posterItem : null);
-      var displayStatus = approvedImage ? 'approved' : 'pending-approval';
+      var displayStatus = approvedImage || isApprovedRepository(media) ? 'approved' : 'pending-approval';
       var visual = '';
       if (approvedImage) {
         var imageClass = 'td-mosaic-cell__image' + (media.type === 'video' ? ' td-mosaic-cell__poster' : '');
