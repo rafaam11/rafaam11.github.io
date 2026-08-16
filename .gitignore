@@ -1,6 +1,8 @@
 .DS_Store
 Thumbs.db
 .superpowers/
+__pycache__/
+*.pyc
 
 # 개인정보가 포함된 지원 서류(이력서/경력기술서)는 공개 사이트에 게시하지 않음
 docs/(한화시스템) 이력서_무인디지털트윈_김진민.md

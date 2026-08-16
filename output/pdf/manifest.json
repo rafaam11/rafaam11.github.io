@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "2026-08-16",
+  "generator": "scripts/generate-portfolio-pdfs.py",
+  "files": [
+    {
+      "name": "surgical-navigation-ko.pdf",
+      "kind": "project",
+      "slug": "surgical-navigation",
+      "locale": "ko",
+      "pages": 6,
+      "links": 8,
+      "characters": 2282,
+      "bytes": 168826,
+      "sha256": "782bb77c3ddb27fc8ff2af8b47cb466b130aa435a524d36ffa26b5693828d128"
+    },
+    {
+      "name": "surgical-navigation-en.pdf",
+      "kind": "project",
+      "slug": "surgical-navigation",
+      "locale": "en",
+      "pages": 6,
+      "links": 8,
+      "characters": 4338,
+      "bytes": 74042,
+      "sha256": "53d05af6838d641c66aa97b168c5024d7328802014a05ab4b5f501237f6fb4ff"
+    },
+    {
+      "name": "mandibular-fracture-ko.pdf",
+      "kind": "project",
+      "slug": "mandibular-fracture",
+      "locale": "ko",
+      "pages": 6,
+      "links": 10,
+      "characters": 2334,
+      "bytes": 175737,
+      "sha256": "484aa1ef142821dacbc80d9fa5ebc7412c36f62c2766ae5d5f322d0ce43cbfea"
+    },
+    {
+      "name": "mandibular-fracture-en.pdf",
+      "kind": "project",
+      "slug": "mandibular-fracture",
+      "locale": "en",
+      "pages": 6,
+      "links": 10,
+      "characters": 4523,
+      "bytes": 74963,
+      "sha256": "339edc05ee52e44c3b1d6ef22c22461cb2864f9c2aab8c963c94de36457ba7df"
+    },
+    {
+      "name": "life-careverse-ko.pdf",
+      "kind": "project",
+      "slug": "life-careverse",
+      "locale": "ko",
+      "pages": 6,
+      "links": 8,
+      "characters": 2329,
+      "bytes": 167234,
+      "sha256": "b68f15d4a1821fabf2823f9d3dea3f1f419bb3abb6d05863c641de9fb5f068ed"
+    },
+    {
+      "name": "life-careverse-en.pdf",
+      "kind": "project",
+      "slug": "life-careverse",
+      "locale": "en",
+      "pages": 6,
+      "links": 8,
+      "characters": 3987,
+      "bytes": 73319,
+      "sha256": "76b9ec1fbf5a0b0c19665d058b71e5005115908b9e855dc62a84548bbeb0dddb"
+    },
+    {
+      "name": "rtms-navigation-ko.pdf",
+      "kind": "project",
+      "slug": "rtms-navigation",
+      "locale": "ko",
+      "pages": 6,
+      "links": 8,
+      "characters": 2227,
+      "bytes": 161597,
+      "sha256": "204fcbc441ca01e847284d51112f423bfd28bc333443355267430dcfebb8c403"
+    },
+    {
+      "name": "rtms-navigation-en.pdf",
+      "kind": "project",
+      "slug": "rtms-navigation",
+      "locale": "en",
+      "pages": 6,
+      "links": 8,
+      "characters": 3938,
+      "bytes": 73295,
+      "sha256": "1a041c9679bdb5f6dc10295db6940f80dc6f4713cc4b2e5795bf876904de39ea"
+    },
+    {
+      "name": "unmanned-forklift-ko.pdf",
+      "kind": "project",
+      "slug": "unmanned-forklift",
+      "locale": "ko",
+      "pages": 6,
+      "links": 8,
+      "characters": 2391,
+      "bytes": 162282,
+      "sha256": "8d04c3d903296b9996df953484168300818e69adcd8750a6aed2be799ee54d12"
+    },
+    {
+      "name": "unmanned-forklift-en.pdf",
+      "kind": "project",
+      "slug": "unmanned-forklift",
+      "locale": "en",
+      "pages": 6,
+      "links": 8,
+      "characters": 4609,
+      "bytes": 74218,
+      "sha256": "84d5bdebafa4ead4ca32724c4ac0caf26b12fca716392bee67d71017474637c0"
+    },
+    {
+      "name": "ai-build-lab-ko.pdf",
+      "kind": "project",
+      "slug": "ai-build-lab",
+      "locale": "ko",
+      "pages": 6,
+      "links": 12,
+      "characters": 2655,
+      "bytes": 176318,
+      "sha256": "6069454910d336335626ac40d353b83242ff69d6a7b0361686df82a8f7df2d88"
+    },
+    {
+      "name": "ai-build-lab-en.pdf",
+      "kind": "project",
+      "slug": "ai-build-lab",
+      "locale": "en",
+      "pages": 6,
+      "links": 12,
+      "characters": 4877,
+      "bytes": 76445,
+      "sha256": "0e792a3e6255298d7c2837bf67304d4a7efe35b47cfd724b1b5d35fc8218d3f9"
+    },
+    {
+      "name": "jinmin-kim-cv-ko.pdf",
+      "kind": "cv",
+      "locale": "ko",
+      "pages": 2,
+      "links": 6,
+      "characters": 1668,
+      "bytes": 134585,
+      "sha256": "1b5de1aa569f2bdab54b89acdfc1062fd1e643bddbefd44fca80cf5634fe403d"
+    },
+    {
+      "name": "jinmin-kim-cv-en.pdf",
+      "kind": "cv",
+      "locale": "en",
+      "pages": 2,
+      "links": 6,
+      "characters": 2627,
+      "bytes": 64834,
+      "sha256": "f997c7da5217425a6414019d0050a111f23d2dc83cab0ad88bce32d04a2ea967"
+    }
+  ]
+}

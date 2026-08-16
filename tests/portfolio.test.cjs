@@ -4,6 +4,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const vm = require('node:vm');
+const crypto = require('node:crypto');
+const childProcess = require('node:child_process');
 
 const root = path.join(__dirname, '..');
 const dataPath = path.join(root, 'js', 'portfolio-data.js');
@@ -48,6 +50,15 @@ function clone(value) {
 
 function count(haystack, needle) {
   return (haystack.match(new RegExp(needle, 'g')) || []).length;
+}
+
+function sha256(filePath) {
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function pdfPageCount(filePath) {
+  const bytes = fs.readFileSync(filePath);
+  return (bytes.toString('latin1').match(/\/Type\s*\/Page\b/g) || []).length;
 }
 
 function assertInOrder(haystack, values, label) {
@@ -1186,6 +1197,140 @@ test('Task 3 review case block title scale wins the trailing Spatial Signal casc
   assert.ok(overrideIndex > generalRuleIndex, 'case block override must follow the general H2 rule');
   assert.ok(cssRuleBodies(css, '.td-shell .td-case-block h2')
     .some((body) => /font-size\s*:\s*var\(--td-title\)/.test(body)));
+});
+
+test('Task 5 exporter produces deterministic public-safe project and CV input', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-export-'));
+  try {
+    const first = path.join(temporaryRoot, 'first.json');
+    const second = path.join(temporaryRoot, 'second.json');
+    for (const output of [first, second]) {
+      const result = childProcess.spawnSync(process.execPath, [
+        path.join(root, 'scripts', 'export-portfolio-data.cjs'),
+        '--output', output
+      ], { cwd: root, encoding: 'utf8' });
+      assert.equal(result.status, 0, result.stderr || result.stdout);
+    }
+    assert.equal(fs.readFileSync(first, 'utf8'), fs.readFileSync(second, 'utf8'));
+    const exported = JSON.parse(fs.readFileSync(first, 'utf8'));
+    assert.equal(exported.schemaVersion, 1);
+    assert.deepEqual(exported.projects.map((project) => project.slug), slugs);
+    assert.deepEqual(exported.locales, ['ko', 'en']);
+    assert.equal(exported.cv.version, '2026-08-16');
+    assert.deepEqual(validator.publicCvDataErrors(exported.cv), []);
+    assert.doesNotMatch(fs.readFileSync(first, 'utf8'), /(?:(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw)/i);
+    assert.doesNotMatch(JSON.stringify(exported.cv), /\b(?:phone|salary|professor|patient|hospital)\b/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 publishes exactly twelve six-page project PDFs and two two-page CV PDFs', () => {
+  const projectNames = slugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
+  const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
+  const outputNames = fs.readdirSync(path.join(root, 'output', 'pdf'))
+    .filter((name) => name.endsWith('.pdf')).sort();
+  assert.deepEqual(outputNames, projectNames.concat(cvNames).sort());
+  assert.deepEqual(fs.readdirSync(path.join(root, 'assets', 'pdfs')).filter((name) => name.endsWith('.pdf')).sort(), projectNames.sort());
+  assert.deepEqual(fs.readdirSync(path.join(root, 'assets', 'cv')).filter((name) => name.endsWith('.pdf')).sort(), cvNames.sort());
+
+  for (const name of projectNames) {
+    const asset = path.join(root, 'assets', 'pdfs', name);
+    const output = path.join(root, 'output', 'pdf', name);
+    const bytes = fs.readFileSync(asset);
+    assert.equal(bytes.subarray(0, 5).toString('ascii'), '%PDF-');
+    assert.ok(bytes.length > 12_000, `${name}: unexpectedly small PDF`);
+    assert.equal(pdfPageCount(asset), 6, `${name}: project PDF page count`);
+    assert.equal(sha256(asset), sha256(output), `${name}: output/assets checksum mismatch`);
+    assert.match(bytes.toString('latin1'), /\/URI\s*\(mailto:uiop3847@naver\.com\)/);
+    assert.doesNotMatch(bytes.toString('latin1'), /(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw/i);
+  }
+  for (const name of cvNames) {
+    const asset = path.join(root, 'assets', 'cv', name);
+    const output = path.join(root, 'output', 'pdf', name);
+    const bytes = fs.readFileSync(asset);
+    assert.equal(bytes.subarray(0, 5).toString('ascii'), '%PDF-');
+    assert.ok(bytes.length > 12_000, `${name}: unexpectedly small PDF`);
+    assert.equal(pdfPageCount(asset), 2, `${name}: CV PDF page count`);
+    assert.equal(sha256(asset), sha256(output), `${name}: output/assets checksum mismatch`);
+  }
+  assert.deepEqual(validator.pdfArtifactErrors(root), []);
+});
+
+test('Task 5 case routes expose their localized stable PDF artifacts', () => {
+  for (const project of data.projects) {
+    for (const locale of ['ko', 'en']) {
+      const prefix = locale === 'en' ? 'en/' : '';
+      const html = read(`${prefix}projects/${project.slug}/index.html`);
+      const expected = `${locale === 'en' ? '../../../' : '../../'}${project.pdf[locale]}`;
+      assert.match(html, new RegExp(`href="${expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
+      assert.equal(fs.existsSync(path.join(root, project.pdf[locale])), true);
+    }
+  }
+});
+
+test('Task 5 CV pages provide localized PDF object, raster previews, open, and download fallbacks', () => {
+  const pages = [
+    { file: 'cv/index.html', locale: 'ko', base: '../', intro: /3D 정합과 로봇 소프트웨어/, open: /PDF 열기/, download: /PDF 다운로드/, alt: /국문 이력서 .*페이지/ },
+    { file: 'en/cv/index.html', locale: 'en', base: '../../', intro: /3D registration and robot software/i, open: /Open PDF/, download: /Download PDF/, alt: /English CV page/ }
+  ];
+  for (const page of pages) {
+    const html = read(page.file);
+    const pdf = `${page.base}assets/cv/jinmin-kim-cv-${page.locale}.pdf`;
+    assert.match(html, page.intro);
+    assert.match(html, new RegExp(`<object[^>]+data="${pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+type="application/pdf"`));
+    for (const pageNumber of [1, 2]) {
+      const preview = `${page.base}assets/cv/jinmin-kim-cv-${page.locale}-page-${pageNumber}.png`;
+      assert.match(html, new RegExp(`<img[^>]+src="${preview.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+alt="[^"]+"`));
+      assert.equal(fs.existsSync(path.join(root, 'assets', 'cv', `jinmin-kim-cv-${page.locale}-page-${pageNumber}.png`)), true);
+    }
+    assert.match(html, page.open);
+    assert.match(html, page.download);
+    assert.match(html, new RegExp(`<a[^>]+href="${pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+target="_blank"[^>]+rel="noopener"`));
+    assert.match(html, new RegExp(`<a[^>]+href="${pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+download`));
+    assert.match(html, page.alt);
+    assert.doesNotMatch(html, /fontawesome|bootstrap(?:\.bundle)?\.min\.js|styles\.css|cv-theme\.css/i);
+  }
+});
+
+test('Task 5 public CV surfaces exclude private and unverified claims', () => {
+  const cvData = JSON.parse(read('data/public-cv.json'));
+  assert.deepEqual(validator.publicCvDataErrors(cvData), []);
+  const publicCv = [
+    JSON.stringify(cvData),
+    read('cv/index.html'),
+    read('en/cv/index.html')
+  ].join('\n');
+  assert.doesNotMatch(publicCv, /(?:\b\d{2,3}-\d{3,4}-\d{4}\b|\b10-\d{4}-\d+\b|\b(?:age|salary|professor|advisor|patient|hospital|customer)\b|나이|연봉|지도교수|환자|병원|고객|3\s*[–-]\s*4개월|1\s*[–-]\s*2주|주\s*단위|월\s*단위)/i);
+  assert.match(publicCv, /7/);
+  assert.match(publicCv, /3/);
+  assert.match(publicCv, /9/);
+  assert.match(publicCv, /JLPT N2/);
+  assert.match(publicCv, /s10278-024-01014-z/);
+});
+
+test('Task 5 standalone PDF validator reports missing or malformed CV data without throwing', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-validator-'));
+  try {
+    for (const relativePath of ['output/pdf', 'assets/pdfs', 'assets/cv']) {
+      fs.cpSync(path.join(root, relativePath), path.join(temporaryRoot, relativePath), { recursive: true });
+    }
+    for (const relativePath of ['cv/index.html', 'en/cv/index.html']) {
+      const target = path.join(temporaryRoot, relativePath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.copyFileSync(path.join(root, relativePath), target);
+    }
+    assert.doesNotThrow(() => validator.pdfArtifactErrors(temporaryRoot));
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /missing public CV data/i);
+
+    const cvPath = path.join(temporaryRoot, 'data', 'public-cv.json');
+    fs.mkdirSync(path.dirname(cvPath), { recursive: true });
+    fs.writeFileSync(cvPath, '{ malformed');
+    assert.doesNotThrow(() => validator.pdfArtifactErrors(temporaryRoot));
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /malformed public CV data/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
 });
 
 test('full validator scans live SVGs and passes the twenty-page public contract', () => {
