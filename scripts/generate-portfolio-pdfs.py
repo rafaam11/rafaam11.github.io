@@ -44,13 +44,22 @@ PUBLIC_SITE = {
     "linkedin": "https://www.linkedin.com/in/rlawlsals",
 }
 ASCII_HYPHENS = str.maketrans({
+    "֊": "-",
+    "᠆": "-",
     "‐": "-",
     "‑": "-",
     "‒": "-",
     "–": "-",
     "—": "-",
     "−": "-",
+    "⸗": "-",
+    "⸺": "-",
+    "⸻": "-",
+    "﹘": "-",
+    "﹣": "-",
+    "－": "-",
 })
+PUBLIC_DASH_ENTITY_PATTERN = re.compile(r"&(?:dash|hyphen|ndash|mdash);?", re.I)
 PUBLIC_PII_PATTERNS = [
     ("phone number", re.compile(r"(?:\+82[\s()./·-]*\(?0?10\)?|\(?010\)?)[\s()./·-]*\d{3,4}[\s()./·-]*\d{4}(?!\d)", re.I)),
     ("explicit English age", re.compile(r"\b\d{1,3}(?:\s+years?\s+old|[-\s]year[-\s]old)\b", re.I)),
@@ -126,18 +135,22 @@ def normalize_public_separators(value: str) -> str:
 def public_text_scan_variants(value: str) -> list[str]:
     decoded = value
     for _ in range(6):
-        next_value = html.unescape(decoded)
+        next_value = PUBLIC_DASH_ENTITY_PATTERN.sub("-", html.unescape(decoded))
         if next_value == decoded:
             break
         decoded = next_value
     decoded = re.sub(r"&#(?:x)?[^;\s<]{1,24};?", " ", decoded, flags=re.I)
     decoded = re.sub(r"&[a-z][a-z0-9]{0,31};?", " ", decoded, flags=re.I)
     decoded = normalize_public_separators(decoded)
-    visible = re.sub(r"<!--[\s\S]*?-->", " ", decoded)
-    visible = re.sub(r"<[^>]*>", " ", visible)
-    visible = re.sub(r"<[^>]*$", " ", visible)
-    visible = normalize_public_separators(visible)
-    return list(dict.fromkeys([decoded, visible]))
+    def flatten_visible_text(separator: str) -> str:
+        visible = re.sub(r"<!--[\s\S]*?-->", separator, decoded)
+        visible = re.sub(r"<[^>]*>", separator, visible)
+        visible = re.sub(r"<[^>]*$", separator, visible)
+        return normalize_public_separators(visible)
+
+    visible_with_spaces = flatten_visible_text(" ")
+    visible_joined = flatten_visible_text("")
+    return list(dict.fromkeys([decoded, visible_with_spaces, visible_joined]))
 
 
 def public_pii_findings(value: Any) -> list[str]:

@@ -882,8 +882,35 @@ function expectedPdfSourceDigest(rootDir, candidatePortfolio = data, candidateCv
   }
 }
 
-function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
+function cvSummaryRecoveryArtifactErrors(rootDir) {
   const errors = [];
+  const recoveryNamePattern = /\.public-cv-summary-.*\.(?:tmp|bak)$/i;
+  const visit = (directory) => {
+    let entries;
+    try {
+      entries = fs.readdirSync(directory, { withFileTypes: true });
+    } catch (error) {
+      errors.push(`${path.relative(rootDir, directory).replace(/\\/g, '/')}: cannot inspect CV summary recovery artifacts.`);
+      return;
+    }
+    for (const entry of entries) {
+      const absolutePath = path.join(directory, entry.name);
+      const relativePath = path.relative(rootDir, absolutePath).replace(/\\/g, '/');
+      if (recoveryNamePattern.test(entry.name)) {
+        errors.push(`${relativePath}: stranded CV summary recovery artifact must be recovered or removed before publication.`);
+      }
+      if (entry.isDirectory()) visit(absolutePath);
+    }
+  };
+  for (const relativeDirectory of ['cv', path.join('en', 'cv')]) {
+    const directory = path.join(rootDir, relativeDirectory);
+    if (fs.existsSync(directory) && fs.lstatSync(directory).isDirectory()) visit(directory);
+  }
+  return errors;
+}
+
+function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
+  const errors = cvSummaryRecoveryArtifactErrors(rootDir);
   const projectNames = i18n.canonicalCaseSlugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
   const expectedOutputNames = projectNames.concat(cvNames).sort();
@@ -1250,6 +1277,7 @@ module.exports = {
   portfolioDataErrors,
   publicPiiFindings,
   publicCvDataErrors,
+  cvSummaryRecoveryArtifactErrors,
   pdfArtifactErrors,
   visualAssetErrors,
   validatePortfolio
