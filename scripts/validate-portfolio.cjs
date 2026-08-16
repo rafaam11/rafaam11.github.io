@@ -1437,7 +1437,7 @@ function localReferenceErrors(file, html, rootDir) {
   return errors;
 }
 
-function pageDependencyErrors(file, html) {
+function pageDependencyErrors(file, html, parsedTags) {
   const errors = [];
   const relativePath = toPosix(file.relativePath);
   const depth = relativePath.split('/').length - 1;
@@ -1451,16 +1451,16 @@ function pageDependencyErrors(file, html) {
     requiredScripts.splice(1, 0, `${base}js/portfolio-data.js`, `${base}js/portfolio-render.js`);
   }
 
-  const tags = htmlStartTags(html);
+  const tags = parsedTags || htmlStartTags(html);
   const styles = tags
     .filter((tag) => tag.name === 'link' && String(htmlAttributeValue(tag, 'rel') || '')
       .toLowerCase().split(/\s+/).includes('stylesheet'))
     .map((tag) => htmlAttributeValue(tag, 'href'))
     .filter((href) => href !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(href));
   const scripts = tags
-    .filter((tag) => tag.name === 'script')
-    .map((tag) => htmlAttributeValue(tag, 'src'))
-    .filter((src) => src !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(src));
+    .filter((tag) => tag.name === 'script' && tag.attributes.some((attribute) => attribute.name === 'src'))
+    .map((tag) => htmlAttributeValue(tag, 'src') || '');
+  const localScripts = scripts.filter((src) => !/^[a-z][a-z0-9+.-]*:/i.test(src));
   for (const required of requiredStyles) {
     if (!styles.includes(required)) errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
   }
@@ -1468,10 +1468,13 @@ function pageDependencyErrors(file, html) {
     errors.push(`${file.relativePath}: unexpected local stylesheet dependency ${unexpected}.`);
   }
   for (const required of requiredScripts) {
-    if (!scripts.includes(required)) errors.push(`${file.relativePath}: missing required local script ${required}.`);
+    if (!localScripts.includes(required)) errors.push(`${file.relativePath}: missing required local script ${required}.`);
   }
-  for (const unexpected of scripts.filter((item) => !requiredScripts.includes(item))) {
+  for (const unexpected of localScripts.filter((item) => !requiredScripts.includes(item))) {
     errors.push(`${file.relativePath}: unexpected local script dependency ${unexpected}.`);
+  }
+  if (scripts.length !== requiredScripts.length || scripts.some((item, index) => item !== requiredScripts[index])) {
+    errors.push(`${file.relativePath}: expected exact parsed script sequence ${requiredScripts.join(' -> ')}; found ${scripts.join(' -> ') || '<none>'}.`);
   }
   if (/bootstrap|fontawesome|fonts\.googleapis\.com|startbootstrap/i.test(html) ||
       /(?:^|[\/"'])(?:styles|cv-theme)\.css(?:[?#"']|$)|spatial-signal\.js/i.test(html)) {
@@ -1552,11 +1555,15 @@ function staticPageErrors(file, html, rootDir) {
   const englishUrl = siteUrl + 'en/' + file.route;
   const canonicalUrl = file.locale === 'en' ? englishUrl : koreanUrl;
   const expectedLang = file.locale;
+  const tags = htmlStartTags(html);
 
   if (!new RegExp(`<html lang="${expectedLang}">`).test(html)) {
     errors.push(`${file.relativePath}: expected html lang ${expectedLang}.`);
   }
-  const bodyTags = htmlStartTags(html).filter((tag) => tag.name === 'body');
+  if (tags.some((tag) => tag.name === 'base')) {
+    errors.push(`${file.relativePath}: real base elements are not allowed.`);
+  }
+  const bodyTags = tags.filter((tag) => tag.name === 'body');
   if (bodyTags.length !== 1) errors.push(`${file.relativePath}: expected exactly one real body start tag.`);
   const body = bodyTags.length === 1 ? bodyTags[0] : null;
   const actualLang = htmlAttributeValue(body, 'data-lang');
@@ -1569,24 +1576,35 @@ function staticPageErrors(file, html, rootDir) {
   const actualPage = htmlAttributeValue(body, 'data-page');
   if (!i18n.supportedNavigationPages.includes(actualPage)) errors.push(`${file.relativePath}: unsupported data-page "${actualPage || ''}".`);
   if (actualPage !== file.page) errors.push(`${file.relativePath}: expected data-page="${file.page}".`);
-  if (!/<header\b[^>]*\bid="site-nav"[^>]*><\/header>/i.test(html)) errors.push(`${file.relativePath}: missing shared navigation mount.`);
-  if (!/<footer\b[^>]*\bid="site-footer"[^>]*><\/footer>/i.test(html)) errors.push(`${file.relativePath}: missing shared footer mount.`);
-  if (!/<main\b[^>]*\bid="main-content"/i.test(html)) errors.push(`${file.relativePath}: missing main-content landmark.`);
-  if (!new RegExp(`<link rel="canonical" href="${escapeRegExp(canonicalUrl)}"`).test(html)) {
-    errors.push(`${file.relativePath}: canonical URL does not match locale route.`);
+  const mountContracts = [
+    { tag: 'header', id: 'site-nav', label: 'shared navigation mount' },
+    { tag: 'main', id: 'main-content', label: 'main-content landmark' },
+    { tag: 'footer', id: 'site-footer', label: 'shared footer mount' }
+  ];
+  for (const contract of mountContracts) {
+    const matches = tags.filter((tag) => tag.name === contract.tag && htmlAttributeValue(tag, 'id') === contract.id);
+    if (matches.length !== 1) {
+      const state = matches.length === 0 ? `missing ${contract.label}` : `duplicate ${contract.label}`;
+      errors.push(`${file.relativePath}: ${state}; expected exactly one real ${contract.tag}#${contract.id} (found ${matches.length}).`);
+    }
   }
-  if (!new RegExp(`hreflang="ko" href="${escapeRegExp(koreanUrl)}"`).test(html) ||
-      !new RegExp(`hreflang="en" href="${escapeRegExp(englishUrl)}"`).test(html) ||
-      !new RegExp(`hreflang="x-default" href="${escapeRegExp(koreanUrl)}"`).test(html)) {
-    errors.push(`${file.relativePath}: incomplete hreflang pair.`);
+
+  const linkTags = tags.filter((tag) => tag.name === 'link');
+  const relationTokens = (tag) => String(htmlAttributeValue(tag, 'rel') || '')
+    .trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const canonicalLinks = linkTags.filter((tag) => relationTokens(tag).includes('canonical'));
+  if (canonicalLinks.length !== 1 || htmlAttributeValue(canonicalLinks[0], 'href') !== canonicalUrl) {
+    errors.push(`${file.relativePath}: expected exactly one correct parsed canonical link for ${canonicalUrl}.`);
   }
-  if (html.indexOf('site-i18n.js') === -1 || html.indexOf('site-i18n.js') > html.indexOf('nav.js')) {
-    errors.push(`${file.relativePath}: site-i18n.js must load before nav.js.`);
+  const alternateLinks = linkTags.filter((tag) => relationTokens(tag).includes('alternate'));
+  for (const [language, expectedUrl] of [['ko', koreanUrl], ['en', englishUrl], ['x-default', koreanUrl]]) {
+    const matches = alternateLinks.filter((tag) => String(htmlAttributeValue(tag, 'hreflang') || '').trim().toLowerCase() === language);
+    if (matches.length !== 1 || htmlAttributeValue(matches[0], 'href') !== expectedUrl) {
+      errors.push(`${file.relativePath}: expected exactly one correct parsed alternate link with hreflang="${language}" for ${expectedUrl}.`);
+    }
   }
-  if (html.includes('portfolio-render.js') && html.indexOf('site-i18n.js') > html.indexOf('portfolio-render.js')) {
-    errors.push(`${file.relativePath}: site-i18n.js must load before portfolio-render.js.`);
-  }
-  errors.push(...pageDependencyErrors(file, html));
+
+  errors.push(...pageDependencyErrors(file, html, tags));
   errors.push(...excludedRouteReferenceErrors(file, html));
   errors.push(...localReferenceErrors(file, html, rootDir));
   return errors;
