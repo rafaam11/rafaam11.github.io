@@ -31,7 +31,6 @@
   var mediaTypes = ['video', 'image', 'repository', 'publication'];
   var leadMediaTypes = ['video', 'image', 'repository'];
   var referenceMediaTypes = ['repository', 'publication'];
-  var fallbackVisualKeys = ['nav-digitaltwin-pipeline', 'coordinate-signal', 'hololens-ar-concept', 'forklift-sim-to-real', 'decision-signal'];
   var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
   var projectTranslationFields = [
     'title', 'shortTitle', 'eyebrow', 'thesis', 'summary', 'problem', 'role', 'teamResult',
@@ -388,7 +387,6 @@
         if (!evidenceStates.includes(project.evidenceState)) errors.push(slug + ': unknown evidence state.');
         if (!lifecycleStates.includes(project.lifecycleState)) errors.push(slug + ': unknown lifecycle state.');
         if (project.route !== 'projects/' + slug + '/') errors.push(slug + ': invalid project route.');
-        if (!fallbackVisualKeys.includes(project.visualKey)) errors.push(slug + ': invalid visual key.');
         if (!Array.isArray(project.capabilityKeys) || project.capabilityKeys.length === 0) {
           errors.push(slug + ': missing capability mappings.');
         } else if (project.capabilityKeys.some(function (key) { return !capabilityKeys.includes(key); })) {

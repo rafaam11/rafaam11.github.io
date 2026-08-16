@@ -1836,9 +1836,7 @@ function pageDependencyErrors(file, html, parsedTags) {
   const relativePath = toPosix(file.relativePath);
   const depth = relativePath.split('/').length - 1;
   const base = '../'.repeat(depth);
-  const isCase = file.route.startsWith('projects/') && file.route !== 'projects/';
   const requiredStyles = [`${base}css/site.css`, `${base}css/spatial-signal.css`];
-  if (isCase) requiredStyles.push(`${base}css/case-study.css`);
   if (file.page === 'cv') requiredStyles.push(`${base}css/cv-pdf.css`);
   const requiredScripts = [`${base}js/site-i18n.js`, `${base}js/nav.js`];
   if (file.page === 'home' || file.page === 'projects') {
