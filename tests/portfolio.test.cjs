@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const vm = require('node:vm');
 
@@ -166,6 +167,7 @@ test('canonical partner data exposes the exact ordered five-stack and three-tier
     ['industrial-spotlight', '산업 스포트라이트', 'Industrial Spotlight'],
     ['ai-build-lab', 'AI 빌드 랩', 'AI Build Lab']
   ]);
+  assert.deepEqual(data.impactMetrics, [], 'obsolete estimated renderer metrics must not survive the canonical reset');
 });
 
 test('canonical project records expose the exact six cases and shared structural narrative', () => {
@@ -213,9 +215,16 @@ test('canonical project records expose the exact six cases and shared structural
     }
   }
 
-  assert.deepEqual(data.projects.find((project) => project.slug === 'ai-build-lab').subcases.map((subcase) => subcase.key), [
-    'llm-wiki', 'multi-cli-work', 'daegu-bus'
-  ]);
+  const aiBuildLab = data.projects.find((project) => project.slug === 'ai-build-lab');
+  assert.deepEqual(aiBuildLab.subcases.map((subcase) => subcase.key), ['llm-wiki', 'multi-cli-work', 'daegu-bus']);
+  for (const subcase of aiBuildLab.subcases) {
+    for (const locale of ['ko', 'en']) {
+      for (const field of ['title', 'summary']) {
+        assert.equal(typeof subcase.translations[locale][field], 'string', `${subcase.key}: missing ${locale} ${field}`);
+        assert.notEqual(subcase.translations[locale][field].trim(), '', `${subcase.key}: empty ${locale} ${field}`);
+      }
+    }
+  }
   assert.match(data.projects.find((project) => project.slug === 'mandibular-fracture').translations.en.role, /co-first author/i);
 });
 
@@ -274,12 +283,65 @@ test('data validator rejects incomplete, unknown, unsafe, and misleading canonic
   }
 });
 
+test('data validator confines approved media paths to HTTP(S) or normalized public assets', () => {
+  const unsafePaths = [
+    'C:/private/raw/demo.png',
+    'C:\\private\\raw\\demo.png',
+    '\\\\server\\share\\demo.png',
+    '/assets/projects/demo.png',
+    '../private/raw/demo.png',
+    'assets/projects/../private/raw/demo.png',
+    'assets/%2e%2e/private/raw/demo.png',
+    'assets/private/raw/demo.png',
+    'assets/projects/private-demo.png',
+    'assets/projects/raw-export.png',
+    'file:///C:/private/raw/demo.png',
+    'javascript:alert(1)',
+    'data:text/plain,private'
+  ];
+  for (const publicPath of unsafePaths) {
+    const copy = JSON.parse(JSON.stringify(data));
+    copy.projects[5].media.lead.publicPath = publicPath;
+    assert.match(validator.portfolioDataErrors(copy).join(' '), /unsafe public path/i, publicPath);
+  }
+
+  for (const publicPath of ['https://github.com/rafaam11/multi-cli-work', 'http://example.com/evidence', 'assets/projects/ai-build-lab/lead.webp']) {
+    const copy = JSON.parse(JSON.stringify(data));
+    copy.projects[5].media.lead.publicPath = publicPath;
+    assert.doesNotMatch(validator.portfolioDataErrors(copy).join(' '), /unsafe public path/i, publicPath);
+  }
+});
+
+test('data validator validates AI Build Lab subcase identity and localized copy', () => {
+  const wrongKeys = JSON.parse(JSON.stringify(data));
+  wrongKeys.projects[5].subcases[0].key = 'private-wiki';
+  assert.match(validator.portfolioDataErrors(wrongKeys).join(' '), /known ordered subcase keys/i);
+
+  const missingCopy = JSON.parse(JSON.stringify(data));
+  delete missingCopy.projects[5].subcases[1].translations.ko.summary;
+  assert.match(validator.portfolioDataErrors(missingCopy).join(' '), /multi-cli-work: missing ko translation for summary/i);
+});
+
+test('data validator is total for optional and malformed media reference collections', () => {
+  const absent = JSON.parse(JSON.stringify(data));
+  delete absent.projects[0].media.references;
+  assert.doesNotThrow(() => validator.portfolioDataErrors(absent));
+
+  for (const references of [{}, 'not-an-array', 42]) {
+    const malformed = JSON.parse(JSON.stringify(data));
+    malformed.projects[0].media.references = references;
+    let errors;
+    assert.doesNotThrow(() => { errors = validator.portfolioDataErrors(malformed); });
+    assert.match(errors.join(' '), /media references must be an array/i);
+  }
+});
+
 test('portfolio validator inventories the twenty-page final route contract before legacy removal', () => {
   const files = validator.publicPortfolioFiles(root);
   assert.equal(files.length, 20);
   assert.equal(new Set(files.map((file) => file.relativePath)).size, 20);
   assert.deepEqual(
-    validator.validatePortfolio(root).filter((error) => /missing public page/.test(error)).map((error) => error.replace(/\\/g, '/')).sort(),
+    validator.validatePortfolio(root).map((error) => error.replace(/\\/g, '/')).sort(),
     [
       'en/projects/ai-build-lab/index.html: missing public page.',
       'en/projects/surgical-navigation/index.html: missing public page.',
@@ -287,6 +349,35 @@ test('portfolio validator inventories the twenty-page final route contract befor
       'projects/surgical-navigation/index.html: missing public page.'
     ]
   );
+});
+
+test('full validator scans prohibited names in live HTML-referenced SVG fallbacks', () => {
+  const liveVisualPaths = new Set(validator.publicPortfolioVisualFiles(root).map((file) => file.relativePath.replace(/\\/g, '/')));
+  assert.equal(liveVisualPaths.has('assets/diagrams/decision-signal.svg'), true, 'decision-signal.svg must remain covered while the retained renderer uses visualKey fallbacks');
+  assert.equal(liveVisualPaths.has('assets/diagrams/research-protocol.svg'), true, 'research-protocol.svg must be inventoried from the published legacy C-Arm page');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-live-svg-validator-'));
+  try {
+    for (const file of validator.publicPortfolioFiles(root).filter((file) => fs.existsSync(file.absolutePath))) {
+      const target = path.join(temporaryRoot, file.relativePath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.copyFileSync(file.absolutePath, target);
+    }
+    const legacyHtml = path.join('projects', 'c-arm-navigation', 'index.html');
+    fs.mkdirSync(path.join(temporaryRoot, 'projects', 'c-arm-navigation'), { recursive: true });
+    fs.copyFileSync(path.join(root, legacyHtml), path.join(temporaryRoot, legacyHtml));
+    for (const file of validator.publicPortfolioVisualFiles(root)) {
+      const target = path.join(temporaryRoot, file.relativePath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.copyFileSync(file.absolutePath, target);
+    }
+    fs.appendFileSync(path.join(temporaryRoot, 'assets', 'diagrams', 'research-protocol.svg'), '<text>Samsung Medical</text>');
+    assert.equal(
+      validator.validatePortfolio(temporaryRoot).some((error) => /research-protocol\.svg.*nonpublic partner.*Samsung Medical/i.test(error.replace(/\\/g, '/'))),
+      true
+    );
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
 });
 
 test('localized pages never rewrite parent traversal into external asset URLs', () => {

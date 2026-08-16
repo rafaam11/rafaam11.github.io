@@ -112,29 +112,7 @@
     { key: 'ai-build-lab', translations: { ko: { label: 'AI 빌드 랩' }, en: { label: 'AI Build Lab' } } }
   ];
 
-  var impactMetrics = [
-    {
-      state: 'verified',
-      translations: {
-        ko: { value: '3–4개월 → 1–2주', label: '유사 센서 검증 도구의 예상 개발 기간' },
-        en: { value: '3–4 months → 1–2 weeks', label: 'Estimated delivery time for comparable sensor-validation tooling' }
-      }
-    },
-    {
-      state: 'verified',
-      translations: {
-        ko: { value: '주 1회 → 월 1회', label: 'LiteSim 도입 후 대략적인 현장 검증 출장 빈도' },
-        en: { value: 'Weekly → monthly', label: 'Approximate field-validation travel after LiteSim adoption' }
-      }
-    },
-    {
-      state: 'verified',
-      translations: {
-        ko: { value: '4–5개 micro-PoC', label: '각각 보통 1–2일 안에 검증한 HoloLens SDK 탐색' },
-        en: { value: '4–5 micro-PoCs', label: 'HoloLens SDK probes, typically validated in one to two days each' }
-      }
-    }
-  ];
+  var impactMetrics = [];
 
   function project(record) {
     var primaryCapability = record.capabilityKeys[0];
