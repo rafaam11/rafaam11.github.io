@@ -54,6 +54,7 @@
   text-decoration: none;
 }
 .td-site-nav .nav-link[aria-current="page"],
+.td-site-nav .nav-link[aria-current="location"],
 .td-site-nav .language-option[aria-current="page"] { color: var(--td-ink, #101715); text-decoration: underline; text-underline-offset: .35rem; }
 .td-site-nav .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .td-site-nav .language-switch {

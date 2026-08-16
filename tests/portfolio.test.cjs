@@ -3649,6 +3649,7 @@ test('Integrated review keeps the entire Home evidence mosaic image-and-title on
     assert.ok(mosaic, `${relativePath}: missing authored Home mosaic`);
     assert.doesNotMatch(mosaic, /td-media-ledger|Pending approval|Public evidence|공개 승인 대기|공개 근거|Verified|Ongoing|Prototype|검증됨|진행 중|프로토타입|FRAME \/|>VIDEO<|>IMAGE</);
   }
+  assert.ok(cssRuleBodies(read('css/spatial-signal.css'), '.td-mosaic-cell__title').length, 'Home mosaic titles require a readable runtime rule');
 });
 
 test('Integrated review rejects private project copy and keeps AI claims factual', () => {
@@ -3726,6 +3727,7 @@ test('Integrated review marks a project-section nav item as a location, not the 
   });
   assert.match(html, /href="\.\.\/\.\.\/projects\/"[^>]*aria-current="location"[^>]*>[\s\S]*?프로젝트</);
   assert.doesNotMatch(html, /href="\.\.\/\.\.\/projects\/"[^>]*aria-current="page"/);
+  assert.match(read('css/site.css'), /\.td-site-nav \.nav-link\[aria-current="location"\]/);
 });
 
 test('Task 6 follow-up keeps a compact runtime-only technical-document CSS contract', () => {
