@@ -14,6 +14,7 @@ const tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
 const projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'unmanned-forklift', 'ai-build-lab'];
 const evidenceStates = ['verified', 'ongoing', 'prototype'];
 const blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
+const aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
 const projectTranslationFields = [
   'title', 'shortTitle', 'eyebrow', 'thesis', 'summary', 'problem', 'role', 'teamResult',
   'evidence', 'limitation', 'collaboration', 'mediaAlt', 'mediaCaption'
@@ -42,18 +43,66 @@ function publicPortfolioFiles(rootDir) {
   ]);
 }
 
+function publishedPortfolioHtmlFiles(rootDir) {
+  const files = new Map(publicPortfolioFiles(rootDir).map((file) => [
+    file.relativePath.replace(/\\/g, '/'),
+    { relativePath: file.relativePath, absolutePath: file.absolutePath }
+  ]));
+  for (const relativePath of ['research/index.html', 'en/research/index.html']) {
+    files.set(relativePath, { relativePath, absolutePath: path.join(rootDir, relativePath) });
+  }
+  for (const projectRoot of ['projects', path.join('en', 'projects')]) {
+    const absoluteRoot = path.join(rootDir, projectRoot);
+    if (!fs.existsSync(absoluteRoot)) continue;
+    for (const entry of fs.readdirSync(absoluteRoot, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const relativePath = path.join(projectRoot, entry.name, 'index.html');
+      files.set(relativePath.replace(/\\/g, '/'), { relativePath, absolutePath: path.join(rootDir, relativePath) });
+    }
+  }
+  return [...files.values()].filter((file) => fs.existsSync(file.absolutePath));
+}
+
 function publicPortfolioVisualFiles(rootDir) {
   const mediaItems = data.projects.flatMap((project) => {
     const media = project.media || {};
-    return [media.lead, media.video, media.poster].concat(media.references || []).filter(Boolean);
+    const references = Array.isArray(media.references) ? media.references : [];
+    return [media.lead, media.video, media.poster].concat(references).filter(Boolean);
   });
-  return mediaItems
-    .filter((item) => item.status === 'approved' && typeof item.publicPath === 'string' && !/^[a-z][a-z0-9+.-]*:/i.test(item.publicPath))
+  const declaredFiles = mediaItems
+    .filter((item) => item.status === 'approved' && isSafePublicPath(item.publicPath) && !/^https?:\/\//i.test(item.publicPath))
     .map((item) => ({
       relativePath: path.normalize(item.publicPath),
       absolutePath: path.join(rootDir, item.publicPath),
       evidenceId: item.id
     }));
+  const rendererFallbackFiles = [...new Set(data.projects
+    .map((project) => project.visualKey)
+    .filter((visualKey) => typeof visualKey === 'string' && visualKey))]
+    .flatMap((visualKey) => ['', '-en'].map((suffix) => {
+      const relativePath = path.join('assets', 'diagrams', `${visualKey}${suffix}.svg`);
+      return { relativePath, absolutePath: path.join(rootDir, relativePath), evidenceId: `renderer:${visualKey}` };
+    }));
+
+  const referencedFiles = [];
+  for (const file of publishedPortfolioHtmlFiles(rootDir)) {
+    const html = fs.readFileSync(file.absolutePath, 'utf8');
+    for (const match of html.matchAll(/\b(?:src|href)="([^"?#]+\.svg)(?:[?#][^"]*)?"/gi)) {
+      const href = match[1];
+      if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(href)) continue;
+      const absolutePath = path.resolve(path.dirname(file.absolutePath), href.replace(/\//g, path.sep));
+      const relativePath = path.relative(rootDir, absolutePath);
+      if (!relativePath || relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)) continue;
+      referencedFiles.push({ relativePath, absolutePath, evidenceId: `html:${file.relativePath}` });
+    }
+  }
+
+  const unique = new Map();
+  for (const file of declaredFiles.concat(rendererFallbackFiles, referencedFiles)) {
+    const key = file.relativePath.replace(/\\/g, '/').toLowerCase();
+    if (!unique.has(key)) unique.set(key, file);
+  }
+  return [...unique.values()];
 }
 
 function translationErrors(record, fields, label) {
@@ -75,10 +124,35 @@ function mediaItemErrors(item, label) {
   if (typeof item.id !== 'string' || !item.id) errors.push(`${label}: media item requires a stable id.`);
   if (typeof item.type !== 'string' || !item.type) errors.push(`${label}: media item requires a type.`);
   if (!['approved', 'pending-approval'].includes(item.status)) errors.push(`${label}: unknown media status.`);
-  const hasPublicPath = typeof item.publicPath === 'string' && item.publicPath.length > 0;
+  const hasPublicPath = typeof item.publicPath === 'string' && item.publicPath.trim().length > 0;
   if (item.status === 'pending-approval' && hasPublicPath) errors.push(`${label}: pending-approval media must not declare a public path.`);
   if (item.status === 'approved' && !hasPublicPath) errors.push(`${label}: approved media requires a public path.`);
+  if (hasPublicPath && !isSafePublicPath(item.publicPath)) errors.push(`${label}: unsafe public path.`);
   return errors;
+}
+
+function isSafePublicPath(value) {
+  if (typeof value !== 'string' || value !== value.trim() || !value) return false;
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+      return (url.protocol === 'http:' || url.protocol === 'https:') && Boolean(url.hostname);
+    } catch {
+      return false;
+    }
+  }
+  if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('/') || value.startsWith('\\') || value.includes('\\') || /[?#]/.test(value)) return false;
+  let decoded;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return false;
+  }
+  if (decoded.startsWith('/') || decoded.includes('\\')) return false;
+  const segments = decoded.split('/');
+  if (!decoded.startsWith('assets/') || segments.some((segment) => !segment || segment === '.' || segment === '..')) return false;
+  if (path.posix.normalize(decoded) !== decoded) return false;
+  return !segments.some((segment) => /^(?:private|raw)(?:$|[-_.])/i.test(segment));
 }
 
 function blockErrors(block, projectSlug) {
@@ -175,14 +249,29 @@ function portfolioDataErrors(candidate) {
         for (const key of ['video', 'poster']) {
           if (project.media[key]) errors.push(...mediaItemErrors(project.media[key], `${slug} ${key}`));
         }
-        for (const [index, item] of (project.media.references || []).entries()) {
-          errors.push(...mediaItemErrors(item, `${slug} reference ${index}`));
+        if (project.media.references !== undefined && !Array.isArray(project.media.references)) {
+          errors.push(`${slug}: media references must be an array.`);
+        } else {
+          for (const [index, item] of (project.media.references || []).entries()) {
+            errors.push(...mediaItemErrors(item, `${slug} reference ${index}`));
+          }
         }
       }
       if (!Array.isArray(project.blocks) || project.blocks.length === 0) {
         errors.push(`${slug}: missing structural blocks.`);
       } else {
         for (const block of project.blocks) errors.push(...blockErrors(block, slug));
+      }
+      if (slug === 'ai-build-lab') {
+        if (!Array.isArray(project.subcases) || project.subcases.length !== aiBuildLabSubcaseKeys.length) {
+          errors.push(`${slug}: must contain exactly three subcases.`);
+        } else {
+          const actualKeys = project.subcases.map((subcase) => subcase && subcase.key);
+          if (JSON.stringify(actualKeys) !== JSON.stringify(aiBuildLabSubcaseKeys)) errors.push(`${slug}: subcases must use the known ordered subcase keys.`);
+          for (const subcase of project.subcases) {
+            errors.push(...translationErrors(subcase, ['title', 'summary'], subcase && subcase.key ? subcase.key : `${slug} unknown-subcase`));
+          }
+        }
       }
     }
   }
