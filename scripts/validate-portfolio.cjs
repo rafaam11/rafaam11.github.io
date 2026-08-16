@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const zlib = require('node:zlib');
 
 const data = require('../js/portfolio-data.js');
 const render = require('../js/portfolio-render.js');
@@ -20,10 +21,20 @@ const evidenceRegisterRelativePath = path.join('assets', 'projects', 'EVIDENCE_R
 const evidenceRegisterStates = new Set(['pending-review', 'approved-public', 'excluded']);
 const evidenceMediaTypes = new Set(['image', 'video', 'repository', 'publication']);
 const localEvidenceExtensions = {
-  image: new Set(['.png', '.jpg', '.jpeg', '.webp']),
+  image: new Set(['.png']),
   video: new Set(['.mp4', '.webm'])
 };
-const evidenceSourceLeakPattern = /(?:(?:^|[\s(`])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|Teams|private[\\/]raw|\b(?:CT|MRI|patient|hospital)\b)/i;
+const maxRasterBytes = 50 * 1024 * 1024;
+const maxDecodedRasterBytes = 100 * 1024 * 1024;
+const privateSourcePathPatterns = [
+  /(?:^|[\s"'`(=\[])[a-z]:[\\/][^\s|]*/im,
+  /(?:^|[\s"'`(=\[])\\\\[^\\/\s|]+[\\/][^\s|]*/im,
+  /file:\/\/[^\s|]*/i,
+  /(?:^|[\s"'`(=\[])(?:\/Users\/|\/home\/)[^\s|]*/im,
+  /(?:^|[\s"'`(=\[])(?:\/mnt\/[a-z]\/)[^\s|]*/im,
+  /\bpath\s*=\s*(?:"[^"]+"|'[^']+'|[^\s|]+)/i,
+  /(?:^|[\\/])(?:private|raw|extracted|manifest)(?=[\\/]|$)/im
+];
 
 function portfolioRoutes() {
   return i18n.routeDescriptors;
@@ -116,7 +127,9 @@ function readEvidenceRegister(rootDir) {
   }
   const content = fs.readFileSync(registerPath, 'utf8');
   const parsed = parseEvidenceRegister(content);
-  if (evidenceSourceLeakPattern.test(content)) parsed.errors.push('Evidence register contains a private source path or restricted source label.');
+  if (privateSourcePathPatterns.some((pattern) => pattern.test(content))) {
+    parsed.errors.push('Evidence register contains a private source path or restricted source label.');
+  }
   const prohibitedPartner = content.match(privatePartnerPattern)?.[0];
   if (prohibitedPartner) parsed.errors.push(`Evidence register contains a nonpublic partner or company-project name: ${prohibitedPartner}.`);
   return { path: registerPath, entries: parsed.entries, errors: parsed.errors };
@@ -147,66 +160,173 @@ function canonicalMediaEntries(candidate) {
   return entries;
 }
 
+let crcTable;
+
+function crc32(buffer) {
+  if (!crcTable) {
+    crcTable = Array.from({ length: 256 }, (_, value) => {
+      let current = value;
+      for (let bit = 0; bit < 8; bit++) current = (current & 1) ? (0xedb88320 ^ (current >>> 1)) : (current >>> 1);
+      return current >>> 0;
+    });
+  }
+  let crc = 0xffffffff;
+  for (const byte of buffer) crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
 function pngDimensions(buffer) {
   const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-  if (buffer.length < 24 || !buffer.subarray(0, 8).equals(signature) || buffer.toString('ascii', 12, 16) !== 'IHDR') return null;
-  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
-}
+  if (buffer.length < 57 || buffer.length > maxRasterBytes || !buffer.subarray(0, 8).equals(signature)) return null;
 
-function jpegDimensions(buffer) {
-  if (buffer.length < 4 || buffer[0] !== 0xff || buffer[1] !== 0xd8) return null;
-  const startOfFrame = new Set([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf]);
-  let offset = 2;
-  while (offset + 3 < buffer.length) {
-    if (buffer[offset] !== 0xff) {
-      offset++;
-      continue;
-    }
-    while (buffer[offset] === 0xff) offset++;
-    const marker = buffer[offset++];
-    if (marker === 0xd8 || marker === 0xd9) continue;
-    if (offset + 2 > buffer.length) return null;
-    const length = buffer.readUInt16BE(offset);
-    if (length < 2 || offset + length > buffer.length) return null;
-    if (startOfFrame.has(marker) && length >= 7) {
-      return { width: buffer.readUInt16BE(offset + 5), height: buffer.readUInt16BE(offset + 3) };
-    }
-    offset += length;
-  }
-  return null;
-}
+  let offset = 8;
+  let header;
+  let sawHeader = false;
+  let sawPalette = false;
+  let sawImageData = false;
+  let imageDataEnded = false;
+  let sawEnd = false;
+  const imageData = [];
 
-function webpDimensions(buffer) {
-  if (buffer.length < 30 || buffer.toString('ascii', 0, 4) !== 'RIFF' || buffer.toString('ascii', 8, 12) !== 'WEBP') return null;
-  const chunk = buffer.toString('ascii', 12, 16);
-  if (chunk === 'VP8X') {
-    return {
-      width: 1 + buffer.readUIntLE(24, 3),
-      height: 1 + buffer.readUIntLE(27, 3)
-    };
+  while (offset < buffer.length) {
+    if (offset + 12 > buffer.length) return null;
+    const length = buffer.readUInt32BE(offset);
+    if (length > maxRasterBytes || offset + 12 + length > buffer.length) return null;
+    const typeStart = offset + 4;
+    const dataStart = typeStart + 4;
+    const dataEnd = dataStart + length;
+    const type = buffer.toString('ascii', typeStart, dataStart);
+    const chunkData = buffer.subarray(dataStart, dataEnd);
+    const declaredCrc = buffer.readUInt32BE(dataEnd);
+    if (crc32(buffer.subarray(typeStart, dataEnd)) !== declaredCrc) return null;
+    offset = dataEnd + 4;
+
+    if (!sawHeader && type !== 'IHDR') return null;
+    if (type === 'IHDR') {
+      if (sawHeader || length !== 13) return null;
+      sawHeader = true;
+      header = {
+        width: chunkData.readUInt32BE(0),
+        height: chunkData.readUInt32BE(4),
+        bitDepth: chunkData[8],
+        colorType: chunkData[9],
+        compression: chunkData[10],
+        filter: chunkData[11],
+        interlace: chunkData[12]
+      };
+    } else if (type === 'PLTE') {
+      if (sawPalette || sawImageData || length === 0 || length % 3 !== 0 || length > 768) return null;
+      sawPalette = true;
+    } else if (type === 'IDAT') {
+      if (imageDataEnded || length === 0) return null;
+      sawImageData = true;
+      imageData.push(chunkData);
+    } else if (type === 'IEND') {
+      if (!sawImageData || length !== 0 || offset !== buffer.length) return null;
+      sawEnd = true;
+      break;
+    } else {
+      if (sawImageData) imageDataEnded = true;
+      if ((buffer[typeStart] & 0x20) === 0) return null;
+    }
+    if (type !== 'IDAT' && sawImageData && type !== 'IEND') imageDataEnded = true;
   }
-  if (chunk === 'VP8L' && buffer.length >= 25 && buffer[20] === 0x2f) {
-    const bits = buffer.readUInt32LE(21);
-    return { width: 1 + (bits & 0x3fff), height: 1 + ((bits >>> 14) & 0x3fff) };
+
+  if (!sawHeader || !sawImageData || !sawEnd || !header) return null;
+  const validDepths = {
+    0: new Set([1, 2, 4, 8, 16]),
+    2: new Set([8, 16]),
+    3: new Set([1, 2, 4, 8]),
+    4: new Set([8, 16]),
+    6: new Set([8, 16])
+  };
+  const channels = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 };
+  if (!validDepths[header.colorType] || !validDepths[header.colorType].has(header.bitDepth) ||
+      header.width <= 0 || header.height <= 0 || header.width > 32768 || header.height > 32768 ||
+      header.compression !== 0 || header.filter !== 0 || header.interlace !== 0 ||
+      (header.colorType === 3 && !sawPalette) || ([0, 4].includes(header.colorType) && sawPalette)) return null;
+
+  const rowBytes = Math.ceil((header.width * channels[header.colorType] * header.bitDepth) / 8);
+  const expectedBytes = (rowBytes + 1) * header.height;
+  if (!Number.isSafeInteger(expectedBytes) || expectedBytes <= 0 || expectedBytes > maxDecodedRasterBytes) return null;
+  let decoded;
+  try {
+    decoded = zlib.inflateSync(Buffer.concat(imageData), { maxOutputLength: expectedBytes });
+  } catch {
+    return null;
   }
-  if (chunk === 'VP8 ' && buffer.length >= 30 && buffer[23] === 0x9d && buffer[24] === 0x01 && buffer[25] === 0x2a) {
-    return { width: buffer.readUInt16LE(26) & 0x3fff, height: buffer.readUInt16LE(28) & 0x3fff };
+  if (decoded.length !== expectedBytes) return null;
+  for (let row = 0; row < header.height; row++) {
+    if (decoded[row * (rowBytes + 1)] > 4) return null;
   }
-  return null;
+  return { width: header.width, height: header.height };
 }
 
 function imageDimensions(filePath, extension) {
+  if (extension !== '.png') return null;
   const buffer = fs.readFileSync(filePath);
-  const dimensions = extension === '.png'
-    ? pngDimensions(buffer)
-    : (extension === '.jpg' || extension === '.jpeg')
-      ? jpegDimensions(buffer)
-      : extension === '.webp'
-        ? webpDimensions(buffer)
-        : null;
-  if (!dimensions || !Number.isInteger(dimensions.width) || !Number.isInteger(dimensions.height) ||
-      dimensions.width <= 0 || dimensions.height <= 0) return null;
-  return dimensions;
+  return pngDimensions(buffer);
+}
+
+function isRelativePathInside(relativePath) {
+  return Boolean(relativePath) && relativePath !== '..' &&
+    !relativePath.startsWith(`..${path.sep}`) && !path.isAbsolute(relativePath);
+}
+
+function inspectExactLocalPath(rootDir, relativeSource) {
+  const errors = [];
+  const segments = String(relativeSource || '').replace(/\\/g, '/').split('/').filter(Boolean);
+  let current = path.resolve(rootDir);
+  let rootRealPath;
+  try {
+    rootRealPath = fs.realpathSync.native(current);
+  } catch {
+    return { errors: ['Evidence root cannot be resolved.'], filePath: null };
+  }
+
+  for (const segment of segments) {
+    let names;
+    try {
+      names = fs.readdirSync(current);
+    } catch {
+      errors.push(`${relativeSource}: missing approved local asset.`);
+      return { errors, filePath: null };
+    }
+    const exactName = names.find((name) => name === segment);
+    if (!exactName) {
+      if (names.some((name) => name.toLowerCase() === segment.toLowerCase())) {
+        errors.push(`${relativeSource}: declaration must match exact filesystem case.`);
+      } else {
+        errors.push(`${relativeSource}: missing approved local asset.`);
+      }
+      return { errors, filePath: null };
+    }
+
+    current = path.join(current, exactName);
+    let stats;
+    try {
+      stats = fs.lstatSync(current);
+    } catch {
+      errors.push(`${relativeSource}: missing approved local asset.`);
+      return { errors, filePath: null };
+    }
+    if (stats.isSymbolicLink()) {
+      errors.push(`${relativeSource}: symbolic link or reparse point is not allowed for public evidence.`);
+      return { errors, filePath: null };
+    }
+    let realPath;
+    try {
+      realPath = fs.realpathSync.native(current);
+    } catch {
+      errors.push(`${relativeSource}: approved local asset realpath cannot be resolved.`);
+      return { errors, filePath: null };
+    }
+    if (!isRelativePathInside(path.relative(rootRealPath, realPath))) {
+      errors.push(`${relativeSource}: public evidence realpath escapes the repository root.`);
+      return { errors, filePath: null };
+    }
+  }
+  return { errors, filePath: current };
 }
 
 function approvedLocalEvidenceErrors(entry, rootDir) {
@@ -233,14 +353,18 @@ function approvedLocalEvidenceErrors(entry, rootDir) {
   const absolutePath = path.resolve(rootDir, normalizedSource.replace(/\//g, path.sep));
   const projectRoot = path.resolve(rootDir, 'assets', 'projects', entry.project);
   const relativeToProject = path.relative(projectRoot, absolutePath);
-  if (!relativeToProject || relativeToProject === '..' || relativeToProject.startsWith(`..${path.sep}`) || path.isAbsolute(relativeToProject)) {
+  if (!isRelativePathInside(relativeToProject)) {
     if (!errors.some((error) => /below its project directory/.test(error))) {
       errors.push(`${entry.id}: approved local asset must resolve below its project directory.`);
     }
-  } else if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
-    errors.push(`${entry.id}: missing approved local asset ${normalizedSource}.`);
-  } else if (entry.type === 'image' && !imageDimensions(absolutePath, extension)) {
-    errors.push(`${entry.id}: approved raster image must expose valid intrinsic dimensions.`);
+  } else {
+    const inspection = inspectExactLocalPath(rootDir, normalizedSource);
+    errors.push(...inspection.errors.map((error) => `${entry.id}: ${error}`));
+    if (inspection.filePath && !fs.lstatSync(inspection.filePath).isFile()) {
+      errors.push(`${entry.id}: approved local source must be a regular file.`);
+    } else if (inspection.filePath && entry.type === 'image' && !imageDimensions(inspection.filePath, extension)) {
+      errors.push(`${entry.id}: approved raster image must be structurally complete and decodable with valid intrinsic dimensions.`);
+    }
   }
   return errors;
 }
@@ -285,9 +409,17 @@ function evidenceRegistryErrors(candidate, rootDir) {
   }
 
   for (const project of Array.isArray(candidate && candidate.projects) ? candidate.projects : []) {
-    const approvedVideos = canonicalMediaEntries({ projects: [project] })
-      .filter(({ item }) => item && item.type === 'video' && item.status === 'approved');
-    if (approvedVideos.length === 0) continue;
+    const lead = project.media && project.media.lead;
+    const video = project.media && project.media.video;
+    const approvedLeadVideo = Boolean(lead && lead.type === 'video' && lead.status === 'approved');
+    const approvedSecondaryVideo = Boolean(video && video.type === 'video' && video.status === 'approved');
+    if (!approvedLeadVideo && !approvedSecondaryVideo) continue;
+    const sameApprovedVideo = approvedLeadVideo && approvedSecondaryVideo &&
+      lead.id === video.id && lead.publicPath === video.publicPath;
+    if (!sameApprovedVideo) {
+      errors.push(`${project.slug}: approved media.video must equal the approved video lead.`);
+      continue;
+    }
     const poster = project.media && project.media.poster;
     const posterEntry = poster && entriesById.get(poster.id);
     if (!poster || poster.type !== 'image' || poster.status !== 'approved' ||
@@ -295,11 +427,10 @@ function evidenceRegistryErrors(candidate, rootDir) {
       errors.push(`${project.slug}: approved video requires an approved image poster registered as approved-public.`);
       continue;
     }
-    if (project.media.lead && project.media.lead.type === 'video' && project.media.lead.status === 'approved') {
-      const html = render.evidenceMediaHtml(project, 'en', '', false);
-      if (!/<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="none")/i.test(html) || /\bautoplay\b/i.test(html)) {
-        errors.push(`${project.slug}: approved video renderer must retain controls, preload="none", and no autoplay.`);
-      }
+    const html = render.evidenceMediaHtml(project, 'en', '', false);
+    if (!/<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="none")/i.test(html) ||
+        !html.includes(`<source src="${lead.publicPath}"`) || /\bautoplay\b/i.test(html)) {
+      errors.push(`${project.slug}: approved video renderer must retain controls, preload="none", a source, and no autoplay.`);
     }
   }
   return errors;
@@ -307,9 +438,77 @@ function evidenceRegistryErrors(candidate, rootDir) {
 
 function evidenceDirectoryErrors(rootDir) {
   const errors = [];
+  const register = readEvidenceRegister(rootDir);
   for (const slug of i18n.canonicalCaseSlugs) {
-    const readme = path.join(rootDir, 'assets', 'projects', slug, 'README.md');
-    if (!fs.existsSync(readme)) errors.push(`${slug}: missing public-safe evidence directory README.`);
+    const relativeProjectDirectory = path.posix.join('assets', 'projects', slug);
+    const projectDirectory = path.join(rootDir, ...relativeProjectDirectory.split('/'));
+    const directoryInspection = inspectExactLocalPath(rootDir, relativeProjectDirectory);
+    if (directoryInspection.errors.length) {
+      errors.push(`${slug}: missing or unsafe public evidence directory (${directoryInspection.errors.join(' ')}).`);
+      continue;
+    }
+    if (!fs.lstatSync(projectDirectory).isDirectory()) {
+      errors.push(`${slug}: public evidence root must be a directory.`);
+      continue;
+    }
+
+    const allowedFiles = new Set(['README.md']);
+    const allowedDirectories = new Set();
+    for (const entry of register.entries) {
+      if (entry.project !== slug || entry.state !== 'approved-public' || !['image', 'video'].includes(entry.type) ||
+          isSafeHttpsUrl(entry.source)) continue;
+      const prefix = `${relativeProjectDirectory}/`;
+      if (!entry.source.startsWith(prefix)) continue;
+      const localName = entry.source.slice(prefix.length);
+      allowedFiles.add(localName);
+      const parts = localName.split('/');
+      for (let index = 1; index < parts.length; index++) allowedDirectories.add(parts.slice(0, index).join('/'));
+    }
+
+    function inspectDirectory(directory, relativeDirectory) {
+      for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
+        const relativeName = relativeDirectory ? `${relativeDirectory}/${item.name}` : item.name;
+        const absoluteName = path.join(directory, item.name);
+        const stats = fs.lstatSync(absoluteName);
+        if (stats.isSymbolicLink()) {
+          errors.push(`${slug}/${relativeName}: symbolic link or reparse point is not allowed in public evidence.`);
+          continue;
+        }
+        let realPath;
+        try {
+          realPath = fs.realpathSync.native(absoluteName);
+        } catch {
+          errors.push(`${slug}/${relativeName}: evidence realpath cannot be resolved.`);
+          continue;
+        }
+        const rootRealPath = fs.realpathSync.native(path.resolve(rootDir));
+        if (!isRelativePathInside(path.relative(rootRealPath, realPath))) {
+          errors.push(`${slug}/${relativeName}: evidence realpath escapes the repository root.`);
+          continue;
+        }
+        if (item.isDirectory()) {
+          if (!allowedDirectories.has(relativeName)) errors.push(`${slug}/${relativeName}: unregistered evidence directory.`);
+          inspectDirectory(absoluteName, relativeName);
+        } else if (!item.isFile() || !allowedFiles.has(relativeName)) {
+          errors.push(`${slug}/${relativeName}: unregistered evidence file.`);
+        }
+      }
+    }
+    inspectDirectory(projectDirectory, '');
+
+    const readme = path.join(projectDirectory, 'README.md');
+    if (!fs.existsSync(readme) || !fs.lstatSync(readme).isFile()) {
+      errors.push(`${slug}: missing public-safe evidence directory README.`);
+      continue;
+    }
+    const readmeContent = fs.readFileSync(readme, 'utf8');
+    if (privateSourcePathPatterns.some((pattern) => pattern.test(readmeContent))) {
+      errors.push(`${slug}/README.md: contains a private source path or restricted source label.`);
+    }
+    const prohibitedPartner = readmeContent.match(privatePartnerPattern)?.[0];
+    if (prohibitedPartner) {
+      errors.push(`${slug}/README.md: contains a nonpublic partner or company-project name: ${prohibitedPartner}.`);
+    }
   }
   return errors;
 }
