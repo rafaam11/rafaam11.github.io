@@ -61,6 +61,38 @@ function pdfPageCount(filePath) {
   return (bytes.toString('latin1').match(/\/Type\s*\/Page\b/g) || []).length;
 }
 
+function task5Python() {
+  return process.env.PORTFOLIO_PDF_PYTHON || path.join(
+    root,
+    '.superpowers', 'sdd', '2026-08-16-3d-registration-partner-portfolio',
+    '.venv-pdf', 'Scripts', 'python.exe'
+  );
+}
+
+function treeFileHashes(directory) {
+  const hashes = {};
+  const visit = (current) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const absolute = path.join(current, entry.name);
+      if (entry.isDirectory()) visit(absolute);
+      if (entry.isFile()) hashes[path.relative(directory, absolute).replace(/\\/g, '/')] = sha256(absolute);
+    }
+  };
+  visit(directory);
+  return hashes;
+}
+
+function copyTask5Surface(targetRoot) {
+  for (const relativePath of ['output/pdf', 'assets/pdfs', 'assets/cv']) {
+    fs.cpSync(path.join(root, relativePath), path.join(targetRoot, relativePath), { recursive: true });
+  }
+  for (const relativePath of ['data/public-cv.json', 'assets/projects/EVIDENCE_REGISTER.md', 'cv/index.html', 'en/cv/index.html']) {
+    const target = path.join(targetRoot, relativePath);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.copyFileSync(path.join(root, relativePath), target);
+  }
+}
+
 function assertInOrder(haystack, values, label) {
   let previous = -1;
   for (const value of values) {
@@ -1214,6 +1246,8 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
     assert.equal(fs.readFileSync(first, 'utf8'), fs.readFileSync(second, 'utf8'));
     const exported = JSON.parse(fs.readFileSync(first, 'utf8'));
     assert.equal(exported.schemaVersion, 1);
+    assert.match(exported.sourceDigest, /^[a-f0-9]{64}$/);
+    assert.equal(Object.prototype.hasOwnProperty.call(exported, 'contentVersion'), false);
     assert.deepEqual(exported.projects.map((project) => project.slug), slugs);
     assert.deepEqual(exported.locales, ['ko', 'en']);
     assert.equal(exported.cv.version, '2026-08-16');
@@ -1330,6 +1364,149 @@ test('Task 5 standalone PDF validator reports missing or malformed CV data witho
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /malformed public CV data/i);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 public CV validation is total and rejects malformed nested data and private contact variants', () => {
+  const approved = JSON.parse(read('data/public-cv.json'));
+  assert.deepEqual(validator.publicCvDataErrors(approved), []);
+
+  const malformed = [
+    null,
+    {},
+    { ...clone(approved), identity: null },
+    { ...clone(approved), identity: { name: 'Jinmin Kim', translations: null } },
+    { ...clone(approved), contacts: [null, null, null] },
+    { ...clone(approved), timeline: [null, null, null, null] },
+    { ...clone(approved), capabilities: [null, null, null, null] },
+    { ...clone(approved), research: [null, null] },
+    { ...clone(approved), achievements: { patentApplications: 7, patentGrants: 3, awardTotal: 9, selectedAwards: [null] } },
+    { ...clone(approved), languages: [null, null] }
+  ];
+  for (const candidate of malformed) {
+    assert.doesNotThrow(() => validator.publicCvDataErrors(candidate));
+    assert.ok(validator.publicCvDataErrors(candidate).length > 0);
+  }
+
+  for (const privateValue of [
+    '31세', '010 1234 5678', '010-1234-5678', '(010) 1234 5678', '+82 10 1234 5678',
+    '서울시 강남구', '부산광역시 해운대구', '경기도 성남시', '강남구 역삼동', '역삼동 123', '테헤란로 123'
+  ]) {
+    const candidate = clone(approved);
+    candidate.identity.translations.ko.summary = privateValue;
+    assert.match(validator.publicCvDataErrors(candidate).join(' '), /prohibited|private|address|phone|age/i, privateValue);
+  }
+
+  const smuggledPhone = clone(approved);
+  smuggledPhone.contacts[1] = { label: 'Phone', value: '010 1234 5678', href: 'tel:01012345678' };
+  assert.match(validator.publicCvDataErrors(smuggledPhone).join(' '), /contact|phone|prohibited/i);
+  const wrongHost = clone(approved);
+  wrongHost.contacts[1].href = 'https://example.com/rafaam11';
+  assert.match(validator.publicCvDataErrors(wrongHost).join(' '), /contact/i);
+});
+
+test('Task 5 generator rejects malformed nested input atomically with a controlled error', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-atomic-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const malformed = JSON.parse(fs.readFileSync(input, 'utf8'));
+    malformed.projects[0].translations.ko = null;
+    fs.writeFileSync(input, `${JSON.stringify(malformed, null, 2)}\n`);
+    const before = treeFileHashes(temporaryRoot);
+    const result = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /^PDF generation failed: [^\r\n]+\r?\n$/);
+    assert.doesNotMatch(result.stderr, /Traceback/);
+    assert.deepEqual(treeFileHashes(temporaryRoot), before);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 generator publishes CV previews and digest manifest without a review directory', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-no-review-'));
+  try {
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const result = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    const manifest = JSON.parse(fs.readFileSync(path.join(temporaryRoot, 'output', 'pdf', 'manifest.json'), 'utf8'));
+    assert.equal(manifest.schemaVersion, 2);
+    assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
+    const previews = manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview');
+    assert.equal(previews.length, 4);
+    for (const preview of previews) {
+      assert.equal(fs.existsSync(path.join(temporaryRoot, preview.path)), true, preview.path);
+      assert.equal(sha256(path.join(temporaryRoot, preview.path)), preview.sha256);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 manifest freshness follows canonical project, evidence, and public CV content', () => {
+  const manifest = JSON.parse(read('output/pdf/manifest.json'));
+  assert.equal(manifest.schemaVersion, 2);
+  assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
+  assert.equal(manifest.artifacts.length, 32);
+  assert.equal(manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview').length, 4);
+
+  const changedPortfolio = clone(data);
+  changedPortfolio.projects[0].translations.en.title += ' changed';
+  assert.match(validator.pdfArtifactErrors(root, changedPortfolio).join(' '), /source digest|stale/i);
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-stale-cv-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const cvPath = path.join(temporaryRoot, 'data', 'public-cv.json');
+    const changedCv = JSON.parse(fs.readFileSync(cvPath, 'utf8'));
+    changedCv.identity.translations.en.headline += ' changed';
+    fs.writeFileSync(cvPath, `${JSON.stringify(changedCv, null, 2)}\n`);
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /source digest|stale/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 CV pages expose a concise semantic HTML summary without relying on PDF tags', () => {
+  const pages = [
+    { file: 'cv/index.html', identity: /김진민/, timeline: /DIGITRACK/, capability: /3D 정합 및 최적화/, evidence: /공동 제1저자/, boundary: /출원 7건.*등록 3건.*수상 9건/s },
+    { file: 'en/cv/index.html', identity: /Jinmin Kim/, timeline: /DIGITRACK/, capability: /3D Registration and Optimization/, evidence: /Joint first author/, boundary: /7 applications.*3 grants.*9 awards/s }
+  ];
+  for (const page of pages) {
+    const html = read(page.file);
+    assert.match(html, /<section[^>]+data-cv-summary[^>]+aria-labelledby=/);
+    assert.match(html, /<h2\b/);
+    assert.match(html, /<ol\b/);
+    assert.match(html, /<ul\b/);
+    assert.match(html, /<dl\b/);
+    assert.match(html, page.identity);
+    assert.match(html, page.timeline);
+    assert.match(html, page.capability);
+    assert.match(html, page.evidence);
+    assert.match(html, page.boundary);
   }
 });
 

@@ -6,6 +6,10 @@ const crypto = require('node:crypto');
 const data = require('../js/portfolio-data.js');
 const render = require('../js/portfolio-render.js');
 const i18n = require('../js/site-i18n.js');
+const {
+  canonicalPdfSource,
+  pdfSourceDigest
+} = require('./portfolio-pdf-source.cjs');
 
 const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
@@ -676,12 +680,56 @@ function portfolioDataErrors(candidate) {
 
 function publicCvDataErrors(candidate) {
   const errors = [];
-  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) {
+  const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+  const isText = (value) => typeof value === 'string' && value.trim().length > 0;
+  const requireKeys = (value, required, label, optional = []) => {
+    if (!isRecord(value)) {
+      errors.push(`${label} must be an object.`);
+      return false;
+    }
+    const allowed = new Set(required.concat(optional));
+    for (const key of required) {
+      if (!Object.prototype.hasOwnProperty.call(value, key)) errors.push(`${label} is missing ${key}.`);
+    }
+    for (const key of Object.keys(value)) {
+      if (!allowed.has(key)) errors.push(`${label} contains unexpected field ${key}.`);
+    }
+    return true;
+  };
+  const requireTranslations = (value, fields, label) => {
+    if (!requireKeys(value, ['ko', 'en'], `${label} translations`)) return;
+    for (const locale of ['ko', 'en']) {
+      const copy = value[locale];
+      if (!requireKeys(copy, fields, `${label} ${locale} translation`)) continue;
+      for (const field of fields) {
+        if (!isText(copy[field])) errors.push(`${label} ${locale} ${field} must be a non-empty string.`);
+      }
+    }
+  };
+  const requireLocalizedStrings = (value, label) => {
+    if (!requireKeys(value, ['ko', 'en'], `${label} translations`)) return;
+    for (const locale of ['ko', 'en']) {
+      if (!isText(value[locale])) errors.push(`${label} ${locale} must be a non-empty string.`);
+    }
+  };
+
+  if (!isRecord(candidate)) {
     return ['Public CV data must be an object.'];
   }
-  const serialized = JSON.stringify(candidate);
+  let serialized = '';
+  try {
+    const json = JSON.stringify(candidate);
+    serialized = typeof json === 'string' ? json : '';
+  } catch {
+    errors.push('Public CV data must be JSON serializable.');
+  }
   const prohibitedPatterns = [
-    /\b\d{2,3}-\d{3,4}-\d{4}\b/,
+    /(?:\+82[\s().-]*(?:0[\s().-]*)?10|\(?010\)?)[\s().-]*\d{3,4}[\s.-]*\d{4}(?=$|[^0-9])/,
+    /(?:만\s*)?\d{1,3}\s*세(?![가-힣])/,
+    /(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])/,
+    /[가-힣]{2,12}(?:특별자치도|도|광역시|특별시)\s+[가-힣]{1,12}(?:시|군|구)(?![가-힣])/,
+    /[가-힣]{2,12}(?:시|군|구)\s+[가-힣]{1,12}(?:구|읍|면|동|로|길)(?![가-힣])/,
+    /[가-힣]{2,20}(?:읍|면|동|로|길)\s*\d{1,5}(?:-\d{1,5})?(?![0-9])/,
     /\b10-\d{4}-\d+\b/,
     /\b(?:age|salary|professor|advisor|patient|hospital|customer|street address|home address)\b/i,
     /나이|연봉|지도교수|환자|병원|고객|자택|거주지|주소/,
@@ -694,30 +742,82 @@ function publicCvDataErrors(candidate) {
     const match = serialized.match(pattern);
     if (match) errors.push(`Public CV data contains a prohibited private or unverified claim: ${match[0]}.`);
   }
+  requireKeys(candidate, ['version', 'identity', 'contacts', 'timeline', 'capabilities', 'research', 'achievements', 'languages'], 'Public CV data');
   if (candidate.version !== '2026-08-16') errors.push('Public CV data requires the approved 2026-08-16 version.');
-  if (!candidate.identity || candidate.identity.name !== 'Jinmin Kim') errors.push('Public CV identity is missing.');
-  for (const locale of ['ko', 'en']) {
-    const copy = candidate.identity && candidate.identity.translations && candidate.identity.translations[locale];
-    if (!copy || !copy.displayName || !copy.headline || !copy.summary) errors.push(`Public CV identity is missing ${locale} copy.`);
+  if (requireKeys(candidate.identity, ['name', 'translations'], 'Public CV identity')) {
+    if (candidate.identity.name !== 'Jinmin Kim') errors.push('Public CV identity must be Jinmin Kim.');
+    requireTranslations(candidate.identity.translations, ['displayName', 'headline', 'summary'], 'Public CV identity');
   }
   if (!Array.isArray(candidate.contacts) || candidate.contacts.length !== 3) {
     errors.push('Public CV must declare exactly three public contact links.');
   } else {
-    for (const contact of candidate.contacts) {
-      const isMail = /^mailto:[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.href || '');
-      if (!contact.label || !contact.value || (!isMail && !isSafeHttpsUrl(contact.href))) {
-        errors.push('Public CV contains an invalid public contact link.');
+    const allowedContacts = new Map([
+      ['Email', { value: 'uiop3847@naver.com', href: 'mailto:uiop3847@naver.com' }],
+      ['GitHub', { value: 'github.com/rafaam11', href: 'https://github.com/rafaam11' }],
+      ['LinkedIn', { value: 'linkedin.com/in/rlawlsals', href: 'https://www.linkedin.com/in/rlawlsals' }]
+    ]);
+    const labels = new Set();
+    for (const [index, contact] of candidate.contacts.entries()) {
+      if (!requireKeys(contact, ['label', 'value', 'href'], `Public CV contact ${index + 1}`)) continue;
+      const expected = allowedContacts.get(contact.label);
+      if (!expected || labels.has(contact.label) || contact.value !== expected.value || contact.href !== expected.href) {
+        errors.push(`Public CV contact ${index + 1} is not an approved public contact.`);
+      }
+      labels.add(contact.label);
+    }
+    if (labels.size !== allowedContacts.size) errors.push('Public CV contacts must contain Email, GitHub, and LinkedIn exactly once.');
+  }
+
+  if (!Array.isArray(candidate.timeline) || candidate.timeline.length !== 4) {
+    errors.push('Public CV timeline must contain exactly 4 entries.');
+  } else {
+    for (const [index, entry] of candidate.timeline.entries()) {
+      if (!requireKeys(entry, ['period', 'organization', 'translations'], `Public CV timeline entry ${index + 1}`)) continue;
+      for (const field of ['period', 'organization']) if (!isText(entry[field])) errors.push(`Public CV timeline entry ${index + 1} ${field} must be a non-empty string.`);
+      requireTranslations(entry.translations, ['role', 'summary'], `Public CV timeline entry ${index + 1}`);
+    }
+  }
+  if (!Array.isArray(candidate.capabilities) || candidate.capabilities.length !== 4) {
+    errors.push('Public CV capabilities must contain exactly 4 entries.');
+  } else {
+    for (const [index, entry] of candidate.capabilities.entries()) {
+      if (!requireKeys(entry, ['translations'], `Public CV capability ${index + 1}`)) continue;
+      requireTranslations(entry.translations, ['title', 'body'], `Public CV capability ${index + 1}`);
+    }
+  }
+  if (!Array.isArray(candidate.research) || candidate.research.length !== 2) {
+    errors.push('Public CV research must contain exactly 2 entries.');
+  } else {
+    for (const [index, entry] of candidate.research.entries()) {
+      if (!requireKeys(entry, ['year', 'title', 'venue', 'role'], `Public CV research entry ${index + 1}`, ['href'])) continue;
+      for (const field of ['year', 'title', 'venue', 'role']) if (!isText(entry[field])) errors.push(`Public CV research entry ${index + 1} ${field} must be a non-empty string.`);
+      if (entry.href !== undefined && !isSafeHttpsUrl(entry.href)) errors.push(`Public CV research entry ${index + 1} has an invalid public link.`);
+    }
+  }
+
+  if (requireKeys(candidate.achievements, ['patentApplications', 'patentGrants', 'awardTotal', 'asOf', 'selectedAwards'], 'Public CV achievements')) {
+    if (candidate.achievements.patentApplications !== 7 || candidate.achievements.patentGrants !== 3 || candidate.achievements.awardTotal !== 9) {
+      errors.push('Public CV achievement totals must remain 7 applications, 3 grants, and 9 awards.');
+    }
+    if (!isText(candidate.achievements.asOf)) errors.push('Public CV achievements asOf must be a non-empty string.');
+    if (!Array.isArray(candidate.achievements.selectedAwards) || candidate.achievements.selectedAwards.length !== 3) {
+      errors.push('Public CV achievements must contain exactly 3 selected awards.');
+    } else {
+      for (const [index, award] of candidate.achievements.selectedAwards.entries()) {
+        if (!requireKeys(award, ['year', 'translations'], `Public CV selected award ${index + 1}`)) continue;
+        if (!isText(award.year)) errors.push(`Public CV selected award ${index + 1} year must be a non-empty string.`);
+        requireLocalizedStrings(award.translations, `Public CV selected award ${index + 1}`);
       }
     }
   }
-  for (const [field, expectedLength] of [['timeline', 4], ['capabilities', 4], ['research', 2]]) {
-    if (!Array.isArray(candidate[field]) || candidate[field].length !== expectedLength) {
-      errors.push(`Public CV ${field} must contain exactly ${expectedLength} entries.`);
+  if (!Array.isArray(candidate.languages) || candidate.languages.length !== 2) {
+    errors.push('Public CV languages must contain exactly 2 entries.');
+  } else {
+    for (const [index, language] of candidate.languages.entries()) {
+      if (!requireKeys(language, ['language', 'translations'], `Public CV language ${index + 1}`)) continue;
+      if (!isText(language.language)) errors.push(`Public CV language ${index + 1} language must be a non-empty string.`);
+      requireLocalizedStrings(language.translations, `Public CV language ${index + 1}`);
     }
-  }
-  if (!candidate.achievements || candidate.achievements.patentApplications !== 7 ||
-      candidate.achievements.patentGrants !== 3 || candidate.achievements.awardTotal !== 9) {
-    errors.push('Public CV achievement totals must remain 7 applications, 3 grants, and 9 awards.');
   }
   if (!serialized.includes('JLPT N2')) errors.push('Public CV must retain the valid JLPT N2 credential.');
   if (!serialized.includes('s10278-024-01014-z') || !serialized.includes('Joint first author')) {
@@ -735,7 +835,52 @@ function pdfPageCount(filePath) {
   return (fs.readFileSync(filePath).toString('latin1').match(/\/Type\s*\/Page\b/g) || []).length;
 }
 
-function pdfArtifactErrors(rootDir) {
+function canonicalEvidenceForPdf(rootDir) {
+  const register = readEvidenceRegister(rootDir);
+  if (register.errors.length) return { evidence: null, errors: register.errors };
+  return {
+    evidence: register.entries.map((entry) => ({
+      id: entry.id,
+      project: entry.project,
+      type: entry.type,
+      state: entry.state,
+      source: entry.source,
+      note: entry.note
+    })),
+    errors: []
+  };
+}
+
+function expectedPdfSourceDigest(rootDir, candidatePortfolio = data, candidateCv) {
+  const errors = [];
+  let cv = candidateCv;
+  if (cv === undefined) {
+    const cvPath = path.join(rootDir, 'data', 'public-cv.json');
+    if (!fs.existsSync(cvPath) || !fs.lstatSync(cvPath).isFile()) {
+      errors.push('data/public-cv.json: missing public CV data.');
+    } else {
+      try {
+        cv = JSON.parse(fs.readFileSync(cvPath, 'utf8'));
+      } catch {
+        errors.push('data/public-cv.json: malformed public CV data.');
+      }
+    }
+  }
+  const evidenceResult = canonicalEvidenceForPdf(rootDir);
+  errors.push(...evidenceResult.errors);
+  if (errors.length || cv === undefined || !evidenceResult.evidence) return { digest: null, cv, errors };
+  try {
+    return {
+      digest: pdfSourceDigest(canonicalPdfSource(candidatePortfolio, evidenceResult.evidence, cv)),
+      cv,
+      errors: []
+    };
+  } catch {
+    return { digest: null, cv, errors: ['Canonical PDF source cannot be serialized.'] };
+  }
+}
+
+function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   const errors = [];
   const projectNames = i18n.canonicalCaseSlugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
@@ -743,18 +888,25 @@ function pdfArtifactErrors(rootDir) {
   const outputRoot = path.join(rootDir, 'output', 'pdf');
   const projectRoot = path.join(rootDir, 'assets', 'pdfs');
   const cvRoot = path.join(rootDir, 'assets', 'cv');
+  const expectedPreviewNames = ['ko', 'en'].flatMap((locale) => [1, 2].map((pageNumber) => `jinmin-kim-cv-${locale}-page-${pageNumber}.png`));
 
   for (const [directory, label] of [[outputRoot, 'output/pdf'], [projectRoot, 'assets/pdfs'], [cvRoot, 'assets/cv']]) {
     if (!fs.existsSync(directory) || !fs.lstatSync(directory).isDirectory()) errors.push(`${label}: missing PDF artifact directory.`);
   }
   if (errors.length) return errors;
 
-  const actualOutputNames = fs.readdirSync(outputRoot).filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
-  const actualProjectNames = fs.readdirSync(projectRoot).filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
-  const actualCvNames = fs.readdirSync(cvRoot).filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
+  const actualOutputEntries = fs.readdirSync(outputRoot).sort();
+  const actualProjectEntries = fs.readdirSync(projectRoot).sort();
+  const actualCvEntries = fs.readdirSync(cvRoot).sort();
+  const actualOutputNames = actualOutputEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
+  const actualProjectNames = actualProjectEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
+  const actualCvNames = actualCvEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
   if (JSON.stringify(actualOutputNames) !== JSON.stringify(expectedOutputNames)) errors.push('output/pdf must contain exactly twelve project PDFs and two CV PDFs.');
   if (JSON.stringify(actualProjectNames) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs must contain exactly the twelve canonical localized project PDFs.');
   if (JSON.stringify(actualCvNames) !== JSON.stringify(cvNames.slice().sort())) errors.push('assets/cv must contain exactly the two localized CV PDFs.');
+  if (JSON.stringify(actualOutputEntries) !== JSON.stringify(expectedOutputNames.concat('manifest.json').sort())) errors.push('output/pdf contains an unexpected or missing published artifact.');
+  if (JSON.stringify(actualProjectEntries) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs contains an unexpected or missing published artifact.');
+  if (JSON.stringify(actualCvEntries) !== JSON.stringify(cvNames.concat(expectedPreviewNames).sort())) errors.push('assets/cv contains an unexpected or missing published artifact.');
 
   for (const name of expectedOutputNames) {
     const isCv = cvNames.includes(name);
@@ -790,15 +942,136 @@ function pdfArtifactErrors(rootDir) {
     }
   }
 
-  const publicCvPath = path.join(rootDir, 'data', 'public-cv.json');
-  if (!fs.existsSync(publicCvPath) || !fs.lstatSync(publicCvPath).isFile()) {
-    errors.push('data/public-cv.json: missing public CV data.');
+  const sourceResult = expectedPdfSourceDigest(rootDir, candidatePortfolio);
+  errors.push(...sourceResult.errors);
+  if (sourceResult.cv !== undefined) errors.push(...publicCvDataErrors(sourceResult.cv));
+
+  const manifestPath = path.join(outputRoot, 'manifest.json');
+  let manifest;
+  if (!fs.existsSync(manifestPath) || !fs.lstatSync(manifestPath).isFile()) {
+    errors.push('output/pdf/manifest.json: missing PDF artifact manifest.');
   } else {
     try {
-      errors.push(...publicCvDataErrors(JSON.parse(fs.readFileSync(publicCvPath, 'utf8'))));
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
     } catch {
-      errors.push('data/public-cv.json: malformed public CV data.');
+      errors.push('output/pdf/manifest.json: malformed PDF artifact manifest.');
     }
+  }
+  if (manifest && typeof manifest === 'object' && !Array.isArray(manifest)) {
+    const topKeys = Object.keys(manifest).sort();
+    if (JSON.stringify(topKeys) !== JSON.stringify(['artifacts', 'documents', 'generator', 'schemaVersion', 'sourceDigest'])) {
+      errors.push('output/pdf/manifest.json: invalid manifest schema fields.');
+    }
+    if (manifest.schemaVersion !== 2) errors.push('output/pdf/manifest.json: unsupported manifest schemaVersion.');
+    if (manifest.generator !== 'scripts/generate-portfolio-pdfs.py') errors.push('output/pdf/manifest.json: invalid generator identity.');
+    if (!/^[a-f0-9]{64}$/.test(manifest.sourceDigest || '')) errors.push('output/pdf/manifest.json: invalid source digest.');
+    if (sourceResult.digest && manifest.sourceDigest !== sourceResult.digest) {
+      errors.push('output/pdf/manifest.json: source digest is stale for the current canonical portfolio, evidence register, or public CV data.');
+    }
+
+    const expectedDocuments = new Map();
+    for (const slug of i18n.canonicalCaseSlugs) {
+      for (const locale of ['ko', 'en']) {
+        const name = `${slug}-${locale}.pdf`;
+        expectedDocuments.set(name, { kind: 'project', slug, locale, pages: 6 });
+      }
+    }
+    for (const locale of ['ko', 'en']) {
+      expectedDocuments.set(`jinmin-kim-cv-${locale}.pdf`, { kind: 'cv', locale, pages: 2 });
+    }
+    if (!Array.isArray(manifest.documents) || manifest.documents.length !== expectedDocuments.size) {
+      errors.push('output/pdf/manifest.json: documents must track exactly fourteen PDFs.');
+    } else {
+      const seen = new Set();
+      for (const document of manifest.documents) {
+        if (!document || typeof document !== 'object' || Array.isArray(document)) {
+          errors.push('output/pdf/manifest.json: document record must be an object.');
+          continue;
+        }
+        const expected = expectedDocuments.get(document.name);
+        const expectedKeys = expected && expected.kind === 'project'
+          ? ['bytes', 'characters', 'kind', 'links', 'locale', 'name', 'pages', 'sha256', 'slug']
+          : ['bytes', 'characters', 'kind', 'links', 'locale', 'name', 'pages', 'sha256'];
+        if (!expected || seen.has(document.name)) {
+          errors.push(`output/pdf/manifest.json: unexpected or duplicate document ${String(document.name)}.`);
+          continue;
+        }
+        seen.add(document.name);
+        if (JSON.stringify(Object.keys(document).sort()) !== JSON.stringify(expectedKeys)) errors.push(`${document.name}: invalid document manifest schema.`);
+        if (document.kind !== expected.kind || document.locale !== expected.locale || document.pages !== expected.pages ||
+            (expected.slug && document.slug !== expected.slug)) errors.push(`${document.name}: document manifest identity or page count mismatch.`);
+        if (!Number.isInteger(document.links) || document.links < 1 || !Number.isInteger(document.characters) || document.characters < 1) {
+          errors.push(`${document.name}: invalid document QA totals in manifest.`);
+        }
+        const filePath = path.join(outputRoot, document.name);
+        if (fs.existsSync(filePath) && (document.bytes !== fs.statSync(filePath).size || document.sha256 !== sha256File(filePath))) {
+          errors.push(`${document.name}: document manifest hash or byte count mismatch.`);
+        }
+      }
+      if (seen.size !== expectedDocuments.size) errors.push('output/pdf/manifest.json: one or more canonical documents are missing.');
+    }
+
+    const expectedArtifacts = new Map();
+    for (const slug of i18n.canonicalCaseSlugs) {
+      for (const locale of ['ko', 'en']) {
+        const name = `${slug}-${locale}.pdf`;
+        for (const prefix of ['output/pdf', 'assets/pdfs']) {
+          expectedArtifacts.set(`${prefix}/${name}`, { kind: 'project-pdf', slug, locale, pages: 6 });
+        }
+      }
+    }
+    for (const locale of ['ko', 'en']) {
+      const pdfName = `jinmin-kim-cv-${locale}.pdf`;
+      for (const prefix of ['output/pdf', 'assets/cv']) {
+        expectedArtifacts.set(`${prefix}/${pdfName}`, { kind: 'cv-pdf', locale, pages: 2 });
+      }
+      for (const pageNumber of [1, 2]) {
+        expectedArtifacts.set(`assets/cv/jinmin-kim-cv-${locale}-page-${pageNumber}.png`, {
+          kind: 'cv-preview', locale, page: pageNumber
+        });
+      }
+    }
+    if (!Array.isArray(manifest.artifacts) || manifest.artifacts.length !== expectedArtifacts.size) {
+      errors.push('output/pdf/manifest.json: artifacts must track exactly 32 published files.');
+    } else {
+      const seen = new Set();
+      for (const artifact of manifest.artifacts) {
+        if (!artifact || typeof artifact !== 'object' || Array.isArray(artifact)) {
+          errors.push('output/pdf/manifest.json: artifact record must be an object.');
+          continue;
+        }
+        const expected = expectedArtifacts.get(artifact.path);
+        if (!expected || seen.has(artifact.path)) {
+          errors.push(`output/pdf/manifest.json: unexpected or duplicate artifact ${String(artifact.path)}.`);
+          continue;
+        }
+        seen.add(artifact.path);
+        const expectedKeys = expected.kind === 'project-pdf'
+          ? ['bytes', 'kind', 'locale', 'pages', 'path', 'sha256', 'slug']
+          : expected.kind === 'cv-pdf'
+            ? ['bytes', 'kind', 'locale', 'pages', 'path', 'sha256']
+            : ['bytes', 'height', 'kind', 'locale', 'page', 'path', 'sha256', 'width'];
+        if (JSON.stringify(Object.keys(artifact).sort()) !== JSON.stringify(expectedKeys)) errors.push(`${artifact.path}: invalid artifact manifest schema.`);
+        if (artifact.kind !== expected.kind || artifact.locale !== expected.locale ||
+            (expected.slug && artifact.slug !== expected.slug) ||
+            (expected.pages && artifact.pages !== expected.pages) ||
+            (expected.page && artifact.page !== expected.page)) errors.push(`${artifact.path}: artifact manifest identity mismatch.`);
+        const filePath = path.join(rootDir, ...artifact.path.split('/'));
+        if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) continue;
+        if (!Number.isInteger(artifact.bytes) || artifact.bytes !== fs.statSync(filePath).size || artifact.sha256 !== sha256File(filePath)) {
+          errors.push(`${artifact.path}: artifact manifest hash or byte count mismatch.`);
+        }
+        if (expected.kind === 'cv-preview') {
+          const dimensions = imageDimensions(filePath, '.png');
+          if (!dimensions || dimensions.width !== artifact.width || dimensions.height !== artifact.height) {
+            errors.push(`${artifact.path}: preview manifest dimensions mismatch.`);
+          }
+        }
+      }
+      if (seen.size !== expectedArtifacts.size) errors.push('output/pdf/manifest.json: one or more canonical artifacts are missing.');
+    }
+  } else if (manifest !== undefined) {
+    errors.push('output/pdf/manifest.json: manifest must be an object.');
   }
 
   for (const locale of ['ko', 'en']) {
@@ -818,6 +1091,9 @@ function pdfArtifactErrors(rootDir) {
     }
     if (!new RegExp(`<a[^>]+href="${escapeRegExp(pdfHref)}"[^>]+target="_blank"[^>]+rel="noopener"`).test(html)) errors.push(`${relativePage}: missing PDF open fallback.`);
     if (!new RegExp(`<a[^>]+href="${escapeRegExp(pdfHref)}"[^>]+download`).test(html)) errors.push(`${relativePage}: missing PDF download fallback.`);
+    if (!/<section[^>]+data-cv-summary[^>]+aria-labelledby=/.test(html) || !/<ol\b/.test(html) || !/<ul\b/.test(html) || !/<dl\b/.test(html)) {
+      errors.push(`${relativePage}: missing visible semantic HTML CV summary.`);
+    }
   }
   return errors;
 }

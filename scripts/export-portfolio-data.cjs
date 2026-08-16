@@ -7,6 +7,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const portfolio = require('../js/portfolio-data.js');
 const validator = require('./validate-portfolio.cjs');
+const { canonicalPdfSource, withPdfSourceDigest } = require('./portfolio-pdf-source.cjs');
 
 function parseArguments(argv) {
   const options = { output: null };
@@ -38,23 +39,7 @@ function exportData() {
     source: entry.source,
     note: entry.note
   }));
-  return {
-    schemaVersion: 1,
-    contentVersion: '2026-08-16',
-    locales: ['ko', 'en'],
-    site: {
-      name: 'Jinmin Kim',
-      email: 'uiop3847@naver.com',
-      portfolio: 'https://rafaam11.github.io',
-      github: 'https://github.com/rafaam11',
-      linkedin: 'https://www.linkedin.com/in/rlawlsals'
-    },
-    capabilities: portfolio.capabilities,
-    tiers: portfolio.tiers,
-    projects: portfolio.projects,
-    evidence,
-    cv
-  };
+  return withPdfSourceDigest(canonicalPdfSource(portfolio, evidence, cv));
 }
 
 function main(argv) {
