@@ -3,21 +3,22 @@ const path = require('node:path');
 
 const data = require('../js/portfolio-data.js');
 const render = require('../js/portfolio-render.js');
+const i18n = require('../js/site-i18n.js');
 
 const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const siteUrl = 'https://rafaam11.github.io/';
 
 function portfolioRoutes() {
-  return [
+  const topLevelPages = [
     { route: '', file: 'index.html' },
     { route: 'projects/', file: 'projects/index.html' },
-    { route: 'research/', file: 'research/index.html' },
     { route: 'cv/', file: 'cv/index.html', allowsNamedEmployer: true },
     { route: 'contact/', file: 'contact/index.html' }
-  ].concat(data.projects.map((project) => ({
-    route: `projects/${project.slug}/`,
-    file: `projects/${project.slug}/index.html`
+  ];
+  return topLevelPages.concat(i18n.canonicalCaseSlugs.map((slug) => ({
+    route: `projects/${slug}/`,
+    file: `projects/${slug}/index.html`
   })));
 }
 
@@ -130,15 +131,6 @@ function staticPageErrors(file, html, rootDir) {
 function validatePortfolio(rootDir) {
   const errors = render.validatePortfolioData(data).slice();
 
-  for (const project of data.projects) {
-    for (const prefix of ['', 'en']) {
-      const relativePath = path.join(prefix, 'projects', project.slug, 'index.html');
-      if (!fs.existsSync(path.join(rootDir, relativePath))) {
-        errors.push(`${relativePath}: missing project detail page.`);
-      }
-    }
-  }
-
   for (const file of publicPortfolioFiles(rootDir)) {
     if (!fs.existsSync(file.absolutePath)) {
       errors.push(`${file.relativePath}: missing public page.`);
@@ -177,7 +169,7 @@ if (require.main === module) {
     for (const error of errors) process.stderr.write(`- ${error}\n`);
     process.exitCode = 1;
   } else {
-    process.stdout.write(`Portfolio validation passed: ${data.projects.length} projects, ${data.capabilities.length} capabilities, ${publicPortfolioFiles(rootDir).length} localized pages.\n`);
+    process.stdout.write(`Portfolio validation passed: ${i18n.canonicalCaseSlugs.length} projects, ${data.capabilities.length} capabilities, ${publicPortfolioFiles(rootDir).length} localized pages.\n`);
   }
 }
 

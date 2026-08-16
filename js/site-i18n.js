@@ -3,11 +3,20 @@
   if (typeof module === 'object' && module.exports) module.exports = value;
   root.SiteI18n = value;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  var supportedNavigationPages = ['home', 'projects', 'cv', 'contact'];
+  var canonicalCaseSlugs = [
+    'surgical-navigation',
+    'mandibular-fracture',
+    'life-careverse',
+    'rtms-navigation',
+    'unmanned-forklift',
+    'ai-build-lab'
+  ];
+
   var ui = {
     ko: {
       nav: {
         projects: '프로젝트',
-        capabilities: '역량',
         cv: 'CV',
         contact: '연락처',
         currentPage: '현재 페이지: ',
@@ -45,7 +54,6 @@
     en: {
       nav: {
         projects: 'Projects',
-        capabilities: 'Capabilities',
         cv: 'CV',
         contact: 'Contact',
         currentPage: 'Current page: ',
@@ -101,6 +109,8 @@
   return {
     defaultLocale: 'ko',
     supportedLocales: ['ko', 'en'],
+    supportedNavigationPages: supportedNavigationPages,
+    canonicalCaseSlugs: canonicalCaseSlugs,
     ui: ui,
     normalizeLocale: normalizeLocale,
     routeHref: routeHref
