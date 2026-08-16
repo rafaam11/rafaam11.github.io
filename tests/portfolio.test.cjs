@@ -2869,3 +2869,173 @@ test('Task 6 review round 3 exposes exact source offsets for parsed real start t
     }
   ]);
 });
+
+test('Task 6 review round 4 decodes attribute character references exactly once', () => {
+  const html = [
+    '<header id="site&#45;nav" data-copy="A&nbsp;B&Tab;C&mdash;D"></header>',
+    '<link rel="canon&#105;cal" href="https&colon;&sol;&sol;rafaam11&period;github&period;io&sol;">',
+    '<a href="&amp;#47;projects">One-pass reference</a>',
+    '<img src=assets&#x2f;img&#47;favicon&#46;ico alt="">',
+    '<object data="assets&#47;cv&#47;file.pdf"></object>',
+    '<video poster=assets&#47;cv&#47;poster.png></video>'
+  ].join('');
+  const tags = validator.htmlStartTags(html);
+  const header = tags.find((tag) => tag.name === 'header');
+  const link = tags.find((tag) => tag.name === 'link');
+  const id = header.attributes.find((attribute) => attribute.name === 'id');
+  const copy = header.attributes.find((attribute) => attribute.name === 'data-copy');
+  assert.deepEqual({ value: id.value, rawValue: id.rawValue }, {
+    value: 'site-nav',
+    rawValue: 'site&#45;nav'
+  });
+  assert.equal(copy.value, 'A\u00a0B\tC\u2014D');
+  assert.equal(link.attributes.find((attribute) => attribute.name === 'rel').value, 'canonical');
+  assert.equal(link.attributes.find((attribute) => attribute.name === 'href').value, 'https://rafaam11.github.io/');
+  assert.deepEqual(validator.htmlReferences(html), [
+    { tag: 'link', attribute: 'href', value: 'https://rafaam11.github.io/' },
+    { tag: 'a', attribute: 'href', value: '&#47;projects' },
+    { tag: 'img', attribute: 'src', value: 'assets/img/favicon.ico' },
+    { tag: 'object', attribute: 'data', value: 'assets/cv/file.pdf' },
+    { tag: 'video', attribute: 'poster', value: 'assets/cv/poster.png' }
+  ]);
+  const onePassErrors = validator.localReferenceErrors(
+    { relativePath: 'index.html', locale: 'ko' },
+    '<a href="projects&amp;#47;index.html">One-pass path</a>',
+    root
+  ).join('\n');
+  assert.match(onePassErrors, /projects&: missing local reference target/i);
+});
+
+test('Task 6 review round 4 applies decoded values to page and dependency contracts', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-entities-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const relativePath = 'projects/surgical-navigation/index.html';
+    const casePath = path.join(temporaryRoot, ...relativePath.split('/'));
+    const baseline = fs.readFileSync(casePath, 'utf8');
+    const canonical = '<link rel="canonical" href="https://rafaam11.github.io/projects/surgical-navigation/">';
+    const koAlternate = '<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/projects/surgical-navigation/">';
+    const header = '<header id="site-nav"></header>';
+    const encodedValid = baseline
+      .replace('data-base="../../"', 'data-base="&#46;&#46;&#47;&#x2e;&#x2e;&#x2f;"')
+      .replace('data-page="projects"', 'data-page="pro&#106;ects"')
+      .replace('data-lang="ko"', 'data-lang="&#107;&#111;"')
+      .replace('data-route="projects/surgical-navigation/"', 'data-route="projects&#47;surgical&#45;navigation&#x2f;"')
+      .replace(header, '<header id="site&#45;nav"></header>')
+      .replace(canonical, '<link rel="canon&#105;cal" href="https&colon;&sol;&sol;rafaam11&period;github&period;io&sol;projects&sol;surgical-navigation&sol;">')
+      .replace(koAlternate, '<link rel="alternate" hreflang="&#107;&#111;" href="https://rafaam11.github.io/projects/surgical-navigation/">')
+      .replace('href="../../css/site.css"', 'href="&#46;&#46;&#47;&#46;&#46;&#47;css&#47;site&#46;css"')
+      .replace('src="../../js/site-i18n.js"', 'src="&#46;&#46;&#47;&#46;&#46;&#47;js&#47;site&#45;i18n&#46;js"');
+    assert.notEqual(encodedValid, baseline, 'encoded valid fixture mutation did not apply');
+
+    const undetected = [];
+    fs.writeFileSync(casePath, encodedValid);
+    const encodedErrors = validator.validatePortfolio(temporaryRoot);
+    if (encodedErrors.length) undetected.push(`encoded valid page: ${encodedErrors.join('\n')}`);
+
+    const mutations = [
+      {
+        label: 'encoded duplicate mount ID',
+        html: baseline.replace(header, `<div id="site&#45;nav"></div>${header}`),
+        expected: /duplicate shared navigation mount|id="site-nav".*found 2/i
+      },
+      {
+        label: 'encoded duplicate canonical relation',
+        html: baseline.replace(canonical, `${canonical}<link rel="canon&#105;cal" href="https://rafaam11.github.io/projects/surgical-navigation/">`),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'encoded duplicate alternate language',
+        html: baseline.replace(koAlternate, `${koAlternate}<link rel="alternate" hreflang="&#107;&#111;" href="https://rafaam11.github.io/projects/surgical-navigation/">`),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      }
+    ];
+    for (const mutation of mutations) {
+      assert.notEqual(mutation.html, baseline, `${mutation.label}: fixture mutation did not apply`);
+      fs.writeFileSync(casePath, mutation.html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!mutation.expected.test(errors)) undetected.push(`${mutation.label}: ${errors || '<no errors>'}`);
+    }
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 4 requires one valued src and no other required-script attributes', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-script-attributes-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const i18n = '<script src="js/site-i18n.js"></script>';
+    const mutations = [
+      ['mismatched SRI', `<script src="js/site-i18n.js" integrity="sha384-reviewer-mismatch"></script>`, /classic executable.*exactly one valued src|script attribute contract.*integrity/i],
+      ['crossorigin', '<script src="js/site-i18n.js" crossorigin=anonymous></script>', /classic executable.*exactly one valued src|script attribute contract.*crossorigin/i],
+      ['referrer policy', '<script src="js/site-i18n.js" referrerpolicy=no-referrer></script>', /classic executable.*exactly one valued src|script attribute contract.*referrerpolicy/i],
+      ['nonce', '<script nonce=review src="js/site-i18n.js"></script>', /classic executable.*exactly one valued src|script attribute contract.*nonce/i],
+      ['id', '<script id=runtime src="js/site-i18n.js"></script>', /classic executable.*exactly one valued src|script attribute contract.*id/i],
+      ['arbitrary attribute', '<script data-runtime=review src="js/site-i18n.js"></script>', /classic executable.*exactly one valued src|script attribute contract.*data-runtime/i],
+      ['duplicate valued src', '<script src="js/site-i18n.js" src="js/site-i18n.js"></script>', /classic executable.*exactly one valued src|script attribute contract.*src/i],
+      ['duplicate boolean src', '<script src="js/site-i18n.js" src></script>', /classic executable.*exactly one valued src|script attribute contract.*src/i],
+      ['boolean-only src', '<script src></script>', /missing required local script.*site-i18n\.js|exact parsed script sequence/i],
+      ['missing src', '<script></script>', /missing required local script.*site-i18n\.js|exact parsed script sequence/i]
+    ];
+
+    const undetected = [];
+    for (const [label, replacement, expected] of mutations) {
+      const html = baseline.replace(i18n, replacement);
+      assert.notEqual(html, baseline, `${label}: fixture mutation did not apply`);
+      fs.writeFileSync(homePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!expected.test(errors)) undetected.push(`${label}: ${errors || '<no errors>'}`);
+    }
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 4 requires exact unique local stylesheet tags without blocking attributes', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-style-attributes-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const siteStyle = '<link rel="stylesheet" href="css/site.css">';
+    const externalStyle = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">';
+    const mutations = [
+      ['duplicate required style', `${siteStyle}${siteStyle}`, /required local stylesheet.*site\.css.*exactly once|duplicate required local stylesheet/i],
+      ['mismatched SRI', '<link rel="stylesheet" href="css/site.css" integrity="sha384-reviewer-mismatch">', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*integrity/i],
+      ['disabled', '<link rel="stylesheet" href="css/site.css" disabled>', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*disabled/i],
+      ['media', '<link rel="stylesheet" href="css/site.css" media=print>', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*media/i],
+      ['type', '<link rel="stylesheet" href="css/site.css" type=text/css>', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*type/i],
+      ['id', '<link id=site-css rel="stylesheet" href="css/site.css">', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*id/i],
+      ['duplicate href', '<link rel="stylesheet" href="css/site.css" href="css/site.css">', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*href/i],
+      ['duplicate rel', '<link rel="stylesheet" rel="stylesheet" href="css/site.css">', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*rel/i],
+      ['alternate stylesheet', '<link rel="alternate stylesheet" href="css/site.css">', /required local stylesheet.*site\.css.*only.*rel.*href|stylesheet attribute contract.*rel/i],
+      ['missing rel', '<link href="css/site.css">', /required local stylesheet.*site\.css.*only.*rel.*href|missing required local stylesheet/i],
+      ['boolean href', '<link rel="stylesheet" href>', /missing required local stylesheet.*site\.css|stylesheet.*valued href/i],
+      ['missing href', '<link rel="stylesheet">', /missing required local stylesheet.*site\.css|stylesheet.*valued href/i]
+    ];
+
+    const undetected = [];
+    for (const [label, replacement, expected] of mutations) {
+      const html = baseline.replace(siteStyle, replacement);
+      assert.notEqual(html, baseline, `${label}: fixture mutation did not apply`);
+      fs.writeFileSync(homePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!expected.test(errors)) undetected.push(`${label}: ${errors || '<no errors>'}`);
+    }
+
+    const externalWithAttributes = baseline.replace(externalStyle, externalStyle.replace('>', ' crossorigin=anonymous referrerpolicy=no-referrer media=all>'));
+    assert.notEqual(externalWithAttributes, baseline, 'external stylesheet fixture mutation did not apply');
+    fs.writeFileSync(homePath, externalWithAttributes);
+    const externalErrors = validator.validatePortfolio(temporaryRoot);
+    if (externalErrors.length) undetected.push(`external stylesheet preservation: ${externalErrors.join('\n')}`);
+
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
