@@ -30,6 +30,7 @@ const capabilityKeys = [
   'ai-product-engineering'
 ];
 const tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
+const validPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
 const retainedLegacyProjectSlugs = [
   'surgical-twin', 'rtms-navigation', 'mandibular-fracture', 'c-arm-navigation',
   'unmanned-forklift', 'quadruped-robot', 'radioactive-digital-twin', 'life-careverse',
@@ -82,6 +83,14 @@ function withEvidenceRoot(registerText, callback) {
     return callback(temporaryRoot);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+}
+
+function seedEvidenceReadmes(temporaryRoot, body = 'Patient data excluded. Public-safe derivative boundary.') {
+  for (const slug of slugs) {
+    const projectDirectory = path.join(temporaryRoot, 'assets', 'projects', slug);
+    fs.mkdirSync(projectDirectory, { recursive: true });
+    fs.writeFileSync(path.join(projectDirectory, 'README.md'), body);
   }
 }
 
@@ -327,6 +336,156 @@ test('Task 4 approved video requires an approved registered image poster and kee
       : entry);
     fs.writeFileSync(path.join(temporaryRoot, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), evidenceRegisterText(pendingPosterRows));
     assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /approved video requires an approved image poster/i);
+  });
+});
+
+test('Task 4 review rejects every unregistered file or directory below a project evidence root', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  withEvidenceRoot(registerText, (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot);
+    assert.deepEqual(validator.evidenceDirectoryErrors(temporaryRoot), []);
+    const unexpectedDirectory = path.join(temporaryRoot, 'assets', 'projects', 'unmanned-forklift', 'exports');
+    fs.mkdirSync(unexpectedDirectory);
+    fs.writeFileSync(path.join(unexpectedDirectory, 'field-frame.png'), validPng);
+    const errors = validator.evidenceDirectoryErrors(temporaryRoot).join(' ');
+    assert.match(errors, /unregistered evidence (?:directory|file)/i);
+    assert.match(errors, /unmanned-forklift[\\/]exports/i);
+  });
+
+  const entries = validator.readEvidenceRegister(root).entries;
+  const approvedSource = 'assets/projects/unmanned-forklift/point-cloud.png';
+  const approved = evidenceRegisterText(entries.map((entry) => entry.id === 'forklift-registration-pointcloud'
+    ? { ...entry, state: 'approved-public', source: approvedSource }
+    : entry));
+  withEvidenceRoot(approved, (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot);
+    fs.writeFileSync(path.join(temporaryRoot, approvedSource), validPng);
+    assert.deepEqual(validator.evidenceDirectoryErrors(temporaryRoot), []);
+  });
+});
+
+test('Task 4 review structurally detects source paths while allowing plain exclusion language', () => {
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const safe = evidenceRegisterText(canonical.map((entry, index) => index === 0
+    ? { ...entry, note: 'Patient data excluded; only approved derivatives may be published.' }
+    : entry));
+  withEvidenceRoot(safe, (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot, 'Patient data excluded. No identifying source metadata is recorded.');
+    assert.deepEqual(validator.readEvidenceRegister(temporaryRoot).errors, []);
+    assert.deepEqual(validator.evidenceDirectoryErrors(temporaryRoot), []);
+  });
+
+  const leaks = [
+    'C:\\source\\capture.png',
+    '\\\\server\\share\\capture.png',
+    'file:///source/capture.png',
+    '/Users/reviewer/capture.png',
+    '/home/reviewer/capture.png',
+    '/mnt/c/source/capture.png',
+    'path=exports/capture.png',
+    'archive/private/raw/capture.png',
+    'archive/extracted/capture.png',
+    'archive/manifest/capture.json'
+  ];
+  for (const leakedNote of leaks) {
+    const leaked = evidenceRegisterText(canonical.map((entry, index) => index === 0
+      ? { ...entry, note: `Original ${leakedNote}` }
+      : entry));
+    withEvidenceRoot(leaked, (temporaryRoot) => {
+      assert.match(validator.readEvidenceRegister(temporaryRoot).errors.join(' '), /private source path/i, leakedNote);
+    });
+  }
+
+  withEvidenceRoot(evidenceRegisterText(canonical), (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot);
+    fs.writeFileSync(
+      path.join(temporaryRoot, 'assets', 'projects', 'rtms-navigation', 'README.md'),
+      'Review source path=/home/reviewer/prototype.mp4'
+    );
+    assert.match(validator.evidenceDirectoryErrors(temporaryRoot).join(' '), /README\.md.*private source path/i);
+  });
+});
+
+test('Task 4 review requires exact filesystem case and rejects link or realpath escape', () => {
+  const candidate = clone(data);
+  candidate.projects[4].media.lead = {
+    id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/unmanned-forklift/point-cloud.png'
+  };
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const approved = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
+    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    : entry));
+
+  withEvidenceRoot(approved, (temporaryRoot) => {
+    const projectDirectory = path.join(temporaryRoot, 'assets', 'projects', 'unmanned-forklift');
+    fs.mkdirSync(projectDirectory, { recursive: true });
+    fs.writeFileSync(path.join(projectDirectory, 'Point-Cloud.png'), validPng);
+    assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /exact filesystem case/i);
+  });
+
+  withEvidenceRoot(approved, (temporaryRoot) => {
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-evidence-outside-'));
+    try {
+      fs.writeFileSync(path.join(outside, 'point-cloud.png'), validPng);
+      const projectDirectory = path.join(temporaryRoot, 'assets', 'projects', 'unmanned-forklift');
+      fs.symlinkSync(outside, projectDirectory, process.platform === 'win32' ? 'junction' : 'dir');
+      assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /symbolic link|reparse point|realpath escape/i);
+    } finally {
+      fs.rmSync(outside, { recursive: true, force: true });
+    }
+  });
+});
+
+test('Task 4 review rejects truncated or corrupt PNG files that only expose an IHDR size', () => {
+  const candidate = clone(data);
+  candidate.projects[4].media.lead = {
+    id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/unmanned-forklift/point-cloud.png'
+  };
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const approved = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
+    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    : entry));
+
+  for (const payload of [validPng.subarray(0, 24), (() => {
+    const corrupted = Buffer.from(validPng);
+    corrupted[42] ^= 0xff;
+    return corrupted;
+  })()]) {
+    withEvidenceRoot(approved, (temporaryRoot) => {
+      const target = path.join(temporaryRoot, candidate.projects[4].media.lead.publicPath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.writeFileSync(target, payload);
+      assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /structurally complete and decodable/i);
+    });
+  }
+});
+
+test('Task 4 review rejects an approved secondary video when the approved lead is an image', () => {
+  const candidate = clone(data);
+  const project = candidate.projects[0];
+  project.media.lead = {
+    id: 'surgical-navigation-demo-poster', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/navigation-demo-poster.png'
+  };
+  project.media.poster = { ...project.media.lead };
+  project.media.video = {
+    id: 'surgical-navigation-demo', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/navigation-demo.mp4'
+  };
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const approved = evidenceRegisterText(canonical.map((entry) => {
+    if (entry.id === project.media.lead.id) return { ...entry, state: 'approved-public', source: project.media.lead.publicPath };
+    if (entry.id === project.media.video.id) return { ...entry, state: 'approved-public', source: project.media.video.publicPath };
+    return entry;
+  }));
+  withEvidenceRoot(approved, (temporaryRoot) => {
+    const poster = path.join(temporaryRoot, project.media.lead.publicPath);
+    fs.mkdirSync(path.dirname(poster), { recursive: true });
+    fs.writeFileSync(poster, validPng);
+    fs.writeFileSync(path.join(temporaryRoot, project.media.video.publicPath), 'video fixture');
+    assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /approved media\.video must equal the approved video lead/i);
   });
 });
 
