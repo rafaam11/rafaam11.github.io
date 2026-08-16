@@ -12,6 +12,7 @@ const htmlEntityMap = {
   centerdot: '·',
   colon: ':',
   comma: ',',
+  dash: '-',
   emsp: ' ',
   ensp: ' ',
   gt: '>',
@@ -19,9 +20,11 @@ const htmlEntityMap = {
   hyphen: '-',
   lpar: '(',
   lt: '<',
+  mdash: '-',
   middot: '·',
   minus: '-',
   nbsp: '\u00a0',
+  ndash: '-',
   newline: '\n',
   period: '.',
   plus: '+',
@@ -99,7 +102,7 @@ function normalizePublicSeparators(value) {
   return value
     .replace(/[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/g, ' ')
     .replace(/[\u200b-\u200d\u2060\ufeff]/g, '')
-    .replace(/[\u2010-\u2015\u2212]/g, '-')
+    .replace(/[\u058a\u1806\u2010-\u2015\u2212\u2e17\u2e3a-\u2e3b\ufe58\ufe63\uff0d]/g, '-')
     .replace(/[\u2044\u2215\uff0f]/g, '/')
     .replace(/[\u2022\u2027\u30fb]/g, '·')
     .replace(/\uff08/g, '(')
@@ -124,11 +127,13 @@ function publicTextScanVariants(value) {
   const decoded = normalizePublicSeparators(text
     .replace(/&#(?:x)?[^;\s<]{1,24};?/gi, ' ')
     .replace(/&[a-z][a-z0-9]{0,31};?/gi, ' '));
-  const visible = normalizePublicSeparators(decoded
-    .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/<[^>]*$/g, ' '));
-  return [...new Set([decoded, visible])];
+  const flattenVisibleText = (separator) => normalizePublicSeparators(decoded
+    .replace(/<!--[\s\S]*?-->/g, separator)
+    .replace(/<[^>]*>/g, separator)
+    .replace(/<[^>]*$/g, separator));
+  const visibleWithSpaces = flattenVisibleText(' ');
+  const visibleJoined = flattenVisibleText('');
+  return [...new Set([decoded, visibleWithSpaces, visibleJoined])];
 }
 
 function publicPiiFindings(value) {

@@ -1667,11 +1667,13 @@ test('Task 5 summary refresh is deterministic, exact, and preserves unrelated pa
     const after = fs.readFileSync(koPath, 'utf8');
     assert.equal(after.replace(summary.extractPublicCvSummary(after), ''), before.replace(envelope, ''));
     assert.equal(summary.extractPublicCvSummary(after), summary.renderPublicCvSummary(cv, 'ko').envelope);
+    assert.deepEqual(cvSummaryTransactionArtifacts(temporaryRoot), []);
     const second = childProcess.spawnSync(process.execPath, [
       path.join(root, 'scripts', 'public-cv-summary.cjs'), '--root', temporaryRoot, '--write'
     ], { cwd: root, encoding: 'utf8' });
     assert.equal(second.status, 0, second.stderr || second.stdout);
     assert.equal(fs.readFileSync(koPath, 'utf8'), after);
+    assert.deepEqual(cvSummaryTransactionArtifacts(temporaryRoot), []);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
@@ -1987,6 +1989,16 @@ test('Task 5 review round 4 preserves durable recovery backups when rollback res
     const backups = recoveryArtifacts.filter((relativePath) => relativePath.endsWith('.bak'));
     assert.equal(backups.length, 2, failure?.message);
     assert.ok(recoveryArtifacts.some((relativePath) => !relativePath.endsWith('.bak')), 'incomplete transaction artifacts must remain untouched until recovery completes');
+    const recoveryErrors = validator.pdfArtifactErrors(temporaryRoot).join('\n').replace(/\\/g, '/');
+    for (const relativePath of recoveryArtifacts) {
+      const portablePath = relativePath.replace(/\\/g, '/');
+      const ignored = childProcess.spawnSync('git', ['check-ignore', '--no-index', '--quiet', '--', portablePath], {
+        cwd: root,
+        encoding: 'utf8'
+      });
+      assert.equal(ignored.status, 0, `${portablePath} must be ignored: ${ignored.stderr || ignored.stdout}`);
+      assert.ok(recoveryErrors.includes(portablePath), `${portablePath} must be named by the validator: ${recoveryErrors}`);
+    }
     for (const [index, locale] of ['ko', 'en'].entries()) {
       const backupRelative = backups.find((relativePath) => relativePath.includes(`-${locale}.bak`));
       assert.ok(backupRelative, locale);
@@ -1995,6 +2007,118 @@ test('Task 5 review round 4 preserves durable recovery backups when rollback res
       const originalStillAvailable = (fs.existsSync(targets[index]) && sha256(targets[index]) === before[index]) || sha256(backupPath) === before[index];
       assert.equal(originalStillAvailable, true, locale);
       assert.ok(failure.message.includes(backupPath), failure.message);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 5 catches entity, numeric, and visible-join romanized addresses without false positives', () => {
+  const privateValues = [
+    '123 Teheran&dash;ro, Gangnam&dash;gu, Seoul',
+    '123 Teheran&hyphen;ro, Gangnam&hyphen;gu, Seoul',
+    '123 Teheran&ndash;ro, Gangnam&ndash;gu, Seoul',
+    '123 Teheran&mdash;ro, Gangnam&mdash;gu, Seoul',
+    '123 Teheran&dashro, Gangnam&dashgu, Seoul',
+    '123 Teheran&#45;ro, Gangnam&#45;gu, Seoul',
+    '123 Teheran&#x2d;ro, Gangnam&#x2d;gu, Seoul',
+    '123 Teheran&amp;#8211;ro, Gangnam&amp;#x2014;gu, Seoul',
+    '123 Teheran&amp;ndash;ro, Gangnam&amp;mdash;gu, Seoul',
+    '123 Teheran<span>-</span>ro, Gangnam<span>-</span>gu, Seoul',
+    '123 Teheran<!-- join -->-ro, Gangnam<!-- join -->-gu, Seoul',
+    '123 Tehe<!-- join -->ran-ro, Gang<!-- join -->nam-gu, Seoul'
+  ];
+  for (const privateValue of privateValues) {
+    assert.match(validator.publicPiiFindings(privateValue).join(' '), /romanized street address/i, privateValue);
+  }
+  for (const safeValue of [
+    'https://example.com/research/teheran-ro?view=full&dash=compact',
+    'dash-aware R&D normalization - joint-first-author - 1 / 2',
+    read('data/public-cv.json'),
+    read('cv/index.html'),
+    read('en/cv/index.html')
+  ]) {
+    assert.deepEqual(validator.publicPiiFindings(safeValue), [], safeValue.slice(0, 120));
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-romanized-visible-pii-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const htmlPath = path.join(temporaryRoot, 'en', 'cv', 'index.html');
+    const original = fs.readFileSync(htmlPath, 'utf8');
+    for (const privateValue of privateValues) {
+      fs.writeFileSync(htmlPath, original.replace('</main>', `<p>${privateValue}</p>\n  </main>`));
+      assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /CV HTML public surface contains prohibited private PII/i, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 5 keeps Python romanized-address normalization aligned with JavaScript', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-python-romanized-pii-'));
+  try {
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const approved = JSON.parse(fs.readFileSync(input, 'utf8'));
+    for (const privateValue of [
+      '123 Teheran&dash;ro, Gangnam&dash;gu, Seoul',
+      '123 Teheran&hyphen;ro, Gangnam&hyphen;gu, Seoul',
+      '123 Teheran&ndash;ro, Gangnam&ndash;gu, Seoul',
+      '123 Teheran&mdash;ro, Gangnam&mdash;gu, Seoul',
+      '123 Teheran&dashro, Gangnam&dashgu, Seoul',
+      '123 Teheran&#45;ro, Gangnam&#x2d;gu, Seoul',
+      '123 Teheran&amp;#8211;ro, Gangnam&amp;#x2014;gu, Seoul',
+      '123 Teheran&amp;ndash;ro, Gangnam&amp;mdash;gu, Seoul',
+      '123 Teheran<span>-</span>ro, Gangnam<span>-</span>gu, Seoul',
+      '123 Teheran<!-- join -->-ro, Gangnam<!-- join -->-gu, Seoul',
+      '123 Tehe<!-- join -->ran-ro, Gang<!-- join -->nam-gu, Seoul'
+    ]) {
+      const payload = clone(approved);
+      payload.cv.identity.translations.en.summary = privateValue;
+      const source = { ...payload };
+      delete source.sourceDigest;
+      payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+      fs.writeFileSync(input, `${JSON.stringify(payload)}\n`);
+      const result = childProcess.spawnSync(python, [
+        path.join(root, 'scripts', 'generate-portfolio-pdfs.py'), '--input', input, '--validate-only'
+      ], { cwd: root, encoding: 'utf8' });
+      assert.equal(result.status, 1, privateValue);
+      assert.match(result.stderr, /^PDF generation failed: [^\r\n]+\r?\n$/, privateValue);
+      assert.match(result.stderr, /romanized street address|private/i, privateValue);
+      assert.doesNotMatch(result.stderr, /Traceback/, privateValue);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 review round 5 ignores and reports every stranded CV recovery artifact', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-recovery-validator-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const artifacts = [
+      'cv/index.html.public-cv-summary-review-ko.tmp',
+      'cv/index.html.public-cv-summary-.tmp',
+      'en/cv/index.html.public-cv-summary-review-en.bak',
+      'en/cv/index.html.public-cv-summary-review-en.restore.tmp'
+    ];
+    for (const relativePath of artifacts) {
+      fs.writeFileSync(path.join(temporaryRoot, relativePath), 'preserved recovery data');
+      const ignored = childProcess.spawnSync('git', ['check-ignore', '--no-index', '--quiet', '--', relativePath], {
+        cwd: root,
+        encoding: 'utf8'
+      });
+      assert.equal(ignored.status, 0, `${relativePath} must be ignored: ${ignored.stderr || ignored.stdout}`);
+    }
+    for (const errors of [validator.pdfArtifactErrors(temporaryRoot), validator.validatePortfolio(temporaryRoot)]) {
+      const joined = errors.join('\n').replace(/\\/g, '/');
+      for (const relativePath of artifacts) assert.ok(joined.includes(relativePath), `${relativePath} must be reported: ${joined}`);
     }
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
