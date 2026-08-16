@@ -40,6 +40,34 @@ function publicPortfolioFiles(rootDir) {
   ]);
 }
 
+function publicPortfolioVisualFiles(rootDir) {
+  const visualKeys = [...new Set(data.projects
+    .map((project) => project.visualKey)
+    .filter((visualKey) => typeof visualKey === 'string' && visualKey.length > 0))];
+
+  return visualKeys.flatMap((visualKey) => ['', '-en'].map((suffix) => {
+    const relativePath = path.join('assets', 'diagrams', `${visualKey}${suffix}.svg`);
+    return {
+      relativePath,
+      absolutePath: path.join(rootDir, relativePath),
+      visualKey,
+      locale: suffix ? 'en' : 'ko'
+    };
+  }));
+}
+
+function visualAssetErrors(assets) {
+  const errors = [];
+  for (const asset of assets) {
+    const content = typeof asset.content === 'string' ? asset.content : '';
+    const prohibitedPartner = content.match(privatePartnerPattern)?.[0];
+    if (prohibitedPartner) {
+      errors.push(`${asset.relativePath}: contains a nonpublic partner or company-project name: ${prohibitedPartner}.`);
+    }
+  }
+  return errors;
+}
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -126,6 +154,19 @@ function validatePortfolio(rootDir) {
     errors.push(...staticPageErrors(file, html, rootDir));
   }
 
+  const visualAssets = [];
+  for (const file of publicPortfolioVisualFiles(rootDir)) {
+    if (!fs.existsSync(file.absolutePath)) {
+      errors.push(`${file.relativePath}: missing public evidence SVG.`);
+      continue;
+    }
+    visualAssets.push({
+      ...file,
+      content: fs.readFileSync(file.absolutePath, 'utf8')
+    });
+  }
+  errors.push(...visualAssetErrors(visualAssets));
+
   return errors;
 }
 
@@ -140,4 +181,10 @@ if (require.main === module) {
   }
 }
 
-module.exports = { portfolioRoutes, publicPortfolioFiles, validatePortfolio };
+module.exports = {
+  portfolioRoutes,
+  publicPortfolioFiles,
+  publicPortfolioVisualFiles,
+  visualAssetErrors,
+  validatePortfolio
+};
