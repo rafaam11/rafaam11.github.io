@@ -69,7 +69,7 @@ function evidenceRegisterText(entries) {
     '',
     '| Evidence ID | Project | Media type | State | Public source | Provenance / usage |',
     '| --- | --- | --- | --- | --- | --- |',
-    ...entries.map((entry) => `| ${entry.id} | ${entry.project} | ${entry.type} | ${entry.state} | ${entry.source || '-'} | ${entry.note || 'Public-safe test evidence.'} |`),
+    ...entries.map((entry) => `| ${entry.id} | ${entry.project} | ${entry.type} | ${entry.state} | ${entry.source === undefined ? '-' : entry.source} | ${entry.note || 'Public-safe test evidence.'} |`),
     ''
   ].join('\n');
 }
@@ -486,6 +486,102 @@ test('Task 4 review rejects an approved secondary video when the approved lead i
     fs.writeFileSync(poster, validPng);
     fs.writeFileSync(path.join(temporaryRoot, project.media.video.publicPath), 'video fixture');
     assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /approved media\.video must equal the approved video lead/i);
+  });
+});
+
+test('Task 4 review root inventory permits only the register and six canonical project directories', () => {
+  const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
+  withEvidenceRoot(registerText, (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot);
+    assert.deepEqual(validator.evidenceDirectoryErrors(temporaryRoot), []);
+    const evidenceRoot = path.join(temporaryRoot, 'assets', 'projects');
+    const secretRoot = path.join(evidenceRoot, 'secret-project');
+    fs.mkdirSync(secretRoot);
+    fs.writeFileSync(path.join(secretRoot, 'patient-export.png'), validPng);
+    fs.writeFileSync(path.join(evidenceRoot, 'stray-notes.txt'), 'unexpected root file');
+    const errors = validator.evidenceDirectoryErrors(temporaryRoot).join(' ');
+    assert.match(errors, /secret-project.*unexpected evidence root (?:directory|item)/i);
+    assert.match(errors, /stray-notes\.txt.*unexpected evidence root (?:file|item)/i);
+
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-evidence-root-link-'));
+    const linkedRoot = path.join(evidenceRoot, 'linked-project');
+    try {
+      fs.symlinkSync(outside, linkedRoot, process.platform === 'win32' ? 'junction' : 'dir');
+      assert.match(validator.evidenceDirectoryErrors(temporaryRoot).join(' '), /linked-project.*symbolic link or reparse point/i);
+    } finally {
+      fs.rmSync(linkedRoot, { recursive: true, force: true });
+      fs.rmSync(outside, { recursive: true, force: true });
+    }
+  });
+});
+
+test('Task 4 review validates source and prose columns structurally without rejecting safe HTTPS paths', () => {
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const candidate = clone(data);
+  const safeUrl = 'https://example.com/study/raw/images';
+  candidate.projects[1].media.references[0].publicPath = safeUrl;
+  const safeRows = canonical.map((entry) => entry.id === 'mandibular-publication'
+    ? { ...entry, source: safeUrl, note: `Public evidence: ${safeUrl}` }
+    : entry);
+  withEvidenceRoot(evidenceRegisterText(safeRows), (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot, `Patient data excluded. Public evidence: ${safeUrl}`);
+    assert.deepEqual(validator.readEvidenceRegister(temporaryRoot).errors, []);
+    assert.deepEqual(validator.evidenceRegistryErrors(candidate, temporaryRoot), []);
+    assert.deepEqual(validator.evidenceDirectoryErrors(temporaryRoot), []);
+  });
+
+  const proseLeaks = [
+    '/tmp/capture.png',
+    '/workspace/review/capture.png',
+    '/var/tmp/capture.png',
+    '/Users/reviewer/capture.png',
+    '/home/reviewer/capture.png',
+    '/mnt/c/review/capture.png',
+    'source:C:/review/capture.png',
+    '\\\\server\\share\\capture.png',
+    'file:///review/capture.png',
+    '../review/capture.png',
+    'exports/capture.png',
+    'archive/private/capture.png',
+    'archive/raw/capture.png',
+    'archive/extracted/capture.png',
+    'archive/manifest/capture.json'
+  ];
+  for (const localPath of proseLeaks) {
+    const leakedRows = canonical.map((entry, index) => index === 0
+      ? { ...entry, note: `Local review source ${localPath}` }
+      : entry);
+    withEvidenceRoot(evidenceRegisterText(leakedRows), (temporaryRoot) => {
+      assert.match(validator.readEvidenceRegister(temporaryRoot).errors.join(' '), /private source path/i, localPath);
+    });
+  }
+
+  const blankPendingSource = evidenceRegisterText(canonical.map((entry, index) => index === 0
+    ? { ...entry, source: '' }
+    : entry));
+  withEvidenceRoot(blankPendingSource, (temporaryRoot) => {
+    assert.match(validator.evidenceRegistryErrors(data, temporaryRoot).join(' '), /source must be exactly "-"/i);
+  });
+
+  const restrictedCandidate = clone(data);
+  restrictedCandidate.projects[4].media.lead = {
+    id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/unmanned-forklift/extracted/point-cloud.png'
+  };
+  const restrictedRows = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
+    ? { ...entry, state: 'approved-public', source: restrictedCandidate.projects[4].media.lead.publicPath }
+    : entry));
+  withEvidenceRoot(restrictedRows, (temporaryRoot) => {
+    assert.match(validator.evidenceRegistryErrors(restrictedCandidate, temporaryRoot).join(' '), /restricted source directory segment/i);
+  });
+
+  withEvidenceRoot(evidenceRegisterText(canonical), (temporaryRoot) => {
+    seedEvidenceReadmes(temporaryRoot);
+    fs.writeFileSync(
+      path.join(temporaryRoot, 'assets', 'projects', 'life-careverse', 'README.md'),
+      'Local review source /tmp/multiuser-demo.mp4'
+    );
+    assert.match(validator.evidenceDirectoryErrors(temporaryRoot).join(' '), /README\.md.*private source path/i);
   });
 });
 
