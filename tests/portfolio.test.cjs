@@ -356,6 +356,8 @@ test('Task 3 review hero mosaic labels a nonvisual approved lead as representati
   const html = render.homeEvidenceMosaicHtml(candidate, 'en');
   const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
   assert.match(firstCell, /role="img" aria-label="Representative technical panel; no actual demo or photograph is shown\."/);
+  assert.match(firstCell, /Verified[\s\S]*Public evidence[\s\S]*REPOSITORY[\s\S]*Mandibular Fracture Optimization/);
+  assert.doesNotMatch(firstCell, /Pending approval/);
   assert.doesNotMatch(firstCell, /<img\b|Presentation and award evidence for mandibular fracture reduction research\./);
 });
 
@@ -476,6 +478,12 @@ test('Task 3 review canonical media validation enforces literal slot-compatible 
         publicPath: 'assets/projects/surgical-navigation/poster.mp4'
       };
     }, /poster: image media requires an image file/i],
+    [(candidate) => {
+      candidate.projects[1].media.lead = {
+        id: 'local-repository', type: 'repository', status: 'approved',
+        publicPath: 'assets/projects/mandibular-fracture/repository.html'
+      };
+    }, /lead: repository media requires an HTTP\(S\) public URL/i],
     [(candidate) => { candidate.projects[1].media.references[0].type = 'image'; }, /reference 0: unsupported image media type/i]
   ];
   for (const [mutate, expected] of mutations) {
