@@ -15,6 +15,13 @@ const projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careve
 const evidenceStates = ['verified', 'ongoing', 'prototype'];
 const blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
 const aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
+const fallbackVisualKeys = [
+  'nav-digitaltwin-pipeline',
+  'coordinate-signal',
+  'hololens-ar-concept',
+  'forklift-sim-to-real',
+  'decision-signal'
+];
 const projectTranslationFields = [
   'title', 'shortTitle', 'eyebrow', 'thesis', 'summary', 'problem', 'role', 'teamResult',
   'evidence', 'limitation', 'collaboration', 'mediaAlt', 'mediaCaption'
@@ -63,6 +70,14 @@ function publishedPortfolioHtmlFiles(rootDir) {
   return [...files.values()].filter((file) => fs.existsSync(file.absolutePath));
 }
 
+function isPathInsideRoot(rootDir, candidatePath) {
+  const relativePath = path.relative(path.resolve(rootDir), path.resolve(candidatePath));
+  return Boolean(relativePath) &&
+    relativePath !== '..' &&
+    !relativePath.startsWith(`..${path.sep}`) &&
+    !path.isAbsolute(relativePath);
+}
+
 function publicPortfolioVisualFiles(rootDir) {
   const mediaItems = data.projects.flatMap((project) => {
     const media = project.media || {};
@@ -78,10 +93,10 @@ function publicPortfolioVisualFiles(rootDir) {
     }));
   const rendererFallbackFiles = [...new Set(data.projects
     .map((project) => project.visualKey)
-    .filter((visualKey) => typeof visualKey === 'string' && visualKey))]
+    .filter((visualKey) => fallbackVisualKeys.includes(visualKey)))]
     .flatMap((visualKey) => ['', '-en'].map((suffix) => {
       const relativePath = path.join('assets', 'diagrams', `${visualKey}${suffix}.svg`);
-      return { relativePath, absolutePath: path.join(rootDir, relativePath), evidenceId: `renderer:${visualKey}` };
+      return { relativePath, absolutePath: path.resolve(rootDir, relativePath), evidenceId: `renderer:${visualKey}` };
     }));
 
   const referencedFiles = [];
@@ -99,6 +114,7 @@ function publicPortfolioVisualFiles(rootDir) {
 
   const unique = new Map();
   for (const file of declaredFiles.concat(rendererFallbackFiles, referencedFiles)) {
+    if (!isPathInsideRoot(rootDir, file.absolutePath)) continue;
     const key = file.relativePath.replace(/\\/g, '/').toLowerCase();
     if (!unique.has(key)) unique.set(key, file);
   }
@@ -224,6 +240,7 @@ function portfolioDataErrors(candidate) {
       if (!tierKeys.includes(project.tier)) errors.push(`${slug}: unknown tier.`);
       if (!evidenceStates.includes(project.evidenceState)) errors.push(`${slug}: unknown evidence state.`);
       if (project.route !== `projects/${slug}/`) errors.push(`${slug}: invalid project route.`);
+      if (!fallbackVisualKeys.includes(project.visualKey)) errors.push(`${slug}: invalid visual key.`);
       if (!Array.isArray(project.capabilityKeys) || project.capabilityKeys.length === 0) {
         errors.push(`${slug}: missing capability mappings.`);
       } else if (project.capabilityKeys.some((key) => !capabilityKeys.includes(key))) {
@@ -373,6 +390,10 @@ function validatePortfolio(rootDir) {
 
   const visualAssets = [];
   for (const file of publicPortfolioVisualFiles(rootDir)) {
+    if (!isPathInsideRoot(rootDir, file.absolutePath)) {
+      errors.push(`${file.relativePath}: public evidence asset resolves outside repository root.`);
+      continue;
+    }
     if (!fs.existsSync(file.absolutePath)) {
       errors.push(`${file.relativePath}: missing public evidence SVG.`);
       continue;
