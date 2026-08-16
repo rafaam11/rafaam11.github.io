@@ -479,14 +479,11 @@
   }
 
   function compactLeadHtml(project, locale, base) {
-    var normalized = localeOf(locale);
+    void locale;
     var media = project.media && project.media.lead ? project.media.lead : {};
-    var copy = pageCopy[normalized];
     var approvedLeadImage = isApprovedImage(media);
-    var approvedLeadRepository = isApprovedRepository(media);
     var posterItem = project.media && project.media.poster;
     var approvedPoster = isApprovedVideo(media) && isApprovedImage(posterItem);
-    var displayStatus = approvedLeadImage || approvedLeadRepository || approvedPoster ? 'approved' : 'pending-approval';
     var visual = '';
     if (approvedLeadImage) {
       visual = '<img class="td-home-project__image" src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' +
@@ -496,16 +493,9 @@
         escapeHtml(assetHref(base, posterItem.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) +
         '" loading="lazy" decoding="async">';
     } else {
-      var accessibleName = displayStatus === 'approved' ? project.mediaAlt : copy.pendingAccessible;
-      var label = displayStatus === 'approved' ? copy.mediaApproved : copy.mediaPending;
-      visual = '<div class="td-home-project__fallback" role="img" aria-label="' + escapeHtml(accessibleName) + '">' +
-          '<span aria-hidden="true">' + escapeHtml((media.type || 'evidence').toUpperCase()) + ' / ' + escapeHtml(project.slug) + '</span>' +
-          '<strong>' + escapeHtml(label) + '</strong>' +
-        '</div>';
+      visual = '<div class="td-home-project__fallback" aria-hidden="true"></div>';
     }
-    return '<figure class="td-home-project__visual" data-media-status="' + displayStatus + '">' +
-      visual + mediaLedgerHtml(project, normalized, displayStatus) +
-    '</figure>';
+    return '<figure class="td-home-project__visual">' + visual + '</figure>';
   }
 
   function homeProjectGalleryHtml(data, base, isFile, locale) {

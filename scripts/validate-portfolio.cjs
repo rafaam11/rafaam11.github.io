@@ -50,10 +50,14 @@ const evidenceRegisterHeader = '| Evidence ID | Project | Media type | State | P
 const evidenceRegisterSeparator = '| --- | --- | --- | --- | --- | --- |';
 const localEvidenceExtensions = {
   image: new Set(['.png']),
-  video: new Set(['.mp4', '.webm'])
+  video: new Set(['.mp4'])
 };
 const maxRasterBytes = 50 * 1024 * 1024;
 const maxDecodedRasterBytes = 100 * 1024 * 1024;
+const maxVideoBytes = 20 * 1024 * 1024;
+const prohibitedPngMetadataChunks = new Set(['tEXt', 'zTXt', 'iTXt', 'eXIf', 'tIME']);
+const prohibitedMp4MetadataBoxes = new Set(['udta', 'meta', 'ilst', 'uuid']);
+const mp4ContainerBoxes = new Set(['moov', 'trak', 'mdia', 'minf', 'stbl', 'dinf', 'edts', 'mvex', 'moof', 'traf', 'mfra']);
 const proseLocalPathPatterns = [
   /[a-z]:[\\/][^\s|]*/i,
   /\\\\[^\\/\s|]+[\\/][^\s|]*/i,
@@ -215,6 +219,59 @@ function isSafeHttpsUrl(value) {
   }
 }
 
+function repeatedlyDecodeUrlComponent(value) {
+  let decoded = String(value || '');
+  for (let index = 0; index < 6; index += 1) {
+    let next;
+    try {
+      next = decodeURIComponent(decoded.replace(/\+/g, '%20'));
+    } catch {
+      return { value: decoded, malformed: true };
+    }
+    if (next === decoded) return { value: decoded, malformed: false };
+    decoded = next;
+  }
+  return { value: decoded, malformed: /%[a-f0-9]{2}/i.test(decoded) };
+}
+
+function isPrivateNetworkHostname(hostname) {
+  const normalized = String(hostname || '').toLowerCase().replace(/^\[|\]$/g, '').replace(/\.$/, '');
+  if (!normalized || normalized === 'localhost' || normalized.endsWith('.localhost') ||
+      normalized.endsWith('.local') || normalized.endsWith('.internal') || normalized.endsWith('.lan')) return true;
+  const ipv4 = normalized.split('.');
+  if (ipv4.length === 4 && ipv4.every((part) => /^\d{1,3}$/.test(part) && Number(part) <= 255)) {
+    const [first, second] = ipv4.map(Number);
+    return first === 0 || first === 10 || first === 127 || first >= 224 ||
+      (first === 100 && second >= 64 && second <= 127) ||
+      (first === 169 && second === 254) ||
+      (first === 172 && second >= 16 && second <= 31) ||
+      (first === 192 && second === 168);
+  }
+  if (normalized.includes(':')) {
+    if (normalized === '::' || normalized === '::1' || normalized.startsWith('fc') || normalized.startsWith('fd') ||
+        /^fe[89ab]/.test(normalized)) return true;
+    const mapped = normalized.match(/::ffff:(\d+\.\d+\.\d+\.\d+)$/)?.[1];
+    if (mapped) return isPrivateNetworkHostname(mapped);
+  }
+  return !normalized.includes('.');
+}
+
+function publicEvidenceUrlErrors(value) {
+  if (!isSafeHttpsUrl(value)) return ['external evidence requires a public HTTPS URL.'];
+  const parsed = new URL(value);
+  if (isPrivateNetworkHostname(parsed.hostname)) return ['external evidence must not use a private-network or loopback host.'];
+  const decoded = repeatedlyDecodeUrlComponent(`${parsed.pathname}${parsed.search}${parsed.hash}`);
+  if (decoded.malformed) return ['external evidence URL contains malformed or excessively encoded path data.'];
+  const surface = decoded.value.replace(/\\/g, '/');
+  if (/[a-z]:\//i.test(surface) || /(?:^|[^:])\/\//.test(surface) || /file:\/\//i.test(surface) ||
+      /(?:^|[/])(?:users|home|tmp|onedrive)(?:[/]|$)/i.test(surface) ||
+      /(?:^|[/])private[/](?:raw|extracted|manifest)(?:[/]|$)/i.test(surface) ||
+      /(?:^|[/])(?:extracted|manifest)(?:[/]|$)/i.test(surface)) {
+    return ['external evidence URL exposes an encoded local source path.'];
+  }
+  return [];
+}
+
 function canonicalMediaEntries(candidate) {
   const entries = [];
   for (const project of Array.isArray(candidate && candidate.projects) ? candidate.projects : []) {
@@ -338,6 +395,131 @@ function imageDimensions(filePath, extension) {
   return pngDimensions(buffer);
 }
 
+function pngChunkTypes(buffer) {
+  const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  if (buffer.length < 20 || !buffer.subarray(0, 8).equals(signature)) return null;
+  const types = [];
+  let offset = 8;
+  while (offset < buffer.length) {
+    if (offset + 12 > buffer.length) return null;
+    const length = buffer.readUInt32BE(offset);
+    const end = offset + 12 + length;
+    if (length > maxRasterBytes || end > buffer.length) return null;
+    const type = buffer.toString('ascii', offset + 4, offset + 8);
+    types.push(type);
+    offset = end;
+    if (type === 'IEND') return offset === buffer.length ? types : null;
+  }
+  return null;
+}
+
+function mp4Boxes(buffer, start = 0, end = buffer.length) {
+  const boxes = [];
+  let offset = start;
+  while (offset < end) {
+    if (offset + 8 > end) return null;
+    const size32 = buffer.readUInt32BE(offset);
+    const type = buffer.toString('latin1', offset + 4, offset + 8);
+    let headerSize = 8;
+    let size = size32;
+    if (size32 === 1) {
+      if (offset + 16 > end) return null;
+      const extended = buffer.readBigUInt64BE(offset + 8);
+      if (extended > BigInt(Number.MAX_SAFE_INTEGER)) return null;
+      size = Number(extended);
+      headerSize = 16;
+    } else if (size32 === 0) {
+      size = end - offset;
+    }
+    if (size < headerSize || offset + size > end) return null;
+    boxes.push({ type, start: offset, dataStart: offset + headerSize, end: offset + size });
+    offset += size;
+    if (size32 === 0 && offset !== end) return null;
+  }
+  return offset === end ? boxes : null;
+}
+
+function findMp4MetadataBox(buffer, boxes, depth = 0) {
+  if (depth > 12) return 'excessive nesting';
+  for (const box of boxes) {
+    if (prohibitedMp4MetadataBoxes.has(box.type)) return box.type;
+    if (!mp4ContainerBoxes.has(box.type)) continue;
+    const children = mp4Boxes(buffer, box.dataStart, box.end);
+    if (!children) return 'malformed nested container';
+    const nested = findMp4MetadataBox(buffer, children, depth + 1);
+    if (nested) return nested;
+  }
+  return '';
+}
+
+function mp4DurationSeconds(buffer, movieHeader) {
+  const length = movieHeader.end - movieHeader.dataStart;
+  if (length < 20) return null;
+  const version = buffer[movieHeader.dataStart];
+  if (version === 0) {
+    const timescale = buffer.readUInt32BE(movieHeader.dataStart + 12);
+    const duration = buffer.readUInt32BE(movieHeader.dataStart + 16);
+    return timescale > 0 ? duration / timescale : null;
+  }
+  if (version === 1 && length >= 32) {
+    const timescale = buffer.readUInt32BE(movieHeader.dataStart + 20);
+    const duration = buffer.readBigUInt64BE(movieHeader.dataStart + 24);
+    if (timescale <= 0 || duration > BigInt(Number.MAX_SAFE_INTEGER)) return null;
+    return Number(duration) / timescale;
+  }
+  return null;
+}
+
+function mp4HasVideoTrack(buffer, moovChildren) {
+  for (const track of moovChildren.filter((box) => box.type === 'trak')) {
+    const trackChildren = mp4Boxes(buffer, track.dataStart, track.end);
+    if (!trackChildren) continue;
+    for (const media of trackChildren.filter((box) => box.type === 'mdia')) {
+      const mediaChildren = mp4Boxes(buffer, media.dataStart, media.end);
+      if (!mediaChildren) continue;
+      for (const handler of mediaChildren.filter((box) => box.type === 'hdlr')) {
+        if (handler.end - handler.dataStart >= 12 && buffer.toString('ascii', handler.dataStart + 8, handler.dataStart + 12) === 'vide') {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function approvedMp4Errors(filePath) {
+  const errors = [];
+  const size = fs.statSync(filePath).size;
+  if (size > maxVideoBytes) return ['approved video must be 20 MB or less.'];
+  const buffer = fs.readFileSync(filePath);
+  const boxes = mp4Boxes(buffer);
+  if (!boxes || boxes.length < 3 || boxes[0].type !== 'ftyp') return ['approved video must be a structurally valid MP4 container.'];
+  const fileType = boxes[0];
+  if (fileType.end - fileType.dataStart < 8 || !/^[\x20-\x7e]{4}$/.test(buffer.toString('ascii', fileType.dataStart, fileType.dataStart + 4))) {
+    return ['approved video must contain a valid MP4 file-type box.'];
+  }
+  const movieBoxes = boxes.filter((box) => box.type === 'moov');
+  const mediaBoxes = boxes.filter((box) => box.type === 'mdat' && box.end > box.dataStart);
+  if (movieBoxes.length !== 1 || mediaBoxes.length === 0) return ['approved video must contain one movie box and non-empty media data.'];
+  const movieChildren = mp4Boxes(buffer, movieBoxes[0].dataStart, movieBoxes[0].end);
+  if (!movieChildren) return ['approved video contains a malformed MP4 movie box.'];
+  const movieHeaders = movieChildren.filter((box) => box.type === 'mvhd');
+  const duration = movieHeaders.length === 1 ? mp4DurationSeconds(buffer, movieHeaders[0]) : null;
+  if (!Number.isFinite(duration) || duration < 15 || duration > 30) errors.push('approved video duration must be within the public 15-30 seconds target.');
+  if (!mp4HasVideoTrack(buffer, movieChildren)) errors.push('approved MP4 must contain a video track.');
+  const metadataBox = findMp4MetadataBox(buffer, boxes);
+  if (metadataBox) errors.push(`approved MP4 must be metadata-stripped; prohibited metadata box: ${metadataBox}.`);
+  const printable = (buffer.toString('latin1').match(/[\x20-\x7e]{6,}/g) || []).join('\n');
+  const pii = publicPiiFindings(printable);
+  if (proseContainsLocalPath(printable)) errors.push('approved MP4 exposes a private path.');
+  if (pii.length || /(?:PatientName|PatientID|DICOM|OneDrive|GPSLatitude|GPSLongitude)/i.test(printable)) {
+    errors.push('approved MP4 exposes private PII or source metadata.');
+  }
+  const prohibitedPartner = printable.match(privatePartnerPattern)?.[0];
+  if (prohibitedPartner) errors.push(`approved MP4 contains a nonpublic partner or company-project name: ${prohibitedPartner}.`);
+  return errors;
+}
+
 function isRelativePathInside(relativePath) {
   return Boolean(relativePath) && relativePath !== '..' &&
     !relativePath.startsWith(`..${path.sep}`) && !path.isAbsolute(relativePath);
@@ -435,8 +617,18 @@ function approvedLocalEvidenceErrors(entry, rootDir) {
     errors.push(...inspection.errors.map((error) => `${entry.id}: ${error}`));
     if (inspection.filePath && !fs.lstatSync(inspection.filePath).isFile()) {
       errors.push(`${entry.id}: approved local source must be a regular file.`);
-    } else if (inspection.filePath && entry.type === 'image' && !imageDimensions(inspection.filePath, extension)) {
-      errors.push(`${entry.id}: approved raster image must be structurally complete and decodable with valid intrinsic dimensions.`);
+    } else if (inspection.filePath && entry.type === 'image') {
+      const buffer = fs.readFileSync(inspection.filePath);
+      if (!pngDimensions(buffer)) {
+        errors.push(`${entry.id}: approved raster image must be structurally complete and decodable with valid intrinsic dimensions.`);
+      } else {
+        const metadataChunks = (pngChunkTypes(buffer) || []).filter((type) => prohibitedPngMetadataChunks.has(type));
+        if (metadataChunks.length) {
+          errors.push(`${entry.id}: approved PNG must be metadata-stripped; prohibited metadata chunk(s): ${metadataChunks.join(', ')}.`);
+        }
+      }
+    } else if (inspection.filePath && entry.type === 'video' && extension === '.mp4') {
+      errors.push(...approvedMp4Errors(inspection.filePath).map((error) => `${entry.id}: ${error}`));
     }
   }
   return errors;
@@ -454,8 +646,8 @@ function evidenceRegistryErrors(candidate, rootDir) {
       errors.push(`${entry.id}: ${entry.state} evidence source must be exactly "-" and must not declare a public source.`);
     }
     if (entry.state === 'approved-public' && !hasSource) errors.push(`${entry.id}: approved-public evidence requires a public source.`);
-    if (entry.state === 'approved-public' && ['repository', 'publication'].includes(entry.type) && !isSafeHttpsUrl(entry.source)) {
-      errors.push(`${entry.id}: approved ${entry.type} evidence requires an HTTPS source.`);
+    if (entry.state === 'approved-public' && ['repository', 'publication'].includes(entry.type)) {
+      errors.push(...publicEvidenceUrlErrors(entry.source).map((error) => `${entry.id}: unsafe external evidence source: ${error}`));
     }
     if (entry.state === 'approved-public' && ['image', 'video'].includes(entry.type)) {
       errors.push(...approvedLocalEvidenceErrors(entry, rootDir));

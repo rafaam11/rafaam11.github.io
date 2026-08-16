@@ -33,6 +33,52 @@ const capabilityKeys = [
 ];
 const tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
 const validPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
+
+function fixtureCrc32(buffer) {
+  let crc = 0xffffffff;
+  for (const byte of buffer) {
+    crc ^= byte;
+    for (let bit = 0; bit < 8; bit += 1) crc = (crc >>> 1) ^ ((crc & 1) ? 0xedb88320 : 0);
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+function pngChunk(type, payload) {
+  const typeBytes = Buffer.from(type, 'ascii');
+  const result = Buffer.alloc(12 + payload.length);
+  result.writeUInt32BE(payload.length, 0);
+  typeBytes.copy(result, 4);
+  payload.copy(result, 8);
+  result.writeUInt32BE(fixtureCrc32(Buffer.concat([typeBytes, payload])), 8 + payload.length);
+  return result;
+}
+
+function pngWithMetadata(type, payload) {
+  const afterHeader = 8 + 12 + 13;
+  return Buffer.concat([validPng.subarray(0, afterHeader), pngChunk(type, payload), validPng.subarray(afterHeader)]);
+}
+
+function mp4Box(type, payload = Buffer.alloc(0)) {
+  const result = Buffer.alloc(8 + payload.length);
+  result.writeUInt32BE(result.length, 0);
+  result.write(type, 4, 4, 'latin1');
+  payload.copy(result, 8);
+  return result;
+}
+
+function validMp4({ durationSeconds = 20, extraMoovBoxes = [], mdatPayload = Buffer.from([0]) } = {}) {
+  const ftyp = mp4Box('ftyp', Buffer.concat([
+    Buffer.from('isom', 'ascii'), Buffer.alloc(4), Buffer.from('isommp42', 'ascii')
+  ]));
+  const mvhdPayload = Buffer.alloc(100);
+  mvhdPayload.writeUInt32BE(1000, 12);
+  mvhdPayload.writeUInt32BE(Math.round(durationSeconds * 1000), 16);
+  const hdlrPayload = Buffer.alloc(24);
+  hdlrPayload.write('vide', 8, 4, 'ascii');
+  const track = mp4Box('trak', mp4Box('mdia', mp4Box('hdlr', hdlrPayload)));
+  const moov = mp4Box('moov', Buffer.concat([mp4Box('mvhd', mvhdPayload), track, ...extraMoovBoxes]));
+  return Buffer.concat([ftyp, moov, mp4Box('mdat', mdatPayload)]);
+}
 const excludedProjectSlugs = [
   'ar-distance-meter',
   'c-arm-navigation',
@@ -441,7 +487,7 @@ test('Task 4 approved video requires an approved registered image poster and kee
     const videoPath = path.join(temporaryRoot, project.media.lead.publicPath);
     const posterPath = path.join(temporaryRoot, project.media.poster.publicPath);
     fs.mkdirSync(path.dirname(videoPath), { recursive: true });
-    fs.writeFileSync(videoPath, Buffer.from('public-safe-video-fixture'));
+    fs.writeFileSync(videoPath, validMp4());
     fs.writeFileSync(posterPath, Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64'));
     assert.deepEqual(validator.evidenceRegistryErrors(candidate, temporaryRoot), []);
     const html = render.evidenceMediaHtml(project, 'en', '../../', false);
@@ -581,6 +627,80 @@ test('Task 4 review rejects truncated or corrupt PNG files that only expose an I
   }
 });
 
+test('Task 4 review rejects privacy-bearing metadata in an otherwise valid approved PNG', () => {
+  const candidate = clone(data);
+  candidate.projects[4].media.lead = {
+    id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/unmanned-forklift/point-cloud.png'
+  };
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const approved = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
+    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    : entry));
+  const metadataFixtures = [
+    ['tEXt', Buffer.from('Source\0C:\\Users\\patient\\private\\raw\\scan.png')],
+    ['zTXt', Buffer.from('PatientName\0\0private')],
+    ['iTXt', Buffer.from('PatientName\0\0\0\0\0private')],
+    ['eXIf', Buffer.from('PatientName=private')],
+    ['tIME', Buffer.from([0x07, 0xe8, 1, 1, 0, 0, 0])]
+  ];
+  for (const [type, payload] of metadataFixtures) {
+    withEvidenceRoot(approved, (temporaryRoot) => {
+      const target = path.join(temporaryRoot, candidate.projects[4].media.lead.publicPath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.writeFileSync(target, pngWithMetadata(type, payload));
+      assert.deepEqual(validator.imageDimensions(target, '.png'), { width: 1, height: 1 });
+      assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /metadata-stripped|metadata chunk/i, type);
+    });
+  }
+});
+
+test('Task 4 review requires approved MP4 evidence to be bounded, playable video, duration-limited, and metadata-stripped', () => {
+  const candidate = clone(data);
+  const project = candidate.projects[0];
+  project.media.lead = {
+    id: 'surgical-navigation-demo', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/navigation-demo.mp4'
+  };
+  project.media.video = { ...project.media.lead };
+  project.media.poster = {
+    id: 'surgical-navigation-demo-poster', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/navigation-demo-poster.png'
+  };
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const approved = evidenceRegisterText(canonical.map((entry) => {
+    if (entry.id === project.media.lead.id) return { ...entry, state: 'approved-public', source: project.media.lead.publicPath };
+    if (entry.id === project.media.poster.id) return { ...entry, state: 'approved-public', source: project.media.poster.publicPath };
+    return entry;
+  }));
+  const fixtures = [
+    [Buffer.from('not an MP4'), /valid MP4|container/i],
+    [validMp4({ durationSeconds: 10 }), /15-30 seconds|duration/i],
+    [validMp4({ durationSeconds: 31 }), /15-30 seconds|duration/i],
+    [validMp4({ extraMoovBoxes: [mp4Box('udta', Buffer.from('PatientName=private'))] }), /metadata-stripped|metadata box/i],
+    [validMp4({ mdatPayload: Buffer.from('C:\\Users\\patient\\private\\raw\\scan.mp4') }), /private path|private PII/i],
+    [Buffer.alloc(20 * 1024 * 1024 + 1), /20 MB|size/i]
+  ];
+  for (const [payload, expected] of fixtures) {
+    withEvidenceRoot(approved, (temporaryRoot) => {
+      const videoPath = path.join(temporaryRoot, project.media.lead.publicPath);
+      const posterPath = path.join(temporaryRoot, project.media.poster.publicPath);
+      fs.mkdirSync(path.dirname(videoPath), { recursive: true });
+      fs.writeFileSync(videoPath, payload);
+      fs.writeFileSync(posterPath, validPng);
+      assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), expected);
+    });
+  }
+  withEvidenceRoot(approved, (temporaryRoot) => {
+    const videoPath = path.join(temporaryRoot, project.media.lead.publicPath);
+    const posterPath = path.join(temporaryRoot, project.media.poster.publicPath);
+    fs.mkdirSync(path.dirname(videoPath), { recursive: true });
+    fs.writeFileSync(videoPath, validMp4());
+    fs.writeFileSync(posterPath, validPng);
+    assert.deepEqual(validator.evidenceRegistryErrors(candidate, temporaryRoot), []);
+  });
+});
+
 test('Task 4 review rejects an approved secondary video when the approved lead is an image', () => {
   const candidate = clone(data);
   const project = candidate.projects[0];
@@ -701,6 +821,36 @@ test('Task 4 review validates source and prose columns structurally without reje
       'Local review source /tmp/multiuser-demo.mp4'
     );
     assert.match(validator.evidenceDirectoryErrors(temporaryRoot).join(' '), /README\.md.*private source path/i);
+  });
+});
+
+test('Task 4 review rejects encoded local paths and private-network hosts in approved external evidence URLs', () => {
+  const canonical = validator.readEvidenceRegister(root).entries;
+  const target = canonical.find((entry) => entry.state === 'approved-public' && ['repository', 'publication'].includes(entry.type));
+  assert.ok(target, 'expected at least one approved external evidence entry');
+  const unsafeSources = [
+    'https://example.com/?source=C:%5CUsers%5Cname%5Cprivate%5Craw%5Cscan.png',
+    'https://example.com/?source=C%253A%255CUsers%255Cname%255Cprivate%255Craw%255Cscan.png',
+    'https://example.com/private/raw/scan.png',
+    'https://localhost/internal',
+    'https://127.0.0.1/internal',
+    'https://192.168.1.8/internal',
+    'https://10.0.0.4/internal',
+    'https://172.16.2.4/internal',
+    'https://[::1]/internal'
+  ];
+  for (const source of unsafeSources) {
+    const register = evidenceRegisterText(canonical.map((entry) => entry.id === target.id ? { ...entry, source } : entry));
+    withEvidenceRoot(register, (temporaryRoot) => {
+      assert.match(
+        validator.evidenceRegistryErrors(data, temporaryRoot).join(' '),
+        /public HTTPS|private network|local source path|unsafe external evidence/i,
+        source
+      );
+    });
+  }
+  withEvidenceRoot(evidenceRegisterText(canonical), (temporaryRoot) => {
+    assert.deepEqual(validator.evidenceRegistryErrors(data, temporaryRoot), []);
   });
 });
 
@@ -860,10 +1010,13 @@ test('Task 3 Home renderer creates six ordered title-led links without card mark
     assert.doesNotMatch(html, new RegExp(project.translations.en.summary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.doesNotMatch(html, new RegExp(project.translations.en.role.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
-  assert.doesNotMatch(html, /td-status|td-tech-list|project-summary|project-role/);
+  assert.doesNotMatch(
+    html,
+    /td-status|td-tech-list|project-summary|project-role|td-media-ledger|data-media-status|>Pending approval<|>Public evidence<|>Verified<|>Ongoing<|>Prototype</
+  );
 });
 
-test('Task 3 review Home tiles render approved images with alt and ledger only', () => {
+test('Task 3 review Home tiles render approved images with alt and no evidence metadata', () => {
   const candidate = clone(data);
   candidate.projects[0].media.lead = {
     id: 'surgical-navigation-public-image',
@@ -874,8 +1027,7 @@ test('Task 3 review Home tiles render approved images with alt and ledger only',
   const html = render.homeProjectGalleryHtml(candidate, '../', true, 'en');
   const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
   assert.match(firstTile, /<img\b(?=[^>]*src="\.\.\/assets\/projects\/surgical-navigation\/lead\.webp")(?=[^>]*alt="Surgical-navigation demonstration connecting tracked equipment and medical-image models to a HoloLens spatial view\.")/);
-  assert.match(firstTile, /Public evidence[\s\S]*IMAGE[\s\S]*Surgical Navigation/);
-  assert.doesNotMatch(firstTile, /td-home-project__fallback|td-home-project__caption|The actual integrated demonstration will be published only after approval\./);
+  assert.doesNotMatch(firstTile, /td-home-project__fallback|td-home-project__caption|td-media-ledger|data-media-status|Public evidence|Pending approval|Verified|Ongoing|Prototype|The actual integrated demonstration will be published only after approval\./);
 });
 
 test('Task 3 review Home video tiles use an approved poster without autoplay or inline video', () => {
@@ -895,8 +1047,7 @@ test('Task 3 review Home video tiles use an approved poster without autoplay or 
   const html = render.homeProjectGalleryHtml(candidate, '', false, 'ko');
   const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
   assert.match(firstTile, /<img\b(?=[^>]*src="assets\/projects\/surgical-navigation\/poster\.webp")(?=[^>]*alt="추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연\.")/);
-  assert.match(firstTile, /공개 근거[\s\S]*VIDEO[\s\S]*수술내비게이션/);
-  assert.doesNotMatch(firstTile, /<video\b|autoplay|demo\.mp4/);
+  assert.doesNotMatch(firstTile, /<video\b|autoplay|demo\.mp4|td-media-ledger|data-media-status|공개 근거|공개 승인 대기|검증됨|진행 중|프로토타입/);
 });
 
 test('Task 3 Home evidence mosaic and capability index follow the required data order', () => {
@@ -981,6 +1132,11 @@ test('Task 3 Home shells preserve exact thesis, section order, and six-link no-J
     const fallback = html.match(/<div class="td-home-projects__fallback">([\s\S]*?)<\/div>\s*<\/section>/)?.[1] || '';
     assert.equal(count(fallback, '<a '), 6, `${file}: fallback link count`);
     assertInOrder(fallback, titles, `${file}: fallback project titles`);
+    assert.doesNotMatch(
+      fallback,
+      />\s*(?:VIDEO|IMAGE|REPOSITORY)\s*\/|>Pending approval<|>Public evidence<|>공개 승인 대기<|>공개 근거<|>Verified<|>Ongoing<|>Prototype<|>검증됨<|>진행 중<|>프로토타입</,
+      `${file}: Home fallback must expose only a visual field and title`
+    );
   }
 });
 
@@ -1016,11 +1172,12 @@ test('Task 3 review pending visual names disclose approval state without claimin
     const detail = render.evidenceMediaHtml(project, locale, '../../', false);
     const home = render.homeProjectGalleryHtml(data, '', false, locale);
     const mosaic = render.homeEvidenceMosaicHtml(data, locale);
-    for (const [surface, html] of [['detail', detail], ['home', home], ['mosaic', mosaic]]) {
+    for (const [surface, html] of [['detail', detail], ['mosaic', mosaic]]) {
       const accessibleNames = [...html.matchAll(/role="img"[^>]*aria-label="([^"]+)"/g)].map((match) => match[1]);
       assert.ok(accessibleNames.includes(expectations[locale]), `${locale} ${surface}: pending accessible name missing`);
       assert.equal(accessibleNames.some((name) => name.includes(project.translations[locale].mediaAlt)), false, `${locale} ${surface}: pending name claims desired media is shown`);
     }
+    assert.doesNotMatch(home, /role="img"|aria-label=|data-media-status|td-media-ledger/, `${locale} home: title-only tiles must not expose evidence metadata`);
     assert.match(detail, new RegExp(project.translations[locale].mediaCaption.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
 });
