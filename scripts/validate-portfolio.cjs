@@ -20,6 +20,11 @@ const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const isSafePublicPath = render.isSafePublicPath;
 const siteUrl = 'https://rafaam11.github.io/';
+const pageMountContracts = [
+  { tag: 'header', id: 'site-nav', label: 'shared navigation mount' },
+  { tag: 'main', id: 'main-content', label: 'main-content landmark' },
+  { tag: 'footer', id: 'site-footer', label: 'shared footer mount' }
+];
 const excludedProjectSlugs = [
   'ar-distance-meter',
   'c-arm-navigation',
@@ -1317,7 +1322,9 @@ function htmlStartTags(html) {
     tags.push({
       name,
       attributes: parseHtmlAttributes(source.slice(nameEnd, closing)),
-      raw
+      raw,
+      startOffset: opening,
+      endOffset: closing + 1
     });
     index = closing + 1;
     if (rawTextTags.has(name) && !/\/\s*>$/.test(raw)) {
@@ -1363,6 +1370,18 @@ function htmlReferences(html) {
 function htmlAttributeValue(tag, name) {
   const attribute = tag && tag.attributes.find((candidate) => candidate.name === name);
   return attribute && attribute.hasValue ? attribute.value : undefined;
+}
+
+function htmlAttributeOccurrences(tags, name, value) {
+  const occurrences = [];
+  for (const tag of tags) {
+    for (const attribute of tag.attributes) {
+      if (attribute.name === name && attribute.hasValue && attribute.value === value) {
+        occurrences.push({ tag, attribute });
+      }
+    }
+  }
+  return occurrences;
 }
 
 function inspectExactSitePath(rootDir, relativePath) {
@@ -1457,9 +1476,9 @@ function pageDependencyErrors(file, html, parsedTags) {
       .toLowerCase().split(/\s+/).includes('stylesheet'))
     .map((tag) => htmlAttributeValue(tag, 'href'))
     .filter((href) => href !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(href));
-  const scripts = tags
-    .filter((tag) => tag.name === 'script' && tag.attributes.some((attribute) => attribute.name === 'src'))
-    .map((tag) => htmlAttributeValue(tag, 'src') || '');
+  const scriptTags = tags
+    .filter((tag) => tag.name === 'script' && tag.attributes.some((attribute) => attribute.name === 'src'));
+  const scripts = scriptTags.map((tag) => htmlAttributeValue(tag, 'src') || '');
   const localScripts = scripts.filter((src) => !/^[a-z][a-z0-9+.-]*:/i.test(src));
   for (const required of requiredStyles) {
     if (!styles.includes(required)) errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
@@ -1475,6 +1494,31 @@ function pageDependencyErrors(file, html, parsedTags) {
   }
   if (scripts.length !== requiredScripts.length || scripts.some((item, index) => item !== requiredScripts[index])) {
     errors.push(`${file.relativePath}: expected exact parsed script sequence ${requiredScripts.join(' -> ')}; found ${scripts.join(' -> ') || '<none>'}.`);
+  }
+  for (const tag of scriptTags) {
+    const source = htmlAttributeValue(tag, 'src') || '';
+    if (!requiredScripts.includes(source)) continue;
+    const forbidden = tag.attributes
+      .filter((attribute) => ['type', 'async', 'defer', 'nomodule'].includes(attribute.name))
+      .map((attribute) => attribute.name);
+    if (forbidden.length) {
+      errors.push(`${file.relativePath}: required local script ${source} must be a classic executable script without type, async, defer, or nomodule attributes (found ${[...new Set(forbidden)].join(', ')}).`);
+    }
+  }
+  const liveMounts = pageMountContracts.map((contract) => {
+    const occurrences = htmlAttributeOccurrences(tags, 'id', contract.id);
+    return occurrences.length === 1 && occurrences[0].tag.name === contract.tag
+      ? occurrences[0].tag
+      : null;
+  });
+  if (liveMounts.every(Boolean)) {
+    const finalMountOffset = Math.max(...liveMounts.map((tag) => tag.startOffset));
+    for (const tag of scriptTags) {
+      const source = htmlAttributeValue(tag, 'src') || '';
+      if (requiredScripts.includes(source) && tag.startOffset <= finalMountOffset) {
+        errors.push(`${file.relativePath}: required local script ${source} must appear after all live mounts, including footer#site-footer.`);
+      }
+    }
   }
   if (/bootstrap|fontawesome|fonts\.googleapis\.com|startbootstrap/i.test(html) ||
       /(?:^|[\/"'])(?:styles|cv-theme)\.css(?:[?#"']|$)|spatial-signal\.js/i.test(html)) {
@@ -1563,6 +1607,11 @@ function staticPageErrors(file, html, rootDir) {
   if (tags.some((tag) => tag.name === 'base')) {
     errors.push(`${file.relativePath}: real base elements are not allowed.`);
   }
+  for (const inertName of ['template', 'noscript']) {
+    if (tags.some((tag) => tag.name === inertName)) {
+      errors.push(`${file.relativePath}: real ${inertName} inert containers are not allowed.`);
+    }
+  }
   const bodyTags = tags.filter((tag) => tag.name === 'body');
   if (bodyTags.length !== 1) errors.push(`${file.relativePath}: expected exactly one real body start tag.`);
   const body = bodyTags.length === 1 ? bodyTags[0] : null;
@@ -1576,16 +1625,13 @@ function staticPageErrors(file, html, rootDir) {
   const actualPage = htmlAttributeValue(body, 'data-page');
   if (!i18n.supportedNavigationPages.includes(actualPage)) errors.push(`${file.relativePath}: unsupported data-page "${actualPage || ''}".`);
   if (actualPage !== file.page) errors.push(`${file.relativePath}: expected data-page="${file.page}".`);
-  const mountContracts = [
-    { tag: 'header', id: 'site-nav', label: 'shared navigation mount' },
-    { tag: 'main', id: 'main-content', label: 'main-content landmark' },
-    { tag: 'footer', id: 'site-footer', label: 'shared footer mount' }
-  ];
-  for (const contract of mountContracts) {
-    const matches = tags.filter((tag) => tag.name === contract.tag && htmlAttributeValue(tag, 'id') === contract.id);
-    if (matches.length !== 1) {
-      const state = matches.length === 0 ? `missing ${contract.label}` : `duplicate ${contract.label}`;
-      errors.push(`${file.relativePath}: ${state}; expected exactly one real ${contract.tag}#${contract.id} (found ${matches.length}).`);
+  for (const contract of pageMountContracts) {
+    const occurrences = htmlAttributeOccurrences(tags, 'id', contract.id);
+    if (occurrences.length !== 1) {
+      const state = occurrences.length === 0 ? `missing ${contract.label}` : `duplicate ${contract.label}`;
+      errors.push(`${file.relativePath}: ${state}; expected exactly one real ${contract.tag}#${contract.id} and exactly one real id="${contract.id}" occurrence across all parsed tags (found ${occurrences.length}).`);
+    } else if (occurrences[0].tag.name !== contract.tag) {
+      errors.push(`${file.relativePath}: real id="${contract.id}" must belong to <${contract.tag}>; found <${occurrences[0].tag.name}>.`);
     }
   }
 
@@ -1668,6 +1714,7 @@ module.exports = {
   publicPortfolioFiles,
   publicPortfolioVisualFiles,
   portfolioHtmlInventoryErrors,
+  htmlStartTags,
   htmlReferences,
   localReferenceErrors,
   pageDependencyErrors,
