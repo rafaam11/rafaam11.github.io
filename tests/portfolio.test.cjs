@@ -1551,6 +1551,49 @@ test('Task 5 publishes exactly twelve six-page project PDFs and two two-page CV 
   assert.deepEqual(validator.pdfArtifactErrors(root), []);
 });
 
+test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status on all twelve PDF covers', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const expected = {
+    'surgical-navigation': { ko: '진행 중', en: 'Ongoing' },
+    'mandibular-fracture': { ko: '검증됨 · 완료', en: 'Verified · Completed' },
+    'life-careverse': { ko: '진행 중', en: 'Ongoing' },
+    'rtms-navigation': { ko: '프로토타입 · 진행 중', en: 'Prototype · Ongoing' },
+    'unmanned-forklift': { ko: '진행 중', en: 'Ongoing' },
+    'ai-build-lab': { ko: '진행 중', en: 'Ongoing' }
+  };
+  assert.deepEqual(Object.fromEntries(data.projects.map((project) => [
+    project.slug,
+    { ko: project.translations.ko.status, en: project.translations.en.status }
+  ])), expected);
+
+  const auditCode = [
+    'import json, sys',
+    'from pathlib import Path',
+    'from pypdf import PdfReader',
+    'root = Path(sys.argv[1])',
+    'slugs = json.loads(sys.argv[2])',
+    'covers = {}',
+    'for slug in slugs:',
+    '    for locale in ("ko", "en"):',
+    '        path = root / "assets" / "pdfs" / f"{slug}-{locale}.pdf"',
+    '        covers[f"{slug}:{locale}"] = PdfReader(str(path)).pages[0].extract_text() or ""',
+    'print(json.dumps(covers, ensure_ascii=False))'
+  ].join('\n');
+  const audit = childProcess.spawnSync(python, ['-c', auditCode, root, JSON.stringify(slugs)], {
+    cwd: root, encoding: 'utf8', timeout: 30_000
+  });
+  assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+  const covers = JSON.parse(audit.stdout);
+  for (const [slug, translations] of Object.entries(expected)) {
+    for (const locale of ['ko', 'en']) {
+      assert.ok(covers[`${slug}:${locale}`].includes(translations[locale]),
+        `${slug}-${locale}.pdf cover must expose ${translations[locale]}`);
+    }
+  }
+  assert.doesNotMatch(Object.values(covers).join('\n'), /(?:Ongoing\s*·\s*Ongoing|진행 중\s*·\s*진행 중)/i);
+});
+
 test('Task 5 case routes expose their localized stable PDF artifacts', () => {
   for (const project of data.projects) {
     for (const locale of ['ko', 'en']) {
