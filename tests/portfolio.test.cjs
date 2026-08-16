@@ -3039,3 +3039,128 @@ test('Task 6 review round 4 requires exact unique local stylesheet tags without 
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
 });
+
+test('Task 6 review round 5 uses only ASCII whitespace for rel tokens and exact hreflang values', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-ascii-tokens-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const canonical = '<link rel="canonical" href="https://rafaam11.github.io/">';
+    const koAlternate = '<link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/">';
+    const siteStyle = '<link rel="stylesheet" href="css/site.css">';
+    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+
+    const asciiTokenLists = baseline
+      .replace(canonical, '<link rel="author\t\n\f\r canonical" href="https://rafaam11.github.io/">')
+      .replaceAll('rel="alternate"', 'rel="author \t\n\f\r alternate"')
+      .replace(siteStyle, '<link rel=" \t\n\f\r stylesheet " href="css/site.css">');
+    assert.notEqual(asciiTokenLists, baseline, 'ASCII token-list fixture mutation did not apply');
+    fs.writeFileSync(homePath, asciiTokenLists);
+    const asciiErrors = validator.validatePortfolio(temporaryRoot);
+
+    const mutations = [
+      {
+        label: 'exact reviewer stylesheet named NBSP',
+        html: baseline.replace(siteStyle, '<link rel="stylesheet&nbsp;" href="css/site.css">'),
+        expected: /missing required local stylesheet.*site\.css|may use only.*rel="stylesheet"/i
+      },
+      {
+        label: 'exact reviewer canonical named NBSP',
+        html: baseline.replace(canonical, '<link rel="canonical&nbsp;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'canonical numeric NBSP',
+        html: baseline.replace(canonical, '<link rel="canonical&#160;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'canonical hex NBSP',
+        html: baseline.replace(canonical, '<link rel="canonical&#xA0;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'canonical em-space',
+        html: baseline.replace(canonical, '<link rel="canonical&emsp;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed canonical link/i
+      },
+      {
+        label: 'exact reviewer hreflang named NBSP',
+        html: baseline.replace(koAlternate, '<link rel="alternate" hreflang="ko&nbsp;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      },
+      {
+        label: 'hreflang numeric NBSP',
+        html: baseline.replace(koAlternate, '<link rel="alternate" hreflang="ko&#160;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      },
+      {
+        label: 'hreflang em-space',
+        html: baseline.replace(koAlternate, '<link rel="alternate" hreflang="ko&emsp;" href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      },
+      {
+        label: 'hreflang ASCII padding',
+        html: baseline.replace(koAlternate, '<link rel="alternate" hreflang=" ko " href="https://rafaam11.github.io/">'),
+        expected: /exactly one correct parsed alternate.*hreflang="ko"/i
+      }
+    ];
+
+    const undetected = asciiErrors.length ? [`valid ASCII token lists: ${asciiErrors.join('\n')}`] : [];
+    for (const mutation of mutations) {
+      assert.notEqual(mutation.html, baseline, `${mutation.label}: fixture mutation did not apply`);
+      fs.writeFileSync(homePath, mutation.html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!mutation.expected.test(errors)) undetected.push(`${mutation.label}: ${errors || '<no errors>'}`);
+    }
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 6 review round 5 classifies same-origin stylesheet URL variants as one local target', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-task6-style-origin-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    const siteStyle = '<link rel="stylesheet" href="css/site.css">';
+    const variants = [
+      'https://rafaam11.github.io/css/site.css',
+      'https://RAFAAM11.GITHUB.IO:443/css/site.css?cache=1#site',
+      '//RAFAAM11.GITHUB.IO:443/css/site.css?v=2#stylesheet',
+      '/css/site.css?root=1#style'
+    ];
+    const undetected = [];
+
+    for (const href of variants) {
+      const duplicate = `<link rel="stylesheet" href="${href}">`;
+      const html = baseline.replace(siteStyle, siteStyle + duplicate);
+      assert.notEqual(html, baseline, `${href}: duplicate fixture mutation did not apply`);
+      fs.writeFileSync(homePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!/required local stylesheet.*site\.css.*exactly once.*found 2|duplicate required local stylesheet/i.test(errors)) {
+        undetected.push(`duplicate ${href}: ${errors || '<no errors>'}`);
+      }
+    }
+
+    for (const href of variants) {
+      const html = baseline.replace(siteStyle, `<link rel="stylesheet" href="${href}">`);
+      assert.notEqual(html, baseline, `${href}: replacement fixture mutation did not apply`);
+      fs.writeFileSync(homePath, html);
+      const errors = validator.validatePortfolio(temporaryRoot).join('\n');
+      if (!/required local stylesheet.*site\.css.*exact file-compatible href/i.test(errors)) {
+        undetected.push(`replacement ${href}: ${errors || '<no errors>'}`);
+      }
+    }
+
+    fs.writeFileSync(homePath, baseline);
+    const externalErrors = validator.validatePortfolio(temporaryRoot);
+    if (externalErrors.length) undetected.push(`external Pretendard control: ${externalErrors.join('\n')}`);
+    assert.deepEqual(undetected, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});

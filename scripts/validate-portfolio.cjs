@@ -1259,7 +1259,7 @@ function absoluteUrlRawPath(value) {
   return value.slice(pathStart, suffixStart);
 }
 
-function normalizedReference(value, reference) {
+function normalizedReference(value, reference, options = {}) {
   const original = String(value || '').trim();
   if (!original || original.startsWith('#') || original.startsWith('?')) return { kind: 'skip' };
   if (/^(?:mailto:|tel:)/i.test(original)) {
@@ -1290,6 +1290,16 @@ function normalizedReference(value, reference) {
     return { kind: 'error', reason: 'unsafe local reference uses a prohibited URL form' };
   }
   if (/^[a-z][a-z0-9+.-]*:/i.test(original)) return { kind: 'error', reason: 'unsafe local reference uses an unsupported scheme' };
+  if (options.allowRootRelative && original.startsWith('/')) {
+    const rawPath = original.split(/[?#]/, 1)[0];
+    const decodedPath = decodePercentReference(rawPath);
+    if (decodedPath === null) return { kind: 'error', reason: 'malformed encoded reference' };
+    if (decodedPath.includes('\\')) return { kind: 'error', reason: 'unsafe local reference is not file-compatible' };
+    if (decodedPath.split('/').includes('..')) {
+      return { kind: 'error', reason: 'local reference path traversal escapes portfolio root' };
+    }
+    return { kind: 'local', path: decodedPath.replace(/^\/+/, ''), rootRelative: true };
+  }
   if (original.includes('\\') || original.startsWith('/')) {
     return { kind: 'error', reason: 'unsafe local reference is not file-compatible' };
   }
@@ -1453,6 +1463,13 @@ function htmlAttributeValue(tag, name) {
   return attribute && attribute.hasValue ? attribute.value : undefined;
 }
 
+function htmlRelTokens(tag) {
+  return String(htmlAttributeValue(tag, 'rel') || '')
+    .split(/[\t\n\f\r ]+/)
+    .filter(Boolean)
+    .map((token) => token.toLowerCase());
+}
+
 function htmlAttributeOccurrences(tags, name, value) {
   const occurrences = [];
   for (const tag of tags) {
@@ -1567,13 +1584,21 @@ function pageDependencyErrors(file, html, parsedTags) {
   }
 
   const tags = parsedTags || htmlStartTags(html);
-  const relationTokens = (tag) => String(htmlAttributeValue(tag, 'rel') || '')
-    .trim().toLowerCase().split(/\s+/).filter(Boolean);
   const stylesheetTags = tags
-    .filter((tag) => tag.name === 'link' && relationTokens(tag).includes('stylesheet'));
-  const styles = stylesheetTags
-    .map((tag) => htmlAttributeValue(tag, 'href'))
-    .filter((href) => href !== undefined && !/^[a-z][a-z0-9+.-]*:/i.test(href));
+    .filter((tag) => tag.name === 'link' && htmlRelTokens(tag).includes('stylesheet'));
+  const pageDirectory = path.posix.dirname(relativePath);
+  const stylesheetRecords = stylesheetTags.map((tag) => {
+    const href = htmlAttributeValue(tag, 'href');
+    const normalized = href === undefined
+      ? { kind: 'error', reason: 'missing stylesheet href' }
+      : normalizedReference(href, { tag: 'link', attribute: 'href' }, { allowRootRelative: true });
+    const sitePath = normalized.kind === 'local'
+      ? path.posix.normalize(normalized.rootRelative
+        ? normalized.path || '.'
+        : path.posix.join(pageDirectory, normalized.path))
+      : '';
+    return { tag, href, normalized, sitePath };
+  });
   const scriptTags = tags
     .filter((tag) => tag.name === 'script' && tag.attributes.some((attribute) => attribute.name === 'src'));
   const scripts = scriptTags.map((tag) => htmlAttributeValue(tag, 'src') || '');
@@ -1584,10 +1609,15 @@ function pageDependencyErrors(file, html, parsedTags) {
       errors.push(`${file.relativePath}: every parsed stylesheet link must contain exactly one valued href attribute (found ${htmlAttributeSummary(tag)}).`);
     }
   }
+  const requiredStylePaths = new Map(requiredStyles.map((required) => [
+    required,
+    path.posix.normalize(path.posix.join(pageDirectory, required))
+  ]));
   for (const required of requiredStyles) {
-    const candidates = tags.filter((tag) => tag.name === 'link' && tag.attributes.some((attribute) => (
-      attribute.name === 'href' && attribute.hasValue && attribute.value === required
-    )));
+    const requiredSitePath = requiredStylePaths.get(required);
+    const candidates = stylesheetRecords.filter((record) => (
+      record.normalized.kind === 'local' && record.sitePath === requiredSitePath
+    ));
     if (candidates.length === 0) {
       errors.push(`${file.relativePath}: missing required local stylesheet ${required}.`);
       continue;
@@ -1596,15 +1626,18 @@ function pageDependencyErrors(file, html, parsedTags) {
       errors.push(`${file.relativePath}: required local stylesheet ${required} must appear exactly once (found ${candidates.length}).`);
       continue;
     }
-    const tag = candidates[0];
+    const { tag, href } = candidates[0];
+    const relTokens = htmlRelTokens(tag);
     if (!hasExactValuedAttributes(tag, ['rel', 'href']) ||
-        String(htmlAttributeValue(tag, 'rel') || '').trim().toLowerCase() !== 'stylesheet' ||
-        htmlAttributeValue(tag, 'href') !== required) {
-      errors.push(`${file.relativePath}: required local stylesheet ${required} may use only one valued rel="stylesheet" and one valued href attribute (found ${htmlAttributeSummary(tag)}).`);
+        relTokens.length !== 1 || relTokens[0] !== 'stylesheet' || href !== required) {
+      errors.push(`${file.relativePath}: required local stylesheet ${required} must use the exact file-compatible href "${required}" and only one valued rel="stylesheet" plus one valued href attribute (found ${htmlAttributeSummary(tag)}).`);
     }
   }
-  for (const unexpected of styles.filter((item) => !requiredStyles.includes(item))) {
-    errors.push(`${file.relativePath}: unexpected local stylesheet dependency ${unexpected}.`);
+  const requiredSitePathSet = new Set(requiredStylePaths.values());
+  for (const record of stylesheetRecords.filter((candidate) => (
+    candidate.normalized.kind === 'local' && !requiredSitePathSet.has(candidate.sitePath)
+  ))) {
+    errors.push(`${file.relativePath}: unexpected local stylesheet dependency ${record.href}.`);
   }
   for (const required of requiredScripts) {
     if (!localScripts.includes(required)) errors.push(`${file.relativePath}: missing required local script ${required}.`);
@@ -1756,15 +1789,13 @@ function staticPageErrors(file, html, rootDir) {
   }
 
   const linkTags = tags.filter((tag) => tag.name === 'link');
-  const relationTokens = (tag) => String(htmlAttributeValue(tag, 'rel') || '')
-    .trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const canonicalLinks = linkTags.filter((tag) => relationTokens(tag).includes('canonical'));
+  const canonicalLinks = linkTags.filter((tag) => htmlRelTokens(tag).includes('canonical'));
   if (canonicalLinks.length !== 1 || htmlAttributeValue(canonicalLinks[0], 'href') !== canonicalUrl) {
     errors.push(`${file.relativePath}: expected exactly one correct parsed canonical link for ${canonicalUrl}.`);
   }
-  const alternateLinks = linkTags.filter((tag) => relationTokens(tag).includes('alternate'));
+  const alternateLinks = linkTags.filter((tag) => htmlRelTokens(tag).includes('alternate'));
   for (const [language, expectedUrl] of [['ko', koreanUrl], ['en', englishUrl], ['x-default', koreanUrl]]) {
-    const matches = alternateLinks.filter((tag) => String(htmlAttributeValue(tag, 'hreflang') || '').trim().toLowerCase() === language);
+    const matches = alternateLinks.filter((tag) => htmlAttributeValue(tag, 'hreflang') === language);
     if (matches.length !== 1 || htmlAttributeValue(matches[0], 'href') !== expectedUrl) {
       errors.push(`${file.relativePath}: expected exactly one correct parsed alternate link with hreflang="${language}" for ${expectedUrl}.`);
     }
