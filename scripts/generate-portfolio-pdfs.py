@@ -34,6 +34,16 @@ EXPECTED_SLUGS = [
     "unmanned-forklift",
     "ai-build-lab",
 ]
+GENERATOR_VERSION = "3.0"
+GENERATOR_PUBLIC_PATH = "scripts/generate-portfolio-pdfs.py"
+EXPECTED_DIAGRAM_KIND = {
+    "surgical-navigation": "coordinate-chain",
+    "mandibular-fracture": "optimization-loop",
+    "life-careverse": "sync-topology",
+    "rtms-navigation": "navigation-loop",
+    "unmanned-forklift": "sensor-convergence",
+    "ai-build-lab": "product-loop",
+}
 LOCALES = ["ko", "en"]
 CONTACT_EMAIL = "uiop3847@naver.com"
 PUBLIC_SITE = {
@@ -291,6 +301,8 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
 
     projects = require_array(payload.get("projects"), "PDF input projects", len(EXPECTED_SLUGS))
     project_slugs: list[str] = []
+    project_sequence_evidence: dict[str, str] = {}
+    seen_diagram_kinds: set[str] = set()
     project_copy_fields = [
         "title", "shortTitle", "eyebrow", "thesis", "summary", "problem", "role",
         "teamResult", "evidence", "limitation", "collaboration", "mediaCaption", "status", "ownedRole"
@@ -313,8 +325,12 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
         validate_translation_record(project, f"PDF input project {slug}", project_copy_fields)
 
         blocks = require_array(project.get("blocks"), f"PDF input project {slug} blocks")
+        block_keys: list[str] = []
         for block_index, block_value in enumerate(blocks, start=1):
             block = require_object(block_value, f"PDF input project {slug} block {block_index}")
+            block_key = require_text(block.get("key"), f"PDF input project {slug} block {block_index} key")
+            require(block_key not in block_keys, f"PDF input project {slug} block key is duplicated: {block_key}.")
+            block_keys.append(block_key)
             block_type = require_text(block.get("type"), f"PDF input project {slug} block {block_index} type")
             translations = require_object(block.get("translations"), f"PDF input project {slug} block {block_index} translations")
             for locale in LOCALES:
@@ -328,6 +344,48 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
                 else:
                     require_text(copy.get("body"), f"PDF input project {slug} block {block_index} {locale} body")
 
+        require(len(block_keys) >= 4, f"PDF input project {slug} must contain at least four structural blocks.")
+        sequence = require_object(project.get("pdfSequence"), f"PDF input project {slug} PDF sequence")
+        require(set(sequence) == {"middle", "evidenceId", "diagram"},
+                f"PDF input project {slug} PDF sequence must contain exactly middle, evidenceId, and diagram.")
+        middle = require_array(sequence.get("middle"), f"PDF input project {slug} PDF sequence middle", 4)
+        for middle_index, block_key in enumerate(middle, start=1):
+            require_text(block_key, f"PDF input project {slug} PDF sequence middle {middle_index}")
+        require(len(set(middle)) == 4 and all(block_key in block_keys for block_key in middle),
+                f"PDF input project {slug} PDF sequence must reference exactly four distinct known blocks.")
+        evidence_id = require_text(sequence.get("evidenceId"), f"PDF input project {slug} PDF sequence evidenceId")
+        media = require_object(project.get("media"), f"PDF input project {slug} media")
+        lead = require_object(media.get("lead"), f"PDF input project {slug} lead media")
+        require(evidence_id == require_text(lead.get("id"), f"PDF input project {slug} lead media id"),
+                f"PDF input project {slug} PDF sequence evidenceId must reference lead media.")
+        project_sequence_evidence[slug] = evidence_id
+        diagram = require_object(sequence.get("diagram"), f"PDF input project {slug} PDF sequence diagram")
+        require(set(diagram) == {"kind", "translations"},
+                f"PDF input project {slug} PDF sequence diagram must contain exactly kind and translations.")
+        diagram_kind = require_text(diagram.get("kind"), f"PDF input project {slug} PDF sequence diagram kind")
+        require(diagram_kind == EXPECTED_DIAGRAM_KIND[slug],
+                f"PDF input project {slug} has an invalid PDF sequence diagram kind.")
+        require(diagram_kind not in seen_diagram_kinds,
+                f"PDF input project {slug} PDF sequence diagram kind must be unique.")
+        seen_diagram_kinds.add(diagram_kind)
+        diagram_translations = require_object(
+            diagram.get("translations"), f"PDF input project {slug} PDF sequence diagram translations"
+        )
+        require(set(diagram_translations) == set(LOCALES),
+                f"PDF input project {slug} PDF sequence diagram translations must contain exactly ko and en.")
+        for locale in LOCALES:
+            diagram_copy = require_object(
+                diagram_translations.get(locale), f"PDF input project {slug} PDF sequence diagram {locale}"
+            )
+            require(set(diagram_copy) == {"title", "nodes"},
+                    f"PDF input project {slug} PDF sequence diagram {locale} must contain title and nodes.")
+            require_text(diagram_copy.get("title"), f"PDF input project {slug} PDF sequence diagram {locale} title")
+            nodes = require_array(
+                diagram_copy.get("nodes"), f"PDF input project {slug} PDF sequence diagram {locale} nodes", 4
+            )
+            for node_index, node in enumerate(nodes, start=1):
+                require_text(node, f"PDF input project {slug} PDF sequence diagram {locale} node {node_index}")
+
         links = require_array(project.get("links"), f"PDF input project {slug} links")
         for link_index, link_value in enumerate(links, start=1):
             link = require_object(link_value, f"PDF input project {slug} link {link_index}")
@@ -337,14 +395,34 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
     require(project_slugs == EXPECTED_SLUGS, "PDF input must contain the six canonical projects in order.")
 
     evidence_entries = require_array(payload.get("evidence"), "PDF input evidence")
+    evidence_ids: set[str] = set()
     for index, value in enumerate(evidence_entries, start=1):
         entry = require_object(value, f"PDF input evidence entry {index}")
         for field in ["id", "project", "type", "state", "source", "note"]:
             require_text(entry.get(field), f"PDF input evidence entry {index} {field}")
+        require(entry["id"] not in evidence_ids, f"PDF input evidence id is duplicated: {entry['id']}.")
+        evidence_ids.add(entry["id"])
         require(entry["project"] in EXPECTED_SLUGS, f"PDF input evidence entry {index} has an unknown project.")
-        if entry["state"] == "approved-public":
+        require(entry["type"] in {"image", "video", "repository", "publication"},
+                f"PDF input evidence entry {index} has an unknown type.")
+        require(entry["state"] in {"pending-review", "approved-public", "excluded"},
+                f"PDF input evidence entry {index} has an unknown state.")
+        if entry["state"] != "approved-public":
+            require(entry["source"] == "-", f"PDF input evidence entry {index} non-public source must be '-'.")
+        elif entry["type"] in {"repository", "publication"}:
             require(entry["source"].startswith("https://"),
-                    f"PDF input evidence entry {index} approved source must use HTTPS.")
+                    f"PDF input evidence entry {index} external source must use HTTPS.")
+        else:
+            extension = "png" if entry["type"] == "image" else "mp4"
+            source_pattern = rf"assets/projects/{re.escape(entry['project'])}/[a-z0-9][a-z0-9._/-]*\.{extension}"
+            source_segments = entry["source"].split("/")
+            require(bool(re.fullmatch(source_pattern, entry["source"])) and
+                    all(segment not in {"", ".", ".."} for segment in source_segments),
+                    f"PDF input evidence entry {index} approved local source must stay below its project directory as a lower-case .{extension} file.")
+
+    for slug, evidence_id in project_sequence_evidence.items():
+        require(any(entry.get("id") == evidence_id and entry.get("project") == slug for entry in evidence_entries),
+                f"PDF input project {slug} PDF sequence evidenceId is not registered for that project.")
 
     validate_cv(payload.get("cv"))
     digest = require_text(payload.get("sourceDigest"), "PDF input sourceDigest")
@@ -570,6 +648,85 @@ class TechnicalDocument:
                 self.canvas.line(x + width + 2, y - height / 2, x + width + gap - 2, y - height / 2)
         return y - height
 
+    def diagram(self, kind: str, title: str, nodes: list[str], y: float) -> float:
+        """Draw one of six project-specific explanatory geometries."""
+        c = self.canvas
+        area_height = 188
+        top = y
+        bottom = y - area_height
+        c.setFillColor(self.colors["paper"])
+        c.setStrokeColor(self.colors["line"])
+        c.rect(self.left, bottom, self.right - self.left, area_height, fill=1, stroke=1)
+        self.text(title, self.left + 14, top - 22, self.right - self.left - 28,
+                  size=10, font="MalgunGothic-Bold", leading=14, max_lines=2)
+
+        def box(cx: float, cy: float, width: float, height: float, value: str, index: int) -> None:
+            x = cx - width / 2
+            box_bottom = cy - height / 2
+            c.setFillColor(self.colors["soft"])
+            c.setStrokeColor(self.colors["line"])
+            c.roundRect(x, box_bottom, width, height, 4, fill=1, stroke=1)
+            self.label(f"0{index + 1}", x + 8, cy + 9)
+            self.text(value, x + 8, cy - 8, width - 16, size=7.2,
+                      font="MalgunGothic-Bold", leading=10, max_lines=3)
+
+        def connector(start: tuple[float, float], end: tuple[float, float], accent: str = "signal") -> None:
+            c.setStrokeColor(self.colors[accent])
+            c.setLineWidth(1.2)
+            c.line(start[0], start[1], end[0], end[1])
+            c.setFillColor(self.colors[accent])
+            c.circle(end[0], end[1], 2.2, fill=1, stroke=0)
+
+        center_x = (self.left + self.right) / 2
+        center_y = bottom + 68
+        if kind == "coordinate-chain":
+            width = 104
+            centers = [(self.left + 58 + index * 122, center_y) for index in range(4)]
+            for index in range(3):
+                connector((centers[index][0] + width / 2, center_y), (centers[index + 1][0] - width / 2, center_y))
+            for index, center in enumerate(centers):
+                box(*center, width, 58, nodes[index], index)
+        elif kind == "optimization-loop":
+            centers = [(self.left + 110, center_y + 34), (self.right - 110, center_y + 34),
+                       (self.right - 110, center_y - 34), (self.left + 110, center_y - 34)]
+            for index in range(4):
+                connector(centers[index], centers[(index + 1) % 4], "warm" if index == 3 else "signal")
+            for index, center in enumerate(centers):
+                box(*center, 142, 48, nodes[index], index)
+        elif kind == "sync-topology":
+            centers = [(center_x, center_y), (self.left + 92, center_y + 44),
+                       (self.right - 92, center_y + 44), (center_x, center_y - 56)]
+            for index in range(1, 4):
+                connector(centers[index], centers[0])
+            box(*centers[0], 146, 54, nodes[0], 0)
+            for index in range(1, 4):
+                box(*centers[index], 126, 46, nodes[index], index)
+        elif kind == "navigation-loop":
+            centers = [(center_x - 150, center_y + 35), (center_x, center_y + 35),
+                       (center_x + 150, center_y + 35), (center_x, center_y - 48)]
+            for start, end in [(0, 1), (1, 2), (2, 3), (3, 0)]:
+                connector(centers[start], centers[end], "warm" if start == 3 else "signal")
+            for index, center in enumerate(centers):
+                box(*center, 124, 48, nodes[index], index)
+        elif kind == "sensor-convergence":
+            centers = [(self.left + 98, center_y + 48), (self.left + 98, center_y),
+                       (self.left + 98, center_y - 48), (self.right - 118, center_y)]
+            for index in range(3):
+                connector((centers[index][0] + 66, centers[index][1]), (centers[3][0] - 76, centers[3][1]))
+            for index in range(3):
+                box(*centers[index], 132, 42, nodes[index], index)
+            box(*centers[3], 152, 62, nodes[3], 3)
+        elif kind == "product-loop":
+            centers = [(center_x, center_y + 54), (center_x + 155, center_y),
+                       (center_x, center_y - 54), (center_x - 155, center_y)]
+            for index in range(4):
+                connector(centers[index], centers[(index + 1) % 4], "warm" if index == 3 else "signal")
+            for index, center in enumerate(centers):
+                box(*center, 132, 46, nodes[index], index)
+        else:
+            raise ValueError(f"Unknown PDF diagram kind: {kind}.")
+        return bottom
+
 
 def register_fonts(dependencies: dict[str, Any], regular: Path, bold: Path) -> None:
     require(regular.is_file(), f"Missing Korean font: {regular}")
@@ -583,6 +740,52 @@ def localized(record: dict[str, Any], locale: str) -> dict[str, Any]:
     require(isinstance(translations, dict) and isinstance(translations.get(locale), dict),
             f"Missing {locale} translation.")
     return translations[locale]
+
+
+def sequence_blocks(project: dict[str, Any], locale: str) -> list[tuple[dict[str, Any], dict[str, Any]]]:
+    by_key = {block["key"]: block for block in project["blocks"]}
+    return [(by_key[key], localized(by_key[key], locale)) for key in project["pdfSequence"]["middle"]]
+
+
+def block_body(block: dict[str, Any], copy: dict[str, Any]) -> str:
+    if block["type"] == "list":
+        return " · ".join(clean_text(item) for item in copy["items"])
+    return clean_text(copy["body"])
+
+
+def preflight_local_evidence(payload: dict[str, Any], publish_root: Path,
+                             dependencies: dict[str, Any]) -> dict[str, Path]:
+    """Resolve and decode approved local evidence before any output stage is created."""
+    resolved: dict[str, Path] = {}
+    root = publish_root.resolve()
+    for entry in payload["evidence"]:
+        source = clean_text(entry["source"])
+        if entry["state"] != "approved-public" or entry["type"] not in {"image", "video"}:
+            continue
+        project_root = (root / "assets" / "projects" / entry["project"]).resolve()
+        candidate = root.joinpath(*source.split("/"))
+        cursor = root
+        for segment in source.split("/"):
+            cursor = cursor / segment
+            require(cursor.exists(), f"{entry['id']}: approved local evidence is missing.")
+            require(not cursor.is_symlink() and not cursor.is_junction(),
+                    f"{entry['id']}: approved local evidence must not use symbolic links or junctions.")
+        try:
+            real_path = candidate.resolve(strict=True)
+            real_path.relative_to(project_root)
+        except (OSError, ValueError) as error:
+            raise ValueError(f"{entry['id']}: approved local evidence is missing or escapes its project directory.") from error
+        require(real_path.is_file(), f"{entry['id']}: approved local evidence must be a regular file.")
+        if entry["type"] == "image":
+            try:
+                with dependencies["Image"].open(real_path) as image:
+                    require(image.format == "PNG" and image.width > 0 and image.height > 0,
+                            f"{entry['id']}: approved image must be a decodable PNG.")
+                    image.verify()
+            except (OSError, ValueError) as error:
+                raise ValueError(f"{entry['id']}: approved image must be a decodable PNG.") from error
+        resolved[entry["id"]] = real_path
+    return resolved
 
 
 def capability_label(payload: dict[str, Any], key: str, locale: str) -> str:
@@ -660,9 +863,11 @@ def project_labels(locale: str) -> dict[str, str]:
 
 
 def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], project: dict[str, Any],
-                         locale: str, output: Path) -> None:
+                         locale: str, output: Path, local_evidence: dict[str, Path]) -> None:
     copy = localized(project, locale)
     labels = project_labels(locale)
+    middle_blocks = sequence_blocks(project, locale)
+    diagram_copy = project["pdfSequence"]["diagram"]["translations"][locale]
     doc = TechnicalDocument(dependencies, output, copy["title"], copy["thesis"], locale, 6)
     content_width = doc.right - doc.left
 
@@ -699,8 +904,11 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     # 2. Problem and boundary
     doc.begin_page(2, labels["problem"])
     y = doc.heading(labels["problem"], doc.top - 32)
-    y = doc.section(labels["problem_label"], copy["problem"], copy["summary"], y, 178)
-    y = doc.section(labels["boundary"], copy["limitation"], copy["collaboration"], y, 178, "warm")
+    first_block, first_copy = middle_blocks[0]
+    y = doc.section("01 / " + first_copy["heading"], first_copy["heading"],
+                    block_body(first_block, first_copy), y, 112)
+    y = doc.section(labels["problem_label"], copy["problem"], copy["summary"], y, 142)
+    y = doc.section(labels["boundary"], copy["limitation"], copy["collaboration"], y, 142, "warm")
     doc.label(labels["state"], doc.left, y - 8)
     doc.text(f"{copy['status']} / {copy['mediaCaption']}", doc.left, y - 30, content_width,
              size=9.5, leading=15, color="muted", max_lines=5)
@@ -711,18 +919,13 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     y = doc.heading(labels["decision"], doc.top - 32)
     doc.label(labels["role"], doc.left, y)
     y = doc.text(copy["role"], doc.left, y - 25, content_width, size=10.5,
-                 leading=17, max_lines=7) - 12
-    flow_blocks = []
-    for block in project.get("blocks", []):
-        block_copy = localized(block, locale)
-        if block.get("type") == "list":
-            flow_blocks.extend(block_copy.get("items", []))
-        elif block.get("type") in {"system", "text", "evidence"}:
-            flow_blocks.append(block_copy.get("heading", ""))
-    if len(flow_blocks) < 4:
-        flow_blocks.extend(project.get("tech", []))
+                 leading=17, max_lines=6) - 10
+    second_block, second_copy = middle_blocks[1]
+    y = doc.section("02 / " + second_copy["heading"], second_copy["heading"],
+                    block_body(second_block, second_copy), y, 92)
     doc.label(labels["flow"], doc.left, y)
-    y = doc.flow([clean_text(item) for item in flow_blocks[:4]], y - 18)
+    y = doc.diagram(project["pdfSequence"]["diagram"]["kind"], diagram_copy["title"],
+                    [clean_text(node) for node in diagram_copy["nodes"]], y - 17)
     y = doc.text(labels["flow_note"], doc.left, y - 15, content_width, size=8,
                  leading=12, color="muted", max_lines=2) - 16
     doc.label(labels["tech"], doc.left, y)
@@ -733,13 +936,33 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     # 4. Evidence ledger
     doc.begin_page(4, labels["evidence"])
     y = doc.heading(labels["evidence"], doc.top - 32)
+    third_block, third_copy = middle_blocks[2]
+    y = doc.section("03 / " + third_copy["heading"], third_copy["heading"],
+                    block_body(third_block, third_copy), y, 104)
+    selected_evidence_id = project["pdfSequence"]["evidenceId"]
+    selected_image = local_evidence.get(selected_evidence_id)
+    if selected_image:
+        doc.label(f"IMAGE / {labels['approved']}", doc.left, y)
+        image_top = y - 18
+        image_height = 176
+        doc.canvas.setStrokeColor(doc.colors["line"])
+        doc.canvas.rect(doc.left, image_top - image_height, content_width, image_height, fill=0, stroke=1)
+        with dependencies["Image"].open(selected_image) as image:
+            ratio = min((content_width - 8) / image.width, (image_height - 8) / image.height)
+            draw_width = image.width * ratio
+            draw_height = image.height * ratio
+        doc.canvas.drawImage(str(selected_image), doc.left + (content_width - draw_width) / 2,
+                             image_top - (image_height + draw_height) / 2,
+                             width=draw_width, height=draw_height, preserveAspectRatio=True,
+                             anchor="c", mask="auto")
+        y = image_top - image_height - 14
     doc.label(labels["registered"], doc.left, y)
     y -= 22
     evidence = [entry for entry in payload["evidence"] if entry.get("project") == project["slug"]]
     for entry in evidence:
         approved = entry.get("state") == "approved-public"
         state_label = labels["approved"] if approved else labels["pending"]
-        row_height = 78
+        row_height = 66 if selected_image else 78
         doc.canvas.setFillColor(doc.colors["soft"] if approved else doc.colors["paper"])
         doc.canvas.setStrokeColor(doc.colors["line"])
         doc.canvas.rect(doc.left, y - row_height, content_width, row_height, fill=1, stroke=1)
@@ -747,8 +970,8 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
                   "signal" if approved else "warm")
         doc.text(entry.get("id", ""), doc.left + 12, y - 39, content_width - 24,
                  size=10, font="MalgunGothic-Bold", leading=14, max_lines=1)
-        note_y = doc.text(entry.get("note", ""), doc.left + 12, y - 57, content_width - 24,
-                          size=7.7, leading=11, color="muted", max_lines=2)
+        note_y = doc.text(entry.get("note", ""), doc.left + 12, y - 55, content_width - 24,
+                          size=7.4, leading=10, color="muted", max_lines=1 if selected_image else 2)
         source = clean_text(entry.get("source"))
         if approved and source.startswith("https://"):
             doc.link(labels["open"], source, doc.right - 112, y - 39, 8)
@@ -762,8 +985,11 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     # 5. Attribution
     doc.begin_page(5, labels["attribution"])
     y = doc.heading(labels["attribution"], doc.top - 32)
-    y = doc.section(labels["role"], copy["ownedRole"], copy["role"], y, 140)
-    y = doc.section(labels["team"], copy["teamResult"], copy["evidence"], y, 140)
+    fourth_block, fourth_copy = middle_blocks[3]
+    y = doc.section("04 / " + fourth_copy["heading"], fourth_copy["heading"],
+                    block_body(fourth_block, fourth_copy), y, 96, "warm")
+    y = doc.section(labels["role"], copy["ownedRole"], copy["role"], y, 116)
+    y = doc.section(labels["team"], copy["teamResult"], copy["evidence"], y, 116)
     column_gap = 12
     column_width = (content_width - column_gap) / 2
     for index, (label, title, body, accent) in enumerate([
@@ -772,12 +998,12 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     ]):
         x = doc.left + index * (column_width + column_gap)
         doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(x, y - 172, column_width, 172, fill=0, stroke=1)
+        doc.canvas.rect(x, y - 146, column_width, 146, fill=0, stroke=1)
         doc.label(label, x + 12, y - 20, accent)
         title_y = doc.text(title, x + 12, y - 44, column_width - 24, size=9,
                            font="MalgunGothic-Bold", leading=14, max_lines=5)
-        doc.text(body, x + 12, title_y - 8, column_width - 24, size=7.8,
-                 leading=12, color="muted", max_lines=5)
+        doc.text(body, x + 12, title_y - 8, column_width - 24, size=7.6,
+                 leading=11, color="muted", max_lines=4)
     doc.finish_page()
 
     # 6. Recap and invitation
@@ -1078,6 +1304,49 @@ def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_d
     return manifest
 
 
+def validate_review_render(dependencies: dict[str, Any], review_dir: Path,
+                           pdf_names: list[str], manifest: dict[str, Any]) -> None:
+    expected_pages = {
+        name: (2 if name.startswith("jinmin-kim-cv-") else 6) for name in pdf_names
+    }
+    require(set(manifest) == {"renderer", "dpi", "pageCount", "documents"},
+            "Review manifest has an invalid schema.")
+    require(manifest["renderer"] == "PyMuPDF fallback" and manifest["dpi"] == 120,
+            "Review manifest has an invalid renderer contract.")
+    require(manifest["pageCount"] == sum(expected_pages.values()) == 76,
+            "Review render must contain exactly 76 pages.")
+    require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 14,
+            "Review manifest must track exactly fourteen documents.")
+    seen: set[str] = set()
+    for document in manifest["documents"]:
+        require(isinstance(document, dict) and set(document) == {"pdf", "pages", "contactSheet"},
+                "Review document has an invalid schema.")
+        name = document["pdf"]
+        require(name in expected_pages and name not in seen, f"Unexpected or duplicate review document: {name}.")
+        require(document["pages"] == expected_pages[name], f"{name}: invalid review page count.")
+        require(document["contactSheet"] == f"{Path(name).stem}.png", f"{name}: invalid contact-sheet name.")
+        seen.add(name)
+    require(seen == set(expected_pages), "Review manifest is missing a canonical document.")
+
+    page_files = {item.name for item in (review_dir / "pages").iterdir() if item.is_file()}
+    expected_page_files = {
+        f"{Path(name).stem}-page-{page:02d}.png"
+        for name, count in expected_pages.items() for page in range(1, count + 1)
+    }
+    sheet_files = {item.name for item in (review_dir / "contact-sheets").iterdir() if item.is_file()}
+    expected_sheet_files = {f"{Path(name).stem}.png" for name in expected_pages}
+    require(page_files == expected_page_files, "Review pages contain an unexpected or missing render.")
+    require(sheet_files == expected_sheet_files, "Review contact sheets contain an unexpected or missing render.")
+    require(json.loads((review_dir / "review-manifest.json").read_text(encoding="utf-8")) == manifest,
+            "Review manifest did not round-trip.")
+    for relative_directory, names in [("pages", page_files), ("contact-sheets", sheet_files)]:
+        for name in names:
+            with dependencies["Image"].open(review_dir / relative_directory / name) as image:
+                require(image.format == "PNG" and image.width > 0 and image.height > 0,
+                        f"{name}: invalid review image.")
+                image.verify()
+
+
 def artifact_record(file_path: Path, relative_path: str, kind: str, **fields: Any) -> dict[str, Any]:
     return {
         "path": relative_path,
@@ -1159,27 +1428,35 @@ def atomic_swap_directories(publications: list[tuple[Path, Path]]) -> None:
 
 def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: Path,
              publish_root: Path, review_dir: Path | None) -> dict[str, Any]:
+    local_evidence = preflight_local_evidence(payload, publish_root, dependencies)
     project_assets = publish_root / "assets" / "pdfs"
     cv_assets = publish_root / "assets" / "cv"
     targets = [output_dir, project_assets, cv_assets]
     token = uuid.uuid4().hex
     stages: list[Path] = []
-    for target in targets:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        stage = target.parent / f".{target.name}.stage-{token}"
-        stage.mkdir()
-        stages.append(stage)
-    staged_output, staged_projects, staged_cv = stages
+    review_stage: Path | None = None
     expected_names = [f"{slug}-{locale}.pdf" for slug in EXPECTED_SLUGS for locale in LOCALES]
     expected_names += [f"jinmin-kim-cv-{locale}.pdf" for locale in LOCALES]
     documents: list[dict[str, Any]] = []
     artifacts: list[dict[str, Any]] = []
     try:
+        for target in targets:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            stage = target.parent / f".{target.name}.stage-{token}"
+            stage.mkdir()
+            stages.append(stage)
+        staged_output, staged_projects, staged_cv = stages
+        if review_dir:
+            review_dir.parent.mkdir(parents=True, exist_ok=True)
+            review_stage = review_dir.parent / f".{review_dir.name}.stage-{token}"
+            review_stage.mkdir()
+            stages.append(review_stage)
+
         for project in payload["projects"]:
             for locale in LOCALES:
                 name = f"{project['slug']}-{locale}.pdf"
                 output = staged_output / name
-                generate_project_pdf(dependencies, payload, project, locale, output)
+                generate_project_pdf(dependencies, payload, project, locale, output, local_evidence)
                 qa = validate_pdf(dependencies, output, 6, localized(project, locale)["title"])
                 published = staged_projects / name
                 shutil.copyfile(output, published)
@@ -1223,25 +1500,30 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
         artifacts.extend(render_cv_previews(dependencies, cv_pdf_paths, staged_cv))
         artifacts.sort(key=lambda artifact: artifact["path"])
         manifest = {
-            "schemaVersion": 2,
+            "schemaVersion": 3,
             "sourceDigest": payload["sourceDigest"],
-            "generator": "scripts/generate-portfolio-pdfs.py",
+            "generator": GENERATOR_PUBLIC_PATH,
+            "generatorVersion": GENERATOR_VERSION,
+            "generatorSha256": sha256(Path(__file__).resolve()),
             "documents": documents,
             "artifacts": artifacts,
         }
         (staged_output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         validate_staged_publication(dependencies, staged_output, staged_projects, staged_cv, manifest)
-        atomic_swap_directories(list(zip(targets, stages)))
+        result = dict(manifest)
+        publications = list(zip(targets, stages[:3]))
+        if review_dir and review_stage:
+            staged_pdf_paths = [staged_output / name for name in expected_names]
+            review_manifest = render_reviews(dependencies, staged_pdf_paths, review_stage)
+            validate_review_render(dependencies, review_stage, expected_names, review_manifest)
+            result["review"] = review_manifest
+            publications.append((review_dir, review_stage))
+        atomic_swap_directories(publications)
+        return result
     finally:
         for stage in stages:
             if stage.exists():
                 shutil.rmtree(stage)
-
-    if review_dir:
-        review_dir.mkdir(parents=True, exist_ok=True)
-        final_paths = [output_dir / name for name in expected_names]
-        manifest["review"] = render_reviews(dependencies, final_paths, review_dir)
-    return manifest
 
 
 def main(argv: list[str]) -> int:

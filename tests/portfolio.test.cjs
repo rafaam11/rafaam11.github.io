@@ -143,7 +143,13 @@ function copyTask5Surface(targetRoot) {
   for (const relativePath of ['output/pdf', 'assets/pdfs', 'assets/cv']) {
     fs.cpSync(path.join(root, relativePath), path.join(targetRoot, relativePath), { recursive: true });
   }
-  for (const relativePath of ['data/public-cv.json', 'assets/projects/EVIDENCE_REGISTER.md', 'cv/index.html', 'en/cv/index.html']) {
+  for (const relativePath of [
+    'data/public-cv.json',
+    'assets/projects/EVIDENCE_REGISTER.md',
+    'cv/index.html',
+    'en/cv/index.html',
+    'scripts/generate-portfolio-pdfs.py'
+  ]) {
     const target = path.join(targetRoot, relativePath);
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.copyFileSync(path.join(root, relativePath), target);
@@ -185,7 +191,8 @@ function copyTask6Surface(targetRoot) {
     'js/site-i18n.js',
     'js/portfolio-data.js',
     'js/portfolio-render.js',
-    'js/nav.js'
+    'js/nav.js',
+    'scripts/generate-portfolio-pdfs.py'
   ]) {
     const target = path.join(targetRoot, relativePath);
     fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -1024,6 +1031,7 @@ test('Task 3 review Home tiles render approved images with alt and no evidence m
     status: 'approved',
     publicPath: 'assets/projects/surgical-navigation/lead.webp'
   };
+  candidate.projects[0].pdfSequence.evidenceId = candidate.projects[0].media.lead.id;
   const html = render.homeProjectGalleryHtml(candidate, '../', true, 'en');
   const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
   assert.match(firstTile, /<img\b(?=[^>]*src="\.\.\/assets\/projects\/surgical-navigation\/lead\.webp")(?=[^>]*alt="Surgical-navigation demonstration connecting tracked equipment and medical-image models to a HoloLens spatial view\.")/);
@@ -1044,6 +1052,7 @@ test('Task 3 review Home video tiles use an approved poster without autoplay or 
     status: 'approved',
     publicPath: 'assets/projects/surgical-navigation/poster.webp'
   };
+  candidate.projects[0].pdfSequence.evidenceId = candidate.projects[0].media.lead.id;
   const html = render.homeProjectGalleryHtml(candidate, '', false, 'ko');
   const firstTile = html.match(/<article class="td-home-project">[\s\S]*?<\/article>/)?.[0] || '';
   assert.match(firstTile, /<img\b(?=[^>]*src="assets\/projects\/surgical-navigation\/poster\.webp")(?=[^>]*alt="추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연\.")/);
@@ -1075,6 +1084,7 @@ test('Task 3 review hero mosaic renders approved images with truthful alt and le
     status: 'approved',
     publicPath: 'assets/projects/mandibular-fracture/lead.webp'
   };
+  candidate.projects[1].pdfSequence.evidenceId = candidate.projects[1].media.lead.id;
   const html = render.homeEvidenceMosaicHtml(candidate, 'en', '../');
   const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
   assert.match(firstCell, /<img\b(?=[^>]*class="td-mosaic-cell__image")(?=[^>]*src="\.\.\/assets\/projects\/mandibular-fracture\/lead\.webp")(?=[^>]*alt="Presentation and award evidence for mandibular fracture reduction research\.")/);
@@ -1097,6 +1107,7 @@ test('Task 3 review hero mosaic renders an approved video poster without inline 
     status: 'approved',
     publicPath: 'assets/projects/surgical-navigation/poster.webp'
   };
+  candidate.projects[0].pdfSequence.evidenceId = candidate.projects[0].media.lead.id;
   const html = render.homeEvidenceMosaicHtml(candidate, 'ko');
   const secondCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][1]?.[0] || '';
   assert.match(secondCell, /<img\b(?=[^>]*class="td-mosaic-cell__image td-mosaic-cell__poster")(?=[^>]*src="assets\/projects\/surgical-navigation\/poster\.webp")(?=[^>]*alt="추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연\.")/);
@@ -1112,6 +1123,7 @@ test('Task 3 review hero mosaic labels a nonvisual approved lead as representati
     status: 'approved',
     publicPath: 'https://example.com/public-evidence'
   };
+  candidate.projects[1].pdfSequence.evidenceId = candidate.projects[1].media.lead.id;
   const html = render.homeEvidenceMosaicHtml(candidate, 'en');
   const firstCell = [...html.matchAll(/<article class="td-mosaic-cell">([\s\S]*?)<\/article>/g)][0]?.[0] || '';
   assert.match(firstCell, /role="img" aria-label="Representative technical panel; no actual demo or photograph is shown\."/);
@@ -1308,6 +1320,7 @@ test('Task 3 case renderer uses project-specific blocks and separates role from 
     { key: 'evidence', type: 'evidence', translations: { ko: { heading: '근거', body: '증거' }, en: { heading: 'Evidence block', body: 'Evidence body' } } },
     { key: 'limit', type: 'limitation', translations: { ko: { heading: '한계', body: '경계' }, en: { heading: 'Limit block', body: 'Limit body' } } }
   ];
+  project.pdfSequence.middle = ['text', 'list', 'system', 'evidence'];
   const candidate = clone(data);
   candidate.projects[1] = project;
   const html = render.caseStudyHtml(candidate, project.slug, '../../../', true, 'en');
@@ -1685,7 +1698,9 @@ test('Task 5 generator publishes CV previews and digest manifest without a revie
     ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
     assert.equal(result.status, 0, result.stderr || result.stdout);
     const manifest = JSON.parse(fs.readFileSync(path.join(temporaryRoot, 'output', 'pdf', 'manifest.json'), 'utf8'));
-    assert.equal(manifest.schemaVersion, 2);
+    assert.equal(manifest.schemaVersion, 3);
+    assert.equal(manifest.generatorVersion, '3.0');
+    assert.equal(manifest.generatorSha256, sha256(path.join(root, 'scripts', 'generate-portfolio-pdfs.py')));
     assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
     const previews = manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview');
     assert.equal(previews.length, 4);
@@ -1700,7 +1715,7 @@ test('Task 5 generator publishes CV previews and digest manifest without a revie
 
 test('Task 5 manifest freshness follows canonical project, evidence, and public CV content', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
-  assert.equal(manifest.schemaVersion, 2);
+  assert.equal(manifest.schemaVersion, 3);
   assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
   assert.equal(manifest.artifacts.length, 32);
   assert.equal(manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview').length, 4);
@@ -1717,6 +1732,207 @@ test('Task 5 manifest freshness follows canonical project, evidence, and public 
     changedCv.identity.translations.en.headline += ' changed';
     fs.writeFileSync(cvPath, `${JSON.stringify(changedCv, null, 2)}\n`);
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /source digest|stale/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 integrated review requires four project-specific middle blocks and six diagram contracts', () => {
+  const expectedKinds = new Map([
+    ['surgical-navigation', 'coordinate-chain'],
+    ['mandibular-fracture', 'optimization-loop'],
+    ['life-careverse', 'sync-topology'],
+    ['rtms-navigation', 'navigation-loop'],
+    ['unmanned-forklift', 'sensor-convergence'],
+    ['ai-build-lab', 'product-loop']
+  ]);
+  const seenKinds = new Set();
+  for (const project of data.projects) {
+    assert.ok(project.pdfSequence && typeof project.pdfSequence === 'object', `${project.slug}: missing pdfSequence`);
+    assert.deepEqual(project.pdfSequence.middle, project.blocks.map((block) => block.key), `${project.slug}: middle sequence`);
+    assert.equal(project.pdfSequence.evidenceId, project.media.lead.id, `${project.slug}: evidence selection`);
+    assert.equal(project.pdfSequence.diagram.kind, expectedKinds.get(project.slug), `${project.slug}: diagram kind`);
+    assert.equal(seenKinds.has(project.pdfSequence.diagram.kind), false, `${project.slug}: duplicate diagram kind`);
+    seenKinds.add(project.pdfSequence.diagram.kind);
+    for (const locale of ['ko', 'en']) {
+      const diagram = project.pdfSequence.diagram.translations[locale];
+      assert.equal(typeof diagram.title, 'string');
+      assert.equal(diagram.title.trim().length > 0, true);
+      assert.equal(diagram.nodes.length, 4);
+      assert.equal(diagram.nodes.every((node) => typeof node === 'string' && node.trim()), true);
+    }
+  }
+  assert.equal(seenKinds.size, 6);
+  assert.deepEqual(validator.portfolioDataErrors(data), []);
+
+  const malformed = clone(data);
+  malformed.projects[0].pdfSequence.middle[1] = 'unknown-middle-block';
+  malformed.projects[1].pdfSequence.diagram.kind = malformed.projects[0].pdfSequence.diagram.kind;
+  assert.match(validator.portfolioDataErrors(malformed).join('\n'), /pdf sequence|middle block|diagram kind|unique/i);
+});
+
+test('Task 5 integrated review renders each middle block on its contracted page and embeds approved local evidence', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-sequence-'));
+  try {
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+    const localEvidence = payload.evidence.find((entry) => entry.id === 'surgical-navigation-demo');
+    localEvidence.type = 'image';
+    localEvidence.state = 'approved-public';
+    localEvidence.source = 'assets/projects/surgical-navigation/approved-demo.png';
+    const source = clone(payload);
+    delete source.sourceDigest;
+    payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+    fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+    const approvedPath = path.join(temporaryRoot, ...localEvidence.source.split('/'));
+    fs.mkdirSync(path.dirname(approvedPath), { recursive: true });
+    fs.copyFileSync(path.join(root, 'assets', 'cv', 'jinmin-kim-cv-ko-page-1.png'), approvedPath);
+
+    const generation = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(generation.status, 0, generation.stderr || generation.stdout);
+
+    const auditCode = [
+      'import json, sys',
+      'from pathlib import Path',
+      'from pypdf import PdfReader',
+      'root = Path(sys.argv[1])',
+      'slugs = json.loads(sys.argv[2])',
+      'result = {}',
+      'for slug in slugs:',
+      '    reader = PdfReader(str(root / "output" / "pdf" / f"{slug}-en.pdf"))',
+      '    result[slug] = [(page.extract_text() or "") for page in reader.pages[1:5]]',
+      'page = PdfReader(str(root / "output" / "pdf" / "surgical-navigation-en.pdf")).pages[3]',
+      'xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
+      'result["approvedImage"] = any(ref.get_object().get("/Subtype") == "/Image" for ref in xobjects.values())',
+      'print(json.dumps(result))'
+    ].join('\n');
+    const audit = childProcess.spawnSync(python, ['-c', auditCode, temporaryRoot, JSON.stringify(slugs)], {
+      cwd: root, encoding: 'utf8', timeout: 30_000
+    });
+    assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+    const pages = JSON.parse(audit.stdout);
+    for (const project of payload.projects) {
+      for (let index = 0; index < 4; index += 1) {
+        const key = project.pdfSequence.middle[index];
+        const block = project.blocks.find((candidate) => candidate.key === key);
+        assert.ok(pages[project.slug][index].includes(block.translations.en.heading), `${project.slug}: page ${index + 2} omits ${key}`);
+      }
+      assert.ok(pages[project.slug][1].includes(project.pdfSequence.diagram.translations.en.title), `${project.slug}: diagram title`);
+    }
+    assert.equal(pages.approvedImage, true, 'approved local image must be placed on evidence page');
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 integrated review failure preserves all existing public PDF trees byte-for-byte', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-review-atomic-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+    payload.projects[0].translations.en.title += ' staged review failure';
+    const source = clone(payload);
+    delete source.sourceDigest;
+    payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+    fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+    const before = Object.fromEntries(['output/pdf', 'assets/pdfs', 'assets/cv'].map((relativePath) => [
+      relativePath, treeFileHashes(path.join(temporaryRoot, relativePath))
+    ]));
+    const driver = [
+      'import importlib.util, sys',
+      'from pathlib import Path',
+      'module_path, input_path, target_root, regular, bold = map(Path, sys.argv[1:6])',
+      'spec = importlib.util.spec_from_file_location("portfolio_pdf_generator", module_path)',
+      'module = importlib.util.module_from_spec(spec)',
+      'spec.loader.exec_module(module)',
+      'payload = module.load_export(input_path)',
+      'deps = module.import_pdf_dependencies()',
+      'module.register_fonts(deps, regular, bold)',
+      'def fail_review(*args, **kwargs):',
+      '    raise RuntimeError("simulated review verification failure")',
+      'module.render_reviews = fail_review',
+      'try:',
+      '    module.generate(payload, deps, target_root / "output" / "pdf", target_root, target_root / "review")',
+      'except Exception as error:',
+      '    print(f"PDF generation failed: {error}", file=sys.stderr)',
+      '    raise SystemExit(1)',
+      'raise SystemExit(0)'
+    ].join('\n');
+    const result = childProcess.spawnSync(python, [
+      '-c', driver,
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      input,
+      temporaryRoot,
+      'C:\\Windows\\Fonts\\malgun.ttf',
+      'C:\\Windows\\Fonts\\malgunbd.ttf'
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /^PDF generation failed: simulated review verification failure\r?\n$/);
+    assert.doesNotMatch(result.stderr, /Traceback/);
+    for (const relativePath of ['output/pdf', 'assets/pdfs', 'assets/cv']) {
+      assert.deepEqual(treeFileHashes(path.join(temporaryRoot, relativePath)), before[relativePath], relativePath);
+    }
+    const leakedTransactions = fs.readdirSync(path.join(temporaryRoot, 'output'))
+      .concat(fs.readdirSync(path.join(temporaryRoot, 'assets')))
+      .filter((name) => /\.(?:stage|backup)-/.test(name));
+    assert.deepEqual(leakedTransactions, []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 integrated review manifest binds artifacts to the current generator source', () => {
+  const manifest = JSON.parse(read('output/pdf/manifest.json'));
+  const generatorPath = path.join(root, 'scripts', 'generate-portfolio-pdfs.py');
+  assert.equal(manifest.schemaVersion, 3);
+  assert.match(manifest.generatorVersion, /^\d+\.\d+$/);
+  assert.equal(manifest.generatorSha256, sha256(generatorPath));
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-generator-stale-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    fs.appendFileSync(path.join(temporaryRoot, 'scripts', 'generate-portfolio-pdfs.py'), '\n# stale layout mutation\n');
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join('\n'), /generator.*(?:hash|stale)|stale.*generator/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('Task 5 integrated review CV HTML intrinsic dimensions match the 1241x1754 previews', () => {
+  for (const relativePath of ['cv/index.html', 'en/cv/index.html']) {
+    const html = read(relativePath);
+    const images = [...html.matchAll(/<img[^>]+jinmin-kim-cv-(?:ko|en)-page-[12]\.png[^>]*>/g)];
+    assert.equal(images.length, 2, relativePath);
+    for (const image of images) {
+      assert.match(image[0], /\bwidth="1241"/);
+      assert.match(image[0], /\bheight="1754"/);
+    }
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-cv-preview-size-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const cvPath = path.join(temporaryRoot, 'cv', 'index.html');
+    fs.writeFileSync(cvPath, fs.readFileSync(cvPath, 'utf8').replace('width="1241"', 'width="1240"'));
+    assert.match(validator.pdfArtifactErrors(temporaryRoot).join('\n'), /cv\/index\.html.*preview.*dimension|intrinsic.*dimension/i);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }

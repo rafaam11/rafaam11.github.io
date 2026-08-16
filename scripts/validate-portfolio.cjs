@@ -20,6 +20,8 @@ const contributionPattern = render.policy.contributionPercentagePattern;
 const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const isSafePublicPath = render.isSafePublicPath;
 const siteUrl = 'https://rafaam11.github.io/';
+const pdfGeneratorRelativePath = path.join('scripts', 'generate-portfolio-pdfs.py');
+const pdfGeneratorVersion = '3.0';
 const pageMountContracts = [
   { tag: 'header', id: 'site-nav', label: 'shared navigation mount' },
   { tag: 'main', id: 'main-content', label: 'main-content landmark' },
@@ -1136,7 +1138,12 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     for (const pageNumber of [1, 2]) {
       const name = `jinmin-kim-cv-${locale}-page-${pageNumber}.png`;
       const preview = path.join(cvRoot, name);
-      if (!fs.existsSync(preview) || !imageDimensions(preview, '.png')) errors.push(`assets/cv/${name}: missing or invalid CV raster preview.`);
+      const dimensions = fs.existsSync(preview) ? imageDimensions(preview, '.png') : null;
+      if (!dimensions) {
+        errors.push(`assets/cv/${name}: missing or invalid CV raster preview.`);
+      } else if (dimensions.width !== 1241 || dimensions.height !== 1754) {
+        errors.push(`assets/cv/${name}: CV raster preview must be exactly 1241x1754.`);
+      }
     }
   }
 
@@ -1157,11 +1164,21 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   }
   if (manifest && typeof manifest === 'object' && !Array.isArray(manifest)) {
     const topKeys = Object.keys(manifest).sort();
-    if (JSON.stringify(topKeys) !== JSON.stringify(['artifacts', 'documents', 'generator', 'schemaVersion', 'sourceDigest'])) {
+    if (JSON.stringify(topKeys) !== JSON.stringify(['artifacts', 'documents', 'generator', 'generatorSha256', 'generatorVersion', 'schemaVersion', 'sourceDigest'])) {
       errors.push('output/pdf/manifest.json: invalid manifest schema fields.');
     }
-    if (manifest.schemaVersion !== 2) errors.push('output/pdf/manifest.json: unsupported manifest schemaVersion.');
+    if (manifest.schemaVersion !== 3) errors.push('output/pdf/manifest.json: unsupported manifest schemaVersion.');
     if (manifest.generator !== 'scripts/generate-portfolio-pdfs.py') errors.push('output/pdf/manifest.json: invalid generator identity.');
+    if (manifest.generatorVersion !== pdfGeneratorVersion) errors.push('output/pdf/manifest.json: invalid generator version.');
+    if (!/^[a-f0-9]{64}$/.test(manifest.generatorSha256 || '')) {
+      errors.push('output/pdf/manifest.json: invalid generator SHA-256.');
+    }
+    const generatorPath = path.join(rootDir, pdfGeneratorRelativePath);
+    if (!fs.existsSync(generatorPath) || !fs.lstatSync(generatorPath).isFile()) {
+      errors.push('scripts/generate-portfolio-pdfs.py: missing current PDF generator source.');
+    } else if (manifest.generatorSha256 !== sha256File(generatorPath)) {
+      errors.push('output/pdf/manifest.json: generator source hash is stale for the current PDF layout code.');
+    }
     if (!/^[a-f0-9]{64}$/.test(manifest.sourceDigest || '')) errors.push('output/pdf/manifest.json: invalid source digest.');
     if (sourceResult.digest && manifest.sourceDigest !== sourceResult.digest) {
       errors.push('output/pdf/manifest.json: source digest is stale for the current canonical portfolio, evidence register, or public CV data.');
@@ -1285,7 +1302,18 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     if (!new RegExp(`<object[^>]+data="${escapeRegExp(pdfHref)}"[^>]+type="application/pdf"`).test(html)) errors.push(`${relativePage}: missing localized PDF object.`);
     for (const pageNumber of [1, 2]) {
       const previewHref = `${base}assets/cv/jinmin-kim-cv-${locale}-page-${pageNumber}.png`;
-      if (!html.includes(previewHref)) errors.push(`${relativePage}: missing localized CV page ${pageNumber} preview.`);
+      const previewTag = html.match(new RegExp(`<img\\b[^>]*src="${escapeRegExp(previewHref)}"[^>]*>`, 'i'))?.[0];
+      if (!previewTag) {
+        errors.push(`${relativePage}: missing localized CV page ${pageNumber} preview.`);
+      } else {
+        const width = Number(previewTag.match(/\bwidth="(\d+)"/i)?.[1]);
+        const height = Number(previewTag.match(/\bheight="(\d+)"/i)?.[1]);
+        const previewPath = path.join(cvRoot, `jinmin-kim-cv-${locale}-page-${pageNumber}.png`);
+        const dimensions = fs.existsSync(previewPath) ? imageDimensions(previewPath, '.png') : null;
+        if (!dimensions || width !== dimensions.width || height !== dimensions.height || width !== 1241 || height !== 1754) {
+          errors.push(`${relativePage}: CV preview intrinsic dimensions must match the 1241x1754 raster artifact.`);
+        }
+      }
     }
     if (!new RegExp(`<a[^>]+href="${escapeRegExp(pdfHref)}"[^>]+target="_blank"[^>]+rel="noopener"`).test(html)) errors.push(`${relativePage}: missing PDF open fallback.`);
     if (!new RegExp(`<a[^>]+href="${escapeRegExp(pdfHref)}"[^>]+download`).test(html)) errors.push(`${relativePage}: missing PDF download fallback.`);
