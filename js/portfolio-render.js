@@ -41,6 +41,8 @@
     contributionPercentagePattern: /(?:(?:contribution|ownership|owned|responsibility|role|기여(?:도)?|역할|담당)[\s\S]{0,80}\b\d{1,3}(?:\.\d+)?\s*%|\b\d{1,3}(?:\.\d+)?\s*%[\s\S]{0,80}(?:contribution|ownership|owned|responsibility|role|기여(?:도)?|역할|담당))/i,
     privateCopyPathPattern: /(?:[a-z]:[\\/]|\\\\[^\\/\s]+[\\/]|file:\/\/|\/(?:Users|home|mnt|tmp|var\/tmp)\/|(?:^|[\\/])(?:private|raw|extracted|manifest)(?=[\\/]|$)|\.(?:dcm|dicom)\b)/i,
     privateCopyPhonePattern: /(?:\+?82[- .]?(?:0)?10|010)[- .]?\d{3,4}[- .]?\d{4}/,
+    privateCopyAgePattern: /(?:\b\d{1,3}(?:\s+years?\s+old|[-\s]year[-\s]old)\b|(?:만\s*)?\d{1,3}\s*세(?![가-힣]))/i,
+    privateCopyAddressPattern: /(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])|[가-힣]{2,12}(?:특별자치도|도|광역시|특별시)\s+[가-힣]{1,12}(?:시|군|구)(?![가-힣])|[가-힣]{2,12}(?:시|군|구)\s+[가-힣]{1,12}(?:구|읍|면|동|로|길)(?![가-힣])|[가-힣]{2,20}(?:읍|면|동|로|길)\s*\d{1,5}(?:-\d{1,5})?(?!\d)|\b\d{1,5}(?:-\d{1,5})?\s+[A-Za-z][A-Za-z0-9.'-]*(?:\s+[A-Za-z][A-Za-z0-9.'-]*){0,3}(?:-ro|-gil|\s(?:Road|Rd\.?|Street|St\.?|Avenue|Ave\.?|Boulevard|Blvd\.?|Lane|Ln\.?|Drive|Dr\.?))\s*,\s*[A-Za-z][A-Za-z.'-]*(?:-gu|-gun|-si)\s*,\s*(?:Seoul|Busan|Daegu|Incheon|Gwangju|Daejeon|Ulsan|Sejong|[A-Za-z][A-Za-z.'-]*-do)\b/i,
     privateCopyPatientPattern: /(?:\b(?:PatientName|PatientID|StudyInstanceUID|SOPInstanceUID)\b|환자(?:명|번호|ID))\s*[:=]/i
   };
 
@@ -141,7 +143,7 @@
   }
 
   function projectPublicCopy(project) {
-    var surfaces = [project && project.translations];
+    var surfaces = [project && project.tech, project && project.translations];
     (project && project.blocks || []).forEach(function (block) { surfaces.push(block && block.translations); });
     (project && project.subcases || []).forEach(function (subcase) { surfaces.push(subcase && subcase.translations); });
     (project && project.links || []).forEach(function (link) { surfaces.push(link && link.translations); });
@@ -149,12 +151,24 @@
     return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
   }
 
-  function publicCopySafetyErrors(project, slug) {
-    var copy = projectPublicCopy(project);
+  function portfolioPublicCopy(data) {
+    var surfaces = [];
+    (data && data.capabilities || []).forEach(function (capability) {
+      surfaces.push(capability && capability.methods, capability && capability.translations);
+    });
+    (data && data.tiers || []).forEach(function (tier) { surfaces.push(tier && tier.translations); });
+    (data && data.projects || []).forEach(function (project) { surfaces.push(projectPublicCopy(project)); });
+    return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
+  }
+
+  function publicCopySafetyErrors(data) {
+    var copy = portfolioPublicCopy(data);
     var errors = [];
-    if (policy.privateCopyPathPattern.test(copy)) errors.push(slug + ': localized public copy contains a private source path.');
-    if (policy.privateCopyPhonePattern.test(copy)) errors.push(slug + ': localized public copy contains private phone PII.');
-    if (policy.privateCopyPatientPattern.test(copy)) errors.push(slug + ': localized public copy contains a private patient identifier.');
+    if (policy.privateCopyPathPattern.test(copy)) errors.push('Shared public data contains a private source path.');
+    if (policy.privateCopyPhonePattern.test(copy)) errors.push('Shared public data contains private phone PII.');
+    if (policy.privateCopyAgePattern.test(copy)) errors.push('Shared public data contains private age PII.');
+    if (policy.privateCopyAddressPattern.test(copy)) errors.push('Shared public data contains private address PII.');
+    if (policy.privateCopyPatientPattern.test(copy)) errors.push('Shared public data contains a private patient identifier.');
     return errors;
   }
 
@@ -178,10 +192,34 @@
   }
 
   function isSafeHttpUrl(value) {
-    if (!/^https?:\/\//i.test(value)) return false;
+    if (typeof value !== 'string' || value !== value.trim() || !/^https:\/\//i.test(value) || value.includes('\\')) return false;
     try {
       var url = new URL(value);
-      return (url.protocol === 'http:' || url.protocol === 'https:') && Boolean(url.hostname);
+      var hostname = String(url.hostname || '').toLowerCase().replace(/^\[|\]$/g, '').replace(/\.$/, '');
+      if (url.protocol !== 'https:' || url.username || url.password || !hostname ||
+          hostname === 'localhost' || hostname.endsWith('.localhost') || hostname.endsWith('.local') ||
+          hostname.endsWith('.internal') || hostname.endsWith('.lan')) return false;
+      var ipv4 = hostname.split('.');
+      if (ipv4.length === 4 && ipv4.every(function (part) { return /^\d{1,3}$/.test(part) && Number(part) <= 255; })) {
+        var first = Number(ipv4[0]);
+        var second = Number(ipv4[1]);
+        if (first === 0 || first === 10 || first === 127 || first >= 224 ||
+            (first === 100 && second >= 64 && second <= 127) ||
+            (first === 169 && second === 254) ||
+            (first === 172 && second >= 16 && second <= 31) ||
+            (first === 192 && second === 168)) return false;
+      } else if (!hostname.includes('.') || hostname === '::' || hostname === '::1' ||
+          hostname.startsWith('fc') || hostname.startsWith('fd') || /^fe[89ab]/.test(hostname)) {
+        return false;
+      }
+      var decoded = fullyDecoded((url.pathname + url.search + url.hash).replace(/\+/g, '%20'));
+      if (!decoded) return false;
+      var surface = decoded.replace(/\\/g, '/');
+      if (/[a-z]:\//i.test(surface) || /(?:^|[^:])\/\//.test(surface) || /file:\/\//i.test(surface) ||
+          /(?:^|[/])(?:users|home|tmp|onedrive)(?:[/]|$)/i.test(surface) ||
+          /(?:^|[/])private[/](?:raw|extracted|manifest)(?:[/]|$)/i.test(surface) ||
+          /(?:^|[/])(?:extracted|manifest)(?:[/]|$)/i.test(surface)) return false;
+      return true;
     } catch (error) {
       return false;
     }
@@ -502,10 +540,10 @@
             });
           }
         }
-        errors = errors.concat(publicCopySafetyErrors(project, slug));
       });
     }
 
+    errors = errors.concat(publicCopySafetyErrors(data));
     var serialized = JSON.stringify(data);
     if (policy.contributionPercentagePattern.test(serialized)) errors.push('Shared data contains a contribution percentage.');
     if (policy.prohibitedPartnerPattern.test(serialized)) errors.push('Shared data contains a nonpublic partner name.');

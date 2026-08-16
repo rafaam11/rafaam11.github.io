@@ -862,7 +862,7 @@ function collectPublicStrings(value, output = []) {
 }
 
 function projectPublicText(project) {
-  const surfaces = [project?.translations];
+  const surfaces = [project?.tech, project?.translations];
   for (const block of project?.blocks || []) surfaces.push(block?.translations);
   for (const subcase of project?.subcases || []) surfaces.push(subcase?.translations);
   for (const link of project?.links || []) surfaces.push(link?.translations);
@@ -876,23 +876,44 @@ function projectPublicText(project) {
   return text;
 }
 
-function projectPublicTextErrors(project) {
-  const slug = project?.slug || 'unknown-project';
-  const text = projectPublicText(project);
+function portfolioPublicText(candidate) {
+  const surfaces = [];
+  for (const capability of candidate?.capabilities || []) surfaces.push(capability?.methods, capability?.translations);
+  for (const tier of candidate?.tiers || []) surfaces.push(tier?.translations);
+  for (const project of candidate?.projects || []) surfaces.push(projectPublicText(project));
+  let text = collectPublicStrings(surfaces).join('\n');
+  for (let index = 0; index < 6; index += 1) {
+    const next = decodeHtmlReferenceEntities(text);
+    if (next === text) break;
+    text = next;
+  }
+  return text;
+}
+
+function portfolioPublicTextErrors(candidate) {
+  const text = portfolioPublicText(candidate);
   const errors = [];
-  if (proseContainsLocalPath(text)) errors.push(`${slug}: localized public copy contains a private source path.`);
+  if (proseContainsLocalPath(text)) errors.push('Canonical public data contains a private source path.');
   for (const finding of publicPiiFindings(text)) {
-    errors.push(`${slug}: localized public copy contains prohibited private PII (${finding}).`);
+    errors.push(`Canonical public data contains prohibited private PII (${finding}).`);
   }
   if (/(?:\b(?:PatientName|PatientID|StudyInstanceUID|SOPInstanceUID)\b|환자(?:명|번호|ID))\s*[:=]/i.test(text)) {
-    errors.push(`${slug}: localized public copy contains a private patient identifier.`);
+    errors.push('Canonical public data contains a private patient identifier.');
   }
   return errors;
 }
 
 function portfolioDataErrors(candidate) {
   const errors = render.validatePortfolioData(candidate).slice();
-  for (const project of candidate?.projects || []) errors.push(...projectPublicTextErrors(project));
+  errors.push(...portfolioPublicTextErrors(candidate));
+  for (const project of candidate?.projects || []) {
+    for (const [index, link] of (Array.isArray(project?.links) ? project.links : []).entries()) {
+      if (!link || typeof link.href !== 'string') continue;
+      for (const error of publicEvidenceUrlErrors(link.href)) {
+        errors.push(`${project.slug || 'unknown-project'} link ${index}: unsafe project link (${error})`);
+      }
+    }
+  }
   return errors;
 }
 

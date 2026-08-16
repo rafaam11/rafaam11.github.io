@@ -788,6 +788,24 @@ def preflight_local_evidence(payload: dict[str, Any], publish_root: Path,
     return resolved
 
 
+def selected_pdf_evidence_image(project: dict[str, Any], local_evidence: dict[str, Path]) -> Path | None:
+    """Use an approved image lead directly, or the approved poster paired with a video lead."""
+    media = project.get("media")
+    if not isinstance(media, dict):
+        return None
+    lead = media.get("lead")
+    if not isinstance(lead, dict) or lead.get("id") != project["pdfSequence"]["evidenceId"]:
+        return None
+    if lead.get("type") == "image" and lead.get("status") == "approved":
+        return local_evidence.get(lead.get("id"))
+    if lead.get("type") != "video" or lead.get("status") != "approved":
+        return None
+    poster = media.get("poster")
+    if not isinstance(poster, dict) or poster.get("type") != "image" or poster.get("status") != "approved":
+        return None
+    return local_evidence.get(poster.get("id"))
+
+
 def capability_label(payload: dict[str, Any], key: str, locale: str) -> str:
     for capability in payload["capabilities"]:
         if capability.get("key") == key:
@@ -939,8 +957,7 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     third_block, third_copy = middle_blocks[2]
     y = doc.section("03 / " + third_copy["heading"], third_copy["heading"],
                     block_body(third_block, third_copy), y, 104)
-    selected_evidence_id = project["pdfSequence"]["evidenceId"]
-    selected_image = local_evidence.get(selected_evidence_id)
+    selected_image = selected_pdf_evidence_image(project, local_evidence)
     if selected_image:
         doc.label(f"IMAGE / {labels['approved']}", doc.left, y)
         image_top = y - 18
