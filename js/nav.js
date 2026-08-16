@@ -45,15 +45,16 @@
     var koreanHref = i18n.routeHref(base, 'ko', route, isFile);
     var englishHref = i18n.routeHref(base, 'en', route, isFile);
     var languageSwitch =
-      '<div class="language-switch" aria-label="' + escapeHtml(copy.languageSwitcher) + '">' +
-        '<a class="language-option' + (locale === 'ko' ? ' active' : '') + '" href="' + escapeHtml(koreanHref) + '" lang="ko"' +
-          (locale === 'ko' ? ' aria-current="true"' : '') + '>' + escapeHtml(copy.korean) + '</a>' +
+      '<div class="language-switch" role="group" aria-label="' + escapeHtml(copy.languageSwitcher) + '">' +
+        '<a class="language-option' + (locale === 'ko' ? ' active' : '') + '" href="' + escapeHtml(koreanHref) + '" lang="ko" data-route="' + escapeHtml(route) + '"' +
+          (locale === 'ko' ? ' aria-current="page"' : '') + '>' + escapeHtml(copy.korean) + '</a>' +
         '<span aria-hidden="true">|</span>' +
-        '<a class="language-option' + (locale === 'en' ? ' active' : '') + '" href="' + escapeHtml(englishHref) + '" lang="en"' +
-          (locale === 'en' ? ' aria-current="true"' : '') + '>' + escapeHtml(copy.english) + '</a>' +
+        '<a class="language-option' + (locale === 'en' ? ' active' : '') + '" href="' + escapeHtml(englishHref) + '" lang="en" data-route="' + escapeHtml(route) + '"' +
+          (locale === 'en' ? ' aria-current="page"' : '') + '>' + escapeHtml(copy.english) + '</a>' +
       '</div>';
 
-    return '<nav class="navbar navbar-expand-md navbar-light topnav sticky-top">' +
+    return '<a class="ss-skip-link" href="#main-content">' + escapeHtml(copy.skipToContent) + '</a>' +
+    '<nav class="navbar navbar-expand-md navbar-light topnav sticky-top ss-site-nav" aria-label="' + escapeHtml(copy.primaryNavigation) + '">' +
       '<div class="container">' +
         '<a class="navbar-brand" href="' + escapeHtml(i18n.routeHref(base, locale, '', isFile)) + '">Jinmin Kim</a>' +
         '<div class="collapse navbar-collapse" id="siteNavLinks">' +
@@ -73,12 +74,14 @@
 
   function footerHtml(locale) {
     var normalized = i18n.normalizeLocale(locale);
-    return '<div class="foot-social">' +
+    return '<div class="ss-site-footer ss-site-footer__inner">' +
+      '<div class="foot-social ss-site-footer__channels">' +
       '<a href="https://github.com/rafaam11" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>' +
       '<a href="https://www.linkedin.com/in/rlawlsals" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>' +
       '<a href="mailto:uiop3847@naver.com" aria-label="Email"><i class="fas fa-envelope"></i></a>' +
-    '</div>' +
-    '<div class="foot-meta">© 2026 Jinmin Kim · ' + escapeHtml(i18n.ui[normalized].footer) + '</div>';
+      '</div>' +
+      '<div class="foot-meta ss-site-footer__meta">© 2026 Jinmin Kim · ' + escapeHtml(i18n.ui[normalized].footer) + '</div>' +
+    '</div>';
   }
 
   function mount(doc, location) {
@@ -110,7 +113,7 @@
 
     var footMount = doc.getElementById('site-footer');
     if (footMount) {
-      footMount.className = 'site-footer';
+      footMount.className = 'site-footer ss-site-footer';
       footMount.innerHTML = footerHtml(locale);
     }
   }

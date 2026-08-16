@@ -7,13 +7,13 @@
 <link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/projects/surgical-twin/" />
 <link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/projects/surgical-twin/" />
 <title>XR 수술 내비게이션 (XR Surgical Navigation) · Jinmin Kim</title><link rel="icon" href="../../assets/img/favicon.ico" />
-<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
 <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" /><link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800" rel="stylesheet" />
-<link href="../../css/styles.css" rel="stylesheet" /><link href="../../css/cv-theme.css" rel="stylesheet" /><link href="../../css/site.css" rel="stylesheet" /><link href="../../css/case-study.css" rel="stylesheet" />
-</head><body data-base="../../" data-page="projects" data-lang="ko" data-route="projects/surgical-twin/">
+<link href="../../css/styles.css" rel="stylesheet" /><link href="../../css/cv-theme.css" rel="stylesheet" /><link href="../../css/site.css" rel="stylesheet" /><link href="../../css/case-study.css" rel="stylesheet" /><link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet" /><link href="../../css/spatial-signal.css" rel="stylesheet" />
+</head><body class="ss-shell" data-base="../../" data-page="projects" data-lang="ko" data-route="projects/surgical-twin/">
 <header id="site-nav"></header>
 <section class="cs-hero cs-hero--editorial"><div class="cs-wrap"><p class="hero-kicker">3D 정합 및 내비게이션 (3D Registration &amp; Navigation)</p><h1>XR 수술 내비게이션 (XR Surgical Navigation)</h1><p class="cs-hero-summary">복잡한 다중 좌표계와 익숙하지 않은 SDK 문제를 작은 검증 단위로 나누고, 가능한 기능을 선별해 외부 아웃소싱 없이 전체 내비게이션 경로를 통합했습니다.</p><p class="cs-meta"><span class="evidence-state">검증 완료</span> 2023.07 – 2023.11 · 의료 XR R&amp;D</p><div class="cs-badges"><span class="badge">Rigid Registration</span><span class="badge">HoloLens 2</span><span class="badge">Unity</span><span class="badge">Optical Tracking</span></div></div></section>
-<main class="cs-wrap cs-content">
+<main id="main-content" tabindex="-1" class="cs-wrap cs-content">
 <section class="cs-section"><h2>한눈에 보기 (At a glance)</h2><div class="case-overview"><div><p class="cs-tldr">어려운 부분은 홀로그램 렌더링 자체가 아니었습니다. 전문 SDK를 빠르게 익히면서 카메라, 의료영상, 환자, 수술도구, HoloLens 좌표계 사이의 신뢰할 수 있는 공간 변환 체인을 유지하는 일이 핵심이었습니다.</p><figure class="cs-figure"><img src="../../assets/diagrams/nav-digitaltwin-pipeline.svg" alt="추적 입력에서 수술 디지털 트윈과 XR 표시로 이어지는 좌표 정합 파이프라인" /><figcaption>최종 오버레이를 신뢰하기 전에 공간 변환 체인을 유도하고 검증했습니다.</figcaption></figure></div><dl class="case-facts"><div><dt>내 책임 범위</dt><dd>좌표계 수학, SDK 탐색, 필터링 결정, 통합, 시연</dd></div><div><dt>근거</dt><dd>시연과 검토를 통과했고 프로그램의 정량 목표를 달성</dd></div><div><dt>제약</dt><dd>적합한 내부 선례가 없는 전문 SDK 및 도메인 통합</dd></div></dl></div></section>
 <section class="cs-section"><h2>의사결정 타임라인 (Decision Timeline)</h2><div class="decision-timeline">
 <article class="decision-step"><span class="decision-label">불확실성</span><h3>모든 좌표계를 일관되게 만들 수 있는가?</h3><p>카메라, 의료영상, 강체, 환자, 수술도구, 헤드셋 좌표계는 각각 규약이 달랐습니다. 시각적으로 그럴듯한 오버레이도 수학적으로는 틀릴 수 있었습니다.</p></article>
