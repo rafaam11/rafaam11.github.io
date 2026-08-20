@@ -27,7 +27,7 @@ Routes stay `Home / Projects / CV / Contact`, Korean at root and English under `
 Same eight items grouped the same way, with a longer three-line description (problem · owned role · evidence). Status appears as parenthesised text, never as a chip.
 
 ### Case page (figure-led article)
-Title → meta line (period · role · status · collaboration) → lead figure or clip (Figure 1 with caption) → five subsections (Problem / Approach / My role / Results and evidence / Limitations and team result) → gallery (Figures 2–N, two-column figure grid with captions) → links (PDF · paper · repository). The former four `blocks` fold into the subsections.
+Title → meta line (period · status · technology) → thesis sentence → lead figure or clip (Figure 1 with caption) → five subsections (Problem / Approach / My role / Results and evidence / Limitations and team result) → gallery (Figures 2–N, two-column figure grid with captions) → links (PDF · paper · repository). The former four `blocks` fold into the subsections.
 
 ### CV
 Public summary block (existing `PUBLIC CV SUMMARY` markers) above the embedded PDF; no decoration.
