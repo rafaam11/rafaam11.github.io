@@ -398,7 +398,7 @@ test('Task 4 public evidence register covers every canonical media id without pr
   }
 
   const serialized = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
-  assert.doesNotMatch(serialized, /(?:(?:^|[\s(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|Teams|private[\\/]raw|\b(?:CT|MRI|patient|hospital)\b)/i);
+  assert.doesNotMatch(serialized, /(?:(?:^|[\s(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|Teams|private[\\/]raw|\b(?:CT|MRI|patient)\b)/i);
   const aiEvidence = register.entries.filter((entry) => entry.project === 'ai-build-lab');
   assert.deepEqual(aiEvidence.map((entry) => [entry.id, entry.type, entry.state, entry.source]), [
     ['multi-cli-work-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/multi-cli-work'],
@@ -973,8 +973,28 @@ test('privacy and attribution policies reject private names and contribution per
   measured.projects[0].translations.en.evidence += ' Measured pass rate 87%.';
   assert.doesNotMatch(validator.portfolioDataErrors(measured).join(' '), /contribution percentage/i);
   const named = clone(data);
-  named.projects[0].translations.en.summary += ' Samsung Medical partner.';
+  named.projects[0].translations.en.summary += ' Genoray partner.';
   assert.match(validator.portfolioDataErrors(named).join(' '), /nonpublic partner/i);
+});
+
+test('Scholar policy allows approved institution and product names while still rejecting private partners', () => {
+  const approved = clone(data);
+  approved.projects[0].translations.ko.summary += ' 삼성서울병원 구강악안면외과와 협력해 SKADI·SMCNavi 기반으로 통합했고 KERI·ETRI 컨소시엄 과제에 참여합니다.';
+  approved.projects[0].translations.en.summary += ' Built with Samsung Medical Center on SKADI and SMCNavi; Digitrack, KERI, and ETRI are named.';
+  assert.deepEqual(render.dataErrors(approved).filter((error) => /nonpublic partner/i.test(error)), []);
+  assert.deepEqual(validator.portfolioDataErrors(approved).filter((error) => /nonpublic partner/i.test(error)), []);
+
+  const blocked = clone(data);
+  blocked.projects[0].translations.en.summary += ' Genoray partner.';
+  assert.match(render.dataErrors(blocked).join('\n'), /nonpublic partner/i);
+
+  const cv = JSON.parse(read('data/public-cv.json'));
+  cv.identity.translations.ko.summary += ' 삼성서울병원·서울성모병원과 협력했습니다.';
+  cv.identity.translations.en.summary += ' Collaborated with Samsung Medical Center, KERI, and ETRI.';
+  assert.deepEqual(validator.publicCvDataErrors(cv).filter((error) => /prohibited/i.test(error)), []);
+  const stillBlocked = JSON.parse(read('data/public-cv.json'));
+  stillBlocked.identity.translations.ko.summary += ' 연봉 협상 중';
+  assert.match(validator.publicCvDataErrors(stillBlocked).join('\n'), /prohibited/i);
 });
 
 test('canonical validator rejects malformed capabilities, tiers, states, blocks, and media', () => {
@@ -1638,7 +1658,7 @@ test('Task 5 public CV surfaces exclude private and unverified claims', () => {
     read('cv/index.html'),
     read('en/cv/index.html')
   ].join('\n');
-  assert.doesNotMatch(publicCv, /(?:\b\d{2,3}-\d{3,4}-\d{4}\b|\b10-\d{4}-\d+\b|\b(?:age|salary|professor|advisor|patient|hospital|customer)\b|나이|연봉|지도교수|환자|병원|고객|3\s*[–-]\s*4개월|1\s*[–-]\s*2주|주\s*단위|월\s*단위)/i);
+  assert.doesNotMatch(publicCv, /(?:\b\d{2,3}-\d{3,4}-\d{4}\b|\b10-\d{4}-\d+\b|\b(?:age|salary|professor|advisor|patient|customer)\b|나이|연봉|지도교수|환자|고객|3\s*[–-]\s*4개월|1\s*[–-]\s*2주|주\s*단위|월\s*단위)/i);
   assert.match(publicCv, /7/);
   assert.match(publicCv, /3/);
   assert.match(publicCv, /9/);
