@@ -8,6 +8,8 @@
     'mandibular-fracture',
     'life-careverse',
     'rtms-navigation',
+    'respiratory-surface-guidance',
+    'skadi-tracking-software',
     'unmanned-forklift',
     'ai-build-lab'
   ];

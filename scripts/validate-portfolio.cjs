@@ -35,7 +35,6 @@ const excludedProjectSlugs = [
   'orthognathic-ar',
   'quadruped-robot',
   'radioactive-digital-twin',
-  'respiratory-surface-guidance',
   'surgical-twin'
 ];
 const standaloneLegacyFiles = [

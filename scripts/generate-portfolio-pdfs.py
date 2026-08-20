@@ -31,6 +31,8 @@ EXPECTED_SLUGS = [
     "mandibular-fracture",
     "life-careverse",
     "rtms-navigation",
+    "respiratory-surface-guidance",
+    "skadi-tracking-software",
     "unmanned-forklift",
     "ai-build-lab",
 ]
@@ -41,6 +43,8 @@ EXPECTED_DIAGRAM_KIND = {
     "mandibular-fracture": "optimization-loop",
     "life-careverse": "sync-topology",
     "rtms-navigation": "navigation-loop",
+    "respiratory-surface-guidance": "surface-gating-chain",
+    "skadi-tracking-software": "tracking-sdk-stack",
     "unmanned-forklift": "sensor-convergence",
     "ai-build-lab": "product-loop",
 }
@@ -291,7 +295,7 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
         capability_keys.add(key)
         validate_translation_record(capability, f"PDF input capability {index}", ["title"])
 
-    tiers = require_array(payload.get("tiers"), "PDF input tiers", 3)
+    tiers = require_array(payload.get("tiers"), "PDF input tiers", 4)
     tier_keys: set[str] = set()
     for index, value in enumerate(tiers, start=1):
         tier = require_object(value, f"PDF input tier {index}")
@@ -392,7 +396,7 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
             href = require_text(link.get("href"), f"PDF input project {slug} link {link_index} href")
             require(href.startswith("https://"), f"PDF input project {slug} link {link_index} must use HTTPS.")
             validate_translation_record(link, f"PDF input project {slug} link {link_index}", ["label"])
-    require(project_slugs == EXPECTED_SLUGS, "PDF input must contain the six canonical projects in order.")
+    require(project_slugs == EXPECTED_SLUGS, "PDF input must contain the eight canonical projects in order.")
 
     evidence_entries = require_array(payload.get("evidence"), "PDF input evidence")
     evidence_ids: set[str] = set()
@@ -649,7 +653,7 @@ class TechnicalDocument:
         return y - height
 
     def diagram(self, kind: str, title: str, nodes: list[str], y: float) -> float:
-        """Draw one of six project-specific explanatory geometries."""
+        """Draw one of eight project-specific explanatory geometries."""
         c = self.canvas
         area_height = 188
         top = y
@@ -723,6 +727,20 @@ class TechnicalDocument:
                 connector(centers[index], centers[(index + 1) % 4], "warm" if index == 3 else "signal")
             for index, center in enumerate(centers):
                 box(*center, 132, 46, nodes[index], index)
+        elif kind == "surface-gating-chain":
+            width = 104
+            centers = [(self.left + 58 + index * 122, center_y) for index in range(4)]
+            for index in range(3):
+                connector((centers[index][0] + width / 2, center_y), (centers[index + 1][0] - width / 2, center_y),
+                          "warm" if index == 2 else "signal")
+            for index, center in enumerate(centers):
+                box(*center, width, 58, nodes[index], index)
+        elif kind == "tracking-sdk-stack":
+            centers = [(center_x, center_y + 54 - index * 36) for index in range(4)]
+            for index in range(3):
+                connector((center_x, centers[index][1] - 15), (center_x, centers[index + 1][1] + 15))
+            for index, center in enumerate(centers):
+                box(*center, 196, 30, nodes[index], index)
         else:
             raise ValueError(f"Unknown PDF diagram kind: {kind}.")
         return bottom
@@ -1330,10 +1348,10 @@ def validate_review_render(dependencies: dict[str, Any], review_dir: Path,
             "Review manifest has an invalid schema.")
     require(manifest["renderer"] == "PyMuPDF fallback" and manifest["dpi"] == 120,
             "Review manifest has an invalid renderer contract.")
-    require(manifest["pageCount"] == sum(expected_pages.values()) == 76,
-            "Review render must contain exactly 76 pages.")
-    require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 14,
-            "Review manifest must track exactly fourteen documents.")
+    require(manifest["pageCount"] == sum(expected_pages.values()) == 100,
+            "Review render must contain exactly 100 pages.")
+    require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 18,
+            "Review manifest must track exactly eighteen documents.")
     seen: set[str] = set()
     for document in manifest["documents"]:
         require(isinstance(document, dict) and set(document) == {"pdf", "pages", "contactSheet"},
@@ -1396,7 +1414,7 @@ def validate_staged_publication(dependencies: dict[str, Any], output_dir: Path,
         "assets/pdfs/": project_assets,
         "assets/cv/": cv_assets,
     }
-    require(len(manifest["artifacts"]) == 32, "Staged PDF manifest must track exactly 32 artifacts.")
+    require(len(manifest["artifacts"]) == 40, "Staged PDF manifest must track exactly 40 artifacts.")
     for artifact in manifest["artifacts"]:
         prefix = next((value for value in roots if artifact["path"].startswith(value)), None)
         require(prefix is not None, f"Manifest artifact has an invalid path: {artifact['path']}.")

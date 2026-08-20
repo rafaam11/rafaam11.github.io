@@ -22,6 +22,8 @@ const slugs = [
   'mandibular-fracture',
   'life-careverse',
   'rtms-navigation',
+  'respiratory-surface-guidance',
+  'skadi-tracking-software',
   'unmanned-forklift',
   'ai-build-lab'
 ];
@@ -32,7 +34,7 @@ const capabilityKeys = [
   'xr-engineering',
   'ai-product-engineering'
 ];
-const tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
+const tierKeys = ['medical-core', 'platform', 'industrial-spotlight', 'ai-build-lab'];
 const validPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
 
 function fixtureCrc32(buffer) {
@@ -88,7 +90,6 @@ const excludedProjectSlugs = [
   'orthognathic-ar',
   'quadruped-robot',
   'radioactive-digital-twin',
-  'respiratory-surface-guidance',
   'surgical-twin'
 ];
 const standaloneLegacyFiles = [
@@ -384,13 +385,13 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 11);
+  assert.equal(register.entries.length, 14);
   assert.deepEqual(
     Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
       state,
       register.entries.filter((entry) => entry.state === state).length
     ])),
-    { 'pending-review': 8, 'approved-public': 3, excluded: 0 }
+    { 'pending-review': 11, 'approved-public': 3, excluded: 0 }
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -449,7 +450,7 @@ test('Task 4 evidence registry rejects missing, duplicate, mismatched, and unapp
 
 test('Task 4 approved local raster validation enforces slug containment, safe names, existence, and dimensions', () => {
   const candidate = clone(data);
-  candidate.projects[4].media.lead = {
+  candidate.projects[6].media.lead = {
     id: 'forklift-registration-pointcloud',
     type: 'image',
     status: 'approved',
@@ -457,12 +458,12 @@ test('Task 4 approved local raster validation enforces slug containment, safe na
   };
   const canonical = validator.readEvidenceRegister(root).entries;
   const approvedRows = canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
-    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    ? { ...entry, state: 'approved-public', source: candidate.projects[6].media.lead.publicPath }
     : entry);
 
   withEvidenceRoot(evidenceRegisterText(approvedRows), (temporaryRoot) => {
     assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /missing approved local asset/i);
-    const target = path.join(temporaryRoot, candidate.projects[4].media.lead.publicPath);
+    const target = path.join(temporaryRoot, candidate.projects[6].media.lead.publicPath);
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, 'not a png');
     assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /valid intrinsic dimensions/i);
@@ -476,7 +477,7 @@ test('Task 4 approved local raster validation enforces slug containment, safe na
     'assets/projects/unmanned-forklift/point-cloud.svg'
   ]) {
     const malformed = clone(candidate);
-    malformed.projects[4].media.lead.publicPath = publicPath;
+    malformed.projects[6].media.lead.publicPath = publicPath;
     const malformedRows = canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
       ? { ...entry, state: 'approved-public', source: publicPath }
       : entry);
@@ -599,13 +600,13 @@ test('Task 4 review structurally detects source paths while allowing plain exclu
 
 test('Task 4 review requires exact filesystem case and rejects link or realpath escape', () => {
   const candidate = clone(data);
-  candidate.projects[4].media.lead = {
+  candidate.projects[6].media.lead = {
     id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
     publicPath: 'assets/projects/unmanned-forklift/point-cloud.png'
   };
   const canonical = validator.readEvidenceRegister(root).entries;
   const approved = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
-    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    ? { ...entry, state: 'approved-public', source: candidate.projects[6].media.lead.publicPath }
     : entry));
 
   withEvidenceRoot(approved, (temporaryRoot) => {
@@ -630,13 +631,13 @@ test('Task 4 review requires exact filesystem case and rejects link or realpath 
 
 test('Task 4 review rejects truncated or corrupt PNG files that only expose an IHDR size', () => {
   const candidate = clone(data);
-  candidate.projects[4].media.lead = {
+  candidate.projects[6].media.lead = {
     id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
     publicPath: 'assets/projects/unmanned-forklift/point-cloud.png'
   };
   const canonical = validator.readEvidenceRegister(root).entries;
   const approved = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
-    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    ? { ...entry, state: 'approved-public', source: candidate.projects[6].media.lead.publicPath }
     : entry));
 
   for (const payload of [validPng.subarray(0, 24), (() => {
@@ -645,7 +646,7 @@ test('Task 4 review rejects truncated or corrupt PNG files that only expose an I
     return corrupted;
   })()]) {
     withEvidenceRoot(approved, (temporaryRoot) => {
-      const target = path.join(temporaryRoot, candidate.projects[4].media.lead.publicPath);
+      const target = path.join(temporaryRoot, candidate.projects[6].media.lead.publicPath);
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.writeFileSync(target, payload);
       assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join(' '), /structurally complete and decodable/i);
@@ -655,13 +656,13 @@ test('Task 4 review rejects truncated or corrupt PNG files that only expose an I
 
 test('Task 4 review rejects privacy-bearing metadata in an otherwise valid approved PNG', () => {
   const candidate = clone(data);
-  candidate.projects[4].media.lead = {
+  candidate.projects[6].media.lead = {
     id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
     publicPath: 'assets/projects/unmanned-forklift/point-cloud.png'
   };
   const canonical = validator.readEvidenceRegister(root).entries;
   const approved = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
-    ? { ...entry, state: 'approved-public', source: candidate.projects[4].media.lead.publicPath }
+    ? { ...entry, state: 'approved-public', source: candidate.projects[6].media.lead.publicPath }
     : entry));
   const metadataFixtures = [
     ['tEXt', Buffer.from('Source\0C:\\Users\\patient\\private\\raw\\scan.png')],
@@ -672,7 +673,7 @@ test('Task 4 review rejects privacy-bearing metadata in an otherwise valid appro
   ];
   for (const [type, payload] of metadataFixtures) {
     withEvidenceRoot(approved, (temporaryRoot) => {
-      const target = path.join(temporaryRoot, candidate.projects[4].media.lead.publicPath);
+      const target = path.join(temporaryRoot, candidate.projects[6].media.lead.publicPath);
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.writeFileSync(target, pngWithMetadata(type, payload));
       assert.deepEqual(validator.imageDimensions(target, '.png'), { width: 1, height: 1 });
@@ -754,7 +755,7 @@ test('Task 4 review rejects an approved secondary video when the approved lead i
   });
 });
 
-test('Task 4 review root inventory permits only the register and six canonical project directories', () => {
+test('Task 4 review root inventory permits only the register and eight canonical project directories', () => {
   const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
   withEvidenceRoot(registerText, (temporaryRoot) => {
     seedEvidenceReadmes(temporaryRoot);
@@ -829,12 +830,12 @@ test('Task 4 review validates source and prose columns structurally without reje
   });
 
   const restrictedCandidate = clone(data);
-  restrictedCandidate.projects[4].media.lead = {
+  restrictedCandidate.projects[6].media.lead = {
     id: 'forklift-registration-pointcloud', type: 'image', status: 'approved',
     publicPath: 'assets/projects/unmanned-forklift/extracted/point-cloud.png'
   };
   const restrictedRows = evidenceRegisterText(canonical.map((entry) => entry.id === 'forklift-registration-pointcloud'
-    ? { ...entry, state: 'approved-public', source: restrictedCandidate.projects[4].media.lead.publicPath }
+    ? { ...entry, state: 'approved-public', source: restrictedCandidate.projects[6].media.lead.publicPath }
     : entry));
   withEvidenceRoot(restrictedRows, (temporaryRoot) => {
     assert.match(validator.evidenceRegistryErrors(restrictedCandidate, temporaryRoot).join(' '), /restricted source directory segment/i);
@@ -945,6 +946,7 @@ test('Task 4 review requires one exact header and one exact adjacent six-cell se
 test('Task 3 review preserves literal tier and evidence-state mappings', () => {
   assert.deepEqual(data.tiers.map((tier) => [tier.key, tier.translations.ko.label, tier.translations.en.label]), [
     ['medical-core', '의료 코어', 'Medical Core'],
+    ['platform', '플랫폼 소프트웨어', 'Platform Software'],
     ['industrial-spotlight', '산업 스포트라이트', 'Industrial Spotlight'],
     ['ai-build-lab', 'AI 빌드 랩', 'AI Build Lab']
   ]);
@@ -953,6 +955,8 @@ test('Task 3 review preserves literal tier and evidence-state mappings', () => {
     ['mandibular-fracture', 'medical-core', 'verified'],
     ['life-careverse', 'medical-core', 'ongoing'],
     ['rtms-navigation', 'medical-core', 'prototype'],
+    ['respiratory-surface-guidance', 'medical-core', 'ongoing'],
+    ['skadi-tracking-software', 'platform', 'ongoing'],
     ['unmanned-forklift', 'industrial-spotlight', 'ongoing'],
     ['ai-build-lab', 'ai-build-lab', 'ongoing']
   ]);
@@ -1016,15 +1020,15 @@ test('canonical validator rejects malformed capabilities, tiers, states, blocks,
   }
 });
 
-test('route descriptors keep four public pages and six paired case routes', () => {
+test('route descriptors keep four public pages and eight paired case routes', () => {
   assert.deepEqual(i18n.supportedNavigationPages, ['home', 'projects', 'cv', 'contact']);
   assert.deepEqual(i18n.canonicalCaseSlugs, slugs);
   assert.deepEqual(validator.portfolioRoutes().map((item) => item.route), [
     '', 'projects/', 'cv/', 'contact/', ...slugs.map((slug) => `projects/${slug}/`)
   ]);
   const files = canonicalPages();
-  assert.equal(files.length, 20);
-  assert.equal(new Set(files.map((item) => item.relativePath)).size, 20);
+  assert.equal(files.length, 24);
+  assert.equal(new Set(files.map((item) => item.relativePath)).size, 24);
 });
 
 test('route helpers preserve locale and explicit file protocol targets', () => {
@@ -1303,7 +1307,7 @@ test('Scholar case article orders header, figure, five sections, gallery, and li
   assert.doesNotMatch(pendingGallery, /sc-gallery/);
 });
 
-test('Task 3 all twelve case shells share one fetch-free, localized renderer contract', () => {
+test('Task 3 all sixteen case shells share one fetch-free, localized renderer contract', () => {
   for (const locale of ['ko', 'en']) {
     for (const project of data.projects) {
       const file = `${locale === 'en' ? 'en/' : ''}projects/${project.slug}/index.html`;
@@ -1462,7 +1466,7 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
   }
 });
 
-test('Task 5 publishes exactly twelve six-page project PDFs and two two-page CV PDFs', () => {
+test('Task 5 publishes exactly sixteen six-page project PDFs and two two-page CV PDFs', () => {
   const projectNames = slugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
   const outputNames = fs.readdirSync(path.join(root, 'output', 'pdf'))
@@ -1494,7 +1498,7 @@ test('Task 5 publishes exactly twelve six-page project PDFs and two two-page CV 
   assert.deepEqual(validator.pdfArtifactErrors(root), []);
 });
 
-test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status on all twelve PDF covers', (t) => {
+test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status on all sixteen PDF covers', (t) => {
   const python = task5Python();
   if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
   const expected = {
@@ -1502,6 +1506,8 @@ test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status o
     'mandibular-fracture': { ko: '검증됨 · 완료', en: 'Verified · Completed' },
     'life-careverse': { ko: '진행 중', en: 'Ongoing' },
     'rtms-navigation': { ko: '프로토타입 · 진행 중', en: 'Prototype · Ongoing' },
+    'respiratory-surface-guidance': { ko: '진행 중 · 연구', en: 'Ongoing · Research' },
+    'skadi-tracking-software': { ko: '진행 중', en: 'Ongoing' },
     'unmanned-forklift': { ko: '진행 중', en: 'Ongoing' },
     'ai-build-lab': { ko: '진행 중', en: 'Ongoing' }
   };
@@ -1718,7 +1724,7 @@ test('Task 5 manifest freshness follows canonical project, evidence, and public 
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   assert.equal(manifest.schemaVersion, 3);
   assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
-  assert.equal(manifest.artifacts.length, 32);
+  assert.equal(manifest.artifacts.length, 40);
   assert.equal(manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview').length, 4);
 
   const changedPortfolio = clone(data);
@@ -1738,12 +1744,14 @@ test('Task 5 manifest freshness follows canonical project, evidence, and public 
   }
 });
 
-test('Task 5 integrated review requires four project-specific middle blocks and six diagram contracts', () => {
+test('Task 5 integrated review requires four project-specific middle blocks and eight diagram contracts', () => {
   const expectedKinds = new Map([
     ['surgical-navigation', 'coordinate-chain'],
     ['mandibular-fracture', 'optimization-loop'],
     ['life-careverse', 'sync-topology'],
     ['rtms-navigation', 'navigation-loop'],
+    ['respiratory-surface-guidance', 'surface-gating-chain'],
+    ['skadi-tracking-software', 'tracking-sdk-stack'],
     ['unmanned-forklift', 'sensor-convergence'],
     ['ai-build-lab', 'product-loop']
   ]);
@@ -1763,7 +1771,7 @@ test('Task 5 integrated review requires four project-specific middle blocks and 
       assert.equal(diagram.nodes.every((node) => typeof node === 'string' && node.trim()), true);
     }
   }
-  assert.equal(seenKinds.size, 6);
+  assert.equal(seenKinds.size, 8);
   assert.deepEqual(validator.portfolioDataErrors(data), []);
 
   const malformed = clone(data);
@@ -2631,7 +2639,7 @@ test('published localized pages never rewrite parent traversal into external URL
   }
 });
 
-test('Task 6 tracked site HTML inventory is exactly the twenty canonical localized routes', () => {
+test('Task 6 tracked site HTML inventory is exactly the twenty-four canonical localized routes', () => {
   const expected = canonicalPages().map((file) => file.relativePath.replace(/\\/g, '/')).sort();
   const actual = trackedFiles('*.html').filter((relativePath) => (
     !relativePath.startsWith('public/') &&
@@ -3610,6 +3618,8 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
     ['mandibular-fracture', 'verified', 'completed'],
     ['life-careverse', 'ongoing', 'ongoing'],
     ['rtms-navigation', 'prototype', 'ongoing'],
+    ['respiratory-surface-guidance', 'ongoing', 'research'],
+    ['skadi-tracking-software', 'ongoing', 'ongoing'],
     ['unmanned-forklift', 'ongoing', 'ongoing'],
     ['ai-build-lab', 'ongoing', 'ongoing']
   ]);
@@ -3617,6 +3627,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
   const projectsHtml = render.projectGroupsHtml(data, '', false, 'en');
   assert.match(projectsHtml, /Verified · Completed/);
   assert.match(projectsHtml, /Prototype · Ongoing/);
+  assert.match(projectsHtml, /Ongoing · Research/);
   assert.doesNotMatch(projectsHtml, /Ongoing · Ongoing/);
   const caseHtml = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'ko');
   assert.match(caseHtml, /<span>검증됨 · 완료<\/span>/);
