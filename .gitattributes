@@ -1,0 +1,9 @@
+# Keep every text file LF in the working tree: validators hash cv/index.html and the generated CV summary byte-for-byte,
+# and a CRLF checkout (core.autocrlf=true on Windows) silently breaks those checks.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.mp4 binary
