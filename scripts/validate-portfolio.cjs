@@ -285,6 +285,9 @@ function canonicalMediaEntries(candidate) {
     for (const [index, item] of (Array.isArray(media.references) ? media.references : []).entries()) {
       entries.push({ project, item, slot: `reference ${index}` });
     }
+    for (const [index, item] of (Array.isArray(media.gallery) ? media.gallery : []).entries()) {
+      entries.push({ project, item, slot: `gallery ${index}` });
+    }
   }
   return entries;
 }
@@ -828,11 +831,12 @@ function evidenceDirectoryErrors(rootDir) {
   return errors;
 }
 
-function publicPortfolioVisualFiles(rootDir) {
-  const mediaItems = data.projects.flatMap((project) => {
+function publicPortfolioVisualFiles(rootDir, candidate = data) {
+  const mediaItems = (Array.isArray(candidate && candidate.projects) ? candidate.projects : []).flatMap((project) => {
     const media = project.media || {};
     const references = Array.isArray(media.references) ? media.references : [];
-    return [media.lead, media.video, media.poster].concat(references).filter(Boolean);
+    const gallery = Array.isArray(media.gallery) ? media.gallery : [];
+    return [media.lead, media.video, media.poster].concat(references, gallery).filter(Boolean);
   });
   const declaredFiles = mediaItems
     .filter((item) => item.status === 'approved' && isSafePublicPath(item.publicPath) && !/^https?:\/\//i.test(item.publicPath))
