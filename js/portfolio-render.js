@@ -158,6 +158,7 @@
     });
     (data && data.tiers || []).forEach(function (tier) { surfaces.push(tier && tier.translations); });
     (data && data.projects || []).forEach(function (project) { surfaces.push(projectPublicCopy(project)); });
+    surfaces.push(data && data.highlights);
     return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
   }
 
@@ -372,6 +373,65 @@
     return errors;
   }
 
+  var galleryMaxItems = 6;
+  var patentNumberPattern = /\b10-\d{4}-\d{6,}\b/;
+
+  function galleryErrors(project, slug) {
+    var gallery = project.media && project.media.gallery;
+    if (gallery === undefined) return [];
+    if (!Array.isArray(gallery)) return [slug + ': media gallery must be an array.'];
+    var errors = [];
+    if (gallery.length > galleryMaxItems) errors.push(slug + ': media gallery allows at most six items.');
+    var seen = [];
+    gallery.forEach(function (item, index) {
+      var label = slug + ' gallery ' + index;
+      errors = errors.concat(mediaItemErrors(item, label, ['image']));
+      if (item && typeof item.id === 'string') {
+        if (seen.includes(item.id)) errors.push(label + ': duplicate gallery id.');
+        seen.push(item.id);
+      }
+      if (item && item.status === 'approved') errors = errors.concat(translationErrors(item, ['caption', 'alt'], label));
+    });
+    return errors;
+  }
+
+  function yearErrors(item, label) {
+    return item && typeof item.year === 'string' && /^\d{4}$/.test(item.year) ? [] : [label + ': requires a four-digit year.'];
+  }
+
+  function highlightsErrors(highlights) {
+    if (highlights === undefined) return [];
+    if (!highlights || typeof highlights !== 'object' || Array.isArray(highlights)) return ['Portfolio highlights must be an object.'];
+    var errors = [];
+    if (!Array.isArray(highlights.publications) || !highlights.publications.length) errors.push('Portfolio highlights require publications.');
+    (Array.isArray(highlights.publications) ? highlights.publications : []).forEach(function (item, index) {
+      var label = 'highlights publication ' + index;
+      errors = errors.concat(yearErrors(item, label), translationErrors(item, ['title', 'venue'], label));
+      if (item && item.href !== undefined && !isSafeProjectLink(item.href)) errors.push(label + ': unsafe link.');
+    });
+    var patents = highlights.patents;
+    if (!patents || typeof patents !== 'object' || Array.isArray(patents)) {
+      errors.push('Portfolio highlights require a patents summary.');
+    } else {
+      if (!Number.isInteger(patents.filed) || !Number.isInteger(patents.registered) || patents.registered > patents.filed) {
+        errors.push('highlights patents: filed and registered must be integers with registered <= filed.');
+      }
+      if (!Array.isArray(patents.items)) errors.push('highlights patents: items must be an array.');
+      (Array.isArray(patents.items) ? patents.items : []).forEach(function (item, index) {
+        var label = 'highlights patent ' + index;
+        errors = errors.concat(yearErrors(item, label), translationErrors(item, ['title'], label));
+        if (!item || !['registered', 'filed'].includes(item.status)) errors.push(label + ': status must be registered or filed.');
+      });
+    }
+    if (!Array.isArray(highlights.awards) || !highlights.awards.length) errors.push('Portfolio highlights require awards.');
+    (Array.isArray(highlights.awards) ? highlights.awards : []).forEach(function (item, index) {
+      var label = 'highlights award ' + index;
+      errors = errors.concat(yearErrors(item, label), translationErrors(item, ['title'], label));
+    });
+    if (patentNumberPattern.test(JSON.stringify(highlights))) errors.push('Portfolio highlights must not include a patent number.');
+    return errors;
+  }
+
   function validatePortfolioData(data) {
     var errors = [];
     if (!data || typeof data !== 'object') return ['Portfolio data must be an object.'];
@@ -458,6 +518,7 @@
               errors = errors.concat(mediaItemErrors(item, slug + ' reference ' + index, referenceMediaTypes));
             });
           }
+          errors = errors.concat(galleryErrors(project, slug));
         }
         if (!Array.isArray(project.blocks) || project.blocks.length === 0) {
           errors.push(slug + ': missing structural blocks.');
@@ -543,6 +604,7 @@
       });
     }
 
+    errors = errors.concat(highlightsErrors(data.highlights));
     errors = errors.concat(publicCopySafetyErrors(data));
     var serialized = JSON.stringify(data);
     if (policy.contributionPercentagePattern.test(serialized)) errors.push('Shared data contains a contribution percentage.');

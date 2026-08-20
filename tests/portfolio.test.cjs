@@ -3911,3 +3911,65 @@ test('Task 6 follow-up removes the dead case stylesheet and visual fallback meta
 
   assert.deepEqual(violations, []);
 });
+
+test('Scholar gallery contract accepts up to six images and rejects other shapes', () => {
+  const ok = clone(data);
+  ok.projects[0].media.gallery = [
+    { id: 'surgical-navigation-gallery-1', type: 'image', status: 'pending-approval' },
+    { id: 'surgical-navigation-gallery-2', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/gallery-2.png',
+      translations: { ko: { caption: '정합 화면', alt: '정합 화면 캡처' }, en: { caption: 'Registration view', alt: 'Registration view capture' } } }
+  ];
+  assert.deepEqual(render.dataErrors(ok).filter((error) => /gallery/i.test(error)), []);
+  const mutations = [
+    [(candidate) => { candidate.projects[0].media.gallery = 'nope'; }, /gallery must be an array/i],
+    [(candidate) => { candidate.projects[0].media.gallery = Array.from({ length: 7 }, (_, index) => ({ id: `g-${index}`, type: 'image', status: 'pending-approval' })); }, /at most six/i],
+    [(candidate) => { candidate.projects[0].media.gallery = [{ id: 'g-video', type: 'video', status: 'pending-approval' }]; }, /unsupported video media type/i],
+    [(candidate) => { candidate.projects[0].media.gallery = [{ id: 'g-1', type: 'image', status: 'approved' }]; }, /approved media requires a public path/i],
+    [(candidate) => { candidate.projects[0].media.gallery = [{ id: 'g-1', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/g-1.png' }]; }, /missing ko translation for caption/i],
+    [(candidate) => { candidate.projects[0].media.gallery = [{ id: 'dup', type: 'image', status: 'pending-approval' }, { id: 'dup', type: 'image', status: 'pending-approval' }]; }, /duplicate gallery id/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const candidate = clone(data);
+    mutate(candidate);
+    assert.match(render.dataErrors(candidate).join('\n'), expected);
+    assert.match(validator.portfolioDataErrors(candidate).join('\n'), expected);
+  }
+});
+
+test('Scholar gallery items participate in evidence registry and public visual file checks', () => {
+  const candidate = clone(data);
+  candidate.projects[0].media.gallery = [{ id: 'surgical-navigation-gallery-unregistered', type: 'image', status: 'pending-approval' }];
+  assert.match(validator.evidenceRegistryErrors(candidate, root).join('\n'), /gallery 0 surgical-navigation-gallery-unregistered: canonical media id is not registered/i);
+
+  const approved = clone(data);
+  approved.projects[0].media.gallery = [{ id: 'surgical-navigation-gallery-1', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/gallery-1.png',
+    translations: { ko: { caption: 'c', alt: 'a' }, en: { caption: 'c', alt: 'a' } } }];
+  const files = validator.publicPortfolioVisualFiles(root, approved).map((file) => file.relativePath.replace(/\\/g, '/'));
+  assert.ok(files.includes('assets/projects/surgical-navigation/gallery-1.png'));
+});
+
+test('Scholar highlights contract validates publications, patents, and awards without patent numbers', () => {
+  const base = {
+    publications: [{ year: '2024', href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { title: '제목', venue: '학술지' }, en: { title: 'Title', venue: 'Journal' } } }],
+    patents: { filed: 7, registered: 3, items: [{ year: '2024', status: 'registered', translations: { ko: { title: '특허' }, en: { title: 'Patent' } } }] },
+    awards: [{ year: '2024', translations: { ko: { title: '수상' }, en: { title: 'Award' } } }]
+  };
+  const ok = clone(data);
+  ok.highlights = clone(base);
+  assert.deepEqual(render.dataErrors(ok).filter((error) => /highlight/i.test(error)), []);
+  const mutations = [
+    [(candidate) => { candidate.highlights = []; }, /highlights must be an object/i],
+    [(candidate) => { candidate.highlights.publications = []; }, /require publications/i],
+    [(candidate) => { candidate.highlights.publications[0].href = 'http://example.com/x'; }, /unsafe link/i],
+    [(candidate) => { candidate.highlights.patents.registered = 9; }, /registered <= filed/i],
+    [(candidate) => { candidate.highlights.patents.items[0].translations.ko.title = '특허 10-2024-0186869'; }, /patent number/i],
+    [(candidate) => { candidate.highlights.awards[0].year = '24'; }, /four-digit year/i],
+    [(candidate) => { delete candidate.highlights.awards[0].translations.en; }, /missing en translation for title/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const candidate = clone(data);
+    candidate.highlights = clone(base);
+    mutate(candidate);
+    assert.match(render.dataErrors(candidate).join('\n'), expected);
+  }
+});
