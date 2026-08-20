@@ -128,7 +128,12 @@
     });
     (data && data.tiers || []).forEach(function (tier) { surfaces.push(tier && tier.translations); });
     (data && data.projects || []).forEach(function (project) { surfaces.push(projectPublicCopy(project)); });
-    surfaces.push(data && data.highlights);
+    var highlights = data && data.highlights;
+    if (highlights) {
+      (highlights.publications || []).forEach(function (item) { surfaces.push(item && item.translations); });
+      (highlights.patents && highlights.patents.items || []).forEach(function (item) { surfaces.push(item && item.translations); });
+      (highlights.awards || []).forEach(function (item) { surfaces.push(item && item.translations); });
+    }
     return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
   }
 

@@ -42,7 +42,8 @@ const standaloneLegacyFiles = [
   'js/scripts.js',
   'js/spatial-signal.js',
   'css/styles.css',
-  'css/cv-theme.css'
+  'css/cv-theme.css',
+  'css/spatial-signal.css'
 ];
 const ignoredHtmlInventoryRoots = new Set(['.git', '.superpowers', 'docs', 'node_modules', 'public']);
 const evidenceRegisterRelativePath = path.join('assets', 'projects', 'EVIDENCE_REGISTER.md');
@@ -1861,7 +1862,7 @@ function pageDependencyErrors(file, html, parsedTags) {
   const relativePath = toPosix(file.relativePath);
   const depth = relativePath.split('/').length - 1;
   const base = '../'.repeat(depth);
-  const requiredStyles = [`${base}css/site.css`, `${base}css/spatial-signal.css`];
+  const requiredStyles = [`${base}css/site.css`, `${base}css/scholar.css`];
   if (file.page === 'cv') requiredStyles.push(`${base}css/cv-pdf.css`);
   const requiredScripts = [`${base}js/site-i18n.js`, `${base}js/nav.js`];
   if (file.page === 'home' || file.page === 'projects') {

@@ -95,7 +95,8 @@ const standaloneLegacyFiles = [
   'js/scripts.js',
   'js/spatial-signal.js',
   'css/styles.css',
-  'css/cv-theme.css'
+  'css/cv-theme.css',
+  'css/spatial-signal.css'
 ];
 
 function read(relativePath) {
@@ -185,8 +186,9 @@ function copyTask6Surface(targetRoot) {
   for (const relativePath of [
     'data/public-cv.json',
     'assets/img/favicon.ico',
+    'assets/img/profile_square.webp',
     'css/site.css',
-    'css/spatial-signal.css',
+    'css/scholar.css',
     'css/cv-pdf.css',
     'js/site-i18n.js',
     'js/portfolio-data.js',
@@ -1102,26 +1104,28 @@ test('Scholar highlights render three numbered groups and a linked publication',
   const html = render.highlightsHtml(candidate, 'ko');
   assertInOrder(html, ['<h3>논문</h3>', 'https://link.springer.com/article/10.1007/s10278-024-01014-z', '논문 제목', '<h3>특허</h3>', '출원 7건 · 등록 3건', '특허 제목', '<h3>수상</h3>', '수상 제목'], 'highlights');
   assert.equal(count(html, '<ol class="sc-list">'), 3);
-  assert.equal(render.highlightsHtml(data, 'en'), '', 'no highlights data renders nothing');
+  const withoutHighlights = clone(data);
+  delete withoutHighlights.highlights;
+  assert.equal(render.highlightsHtml(withoutHighlights, 'en'), '', 'no highlights data renders nothing');
 });
 
-test('Task 3 Home shells preserve exact thesis, section order, and six-link no-JS fallback', () => {
+test('Scholar Home shells carry the intro, four mounts, and a full no-JS project list', () => {
   const pages = [
-    ['index.html', '3D 정합과 공간 시스템을 설계하고 구현합니다.', data.projects.map((item) => item.translations.ko.title)],
-    ['en/index.html', 'I design and build 3D registration and spatial systems.', data.projects.map((item) => item.translations.en.title)]
+    ['index.html', '로봇SW 엔지니어', data.projects.map((item) => item.translations.ko.title), 'assets/'],
+    ['en/index.html', 'robot software engineer', data.projects.map((item) => item.translations.en.title), '../assets/']
   ];
-  for (const [file, thesis, titles] of pages) {
+  for (const [file, identity, titles, assetBase] of pages) {
     const html = read(file);
-    assert.match(html, new RegExp(thesis.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-    assertInOrder(html, ['td-home-hero', 'data-portfolio="home-projects"', 'data-portfolio="capability-index"', 'td-home-contact'], file);
-    const fallback = html.match(/<div class="td-home-projects__fallback">([\s\S]*?)<\/div>\s*<\/section>/)?.[1] || '';
-    assert.equal(count(fallback, '<a '), 6, `${file}: fallback link count`);
+    assert.match(html, new RegExp(identity, 'i'));
+    assertInOrder(html, ['class="sc-intro"', 'data-portfolio="capability-index"', 'data-portfolio="home-projects"', 'data-portfolio="home-highlights"', 'class="sc-contact"'], file);
+    assert.match(html, new RegExp(`<img class="sc-intro__photo" src="${assetBase}img/profile_square.webp"`));
+    assert.match(html, /mailto:uiop3847@naver\.com/);
+    assert.match(html, /https:\/\/www\.linkedin\.com\/in\/rlawlsals/);
+    assert.match(html, new RegExp(`${assetBase}cv/jinmin-kim-cv-(?:ko|en)\\.pdf`));
+    const fallback = html.match(/<ol class="sc-project-list sc-project-list--fallback">([\s\S]*?)<\/ol>/)?.[1] || '';
+    assert.equal(count(fallback, '<a '), data.projects.length, `${file}: fallback link count`);
     assertInOrder(fallback, titles, `${file}: fallback project titles`);
-    assert.doesNotMatch(
-      fallback,
-      />\s*(?:VIDEO|IMAGE|REPOSITORY)\s*\/|>Pending approval<|>Public evidence<|>공개 승인 대기<|>공개 근거<|>Verified<|>Ongoing<|>Prototype<|>검증됨<|>진행 중<|>프로토타입</,
-      `${file}: Home fallback must expose only a visual field and title`
-    );
+    assert.doesNotMatch(html, /td-eyebrow|td-home-hero|td-mosaic|hero-kicker|SELECTED WORK|JOINT DEVELOPMENT|공동개발 파트너|박사|진학|이직|PhD|admission/i, `${file}: no Spatial Signal residue or career wording`);
   }
 });
 
@@ -1394,53 +1398,40 @@ test('selected project and CV routes retain paired file-safe locale metadata', (
   }
 });
 
-test('Task 3 Contact asks joint-development partners for problem, data or sensors, validation, and schedule', () => {
+test('Scholar Contact invites research collaboration in neutral wording', () => {
   const pages = [
-    ['contact/index.html', [/공동개발/, /문제/, /데이터|센서/, /검증/, /일정/]],
-    ['en/contact/index.html', [/joint development/i, /problem/i, /data|sensors/i, /validation/i, /schedule/i]]
+    ['contact/index.html', [/공동연구/, /연구 협력/, /문제/, /데이터|센서/, /검증/, /일정/]],
+    ['en/contact/index.html', [/joint research/i, /research collaboration/i, /problem/i, /data|sensors/i, /validation/i, /schedule/i]]
   ];
   for (const [file, patterns] of pages) {
     const html = read(file);
     for (const pattern of patterns) assert.match(html, pattern, `${file}: ${pattern}`);
     assert.match(html, /mailto:uiop3847@naver\.com/);
     assert.match(html, /https:\/\/github\.com\/rafaam11/);
-    assert.doesNotMatch(html, /<form\b|LinkedIn|response time|consultation|시니어 R&amp;D|채용/i);
+    assert.ok(count(html.match(/<main[\s\S]*<\/main>/)?.[0] || '', '<p') <= 4, `${file}: at most three paragraphs plus the link line`);
+    assert.doesNotMatch(html, /<form\b|response time|consultation|채용|박사|진학|이직|PhD|admission|graduate program|job change|td-eyebrow|hero-kicker/i);
   }
 });
 
-test('Task 3 technical-document CSS exposes the instrument palette, grid, provenance, focus, and reduced motion', () => {
-  const css = [read('css/site.css'), read('css/spatial-signal.css')].join('\n');
-  for (const value of ['#eef1ef', '#fbfcfb', '#101715', '#586560', '#b9c4c0', '#0c6b5e', '#a94b32']) assert.match(css, new RegExp(value, 'i'));
-  assert.match(css, /--td-max:\s*1240px/);
-  assert.match(css, /repeat\(12,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(css, /\.td-media-ledger/);
+test('Scholar CSS keeps the quiet researcher palette and no decorative devices', () => {
+  const siteCss = read('css/site.css');
+  const scholarCss = read('css/scholar.css');
+  const css = `${siteCss}\n${scholarCss}`;
+  assert.equal(fs.existsSync(path.join(root, 'css', 'spatial-signal.css')), false, 'spatial-signal.css must be deleted');
+  for (const value of ['#1a1a1a', '#555', '#e5e5e5', '#1a56db', '--sc-max: 880px']) assert.match(css, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+  assert.doesNotMatch(css, /text-transform\s*:\s*uppercase|ui-monospace|SFMono|gradient|box-shadow|--td-|\.td-(?!shell|site-nav|site-footer|cv-|section-heading)/i);
+  for (const selector of ['.td-shell', '.td-site-nav', '.td-site-footer', '.td-shell .ss-skip-link', '.sc-intro', '.sc-project-list', '.sc-project', '.sc-project__thumb', '.sc-figure', '.sc-gallery__grid', '.sc-highlights', '.sc-case', '.sc-contact', '.hero-kicker']) {
+    assert.ok(cssRuleBodies(css, selector).length, `missing selector ${selector}`);
+  }
+  assert.ok(cssRuleBodies(siteCss, '.td-site-nav .nav-link').some((body) => /min-height\s*:\s*44px/.test(body)));
   assert.match(css, /:focus-visible/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
-  const technical = css.match(/\/\* Task 3 technical-document system \*\/[\s\S]*?\/\* Task 3 technical-document system end \*\//)?.[0] || '';
-  assert.doesNotMatch(technical, /gradient|box-shadow/i);
-});
-
-test('Task 3 review technical-document CSS stays narrow, touch, and reduced-motion safe', () => {
-  const siteCss = read('css/site.css');
-  const spatialCss = read('css/spatial-signal.css');
-  assert.ok(cssRuleBodies(siteCss, '.td-site-nav .nav-link').some((body) => /min-height\s*:\s*44px/.test(body)));
-  assert.ok(cssRuleBodies(spatialCss, '.td-pdf-cta > a').some((body) => /min-height\s*:\s*44px/.test(body)));
-  assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(max-width:\s*700px\)/i)
-    .some((body) => /\.td-project-row[\s\S]*grid-template-columns:\s*1fr/.test(body)));
-  assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(max-width:\s*760px\)/i)
-    .some((body) => /\.td-case-block[\s\S]*grid-column:\s*1\s*\/\s*-1/.test(body)));
-  assert.ok(cssAtRuleBodies(spatialCss, /@media\s*\(prefers-reduced-motion:\s*reduce\)/i)
-    .some((body) => /\.td-shell\s+\*[\s\S]*animation:\s*none\s*!important[\s\S]*transition-duration:\s*\.01ms\s*!important/.test(body)));
-});
-
-test('Task 3 review case block title scale wins the trailing Spatial Signal cascade', () => {
-  const css = read('css/spatial-signal.css');
-  const generalRuleIndex = css.indexOf('.td-shell h2 { font-size: var(--td-section); }');
-  const overrideIndex = css.indexOf('.td-shell .td-case-block h2');
-  assert.ok(generalRuleIndex >= 0, 'expected the general technical-document H2 scale');
-  assert.ok(overrideIndex > generalRuleIndex, 'case block override must follow the general H2 rule');
-  assert.ok(cssRuleBodies(css, '.td-shell .td-case-block h2')
-    .some((body) => /font-size\s*:\s*var\(--td-title\)/.test(body)));
+  assert.ok(cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*700px\)/i).some((body) => /\.sc-project[\s\S]*grid-template-columns:\s*1fr/.test(body)));
+  assert.ok(cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*760px\)/i).some((body) => /\.sc-gallery__grid[\s\S]*grid-template-columns:\s*1fr/.test(body)));
+  assert.ok(siteCss.split(/\r?\n/).length <= 160, 'site.css stays a small shared shell');
+  assert.ok(scholarCss.split(/\r?\n/).length <= 300, 'scholar.css stays compact');
+  const ssClasses = [...new Set([...css.matchAll(/\.((?:ss)-[a-z0-9_-]+)/gi)].map((match) => match[1]))].sort();
+  assert.deepEqual(ssClasses, ['ss-skip-link']);
 });
 
 test('Task 5 exporter produces deterministic public-safe project and CV input', () => {
@@ -3745,54 +3736,6 @@ test('Integrated review marks a project-section nav item as a location, not the 
   assert.match(read('css/site.css'), /\.td-site-nav \.nav-link\[aria-current="location"\]/);
 });
 
-test('Task 6 follow-up keeps a compact runtime-only technical-document CSS contract', () => {
-  const siteCss = read('css/site.css');
-  const spatialCss = read('css/spatial-signal.css');
-  const css = `${siteCss}\n${spatialCss}`;
-  const violations = [];
-
-  const ssClasses = [...new Set([...css.matchAll(/\.((?:ss)-[a-z0-9_-]+)/gi)].map((match) => match[1]))].sort();
-  if (JSON.stringify(ssClasses) !== JSON.stringify(['ss-skip-link'])) {
-    violations.push(`unexpected Spatial Signal classes: ${ssClasses.join(', ')}`);
-  }
-  for (const [label, pattern] of [
-    ['Bootstrap navigation', /\.(?:topnav|navbar(?:-[a-z0-9_-]+)?)(?![a-z0-9_-])/i],
-    ['legacy page system', /\.(?:page-home|page-projects|page-capabilities|hero-editorial|capability-atlas|project-chapter|status-pill)(?![a-z0-9_-])/i],
-    ['legacy case system', /\.(?:cs-|case-overview|decision-timeline|case-pager)/i],
-    ['legacy Spatial Signal variables', /--ss-[a-z0-9_-]+/i]
-  ]) {
-    if (pattern.test(css)) violations.push(label);
-  }
-  if (siteCss.split(/\r?\n/).length > 160) violations.push('site.css remains larger than the shared runtime shell');
-  if (spatialCss.split(/\r?\n/).length > 380) violations.push('spatial-signal.css remains larger than the technical runtime surface');
-
-  for (const selector of [
-    '.td-shell',
-    '.td-site-nav',
-    '.td-site-footer',
-    '.td-shell .ss-skip-link',
-    '.td-site-nav .language-switch',
-    '.hero-kicker',
-    '.td-home-hero',
-    '.td-project-row',
-    '.td-contact-brief',
-    '.td-case',
-    '.td-pdf-cta > a'
-  ]) {
-    if (!cssRuleBodies(css, selector).length) violations.push(`missing runtime selector ${selector}`);
-  }
-  for (const pattern of [
-    /:focus-visible/,
-    /@media\s*\(prefers-reduced-motion:\s*reduce\)/i,
-    /@media\s*\(max-width:\s*900px\)/i,
-    /@media\s*\(max-width:\s*760px\)/i,
-    /@media\s*\(max-width:\s*700px\)/i
-  ]) {
-    if (!pattern.test(css)) violations.push(`missing runtime contract ${pattern}`);
-  }
-  assert.deepEqual(violations, []);
-});
-
 test('Task 6 follow-up removes the dead case stylesheet and visual fallback metadata', () => {
   const violations = [];
   const caseCssPath = path.join(root, 'css', 'case-study.css');
@@ -3875,4 +3818,16 @@ test('Scholar highlights contract validates publications, patents, and awards wi
     mutate(candidate);
     assert.match(render.dataErrors(candidate).join('\n'), expected);
   }
+});
+
+test('Scholar highlights data mirrors the approved public CV signals', () => {
+  assert.ok(data.highlights, 'portfolio data exports highlights');
+  assert.deepEqual(render.dataErrors(data).filter((error) => /highlight/i.test(error)), []);
+  assert.equal(data.highlights.publications.length, 3);
+  assert.equal(data.highlights.publications[0].href, 'https://link.springer.com/article/10.1007/s10278-024-01014-z');
+  assert.deepEqual([data.highlights.patents.filed, data.highlights.patents.registered], [7, 3]);
+  assert.equal(data.highlights.patents.items.length, 3);
+  assert.ok(data.highlights.patents.items.every((item) => item.status === 'registered'));
+  assert.equal(data.highlights.awards.length, 9);
+  assert.doesNotMatch(JSON.stringify(data.highlights), /\b10-\d{4}-\d+\b|홍재성|안재명|강영남|최현석/);
 });
