@@ -1136,7 +1136,7 @@ test('Scholar Projects page groups detailed rows by tier in data order', () => {
     assert.match(group, new RegExp(`<h2 class="sc-group__title">${tier.translations.en.label.replace(/&/g, '&amp;')}</h2>`));
     assert.equal(count(group, '<li class="sc-project'), data.projects.filter((project) => project.tier === tier.key).length);
   }
-  assert.match(html, /<dt>Problem<\/dt>[\s\S]*<dt>Personal role<\/dt>[\s\S]*<dt>Evidence<\/dt>/);
+  assert.match(html, /<dt>Problem<\/dt>[\s\S]*<dt>My role<\/dt>[\s\S]*<dt>Evidence<\/dt>/);
   assert.match(html, /<h3 class="sc-project__title"><a href="\.\.\/en\/projects\/surgical-navigation\/">Surgical Navigation Systems<\/a><\/h3>/);
   assert.doesNotMatch(html, /td-|Featured|More Projects/i);
 });
@@ -1287,7 +1287,7 @@ test('Scholar case article orders header, figure, five sections, gallery, and li
   const candidate = clone(data);
   candidate.projects[1] = project;
   const html = render.caseStudyHtml(candidate, project.slug, '../../../', true, 'en');
-  assertInOrder(html, ['sc-case__header', 'sc-case__meta', 'sc-case__thesis', 'Figure 1.', '<h2>Problem</h2>', '<h2>Approach</h2>', 'data-block-type="system"', 'data-block-type="text"', 'data-block-type="list"', '<h2>Personal role</h2>', '<h2>Results and evidence</h2>', 'data-block-type="evidence"', '<h2>Limits and team result</h2>', 'data-block-type="limitation"', 'sc-gallery', 'Figure 2.', 'First gallery figure', 'Figure 3.', 'Third gallery figure', 'sc-case__links'], 'case sequence');
+  assertInOrder(html, ['sc-case__header', 'sc-case__meta', 'sc-case__thesis', 'Figure 1.', '<h2>Problem</h2>', '<h2>Approach</h2>', 'data-block-type="system"', 'data-block-type="text"', 'data-block-type="list"', '<h2>My role</h2>', '<h2>Results and evidence</h2>', 'data-block-type="evidence"', '<h2>Limits and team result</h2>', 'data-block-type="limitation"', 'sc-gallery', 'Figure 2.', 'First gallery figure', 'Figure 3.', 'Third gallery figure', 'sc-case__links'], 'case sequence');
   assert.match(html, /<ul>[\s\S]*<li>One<\/li>[\s\S]*<li>Two<\/li>/);
   assert.doesNotMatch(html, /mandibular-gallery-2|Figure 4\./);
   assert.match(html, /src="\.\.\/\.\.\/\.\.\/assets\/projects\/mandibular-fracture\/g1\.png" alt="First gallery alt"/);

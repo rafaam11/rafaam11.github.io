@@ -55,7 +55,7 @@
       patentSummary: function (filed, registered) { return '출원 ' + filed + '건 · 등록 ' + registered + '건'; }
     },
     en: {
-      personalRole: 'Personal role', teamResult: 'Team result', period: 'Period', technology: 'Technology',
+      personalRole: 'My role', teamResult: 'Team result', period: 'Period', technology: 'Technology',
       evidence: 'Evidence', problem: 'Problem', approach: 'Approach', results: 'Results and evidence', limits: 'Limits and team result',
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
       contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
