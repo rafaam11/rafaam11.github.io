@@ -37,7 +37,7 @@
     'evidence', 'limitation', 'collaboration', 'mediaAlt', 'mediaCaption'
   ];
   var policy = {
-    prohibitedPartnerPattern: /Digitrack|삼성서울병원|Samsung Medical|\b(?:KERI|KAERI|ANL|SNU|ETRI)\b|HD현대|Hyundai|계명대|동산병원|울산대|이화여대|Genoray|제노레이|Megagen|메가젠|Hallym|한림|Argonne|서울대학교|서울대/i,
+    prohibitedPartnerPattern: /\b(?:KAERI|ANL|SNU)\b|HD현대|Hyundai|계명대|동산병원|울산대|이화여대|Genoray|제노레이|Megagen|메가젠|Hallym|한림|Argonne|서울대학교|서울대/i,
     contributionPercentagePattern: /(?:(?:contribution|ownership|owned|responsibility|role|기여(?:도)?|역할|담당)[\s\S]{0,80}\b\d{1,3}(?:\.\d+)?\s*%|\b\d{1,3}(?:\.\d+)?\s*%[\s\S]{0,80}(?:contribution|ownership|owned|responsibility|role|기여(?:도)?|역할|담당))/i,
     privateCopyPathPattern: /(?:[a-z]:[\\/]|\\\\[^\\/\s]+[\\/]|file:\/\/|\/(?:Users|home|mnt|tmp|var\/tmp)\/|(?:^|[\\/])(?:private|raw|extracted|manifest)(?=[\\/]|$)|\.(?:dcm|dicom)\b)/i,
     privateCopyPhonePattern: /(?:\+?82[- .]?(?:0)?10|010)[- .]?\d{3,4}[- .]?\d{4}/,

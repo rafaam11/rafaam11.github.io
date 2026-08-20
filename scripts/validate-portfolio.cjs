@@ -967,11 +967,11 @@ function publicCvDataErrors(candidate) {
   }
   const prohibitedPatterns = [
     /\b10-\d{4}-\d+\b/,
-    /\b(?:age|salary|professor|advisor|patient|hospital|customer|street address|home address)\b/i,
-    /나이|연봉|지도교수|환자|병원|고객|자택|거주지|주소/,
+    /\b(?:age|salary|professor|advisor|patient|customer|street address|home address)\b/i,
+    /나이|연봉|지도교수|환자|고객|자택|거주지|주소/,
     /\b(?:JPT|OPIc)\b/i,
     /3\s*[-–]\s*4\s*(?:months|개월)|1\s*[-–]\s*2\s*(?:weeks|주)|주\s*단위|월\s*단위/i,
-    /Samsung Medical|삼성서울병원|동산병원|계명대|HD현대|Hyundai|KERI|KAERI|ANL|ETRI/i,
+    /동산병원|계명대|HD현대|Hyundai|KAERI|ANL/i,
     /(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw/i
   ];
   for (const pattern of prohibitedPatterns) {
