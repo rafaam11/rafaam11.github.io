@@ -7,8 +7,8 @@ This file provides guidance to coding agents working in this repository.
 Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaScript 기반이며 빌드 과정이 없습니다.
 
 - **URL:** https://rafaam11.github.io
-- **Positioning:** 3D registration · spatial systems · hands-on research engineering
-- **Audience:** 기술·사업 공동개발 파트너와 senior R&D hiring managers
+- **Positioning:** 3D registration · medical imaging · robot systems — research to field
+- **Audience:** 연구 협력자(의료영상·3D 정합)와 일반 방문자(리크루터·지인)
 - **Structure:** Home / Projects / CV / Contact
 - **Canonical cases:** 6 projects, paired in Korean and English
 - **Capabilities:** 5 implementation-backed stacks presented inside Home and Projects; no standalone route
@@ -47,7 +47,7 @@ js/portfolio-render.js             # Home, Projects, and case renderer
 js/site-i18n.js                    # Canonical route descriptors and localized UI copy
 js/nav.js                          # Shared nav/footer; file:// and HTTP compatible
 css/site.css                       # Shared portfolio components
-css/spatial-signal.css             # Active technical-document visual layer
+css/scholar.css                    # Researcher-style visual system (2026-08-21)
 css/cv-pdf.css                     # CV viewer and page-preview layout
 assets/projects/EVIDENCE_REGISTER.md # Public evidence identifier and approval SSOT
 assets/projects/<slug>/            # Approved derivatives or public-safe boundary README
@@ -71,6 +71,7 @@ public/                            # Generated blog output; never edit for portf
 - Evidence IDs and publication state must match `assets/projects/EVIDENCE_REGISTER.md`. Pending internal media has no public path.
 - Project and CV PDFs are generated artifacts. Use the exporter/generator pipeline; do not hand-edit PDFs.
 - Do not restore the removed Research/Capabilities route, excluded project routes, decorative SVG fallbacks, Bootstrap/StartBootstrap, or the old sidebar layout.
+- Home mounts: capability-index, home-projects, home-highlights; Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
 
 ## Required verification
 

@@ -124,6 +124,40 @@
     }, record);
   }
 
+  var highlights = {
+    publications: [
+      { year: '2024', href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: {
+        ko: { title: 'A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery', venue: 'Journal of Imaging Informatics in Medicine (SCIE Q1) · 공동 제1저자' },
+        en: { title: 'A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery', venue: 'Journal of Imaging Informatics in Medicine (SCIE Q1) · joint first author' } } },
+      { year: '2022', translations: {
+        ko: { title: 'Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery', venue: 'ACCAS 2022, Bangkok · 구두 발표' },
+        en: { title: 'Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery', venue: 'ACCAS 2022, Bangkok · oral presentation' } } },
+      { year: '2019', translations: {
+        ko: { title: 'Design of Ping-Pong Ball Launcher', venue: 'ISM 2019 — International Symposium on Mechatronics' },
+        en: { title: 'Design of Ping-Pong Ball Launcher', venue: 'ISM 2019 — International Symposium on Mechatronics' } } }
+    ],
+    patents: {
+      filed: 7,
+      registered: 3,
+      items: [
+        { year: '2024', status: 'registered', translations: { ko: { title: '수술도구의 실시간 3차원 위치추적을 위한 좌표계 정합 방법' }, en: { title: 'Coordinate-system registration method for real-time 3D tracking of surgical instruments' } } },
+        { year: '2024', status: 'registered', translations: { ko: { title: '위치 추적 장치 및 방법' }, en: { title: 'Position tracking apparatus and method' } } },
+        { year: '2015', status: 'registered', translations: { ko: { title: '일회용 종이컵 수거함' }, en: { title: 'Disposable paper-cup collection box' } } }
+      ]
+    },
+    awards: [
+      { year: '2024', translations: { ko: { title: '의료메타버스학회 우수포스터상' }, en: { title: 'Best Poster Award, Korean Society of Medical Metaverse' } } },
+      { year: '2023', translations: { ko: { title: '대한의료로봇학회 우수논문상' }, en: { title: 'Best Paper Award, Korean Society of Medical Robotics' } } },
+      { year: '2020', translations: { ko: { title: 'KIT 엔지니어링 페어 장려상 (4족 보행 로봇)' }, en: { title: 'Encouragement Award, KIT Engineering Fair (quadruped robot)' } } },
+      { year: '2020', translations: { ko: { title: 'ROS 기반 자율주행 교육 동상' }, en: { title: 'Bronze Prize, ROS-based Autonomous Driving Course' } } },
+      { year: '2019', translations: { ko: { title: '국제 TRIZ 경진대회 대상' }, en: { title: 'Grand Prize, International TRIZ Competition' } } },
+      { year: '2019', translations: { ko: { title: '창업아이디어 경진대회 최우수상' }, en: { title: 'First Prize, Startup Idea Competition' } } },
+      { year: '2019', translations: { ko: { title: '효성 GREEN 지구 공모전 우수상' }, en: { title: 'Excellence Award, Hyosung GREEN Earth Contest' } } },
+      { year: '2019', translations: { ko: { title: '대학창의발명대회 후원기관상' }, en: { title: 'Sponsor Award, University Creative Invention Contest' } } },
+      { year: '2015', translations: { ko: { title: '대학창의발명대회 우수상' }, en: { title: 'Excellence Award, University Creative Invention Contest' } } }
+    ]
+  };
+
   var projects = [
     project({
       slug: 'surgical-navigation',
@@ -474,6 +508,7 @@
     capabilities: capabilities,
     tiers: tiers,
     impactMetrics: impactMetrics,
-    projects: projects
+    projects: projects,
+    highlights: highlights
   };
 });
