@@ -48,48 +48,18 @@
 
   var pageCopy = {
     ko: {
-      mediaApproved: '공개 근거',
-      mediaPending: '공개 승인 대기',
-      fallback: '실제 근거 미디어는 승인 후 공개합니다.',
-      pendingAccessible: '공개 시각 자료 승인 대기: 실제 데모 또는 사진을 표시하지 않습니다.',
-      representativeAccessible: '대표 기술 패널: 실제 데모 또는 사진을 표시하지 않습니다.',
-      personalRole: '개인 역할',
-      teamResult: '팀 결과',
-      period: '기간',
-      technology: '기술 스택',
-      evidence: '근거',
-      evidenceLimits: '근거와 한계',
-      deeperDocument: '더 깊은 사례 문서',
-      pdfDescription: '구조, 결정, 검증 근거를 더 자세히 보려면 사례 PDF를 확인하세요.',
-      openPdf: '사례 PDF 열기',
-      collaboration: '공동개발',
-      contact: '문제와 검증 범위를 함께 정의하기',
-      medicalSummary: '정합, 추적, 의료영상, XR을 실제 워크플로에 연결한 네 가지 핵심 사례입니다.',
-      industrialSummary: '다중 센서 좌표를 위치추정과 안전 판단, 차량 시스템까지 연결합니다.',
-      aiSummary: '직접 겪은 문제를 요구사항, 테스트, 릴리스, 운영되는 도구로 전환합니다.',
-      mediaType: { video: 'VIDEO', image: 'IMAGE', repository: 'REPOSITORY' }
+      personalRole: '내 역할', teamResult: '팀 성과', period: '기간', technology: '기술',
+      evidence: '근거', problem: '문제', approach: '접근', results: '결과와 근거', limits: '한계와 팀 성과',
+      components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
+      contact: '연락처', publications: '논문', patents: '특허', awards: '수상',
+      patentSummary: function (filed, registered) { return '출원 ' + filed + '건 · 등록 ' + registered + '건'; }
     },
     en: {
-      mediaApproved: 'Public evidence',
-      mediaPending: 'Pending approval',
-      fallback: 'Actual evidence media will be published only after approval.',
-      pendingAccessible: 'Public visual pending approval; no actual demo or photograph is shown.',
-      representativeAccessible: 'Representative technical panel; no actual demo or photograph is shown.',
-      personalRole: 'Personal role',
-      teamResult: 'Team result',
-      period: 'Period',
-      technology: 'Technology stack',
-      evidence: 'Evidence',
-      evidenceLimits: 'Evidence & Limits',
-      deeperDocument: 'Deeper case document',
-      pdfDescription: 'Open the case-study PDF for the fuller structure, decisions, and validation evidence.',
-      openPdf: 'Open case-study PDF',
-      collaboration: 'Joint development',
-      contact: 'Define the problem and validation scope together',
-      medicalSummary: 'Four core cases connect registration, tracking, medical imaging, and XR to working workflows.',
-      industrialSummary: 'Multi-sensor coordinates connect to localization, safety decisions, and the vehicle system.',
-      aiSummary: 'Personally experienced problems become required, tested, released, and operated tools.',
-      mediaType: { video: 'VIDEO', image: 'IMAGE', repository: 'REPOSITORY' }
+      personalRole: 'Personal role', teamResult: 'Team result', period: 'Period', technology: 'Technology',
+      evidence: 'Evidence', problem: 'Problem', approach: 'Approach', results: 'Results and evidence', limits: 'Limits and team result',
+      components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
+      contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
+      patentSummary: function (filed, registered) { return filed + ' filed · ' + registered + ' registered'; }
     }
   };
 
@@ -633,21 +603,6 @@
     return states.map(function (state) { return stateLabel(state, locale); }).join(' · ');
   }
 
-  function mediaLedgerHtml(project, locale, displayStatus) {
-    var normalized = localeOf(locale);
-    var copy = pageCopy[normalized];
-    var media = project.media && project.media.lead ? project.media.lead : {};
-    var effectiveStatus = displayStatus || media.status;
-    var mediaStatus = effectiveStatus === 'approved' ? copy.mediaApproved : copy.mediaPending;
-    var modality = copy.mediaType[media.type] || String(media.type || 'EVIDENCE').toUpperCase();
-    return '<div class="td-media-ledger">' +
-      '<span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span>' +
-      '<span>' + escapeHtml(mediaStatus) + '</span>' +
-      '<span>' + escapeHtml(modality) + '</span>' +
-      '<span>' + escapeHtml(project.shortTitle || project.title || project.slug) + '</span>' +
-    '</div>';
-  }
-
   function isApprovedImage(item) {
     return Boolean(item && item.type === 'image' && item.status === 'approved' &&
       isSafePublicPath(item.publicPath) && isImagePath(item.publicPath));
@@ -658,8 +613,17 @@
       isSafePublicPath(item.publicPath) && isVideoPath(item.publicPath));
   }
 
-  function isApprovedRepository(item) {
-    return Boolean(item && item.type === 'repository' && item.status === 'approved' && isSafeHttpUrl(item.publicPath));
+  function thumbnailItem(project) {
+    var media = project.media && project.media.lead ? project.media.lead : {};
+    var posterItem = project.media && project.media.poster;
+    if (isApprovedImage(media)) return media;
+    if (isApprovedVideo(media) && isApprovedImage(posterItem)) return posterItem;
+    return null;
+  }
+
+  function figureHtml(visual, label, caption, extraClass) {
+    return '<figure class="sc-figure' + (extraClass ? ' ' + extraClass : '') + '" data-media-status="approved">' + visual +
+      '<figcaption><span class="sc-figure__label">' + escapeHtml(label) + '</span> ' + escapeHtml(caption) + '</figcaption></figure>';
   }
 
   function evidenceMediaHtml(projectRecord, locale, base, isFile) {
@@ -667,189 +631,135 @@
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
     var sourceCopy = translation(projectRecord, normalized);
-    var project = Object.assign({}, projectRecord, {
-      title: sourceCopy.title || projectRecord.title || '',
-      shortTitle: sourceCopy.shortTitle || sourceCopy.title || projectRecord.shortTitle || '',
-      mediaAlt: sourceCopy.mediaAlt || projectRecord.mediaAlt || '',
-      mediaCaption: sourceCopy.mediaCaption || projectRecord.mediaCaption || ''
-    });
-    var media = project.media && project.media.lead ? project.media.lead : {};
-    var posterItem = project.media && project.media.poster;
-    var approvedPoster = isApprovedVideo(media) && isApprovedImage(posterItem) ? posterItem.publicPath : '';
-    var renderable = isApprovedImage(media) || isApprovedRepository(media) || Boolean(approvedPoster);
+    var media = projectRecord && projectRecord.media && projectRecord.media.lead ? projectRecord.media.lead : {};
+    var posterItem = projectRecord && projectRecord.media && projectRecord.media.poster;
+    var alt = sourceCopy.mediaAlt || projectRecord.mediaAlt || '';
+    var caption = sourceCopy.mediaCaption || projectRecord.mediaCaption || '';
     var visual = '';
-    if (!renderable) {
-      visual = '<div class="td-evidence-placeholder" role="img" aria-label="' + escapeHtml(copy.pendingAccessible) + '">' +
-        '<span class="td-evidence-placeholder__coordinate">X/Y/Z · ' + escapeHtml((media.type || 'evidence').toUpperCase()) + '</span>' +
-        '<strong>' + escapeHtml(copy.mediaPending) + '</strong>' +
-        '<p>' + escapeHtml(copy.fallback) + '</p>' +
-      '</div>';
-    } else if (media.type === 'video') {
-      var poster = assetHref(base, approvedPoster);
-      visual = '<video controls preload="none" tabindex="0" poster="' + escapeHtml(poster) + '"' +
-        ' aria-label="' + escapeHtml(project.mediaAlt) + '"><source src="' + escapeHtml(assetHref(base, media.publicPath)) + '"></video>';
-    } else if (media.type === 'image') {
-      visual = '<img src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) + '" loading="lazy" decoding="async">';
+    if (isApprovedVideo(media) && isApprovedImage(posterItem)) {
+      visual = '<video controls preload="none" tabindex="0" poster="' + escapeHtml(assetHref(base, posterItem.publicPath)) + '"' +
+        ' aria-label="' + escapeHtml(alt) + '"><source src="' + escapeHtml(assetHref(base, media.publicPath)) + '"></video>';
+    } else if (isApprovedImage(media)) {
+      visual = '<img src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">';
     } else {
-      visual = '<a class="td-evidence-repository" href="' + escapeHtml(assetHref(base, media.publicPath)) + '" target="_blank" rel="noopener">' +
-        '<span aria-hidden="true">&lt;/&gt;</span><strong>' + escapeHtml(project.shortTitle || project.title) + '</strong>' +
-      '</a>';
+      return '';
     }
-    var displayStatus = renderable ? 'approved' : 'pending-approval';
-    return '<figure class="td-evidence-frame" data-media-status="' + displayStatus + '">' +
-      '<div class="td-evidence-frame__visual">' + visual + '</div>' +
-      mediaLedgerHtml(project, normalized, displayStatus) +
-      '<p class="td-evidence-frame__caption">' + escapeHtml(project.mediaCaption) + '</p>' +
-    '</figure>';
+    return figureHtml(visual, copy.figure + ' 1.', caption, '');
   }
 
-  function compactLeadHtml(project, locale, base) {
-    void locale;
-    var media = project.media && project.media.lead ? project.media.lead : {};
-    var approvedLeadImage = isApprovedImage(media);
-    var posterItem = project.media && project.media.poster;
-    var approvedPoster = isApprovedVideo(media) && isApprovedImage(posterItem);
-    var visual = '';
-    if (approvedLeadImage) {
-      visual = '<img class="td-home-project__image" src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' +
-        escapeHtml(project.mediaAlt) + '" loading="lazy" decoding="async">';
-    } else if (approvedPoster) {
-      visual = '<img class="td-home-project__image td-home-project__poster" src="' +
-        escapeHtml(assetHref(base, posterItem.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) +
-        '" loading="lazy" decoding="async">';
-    } else {
-      visual = '<div class="td-home-project__fallback" aria-hidden="true"></div>';
-    }
-    return '<figure class="td-home-project__visual">' + visual + '</figure>';
-  }
-
-  function homeProjectGalleryHtml(data, base, isFile, locale) {
+  function caseGalleryHtml(project, locale, base, firstFigureNumber) {
     var normalized = localeOf(locale);
-    return validProjects(data, normalized).map(function (project) {
-      var href = i18n.routeHref(base, normalized, project.route, Boolean(isFile));
-      return '<article class="td-home-project"><a href="' + escapeHtml(href) + '">' +
-        compactLeadHtml(project, normalized, base) +
-        '<h3>' + escapeHtml(project.title) + '</h3>' +
-      '</a></article>';
+    var copy = pageCopy[normalized];
+    var items = (project.media && Array.isArray(project.media.gallery) ? project.media.gallery : []).filter(isApprovedImage);
+    if (!items.length) return '';
+    var figures = items.map(function (item, offset) {
+      var itemCopy = translation(item, normalized);
+      var visual = '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || project.mediaAlt || '') + '" loading="lazy" decoding="async">';
+      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', itemCopy.caption || '', 'sc-figure--gallery');
     }).join('');
-  }
-
-  function homeEvidenceMosaicHtml(data, locale, base) {
-    var normalized = localeOf(locale);
-    var projects = validProjects(data, normalized);
-    var definitions = normalized === 'en'
-      ? [
-          { label: 'Registration', slug: 'mandibular-fracture' },
-          { label: 'Surgical navigation', slug: 'surgical-navigation' },
-          { label: 'Sensor fusion', slug: 'unmanned-forklift' }
-        ]
-      : [
-          { label: '3D 정합', slug: 'mandibular-fracture' },
-          { label: '수술내비게이션', slug: 'surgical-navigation' },
-          { label: '센서 융합', slug: 'unmanned-forklift' }
-        ];
-    return definitions.map(function (definition) {
-      var project = projects.find(function (item) { return item.slug === definition.slug; });
-      if (!project) return '';
-      var media = project.media && project.media.lead ? project.media.lead : {};
-      var posterItem = project.media && project.media.poster;
-      var approvedImage = isApprovedImage(media) ? media : (isApprovedVideo(media) && isApprovedImage(posterItem) ? posterItem : null);
-      var visual = '';
-      if (approvedImage) {
-        var imageClass = 'td-mosaic-cell__image' + (media.type === 'video' ? ' td-mosaic-cell__poster' : '');
-        visual = '<div class="td-mosaic-cell__field td-mosaic-cell__field--media"><img class="' + imageClass +
-          '" src="' + escapeHtml(assetHref(base, approvedImage.publicPath)) + '" alt="' + escapeHtml(project.mediaAlt) +
-          '" loading="lazy" decoding="async"></div>';
-      } else {
-        visual = '<div class="td-mosaic-cell__field" aria-hidden="true">' +
-          '<i></i>' +
-        '</div>';
-      }
-      return '<article class="td-mosaic-cell">' +
-        '<p class="td-mosaic-cell__label">' + escapeHtml(definition.label) + '</p>' +
-        visual +
-        '<h3 class="td-mosaic-cell__title">' + escapeHtml(project.shortTitle || project.title) + '</h3>' +
-      '</article>';
-    }).join('');
+    return '<section class="sc-gallery" aria-label="' + escapeHtml(copy.figures) + '"><div class="sc-gallery__grid">' + figures + '</div></section>';
   }
 
   function capabilityIndexHtml(data, locale) {
     var localized = localizePortfolioData(data, locale);
-    return localized.capabilities.map(function (capability, index) {
-      return '<article class="td-capability-row">' +
-        '<span class="td-capability-row__index">0' + (index + 1) + '</span>' +
-        '<h3>' + escapeHtml(capability.title) + '</h3>' +
-        '<p>' + capability.methods.map(escapeHtml).join(' · ') + '</p>' +
-      '</article>';
+    return '<p class="sc-capabilities">' + localized.capabilities.map(function (capability) {
+      return '<strong>' + escapeHtml(capability.title) + '</strong> (' + capability.methods.map(escapeHtml).join(', ') + ')';
+    }).join(' · ') + '</p>';
+  }
+
+  function projectLinksInline(project, locale) {
+    return (project.links || []).filter(function (link) { return link && isSafeProjectLink(link.href); }).map(function (link) {
+      return ' · <a href="' + escapeHtml(link.href) + '" target="_blank" rel="noopener">' + escapeHtml(translatedField(link, 'label', locale)) + '</a>';
     }).join('');
   }
 
-  function projectCardHtml(project, base, isFile, locale, feature) {
+  function projectItemHtml(project, base, isFile, locale, settings) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
     var href = i18n.routeHref(base, normalized, project.route, Boolean(isFile));
-    var className = feature ? 'td-project-row td-project-row--feature' : 'td-project-card';
-    return '<article class="' + className + '">' +
-      evidenceMediaHtml(project, normalized, base, isFile) +
-      '<div class="td-project-entry__body">' +
-        '<div class="td-project-entry__meta"><span class="td-status" data-state="' + escapeHtml(project.evidenceState) + '" data-lifecycle="' + escapeHtml(project.lifecycleState) + '">' + escapeHtml(projectStateLabel(project, normalized)) + '</span><span>' + escapeHtml(project.period) + '</span></div>' +
-        '<h3><a href="' + escapeHtml(href) + '">' + escapeHtml(project.title) + '</a></h3>' +
-        '<p class="td-project-entry__summary">' + escapeHtml(project.summary) + '</p>' +
-        '<dl class="td-project-entry__attribution"><div><dt>' + escapeHtml(copy.personalRole) + '</dt><dd>' + escapeHtml(project.role) + '</dd></div>' +
-        '<div><dt>' + escapeHtml(copy.teamResult) + '</dt><dd>' + escapeHtml(project.teamResult) + '</dd></div></dl>' +
-      '</div>' +
-    '</article>';
+    var thumb = thumbnailItem(project);
+    var visual = thumb
+      ? '<a class="sc-project__thumb" href="' + escapeHtml(href) + '" tabindex="-1" aria-hidden="true"><img src="' + escapeHtml(assetHref(base, thumb.publicPath)) + '" alt="" loading="lazy" decoding="async"></a>'
+      : '';
+    var facts = settings.detailed
+      ? '<dl class="sc-project__facts">' +
+          '<div><dt>' + escapeHtml(copy.problem) + '</dt><dd>' + escapeHtml(project.problem) + '</dd></div>' +
+          '<div><dt>' + escapeHtml(copy.personalRole) + '</dt><dd>' + escapeHtml(project.role) + '</dd></div>' +
+          '<div><dt>' + escapeHtml(copy.evidence) + '</dt><dd>' + escapeHtml(project.evidence) + '</dd></div>' +
+        '</dl>'
+      : '';
+    var tag = settings.headingTag;
+    return '<li class="sc-project' + (thumb ? '' : ' sc-project--text') + '" data-project="' + escapeHtml(project.slug) + '">' + visual +
+      '<div class="sc-project__body">' +
+        '<' + tag + ' class="sc-project__title"><a href="' + escapeHtml(href) + '">' + escapeHtml(project.title) + '</a></' + tag + '>' +
+        '<p class="sc-project__meta">' + escapeHtml(project.period) + ' · ' + escapeHtml(projectStateLabel(project, normalized)) + '</p>' +
+        '<p class="sc-project__summary">' + escapeHtml(project.summary) + '</p>' + facts +
+        '<p class="sc-project__links"><a href="' + escapeHtml(href) + '">' + escapeHtml(copy.details) + '</a> · <a href="' + escapeHtml(assetHref(base, project.pdf[normalized])) + '">' + escapeHtml(copy.pdf) + '</a>' + projectLinksInline(project, normalized) + '</p>' +
+      '</div></li>';
   }
 
-  function projectGroupsHtml(data, base, isFile, locale) {
+  function projectListHtml(data, base, isFile, locale, settings) {
     var normalized = localeOf(locale);
     var localized = localizePortfolioData(data, normalized);
     var projects = validProjects(data, normalized);
-    var summaryByTier = {
-      'medical-core': pageCopy[normalized].medicalSummary,
-      'industrial-spotlight': pageCopy[normalized].industrialSummary,
-      'ai-build-lab': pageCopy[normalized].aiSummary
-    };
     return localized.tiers.map(function (tier) {
       var tierProjects = projects.filter(function (project) { return project.tier === tier.key; });
-      var feature = tier.key !== 'medical-core';
-      return '<section class="td-project-tier' + (feature ? ' td-project-tier--feature' : '') + '" data-tier="' + escapeHtml(tier.key) + '">' +
-        '<header class="td-project-tier__header"><p>' + escapeHtml(tier.label) + '</p><h2>' + escapeHtml(tier.label) + '</h2><span>' + escapeHtml(summaryByTier[tier.key]) + '</span></header>' +
-        '<div class="td-project-tier__entries">' + tierProjects.map(function (project) {
-          return projectCardHtml(project, base, isFile, normalized, feature);
-        }).join('') + '</div>' +
+      if (!tierProjects.length) return '';
+      return '<section class="sc-group" data-tier="' + escapeHtml(tier.key) + '">' +
+        '<' + settings.groupHeadingTag + ' class="sc-group__title">' + escapeHtml(tier.label) + '</' + settings.groupHeadingTag + '>' +
+        '<ol class="sc-project-list">' + tierProjects.map(function (project) { return projectItemHtml(project, base, isFile, normalized, settings); }).join('') + '</ol>' +
       '</section>';
     }).join('');
+  }
+
+  function homeProjectGalleryHtml(data, base, isFile, locale) {
+    return projectListHtml(data, base, isFile, locale, { detailed: false, groupHeadingTag: 'h3', headingTag: 'h4' });
+  }
+
+  function projectGroupsHtml(data, base, isFile, locale) {
+    return projectListHtml(data, base, isFile, locale, { detailed: true, groupHeadingTag: 'h2', headingTag: 'h3' });
+  }
+
+  function highlightsHtml(data, locale) {
+    var normalized = localeOf(locale);
+    var copy = pageCopy[normalized];
+    var highlights = data && data.highlights;
+    if (!highlights || highlightsErrors(highlights).length) return '';
+    function item(entry, withVenue) {
+      var entryCopy = translation(entry, normalized);
+      var title = escapeHtml(entryCopy.title || '');
+      if (entry.href && isSafeProjectLink(entry.href)) title = '<a href="' + escapeHtml(entry.href) + '" target="_blank" rel="noopener">' + title + '</a>';
+      var venue = withVenue && entryCopy.venue ? ' <span class="sc-list__venue">' + escapeHtml(entryCopy.venue) + '</span>' : '';
+      return '<li><span class="sc-list__year">' + escapeHtml(entry.year) + '</span> ' + title + venue + '</li>';
+    }
+    function group(title, note, entries, withVenue) {
+      return '<section class="sc-highlights__group"><h3>' + escapeHtml(title) + '</h3>' + (note ? '<p class="sc-highlights__note">' + escapeHtml(note) + '</p>' : '') +
+        '<ol class="sc-list">' + entries.map(function (entry) { return item(entry, withVenue); }).join('') + '</ol></section>';
+    }
+    return '<div class="sc-highlights">' +
+      group(copy.publications, '', highlights.publications, true) +
+      group(copy.patents, copy.patentSummary(highlights.patents.filed, highlights.patents.registered), highlights.patents.items, false) +
+      group(copy.awards, '', highlights.awards, false) +
+    '</div>';
   }
 
   function blockHtml(block, locale) {
     var copy = translation(block, locale);
     var heading = escapeHtml(copy.heading || '');
     if (block.type === 'list') {
-      return '<section class="td-case-block td-case-block--list" data-block-type="list"><h2>' + heading + '</h2><ul>' +
-        (copy.items || []).map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') +
-      '</ul></section>';
+      return '<div class="sc-block" data-block-type="list"><h3>' + heading + '</h3><ul>' +
+        (copy.items || []).map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul></div>';
     }
-    var tag = block.type === 'limitation' ? 'aside' : 'section';
-    return '<' + tag + ' class="td-case-block td-case-block--' + escapeHtml(block.type) + '" data-block-type="' + escapeHtml(block.type) + '">' +
-      '<h2>' + heading + '</h2><p>' + escapeHtml(copy.body || '') + '</p></' + tag + '>';
+    return '<div class="sc-block" data-block-type="' + escapeHtml(block.type) + '"><h3>' + heading + '</h3><p>' + escapeHtml(copy.body || '') + '</p></div>';
   }
 
   function subcasesHtml(project, locale) {
     if (!project.subcases || !project.subcases.length) return '';
-    return '<section class="td-case-subcases" aria-label="AI Build Lab"><div>' + project.subcases.map(function (subcase) {
-      var copy = translation(subcase, locale);
-      return '<article><h2>' + escapeHtml(copy.title || '') + '</h2><p>' + escapeHtml(copy.summary || '') + '</p></article>';
-    }).join('') + '</div></section>';
-  }
-
-  function projectLinksHtml(project, locale) {
-    if (!project.links || !project.links.length) return '';
-    var safeLinks = project.links.filter(function (link) { return link && isSafeProjectLink(link.href); });
-    if (!safeLinks.length) return '';
-    return '<p class="td-case-links">' + safeLinks.map(function (link) {
-      return '<a href="' + escapeHtml(link.href) + '" target="_blank" rel="noopener">' + escapeHtml(translatedField(link, 'label', locale)) + '</a>';
-    }).join(' · ') + '</p>';
+    var copy = pageCopy[localeOf(locale)];
+    return '<section class="sc-case__section" aria-label="' + escapeHtml(copy.components) + '"><h2>' + escapeHtml(copy.components) + '</h2><ul class="sc-subcases">' + project.subcases.map(function (subcase) {
+      var subcaseCopy = translation(subcase, locale);
+      return '<li><strong>' + escapeHtml(subcaseCopy.title || '') + '</strong> — ' + escapeHtml(subcaseCopy.summary || '') + '</li>';
+    }).join('') + '</ul></section>';
   }
 
   function caseStudyHtml(data, slug, base, isFile, locale) {
@@ -863,20 +773,26 @@
     if (normalized === 'ko' && englishTitle) title += '<small lang="en">' + escapeHtml(englishTitle) + '</small>';
     var pdfHref = assetHref(base, project.pdf[normalized]);
     var contactHref = i18n.routeHref(base, normalized, 'contact/', Boolean(isFile));
-    return '<article class="td-case" data-case="' + escapeHtml(project.slug) + '">' +
-      '<header class="td-case__header"><p class="td-eyebrow">' + escapeHtml(project.eyebrow) + '</p><div class="td-case__title-line"><h1>' + title + '</h1><span class="td-status" data-state="' + escapeHtml(project.evidenceState) + '" data-lifecycle="' + escapeHtml(project.lifecycleState) + '">' + escapeHtml(projectStateLabel(project, normalized)) + '</span></div></header>' +
-      '<p class="td-case__thesis">' + escapeHtml(project.thesis) + '</p>' +
-      '<dl class="td-fact-ledger"><div><dt>' + escapeHtml(copy.period) + '</dt><dd>' + escapeHtml(project.period) + '</dd></div>' +
-        '<div><dt>' + escapeHtml(copy.personalRole) + '</dt><dd>' + escapeHtml(project.role) + '</dd></div>' +
-        '<div><dt>' + escapeHtml(copy.technology) + '</dt><dd>' + project.tech.map(escapeHtml).join(' · ') + '</dd></div></dl>' +
-      evidenceMediaHtml(sourceProject, normalized, base, isFile) +
-      '<div class="td-case__blocks">' + project.blocks.map(function (block) { return blockHtml(block, normalized); }).join('') + '</div>' +
+    var lead = evidenceMediaHtml(sourceProject, normalized, base, isFile);
+    function blocksOfType(types) {
+      return types.reduce(function (ordered, type) {
+        return ordered.concat(project.blocks.filter(function (block) { return block.type === type; }));
+      }, []).map(function (block) { return blockHtml(block, normalized); }).join('');
+    }
+    return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' +
+      '<header class="sc-case__header"><h1>' + title + '</h1>' +
+        '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
+        '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>' +
+      lead +
+      '<section class="sc-case__section"><h2>' + escapeHtml(copy.problem) + '</h2><p>' + escapeHtml(project.problem) + '</p></section>' +
+      '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' + escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>' +
+      '<section class="sc-case__section"><h2>' + escapeHtml(copy.personalRole) + '</h2><p>' + escapeHtml(project.role) + '</p></section>' +
+      '<section class="sc-case__section"><h2>' + escapeHtml(copy.results) + '</h2><p>' + escapeHtml(project.evidence) + '</p>' + blocksOfType(['evidence']) + '</section>' +
+      '<section class="sc-case__section"><h2>' + escapeHtml(copy.limits) + '</h2><p>' + escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + blocksOfType(['limitation']) + '</section>' +
+      caseGalleryHtml(project, normalized, base, lead ? 2 : 1) +
       subcasesHtml(project, normalized) +
-      '<section class="td-team-result"><p class="td-eyebrow">' + escapeHtml(copy.teamResult) + '</p><h2>' + escapeHtml(copy.teamResult) + '</h2><p>' + escapeHtml(project.teamResult) + '</p></section>' +
-      '<section class="td-evidence-limits"><p class="td-eyebrow">' + escapeHtml(copy.evidenceLimits) + '</p><div><article><h2>' + escapeHtml(copy.evidence) + '</h2><p>' + escapeHtml(project.evidence) + '</p></article>' +
-        '<aside><h2>' + escapeHtml(normalized === 'ko' ? '한계' : 'Limits') + '</h2><p>' + escapeHtml(project.limitation) + '</p></aside></div>' + projectLinksHtml(project, normalized) + '</section>' +
-      '<section class="td-pdf-cta"><div><p class="td-eyebrow">PDF</p><h2>' + escapeHtml(copy.deeperDocument) + '</h2><p>' + escapeHtml(copy.pdfDescription) + '</p></div><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a></section>' +
-      '<section class="td-case-contact"><p class="td-eyebrow">' + escapeHtml(copy.collaboration) + '</p><p>' + escapeHtml(project.collaboration) + '</p><a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></section>' +
+      '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
+        ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>' +
     '</article>';
   }
 
@@ -886,7 +802,7 @@
     var base = body && body.getAttribute ? (body.getAttribute('data-base') || '') : '';
     var locale = localeOf(body && body.getAttribute ? body.getAttribute('data-lang') : 'ko');
     var isFile = Boolean(doc.location && doc.location.protocol === 'file:');
-    var projectSlugs = validProjects(data, locale).map(function (project) { return project.slug; });
+    var mountedSlugs = validProjects(data, locale).map(function (project) { return project.slug; });
 
     function fill(selector, renderer) {
       Array.prototype.forEach.call(doc.querySelectorAll(selector), function (node) {
@@ -895,13 +811,13 @@
       });
     }
 
-    fill('[data-portfolio="home-evidence"]', function () { return homeEvidenceMosaicHtml(data, locale, base); });
     fill('[data-portfolio="home-projects"]', function () { return homeProjectGalleryHtml(data, base, isFile, locale); });
     fill('[data-portfolio="capability-index"]', function () { return capabilityIndexHtml(data, locale); });
+    fill('[data-portfolio="home-highlights"]', function () { return highlightsHtml(data, locale); });
     fill('[data-portfolio="project-groups"]', function () { return projectGroupsHtml(data, base, isFile, locale); });
     fill('[data-portfolio="case-study"]', function (node) {
       var slug = node && node.getAttribute ? node.getAttribute('data-project') : '';
-      return projectSlugs.indexOf(slug) === -1 ? '' : caseStudyHtml(data, slug, base, isFile, locale);
+      return mountedSlugs.indexOf(slug) === -1 ? '' : caseStudyHtml(data, slug, base, isFile, locale);
     });
   }
 
@@ -912,14 +828,12 @@
     localizePortfolioData: localizePortfolioData,
     validatePortfolioData: validatePortfolioData,
     homeProjectGalleryHtml: homeProjectGalleryHtml,
-    homeEvidenceMosaicHtml: homeEvidenceMosaicHtml,
     capabilityIndexHtml: capabilityIndexHtml,
+    highlightsHtml: highlightsHtml,
     projectGroupsHtml: projectGroupsHtml,
     evidenceMediaHtml: evidenceMediaHtml,
+    caseGalleryHtml: caseGalleryHtml,
     caseStudyHtml: caseStudyHtml,
-    mountAll: mountAll,
-    capabilityAtlasHtml: function (data, base, isFile, locale) { void base; void isFile; return capabilityIndexHtml(data, locale); },
-    projectChaptersHtml: projectGroupsHtml,
-    capabilityDetailsHtml: function (data, base, isFile, locale) { void base; void isFile; return capabilityIndexHtml(data, locale); }
+    mountAll: mountAll
   };
 });

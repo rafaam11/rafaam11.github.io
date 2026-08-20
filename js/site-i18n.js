@@ -60,7 +60,7 @@
         },
         renderError: '포트폴리오 데이터를 표시할 수 없습니다.'
       },
-      footer: '3D 공간 컴퓨팅 · 연구 엔지니어 · 대한민국 대구'
+      footer: '로봇SW 엔지니어 · 대한민국 대구'
     },
     en: {
       nav: {
@@ -98,7 +98,7 @@
         },
         renderError: 'Portfolio data could not be rendered.'
       },
-      footer: '3D Spatial Computing · Research Engineer · Daegu, Korea'
+      footer: 'Robot Software Engineer · Daegu, Korea'
     }
   };
 

@@ -63,11 +63,11 @@
 
   function footerHtml(locale) {
     var normalized = i18n.normalizeLocale(locale);
-    var collaboration = normalized === 'en'
-      ? 'Joint development across registration, sensing, medical workflows, and working software.'
-      : '정합, 센싱, 의료 워크플로, 동작하는 소프트웨어를 연결하는 공동개발.';
+    var tagline = normalized === 'en'
+      ? 'Registration, medical imaging, and robot systems — from research to the field.'
+      : '3D 정합 · 의료영상 · 로봇 시스템 — 연구에서 현장까지.';
     return '<div class="td-site-footer__inner">' +
-      '<div><strong>Jinmin Kim</strong><p>' + escapeHtml(collaboration) + '</p></div>' +
+      '<div><strong>Jinmin Kim</strong><p>' + escapeHtml(tagline) + '</p></div>' +
       '<div class="td-site-footer__links"><a href="mailto:uiop3847@naver.com">Email</a><a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub</a></div>' +
       '<div class="td-site-footer__meta">© 2026 · ' + escapeHtml(i18n.ui[normalized].footer) + '</div>' +
     '</div>';
