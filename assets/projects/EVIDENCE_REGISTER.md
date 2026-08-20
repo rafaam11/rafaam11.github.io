@@ -15,3 +15,6 @@ This register is the tracked source of truth for portfolio evidence identifiers.
 | forklift-registration-pointcloud | unmanned-forklift | image | pending-review | - | Registration or point-cloud result; no public derivative approved. |
 | multi-cli-work-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/multi-cli-work | Public source and release history; registered as repository evidence, not visual media. |
 | daegu-bus-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/public-transportation-info | Public source history; registered as repository evidence, not visual media. |
+| respiratory-surface-guidance-sensor-precision | respiratory-surface-guidance | image | pending-review | - | Author-measured sensor precision table or validation-tool capture; no public derivative approved. |
+| skadi-viewer-demo | skadi-tracking-software | video | pending-review | - | Viewer and API demonstration clip; no public derivative approved. |
+| skadi-viewer-demo-poster | skadi-tracking-software | image | pending-review | - | Poster paired with the Viewer clip; no public derivative approved. |

@@ -17,13 +17,15 @@
   var evidenceStates = ['verified', 'ongoing', 'prototype'];
   var lifecycleStates = ['ongoing', 'completed', 'expected', 'research'];
   var capabilityKeys = ['registration', 'sensor-fusion', 'medical-navigation', 'xr-engineering', 'ai-product-engineering'];
-  var tierKeys = ['medical-core', 'industrial-spotlight', 'ai-build-lab'];
-  var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'unmanned-forklift', 'ai-build-lab'];
+  var tierKeys = ['medical-core', 'platform', 'industrial-spotlight', 'ai-build-lab'];
+  var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'respiratory-surface-guidance', 'skadi-tracking-software', 'unmanned-forklift', 'ai-build-lab'];
   var pdfDiagramKindsBySlug = {
     'surgical-navigation': 'coordinate-chain',
     'mandibular-fracture': 'optimization-loop',
     'life-careverse': 'sync-topology',
     'rtms-navigation': 'navigation-loop',
+    'respiratory-surface-guidance': 'surface-gating-chain',
+    'skadi-tracking-software': 'tracking-sdk-stack',
     'unmanned-forklift': 'sensor-convergence',
     'ai-build-lab': 'product-loop'
   };
@@ -427,7 +429,7 @@
     }
 
     if (!Array.isArray(data.tiers) || data.tiers.length !== tierKeys.length) {
-      errors.push('Portfolio data must contain exactly three tiers.');
+      errors.push('Portfolio data must contain exactly four tiers.');
     } else {
       if (JSON.stringify(data.tiers.map(function (tier) { return tier && tier.key; })) !== JSON.stringify(tierKeys)) {
         errors.push('Portfolio tiers must use the known ordered keys.');
@@ -438,7 +440,7 @@
     }
 
     if (!Array.isArray(data.projects) || data.projects.length !== projectSlugs.length) {
-      errors.push('Portfolio data must contain exactly six projects.');
+      errors.push('Portfolio data must contain exactly eight projects.');
     } else {
       if (JSON.stringify(data.projects.map(function (project) { return project && project.slug; })) !== JSON.stringify(projectSlugs)) {
         errors.push('Portfolio projects must use the known ordered slugs.');

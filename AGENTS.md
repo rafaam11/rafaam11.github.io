@@ -10,7 +10,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 - **Positioning:** 3D registration · medical imaging · robot systems — research to field
 - **Audience:** 연구 협력자(의료영상·3D 정합)와 일반 방문자(리크루터·지인)
 - **Structure:** Home / Projects / CV / Contact
-- **Canonical cases:** 6 projects, paired in Korean and English
+- **Canonical cases:** 8 projects, paired in Korean and English
 - **Capabilities:** 5 implementation-backed stacks presented inside Home and Projects; no standalone route
 - **Deploy:** `main` push 후 GitHub Pages가 root를 직접 서빙
 - **Preview:** `python -m http.server 8000` or direct `file://` open
@@ -27,22 +27,22 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 
 ## Public routes
 
-한국어는 루트, 영어는 `/en/`에 있으며 정확히 20개 HTML 페이지를 유지합니다.
+한국어는 루트, 영어는 `/en/`에 있으며 정확히 24개 HTML 페이지를 유지합니다.
 
 - `index.html`, `projects/index.html`, `cv/index.html`, `contact/index.html`
 - `en/index.html`, `en/projects/index.html`, `en/cv/index.html`, `en/contact/index.html`
-- 두 언어의 여섯 사례: `surgical-navigation`, `mandibular-fracture`, `life-careverse`, `rtms-navigation`, `unmanned-forklift`, `ai-build-lab`
+- 두 언어의 여덟 사례: `surgical-navigation`, `mandibular-fracture`, `life-careverse`, `rtms-navigation`, `respiratory-surface-guidance`, `skadi-tracking-software`, `unmanned-forklift`, `ai-build-lab`
 
 ## File structure
 
 ```text
-index.html                         # Home: expert thesis, evidence mosaic, six project links, five-stack index
-projects/index.html                # Medical Core, Industrial Spotlight, AI Build Lab
-projects/<slug>/index.html         # 6 shared-renderer case summaries
-en/                               # English counterparts for all 10 Korean routes
+index.html                         # Home: expert thesis, evidence mosaic, eight project links, five-stack index
+projects/index.html                # Projects groups: Medical Core (5), Platform Software (1), Industrial Spotlight (1), AI Build Lab (1)
+projects/<slug>/index.html         # 8 shared-renderer case summaries
+en/                               # English counterparts for all 12 Korean routes
 cv/index.html                      # Public-safe semantic CV plus PDF and raster fallbacks
 contact/index.html                 # Joint-development enquiry guidance
-js/portfolio-data.js               # Canonical 6 projects and 5 capability stacks
+js/portfolio-data.js               # Canonical 8 projects and 5 capability stacks
 js/portfolio-render.js             # Home, Projects, and case renderer
 js/site-i18n.js                    # Canonical route descriptors and localized UI copy
 js/nav.js                          # Shared nav/footer; file:// and HTTP compatible
@@ -51,7 +51,7 @@ css/scholar.css                    # Researcher-style visual system (2026-08-21)
 css/cv-pdf.css                     # CV viewer and page-preview layout
 assets/projects/EVIDENCE_REGISTER.md # Public evidence identifier and approval SSOT
 assets/projects/<slug>/            # Approved derivatives or public-safe boundary README
-assets/pdfs/                       # 12 public project PDFs
+assets/pdfs/                       # 16 public project PDFs
 assets/cv/                         # 2 public CV PDFs and 4 preview PNGs
 scripts/export-portfolio-data.cjs  # Deterministic PDF input exporter
 scripts/generate-portfolio-pdfs.py # ReportLab PDF generator and artifact publisher

@@ -8,12 +8,25 @@ Jinmin Kim의 연구자풍 포트폴리오입니다. 3D 정합, 의료영상, �
 
 ## 공개 프로젝트와 역량
 
+**Medical Core**
+
 1. Surgical Navigation Systems
 2. Mandibular Fracture Reduction Optimization
 3. Life Careverse
 4. rTMS Navigation Prototype
-5. Multi-sensor Registration for an Autonomous Forklift
-6. AI Build Lab
+5. Surface-guided Respiratory Tracking (SGRT)
+
+**Platform Software**
+
+6. SKADI Tracking Software (API and Viewer)
+
+**Industrial Spotlight**
+
+7. Multi-sensor Registration for an Autonomous Forklift
+
+**AI Build Lab**
+
+8. AI Build Lab
 
 다섯 역량 스택은 별도 라우트가 아니라 Home과 Projects의 프로젝트 근거에 연결됩니다: 3D Geometry & Registration, Sensor Fusion & Localization, Medical Navigation & Visualization, XR Application Engineering, Product Engineering with AI.
 

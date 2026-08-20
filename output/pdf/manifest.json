@@ -1,9 +1,9 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "dde290c085ab645be8b523d642428b21f1c9261a41763ac6d55c93a0204761d4",
+  "sourceDigest": "0ff7b809175921629b9312695065f0d6f40a4814a96f6bbbb1341e7f24b0b05c",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
-  "generatorSha256": "a11d1b653b4746131b1a227b7a23c0708e0411ef613309b46f62ccd2880ef4d8",
+  "generatorSha256": "5d8872921f4135acb549fc1e58d21f67fb5e4964e579a9f53650f0b8d8236d83",
   "documents": [
     {
       "name": "surgical-navigation-ko.pdf",
@@ -94,6 +94,50 @@
       "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
     },
     {
+      "name": "respiratory-surface-guidance-ko.pdf",
+      "kind": "project",
+      "slug": "respiratory-surface-guidance",
+      "locale": "ko",
+      "pages": 6,
+      "links": 8,
+      "characters": 3195,
+      "bytes": 232867,
+      "sha256": "840b05d49e84a9b05827ca00e6e8c2cf03826002c073154fdddc323b3d4a00f2"
+    },
+    {
+      "name": "respiratory-surface-guidance-en.pdf",
+      "kind": "project",
+      "slug": "respiratory-surface-guidance",
+      "locale": "en",
+      "pages": 6,
+      "links": 8,
+      "characters": 6080,
+      "bytes": 78818,
+      "sha256": "e343ff388d38d8e765fbc6275fccbfcb0c45f933cf4ebbb53b0752efedef6f32"
+    },
+    {
+      "name": "skadi-tracking-software-ko.pdf",
+      "kind": "project",
+      "slug": "skadi-tracking-software",
+      "locale": "ko",
+      "pages": 6,
+      "links": 8,
+      "characters": 2995,
+      "bytes": 201433,
+      "sha256": "6e7eca279562cd9ac5d1a6a1189e6b8def6b6692c7e5eadf694840558cc61c23"
+    },
+    {
+      "name": "skadi-tracking-software-en.pdf",
+      "kind": "project",
+      "slug": "skadi-tracking-software",
+      "locale": "en",
+      "pages": 6,
+      "links": 8,
+      "characters": 5346,
+      "bytes": 78059,
+      "sha256": "2aa7b75bef674fc4dbe0d5302cec53f34d2ecb4cff56d779a54da5b0b7288574"
+    },
+    {
       "name": "unmanned-forklift-ko.pdf",
       "kind": "project",
       "slug": "unmanned-forklift",
@@ -143,9 +187,9 @@
       "locale": "ko",
       "pages": 2,
       "links": 6,
-      "characters": 1668,
-      "bytes": 134585,
-      "sha256": "1b5de1aa569f2bdab54b89acdfc1062fd1e643bddbefd44fca80cf5634fe403d"
+      "characters": 1694,
+      "bytes": 136297,
+      "sha256": "eecb446198fe3f6b2e84808c29d1b77012679339ad8db30cbb6b84f5d184f72d"
     },
     {
       "name": "jinmin-kim-cv-en.pdf",
@@ -153,9 +197,9 @@
       "locale": "en",
       "pages": 2,
       "links": 6,
-      "characters": 2627,
-      "bytes": 64834,
-      "sha256": "f997c7da5217425a6414019d0050a111f23d2dc83cab0ad88bce32d04a2ea967"
+      "characters": 2682,
+      "bytes": 64889,
+      "sha256": "b3bfad557102b788d998bd1c43d013e2e0ab47eaf95eb29fcd22b13aa95e0648"
     }
   ],
   "artifacts": [
@@ -176,16 +220,16 @@
       "page": 2,
       "width": 1241,
       "height": 1754,
-      "bytes": 110421,
-      "sha256": "749b4c178eb28ed46344601d0d3cf2deb9b15545a52b90d41d48b0f06c4acfb1"
+      "bytes": 115393,
+      "sha256": "6d79d97fe632f419dfa1af1e2a2eaee6fc091451879bde7f7123aee9b0c74b66"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-en.pdf",
       "kind": "cv-pdf",
       "locale": "en",
       "pages": 2,
-      "bytes": 64834,
-      "sha256": "f997c7da5217425a6414019d0050a111f23d2dc83cab0ad88bce32d04a2ea967"
+      "bytes": 64889,
+      "sha256": "b3bfad557102b788d998bd1c43d013e2e0ab47eaf95eb29fcd22b13aa95e0648"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-ko-page-1.png",
@@ -204,16 +248,16 @@
       "page": 2,
       "width": 1241,
       "height": 1754,
-      "bytes": 95720,
-      "sha256": "b9f2ef9cc7ebceb763c4d52f38013d7b9e0611b76d9ee23fcae9fba28190d10b"
+      "bytes": 98911,
+      "sha256": "2eb40a0d622f99a934e3b2294cf9e7963cf337438c7bda48a22acb801d817440"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-ko.pdf",
       "kind": "cv-pdf",
       "locale": "ko",
       "pages": 2,
-      "bytes": 134585,
-      "sha256": "1b5de1aa569f2bdab54b89acdfc1062fd1e643bddbefd44fca80cf5634fe403d"
+      "bytes": 136297,
+      "sha256": "eecb446198fe3f6b2e84808c29d1b77012679339ad8db30cbb6b84f5d184f72d"
     },
     {
       "path": "assets/pdfs/ai-build-lab-en.pdf",
@@ -270,6 +314,24 @@
       "sha256": "c2b27b5187c6ad50c360ed6ea85b50d43eff3b0cbe70c56ad1b95cb5078b9ed9"
     },
     {
+      "path": "assets/pdfs/respiratory-surface-guidance-en.pdf",
+      "kind": "project-pdf",
+      "slug": "respiratory-surface-guidance",
+      "locale": "en",
+      "pages": 6,
+      "bytes": 78818,
+      "sha256": "e343ff388d38d8e765fbc6275fccbfcb0c45f933cf4ebbb53b0752efedef6f32"
+    },
+    {
+      "path": "assets/pdfs/respiratory-surface-guidance-ko.pdf",
+      "kind": "project-pdf",
+      "slug": "respiratory-surface-guidance",
+      "locale": "ko",
+      "pages": 6,
+      "bytes": 232867,
+      "sha256": "840b05d49e84a9b05827ca00e6e8c2cf03826002c073154fdddc323b3d4a00f2"
+    },
+    {
       "path": "assets/pdfs/rtms-navigation-en.pdf",
       "kind": "project-pdf",
       "slug": "rtms-navigation",
@@ -286,6 +348,24 @@
       "pages": 6,
       "bytes": 175256,
       "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
+    },
+    {
+      "path": "assets/pdfs/skadi-tracking-software-en.pdf",
+      "kind": "project-pdf",
+      "slug": "skadi-tracking-software",
+      "locale": "en",
+      "pages": 6,
+      "bytes": 78059,
+      "sha256": "2aa7b75bef674fc4dbe0d5302cec53f34d2ecb4cff56d779a54da5b0b7288574"
+    },
+    {
+      "path": "assets/pdfs/skadi-tracking-software-ko.pdf",
+      "kind": "project-pdf",
+      "slug": "skadi-tracking-software",
+      "locale": "ko",
+      "pages": 6,
+      "bytes": 201433,
+      "sha256": "6e7eca279562cd9ac5d1a6a1189e6b8def6b6692c7e5eadf694840558cc61c23"
     },
     {
       "path": "assets/pdfs/surgical-navigation-en.pdf",
@@ -346,16 +426,16 @@
       "kind": "cv-pdf",
       "locale": "en",
       "pages": 2,
-      "bytes": 64834,
-      "sha256": "f997c7da5217425a6414019d0050a111f23d2dc83cab0ad88bce32d04a2ea967"
+      "bytes": 64889,
+      "sha256": "b3bfad557102b788d998bd1c43d013e2e0ab47eaf95eb29fcd22b13aa95e0648"
     },
     {
       "path": "output/pdf/jinmin-kim-cv-ko.pdf",
       "kind": "cv-pdf",
       "locale": "ko",
       "pages": 2,
-      "bytes": 134585,
-      "sha256": "1b5de1aa569f2bdab54b89acdfc1062fd1e643bddbefd44fca80cf5634fe403d"
+      "bytes": 136297,
+      "sha256": "eecb446198fe3f6b2e84808c29d1b77012679339ad8db30cbb6b84f5d184f72d"
     },
     {
       "path": "output/pdf/life-careverse-en.pdf",
@@ -394,6 +474,24 @@
       "sha256": "c2b27b5187c6ad50c360ed6ea85b50d43eff3b0cbe70c56ad1b95cb5078b9ed9"
     },
     {
+      "path": "output/pdf/respiratory-surface-guidance-en.pdf",
+      "kind": "project-pdf",
+      "slug": "respiratory-surface-guidance",
+      "locale": "en",
+      "pages": 6,
+      "bytes": 78818,
+      "sha256": "e343ff388d38d8e765fbc6275fccbfcb0c45f933cf4ebbb53b0752efedef6f32"
+    },
+    {
+      "path": "output/pdf/respiratory-surface-guidance-ko.pdf",
+      "kind": "project-pdf",
+      "slug": "respiratory-surface-guidance",
+      "locale": "ko",
+      "pages": 6,
+      "bytes": 232867,
+      "sha256": "840b05d49e84a9b05827ca00e6e8c2cf03826002c073154fdddc323b3d4a00f2"
+    },
+    {
       "path": "output/pdf/rtms-navigation-en.pdf",
       "kind": "project-pdf",
       "slug": "rtms-navigation",
@@ -410,6 +508,24 @@
       "pages": 6,
       "bytes": 175256,
       "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
+    },
+    {
+      "path": "output/pdf/skadi-tracking-software-en.pdf",
+      "kind": "project-pdf",
+      "slug": "skadi-tracking-software",
+      "locale": "en",
+      "pages": 6,
+      "bytes": 78059,
+      "sha256": "2aa7b75bef674fc4dbe0d5302cec53f34d2ecb4cff56d779a54da5b0b7288574"
+    },
+    {
+      "path": "output/pdf/skadi-tracking-software-ko.pdf",
+      "kind": "project-pdf",
+      "slug": "skadi-tracking-software",
+      "locale": "ko",
+      "pages": 6,
+      "bytes": 201433,
+      "sha256": "6e7eca279562cd9ac5d1a6a1189e6b8def6b6692c7e5eadf694840558cc61c23"
     },
     {
       "path": "output/pdf/surgical-navigation-en.pdf",

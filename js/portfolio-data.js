@@ -108,6 +108,7 @@
 
   var tiers = [
     { key: 'medical-core', translations: { ko: { label: '의료 코어' }, en: { label: 'Medical Core' } } },
+    { key: 'platform', translations: { ko: { label: '플랫폼 소프트웨어' }, en: { label: 'Platform Software' } } },
     { key: 'industrial-spotlight', translations: { ko: { label: '산업 스포트라이트' }, en: { label: 'Industrial Spotlight' } } },
     { key: 'ai-build-lab', translations: { ko: { label: 'AI 빌드 랩' }, en: { label: 'AI Build Lab' } } }
   ];
@@ -171,7 +172,8 @@
       media: {
         lead: { id: 'surgical-navigation-demo', type: 'video', status: 'pending-approval' },
         video: { id: 'surgical-navigation-demo', type: 'video', status: 'pending-approval' },
-        poster: { id: 'surgical-navigation-demo-poster', type: 'image', status: 'pending-approval' }
+        poster: { id: 'surgical-navigation-demo-poster', type: 'image', status: 'pending-approval' },
+        gallery: []
       },
       pdf: { ko: 'assets/pdfs/surgical-navigation-ko.pdf', en: 'assets/pdfs/surgical-navigation-en.pdf' },
       pdfSequence: {
@@ -232,7 +234,8 @@
       tech: ['Python', 'Open3D', 'OpenCV', 'SciPy', 'PCA', 'ICP', 'CLPSO', '3D Slicer'],
       media: {
         lead: { id: 'mandibular-presentation-award', type: 'image', status: 'pending-approval' },
-        references: [{ id: 'mandibular-publication', type: 'publication', status: 'approved', publicPath: 'https://link.springer.com/article/10.1007/s10278-024-01014-z' }]
+        references: [{ id: 'mandibular-publication', type: 'publication', status: 'approved', publicPath: 'https://link.springer.com/article/10.1007/s10278-024-01014-z' }],
+        gallery: []
       },
       pdf: { ko: 'assets/pdfs/mandibular-fracture-ko.pdf', en: 'assets/pdfs/mandibular-fracture-en.pdf' },
       pdfSequence: {
@@ -286,7 +289,7 @@
       slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
       tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'],
-      media: { lead: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, video: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, poster: { id: 'life-careverse-multiuser-poster', type: 'image', status: 'pending-approval' } },
+      media: { lead: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, video: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, poster: { id: 'life-careverse-multiuser-poster', type: 'image', status: 'pending-approval' }, gallery: [] },
       pdf: { ko: 'assets/pdfs/life-careverse-ko.pdf', en: 'assets/pdfs/life-careverse-en.pdf' },
       pdfSequence: {
         middle: ['shared-state', 'xr-application', 'multiuser-demo', 'adoption-boundary'],
@@ -338,7 +341,7 @@
       slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'prototype', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
       tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'],
-      media: { lead: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, video: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, poster: { id: 'rtms-prototype-poster', type: 'image', status: 'pending-approval' } },
+      media: { lead: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, video: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, poster: { id: 'rtms-prototype-poster', type: 'image', status: 'pending-approval' }, gallery: [] },
       pdf: { ko: 'assets/pdfs/rtms-navigation-ko.pdf', en: 'assets/pdfs/rtms-navigation-en.pdf' },
       pdfSequence: {
         middle: ['slicer-architecture', 'coordinate-visibility', 'repeatable-prototype', 'prototype-boundary'],
@@ -387,10 +390,122 @@
       ]
     }),
     project({
+      slug: 'respiratory-surface-guidance', tier: 'medical-core', period: '2026.06 – present', evidenceState: 'ongoing', lifecycleState: 'research',
+      capabilityKeys: ['registration', 'sensor-fusion', 'medical-navigation'], route: 'projects/respiratory-surface-guidance/',
+      tech: ['ToF camera', 'Structured light', 'Qt', 'VTK', 'OpenCV', 'Python', '4DCT'],
+      media: {
+        lead: { id: 'respiratory-surface-guidance-sensor-precision', type: 'image', status: 'pending-approval' },
+        gallery: []
+      },
+      pdf: { ko: 'assets/pdfs/respiratory-surface-guidance-ko.pdf', en: 'assets/pdfs/respiratory-surface-guidance-en.pdf' },
+      pdfSequence: {
+        middle: ['surface-to-signal', 'sensor-validation', 'measured-precision', 'research-boundary'],
+        evidenceId: 'respiratory-surface-guidance-sensor-precision',
+        diagram: {
+          kind: 'surface-gating-chain',
+          translations: {
+            ko: { title: '광학 표면에서 게이팅 신호까지', nodes: ['3D 센서', '표면·ROI 깊이', '호흡 파형', '게이팅·정합 출력'] },
+            en: { title: 'Optical surface to gating signal', nodes: ['3D sensor', 'Surface and ROI depth', 'Respiratory waveform', 'Gating and registration output'] }
+          }
+        }
+      },
+      translations: {
+        ko: {
+          title: '표면유도 호흡추적 (SGRT)', shortTitle: '표면유도 호흡추적', eyebrow: '의료 코어 · 방사선치료 연구',
+          thesis: '환자 체표면을 광학 3D로 읽어 셋업 정합과 호흡 게이팅 신호를 만드는 표면유도 방사선치료(SGRT)의 광학 파트를 국산 센서 스택으로 구성합니다.',
+          summary: 'K-LINAC 대과제(주관 한국전기연구원, 세부주관 ETRI)의 디지트랙 위탁 연구로, 원거리 표면 재구성과 근거리 실시간 호흡 추적을 상용 3D 센서로 구현하는 초기 단계 연구입니다.',
+          problem: '치료 중 환자의 위치와 호흡을 추가 촬영·피부 마킹 없이 알아야 하는데, 기존 상용 시스템은 고가의 외산이며 센서·알고리즘 선택 근거가 공개되어 있지 않습니다.',
+          role: '센서 검증 실험을 총괄하며 자체 검증 도구 DtDepthScan(Qt·VTK·OpenCV)을 개발했고, ROI 깊이에서 호흡 파형과 게이팅 신호를 뽑는 추적 알고리즘 설계·구현, 센서 인터페이스와 전송 프로토콜 정의, 과제 실무를 담당합니다.',
+          teamResult: '컨소시엄이 4DCT 재구성, 영상유도 체계, 임상 자문을 나누어 맡고 있으며 임상 기관은 서울성모병원 방사선종양학과입니다. 과제 전체 성과를 개인 성과로 쓰지 않습니다.',
+          evidence: '상용 3D 센서 5종을 0.5~3 m 거리에서 실리콘 인체 팬텀으로 측정한 정밀도(σ)·실측 fps·Fill rate 표와 DtDepthScan 화면이 본인 측정 근거입니다.',
+          limitation: '2026년 6월 시작한 1차년도 연구로 임상 성능, 과제 목표 달성, 제품화를 주장하지 않으며 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
+          collaboration: '방사선종양학, 4DCT 재구성, 영상유도 체계, 통합 제어 담당 기관과 인터페이스를 맞춥니다.',
+          mediaAlt: '상용 3D 센서 5종의 거리별 정밀도 실측표와 DtDepthScan 검증 도구 화면.', mediaCaption: '센서 실측 결과와 검증 도구 화면은 공개 승인 후 게시합니다.',
+          status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '표면유도 호흡추적 센서 검증.', visualCaption: '실측 미디어는 승인 대기 중입니다.'
+        },
+        en: {
+          title: 'Surface-guided Respiratory Tracking (SGRT)', shortTitle: 'Surface-guided Respiratory Tracking', eyebrow: 'Medical Core · Radiotherapy Research',
+          thesis: 'Build the optical part of surface-guided radiotherapy — patient-surface setup registration and respiratory gating — on a domestic 3D sensor stack.',
+          summary: 'An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme (led by KERI, imaging sub-project led by ETRI): far-field surface reconstruction and near-field real-time breathing tracking with commercial 3D sensors.',
+          problem: 'Patient position and breathing must be known during treatment without extra imaging or skin marks; the existing commercial system is imported and its sensor and algorithm choices are not documented publicly.',
+          role: 'Lead the sensor validation campaign and wrote the in-house validation tool DtDepthScan (Qt, VTK, OpenCV); design and implement the breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal; define the sensor interface and transport protocol; run day-to-day project work.',
+          teamResult: 'Consortium partners own 4DCT reconstruction, the image-guidance framework, and clinical advice; the clinical partner is the radiation oncology department of Seoul St. Mary\'s Hospital. Programme-level results are not attributed to me.',
+          evidence: 'My own measurements: precision (σ), measured fps, and fill rate for five commercial 3D sensors at 0.5–3 m against a silicone body phantom, plus DtDepthScan captures.',
+          limitation: 'A first-year study that started in June 2026; no clinical performance, programme-target achievement, or productisation is claimed, and programme targets, budgets, and other institutions\' metrics are not published here.',
+          collaboration: 'Interfaces are agreed with radiation oncology, 4DCT reconstruction, image guidance, and integrated-control partners.',
+          mediaAlt: 'Measured precision table for five commercial 3D sensors by distance and the DtDepthScan validation tool.', mediaCaption: 'Sensor measurements and tool captures will be published after approval.',
+          status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision measurements; no clinical claim.', problemSummary: 'Surface-based setup registration and gating signals on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate tables.', visualAlt: 'Sensor validation for surface-guided respiratory tracking.', visualCaption: 'Measurement media is pending approval.'
+        }
+      },
+      blocks: [
+        { key: 'surface-to-signal', type: 'system', translations: { ko: { heading: '표면에서 신호까지', body: '원거리 센서는 표면 재구성과 계획 CT 정합을, 근거리 센서는 흉·복부 ROI 깊이에서 호흡 파형과 게이팅 신호를 맡도록 역할을 나눴습니다.' }, en: { heading: 'Surface to signal', body: 'Far-field sensors reconstruct the surface for planning-CT registration; near-field sensors turn chest and abdomen ROI depth into a respiratory waveform and gating signal.' } } },
+        { key: 'sensor-validation', type: 'text', translations: { ko: { heading: '센서 검증 설계', body: '카메라 추상화 구조의 DtDepthScan으로 센서 5종을 같은 절차(거리 5구간, 회당 500프레임)로 녹화해 정밀도·fps·Fill rate를 비교했습니다.' }, en: { heading: 'Sensor validation design', body: 'DtDepthScan abstracts the camera layer so five sensors run the same protocol — five distances, 500 frames per run — for precision, fps, and fill-rate comparison.' } } },
+        { key: 'measured-precision', type: 'evidence', translations: { ko: { heading: '측정 근거', body: '거리별 ROI 평균 깊이의 시간 σ, 노출·워밍업에 따른 변화, 반복 측정 재현성을 표로 남겼습니다.' }, en: { heading: 'Measured evidence', body: 'Temporal σ of ROI mean depth by distance, exposure and warm-up effects, and repeat-measurement reproducibility are tabulated.' } } },
+        { key: 'research-boundary', type: 'limitation', translations: { ko: { heading: '연구 경계', body: '1차년도 센서·알고리즘 기초 설계 단계이며 임상 성능이나 과제 목표 달성을 주장하지 않습니다.' }, en: { heading: 'Research boundary', body: 'First-year sensor and algorithm groundwork; no clinical performance or programme-target achievement is claimed.' } } }
+      ]
+    }),
+    project({
+      slug: 'skadi-tracking-software', tier: 'platform', period: '2023.02 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
+      capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/skadi-tracking-software/',
+      tech: ['SKADI', 'C++', 'Python API', 'Viewer', '3D Slicer', 'Optical tracking'],
+      media: {
+        lead: { id: 'skadi-viewer-demo', type: 'video', status: 'pending-approval' },
+        video: { id: 'skadi-viewer-demo', type: 'video', status: 'pending-approval' },
+        poster: { id: 'skadi-viewer-demo-poster', type: 'image', status: 'pending-approval' },
+        gallery: []
+      },
+      pdf: { ko: 'assets/pdfs/skadi-tracking-software-ko.pdf', en: 'assets/pdfs/skadi-tracking-software-en.pdf' },
+      pdfSequence: {
+        middle: ['sdk-layers', 'viewer-and-template', 'delivery-evidence', 'hardware-boundary'],
+        evidenceId: 'skadi-viewer-demo',
+        diagram: {
+          kind: 'tracking-sdk-stack',
+          translations: {
+            ko: { title: '추적 장치에서 응용까지의 소프트웨어 계층', nodes: ['SKADI 트래커', 'API·SDK', 'Viewer·Slicer 템플릿', '수술내비게이션 응용'] },
+            en: { title: 'Software layers from tracker to application', nodes: ['SKADI tracker', 'API and SDK', 'Viewer and Slicer template', 'Surgical-navigation application'] }
+          }
+        }
+      },
+      translations: {
+        ko: {
+          title: 'SKADI 위치추적 소프트웨어 (API·Viewer)', shortTitle: 'SKADI 소프트웨어', eyebrow: '플랫폼 소프트웨어 · 광학 위치추적',
+          thesis: '자체 광학식 3차원 위치추적장치 SKADI를 수술내비게이션 기업과 연구기관이 바로 쓸 수 있게 하는 소프트웨어 계층을 만듭니다.',
+          summary: 'SKADI의 API·SDK, 장치 상태와 추적 결과를 보여주는 Viewer, 연구자가 바로 시작할 수 있는 3D Slicer 커스텀 앱 템플릿을 개발·유지보수합니다.',
+          problem: '광학 트래커는 하드웨어만으로는 쓰이지 않습니다. 좌표계, 마커 정의, 실시간 스트리밍, 오류 상태를 응용 개발자가 다루기 쉬운 인터페이스로 제공해야 합니다.',
+          role: 'API·SDK와 Viewer의 설계·구현·유지보수, 3D Slicer 커스텀 앱 템플릿 작성, 고객사 통합 지원과 문의 대응을 담당합니다.',
+          teamResult: '장치 하드웨어, 광학·기구 설계, 영업과 납품은 회사의 다른 구성원이 맡습니다. 납품 실적과 매출은 회사 성과이며 여기서 주장하지 않습니다.',
+          evidence: 'Viewer 화면, API 구조 다이어그램, Slicer 템플릿 동작 화면이 근거이며 고객 현장 영상은 싣지 않습니다.',
+          limitation: '장치 사양·정확도 수치·고객사 명단·판매 수치는 회사 소유 정보로 공개하지 않습니다.',
+          collaboration: '광학·하드웨어 설계자, 고객사 내비게이션 개발자, 연구기관 사용자와 인터페이스를 맞춥니다.',
+          mediaAlt: 'SKADI Viewer가 추적 장치 상태와 마커 좌표를 실시간으로 표시하는 화면.', mediaCaption: 'Viewer·API 시연 클립은 공개 승인 후 게시합니다.',
+          status: '진행 중', cardProblem: '광학 트래커를 응용 개발자가 바로 쓰는 API·Viewer 계층으로 만듭니다.', cardOwnedRole: 'API·SDK·Viewer·Slicer 템플릿 개발·유지보수를 담당합니다.', cardEvidence: 'Viewer·API·템플릿 화면; 장치 사양과 판매 수치는 비공개입니다.', problemSummary: '추적 장치를 쓰기 쉬운 소프트웨어 계층으로 감쌉니다.', ownedRole: 'API·SDK·Viewer·Slicer 템플릿을 담당합니다.', verifiedEvidence: 'Viewer·API·템플릿 동작 화면이 근거입니다.', visualAlt: 'SKADI 소프트웨어 계층.', visualCaption: '시연 미디어는 승인 대기 중입니다.'
+        },
+        en: {
+          title: 'SKADI Tracking Software (API and Viewer)', shortTitle: 'SKADI Software', eyebrow: 'Platform Software · Optical Tracking',
+          thesis: 'Make the in-house SKADI optical 3D tracker directly usable by surgical-navigation companies and research groups through its software layer.',
+          summary: 'Develop and maintain the SKADI API and SDK, the Viewer that shows device state and tracking results, and a 3D Slicer custom-application template that lets researchers start immediately.',
+          problem: 'An optical tracker is not used as bare hardware: coordinate frames, marker definitions, real-time streaming, and error states must be exposed through an interface application developers can work with.',
+          role: 'Own the design, implementation, and maintenance of the API, SDK, and Viewer; wrote the 3D Slicer custom-application template; support customer integrations and enquiries.',
+          teamResult: 'Device hardware, optical and mechanical design, sales, and delivery belong to other colleagues. Delivery records and revenue are company results and are not claimed here.',
+          evidence: 'Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site footage is excluded.',
+          limitation: 'Device specifications, accuracy figures, customer lists, and sales numbers are company-owned and not published.',
+          collaboration: 'Interfaces are agreed with optical and hardware designers, customer navigation developers, and research users.',
+          mediaAlt: 'SKADI Viewer showing live tracker status and marker coordinates.', mediaCaption: 'The Viewer and API demonstration clip will be published after approval.',
+          status: 'Ongoing', cardProblem: 'Turn the optical tracker into an API and Viewer layer developers use directly.', cardOwnedRole: 'Own the API, SDK, Viewer, and Slicer template.', cardEvidence: 'Viewer, API, and template screens; specs and sales figures stay private.', problemSummary: 'Wrap the tracker in a usable software layer.', ownedRole: 'Own the API, SDK, Viewer, and Slicer template.', verifiedEvidence: 'Viewer, API, and template screens.', visualAlt: 'SKADI software layers.', visualCaption: 'Demonstration media is pending approval.'
+        }
+      },
+      blocks: [
+        { key: 'sdk-layers', type: 'system', translations: { ko: { heading: 'SDK 계층', body: '장치 연결, 마커·좌표계 정의, 실시간 스트리밍, 오류 상태를 API로 드러내고 언어 바인딩을 제공합니다.' }, en: { heading: 'SDK layers', body: 'Device connection, marker and frame definitions, real-time streaming, and error states are exposed through the API with language bindings.' } } },
+        { key: 'viewer-and-template', type: 'text', translations: { ko: { heading: 'Viewer와 템플릿', body: 'Viewer는 장치 상태와 추적 결과를 검증하는 도구이고, Slicer 템플릿은 연구자가 내비게이션 프로토타입을 바로 시작하게 합니다.' }, en: { heading: 'Viewer and template', body: 'The Viewer verifies device state and tracking output; the Slicer template lets researchers start a navigation prototype at once.' } } },
+        { key: 'delivery-evidence', type: 'evidence', translations: { ko: { heading: '동작 근거', body: 'Viewer·API·템플릿의 실제 동작 화면을 근거로 삼고 고객 현장 영상은 제외합니다.' }, en: { heading: 'Working evidence', body: 'Working Viewer, API, and template screens are the evidence; customer-site footage is excluded.' } } },
+        { key: 'hardware-boundary', type: 'limitation', translations: { ko: { heading: '하드웨어 경계', body: '장치 사양·정확도·판매 수치는 회사 소유 정보이며 이 사례는 소프트웨어 계층만 다룹니다.' }, en: { heading: 'Hardware boundary', body: 'Specifications, accuracy, and sales are company-owned; this case covers the software layer only.' } } }
+      ]
+    }),
+    project({
       slug: 'unmanned-forklift', tier: 'industrial-spotlight', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['sensor-fusion', 'registration'], route: 'projects/unmanned-forklift/',
       tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'],
-      media: { lead: { id: 'forklift-registration-pointcloud', type: 'image', status: 'pending-approval' } },
+      media: { lead: { id: 'forklift-registration-pointcloud', type: 'image', status: 'pending-approval' }, gallery: [] },
       pdf: { ko: 'assets/pdfs/unmanned-forklift-ko.pdf', en: 'assets/pdfs/unmanned-forklift-en.pdf' },
       pdfSequence: {
         middle: ['sensor-coordinate-chain', 'perception-to-policy', 'integration-evidence', 'field-boundary'],
@@ -444,7 +559,8 @@
       tech: ['Electron', 'TypeScript', 'Node.js', 'Cloudflare', 'GitHub Actions', 'Agent workflows'],
       media: {
         lead: { id: 'multi-cli-work-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' },
-        references: [{ id: 'daegu-bus-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/public-transportation-info' }]
+        references: [{ id: 'daegu-bus-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/public-transportation-info' }],
+        gallery: []
       },
       pdf: { ko: 'assets/pdfs/ai-build-lab-ko.pdf', en: 'assets/pdfs/ai-build-lab-en.pdf' },
       pdfSequence: {
