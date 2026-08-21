@@ -1,17 +1,17 @@
 {
-  "version": "2026-08-16",
+  "version": "2026-08-21",
   "identity": {
     "name": "Jinmin Kim",
     "translations": {
       "ko": {
         "displayName": "김진민",
-        "headline": "3D 정합과 로봇 소프트웨어 엔지니어",
-        "summary": "의료 내비게이션에서 시작해 XR, 3D 정합, 다중 센서 통합으로 확장해 온 연구개발 엔지니어입니다. 좌표계와 알고리즘을 실제 장치, 사용자 인터페이스, 검증 흐름으로 연결합니다."
+        "headline": "3D 정합·의료영상·로봇 시스템을 잇는 로봇SW 엔지니어",
+        "summary": "수술내비게이션에서 시작해 XR, 3D 정합, 다중 센서 통합, 무인지게차 현장 배치까지 확장해 온 연구개발 엔지니어입니다. 좌표계와 알고리즘을 실제 장치, 사용자 인터페이스, 검증 흐름으로 연결합니다."
       },
       "en": {
         "displayName": "Jinmin Kim",
-        "headline": "3D Registration and Robot Software Engineer",
-        "summary": "An R&D engineer whose work spans medical navigation, XR, 3D registration, and multi-sensor integration. I connect coordinate models and algorithms to physical devices, user interfaces, and explicit validation flows."
+        "headline": "Robot Software Engineer — 3D Registration, Medical Imaging, Robot Systems",
+        "summary": "An R&D engineer whose work spans surgical navigation, XR, 3D registration, multi-sensor integration, and autonomous-forklift field deployment. I connect coordinate models and algorithms to physical devices, user interfaces, and explicit validation flows."
       }
     }
   },
@@ -38,12 +38,12 @@
       "organization": "DIGITRACK Inc.",
       "translations": {
         "ko": {
-          "role": "로봇SW 개발자",
-          "summary": "의료 내비게이션, XR, 3D 정합, 다중 센서 인지와 산업 시스템 통합 및 현장 검증을 구현합니다."
+          "role": "연구원 · 로봇SW 개발",
+          "summary": "삼성서울병원 협업 수술내비게이션 SW, NeuroPilot rTMS, SKADI API·Viewer, DOTORI 비전·안전정책, 호흡추적(2026–) 담당."
         },
         "en": {
-          "role": "Robot Software Engineer",
-          "summary": "Implement medical navigation, XR, 3D registration, multi-sensor perception, industrial system integration, and field validation."
+          "role": "Researcher · Robot Software",
+          "summary": "Surgical-navigation software with Samsung Medical Center; NeuroPilot rTMS; SKADI API and Viewer; DOTORI vision and safety policy; respiratory tracking (2026–)."
         }
       }
     },
@@ -52,12 +52,12 @@
       "organization": "DGIST",
       "translations": {
         "ko": {
-          "role": "로봇및기계전자공학 석사",
-          "summary": "하악골 골절 정복 최적화와 수술내비게이션, XR을 연구했습니다."
+          "role": "로봇공학 석사",
+          "summary": "치아 교합 기반 하악골 골절 정복 계획 최적화(JIIM 2024, 공동 제1저자)와 AR 수술내비게이션·XR 연구."
         },
         "en": {
-          "role": "M.S., Robotics and Mechatronics Engineering",
-          "summary": "Researched mandibular fracture reduction optimization, surgical navigation, and XR."
+          "role": "M.S. in Robotics",
+          "summary": "Occlusion-based mandibular fracture reduction planning (JIIM 2024, joint first author) and AR surgical-navigation and XR research."
         }
       }
     },
@@ -81,11 +81,11 @@
       "translations": {
         "ko": {
           "role": "기계시스템공학 학사",
-          "summary": "시스템비전연구실 학부연구와 발명, 특허 활동을 수행했습니다."
+          "summary": "시스템비전연구실 학부연구, 4족 보행 로봇 설계·제작, 발명·특허 활동을 수행했습니다."
         },
         "en": {
           "role": "B.S., Mechanical System Engineering",
-          "summary": "Completed undergraduate system-vision research and invention activities."
+          "summary": "System-vision undergraduate research, a quadruped robot design-and-build, and invention and patent activity."
         }
       }
     }
@@ -95,11 +95,11 @@
       "translations": {
         "ko": {
           "title": "3D 정합 및 최적화",
-          "body": "PCA, ICP, CLPSO와 Open3D, OpenCV, SciPy를 사용해 특징점, 표면, 좌표계를 다뤘습니다."
+          "body": "PCA, ICP, CLPSO와 Open3D, OpenCV, SciPy로 특징점·표면·좌표계 정합과 센서 정밀도 검증을 다뤘습니다."
         },
         "en": {
           "title": "3D Registration and Optimization",
-          "body": "Used PCA, ICP, CLPSO, Open3D, OpenCV, and SciPy for feature, surface, and coordinate-system problems."
+          "body": "Feature, surface, and coordinate-frame registration plus sensor-precision validation with PCA, ICP, CLPSO, Open3D, OpenCV, and SciPy."
         }
       }
     },
@@ -107,11 +107,11 @@
       "translations": {
         "ko": {
           "title": "의료 내비게이션 및 XR",
-          "body": "3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, PUN2, Photon Voice로 동작하는 애플리케이션을 구현했습니다."
+          "body": "3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, Photon 기반 내비게이션·XR 앱을 구현했습니다."
         },
         "en": {
           "title": "Medical Navigation and XR",
-          "body": "Built working applications with 3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, PUN2, and Photon Voice."
+          "body": "Working navigation and XR applications with 3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, and Photon."
         }
       }
     },
@@ -119,11 +119,11 @@
       "translations": {
         "ko": {
           "title": "로봇 및 센서 통합",
-          "body": "ROS 2, Unity, Isaac Sim, NDI 추적기, HoloLens 2, Meta Quest, RGB, ToF, LiDAR를 연결했습니다."
+          "body": "ROS 2, Zenoh, Isaac Sim, NDI 추적기, HoloLens 2, Meta Quest, RGB·ToF·LiDAR 연결·배치했습니다."
         },
         "en": {
           "title": "Robot and Sensor Integration",
-          "body": "Integrated ROS 2, Unity, Isaac Sim, NDI tracking, HoloLens 2, Meta Quest, RGB, ToF, and LiDAR."
+          "body": "Integrated ROS 2, Zenoh, Isaac Sim, NDI tracking, HoloLens 2, Meta Quest, RGB, ToF, and LiDAR, and deployed them in the field."
         }
       }
     },
@@ -131,11 +131,11 @@
       "translations": {
         "ko": {
           "title": "응용 계층 개발",
-          "body": "Python, C#, C++로 알고리즘, XR 애플리케이션, API, ROS 2 패키지, 장치 인터페이스를 구현했습니다."
+          "body": "Python, C#, C++로 알고리즘, API·Viewer, XR 앱, ROS 2 패키지, SAM 계열 세그멘테이션 PoC를 구현했습니다."
         },
         "en": {
           "title": "Application-layer Engineering",
-          "body": "Used Python, C#, and C++ for algorithms, XR applications, APIs, ROS 2 packages, and device interfaces."
+          "body": "Algorithms, API and Viewer software, XR apps, ROS 2 packages, and SAM-family segmentation PoCs in Python, C#, and C++."
         }
       }
     }
@@ -159,7 +159,7 @@
     "patentApplications": 7,
     "patentGrants": 3,
     "awardTotal": 9,
-    "asOf": "2026-08-16",
+    "asOf": "2026-08-21",
     "selectedAwards": [
       {
         "year": "2024",

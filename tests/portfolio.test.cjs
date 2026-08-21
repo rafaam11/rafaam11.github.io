@@ -1457,7 +1457,7 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
     assert.equal(Object.prototype.hasOwnProperty.call(exported, 'contentVersion'), false);
     assert.deepEqual(exported.projects.map((project) => project.slug), slugs);
     assert.deepEqual(exported.locales, ['ko', 'en']);
-    assert.equal(exported.cv.version, '2026-08-16');
+    assert.equal(exported.cv.version, '2026-08-21');
     assert.deepEqual(validator.publicCvDataErrors(exported.cv), []);
     assert.doesNotMatch(fs.readFileSync(first, 'utf8'), /(?:(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw)/i);
     assert.doesNotMatch(JSON.stringify(exported.cv), /\b(?:phone|salary|professor|patient|hospital)\b/i);
@@ -3841,4 +3841,25 @@ test('Scholar highlights data mirrors the approved public CV signals', () => {
   assert.ok(data.highlights.patents.items.every((item) => item.status === 'registered'));
   assert.equal(data.highlights.awards.length, 9);
   assert.doesNotMatch(JSON.stringify(data.highlights), /\b10-\d{4}-\d+\b|홍재성|안재명|강영남|최현석/);
+});
+
+test('Scholar CV refresh names the approved partners and products within the PDF line caps', () => {
+  const cv = JSON.parse(read('data/public-cv.json'));
+  assert.equal(cv.version, '2026-08-21');
+  assert.equal(cv.achievements.asOf, '2026-08-21');
+  const digitrack = cv.timeline[0];
+  assert.match(digitrack.translations.ko.summary, /삼성서울병원/);
+  assert.match(digitrack.translations.ko.summary, /SKADI/);
+  assert.match(digitrack.translations.ko.summary, /DOTORI/);
+  assert.match(digitrack.translations.en.summary, /Samsung Medical Center/);
+  for (const entry of cv.timeline) {
+    assert.ok(entry.translations.ko.summary.length <= 95, `${entry.organization}: ko summary ${entry.translations.ko.summary.length} chars`);
+    assert.ok(entry.translations.en.summary.length <= 190, `${entry.organization}: en summary ${entry.translations.en.summary.length} chars`);
+  }
+  for (const capability of cv.capabilities) {
+    assert.ok(capability.translations.ko.body.length <= 85, `${capability.translations.ko.title}: ko body`);
+    assert.ok(capability.translations.en.body.length <= 170, `${capability.translations.en.title}: en body`);
+  }
+  assert.doesNotMatch(JSON.stringify(cv), /박사|진학|이직|PhD|admission|홍재성|안재명|강영남|최현석|\b10-\d{4}-\d+\b/);
+  assert.deepEqual(validator.publicCvDataErrors(cv), []);
 });

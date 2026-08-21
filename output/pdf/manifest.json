@@ -1,9 +1,9 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "0ff7b809175921629b9312695065f0d6f40a4814a96f6bbbb1341e7f24b0b05c",
+  "sourceDigest": "d8df48ea26ca679e8e2c2de1eb62c99b42ad697b3e590ae22014395f3db89ba2",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
-  "generatorSha256": "5d8872921f4135acb549fc1e58d21f67fb5e4964e579a9f53650f0b8d8236d83",
+  "generatorSha256": "ffb07da833d39d69353731fefa2e6407387f4bf09ec56b238a116b218d644168",
   "documents": [
     {
       "name": "surgical-navigation-ko.pdf",
@@ -187,9 +187,9 @@
       "locale": "ko",
       "pages": 2,
       "links": 6,
-      "characters": 1694,
-      "bytes": 136297,
-      "sha256": "eecb446198fe3f6b2e84808c29d1b77012679339ad8db30cbb6b84f5d184f72d"
+      "characters": 1801,
+      "bytes": 144308,
+      "sha256": "4719d3513d0e35bfa2f9cfaef05b280957fd8dbe21f9d0c09b65b5371295f699"
     },
     {
       "name": "jinmin-kim-cv-en.pdf",
@@ -197,9 +197,9 @@
       "locale": "en",
       "pages": 2,
       "links": 6,
-      "characters": 2682,
-      "bytes": 64889,
-      "sha256": "b3bfad557102b788d998bd1c43d013e2e0ab47eaf95eb29fcd22b13aa95e0648"
+      "characters": 2922,
+      "bytes": 65507,
+      "sha256": "6cea2d6db9c35d5081d3a6ae2a6bf07e2ef59858e49c8e6ec941130460b61618"
     }
   ],
   "artifacts": [
@@ -210,8 +210,8 @@
       "page": 1,
       "width": 1241,
       "height": 1754,
-      "bytes": 156182,
-      "sha256": "ee9e46d84d5b83fbe04817323a8d01618500058d926061a19f4fc326e9fada8b"
+      "bytes": 174032,
+      "sha256": "7a00e884b1339425c9451dce57fc323dcd7191750f002de731a69aa5dedee9e5"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-en-page-2.png",
@@ -220,16 +220,16 @@
       "page": 2,
       "width": 1241,
       "height": 1754,
-      "bytes": 115393,
-      "sha256": "6d79d97fe632f419dfa1af1e2a2eaee6fc091451879bde7f7123aee9b0c74b66"
+      "bytes": 115329,
+      "sha256": "01d0d9182abc17209f3c4ad57e3d549b1005f5a1fcc3c6054cf75f6f6cd818f7"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-en.pdf",
       "kind": "cv-pdf",
       "locale": "en",
       "pages": 2,
-      "bytes": 64889,
-      "sha256": "b3bfad557102b788d998bd1c43d013e2e0ab47eaf95eb29fcd22b13aa95e0648"
+      "bytes": 65507,
+      "sha256": "6cea2d6db9c35d5081d3a6ae2a6bf07e2ef59858e49c8e6ec941130460b61618"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-ko-page-1.png",
@@ -238,8 +238,8 @@
       "page": 1,
       "width": 1241,
       "height": 1754,
-      "bytes": 143458,
-      "sha256": "58e1b1105c01f3f55247d2074d04a78146db3a3dc498d7a5a54014d69b77d266"
+      "bytes": 155992,
+      "sha256": "edc42aaaabeab993d84741057fd04b7c535bde22477095dfa6cd8655927e753f"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-ko-page-2.png",
@@ -248,16 +248,16 @@
       "page": 2,
       "width": 1241,
       "height": 1754,
-      "bytes": 98911,
-      "sha256": "2eb40a0d622f99a934e3b2294cf9e7963cf337438c7bda48a22acb801d817440"
+      "bytes": 98870,
+      "sha256": "987dec34e428aa50356faf640d00ec84520f1c920833f256afede3ecaa6a461d"
     },
     {
       "path": "assets/cv/jinmin-kim-cv-ko.pdf",
       "kind": "cv-pdf",
       "locale": "ko",
       "pages": 2,
-      "bytes": 136297,
-      "sha256": "eecb446198fe3f6b2e84808c29d1b77012679339ad8db30cbb6b84f5d184f72d"
+      "bytes": 144308,
+      "sha256": "4719d3513d0e35bfa2f9cfaef05b280957fd8dbe21f9d0c09b65b5371295f699"
     },
     {
       "path": "assets/pdfs/ai-build-lab-en.pdf",
@@ -426,16 +426,16 @@
       "kind": "cv-pdf",
       "locale": "en",
       "pages": 2,
-      "bytes": 64889,
-      "sha256": "b3bfad557102b788d998bd1c43d013e2e0ab47eaf95eb29fcd22b13aa95e0648"
+      "bytes": 65507,
+      "sha256": "6cea2d6db9c35d5081d3a6ae2a6bf07e2ef59858e49c8e6ec941130460b61618"
     },
     {
       "path": "output/pdf/jinmin-kim-cv-ko.pdf",
       "kind": "cv-pdf",
       "locale": "ko",
       "pages": 2,
-      "bytes": 136297,
-      "sha256": "eecb446198fe3f6b2e84808c29d1b77012679339ad8db30cbb6b84f5d184f72d"
+      "bytes": 144308,
+      "sha256": "4719d3513d0e35bfa2f9cfaef05b280957fd8dbe21f9d0c09b65b5371295f699"
     },
     {
       "path": "output/pdf/life-careverse-en.pdf",
