@@ -170,15 +170,22 @@
       route: 'projects/surgical-navigation/',
       tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink'],
       media: {
-        lead: { id: 'surgical-navigation-demo', type: 'video', status: 'pending-approval' },
-        video: { id: 'surgical-navigation-demo', type: 'video', status: 'pending-approval' },
-        poster: { id: 'surgical-navigation-demo-poster', type: 'image', status: 'pending-approval' },
-        gallery: []
+        lead: { id: 'surgical-navigation-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-clip-01.mp4' },
+        video: { id: 'surgical-navigation-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-clip-01.mp4' },
+        poster: { id: 'surgical-navigation-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-poster-01.png' },
+        gallery: [
+          { id: 'surgical-navigation-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-01.png', translations: { ko: { caption: '시스템 구성 — 추적 장치·내비게이션 서버·HoloLens 2 클라이언트(ASA·PUN)', alt: '추적 장치와 내비게이션 서버, 두 대의 HoloLens 2가 ASA와 PUN으로 연결된 구성도' }, en: { caption: 'System layout: tracker, navigation server, and HoloLens 2 clients linked through ASA and PUN', alt: 'Diagram of the tracker, navigation server, and two HoloLens 2 clients connected through Azure Spatial Anchors and Photon Unity Networking' } } },
+          { id: 'surgical-navigation-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-02.png', translations: { ko: { caption: '좌표계 관계 — 추적 장치·환자 마커·프로브 마커 변환', alt: '추적 장치 기준의 환자 마커와 프로브 마커 좌표 변환 개념도' }, en: { caption: 'Coordinate frames: tracker, patient marker, and probe marker transforms', alt: 'Concept diagram of patient-marker and probe-marker transforms relative to the tracker' } } },
+          { id: 'surgical-navigation-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-03.png', translations: { ko: { caption: '패시브 마커 어댑터를 장착한 추적 수술기구', alt: '반사 마커 4개가 달린 어댑터를 장착한 수술용 기구 사진' }, en: { caption: 'Surgical instrument fitted with a passive-marker adapter', alt: 'Photo of a surgical instrument with a four-sphere reflective marker adapter' } } },
+          { id: 'surgical-navigation-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-04.png', translations: { ko: { caption: '벤치 셋업 — 광학 추적 장치·내비게이션 화면·두개골 팬텀(영상 패널 블러)', alt: '삼각대 위 광학 추적 장치, 내비게이션 SW 화면, 두개골 팬텀과 마커 기구가 놓인 작업대' }, en: { caption: 'Bench setup: optical tracker, navigation screen, and skull phantom (image panels blurred)', alt: 'Work bench with an optical tracker on a tripod, the navigation software screen, a skull phantom, and marker instruments' } } },
+          { id: 'surgical-navigation-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-05.png', translations: { ko: { caption: 'HoloLens 시점 — 두개골 홀로그램과 토글 패널', alt: 'HoloLens로 본 두개골 홀로그램과 손 추적·시선 추적 토글 패널' }, en: { caption: 'HoloLens view: skull hologram and the toggle panel', alt: 'Skull hologram and hand- and eye-tracking toggle panel seen through HoloLens' } } },
+          { id: 'surgical-navigation-gallery-06', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-06.png', translations: { ko: { caption: 'HoloLens 착용 상태의 팬텀 시연', alt: 'HoloLens를 착용한 사용자가 추적 장치 앞에서 팬텀에 기구를 맞추는 장면' }, en: { caption: 'Phantom demonstration while wearing HoloLens', alt: 'User wearing HoloLens aligning an instrument on a phantom in front of the tracker' } } },
+        ]
       },
       pdf: { ko: 'assets/pdfs/surgical-navigation-ko.pdf', en: 'assets/pdfs/surgical-navigation-en.pdf' },
       pdfSequence: {
         middle: ['coordinate-chain', 'spatial-feedback', 'demonstration-evidence', 'clinical-boundary'],
-        evidenceId: 'surgical-navigation-demo',
+        evidenceId: 'surgical-navigation-clip-01',
         diagram: {
           kind: 'coordinate-chain',
           translations: {
@@ -198,11 +205,11 @@
           role: '장치·SDK·좌표 변환·데이터 흐름을 포함한 통합 소프트웨어와 HoloLens 공간 배치·정합 피드백 경험을 리드했습니다.',
           teamResult: '팀과 외부 협업자가 통합 시연과 수용 검토를 함께 수행했으며, 그 결과를 개인 성과로 재귀속하지 않습니다.',
           evidence: '동작하는 장치 연결, 좌표 변환, 공간 배치, 정합 피드백 시연이 근거입니다.',
-          limitation: '실제 판텀·장비·HoloLens 시연 미디어는 공개 승인 대기 중이며 임상 효과를 주장하지 않습니다.',
+          limitation: '시연은 팬텀 대상의 통합 동작을 보여주며 임상 효과나 운영 배포를 주장하지 않습니다.',
           collaboration: '추적 장치, 의료영상, XR, 워크플로 전문가와의 공동 검토가 필요합니다.',
-          mediaAlt: '추적 장치와 의료영상 모델이 HoloLens 공간 표시로 연결되는 수술내비게이션 시연.',
-          mediaCaption: '실제 통합 시연은 공개 승인 후에만 게시합니다.',
-          status: '진행 중', cardProblem: '분절된 장치·좌표·XR 흐름을 하나의 내비게이션으로 연결합니다.', cardOwnedRole: '통합 SW와 HoloLens 공간 배치·정합 피드백을 리드했습니다.', cardEvidence: '장치 연결·좌표 변환·공간 시연; 미디어는 승인 대기 중입니다.', problemSummary: '장치별 좌표와 정합 상태를 하나의 사용자 경험으로 연결합니다.', ownedRole: '통합 소프트웨어와 HoloLens 공간 배치·정합 피드백을 리드했습니다.', verifiedEvidence: '동작하는 통합 시연이 근거이며 실제 미디어는 승인 대기 중입니다.', visualAlt: '추적·정합·HoloLens 통합 흐름.', visualCaption: '공개 가능한 시스템 관계 다이어그램.'
+          mediaAlt: 'HoloLens 시점에서 두개골 팬텀 위에 정합된 붉은 홀로그램과 추적 포인터가 보이는 시연 장면.',
+          mediaCaption: 'HoloLens 시점에서 두개골 팬텀 위에 정합된 홀로그램과 추적 포인터를 보여주는 시연 클립입니다.',
+          status: '진행 중', cardProblem: '분절된 장치·좌표·XR 흐름을 하나의 내비게이션으로 연결합니다.', cardOwnedRole: '통합 SW와 HoloLens 공간 배치·정합 피드백을 리드했습니다.', cardEvidence: '장치 연결·좌표 변환·HoloLens 공간 시연 클립과 구성도·사진이 근거입니다.', problemSummary: '장치별 좌표와 정합 상태를 하나의 사용자 경험으로 연결합니다.', ownedRole: '통합 소프트웨어와 HoloLens 공간 배치·정합 피드백을 리드했습니다.', verifiedEvidence: 'HoloLens 공간 시연 클립, 시스템·좌표 구성도, 벤치 사진이 근거입니다.', visualAlt: 'HoloLens 홀로그램 정합 시연.', visualCaption: 'HoloLens 시점 홀로그램 정합 시연 클립.'
         },
         en: {
           title: 'Surgical Navigation Systems',
@@ -214,11 +221,11 @@
           role: 'Led the integrated software across device, SDK, coordinate transforms, and data flow, plus the HoloLens spatial-placement and registration-feedback experience.',
           teamResult: 'The team and external collaborators jointly conducted integration demonstrations and acceptance reviews; those results are not attributed as individual outcomes.',
           evidence: 'Working device connections, coordinate transforms, spatial placement, and registration-feedback demonstrations provide the evidence.',
-          limitation: 'Actual phantom, equipment, and HoloLens demonstration media remains pending approval, and no clinical efficacy is claimed.',
+          limitation: 'The demonstration shows integrated operation on a phantom; it does not claim clinical efficacy or production deployment.',
           collaboration: 'Joint review spans tracking hardware, medical imaging, XR, and workflow expertise.',
-          mediaAlt: 'Surgical-navigation demonstration connecting tracked equipment and medical-image models to a HoloLens spatial view.',
-          mediaCaption: 'The actual integrated demonstration will be published only after approval.',
-          status: 'Ongoing', cardProblem: 'Connect fragmented device, coordinate, and XR flows into one navigation experience.', cardOwnedRole: 'Led integrated software and the HoloLens placement and registration-feedback experience.', cardEvidence: 'Device, transform, and spatial demonstrations; media pending approval.', problemSummary: 'Connect device coordinates and registration state into one readable user experience.', ownedRole: 'Led integrated software and HoloLens spatial placement and registration feedback.', verifiedEvidence: 'A working integrated demonstration is the evidence; actual media is pending approval.', visualAlt: 'Tracking, registration, and HoloLens integration flow.', visualCaption: 'Public-safe system-relationship diagram.'
+          mediaAlt: 'Demonstration seen through HoloLens: a red hologram registered on a skull phantom with a tracked pointer.',
+          mediaCaption: 'Demonstration clip from the HoloLens viewpoint: a hologram registered on a skull phantom with a tracked pointer.',
+          status: 'Ongoing', cardProblem: 'Connect fragmented device, coordinate, and XR flows into one navigation experience.', cardOwnedRole: 'Led integrated software and the HoloLens placement and registration-feedback experience.', cardEvidence: 'Device-connection, transform, and HoloLens spatial demonstration clip plus diagrams and photos are the evidence.', problemSummary: 'Connect device coordinates and registration state into one readable user experience.', ownedRole: 'Led integrated software and HoloLens spatial placement and registration feedback.', verifiedEvidence: 'The HoloLens spatial demonstration clip, system and coordinate diagrams, and bench photos are the evidence.', visualAlt: 'HoloLens hologram registration demonstration.', visualCaption: 'HoloLens-view hologram registration demonstration clip.'
         }
       },
       blocks: [
@@ -233,14 +240,20 @@
       capabilityKeys: ['registration', 'medical-navigation'], route: 'projects/mandibular-fracture/',
       tech: ['Python', 'Open3D', 'OpenCV', 'SciPy', 'PCA', 'ICP', 'CLPSO', '3D Slicer'],
       media: {
-        lead: { id: 'mandibular-presentation-award', type: 'image', status: 'pending-approval' },
+        lead: { id: 'mandibular-fracture-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-lead-01.png' },
         references: [{ id: 'mandibular-publication', type: 'publication', status: 'approved', publicPath: 'https://link.springer.com/article/10.1007/s10278-024-01014-z' }],
-        gallery: []
+        gallery: [
+          { id: 'mandibular-fracture-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-01.png', translations: { ko: { caption: '치아 랜드마크 추출 — 상악 정렬·치열궁 곡선·단면·중심구·협측 교두', alt: '상악 모델 정렬, 치열궁 피팅, 수직 단면, 그래프 피크, 중심구와 설측 교두 추출 과정 그림' }, en: { caption: 'Dental landmark extraction: maxilla alignment, arch-line fit, slicing, central groove, and buccal cusp', alt: 'Figure showing maxilla alignment, arch-line fitting, perpendicular slicing, graph peaks, and central-groove and lingual-cusp extraction' } } },
+          { id: 'mandibular-fracture-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-02.png', translations: { ko: { caption: '골절편의 일반 위치 맞춤 — 치열궁 정렬·골절면 특징·중첩 오차', alt: '상악 치열궁에 맞춘 두 하악골 골절편, 협측 교두 추출, 골절면 특징점과 비틀림·부피 중첩 오차 그림' }, en: { caption: 'General positioning of fracture segments: arch alignment, fracture-surface features, and overlap error', alt: 'Figure of two mandibular segments aligned to the maxillary arch, buccal-cusp extraction, fracture-section features, and twisting and volume-overlap error' } } },
+          { id: 'mandibular-fracture-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-03.png', translations: { ko: { caption: '다양한 골절·치아 조건의 표면 거리 맵 — 10–4 분할, 11–3 분할, 치아 2개 결손', alt: '세 가지 골절·결손 조건에서 정복 모델의 표면 거리 맵' }, en: { caption: 'Surface-distance maps for different fracture and tooth conditions: 10–4 split, 11–3 split, two missing teeth', alt: 'Surface-distance maps of the reduction model in three fracture and tooth-loss conditions' } } },
+          { id: 'mandibular-fracture-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-04.png', translations: { ko: { caption: '치열궁 기반 하악 분절 정렬(ACCAS 2022 발표)', alt: '상악 치열궁을 거울 대칭해 두 하악 분절을 정렬하는 개념도' }, en: { caption: 'Arch-line-based alignment of mandibular segments (ACCAS 2022)', alt: 'Concept figure aligning two lower segments to the mirrored upper arch' } } },
+          { id: 'mandibular-fracture-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-05.png', translations: { ko: { caption: 'ACCAS 2022(태국 콘캔) 발표 현장', alt: 'ACCAS 2022 학회 배너 앞에 선 발표자' }, en: { caption: 'Presenting at ACCAS 2022, Khon Kaen', alt: 'Presenter standing in front of the ACCAS 2022 conference banner' } } },
+        ]
       },
       pdf: { ko: 'assets/pdfs/mandibular-fracture-ko.pdf', en: 'assets/pdfs/mandibular-fracture-en.pdf' },
       pdfSequence: {
         middle: ['clinical-question', 'research-pipeline', 'published-evidence', 'research-boundary'],
-        evidenceId: 'mandibular-presentation-award',
+        evidenceId: 'mandibular-fracture-lead-01',
         diagram: {
           kind: 'optimization-loop',
           translations: {
@@ -259,10 +272,10 @@
           role: '문제 정의, 특징·최적화 설계, 시뮬레이터, 실험·분석, 논문으로 이어지는 연구 파이프라인을 공동으로 리드했고 공동 제1저자로 참여했습니다.',
           teamResult: '공동 연구팀은 국제·국내 학술대회 발표, 수상, 동료심사 논문을 남겼습니다.',
           evidence: 'ACCAS 2022 발표, 2022 국내 학술대회 발표, 2023 우수논문상, 2024 Q1 SCIE 동료심사 논문, 정량 실험이 근거입니다.',
-          limitation: '준비된 연구 데이터셋의 결과이며 일상 임상 사용이나 단독 제1저자를 주장하지 않습니다.',
+          limitation: '공개 근거는 게재 논문 그림과 발표 자료이며 임상 적용이나 단독 제1저자를 주장하지 않습니다.',
           collaboration: '임상 문제 해석, 알고리즘, 실험 설계, 논문 작성을 공동 연구로 수행했습니다.',
-          mediaAlt: '하악골 골절 정복 연구의 학술대회 발표와 수상 근거.', mediaCaption: '발표·수상 미디어는 공개 승인 대기 중이며 게재 논문은 공개 참조할 수 있습니다.',
-          status: '검증됨 · 완료', cardProblem: '모호한 정복 위치를 검증 가능한 3D 최적화 문제로 정의했습니다.', cardOwnedRole: '문제 정의부터 실험·논문까지 공동 리드했습니다.', cardEvidence: '발표·수상·Q1 SCIE 논문·정량 실험.', problemSummary: '교합 제약을 반영한 재현 가능한 정복 표적을 정의합니다.', ownedRole: '연구 파이프라인을 공동 리드한 공동 제1저자입니다.', verifiedEvidence: '학술대회 발표, 수상, Q1 SCIE 논문, 정량 실험.', visualAlt: '하악골 정복 정합과 최적화 근거.', visualCaption: '발표·수상 미디어는 승인 대기 중입니다.'
+          mediaAlt: '골절 전 하악골과 정복 모델 사이의 표면 거리 맵 6개 패널.', mediaCaption: '골절 전 하악골과 정복 모델 사이의 표면 거리 맵입니다(게재 논문 그림 3 일부).',
+          status: '검증됨 · 완료', cardProblem: '모호한 정복 위치를 검증 가능한 3D 최적화 문제로 정의했습니다.', cardOwnedRole: '문제 정의부터 실험·논문까지 공동 리드했습니다.', cardEvidence: '게재 논문 그림·학회 발표·Q1 SCIE 논문·정량 실험.', problemSummary: '교합 제약을 반영한 재현 가능한 정복 표적을 정의합니다.', ownedRole: '연구 파이프라인을 공동 리드한 공동 제1저자입니다.', verifiedEvidence: '학술대회 발표, 수상, Q1 SCIE 논문 그림, 정량 실험.', visualAlt: '하악골 정복 표면 거리 맵.', visualCaption: '표면 거리 맵(논문 그림 3 일부).'
         },
         en: {
           title: 'Mandibular Fracture Reduction Optimization', shortTitle: 'Mandibular Fracture Optimization', eyebrow: 'Medical Core · Verified Research',
@@ -272,10 +285,10 @@
           role: 'Jointly led the research pipeline across problem definition, feature and optimization design, simulator, experiments and analysis, and paper, serving as a co-first author.',
           teamResult: 'The joint research team produced international and domestic presentations, an award, and a peer-reviewed publication.',
           evidence: 'ACCAS 2022, a 2022 domestic conference, a 2023 best-paper award, a 2024 Q1 SCIE peer-reviewed paper, and quantitative experiments provide the evidence.',
-          limitation: 'Results are from prepared research datasets; this does not claim routine clinical use or sole first authorship.',
+          limitation: 'Public evidence is the published figures and presentation material; no clinical use or sole first authorship is claimed.',
           collaboration: 'Clinical interpretation, algorithm design, experiment design, and writing were conducted as joint research.',
-          mediaAlt: 'Presentation and award evidence for mandibular fracture reduction research.', mediaCaption: 'Presentation and award media remains pending approval; the publication is publicly referenced.',
-          status: 'Verified · Completed', cardProblem: 'Frame an ambiguous reduction as a testable 3D optimization problem.', cardOwnedRole: 'Jointly led the pipeline from problem framing through experiments and paper.', cardEvidence: 'Conference, award, publication, and experiment evidence.', problemSummary: 'Use occlusion constraints to define a reproducible reduction target.', ownedRole: 'Jointly led the research pipeline and served as a co-first author.', verifiedEvidence: 'Presentations, award, Q1 SCIE paper, and quantitative experiments.', visualAlt: 'Mandibular registration and optimization evidence.', visualCaption: 'Presentation and award media remains pending approval.'
+          mediaAlt: 'Six-panel surface-distance map between the pre-fracture mandible and the reduction model.', mediaCaption: 'Surface-distance maps between the pre-fracture mandible and the reduction model (part of Fig. 3 in the published paper).',
+          status: 'Verified · Completed', cardProblem: 'Frame an ambiguous reduction as a testable 3D optimization problem.', cardOwnedRole: 'Jointly led the pipeline from problem framing through experiments and paper.', cardEvidence: 'Published figures, conference presentation, Q1 SCIE paper, and quantitative experiments.', problemSummary: 'Use occlusion constraints to define a reproducible reduction target.', ownedRole: 'Jointly led the research pipeline and served as a co-first author.', verifiedEvidence: 'Conference presentations, award, Q1 SCIE paper figures, and quantitative experiments.', visualAlt: 'Mandibular reduction surface-distance maps.', visualCaption: 'Surface-distance maps (part of paper Fig. 3).'
         }
       },
       blocks: [
@@ -289,11 +302,20 @@
       slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
       tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'],
-      media: { lead: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, video: { id: 'life-careverse-multiuser-demo', type: 'video', status: 'pending-approval' }, poster: { id: 'life-careverse-multiuser-poster', type: 'image', status: 'pending-approval' }, gallery: [] },
+      media: {
+        lead: { id: 'life-careverse-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-clip-01.mp4' },
+        video: { id: 'life-careverse-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-clip-01.mp4' },
+        poster: { id: 'life-careverse-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-poster-01.png' },
+        gallery: [
+          { id: 'life-careverse-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-01.png', translations: { ko: { caption: 'Quest 패스스루 — 두개골 홀로그램과 좌표축, 메뉴 패널', alt: 'Quest 패스스루 화면에 표시된 두개골 모델, 좌표축, 파란 메뉴 패널' }, en: { caption: 'Quest passthrough: skull hologram with coordinate axes and menu panel', alt: 'Skull model, coordinate axes, and blue menu panel shown in Quest passthrough' } } },
+          { id: 'life-careverse-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-02.png', translations: { ko: { caption: '홀로그램 조작 — 모델과 마커 구', alt: '책상 위 공간에 배치된 두개골 모델과 빨간 마커 구' }, en: { caption: 'Manipulating the hologram: model and marker spheres', alt: 'Skull model and red marker spheres placed in the space above a desk' } } },
+          { id: 'life-careverse-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-03.png', translations: { ko: { caption: '가상 상담실 — 공유 화면과 사용자 아바타', alt: '공유 디스플레이와 아바타가 있는 가상 상담실 장면' }, en: { caption: 'Virtual consultation room with shared display and user avatar', alt: 'Virtual consultation room scene with a shared display and an avatar' } } },
+        ]
+      },
       pdf: { ko: 'assets/pdfs/life-careverse-ko.pdf', en: 'assets/pdfs/life-careverse-en.pdf' },
       pdfSequence: {
         middle: ['shared-state', 'xr-application', 'multiuser-demo', 'adoption-boundary'],
-        evidenceId: 'life-careverse-multiuser-demo',
+        evidenceId: 'life-careverse-clip-01',
         diagram: {
           kind: 'sync-topology',
           translations: {
@@ -311,10 +333,10 @@
           role: 'Quest·Unity·Photon/PUN2·음성·스패셜 UI·시나리오 통합을 포함한 XR 앱 전체를 리드했습니다.',
           teamResult: '팀의 채택, 소프트웨어 등록, 연구 테스트는 공동 결과이며 각각의 범위와 확정 수준을 구분합니다.',
           evidence: '동작하는 멀티유저 동기화, 음성, 스패셜 UI, 시나리오 시연이 근거입니다.',
-          limitation: '시연 미디어는 공개 승인 대기 중이며 사용자 효과나 생산성 지표를 주장하지 않습니다.',
+          limitation: '시연은 공간 배치·조작 동작을 보여주며 사용자 효과나 임상 효과를 주장하지 않습니다.',
           collaboration: '시나리오 전문가, 연구자, 소프트웨어 팀의 공동 검토로 진행했습니다.',
-          mediaAlt: 'Quest 헤드셋 사용자 간 공간 상태와 음성이 동기화되는 Life Careverse 시연.', mediaCaption: '멀티유저 시연 미디어는 공개 승인 후에만 게시합니다.',
-          status: '진행 중', cardProblem: '다수 사용자의 공간·음성·시나리오 상태를 통합합니다.', cardOwnedRole: 'Quest 멀티유저 XR 앱 전체를 리드했습니다.', cardEvidence: '동작하는 동기화·음성·시나리오 시연.', problemSummary: '멀티유저 XR의 공간·음성·시나리오 상태를 통합합니다.', ownedRole: 'Quest 기반 XR 앱 전체를 리드했습니다.', verifiedEvidence: '동작하는 멀티유저 시연; 미디어는 승인 대기 중입니다.', visualAlt: '멀티유저 XR 동기화 시연.', visualCaption: '시연 미디어는 승인 대기 중입니다.'
+          mediaAlt: 'Quest 패스스루에서 두개골 홀로그램과 좌표축, 메뉴 패널을 조작하는 장면.', mediaCaption: 'Meta Quest 패스스루에서 두개골 홀로그램과 메뉴 패널을 조작하는 시연 클립입니다.',
+          status: '진행 중', cardProblem: '다수 사용자의 공간·음성·시나리오 상태를 통합합니다.', cardOwnedRole: 'Quest 멀티유저 XR 앱 전체를 리드했습니다.', cardEvidence: 'Quest 패스스루 시연 클립과 가상 상담실 화면이 근거입니다.', problemSummary: '멀티유저 XR의 공간·음성·시나리오 상태를 통합합니다.', ownedRole: 'Quest 기반 XR 앱 전체를 리드했습니다.', verifiedEvidence: '동작하는 Quest 패스스루 시연 클립과 가상 상담실 화면이 근거입니다.', visualAlt: 'Quest 패스스루 홀로그램 조작 시연.', visualCaption: 'Quest 패스스루 홀로그램 조작 클립.'
         },
         en: {
           title: 'Life Careverse - Multi-user XR', shortTitle: 'Life Careverse', eyebrow: 'Medical Core · Multi-user XR',
@@ -324,10 +346,10 @@
           role: 'Led the XR application overall across Quest, Unity, Photon/PUN2, voice, spatial UI, and scenario integration.',
           teamResult: 'Team adoption, software registration, and research testing remain joint results, each stated only to its qualified evidence level.',
           evidence: 'Working multi-user synchronization, voice, spatial UI, and scenario demonstrations provide the evidence.',
-          limitation: 'Demo media remains pending approval; no user-effect or productivity metrics are claimed.',
+          limitation: 'The demonstration shows spatial placement and manipulation; no user-effect or clinical effect is claimed.',
           collaboration: 'Scenario experts, researchers, and the software team reviewed the application together.',
-          mediaAlt: 'Life Careverse demonstration synchronizing spatial state and voice between Quest headset users.', mediaCaption: 'The multi-user demonstration will be published only after approval.',
-          status: 'Ongoing', cardProblem: 'Integrate spatial, voice, and scenario state across multiple users.', cardOwnedRole: 'Led the Quest multi-user XR application overall.', cardEvidence: 'Working synchronization, voice, and scenario demonstrations.', problemSummary: 'Integrate spatial, voice, and scenario state for a multi-user XR application.', ownedRole: 'Led the Quest-based XR application overall.', verifiedEvidence: 'A working multi-user demonstration is the evidence; media is pending approval.', visualAlt: 'Multi-user XR synchronization demonstration.', visualCaption: 'Demo media remains pending approval.'
+          mediaAlt: 'Manipulating a skull hologram, coordinate axes, and menu panel in Quest passthrough.', mediaCaption: 'Demonstration clip manipulating a skull hologram and menu panel in Meta Quest passthrough.',
+          status: 'Ongoing', cardProblem: 'Integrate spatial, voice, and scenario state across multiple users.', cardOwnedRole: 'Led the Quest multi-user XR application overall.', cardEvidence: 'Quest passthrough demonstration clip and virtual consultation-room captures are the evidence.', problemSummary: 'Integrate spatial, voice, and scenario state for a multi-user XR application.', ownedRole: 'Led the Quest-based XR application overall.', verifiedEvidence: 'A working Quest passthrough demonstration clip and virtual consultation-room captures are the evidence.', visualAlt: 'Quest passthrough hologram manipulation demonstration.', visualCaption: 'Quest passthrough hologram manipulation clip.'
         }
       },
       blocks: [
@@ -394,13 +416,14 @@
       capabilityKeys: ['registration', 'sensor-fusion', 'medical-navigation'], route: 'projects/respiratory-surface-guidance/',
       tech: ['ToF camera', 'Structured light', 'Qt', 'VTK', 'OpenCV', 'Python', '4DCT'],
       media: {
-        lead: { id: 'respiratory-surface-guidance-sensor-precision', type: 'image', status: 'pending-approval' },
-        gallery: []
+        lead: { id: 'respiratory-surface-guidance-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-lead-01.png' },
+        gallery: [
+        ]
       },
       pdf: { ko: 'assets/pdfs/respiratory-surface-guidance-ko.pdf', en: 'assets/pdfs/respiratory-surface-guidance-en.pdf' },
       pdfSequence: {
         middle: ['surface-to-signal', 'sensor-validation', 'measured-precision', 'research-boundary'],
-        evidenceId: 'respiratory-surface-guidance-sensor-precision',
+        evidenceId: 'respiratory-surface-guidance-lead-01',
         diagram: {
           kind: 'surface-gating-chain',
           translations: {
@@ -418,10 +441,10 @@
           role: '센서 검증 실험을 총괄하며 자체 검증 도구 DtDepthScan(Qt·VTK·OpenCV)을 개발했고, ROI 깊이에서 호흡 파형과 게이팅 신호를 뽑는 추적 알고리즘 설계·구현, 센서 인터페이스와 전송 프로토콜 정의, 과제 실무를 담당합니다.',
           teamResult: '컨소시엄이 4DCT 재구성, 영상유도 체계, 임상 자문을 나누어 맡고 있으며 임상 기관은 서울성모병원 방사선종양학과입니다. 과제 전체 성과를 개인 성과로 쓰지 않습니다.',
           evidence: '상용 3D 센서 5종을 0.5~3 m 거리에서 실리콘 인체 팬텀으로 측정한 정밀도(σ)·실측 fps·Fill rate 표와 DtDepthScan 화면이 본인 측정 근거입니다.',
-          limitation: '2026년 6월 시작한 1차년도 연구로 임상 성능, 과제 목표 달성, 제품화를 주장하지 않으며 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
+          limitation: '1차년도 센서 검증 결과이며 임상 성능이나 과제 목표 달성을 주장하지 않고 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
           collaboration: '방사선종양학, 4DCT 재구성, 영상유도 체계, 통합 제어 담당 기관과 인터페이스를 맞춥니다.',
-          mediaAlt: '상용 3D 센서 5종의 거리별 정밀도 실측표와 DtDepthScan 검증 도구 화면.', mediaCaption: '센서 실측 결과와 검증 도구 화면은 공개 승인 후 게시합니다.',
-          status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '표면유도 호흡추적 센서 검증.', visualCaption: '실측 미디어는 승인 대기 중입니다.'
+          mediaAlt: '상용 3D 센서 5종의 거리별 정밀도 σ·fps·유효 픽셀 비율 실측표.', mediaCaption: '상용 3D 센서 5종의 거리별 정밀도 실측표(본인 측정, 자체 검증 도구 DtDepthScan)입니다.',
+          status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측표; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '센서 정밀도 실측표.', visualCaption: '센서 5종 거리별 정밀도 실측표.'
         },
         en: {
           title: 'Surface-guided Respiratory Tracking (SGRT)', shortTitle: 'Surface-guided Respiratory Tracking', eyebrow: 'Medical Core · Radiotherapy Research',
@@ -431,10 +454,10 @@
           role: 'Lead the sensor validation campaign and wrote the in-house validation tool DtDepthScan (Qt, VTK, OpenCV); design and implement the breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal; define the sensor interface and transport protocol; run day-to-day project work.',
           teamResult: 'Consortium partners own 4DCT reconstruction, the image-guidance framework, and clinical advice; the clinical partner is the radiation oncology department of Seoul St. Mary\'s Hospital. Programme-level results are not attributed to me.',
           evidence: 'My own measurements: precision (σ), measured fps, and fill rate for five commercial 3D sensors at 0.5–3 m against a silicone body phantom, plus DtDepthScan captures.',
-          limitation: 'A first-year study that started in June 2026; no clinical performance, programme-target achievement, or productisation is claimed, and programme targets, budgets, and other institutions\' metrics are not published here.',
+          limitation: 'First-year sensor validation only; no clinical performance or programme-target achievement is claimed, and programme targets, budgets, and metrics of other institutions are not published here.',
           collaboration: 'Interfaces are agreed with radiation oncology, 4DCT reconstruction, image guidance, and integrated-control partners.',
-          mediaAlt: 'Measured precision table for five commercial 3D sensors by distance and the DtDepthScan validation tool.', mediaCaption: 'Sensor measurements and tool captures will be published after approval.',
-          status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision measurements; no clinical claim.', problemSummary: 'Surface-based setup registration and gating signals on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate tables.', visualAlt: 'Sensor validation for surface-guided respiratory tracking.', visualCaption: 'Measurement media is pending approval.'
+          mediaAlt: 'Measured precision σ, fps, and fill rate of five commercial 3D sensors by distance.', mediaCaption: 'Measured precision of five commercial 3D sensors by distance (author-measured with the in-house tool DtDepthScan).',
+          status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision table by distance; no clinical claim.', problemSummary: 'Surface-based setup registration and gating signals on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate table.', visualAlt: 'Sensor precision measurement table.', visualCaption: 'Five-sensor precision table by distance.'
         }
       },
       blocks: [
@@ -505,11 +528,20 @@
       slug: 'unmanned-forklift', tier: 'industrial-spotlight', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['sensor-fusion', 'registration'], route: 'projects/unmanned-forklift/',
       tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'],
-      media: { lead: { id: 'forklift-registration-pointcloud', type: 'image', status: 'pending-approval' }, gallery: [] },
+      media: {
+        lead: { id: 'unmanned-forklift-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-clip-01.mp4' },
+        video: { id: 'unmanned-forklift-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-clip-01.mp4' },
+        poster: { id: 'unmanned-forklift-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-poster-01.png' },
+        gallery: [
+          { id: 'unmanned-forklift-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-gallery-01.png', translations: { ko: { caption: '팔레트 진입 직전의 포크 정렬 — 풀 시나리오 테스트', alt: '시험장 바닥의 팔레트 앞에 포크를 정렬한 무인지게차' }, en: { caption: 'Fork alignment just before pallet entry during the full-scenario test', alt: 'Autonomous forklift aligning its forks in front of a pallet on the test floor' } } },
+          { id: 'unmanned-forklift-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-gallery-02.png', translations: { ko: { caption: '궤적 추종 주행 테스트 — 시험장 전경', alt: '시험장 바닥의 경로 표시선을 따라 주행하는 무인지게차 원경' }, en: { caption: 'Trajectory-following drive test, wide view of the test site', alt: 'Wide view of the autonomous forklift following a marked path on the test floor' } } },
+          { id: 'unmanned-forklift-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-gallery-03.png', translations: { ko: { caption: '포크 승강 테스트 — 카트 들어올리기', alt: '파란 카트를 포크로 들어올린 무인지게차' }, en: { caption: 'Fork-lift test lifting a cart', alt: 'Autonomous forklift lifting a blue cart with its forks' } } },
+        ]
+      },
       pdf: { ko: 'assets/pdfs/unmanned-forklift-ko.pdf', en: 'assets/pdfs/unmanned-forklift-en.pdf' },
       pdfSequence: {
         middle: ['sensor-coordinate-chain', 'perception-to-policy', 'integration-evidence', 'field-boundary'],
-        evidenceId: 'forklift-registration-pointcloud',
+        evidenceId: 'unmanned-forklift-clip-01',
         diagram: {
           kind: 'sensor-convergence',
           translations: {
@@ -527,10 +559,10 @@
           role: 'ToF-RGB-SAM3 정합, SICK TiM LiDAR·NAV350 3D PCD 처리, 로봇 위치추정, 센서 융합·안전 정책 판단, Zenoh 결과 발행을 담당했습니다.',
           teamResult: '팀은 시스템 통합과 현장 검증을 수행했습니다. 생산 운영, 배포 성공, 고객 성과로 확대하지 않습니다.',
           evidence: '좌표 정합 결과, 3D 포인트클라우드, 로봇 위치, 안전 판단, Zenoh 메시지를 통합과 현장 검증에서 확인했습니다.',
-          limitation: '공개 결과는 통합과 현장 검증까지이며 생산 운영, 배포 성공, 고객 성과를 주장하지 않습니다.',
+          limitation: '공개 클립과 사진은 시험장 테스트이며 생산 운영 성과나 고객 성과를 주장하지 않습니다.',
           collaboration: '차량 제어, 센서, 안전, 현장 검증 담당자와 공동 통합합니다.',
-          mediaAlt: 'ToF-RGB 정합 결과와 LiDAR·NAV350 3D 포인트클라우드가 무인지게차 좌표에 표시된 장면.', mediaCaption: '포인트클라우드·정합 미디어는 공개 승인 대기 중입니다.',
-          status: '진행 중', cardProblem: '다중 센서 좌표를 정합해 안전 판단과 차량 시스템에 연결합니다.', cardOwnedRole: 'ToF-RGB-SAM3, LiDAR·NAV350 PCD, 위치추정, 안전 정책, Zenoh를 담당했습니다.', cardEvidence: '시스템 통합과 현장 검증; 운영·고객 성과는 주장하지 않습니다.', problemSummary: '다중 센서 좌표를 안전 판단과 차량 시스템에 연결합니다.', ownedRole: '정합, PCD, 위치추정, 센서 융합·안전 정책, Zenoh를 담당했습니다.', verifiedEvidence: '시스템 통합과 현장 검증까지만 공개 결과로 제시합니다.', visualAlt: '무인지게차 다중 센서 정합과 포인트클라우드.', visualCaption: '현장 미디어는 승인 대기 중입니다.'
+          mediaAlt: '3D 뷰·카메라 영상·신호 플롯이 함께 표시된 무인지게차 비전 서보잉 테스트 녹화 화면.', mediaCaption: '무인지게차 DOTORI의 비전 서보잉 테스트 화면 녹화입니다(3D 뷰·카메라 영상·신호 플롯).',
+          status: '진행 중', cardProblem: '다중 센서 좌표를 정합해 안전 판단과 차량 시스템에 연결합니다.', cardOwnedRole: 'ToF-RGB-SAM3, LiDAR·NAV350 PCD, 위치추정, 안전 정책, Zenoh를 담당했습니다.', cardEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진이 근거입니다.', problemSummary: '다중 센서 좌표를 안전 판단과 차량 시스템에 연결합니다.', ownedRole: '정합, PCD, 위치추정, 센서 융합·안전 정책, Zenoh를 담당했습니다.', verifiedEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진까지만 공개 결과로 제시합니다.', visualAlt: '무인지게차 비전 서보잉 테스트 녹화.', visualCaption: '비전 서보잉 테스트 화면 녹화 클립.'
         },
         en: {
           title: 'Multi-sensor Registration for an Autonomous Forklift', shortTitle: 'Autonomous Forklift Registration', eyebrow: 'Industrial Spotlight · Multi-sensor System',
@@ -540,10 +572,10 @@
           role: 'Owned ToF-RGB-SAM3 registration; SICK TiM LiDAR and NAV350 3D PCD processing; robot localization; sensor fusion and safety-policy decisions; and publishing results through Zenoh.',
           teamResult: 'The team performed system integration and field validation. This is not presented as production operation, deployment success, or customer outcomes.',
           evidence: 'Registration outputs, 3D point clouds, robot pose, safety decisions, and Zenoh messages were checked through integration and field validation.',
-          limitation: 'The public result is integration and field validation only, not production operation, deployment success, or customer outcomes.',
+          limitation: 'The public clip and photos are test-site runs; they do not claim production or customer outcomes.',
           collaboration: 'Vehicle control, sensing, safety, and field-validation owners integrate the system jointly.',
-          mediaAlt: 'Autonomous-forklift view showing ToF-RGB registration and LiDAR and NAV350 point clouds in vehicle coordinates.', mediaCaption: 'Point-cloud and registration media remains pending approval.',
-          status: 'Ongoing', cardProblem: 'Register multi-sensor coordinates and connect them to safety decisions and the vehicle system.', cardOwnedRole: 'Owned ToF-RGB-SAM3, LiDAR and NAV350 PCD, localization, safety policy, and Zenoh output.', cardEvidence: 'System integration and field validation only; no operations or customer-outcome claim.', problemSummary: 'Connect registered multi-sensor data to safety decisions and the vehicle system.', ownedRole: 'Owned registration, PCD, localization, sensor fusion and safety policy, and Zenoh output.', verifiedEvidence: 'Public result is limited to system integration and field validation.', visualAlt: 'Autonomous-forklift multi-sensor registration and point clouds.', visualCaption: 'Field media remains pending approval.'
+          mediaAlt: 'Vision-servoing test recording of the autonomous forklift with 3D view, camera feed, and signal plots.', mediaCaption: 'Screen recording of the DOTORI vision-servoing test (3D view, camera feed, signal plots).',
+          status: 'Ongoing', cardProblem: 'Register multi-sensor coordinates and connect them to safety decisions and the vehicle system.', cardOwnedRole: 'Owned ToF-RGB-SAM3, LiDAR and NAV350 PCD, localization, safety policy, and Zenoh output.', cardEvidence: 'Vision-servoing screen recording and test-site driving and loading photos are the evidence.', problemSummary: 'Connect registered multi-sensor data to safety decisions and the vehicle system.', ownedRole: 'Owned registration, PCD, localization, sensor fusion and safety policy, and Zenoh output.', verifiedEvidence: 'Public result is limited to the vision-servoing recording and test-site driving and loading photos.', visualAlt: 'Autonomous-forklift vision-servoing test recording.', visualCaption: 'Vision-servoing test screen recording clip.'
         }
       },
       blocks: [
