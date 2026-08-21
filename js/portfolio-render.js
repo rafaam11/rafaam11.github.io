@@ -130,6 +130,8 @@
     });
     (data && data.tiers || []).forEach(function (tier) { surfaces.push(tier && tier.translations); });
     (data && data.projects || []).forEach(function (project) { surfaces.push(projectPublicCopy(project)); });
+    // Highlights only surface `translations` here, not `href` values: an `https://` URL matches
+    // the private-path pattern's `[a-z]:[\/]` clause as a false positive. Hrefs are validated separately by `isSafeProjectLink` in `highlightsErrors`.
     var highlights = data && data.highlights;
     if (highlights) {
       (highlights.publications || []).forEach(function (item) { surfaces.push(item && item.translations); });

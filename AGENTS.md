@@ -36,7 +36,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 ## File structure
 
 ```text
-index.html                         # Home: expert thesis, evidence mosaic, eight project links, five-stack index
+index.html                         # Home: intro (name, identity line, photo, contacts), interests paragraph, grouped project rows, Publications · Patents · Awards, contact line
 projects/index.html                # Projects groups: Medical Core (5), Platform Software (1), Industrial Spotlight (1), AI Build Lab (1)
 projects/<slug>/index.html         # 8 shared-renderer case summaries
 en/                               # English counterparts for all 12 Korean routes
