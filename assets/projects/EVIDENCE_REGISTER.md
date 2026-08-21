@@ -4,17 +4,35 @@ This register is the tracked source of truth for portfolio evidence identifiers.
 
 | Evidence ID | Project | Media type | State | Public source | Provenance / usage |
 | --- | --- | --- | --- | --- | --- |
-| surgical-navigation-demo | surgical-navigation | video | pending-review | - | Preferred working-system demonstration; no public derivative approved. |
-| surgical-navigation-demo-poster | surgical-navigation | image | pending-review | - | Poster paired with the working-system clip; no public derivative approved. |
-| mandibular-presentation-award | mandibular-fracture | image | pending-review | - | Presentation or recognition evidence; no public derivative approved. |
 | mandibular-publication | mandibular-fracture | publication | approved-public | https://link.springer.com/article/10.1007/s10278-024-01014-z | Public article page used as external research evidence. |
-| life-careverse-multiuser-demo | life-careverse | video | pending-review | - | Multi-user XR demonstration; no public derivative approved. |
-| life-careverse-multiuser-poster | life-careverse | image | pending-review | - | Poster paired with the multi-user clip; no public derivative approved. |
 | rtms-prototype-recording | rtms-navigation | video | pending-review | - | Working prototype recording; no public derivative approved. |
 | rtms-prototype-poster | rtms-navigation | image | pending-review | - | Poster paired with the prototype clip; no public derivative approved. |
-| forklift-registration-pointcloud | unmanned-forklift | image | pending-review | - | Registration or point-cloud result; no public derivative approved. |
 | multi-cli-work-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/multi-cli-work | Public source and release history; registered as repository evidence, not visual media. |
 | daegu-bus-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/public-transportation-info | Public source history; registered as repository evidence, not visual media. |
-| respiratory-surface-guidance-sensor-precision | respiratory-surface-guidance | image | pending-review | - | Author-measured sensor precision table or validation-tool capture; no public derivative approved. |
 | skadi-viewer-demo | skadi-tracking-software | video | pending-review | - | Viewer and API demonstration clip; no public derivative approved. |
 | skadi-viewer-demo-poster | skadi-tracking-software | image | pending-review | - | Poster paired with the Viewer clip; no public derivative approved. |
+| unmanned-forklift-clip-01 | unmanned-forklift | video | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-clip-01.mp4 | Approved derivative; caption in portfolio data. |
+| unmanned-forklift-poster-01 | unmanned-forklift | image | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-poster-01.png | Approved derivative; caption in portfolio data. |
+| unmanned-forklift-gallery-01 | unmanned-forklift | image | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-gallery-01.png | Approved derivative; caption in portfolio data. |
+| unmanned-forklift-gallery-02 | unmanned-forklift | image | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-gallery-02.png | Approved derivative; caption in portfolio data. |
+| unmanned-forklift-gallery-03 | unmanned-forklift | image | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-gallery-03.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-clip-01 | surgical-navigation | video | approved-public | assets/projects/surgical-navigation/surgical-navigation-clip-01.mp4 | Approved derivative; caption in portfolio data. |
+| surgical-navigation-poster-01 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-poster-01.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-gallery-01 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-gallery-01.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-gallery-02 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-gallery-02.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-gallery-03 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-gallery-03.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-gallery-04 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-gallery-04.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-gallery-05 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-gallery-05.png | Approved derivative; caption in portfolio data. |
+| surgical-navigation-gallery-06 | surgical-navigation | image | approved-public | assets/projects/surgical-navigation/surgical-navigation-gallery-06.png | Approved derivative; caption in portfolio data. |
+| mandibular-fracture-lead-01 | mandibular-fracture | image | approved-public | assets/projects/mandibular-fracture/mandibular-fracture-lead-01.png | Approved derivative; caption in portfolio data. |
+| mandibular-fracture-gallery-01 | mandibular-fracture | image | approved-public | assets/projects/mandibular-fracture/mandibular-fracture-gallery-01.png | Approved derivative; caption in portfolio data. |
+| mandibular-fracture-gallery-02 | mandibular-fracture | image | approved-public | assets/projects/mandibular-fracture/mandibular-fracture-gallery-02.png | Approved derivative; caption in portfolio data. |
+| mandibular-fracture-gallery-03 | mandibular-fracture | image | approved-public | assets/projects/mandibular-fracture/mandibular-fracture-gallery-03.png | Approved derivative; caption in portfolio data. |
+| mandibular-fracture-gallery-04 | mandibular-fracture | image | approved-public | assets/projects/mandibular-fracture/mandibular-fracture-gallery-04.png | Approved derivative; caption in portfolio data. |
+| mandibular-fracture-gallery-05 | mandibular-fracture | image | approved-public | assets/projects/mandibular-fracture/mandibular-fracture-gallery-05.png | Approved derivative; caption in portfolio data. |
+| respiratory-surface-guidance-lead-01 | respiratory-surface-guidance | image | approved-public | assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-lead-01.png | Approved derivative; caption in portfolio data. |
+| life-careverse-clip-01 | life-careverse | video | approved-public | assets/projects/life-careverse/life-careverse-clip-01.mp4 | Approved derivative; caption in portfolio data. |
+| life-careverse-poster-01 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-poster-01.png | Approved derivative; caption in portfolio data. |
+| life-careverse-gallery-01 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-01.png | Approved derivative; caption in portfolio data. |
+| life-careverse-gallery-02 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-02.png | Approved derivative; caption in portfolio data. |
+| life-careverse-gallery-03 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-03.png | Approved derivative; caption in portfolio data. |

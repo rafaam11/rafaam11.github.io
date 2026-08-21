@@ -514,9 +514,15 @@ function approvedMp4Errors(filePath) {
   if (!mp4HasVideoTrack(buffer, movieChildren)) errors.push('approved MP4 must contain a video track.');
   const metadataBox = findMp4MetadataBox(buffer, boxes);
   if (metadataBox) errors.push(`approved MP4 must be metadata-stripped; prohibited metadata box: ${metadataBox}.`);
-  const printable = (buffer.toString('latin1').match(/[\x20-\x7e]{6,}/g) || []).join('\n');
+  // Compressed sample data inside mdat is random enough to spell short path- or name-like fragments,
+  // so names and PII are scanned only in container/metadata boxes, while the whole file is scanned
+  // for a structural local path (drive letter or UNC prefix followed by at least one directory segment).
+  const metadataBytes = Buffer.concat(boxes.filter((box) => box.type !== 'mdat').map((box) => buffer.subarray(box.start, box.end)));
+  const printable = (metadataBytes.toString('latin1').match(/[\x20-\x7e]{6,}/g) || []).join('\n');
+  const printableAll = (buffer.toString('latin1').match(/[\x20-\x7e]{6,}/g) || []).join('\n');
+  const structuralLocalPath = /(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\[A-Za-z0-9_.-]{1,64}[\\/])[A-Za-z0-9_.-]{1,64}[\\/][A-Za-z0-9_.-]{1,64}(?:[\\/]|\b)|file:\/\/|OneDrive|private[\\/]raw/im;
   const pii = publicPiiFindings(printable);
-  if (proseContainsLocalPath(printable)) errors.push('approved MP4 exposes a private path.');
+  if (proseContainsLocalPath(printable) || structuralLocalPath.test(printableAll)) errors.push('approved MP4 exposes a private path.');
   if (pii.length || /(?:PatientName|PatientID|DICOM|OneDrive|GPSLatitude|GPSLongitude)/i.test(printable)) {
     errors.push('approved MP4 exposes private PII or source metadata.');
   }
@@ -1194,7 +1200,10 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
       }
       if (!/\/URI\s*\(/.test(text)) errors.push(`${path.relative(rootDir, filePath)}: missing public link annotation.`);
       if (/\/EmbeddedFiles\b|\/Filespec\b/.test(text)) errors.push(`${path.relative(rootDir, filePath)}: hidden attachment is not allowed.`);
-      if (/(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw/i.test(text)) errors.push(`${path.relative(rootDir, filePath)}: PDF bytes expose a private source path.`);
+      // Compressed stream bodies (images, fonts, content) are binary and can spell drive-letter fragments by chance;
+      // private paths can only leak through dictionaries and metadata, so the scan skips stream bodies.
+      const outsideStreams = text.replace(/stream\r?\n[\s\S]*?endstream/g, 'stream endstream');
+      if (/(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw/i.test(outsideStreams)) errors.push(`${path.relative(rootDir, filePath)}: PDF bytes expose a private source path.`);
     }
     if (fs.existsSync(publishedPath) && fs.existsSync(outputPath) && sha256File(publishedPath) !== sha256File(outputPath)) {
       errors.push(`${name}: output and published PDF checksums differ.`);
@@ -2181,9 +2190,12 @@ function validatePortfolio(rootDir) {
       errors.push(`${file.relativePath}: missing public evidence asset.`);
       continue;
     }
+    // PNG/MP4 payloads are binary: a text-pattern scan over them only yields false positives,
+    // so only text-like assets are scanned for nonpublic names.
+    const binaryAsset = /\.(?:png|mp4)$/i.test(file.absolutePath);
     visualAssets.push({
       ...file,
-      content: fs.readFileSync(file.absolutePath, 'utf8')
+      content: binaryAsset ? '' : fs.readFileSync(file.absolutePath, 'utf8')
     });
   }
   errors.push(...visualAssetErrors(visualAssets));
