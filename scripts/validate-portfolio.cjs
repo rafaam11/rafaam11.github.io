@@ -983,7 +983,7 @@ function publicCvDataErrors(candidate) {
     if (match) errors.push(`Public CV data contains a prohibited private or unverified claim: ${match[0]}.`);
   }
   requireKeys(candidate, ['version', 'identity', 'contacts', 'timeline', 'capabilities', 'research', 'achievements', 'languages'], 'Public CV data');
-  if (candidate.version !== '2026-08-16') errors.push('Public CV data requires the approved 2026-08-16 version.');
+  if (candidate.version !== '2026-08-21') errors.push('Public CV data requires the approved 2026-08-21 version.');
   if (requireKeys(candidate.identity, ['name', 'translations'], 'Public CV identity')) {
     if (candidate.identity.name !== 'Jinmin Kim') errors.push('Public CV identity must be Jinmin Kim.');
     requireTranslations(candidate.identity.translations, ['displayName', 'headline', 'summary'], 'Public CV identity');

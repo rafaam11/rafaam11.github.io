@@ -211,7 +211,7 @@ def public_pii_findings(value: Any) -> list[str]:
 
 def validate_cv(cv_value: Any) -> dict[str, Any]:
     cv = require_object(cv_value, "PDF input public CV")
-    require(cv.get("version") == "2026-08-16", "PDF input requires the approved public CV version.")
+    require(cv.get("version") == "2026-08-21", "PDF input requires the approved public CV version.")
     identity = require_object(cv.get("identity"), "PDF input CV identity")
     require(identity.get("name") == "Jinmin Kim", "PDF input CV identity must be Jinmin Kim.")
     validate_translation_record(identity, "PDF input CV identity", ["displayName", "headline", "summary"])
@@ -1091,7 +1091,7 @@ def cv_labels(locale: str) -> dict[str, str]:
             "selected": "선정 수상",
             "languages": "언어",
             "projects": "대표 작업 범위",
-            "source": "2026-08-16 승인된 공개 사실만 사용한 2페이지 CV입니다.",
+            "source": "2026-08-21 승인된 공개 사실만 사용한 2페이지 CV입니다.",
             "patent_value": "출원 {applications}건 / 등록 {grants}건",
             "award_value": "총 {total}건",
         }
@@ -1107,7 +1107,7 @@ def cv_labels(locale: str) -> dict[str, str]:
         "selected": "Selected awards",
         "languages": "Languages",
         "projects": "Representative Work Scope",
-        "source": "Two-page CV using only public facts approved on 2026-08-16.",
+        "source": "Two-page CV using only public facts approved on 2026-08-21.",
         "patent_value": "{applications} applications / {grants} grants",
         "award_value": "{total} total",
     }
