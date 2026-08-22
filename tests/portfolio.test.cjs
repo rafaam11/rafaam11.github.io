@@ -563,11 +563,29 @@ test('digital occlusion MP4 validation reads coded dimensions and permits an emp
   }
 });
 
-test('digital occlusion anatomy counts do not weaken real Korean address detection', () => {
+test('digital occlusion permits only the exact anatomy count without weakening Korean address detection', () => {
   assert.doesNotMatch(render.dataErrors(data).join('\n'), /private address PII/i);
-  const unsafe = clone(data);
-  unsafe.projects.find((item) => item.slug === 'digital-occlusion-workflow').translations.ko.summary += ' 강남구 역삼동 123';
-  assert.match(render.dataErrors(unsafe).join('\n'), /private address PII/i);
+  assert.doesNotMatch(validator.portfolioDataErrors(data).join('\n'), /private address PII|Korean address/i);
+
+  for (const privateValue of ['악안면 30-1', '강남구 역삼동 123']) {
+    const unsafe = clone(data);
+    unsafe.projects.find((item) => item.slug === 'digital-occlusion-workflow').translations.ko.summary += ` ${privateValue}`;
+    assert.match(render.dataErrors(unsafe).join('\n'), /private address PII/i, privateValue);
+    assert.match(validator.portfolioDataErrors(unsafe).join('\n'), /private address PII|Korean address/i, privateValue);
+  }
+
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'digital-occlusion-anatomy-pii-'));
+  try {
+    copyTask6Surface(temporaryRoot);
+    const homePath = path.join(temporaryRoot, 'index.html');
+    const baseline = fs.readFileSync(homePath, 'utf8');
+    fs.writeFileSync(homePath, baseline.replace('</main>', '<p>악안면 30개</p></main>'));
+    assert.doesNotMatch(validator.validatePortfolio(temporaryRoot).join('\n'), /visible public HTML contains prohibited private PII.*address/i);
+    fs.writeFileSync(homePath, baseline.replace('</main>', '<p>악안면 30-1</p></main>'));
+    assert.match(validator.validatePortfolio(temporaryRoot).join('\n'), /visible public HTML contains prohibited private PII.*address/i);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
 });
 
 test('digital occlusion PDF validation reports both pending localized artifacts without throwing', () => {

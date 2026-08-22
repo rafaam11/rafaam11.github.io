@@ -176,7 +176,7 @@
 
   function publicCopySafetyErrors(data) {
     var copy = portfolioPublicCopy(data);
-    var addressCopy = copy.replace(/악안면 30(?=개|\b)/g, '악안면 특징점');
+    var addressCopy = copy.replace(/악안면 30개/g, '악안면 특징점');
     var errors = [];
     if (policy.privateCopyPathPattern.test(copy)) errors.push('Shared public data contains a private source path.');
     if (policy.privateCopyPhonePattern.test(copy)) errors.push('Shared public data contains private phone PII.');
