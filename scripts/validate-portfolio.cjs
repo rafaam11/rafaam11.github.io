@@ -47,6 +47,10 @@ const standaloneLegacyFiles = [
 const ignoredHtmlInventoryRoots = new Set(['.git', '.superpowers', 'docs', 'node_modules', 'public']);
 const evidenceRegisterRelativePath = path.join('assets', 'projects', 'EVIDENCE_REGISTER.md');
 const evidenceRegisterStates = new Set(['pending-review', 'approved-public', 'excluded']);
+// The public CV renders as three generated pages: profile and education, experience and publications,
+// then patents, awards, and skills.
+const cvPageCount = 3;
+const cvPageNumbers = Array.from({ length: cvPageCount }, (unused, index) => index + 1);
 const evidenceMediaTypes = new Set(['image', 'video', 'repository', 'publication']);
 const evidenceRegisterHeader = '| Evidence ID | Project | Media type | State | Public source | Provenance / usage |';
 const evidenceRegisterSeparator = '| --- | --- | --- | --- | --- | --- |';
@@ -945,11 +949,11 @@ function publicCvDataErrors(candidate) {
     }
     return true;
   };
-  const requireTranslations = (value, fields, label) => {
+  const requireTranslations = (value, fields, label, optional = []) => {
     if (!requireKeys(value, ['ko', 'en'], `${label} translations`)) return;
     for (const locale of ['ko', 'en']) {
       const copy = value[locale];
-      if (!requireKeys(copy, fields, `${label} ${locale} translation`)) continue;
+      if (!requireKeys(copy, fields, `${label} ${locale} translation`, optional)) continue;
       for (const field of fields) {
         if (!isText(copy[field])) errors.push(`${label} ${locale} ${field} must be a non-empty string.`);
       }
@@ -975,10 +979,13 @@ function publicCvDataErrors(candidate) {
   for (const finding of publicPiiFindings(candidate)) {
     errors.push(`Public CV data contains prohibited private PII (${finding}).`);
   }
+  // 2026-08-22 policy: patent application numbers and the thesis advisor's name are approved for
+  // the public CV (both are public record). Other people's names, patient data, and private
+  // contact facts remain prohibited.
   const prohibitedPatterns = [
-    /\b10-\d{4}-\d+\b/,
-    /\b(?:age|salary|professor|advisor|patient|customer|street address|home address)\b/i,
-    /나이|연봉|지도교수|환자|고객|자택|거주지|주소/,
+    /\b(?:age|salary|customer|street address|home address)\b/i,
+    /(?:patient|환자)\s*(?:data|record|id|name|정보|데이터|기록|이름)/i,
+    /나이|연봉|고객|자택|거주지|주소/,
     /\b(?:JPT|OPIc)\b/i,
     /3\s*[-–]\s*4\s*(?:months|개월)|1\s*[-–]\s*2\s*(?:weeks|주)|주\s*단위|월\s*단위/i,
     /동산병원|계명대|HD현대|Hyundai|KAERI|ANL/i,
@@ -988,10 +995,11 @@ function publicCvDataErrors(candidate) {
     const match = serialized.match(pattern);
     if (match) errors.push(`Public CV data contains a prohibited private or unverified claim: ${match[0]}.`);
   }
-  requireKeys(candidate, ['version', 'identity', 'contacts', 'timeline', 'capabilities', 'research', 'achievements', 'languages'], 'Public CV data');
-  if (candidate.version !== '2026-08-21') errors.push('Public CV data requires the approved 2026-08-21 version.');
-  if (requireKeys(candidate.identity, ['name', 'translations'], 'Public CV identity')) {
+  requireKeys(candidate, ['version', 'identity', 'contacts', 'education', 'experience', 'publications', 'patents', 'awards', 'skills', 'languages'], 'Public CV data');
+  if (candidate.version !== '2026-08-22') errors.push('Public CV data requires the approved 2026-08-22 version.');
+  if (requireKeys(candidate.identity, ['name', 'location', 'translations'], 'Public CV identity')) {
     if (candidate.identity.name !== 'Jinmin Kim') errors.push('Public CV identity must be Jinmin Kim.');
+    requireLocalizedStrings(candidate.identity.location, 'Public CV identity location');
     requireTranslations(candidate.identity.translations, ['displayName', 'headline', 'summary'], 'Public CV identity');
   }
   if (!Array.isArray(candidate.contacts) || candidate.contacts.length !== 3) {
@@ -1014,46 +1022,97 @@ function publicCvDataErrors(candidate) {
     if (labels.size !== allowedContacts.size) errors.push('Public CV contacts must contain Email, GitHub, and LinkedIn exactly once.');
   }
 
-  if (!Array.isArray(candidate.timeline) || candidate.timeline.length !== 4) {
-    errors.push('Public CV timeline must contain exactly 4 entries.');
-  } else {
-    for (const [index, entry] of candidate.timeline.entries()) {
-      if (!requireKeys(entry, ['period', 'organization', 'translations'], `Public CV timeline entry ${index + 1}`)) continue;
-      for (const field of ['period', 'organization']) if (!isText(entry[field])) errors.push(`Public CV timeline entry ${index + 1} ${field} must be a non-empty string.`);
-      requireTranslations(entry.translations, ['role', 'summary'], `Public CV timeline entry ${index + 1}`);
-    }
-  }
-  if (!Array.isArray(candidate.capabilities) || candidate.capabilities.length !== 4) {
-    errors.push('Public CV capabilities must contain exactly 4 entries.');
-  } else {
-    for (const [index, entry] of candidate.capabilities.entries()) {
-      if (!requireKeys(entry, ['translations'], `Public CV capability ${index + 1}`)) continue;
-      requireTranslations(entry.translations, ['title', 'body'], `Public CV capability ${index + 1}`);
-    }
-  }
-  if (!Array.isArray(candidate.research) || candidate.research.length !== 2) {
-    errors.push('Public CV research must contain exactly 2 entries.');
-  } else {
-    for (const [index, entry] of candidate.research.entries()) {
-      if (!requireKeys(entry, ['year', 'title', 'venue', 'role'], `Public CV research entry ${index + 1}`, ['href'])) continue;
-      for (const field of ['year', 'title', 'venue', 'role']) if (!isText(entry[field])) errors.push(`Public CV research entry ${index + 1} ${field} must be a non-empty string.`);
-      if (entry.href !== undefined && !isSafeHttpsUrl(entry.href)) errors.push(`Public CV research entry ${index + 1} has an invalid public link.`);
-    }
-  }
-
-  if (requireKeys(candidate.achievements, ['patentApplications', 'patentGrants', 'awardTotal', 'asOf', 'selectedAwards'], 'Public CV achievements')) {
-    if (candidate.achievements.patentApplications !== 7 || candidate.achievements.patentGrants !== 3 || candidate.achievements.awardTotal !== 9) {
-      errors.push('Public CV achievement totals must remain 7 applications, 3 grants, and 9 awards.');
-    }
-    if (!isText(candidate.achievements.asOf)) errors.push('Public CV achievements asOf must be a non-empty string.');
-    if (!Array.isArray(candidate.achievements.selectedAwards) || candidate.achievements.selectedAwards.length !== 3) {
-      errors.push('Public CV achievements must contain exactly 3 selected awards.');
-    } else {
-      for (const [index, award] of candidate.achievements.selectedAwards.entries()) {
-        if (!requireKeys(award, ['year', 'translations'], `Public CV selected award ${index + 1}`)) continue;
-        if (!isText(award.year)) errors.push(`Public CV selected award ${index + 1} year must be a non-empty string.`);
-        requireLocalizedStrings(award.translations, `Public CV selected award ${index + 1}`);
+  const requireLocalizedList = (value, field, label) => {
+    if (!requireKeys(value, ['ko', 'en'], `${label} translations`)) return;
+    for (const locale of ['ko', 'en']) {
+      const copy = value[locale];
+      if (!isRecord(copy)) {
+        errors.push(`${label} ${locale} translation must be an object.`);
+        continue;
       }
+      if (!Array.isArray(copy[field]) || copy[field].length === 0) {
+        errors.push(`${label} ${locale} ${field} must be a non-empty array.`);
+        continue;
+      }
+      for (const item of copy[field]) if (!isText(item)) errors.push(`${label} ${locale} ${field} entries must be non-empty strings.`);
+    }
+  };
+
+  if (!Array.isArray(candidate.education) || candidate.education.length !== 2) {
+    errors.push('Public CV education must contain exactly 2 entries.');
+  } else {
+    for (const [index, entry] of candidate.education.entries()) {
+      if (!requireKeys(entry, ['period', 'organization', 'translations'], `Public CV education entry ${index + 1}`)) continue;
+      for (const field of ['period', 'organization']) if (!isText(entry[field])) errors.push(`Public CV education entry ${index + 1} ${field} must be a non-empty string.`);
+      requireTranslations(entry.translations, ['degree'], `Public CV education entry ${index + 1}`, ['notes']);
+      requireLocalizedList(entry.translations, 'notes', `Public CV education entry ${index + 1}`);
+    }
+  }
+  if (!Array.isArray(candidate.experience) || candidate.experience.length !== 1) {
+    errors.push('Public CV experience must contain exactly 1 entry.');
+  } else {
+    for (const [index, entry] of candidate.experience.entries()) {
+      if (!requireKeys(entry, ['period', 'organization', 'translations', 'areas'], `Public CV experience entry ${index + 1}`)) continue;
+      for (const field of ['period', 'organization']) if (!isText(entry[field])) errors.push(`Public CV experience entry ${index + 1} ${field} must be a non-empty string.`);
+      requireTranslations(entry.translations, ['role', 'context'], `Public CV experience entry ${index + 1}`);
+      if (!Array.isArray(entry.areas) || entry.areas.length !== 4) {
+        errors.push(`Public CV experience entry ${index + 1} must contain exactly 4 areas.`);
+        continue;
+      }
+      for (const [areaIndex, area] of entry.areas.entries()) {
+        const label = `Public CV experience area ${areaIndex + 1}`;
+        if (!requireKeys(area, ['translations'], label)) continue;
+        requireTranslations(area.translations, ['title'], label, ['items']);
+        requireLocalizedList(area.translations, 'items', label);
+      }
+    }
+  }
+  if (!Array.isArray(candidate.publications) || candidate.publications.length !== 7) {
+    errors.push('Public CV publications must contain exactly 7 entries.');
+  } else {
+    for (const [index, entry] of candidate.publications.entries()) {
+      const label = `Public CV publication ${index + 1}`;
+      if (!requireKeys(entry, ['year', 'translations'], label, ['href'])) continue;
+      if (!isText(entry.year)) errors.push(`${label} year must be a non-empty string.`);
+      requireTranslations(entry.translations, ['title', 'venue', 'role'], label);
+      if (entry.href !== undefined && !isSafeHttpsUrl(entry.href)) errors.push(`${label} has an invalid public link.`);
+    }
+  }
+  if (!Array.isArray(candidate.patents) || candidate.patents.length !== 7) {
+    errors.push('Public CV patents must contain exactly 7 entries.');
+  } else {
+    let granted = 0;
+    for (const [index, entry] of candidate.patents.entries()) {
+      const label = `Public CV patent ${index + 1}`;
+      if (!requireKeys(entry, ['status', 'group', 'number', 'filed', 'translations'], label)) continue;
+      if (!['filed', 'granted'].includes(entry.status)) errors.push(`${label} status must be filed or granted.`);
+      if (entry.status === 'granted') granted += 1;
+      if (!['work', 'undergraduate'].includes(entry.group)) errors.push(`${label} group must be work or undergraduate.`);
+      // Application numbers are public record and use the KIPO 10-YYYY-NNNNNNN form.
+      if (!/^10-\d{4}-\d{7}$/.test(String(entry.number))) errors.push(`${label} number must be a KIPO application number.`);
+      if (!isText(entry.filed)) errors.push(`${label} filed must be a non-empty string.`);
+      requireTranslations(entry.translations, ['title'], label);
+    }
+    if (granted !== 3) errors.push('Public CV patents must record exactly 3 granted entries.');
+  }
+  if (!Array.isArray(candidate.awards) || candidate.awards.length !== 9) {
+    errors.push('Public CV awards must contain exactly 9 entries.');
+  } else {
+    for (const [index, entry] of candidate.awards.entries()) {
+      const label = `Public CV award ${index + 1}`;
+      if (!requireKeys(entry, ['year', 'group', 'translations'], label)) continue;
+      if (!isText(entry.year)) errors.push(`${label} year must be a non-empty string.`);
+      if (!['academic', 'undergraduate'].includes(entry.group)) errors.push(`${label} group must be academic or undergraduate.`);
+      requireTranslations(entry.translations, ['title', 'organization'], label);
+    }
+  }
+  if (!Array.isArray(candidate.skills) || candidate.skills.length !== 5) {
+    errors.push('Public CV skills must contain exactly 5 entries.');
+  } else {
+    for (const [index, entry] of candidate.skills.entries()) {
+      const label = `Public CV skill ${index + 1}`;
+      if (!requireKeys(entry, ['translations'], label)) continue;
+      requireTranslations(entry.translations, ['category', 'items'], label);
     }
   }
   if (!Array.isArray(candidate.languages) || candidate.languages.length !== 2) {
@@ -1161,7 +1220,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   const outputRoot = path.join(rootDir, 'output', 'pdf');
   const projectRoot = path.join(rootDir, 'assets', 'pdfs');
   const cvRoot = path.join(rootDir, 'assets', 'cv');
-  const expectedPreviewNames = ['ko', 'en'].flatMap((locale) => [1, 2].map((pageNumber) => `jinmin-kim-cv-${locale}-page-${pageNumber}.png`));
+  const expectedPreviewNames = ['ko', 'en'].flatMap((locale) => cvPageNumbers.map((pageNumber) => `jinmin-kim-cv-${locale}-page-${pageNumber}.png`));
 
   for (const [directory, label] of [[outputRoot, 'output/pdf'], [projectRoot, 'assets/pdfs'], [cvRoot, 'assets/cv']]) {
     if (!fs.existsSync(directory) || !fs.lstatSync(directory).isDirectory()) errors.push(`${label}: missing PDF artifact directory.`);
@@ -1185,7 +1244,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     const isCv = cvNames.includes(name);
     const publishedPath = path.join(isCv ? cvRoot : projectRoot, name);
     const outputPath = path.join(outputRoot, name);
-    const expectedPages = isCv ? 2 : 6;
+    const expectedPages = isCv ? cvPageCount : 6;
     for (const filePath of [publishedPath, outputPath]) {
       if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) {
         errors.push(`${path.relative(rootDir, filePath)}: missing PDF artifact.`);
@@ -1211,7 +1270,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   }
 
   for (const locale of ['ko', 'en']) {
-    for (const pageNumber of [1, 2]) {
+    for (const pageNumber of cvPageNumbers) {
       const name = `jinmin-kim-cv-${locale}-page-${pageNumber}.png`;
       const preview = path.join(cvRoot, name);
       const dimensions = fs.existsSync(preview) ? imageDimensions(preview, '.png') : null;
@@ -1268,7 +1327,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
       }
     }
     for (const locale of ['ko', 'en']) {
-      expectedDocuments.set(`jinmin-kim-cv-${locale}.pdf`, { kind: 'cv', locale, pages: 2 });
+      expectedDocuments.set(`jinmin-kim-cv-${locale}.pdf`, { kind: 'cv', locale, pages: cvPageCount });
     }
     if (!Array.isArray(manifest.documents) || manifest.documents.length !== expectedDocuments.size) {
       errors.push('output/pdf/manifest.json: documents must track exactly fourteen PDFs.');
@@ -1314,9 +1373,9 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     for (const locale of ['ko', 'en']) {
       const pdfName = `jinmin-kim-cv-${locale}.pdf`;
       for (const prefix of ['output/pdf', 'assets/cv']) {
-        expectedArtifacts.set(`${prefix}/${pdfName}`, { kind: 'cv-pdf', locale, pages: 2 });
+        expectedArtifacts.set(`${prefix}/${pdfName}`, { kind: 'cv-pdf', locale, pages: cvPageCount });
       }
-      for (const pageNumber of [1, 2]) {
+      for (const pageNumber of cvPageNumbers) {
         expectedArtifacts.set(`assets/cv/jinmin-kim-cv-${locale}-page-${pageNumber}.png`, {
           kind: 'cv-preview', locale, page: pageNumber
         });
@@ -1376,7 +1435,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     const base = locale === 'en' ? '../../' : '../';
     const pdfHref = `${base}assets/cv/jinmin-kim-cv-${locale}.pdf`;
     if (!new RegExp(`<object[^>]+data="${escapeRegExp(pdfHref)}"[^>]+type="application/pdf"`).test(html)) errors.push(`${relativePage}: missing localized PDF object.`);
-    for (const pageNumber of [1, 2]) {
+    for (const pageNumber of cvPageNumbers) {
       const previewHref = `${base}assets/cv/jinmin-kim-cv-${locale}-page-${pageNumber}.png`;
       const previewTag = html.match(new RegExp(`<img\\b[^>]*src="${escapeRegExp(previewHref)}"[^>]*>`, 'i'))?.[0];
       if (!previewTag) {

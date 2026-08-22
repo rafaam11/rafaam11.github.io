@@ -40,7 +40,8 @@ const knownHtmlEntityPattern = new RegExp(`&(${Object.keys(htmlEntityMap).sort((
 const publicPiiRules = [
   {
     label: 'phone number',
-    pattern: /(?:\+82[\s()./·-]*\(?0?10\)?|\(?010\)?)[\s()./·-]*\d{3,4}[\s()./·-]*\d{4}(?!\d)/i
+    // The leading lookbehind keeps KIPO patent numbers (10-2019-0100328) from reading as 010-xxxx-xxxx.
+    pattern: /(?<![\d-])(?:\+82[\s()./·-]*\(?0?10\)?|\(?010\)?)[\s()./·-]*\d{3,4}[\s()./·-]*\d{4}(?!\d)/i
   },
   {
     label: 'explicit English age',
@@ -237,130 +238,189 @@ function renderPublicCvSummary(cvValue, locale) {
   const cv = requireRecord(cvValue, 'Public CV');
   const identity = requireRecord(cv.identity, 'Public CV identity');
   const identityCopy = localized(identity, locale, ['displayName', 'headline', 'summary'], 'Public CV identity');
-  const timeline = requireArray(cv.timeline, 'Public CV timeline');
-  const capabilities = requireArray(cv.capabilities, 'Public CV capabilities');
-  const research = requireArray(cv.research, 'Public CV research');
-  const achievements = requireRecord(cv.achievements, 'Public CV achievements');
-  const selectedAwards = requireArray(achievements.selectedAwards, 'Public CV selected awards');
+  const location = requireRecord(identity.location, 'Public CV identity location');
+  const education = requireArray(cv.education, 'Public CV education');
+  const experience = requireArray(cv.experience, 'Public CV experience');
+  const publications = requireArray(cv.publications, 'Public CV publications');
+  const patents = requireArray(cv.patents, 'Public CV patents');
+  const awards = requireArray(cv.awards, 'Public CV awards');
+  const skills = requireArray(cv.skills, 'Public CV skills');
   const languages = requireArray(cv.languages, 'Public CV languages');
   const contacts = requireArray(cv.contacts, 'Public CV contacts');
   const sourceDigest = digest(cv);
+  const grantedCount = patents.filter((entry) => requireRecord(entry, 'Public CV patent').status === 'granted').length;
   const copy = locale === 'ko' ? {
-    kicker: 'HTML 요약',
-    titleSuffix: '공개 경력 요약',
-    timeline: '경력 및 학력',
-    capabilities: '구현 기반 역량',
-    evidence: '연구 및 공개 근거',
-    achievements: '성과 신호와 해석 경계',
-    contacts: '공개 연락처',
+    education: '학력',
+    experience: '경력',
+    publications: '연구 실적',
     patents: '특허',
     awards: '수상',
-    languages: '언어',
-    selectedAwards: '대표 수상',
-    patentValue: `${achievements.patentApplications}건 출원 · ${achievements.patentGrants}건 등록`,
-    awardValue: `총 ${achievements.awardTotal}건`,
-    signalSummary: `공개 누적 신호: 특허 출원 ${achievements.patentApplications}건 · 등록 ${achievements.patentGrants}건 · 수상 ${achievements.awardTotal}건`,
-    boundary: '승인된 공개 누적 신호이며, 단독 소유나 개별 프로젝트 효과를 주장하지 않습니다.',
-    roleSuffix: (role) => role === 'Joint first author' ? 'Joint first author · 공동 제1저자' : role === 'International conference presentation' ? 'International conference presentation · 국제학회 발표' : role
+    skills: '기술 및 어학',
+    languages: '어학',
+    contacts: '공개 연락처',
+    patentCount: `출원 ${patents.length}건 · 등록 ${grantedCount}건`,
+    awardCount: `총 ${awards.length}건`,
+    statuses: { granted: '등록', filed: '출원' },
+    groups: { work: '직무', undergraduate: '학부', academic: '학회' },
+    filedSuffix: '출원',
+    boundary: '공개 승인된 사실만 싣습니다. 타인 개인정보와 미검증 성과 주장은 포함하지 않습니다.'
   } : {
-    kicker: 'HTML SUMMARY',
-    titleSuffix: 'Public career summary',
-    timeline: 'Experience and education',
-    capabilities: 'Implementation-based capabilities',
-    evidence: 'Research and public evidence',
-    achievements: 'Achievement signals and boundary',
-    contacts: 'Public contacts',
+    education: 'Education',
+    experience: 'Experience',
+    publications: 'Publications and presentations',
     patents: 'Patents',
-    awards: 'Awards',
+    awards: 'Honours and awards',
+    skills: 'Skills and languages',
     languages: 'Languages',
-    selectedAwards: 'Selected awards',
-    patentValue: `${achievements.patentApplications} applications · ${achievements.patentGrants} grants`,
-    awardValue: `${achievements.awardTotal} awards`,
-    signalSummary: `Public cumulative signals: ${achievements.patentApplications} applications · ${achievements.patentGrants} grants · ${achievements.awardTotal} awards`,
-    boundary: 'These are approved public cumulative signals, not claims of sole ownership or project-level effect.',
-    roleSuffix: (role) => role
+    contacts: 'Public contacts',
+    patentCount: `${patents.length} applications · ${grantedCount} granted`,
+    awardCount: `${awards.length} total`,
+    statuses: { granted: 'Granted', filed: 'Filed' },
+    groups: { work: 'Employment', undergraduate: 'Undergraduate', academic: 'Academic society' },
+    filedSuffix: 'filed',
+    boundary: 'Only approved public facts appear here. Personal information about other people and unverified outcome claims are excluded.'
   };
 
-  const timelineHtml = timeline.map((entry, index) => {
-    const record = requireRecord(entry, `Public CV timeline entry ${index + 1}`);
-    const entryCopy = localized(record, locale, ['role', 'summary'], `Public CV timeline entry ${index + 1}`);
-    return `          <li><time>${htmlEscape(requireText(record.period, `Public CV timeline entry ${index + 1} period`))}</time><strong>${htmlEscape(requireText(record.organization, `Public CV timeline entry ${index + 1} organization`))}</strong><span>${htmlEscape(entryCopy.role)} · ${htmlEscape(entryCopy.summary)}</span></li>`;
+  const entryHead = (organization, period) => `<p class="sc-cv__head"><strong>${htmlEscape(organization)}</strong><time>${htmlEscape(period)}</time></p>`;
+  const listItems = (items, label) => items.map((item, index) => `            <li>${htmlEscape(requireText(item, `${label} item ${index + 1}`))}</li>`).join('\n');
+
+  const educationHtml = education.map((entry, index) => {
+    const label = `Public CV education entry ${index + 1}`;
+    const record = requireRecord(entry, label);
+    const entryCopy = localized(record, locale, ['degree'], label);
+    const notes = requireArray(requireRecord(record.translations, `${label} translations`)[locale].notes, `${label} notes`);
+    return `        <li>
+          ${entryHead(requireText(record.organization, `${label} organization`), requireText(record.period, `${label} period`))}
+          <p class="sc-cv__role">${htmlEscape(entryCopy.degree)}</p>
+          <ul>
+${listItems(notes, `${label} note`)}
+          </ul>
+        </li>`;
   }).join('\n');
-  const capabilityHtml = capabilities.map((entry, index) => {
-    const entryCopy = localized(entry, locale, ['title', 'body'], `Public CV capability ${index + 1}`);
-    return `          <li><strong>${htmlEscape(entryCopy.title)}</strong><span>${htmlEscape(entryCopy.body)}</span></li>`;
+
+  const experienceHtml = experience.map((entry, index) => {
+    const label = `Public CV experience entry ${index + 1}`;
+    const record = requireRecord(entry, label);
+    const entryCopy = localized(record, locale, ['role', 'context'], label);
+    const areas = requireArray(record.areas, `${label} areas`).map((area, areaIndex) => {
+      const areaLabel = `Public CV experience area ${areaIndex + 1}`;
+      const areaRecord = requireRecord(area, areaLabel);
+      const areaCopy = localized(areaRecord, locale, ['title'], areaLabel);
+      const items = requireArray(requireRecord(areaRecord.translations, `${areaLabel} translations`)[locale].items, `${areaLabel} items`);
+      return `          <div class="sc-cv__area">
+            <h4>${htmlEscape(areaCopy.title)}</h4>
+            <ul>
+${listItems(items, `${areaLabel} item`)}
+            </ul>
+          </div>`;
+    }).join('\n');
+    return `        <li>
+          ${entryHead(requireText(record.organization, `${label} organization`), requireText(record.period, `${label} period`))}
+          <p class="sc-cv__role">${htmlEscape(entryCopy.role)}</p>
+          <p class="sc-cv__note">${htmlEscape(entryCopy.context)}</p>
+${areas}
+        </li>`;
   }).join('\n');
-  const researchHtml = research.map((entry, index) => {
-    const record = requireRecord(entry, `Public CV research entry ${index + 1}`);
-    const title = htmlEscape(requireText(record.title, `Public CV research entry ${index + 1} title`));
+
+  const publicationHtml = publications.map((entry, index) => {
+    const label = `Public CV publication ${index + 1}`;
+    const record = requireRecord(entry, label);
+    const entryCopy = localized(record, locale, ['title', 'venue', 'role'], label);
+    const title = htmlEscape(entryCopy.title);
     const titleHtml = record.href === undefined
-      ? `<strong>${title}</strong>`
-      : `<a href="${htmlEscape(safePublicHref(record.href, `Public CV research entry ${index + 1} href`))}" target="_blank" rel="noopener">${title}</a>`;
-    return `          <li><time>${htmlEscape(requireText(record.year, `Public CV research entry ${index + 1} year`))}</time>${titleHtml}<span>${htmlEscape(requireText(record.venue, `Public CV research entry ${index + 1} venue`))} · ${htmlEscape(copy.roleSuffix(requireText(record.role, `Public CV research entry ${index + 1} role`)))}</span></li>`;
+      ? `<span class="sc-cv__title">${title}</span>`
+      : `<a class="sc-cv__title" href="${htmlEscape(safePublicHref(record.href, `${label} href`))}" target="_blank" rel="noopener">${title}</a>`;
+    return `          <li><time>${htmlEscape(requireText(record.year, `${label} year`))}</time>${titleHtml}<span class="sc-cv__meta">${htmlEscape(entryCopy.venue)} · ${htmlEscape(entryCopy.role)}</span></li>`;
   }).join('\n');
+
+  const patentHtml = patents.map((entry, index) => {
+    const label = `Public CV patent ${index + 1}`;
+    const record = requireRecord(entry, label);
+    const entryCopy = localized(record, locale, ['title'], label);
+    const status = copy.statuses[requireText(record.status, `${label} status`)];
+    const group = copy.groups[requireText(record.group, `${label} group`)];
+    if (!status || !group) throw new TypeError(`${label} has an unknown status or group.`);
+    const meta = `${requireText(record.number, `${label} number`)} · ${requireText(record.filed, `${label} filed`)} ${copy.filedSuffix} · ${group}`;
+    return `          <li><span class="sc-cv__state">${htmlEscape(status)}</span><span class="sc-cv__title">${htmlEscape(entryCopy.title)}</span><span class="sc-cv__meta">${htmlEscape(meta)}</span></li>`;
+  }).join('\n');
+
+  const awardHtml = awards.map((entry, index) => {
+    const label = `Public CV award ${index + 1}`;
+    const record = requireRecord(entry, label);
+    const entryCopy = localized(record, locale, ['title', 'organization'], label);
+    return `          <li><time>${htmlEscape(requireText(record.year, `${label} year`))}</time><span class="sc-cv__title">${htmlEscape(entryCopy.title)}</span><span class="sc-cv__meta">${htmlEscape(entryCopy.organization)}</span></li>`;
+  }).join('\n');
+
+  const skillHtml = skills.map((entry, index) => {
+    const label = `Public CV skill ${index + 1}`;
+    const entryCopy = localized(requireRecord(entry, label), locale, ['category', 'items'], label);
+    return `          <div><dt>${htmlEscape(entryCopy.category)}</dt><dd>${htmlEscape(entryCopy.items)}</dd></div>`;
+  }).join('\n');
+
   const languageHtml = languages.map((entry, index) => {
     const record = requireRecord(entry, `Public CV language ${index + 1}`);
     const translations = requireRecord(record.translations, `Public CV language ${index + 1} translations`);
     return htmlEscape(requireText(translations[locale], `Public CV language ${index + 1} ${locale}`));
   }).join(' · ');
-  const awardHtml = selectedAwards.map((entry, index) => {
-    const record = requireRecord(entry, `Public CV selected award ${index + 1}`);
-    const translations = requireRecord(record.translations, `Public CV selected award ${index + 1} translations`);
-    return `          <li><time>${htmlEscape(requireText(record.year, `Public CV selected award ${index + 1} year`))}</time><span>${htmlEscape(requireText(translations[locale], `Public CV selected award ${index + 1} ${locale}`))}</span></li>`;
-  }).join('\n');
+
   const contactHtml = contacts.map((entry, index) => {
     const record = requireRecord(entry, `Public CV contact ${index + 1}`);
     const label = requireText(record.label, `Public CV contact ${index + 1} label`);
     const href = safePublicHref(record.href, `Public CV contact ${index + 1} href`, true);
-    return `        <li><a href="${htmlEscape(href)}">${htmlEscape(label)}: ${htmlEscape(requireText(record.value, `Public CV contact ${index + 1} value`))}</a></li>`;
+    return `      <li><a href="${htmlEscape(href)}">${htmlEscape(label)}: ${htmlEscape(requireText(record.value, `Public CV contact ${index + 1} value`))}</a></li>`;
   }).join('\n');
 
-  const body = `  <div class="td-section-heading">
-    <p class="hero-kicker">${copy.kicker}</p>
-    <h2 id="cv-summary-title">${htmlEscape(identityCopy.displayName)} · ${copy.titleSuffix}</h2>
-    <p><strong>${htmlEscape(identityCopy.headline)}</strong><span> · ${htmlEscape(identityCopy.summary)}</span></p>
-    <address class="td-cv-summary-contacts" aria-label="${htmlEscape(copy.contacts)}">
+  const body = `  <header class="sc-cv__intro">
+    <h2 id="cv-summary-title">${htmlEscape(identityCopy.displayName)}<small lang="${locale === 'ko' ? 'en' : 'ko'}">${htmlEscape(locale === 'ko' ? requireText(identity.name, 'Public CV identity name') : requireText(requireRecord(identity.translations, 'Public CV identity translations').ko.displayName, 'Public CV identity ko displayName'))}</small></h2>
+    <p class="sc-cv__headline">${htmlEscape(identityCopy.headline)}</p>
+    <p class="sc-cv__summary">${htmlEscape(identityCopy.summary)}</p>
+    <address class="sc-cv__contacts" aria-label="${htmlEscape(copy.contacts)}">
       <ul>
+        <li>${htmlEscape(requireText(location[locale], 'Public CV identity location'))}</li>
 ${contactHtml}
       </ul>
     </address>
-  </div>
-  <div class="td-cv-summary-grid">
-    <section data-cv-section="timeline" aria-labelledby="cv-timeline-title">
-      <h3 id="cv-timeline-title">${copy.timeline}</h3>
-      <ol>
-${timelineHtml}
-      </ol>
-    </section>
-    <section data-cv-section="capabilities" aria-labelledby="cv-capabilities-title">
-      <h3 id="cv-capabilities-title">${copy.capabilities}</h3>
-      <ul>
-${capabilityHtml}
-      </ul>
-    </section>
-    <section data-cv-section="evidence" aria-labelledby="cv-evidence-title">
-      <h3 id="cv-evidence-title">${copy.evidence}</h3>
-      <ol>
-${researchHtml}
-      </ol>
-    </section>
-    <section data-cv-section="achievements" aria-labelledby="cv-achievements-title">
-      <h3 id="cv-achievements-title">${copy.achievements}</h3>
-      <p>${copy.signalSummary}</p>
-      <dl>
-        <div><dt>${copy.patents}</dt><dd>${copy.patentValue}</dd></div>
-        <div><dt>${copy.awards}</dt><dd>${copy.awardValue}</dd></div>
-        <div><dt>${copy.languages}</dt><dd>${languageHtml}</dd></div>
-      </dl>
-      <h4>${copy.selectedAwards}</h4>
-      <ul>
+  </header>
+  <section data-cv-section="education" aria-labelledby="cv-education-title">
+    <h3 id="cv-education-title">${copy.education}</h3>
+    <ol class="sc-cv__entries">
+${educationHtml}
+    </ol>
+  </section>
+  <section data-cv-section="experience" aria-labelledby="cv-experience-title">
+    <h3 id="cv-experience-title">${copy.experience}</h3>
+    <ol class="sc-cv__entries">
+${experienceHtml}
+    </ol>
+  </section>
+  <section data-cv-section="publications" aria-labelledby="cv-publications-title">
+    <h3 id="cv-publications-title">${copy.publications}</h3>
+    <ol class="sc-cv__list">
+${publicationHtml}
+    </ol>
+  </section>
+  <section data-cv-section="patents" aria-labelledby="cv-patents-title">
+    <h3 id="cv-patents-title">${copy.patents}<small>${copy.patentCount}</small></h3>
+    <ol class="sc-cv__list">
+${patentHtml}
+    </ol>
+  </section>
+  <section data-cv-section="awards" aria-labelledby="cv-awards-title">
+    <h3 id="cv-awards-title">${copy.awards}<small>${copy.awardCount}</small></h3>
+    <ol class="sc-cv__list">
 ${awardHtml}
-      </ul>
-      <p>${copy.boundary}</p>
-    </section>
-  </div>`;
+    </ol>
+  </section>
+  <section data-cv-section="skills" aria-labelledby="cv-skills-title">
+    <h3 id="cv-skills-title">${copy.skills}</h3>
+    <dl class="sc-cv__skills">
+${skillHtml}
+          <div><dt>${copy.languages}</dt><dd>${languageHtml}</dd></div>
+    </dl>
+    <p class="sc-cv__note">${copy.boundary}</p>
+  </section>`;
   const summaryDigest = digest(`${locale}\n${sourceDigest}\n${body}`);
-  const html = `<section class="td-cv-summary" data-cv-summary data-cv-source-digest="${sourceDigest}" data-cv-summary-digest="${summaryDigest}" aria-labelledby="cv-summary-title">\n${body}\n</section>`;
+  const html = `<section class="sc-cv" data-cv-summary data-cv-source-digest="${sourceDigest}" data-cv-summary-digest="${summaryDigest}" aria-labelledby="cv-summary-title">\n${body}\n</section>`;
   const envelope = `${' '.repeat(4)}${summaryStart}\n${html.split('\n').map((line) => `${' '.repeat(4)}${line}`).join('\n')}\n${' '.repeat(4)}${summaryEnd}`;
   return { html, envelope, sourceDigest, summaryDigest };
 }

@@ -1504,16 +1504,17 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
     assert.equal(Object.prototype.hasOwnProperty.call(exported, 'contentVersion'), false);
     assert.deepEqual(exported.projects.map((project) => project.slug), slugs);
     assert.deepEqual(exported.locales, ['ko', 'en']);
-    assert.equal(exported.cv.version, '2026-08-21');
+    assert.equal(exported.cv.version, '2026-08-22');
     assert.deepEqual(validator.publicCvDataErrors(exported.cv), []);
     assert.doesNotMatch(fs.readFileSync(first, 'utf8'), /(?:(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw)/i);
-    assert.doesNotMatch(JSON.stringify(exported.cv), /\b(?:phone|salary|professor|patient|hospital)\b/i);
+    // Partner hospitals and the thesis advisor are approved public names; private facts are not.
+    assert.doesNotMatch(JSON.stringify(exported.cv), /\b(?:phone|salary|home address)\b/i);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
 });
 
-test('Task 5 publishes exactly sixteen six-page project PDFs and two two-page CV PDFs', () => {
+test('Task 5 publishes exactly sixteen six-page project PDFs and two three-page CV PDFs', () => {
   const projectNames = slugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
   const outputNames = fs.readdirSync(path.join(root, 'output', 'pdf'))
@@ -1540,7 +1541,7 @@ test('Task 5 publishes exactly sixteen six-page project PDFs and two two-page CV
     const bytes = fs.readFileSync(asset);
     assert.equal(bytes.subarray(0, 5).toString('ascii'), '%PDF-');
     assert.ok(bytes.length > 12_000, `${name}: unexpectedly small PDF`);
-    assert.equal(pdfPageCount(asset), 2, `${name}: CV PDF page count`);
+    assert.equal(pdfPageCount(asset), 3, `${name}: CV PDF page count`);
     assert.equal(sha256(asset), sha256(output), `${name}: output/assets checksum mismatch`);
   }
   assert.deepEqual(validator.pdfArtifactErrors(root), []);
@@ -1635,7 +1636,9 @@ test('Task 5 public CV surfaces exclude private and unverified claims', () => {
     read('cv/index.html'),
     read('en/cv/index.html')
   ].join('\n');
-  assert.doesNotMatch(publicCv, /(?:\b\d{2,3}-\d{3,4}-\d{4}\b|\b10-\d{4}-\d+\b|\b(?:age|salary|professor|advisor|patient|customer)\b|나이|연봉|지도교수|환자|고객|3\s*[–-]\s*4개월|1\s*[–-]\s*2주|주\s*단위|월\s*단위)/i);
+  // Patent application numbers and the thesis advisor became approved public CV facts on 2026-08-22;
+  // phone numbers, private facts, patient data, and unverified delivery claims stay prohibited.
+  assert.doesNotMatch(publicCv, /(?:\b0?10-\d{3,4}-\d{4}\b|\b(?:age|salary|customer)\b|나이|연봉|고객|(?:patient|환자)\s*(?:data|record|정보|데이터)|3\s*[–-]\s*4개월|1\s*[–-]\s*2주|주\s*단위|월\s*단위)/i);
   assert.match(publicCv, /7/);
   assert.match(publicCv, /3/);
   assert.match(publicCv, /9/);
@@ -1759,7 +1762,7 @@ test('Task 5 generator publishes CV previews and digest manifest without a revie
     assert.equal(manifest.generatorSha256, sha256(path.join(root, 'scripts', 'generate-portfolio-pdfs.py')));
     assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
     const previews = manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview');
-    assert.equal(previews.length, 4);
+    assert.equal(previews.length, 6);
     for (const preview of previews) {
       assert.equal(fs.existsSync(path.join(temporaryRoot, preview.path)), true, preview.path);
       assert.equal(sha256(path.join(temporaryRoot, preview.path)), preview.sha256);
@@ -1773,8 +1776,8 @@ test('Task 5 manifest freshness follows canonical project, evidence, and public 
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   assert.equal(manifest.schemaVersion, 3);
   assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
-  assert.equal(manifest.artifacts.length, 40);
-  assert.equal(manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview').length, 4);
+  assert.equal(manifest.artifacts.length, 42);
+  assert.equal(manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview').length, 6);
 
   const changedPortfolio = clone(data);
   changedPortfolio.projects[0].translations.en.title += ' changed';
@@ -2063,8 +2066,8 @@ test('Task 5 integrated review CV HTML intrinsic dimensions match the 1241x1754 
 
 test('Task 5 CV pages expose a concise semantic HTML summary without relying on PDF tags', () => {
   const pages = [
-    { file: 'cv/index.html', identity: /김진민/, timeline: /DIGITRACK/, capability: /3D 정합 및 최적화/, evidence: /공동 제1저자/, boundary: /출원 7건.*등록 3건.*수상 9건/s },
-    { file: 'en/cv/index.html', identity: /Jinmin Kim/, timeline: /DIGITRACK/, capability: /3D Registration and Optimization/, evidence: /Joint first author/, boundary: /7 applications.*3 grants.*9 awards/s }
+    { file: 'cv/index.html', identity: /김진민/, timeline: /DIGITRACK/, capability: /3D Slicer/, evidence: /공동 제1저자/, boundary: /출원 7건 · 등록 3건[\s\S]*총 9건/ },
+    { file: 'en/cv/index.html', identity: /Jinmin Kim/, timeline: /DIGITRACK/, capability: /3D Slicer/, evidence: /Joint first author/, boundary: /7 applications · 3 granted[\s\S]*9 total/ }
   ];
   for (const page of pages) {
     const html = read(page.file);
@@ -2181,7 +2184,7 @@ test('Task 5 semantic CV renderer escapes canonical values and refuses unsafe pu
   const summary = require('../scripts/public-cv-summary.cjs');
   const cv = JSON.parse(read('data/public-cv.json'));
   cv.identity.translations.en.displayName = '<img src=x onerror="alert(1)">';
-  cv.research[0].title = '<script>alert(1)</script>';
+  cv.publications[0].translations.en.title = '<script>alert(1)</script>';
   const rendered = summary.renderPublicCvSummary(cv, 'en');
   assert.match(rendered.sourceDigest, /^[a-f0-9]{64}$/);
   assert.match(rendered.summaryDigest, /^[a-f0-9]{64}$/);
@@ -2190,7 +2193,7 @@ test('Task 5 semantic CV renderer escapes canonical values and refuses unsafe pu
   assert.doesNotMatch(rendered.html, /<img|<script>/i);
 
   const unsafe = JSON.parse(read('data/public-cv.json'));
-  unsafe.research[0].href = 'javascript:alert(1)';
+  unsafe.publications[1].href = 'javascript:alert(1)';
   assert.throws(() => summary.renderPublicCvSummary(unsafe, 'en'), /safe HTTPS/i);
 });
 
@@ -2272,7 +2275,7 @@ test('Task 5 validator rejects HTML summary mutation and digest-only spoofing', 
     const original = fs.readFileSync(htmlPath, 'utf8');
     assert.match(original, /data-cv-summary-digest="[a-f0-9]{64}"/);
 
-    fs.writeFileSync(htmlPath, original.replace('Jinmin Kim · Public career summary', 'Mutated public career summary'));
+    fs.writeFileSync(htmlPath, original.replace('Robot Software Engineer', 'Mutated headline'));
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /semantic HTML CV summary.*(?:stale|match)|does not match.*canonical/i);
 
     fs.writeFileSync(htmlPath, original.replace(/data-cv-summary-digest="[a-f0-9]{64}"/, `data-cv-summary-digest="${'0'.repeat(64)}"`));
@@ -3898,21 +3901,26 @@ test('Scholar highlights data mirrors the approved public CV signals', () => {
 
 test('Scholar CV refresh names the approved partners and products within the PDF line caps', () => {
   const cv = JSON.parse(read('data/public-cv.json'));
-  assert.equal(cv.version, '2026-08-21');
-  assert.equal(cv.achievements.asOf, '2026-08-21');
-  const digitrack = cv.timeline[0];
-  assert.match(digitrack.translations.ko.summary, /삼성서울병원/);
-  assert.match(digitrack.translations.ko.summary, /SKADI/);
-  assert.match(digitrack.translations.ko.summary, /DOTORI/);
-  assert.match(digitrack.translations.en.summary, /Samsung Medical Center/);
-  for (const entry of cv.timeline) {
-    assert.ok(entry.translations.ko.summary.length <= 95, `${entry.organization}: ko summary ${entry.translations.ko.summary.length} chars`);
-    assert.ok(entry.translations.en.summary.length <= 190, `${entry.organization}: en summary ${entry.translations.en.summary.length} chars`);
+  assert.equal(cv.version, '2026-08-22');
+  const digitrack = cv.experience[0];
+  const koItems = digitrack.areas.flatMap((area) => area.translations.ko.items).join('\n');
+  const enItems = digitrack.areas.flatMap((area) => area.translations.en.items).join('\n');
+  for (const needle of [/삼성서울병원/, /SKADI/, /DOTORI/, /NeuroPilot/]) assert.match(koItems, needle);
+  assert.match(enItems, /Samsung Medical Center/);
+  // Bullets wrap inside the generated PDF, so each one stays within the four-line budget.
+  for (const area of digitrack.areas) {
+    for (const item of area.translations.ko.items) assert.ok(item.length <= 170, `ko bullet ${item.length} chars: ${item}`);
+    for (const item of area.translations.en.items) assert.ok(item.length <= 320, `en bullet ${item.length} chars: ${item}`);
   }
-  for (const capability of cv.capabilities) {
-    assert.ok(capability.translations.ko.body.length <= 85, `${capability.translations.ko.title}: ko body`);
-    assert.ok(capability.translations.en.body.length <= 170, `${capability.translations.en.title}: en body`);
+  for (const entry of cv.education) {
+    for (const note of entry.translations.ko.notes) assert.ok(note.length <= 170, `${entry.organization}: ko note ${note.length} chars`);
+    for (const note of entry.translations.en.notes) assert.ok(note.length <= 320, `${entry.organization}: en note ${note.length} chars`);
   }
-  assert.doesNotMatch(JSON.stringify(cv), /박사|진학|이직|PhD|admission|홍재성|안재명|강영남|최현석|\b10-\d{4}-\d+\b/);
+  assert.equal(cv.patents.filter((patent) => patent.status === 'granted').length, 3);
+  assert.equal(cv.awards.length, 9);
+  // 2026-08-22: the thesis advisor and KIPO application numbers are approved; other people stay out.
+  assert.doesNotMatch(JSON.stringify(cv), /박사|진학|이직|PhD|admission|안재명|강영남|최현석/);
+  assert.match(JSON.stringify(cv), /홍재성/);
+  assert.match(JSON.stringify(cv), /10-2024-0186869/);
   assert.deepEqual(validator.publicCvDataErrors(cv), []);
 });

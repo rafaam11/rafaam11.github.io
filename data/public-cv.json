@@ -1,7 +1,11 @@
 {
-  "version": "2026-08-21",
+  "version": "2026-08-22",
   "identity": {
     "name": "Jinmin Kim",
+    "location": {
+      "ko": "대구, 대한민국",
+      "en": "Daegu, Republic of Korea"
+    },
     "translations": {
       "ko": {
         "displayName": "김진민",
@@ -32,171 +36,563 @@
       "href": "https://www.linkedin.com/in/rlawlsals"
     }
   ],
-  "timeline": [
+  "education": [
     {
-      "period": "2023-02 - Present",
-      "organization": "DIGITRACK Inc.",
-      "translations": {
-        "ko": {
-          "role": "연구원 · 로봇SW 개발",
-          "summary": "삼성서울병원 협업 수술내비게이션 SW, NeuroPilot rTMS, SKADI API·Viewer, DOTORI 비전·안전정책, 호흡추적(2026–) 담당."
-        },
-        "en": {
-          "role": "Researcher · Robot Software",
-          "summary": "Surgical-navigation software with Samsung Medical Center; NeuroPilot rTMS; SKADI API and Viewer; DOTORI vision and safety policy; respiratory tracking (2026–)."
-        }
-      }
-    },
-    {
-      "period": "2021-03 - 2023-02",
+      "period": "2021.03 - 2023.02",
       "organization": "DGIST",
       "translations": {
         "ko": {
-          "role": "로봇공학 석사",
-          "summary": "치아 교합 기반 하악골 골절 정복 계획 최적화(JIIM 2024, 공동 제1저자)와 AR 수술내비게이션·XR 연구."
+          "degree": "공학석사, 로봇및기계전자공학",
+          "notes": [
+            "수술로봇및증강현실연구실 (지도교수 홍재성) — 수술내비게이션팀",
+            "학위논문: 치아 교합 기반 하악골 골절 정복 계획 최적화 (Virtual Jawbone Reduction Planning based on Dental Occlusion for Mandibular Fracture Surgery)",
+            "구강악안면 AR 수술 다기관 과제 참여 (2021.06 - 2023.05) — Unity 기반 AR 내비게이션 초기·지원 개발"
+          ]
         },
         "en": {
-          "role": "M.S. in Robotics",
-          "summary": "Occlusion-based mandibular fracture reduction planning (JIIM 2024, joint first author) and AR surgical-navigation and XR research."
+          "degree": "M.S. in Robotics and Mechatronics Engineering",
+          "notes": [
+            "Surgical Robotics and Augmented Reality Laboratory (advisor: Jaesung Hong) — surgical navigation team",
+            "Thesis: Virtual Jawbone Reduction Planning based on Dental Occlusion for Mandibular Fracture Surgery",
+            "Multi-centre oral and maxillofacial AR surgery programme (2021.06 - 2023.05) — early and supporting development of the Unity-based AR navigation"
+          ]
         }
       }
     },
     {
-      "period": "2020-07",
-      "organization": "UNIST U-SURF",
-      "translations": {
-        "ko": {
-          "role": "하계대학원 연구인턴",
-          "summary": "소프트로봇 논문 리딩과 자기력 실험을 수행했습니다."
-        },
-        "en": {
-          "role": "Summer Research Intern",
-          "summary": "Reviewed soft-robotics literature and conducted magnetic-force experiments."
-        }
-      }
-    },
-    {
-      "period": "2015-03 - 2021-02",
+      "period": "2015.03 - 2021.02",
       "organization": "Kumoh National Institute of Technology",
       "translations": {
         "ko": {
-          "role": "기계시스템공학 학사",
-          "summary": "시스템비전연구실 학부연구, 4족 보행 로봇 설계·제작, 발명·특허 활동을 수행했습니다."
+          "degree": "공학사, 기계시스템공학",
+          "notes": [
+            "System & Vision Lab. 학부연구생 (2019 - 2020) · DGIST·UNIST 방학 학부연구프로그램 수료",
+            "5절 링크 기반 4족 보행 로봇 설계·제작 (2020.04 - 2021.01) — 기구 설계, 기구학 모델링, 제어 구현. 특허 출원과 엔지니어링 페어 수상으로 이어졌습니다.",
+            "발명동아리 부회장 (2019) — 특허 출원과 발명대회 수상 다수, 교육부 교육기부 우수동아리 지정"
+          ]
         },
         "en": {
-          "role": "B.S., Mechanical System Engineering",
-          "summary": "System-vision undergraduate research, a quadruped robot design-and-build, and invention and patent activity."
+          "degree": "B.S. in Mechanical System Engineering",
+          "notes": [
+            "Undergraduate researcher, System & Vision Lab. (2019 - 2020); completed the DGIST and UNIST summer undergraduate research programmes",
+            "Designed and built a five-bar-linkage quadruped robot (2020.04 - 2021.01) — mechanism design, kinematic modelling, and control, leading to a patent application and an engineering-fair award",
+            "Vice president of the invention club (2019) — several patent applications and invention-contest awards; the club was designated an outstanding education-donation club by the Ministry of Education"
+          ]
         }
       }
     }
   ],
-  "capabilities": [
+  "experience": [
     {
+      "period": "2023.02 - Present",
+      "organization": "DIGITRACK Inc.",
       "translations": {
         "ko": {
-          "title": "3D 정합 및 최적화",
-          "body": "PCA, ICP, CLPSO와 Open3D, OpenCV, SciPy로 특징점·표면·좌표계 정합과 센서 정밀도 검증을 다뤘습니다."
+          "role": "연구원 · 소프트웨어 개발",
+          "context": "DGIST 창업 의료기기·로봇 기업 (마커 기반 3차원 위치추적장치와 소프트웨어), 대구"
         },
         "en": {
-          "title": "3D Registration and Optimization",
-          "body": "Feature, surface, and coordinate-frame registration plus sensor-precision validation with PCA, ICP, CLPSO, Open3D, OpenCV, and SciPy."
+          "role": "Researcher · Software Development",
+          "context": "A DGIST spin-off medical-device and robotics company (marker-based 3D optical tracking devices and software), Daegu"
         }
-      }
-    },
-    {
-      "translations": {
-        "ko": {
-          "title": "의료 내비게이션 및 XR",
-          "body": "3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, Photon 기반 내비게이션·XR 앱을 구현했습니다."
+      },
+      "areas": [
+        {
+          "translations": {
+            "ko": {
+              "title": "수술내비게이션 · 의료영상",
+              "items": [
+                "삼성서울병원 구강악안면외과와 3년 이상 협업 — 2023년부터 격주 임상 미팅을 이어오며 정부과제 2건과 개발용역 1건을 메인 실무로 수행했습니다.",
+                "병원에서 사용 중인 3D Slicer 기반 수술내비게이션 통합 소프트웨어를 전담 개발했습니다 — 수술 계획을 광학 트래킹으로 정합·오버레이하고, HoloLens 2 좌표계 정합으로 AR 수술 가이드를 구현했습니다.",
+                "Meta Quest 기반 환자-의사 상담 XR 앱 개발 — 다중 사용자의 공간·음성·시나리오 상태를 동기화했습니다.",
+                "rTMS 코일 내비게이션 시스템(NeuroPilot) 주도 개발 — 코일 위치 디지털트윈 가시화 (보건의료 정부과제).",
+                "저선량 C-Arm 3차원 내비게이션 — C-Arm 영상과 3차원 내비게이션 워크플로를 연결하고 담당 기능 범위를 구현했습니다.",
+                "방사선치료용 3차원 표면유도 호흡추적과 4DCT 정합 담당 (한국전기연구원 대형과제, 2026.06 - ).",
+                "한국전기연구원·한국기계연구원 등 연구기관 개발용역 다수 수행."
+              ]
+            },
+            "en": {
+              "title": "Surgical navigation and medical imaging",
+              "items": [
+                "Over three years of collaboration with the oral and maxillofacial surgery department of Samsung Medical Center — biweekly clinical meetings since 2023, with two government programmes and one development contract carried as the main engineer.",
+                "Sole developer of the 3D Slicer-based surgical-navigation software in use at the hospital — registering and overlaying the surgical plan through optical tracking, and building an AR surgical guide on a registered HoloLens 2 coordinate frame.",
+                "Built a patient-and-clinician consultation XR application on Meta Quest, synchronising spatial, voice, and scenario state across users.",
+                "Led development of the NeuroPilot rTMS coil-navigation system — digital-twin visualisation of coil pose (health-technology government programme).",
+                "Low-dose C-arm 3D navigation — connected C-arm imaging to the 3D navigation workflow and implemented the owned feature scope.",
+                "Own surface-guided respiratory tracking and 4D CBCT registration for radiotherapy (large KERI programme, 2026.06 - ).",
+                "Delivered several development contracts for research institutes including KERI and KIMM."
+              ]
+            }
+          }
         },
-        "en": {
-          "title": "Medical Navigation and XR",
-          "body": "Working navigation and XR applications with 3D Slicer, VTK, Qt, OpenIGTLink, Unity, MRTK, Meta SDK, and Photon."
-        }
-      }
-    },
-    {
-      "translations": {
-        "ko": {
-          "title": "로봇 및 센서 통합",
-          "body": "ROS 2, Zenoh, Isaac Sim, NDI 추적기, HoloLens 2, Meta Quest, RGB·ToF·LiDAR 연결·배치했습니다."
+        {
+          "translations": {
+            "ko": {
+              "title": "3차원 위치추적장치 소프트웨어",
+              "items": [
+                "자체 광학식 3차원 위치추적장치 SKADI의 API·Viewer 소프트웨어 개발·유지보수 — 국내 수술내비게이션 기업과 연구기관에 납품되는 제품군의 소프트웨어 계층을 담당합니다.",
+                "3D Slicer 커스텀 앱 템플릿을 작성해 연구기관이 내비게이션 프로토타입을 바로 시작할 수 있게 했습니다."
+              ]
+            },
+            "en": {
+              "title": "3D optical tracking software",
+              "items": [
+                "Develop and maintain the API and Viewer software for SKADI, the in-house optical 3D tracker — the software layer of a product line delivered to Korean surgical-navigation companies and research institutes.",
+                "Wrote a 3D Slicer custom-application template so research groups can start a navigation prototype immediately."
+              ]
+            }
+          }
         },
-        "en": {
-          "title": "Robot and Sensor Integration",
-          "body": "Integrated ROS 2, Zenoh, Isaac Sim, NDI tracking, HoloLens 2, Meta Quest, RGB, ToF, and LiDAR, and deployed them in the field."
-        }
-      }
-    },
-    {
-      "translations": {
-        "ko": {
-          "title": "응용 계층 개발",
-          "body": "Python, C#, C++로 알고리즘, API·Viewer, XR 앱, ROS 2 패키지, SAM 계열 세그멘테이션 PoC를 구현했습니다."
+        {
+          "translations": {
+            "ko": {
+              "title": "산업 로봇 — 무인지게차 (2025 - )",
+              "items": [
+                "자체 무인지게차 솔루션(DOTORI)의 안전정책 관리자(safety_manager) 설계·구현, 라이다·ToF 센서의 Zenoh/ROS 2 네트워크 통합.",
+                "비전 R&D 담당 — 트럭 로딩 비전(ToF+RGB, SAM 계열 세그멘테이션 PoC와 행동트리 연동) 개발.",
+                "생산 현장 2곳 배치·시운전·운영 — 현장 배치 엔지니어링을 포함합니다."
+              ]
+            },
+            "en": {
+              "title": "Industrial robotics — autonomous forklift (2025 - )",
+              "items": [
+                "Designed and implemented the safety-policy manager for the in-house autonomous-forklift solution (DOTORI) and integrated LiDAR and ToF sensors over the Zenoh and ROS 2 network.",
+                "Own vision R&D — truck-loading vision with ToF and RGB fusion, a SAM-family segmentation proof of concept, and behaviour-tree integration.",
+                "Deployed, commissioned, and operated the system at two production sites, including the field-deployment engineering."
+              ]
+            }
+          }
         },
-        "en": {
-          "title": "Application-layer Engineering",
-          "body": "Algorithms, API and Viewer software, XR apps, ROS 2 packages, and SAM-family segmentation PoCs in Python, C#, and C++."
+        {
+          "translations": {
+            "ko": {
+              "title": "개인 — AI 활용 (2026 - )",
+              "items": [
+                "LLM Wiki — AI 에이전트 기반 개인 지식관리 시스템 구축·운영. 기획·아키텍처·검증은 직접 소유하고 구현의 상당 부분을 AI 에이전트에 위임했으며, 실데이터 마이그레이션과 일일 자동화 루틴을 운영합니다 (TypeScript·Python·PostgreSQL·MCP)."
+              ]
+            },
+            "en": {
+              "title": "Personal — building with AI (2026 - )",
+              "items": [
+                "LLM Wiki — built and operate a personal knowledge system driven by AI agents. I own the framing, architecture, and verification while delegating much of the implementation to agents, and run the real-data migration and daily automation routines (TypeScript, Python, PostgreSQL, MCP)."
+              ]
+            }
+          }
         }
-      }
+      ]
     }
   ],
-  "research": [
+  "publications": [
+    {
+      "year": "2026",
+      "translations": {
+        "ko": {
+          "title": "Development and Clinical Evaluation of an Extended Reality-Based Consultation Platform \"OMFS VR Consultation App\" for Enhanced Patient Understanding in Orthognathic Surgery",
+          "venue": "2026 의료메타버스학회 춘계 학술대회",
+          "role": "포스터 발표 · 공동저자"
+        },
+        "en": {
+          "title": "Development and Clinical Evaluation of an Extended Reality-Based Consultation Platform \"OMFS VR Consultation App\" for Enhanced Patient Understanding in Orthognathic Surgery",
+          "venue": "2026 Spring Conference, Korean Society of Medical Metaverse",
+          "role": "Poster presentation · Co-author"
+        }
+      }
+    },
     {
       "year": "2024",
-      "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
-      "venue": "Journal of Imaging Informatics in Medicine, Q1 SCIE",
-      "role": "Joint first author",
-      "href": "https://link.springer.com/article/10.1007/s10278-024-01014-z"
+      "href": "https://link.springer.com/article/10.1007/s10278-024-01014-z",
+      "translations": {
+        "ko": {
+          "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
+          "venue": "Journal of Imaging Informatics in Medicine (SCIE, Q1)",
+          "role": "학술지 논문 · 공동 제1저자 (Joint first author)"
+        },
+        "en": {
+          "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
+          "venue": "Journal of Imaging Informatics in Medicine (SCIE, Q1)",
+          "role": "Journal article · Joint first author"
+        }
+      }
+    },
+    {
+      "year": "2024",
+      "translations": {
+        "ko": {
+          "title": "Set-up of Dental Final Occlusion using Haptic Device in Orthognathic Surgery",
+          "venue": "2024 의료메타버스학회 춘계 학술대회",
+          "role": "포스터 발표 · 공동저자 · 우수포스터상"
+        },
+        "en": {
+          "title": "Set-up of Dental Final Occlusion using Haptic Device in Orthognathic Surgery",
+          "venue": "2024 Spring Conference, Korean Society of Medical Metaverse",
+          "role": "Poster presentation · Co-author · Best Poster Award"
+        }
+      }
+    },
+    {
+      "year": "2023",
+      "translations": {
+        "ko": {
+          "title": "하악골 골절 수술을 위한 치아 교합 기반의 턱뼈 모델 최적화",
+          "venue": "제14회 대한의료로봇학회 학술대회",
+          "role": "구두 발표 · 공동저자 · 우수논문상"
+        },
+        "en": {
+          "title": "Occlusion-based Jawbone Model Optimization for Mandibular Fracture Surgery",
+          "venue": "14th Conference, Korean Society of Medical Robotics",
+          "role": "Oral presentation · Co-author · Best Paper Award"
+        }
+      }
     },
     {
       "year": "2022",
-      "title": "Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery",
-      "venue": "ACCAS 2022",
-      "role": "International conference presentation"
-    }
-  ],
-  "achievements": {
-    "patentApplications": 7,
-    "patentGrants": 3,
-    "awardTotal": 9,
-    "asOf": "2026-08-21",
-    "selectedAwards": [
-      {
-        "year": "2024",
-        "translations": {
-          "ko": "의료메타버스학회 우수포스터상",
-          "en": "Best Poster Award, Korean Society of Medical Metaverse"
-        }
-      },
-      {
-        "year": "2023",
-        "translations": {
-          "ko": "대한의료로봇학회 우수논문상",
-          "en": "Best Paper Award, Korean Society of Medical Robotics"
-        }
-      },
-      {
-        "year": "2019",
-        "translations": {
-          "ko": "국제 TRIZ 경진대회 대상",
-          "en": "Grand Prize, International TRIZ Competition"
+      "translations": {
+        "ko": {
+          "title": "Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery",
+          "venue": "ACCAS 2022, Bangkok, Thailand",
+          "role": "국제학회 논문 · 제1저자"
+        },
+        "en": {
+          "title": "Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery",
+          "venue": "ACCAS 2022, Bangkok, Thailand",
+          "role": "International conference paper · First author"
         }
       }
-    ]
-  },
+    },
+    {
+      "year": "2022",
+      "translations": {
+        "ko": {
+          "title": "하악골 골절 수술 가이드를 위한 가상 턱뼈 모델 재구성",
+          "venue": "제13차 대한의료로봇학회 학술대회",
+          "role": "구두 발표 · 제1저자"
+        },
+        "en": {
+          "title": "Virtual Jawbone Model Reconstruction for Mandibular Fracture Surgery Guidance",
+          "venue": "13th Conference, Korean Society of Medical Robotics",
+          "role": "Oral presentation · First author"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "translations": {
+        "ko": {
+          "title": "Design of Ping-Pong Ball Launcher",
+          "venue": "ISM 2019 — International Symposium on Mechatronics",
+          "role": "학회 논문 · 제1저자"
+        },
+        "en": {
+          "title": "Design of Ping-Pong Ball Launcher",
+          "venue": "ISM 2019 — International Symposium on Mechatronics",
+          "role": "Conference paper · First author"
+        }
+      }
+    }
+  ],
+  "patents": [
+    {
+      "status": "granted",
+      "group": "work",
+      "number": "10-2024-0186869",
+      "filed": "2024.12",
+      "translations": {
+        "ko": {
+          "title": "수술도구의 실시간 3차원 위치추적을 위한 좌표계 정합 방법"
+        },
+        "en": {
+          "title": "Coordinate-frame registration method for real-time 3D tracking of surgical instruments"
+        }
+      }
+    },
+    {
+      "status": "granted",
+      "group": "work",
+      "number": "10-2024-0186864",
+      "filed": "2024.12",
+      "translations": {
+        "ko": {
+          "title": "위치 추적 장치 및 방법"
+        },
+        "en": {
+          "title": "Position tracking device and method"
+        }
+      }
+    },
+    {
+      "status": "filed",
+      "group": "work",
+      "number": "10-2024-0127937",
+      "filed": "2024.09",
+      "translations": {
+        "ko": {
+          "title": "2축 회전 방식의 스테레오 카메라 구동 장치 및 방법"
+        },
+        "en": {
+          "title": "Two-axis rotating stereo-camera actuation device and method"
+        }
+      }
+    },
+    {
+      "status": "filed",
+      "group": "undergraduate",
+      "number": "10-2021-0008332",
+      "filed": "2021.01",
+      "translations": {
+        "ko": {
+          "title": "다관절 링크구조를 이용한 4족 보행 로봇"
+        },
+        "en": {
+          "title": "Quadruped walking robot using a multi-joint link structure"
+        }
+      }
+    },
+    {
+      "status": "granted",
+      "group": "undergraduate",
+      "number": "10-2019-0100328",
+      "filed": "2019.08",
+      "translations": {
+        "ko": {
+          "title": "탄성부를 포함하는 옷걸이"
+        },
+        "en": {
+          "title": "Clothes hanger with an elastic section"
+        }
+      }
+    },
+    {
+      "status": "filed",
+      "group": "undergraduate",
+      "number": "10-2019-0010185",
+      "filed": "2019.01",
+      "translations": {
+        "ko": {
+          "title": "조립하여 수납공간을 조절할 수 있는 캐리어"
+        },
+        "en": {
+          "title": "Assemblable carrier with adjustable storage space"
+        }
+      }
+    },
+    {
+      "status": "filed",
+      "group": "undergraduate",
+      "number": "10-2015-0122661",
+      "filed": "2015.08",
+      "translations": {
+        "ko": {
+          "title": "일회용 종이컵 수거함"
+        },
+        "en": {
+          "title": "Disposable paper-cup collection bin"
+        }
+      }
+    }
+  ],
+  "awards": [
+    {
+      "year": "2024",
+      "group": "academic",
+      "translations": {
+        "ko": {
+          "title": "우수포스터상",
+          "organization": "의료메타버스학회"
+        },
+        "en": {
+          "title": "Best Poster Award",
+          "organization": "Korean Society of Medical Metaverse"
+        }
+      }
+    },
+    {
+      "year": "2023",
+      "group": "academic",
+      "translations": {
+        "ko": {
+          "title": "우수논문상",
+          "organization": "대한의료로봇학회"
+        },
+        "en": {
+          "title": "Best Paper Award",
+          "organization": "Korean Society of Medical Robotics"
+        }
+      }
+    },
+    {
+      "year": "2020",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "엔지니어링 페어 장려상 (5절 링크 기반 4족 보행 로봇)",
+          "organization": "금오공과대학교"
+        },
+        "en": {
+          "title": "Encouragement Prize, Engineering Fair (five-bar-linkage quadruped robot)",
+          "organization": "Kumoh National Institute of Technology"
+        }
+      }
+    },
+    {
+      "year": "2020",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "ROS 기반 자율주행 교육 동상",
+          "organization": "교육 프로그램 경진"
+        },
+        "en": {
+          "title": "Bronze Prize, ROS-based autonomous-driving training",
+          "organization": "Training programme competition"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "국제 TRIZ 경진대회 대상",
+          "organization": "The International TRIZ Association"
+        },
+        "en": {
+          "title": "Grand Prize, International TRIZ Competition",
+          "organization": "The International TRIZ Association"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "창업아이디어 경진대회 최우수상",
+          "organization": "금오공과대학교"
+        },
+        "en": {
+          "title": "Grand Prize, Startup Idea Competition",
+          "organization": "Kumoh National Institute of Technology"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "대학창의발명대회 후원기관상",
+          "organization": "한국발명진흥회"
+        },
+        "en": {
+          "title": "Sponsor's Award, University Creative Invention Contest",
+          "organization": "Korea Invention Promotion Association"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "GREEN 지구 공모전 우수상",
+          "organization": "효성"
+        },
+        "en": {
+          "title": "Excellence Award, GREEN Earth Competition",
+          "organization": "Hyosung"
+        }
+      }
+    },
+    {
+      "year": "2015",
+      "group": "undergraduate",
+      "translations": {
+        "ko": {
+          "title": "대학창의발명대회 우수상",
+          "organization": "한국발명진흥회"
+        },
+        "en": {
+          "title": "Excellence Award, University Creative Invention Contest",
+          "organization": "Korea Invention Promotion Association"
+        }
+      }
+    }
+  ],
+  "skills": [
+    {
+      "translations": {
+        "ko": {
+          "category": "프로그래밍",
+          "items": "Python, C++, C#"
+        },
+        "en": {
+          "category": "Programming",
+          "items": "Python, C++, C#"
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "category": "의료영상",
+          "items": "3D Slicer, DICOM, 영상 정합(rigid·ICP), 세그멘테이션(SAM 계열)"
+        },
+        "en": {
+          "category": "Medical imaging",
+          "items": "3D Slicer, DICOM, image registration (rigid, ICP), segmentation (SAM family)"
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "category": "3D · XR",
+          "items": "Unity, HoloLens 2 (MRTK), Meta Quest, 광학 트래킹"
+        },
+        "en": {
+          "category": "3D and XR",
+          "items": "Unity, HoloLens 2 (MRTK), Meta Quest, optical tracking"
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "category": "로봇",
+          "items": "ROS 2, Zenoh, Isaac Sim, 행동트리"
+        },
+        "en": {
+          "category": "Robotics",
+          "items": "ROS 2, Zenoh, Isaac Sim, behaviour trees"
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "category": "AI 도구",
+          "items": "PyTorch, LLM 에이전트 기반 개발 워크플로"
+        },
+        "en": {
+          "category": "AI tooling",
+          "items": "PyTorch, LLM-agent-based development workflow"
+        }
+      }
+    }
+  ],
   "languages": [
     {
-      "language": "Korean",
+      "language": "English",
       "translations": {
-        "ko": "한국어 - 모국어",
-        "en": "Korean - Native"
+        "ko": "영어 - 중급 (논문 작성·독해)",
+        "en": "English - Intermediate (paper writing and reading)"
       }
     },
     {
       "language": "Japanese",
       "translations": {
-        "ko": "일본어 - JLPT N2",
-        "en": "Japanese - JLPT N2"
+        "ko": "일본어 - JLPT N2 (2021)",
+        "en": "Japanese - JLPT N2 (2021)"
       }
     }
   ]
