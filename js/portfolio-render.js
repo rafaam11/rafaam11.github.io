@@ -1350,7 +1350,8 @@
     return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header + lead + problemSection + approach +
       roleSection + evidenceSection + limitSection +
       caseGalleryHtml(project, normalized, base, lead ? 2 : 1) +
-      subcasesHtml(project, normalized) + links + '</article>';
+      subcasesHtml(project, normalized) +
+      relatedProjectsHtml(data, sourceProject, normalized, base, isFile) + links + '</article>';
   }
 
   function mountAll(doc, data) {
