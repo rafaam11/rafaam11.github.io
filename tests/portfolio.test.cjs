@@ -2639,7 +2639,7 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
 test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const visualFiles = validator.publicPortfolioVisualFiles(root);
-  assert.equal(visualFiles.length, 37, 'approved derivatives across all eight cases');
+  assert.equal(visualFiles.length, 38, 'approved derivatives across all eight cases');
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
 

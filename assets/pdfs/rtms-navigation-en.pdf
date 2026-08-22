@@ -738,7 +738,7 @@ endobj
 27 0 obj
 <<
 /Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
-  /Subject (Rapidly turn tracking and coordinate data into a repeatable Slicer navigation prototype.) /Title (rTMS Navigation Prototype) /Trapped /False
+  /Subject (Turn optical tracking and 3D Slicer into a license-gated coil-navigation product that gives operators position and angle guidance they can rely on.) /Title (rTMS Coil Navigation Software \(NeuroPilot\)) /Trapped /False
 >>
 endobj
 28 0 obj
@@ -748,7 +748,7 @@ endobj
 endobj
 29 0 obj
 <<
-/Length 2459
+/Length 2878
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -761,52 +761,55 @@ n 48 801.8898 m 547.2756 801.8898 l S
 BT 1 0 0 1 48 810.8898 Tm /F2+0 7.5 Tf 9 TL (TECHNICAL CASE) Tj T* ET
 BT 1 0 0 1 387.5307 810.8898 Tm /F2+0 7.5 Tf 9 TL (JINMIN KIM / PUBLIC TECHNICAL DOCUMENT) Tj T* ET
 n 48 32 m 547.2756 32 l S
-BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Coil Navigation Software \(NeuroPilot\)) Tj T* ET
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 6) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 751.8898 Tm /F3+0 7.5 Tf 9 TL (MEDICAL CORE \001 PROTOTYPE) Tj T* ET
+BT 1 0 0 1 48 751.8898 Tm /F3+0 7.5 Tf 9 TL (MEDICAL CORE \001 VERIFIED) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 48 713.8898 Tm /F3+0 27 Tf 32.4 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 713.8898 Tm /F3+0 27 Tf 32.4 TL (rTMS Coil Navigation Software) Tj T* ET
+BT 1 0 0 1 48 679.8898 Tm /F3+0 27 Tf 32.4 TL (\(NeuroPilot\)) Tj T* ET
 .047059 .419608 .368627 rg
-n 48 664.8898 76 4 re f*
+n 48 630.8898 76 4 re f*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 48 631.8898 Tm /F3+0 15 Tf 18 TL (Rapidly turn tracking and coordinate data into a) Tj T* ET
-BT 1 0 0 1 48 608.8898 Tm /F3+0 15 Tf 18 TL (repeatable Slicer navigation prototype.) Tj T* ET
+BT 1 0 0 1 48 597.8898 Tm /F3+0 15 Tf 18 TL (Turn optical tracking and 3D Slicer into a license-gated) Tj T* ET
+BT 1 0 0 1 48 574.8898 Tm /F3+0 15 Tf 18 TL (coil-navigation product that gives operators position and) Tj T* ET
+BT 1 0 0 1 48 551.8898 Tm /F3+0 15 Tf 18 TL (angle guidance they can rely on.) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 491.8898 243.6378 58 re S
+n 48 434.8898 243.6378 58 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 531.8898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
+BT 1 0 0 1 60 474.8898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 511.8898 Tm /F3+0 9 Tf 10.8 TL (Prototype \001 Ongoing) Tj T* ET
+BT 1 0 0 1 60 454.8898 Tm /F3+0 9 Tf 10.8 TL (Verified \001 Ongoing) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 491.8898 243.6378 58 re S
+n 303.6378 434.8898 243.6378 58 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 531.8898 Tm /F3+0 7.5 Tf 9 TL (PERIOD) Tj T* ET
+BT 1 0 0 1 315.6378 474.8898 Tm /F3+0 7.5 Tf 9 TL (PERIOD) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 511.8898 Tm /F3+0 9 Tf 10.8 TL (2024.07 - present) Tj T* ET
+BT 1 0 0 1 315.6378 454.8898 Tm /F3+0 9 Tf 10.8 TL (2024.07 - present) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 413.8898 243.6378 58 re S
+n 48 356.8898 243.6378 58 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 453.8898 Tm /F3+0 7.5 Tf 9 TL (PORTFOLIO TIER) Tj T* ET
+BT 1 0 0 1 60 396.8898 Tm /F3+0 7.5 Tf 9 TL (PORTFOLIO TIER) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 433.8898 Tm /F3+0 9 Tf 10.8 TL (Medical Core) Tj T* ET
+BT 1 0 0 1 60 376.8898 Tm /F3+0 9 Tf 10.8 TL (Medical Core) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 413.8898 243.6378 58 re S
+n 303.6378 356.8898 243.6378 58 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 453.8898 Tm /F3+0 7.5 Tf 9 TL (PRIMARY CAPABILITY) Tj T* ET
+BT 1 0 0 1 315.6378 396.8898 Tm /F3+0 7.5 Tf 9 TL (PRIMARY CAPABILITY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 433.8898 Tm /F3+0 9 Tf 10.8 TL (Medical Navigation & Visualization) Tj T* ET
+BT 1 0 0 1 315.6378 376.8898 Tm /F3+0 9 Tf 10.8 TL (Medical Navigation & Visualization) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 359.8898 Tm /F2+0 9.5 Tf 11.4 TL (Connected Slicer structure, tracking devices, coordinate flow, and UI into a repeatable research-navigation) Tj T* ET
-BT 1 0 0 1 48 344.8898 Tm /F2+0 9.5 Tf 11.4 TL (environment.) Tj T* ET
+BT 1 0 0 1 48 302.8898 Tm /F2+0 9.5 Tf 11.4 TL (Designed a 3D Slicer workflow from procedure setup through real-time coil navigation, a landmark-and-ICP) Tj T* ET
+BT 1 0 0 1 48 287.8898 Tm /F2+0 9.5 Tf 11.4 TL (registration engine, optical-tracker, tablet, and robot integration, and a license-gated product structure, delivered) Tj T* ET
+BT 1 0 0 1 48 272.8898 Tm /F2+0 9.5 Tf 11.4 TL (to the customer and maintained on an ongoing basis.) Tj T* ET
  
 endstream
 endobj
 30 0 obj
 <<
-/Length 3081
+/Length 3992
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -819,7 +822,7 @@ n 48 801.8898 m 547.2756 801.8898 l S
 BT 1 0 0 1 48 810.8898 Tm /F2+0 7.5 Tf 9 TL (PROBLEM AND SYSTEM BOUNDARY) Tj T* ET
 BT 1 0 0 1 387.5307 810.8898 Tm /F2+0 7.5 Tf 9 TL (JINMIN KIM / PUBLIC TECHNICAL DOCUMENT) Tj T* ET
 n 48 32 m 547.2756 32 l S
-BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Coil Navigation Software \(NeuroPilot\)) Tj T* ET
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (2 / 6) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
@@ -832,11 +835,12 @@ n 48 598.3898 499.2756 112 re f*
 .047059 .419608 .368627 rg
 n 48 598.3898 4 112 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (01 / SLICER ARCHITECTURE) Tj T* ET
+BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (01 / NAVIGATION UI WORKFLOW) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Slicer architecture) Tj T* ET
+BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Navigation UI workflow) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connected device input, transforms, targets, and UI into a repeatable structure.) Tj T* ET
+BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Six Home-screen menus gate the sequence from loading DICOM through volume normalisation, skin and) Tj T* ET
+BT 1 0 0 1 64 629.3898 Tm /F2+0 9.5 Tf 11.4 TL (brain reconstruction, landmark registration, and target setup to the live session. The aiming screen carries) Tj T* ET
 .933333 .945098 .937255 rg
 n 48 444.3898 499.2756 142 re f*
 .047059 .419608 .368627 rg
@@ -844,11 +848,12 @@ n 48 444.3898 4 142 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 564.3898 Tm /F3+0 7.5 Tf 9 TL (PROBLEM) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 542.3898 Tm /F3+0 13 Tf 15.6 TL (Tracking data and medical-image targets needed a repeatable flow that) Tj T* ET
-BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (did not hide coordinate assumptions.) Tj T* ET
+BT 1 0 0 1 64 542.3898 Tm /F3+0 13 Tf 15.6 TL (Giving an operator coil position and angle guidance they can rely on) Tj T* ET
+BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (meant tying medical images, a tracker, a tablet, and a robot, each in its) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connected Slicer structure, tracking devices, coordinate flow, and UI into a repeatable research-navigation) Tj T* ET
-BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (environment.) Tj T* ET
+BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (Designed a 3D Slicer workflow from procedure setup through real-time coil navigation, a) Tj T* ET
+BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (landmark-and-ICP registration engine, optical-tracker, tablet, and robot integration, and a license-gated) Tj T* ET
+BT 1 0 0 1 64 472.3898 Tm /F2+0 9.5 Tf 11.4 TL (product structure, delivered to the customer and maintained on an ongoing basis.) Tj T* ET
 .933333 .945098 .937255 rg
 n 48 290.3898 499.2756 142 re f*
 .662745 .294118 .196078 rg
@@ -856,21 +861,24 @@ n 48 290.3898 4 142 re f*
 .662745 .294118 .196078 rg
 BT 1 0 0 1 64 410.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (This is a research prototype screen and does not claim clinical efficacy,) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (quantitative accuracy, or commercial deployment.) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (Although this is delivered and maintained medical navigation software,) Tj T* ET
+BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (this case claims no clinical efficacy or quantitative accuracy, and excludes) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Domain experts review the tracking hardware and research workflow.) Tj T* ET
+BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (The brain-segmentation and landmark-detection models were supplied externally and integrated behind) Tj T* ET
+BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (an adapter boundary; what I own is that boundary, the post-processing, the license gating, and the UI) Tj T* ET
+BT 1 0 0 1 64 318.3898 Tm /F2+0 9.5 Tf 11.4 TL (integration. Interfaces are agreed with the optical-tracker and robot side, the tablet-app developer, and) Tj T* ET
+BT 1 0 0 1 64 303.3898 Tm /F2+0 9.5 Tf 11.4 TL (one colleague.) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 270.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Prototype \001 Ongoing / NeuroPilot navigation module: tracker, patient-marker and coil-marker status, distance and) Tj T* ET
-BT 1 0 0 1 48 233.3898 Tm /F2+0 9.5 Tf 11.4 TL (tilt guidance to the target, and the aiming guide \(project path hidden\).) Tj T* ET
+BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Verified \001 Ongoing / NeuroPilot navigation module: tracker, patient-marker and coil-marker status, distance and tilt) Tj T* ET
+BT 1 0 0 1 48 233.3898 Tm /F2+0 9.5 Tf 11.4 TL (guidance to the target, and the aiming guide \(project path hidden\).) Tj T* ET
  
 endstream
 endobj
 31 0 obj
 <<
-/Length 6103
+/Length 6599
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -883,7 +891,7 @@ n 48 801.8898 m 547.2756 801.8898 l S
 BT 1 0 0 1 48 810.8898 Tm /F2+0 7.5 Tf 9 TL (OWNED DECISIONS AND IMPLEMENTATION) Tj T* ET
 BT 1 0 0 1 387.5307 810.8898 Tm /F2+0 7.5 Tf 9 TL (JINMIN KIM / PUBLIC TECHNICAL DOCUMENT) Tj T* ET
 n 48 32 m 547.2756 32 l S
-BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Coil Navigation Software \(NeuroPilot\)) Tj T* ET
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 6) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
@@ -894,153 +902,155 @@ n 48 731.3898 m 547.2756 731.3898 l S
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 710.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Led the Slicer structure, device integration, coordinate flow, UI, and repeatable experiment) Tj T* ET
-BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (environment.) Tj T* ET
+BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining) Tj T* ET
+BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (landmarks and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the) Tj T* ET
+BT 1 0 0 1 48 651.3898 Tm /F2+0 10.5 Tf 12.6 TL (tablet protocol and robot integration, and the product structure covering license verification and) Tj T* ET
+BT 1 0 0 1 48 634.3898 Tm /F2+0 10.5 Tf 12.6 TL (optional-feature gating.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 549.3898 499.2756 92 re f*
+n 48 515.3898 499.2756 92 re f*
 .047059 .419608 .368627 rg
-n 48 549.3898 4 92 re f*
+n 48 515.3898 4 92 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 619.3898 Tm /F3+0 7.5 Tf 9 TL (02 / COORDINATE VISIBILITY) Tj T* ET
+BT 1 0 0 1 64 585.3898 Tm /F3+0 7.5 Tf 9 TL (02 / COORDINATE AND REGISTRATION ENGINE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 597.3898 Tm /F3+0 13 Tf 15.6 TL (Coordinate visibility) Tj T* ET
+BT 1 0 0 1 64 563.3898 Tm /F3+0 13 Tf 15.6 TL (Coordinate and registration engine) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 575.3898 Tm /F2+0 9.5 Tf 11.4 TL (Kept coordinate frames and transforms explicit in the prototype.) Tj T* ET
+BT 1 0 0 1 64 541.3898 Tm /F2+0 9.5 Tf 11.4 TL (The transform chain from image coordinates through patient, tracker, and coil frames stays explicit in both) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 537.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
+BT 1 0 0 1 48 503.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 332.3898 499.2756 188 re B*
+n 48 298.3898 499.2756 188 re B*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 498.3898 Tm /F3+0 10 Tf 12 TL (Target-visibility navigation loop) Tj T* ET
+BT 1 0 0 1 62 464.3898 Tm /F3+0 10 Tf 12 TL (Coordinate loop from input to aiming guidance) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 147.6378 435.3898 m 297.6378 435.3898 l S
+n 147.6378 401.3898 m 297.6378 401.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 435.3898 m
-299.8378 436.6048 298.8528 437.5898 297.6378 437.5898 c
-296.4228 437.5898 295.4378 436.6048 295.4378 435.3898 c
-295.4378 434.1747 296.4228 433.1898 297.6378 433.1898 c
-298.8528 433.1898 299.8378 434.1747 299.8378 435.3898 c
+299.8378 401.3898 m
+299.8378 402.6048 298.8528 403.5898 297.6378 403.5898 c
+296.4228 403.5898 295.4378 402.6048 295.4378 401.3898 c
+295.4378 400.1747 296.4228 399.1898 297.6378 399.1898 c
+298.8528 399.1898 299.8378 400.1747 299.8378 401.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 435.3898 m 447.6378 435.3898 l S
+n 297.6378 401.3898 m 447.6378 401.3898 l S
 .047059 .419608 .368627 rg
 n
-449.8378 435.3898 m
-449.8378 436.6048 448.8528 437.5898 447.6378 437.5898 c
-446.4228 437.5898 445.4378 436.6048 445.4378 435.3898 c
-445.4378 434.1747 446.4228 433.1898 447.6378 433.1898 c
-448.8528 433.1898 449.8378 434.1747 449.8378 435.3898 c
+449.8378 401.3898 m
+449.8378 402.6048 448.8528 403.5898 447.6378 403.5898 c
+446.4228 403.5898 445.4378 402.6048 445.4378 401.3898 c
+445.4378 400.1747 446.4228 399.1898 447.6378 399.1898 c
+448.8528 399.1898 449.8378 400.1747 449.8378 401.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 447.6378 435.3898 m 297.6378 352.3898 l S
+n 447.6378 401.3898 m 297.6378 318.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 352.3898 m
-299.8378 353.6048 298.8528 354.5898 297.6378 354.5898 c
-296.4228 354.5898 295.4378 353.6048 295.4378 352.3898 c
-295.4378 351.1747 296.4228 350.1898 297.6378 350.1898 c
-298.8528 350.1898 299.8378 351.1747 299.8378 352.3898 c
+299.8378 318.3898 m
+299.8378 319.6048 298.8528 320.5898 297.6378 320.5898 c
+296.4228 320.5898 295.4378 319.6048 295.4378 318.3898 c
+295.4378 317.1747 296.4228 316.1898 297.6378 316.1898 c
+298.8528 316.1898 299.8378 317.1747 299.8378 318.3898 c
 f*
 .662745 .294118 .196078 RG
 1.2 w
-n 297.6378 352.3898 m 147.6378 435.3898 l S
+n 297.6378 318.3898 m 147.6378 401.3898 l S
 .662745 .294118 .196078 rg
 n
-149.8378 435.3898 m
-149.8378 436.6048 148.8528 437.5898 147.6378 437.5898 c
-146.4228 437.5898 145.4378 436.6048 145.4378 435.3898 c
-145.4378 434.1747 146.4228 433.1898 147.6378 433.1898 c
-148.8528 433.1898 149.8378 434.1747 149.8378 435.3898 c
+149.8378 401.3898 m
+149.8378 402.6048 148.8528 403.5898 147.6378 403.5898 c
+146.4228 403.5898 145.4378 402.6048 145.4378 401.3898 c
+145.4378 400.1747 146.4228 399.1898 147.6378 399.1898 c
+148.8528 399.1898 149.8378 400.1747 149.8378 401.3898 c
 f*
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-89.6378 411.3898 m
-205.6378 411.3898 l
-207.849 411.3898 209.6378 413.1786 209.6378 415.3898 c
-209.6378 455.3898 l
-209.6378 457.601 207.849 459.3898 205.6378 459.3898 c
-89.6378 459.3898 l
-87.4266 459.3898 85.6378 457.601 85.6378 455.3898 c
-85.6378 415.3898 l
-85.6378 413.1786 87.4266 411.3898 89.6378 411.3898 c
+89.6378 377.3898 m
+205.6378 377.3898 l
+207.849 377.3898 209.6378 379.1786 209.6378 381.3898 c
+209.6378 421.3898 l
+209.6378 423.601 207.849 425.3898 205.6378 425.3898 c
+89.6378 425.3898 l
+87.4266 425.3898 85.6378 423.601 85.6378 421.3898 c
+85.6378 381.3898 l
+85.6378 379.1786 87.4266 377.3898 89.6378 377.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 93.6378 444.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
+BT 1 0 0 1 93.6378 410.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 93.6378 427.3898 Tm /F3+0 7.2 Tf 8.64 TL (Tracking input) Tj T* ET
+BT 1 0 0 1 93.6378 393.3898 Tm /F3+0 7.2 Tf 8.64 TL (Tracker + tablet input) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-239.6378 411.3898 m
-355.6378 411.3898 l
-357.849 411.3898 359.6378 413.1786 359.6378 415.3898 c
-359.6378 455.3898 l
-359.6378 457.601 357.849 459.3898 355.6378 459.3898 c
-239.6378 459.3898 l
-237.4266 459.3898 235.6378 457.601 235.6378 455.3898 c
-235.6378 415.3898 l
-235.6378 413.1786 237.4266 411.3898 239.6378 411.3898 c
+239.6378 377.3898 m
+355.6378 377.3898 l
+357.849 377.3898 359.6378 379.1786 359.6378 381.3898 c
+359.6378 421.3898 l
+359.6378 423.601 357.849 425.3898 355.6378 425.3898 c
+239.6378 425.3898 l
+237.4266 425.3898 235.6378 423.601 235.6378 421.3898 c
+235.6378 381.3898 l
+235.6378 379.1786 237.4266 377.3898 239.6378 377.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 243.6378 444.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 243.6378 410.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 243.6378 427.3898 Tm /F3+0 7.2 Tf 8.64 TL (Coordinate transform) Tj T* ET
+BT 1 0 0 1 243.6378 393.3898 Tm /F3+0 7.2 Tf 8.64 TL (Landmark + ICP registration) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-389.6378 411.3898 m
-505.6378 411.3898 l
-507.849 411.3898 509.6378 413.1786 509.6378 415.3898 c
-509.6378 455.3898 l
-509.6378 457.601 507.849 459.3898 505.6378 459.3898 c
-389.6378 459.3898 l
-387.4266 459.3898 385.6378 457.601 385.6378 455.3898 c
-385.6378 415.3898 l
-385.6378 413.1786 387.4266 411.3898 389.6378 411.3898 c
+389.6378 377.3898 m
+505.6378 377.3898 l
+507.849 377.3898 509.6378 379.1786 509.6378 381.3898 c
+509.6378 421.3898 l
+509.6378 423.601 507.849 425.3898 505.6378 425.3898 c
+389.6378 425.3898 l
+387.4266 425.3898 385.6378 423.601 385.6378 421.3898 c
+385.6378 381.3898 l
+385.6378 379.1786 387.4266 377.3898 389.6378 377.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 393.6378 444.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 393.6378 410.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 393.6378 427.3898 Tm /F3+0 7.2 Tf 8.64 TL (Medical-image target) Tj T* ET
+BT 1 0 0 1 393.6378 393.3898 Tm /F3+0 7.2 Tf 8.64 TL (Patient-coil transform chain) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-239.6378 328.3898 m
-355.6378 328.3898 l
-357.849 328.3898 359.6378 330.1786 359.6378 332.3898 c
-359.6378 372.3898 l
-359.6378 374.601 357.849 376.3898 355.6378 376.3898 c
-239.6378 376.3898 l
-237.4266 376.3898 235.6378 374.601 235.6378 372.3898 c
-235.6378 332.3898 l
-235.6378 330.1786 237.4266 328.3898 239.6378 328.3898 c
+239.6378 294.3898 m
+355.6378 294.3898 l
+357.849 294.3898 359.6378 296.1786 359.6378 298.3898 c
+359.6378 338.3898 l
+359.6378 340.601 357.849 342.3898 355.6378 342.3898 c
+239.6378 342.3898 l
+237.4266 342.3898 235.6378 340.601 235.6378 338.3898 c
+235.6378 298.3898 l
+235.6378 296.1786 237.4266 294.3898 239.6378 294.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 243.6378 361.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 243.6378 327.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 243.6378 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Slicer UI) Tj T* ET
+BT 1 0 0 1 243.6378 310.3898 Tm /F3+0 7.2 Tf 8.64 TL (Slicer navigation UI) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 317.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 283.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 289.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 48 255.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 265.3898 Tm /F2+0 9 Tf 10.8 TL (3D Slicer / VTK / Qt / OpenIGTLink / Optical tracking / C++ / Python) Tj T* ET
+BT 1 0 0 1 48 231.3898 Tm /F2+0 9 Tf 10.8 TL (3D Slicer / VTK / PyQt5 / Python / PyTorch / Optical tracking / TCP/IP binary protocol / License gating) Tj T* ET
  
 endstream
 endobj
 32 0 obj
 <<
-/Length 2866
+/Length 3188
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1053,7 +1063,7 @@ n 48 801.8898 m 547.2756 801.8898 l S
 BT 1 0 0 1 48 810.8898 Tm /F2+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 BT 1 0 0 1 387.5307 810.8898 Tm /F2+0 7.5 Tf 9 TL (JINMIN KIM / PUBLIC TECHNICAL DOCUMENT) Tj T* ET
 n 48 32 m 547.2756 32 l S
-BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Coil Navigation Software \(NeuroPilot\)) Tj T* ET
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 6) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
@@ -1066,11 +1076,12 @@ n 48 606.3898 499.2756 104 re f*
 .047059 .419608 .368627 rg
 n 48 606.3898 4 104 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (03 / REPEATABLE PROTOTYPE) Tj T* ET
+BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (03 / DEVICE AND SYSTEM INTEGRATION) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Repeatable prototype) Tj T* ET
+BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Device and system integration) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Use repeated execution of the same device, coordinate, and UI flow as evidence.) Tj T* ET
+BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Migrated the optical-tracker SDK across a major version and talk to the tablet over an in-house TCP binary) Tj T* ET
+BT 1 0 0 1 64 629.3898 Tm /F2+0 9.5 Tf 11.4 TL (protocol. Tracker ownership is concentrated in one component so screens no longer contend for its state,) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 594.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .72549 .768627 .752941 RG
@@ -1102,13 +1113,14 @@ BT 1 0 0 1 60 234.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in 
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 208.3898 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 184.3898 Tm /F2+0 9.5 Tf 11.4 TL (A repeatable Slicer prototype and visible tracking, coordinate, and visualization flow provide the evidence.) Tj T* ET
+BT 1 0 0 1 48 184.3898 Tm /F2+0 9.5 Tf 11.4 TL (The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and) Tj T* ET
+BT 1 0 0 1 48 169.3898 Tm /F2+0 9.5 Tf 11.4 TL (coordinate-transform and registration logs.) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 4018
+/Length 5427
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1121,7 +1133,7 @@ n 48 801.8898 m 547.2756 801.8898 l S
 BT 1 0 0 1 48 810.8898 Tm /F2+0 7.5 Tf 9 TL (ROLE, TEAM RESULT, AND LIMITS) Tj T* ET
 BT 1 0 0 1 387.5307 810.8898 Tm /F2+0 7.5 Tf 9 TL (JINMIN KIM / PUBLIC TECHNICAL DOCUMENT) Tj T* ET
 n 48 32 m 547.2756 32 l S
-BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Coil Navigation Software \(NeuroPilot\)) Tj T* ET
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (5 / 6) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
@@ -1134,11 +1146,11 @@ n 48 614.3898 499.2756 96 re f*
 .662745 .294118 .196078 rg
 n 48 614.3898 4 96 re f*
 .662745 .294118 .196078 rg
-BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / PROTOTYPE BOUNDARY) Tj T* ET
+BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / CLINICAL AND PRODUCT BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Prototype boundary) Tj T* ET
+BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Clinical and product boundary) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Clinical efficacy and quantitative accuracy require separate validation.) Tj T* ET
+BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Although the product is licensed, delivered, and maintained, no clinical efficacy or quantitative accuracy is) Tj T* ET
 .933333 .945098 .937255 rg
 n 48 486.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
@@ -1146,9 +1158,12 @@ n 48 486.3898 4 116 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 580.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Led Slicer structure, device integration, coordinate flow, and UI.) Tj T* ET
+BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Led the workflow, registration engine, device integration, and product) Tj T* ET
+BT 1 0 0 1 64 540.3898 Tm /F3+0 13 Tf 15.6 TL (structure.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 536.3898 Tm /F2+0 9.5 Tf 11.4 TL (Led the Slicer structure, device integration, coordinate flow, UI, and repeatable experiment environment.) Tj T* ET
+BT 1 0 0 1 64 518.3898 Tm /F2+0 9.5 Tf 11.4 TL (Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining landmarks) Tj T* ET
+BT 1 0 0 1 64 503.3898 Tm /F2+0 9.5 Tf 11.4 TL (and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and) Tj T* ET
+BT 1 0 0 1 64 488.3898 Tm /F2+0 9.5 Tf 11.4 TL (robot integration, and the product structure covering license verification and optional-feature gating.) Tj T* ET
 .933333 .945098 .937255 rg
 n 48 358.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
@@ -1156,38 +1171,46 @@ n 48 358.3898 4 116 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 452.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (The team shared a working research prototype; this is not extended into a) Tj T* ET
-BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (clinical-efficacy or quantitative-accuracy result.) Tj T* ET
+BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (The core registration, coordinate-transform, and navigation-UI structure) Tj T* ET
+BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (was designed and built individually, with one colleague contributing to) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (A repeatable Slicer prototype and visible tracking, coordinate, and visualization flow provide the evidence.) Tj T* ET
+BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and) Tj T* ET
+BT 1 0 0 1 64 375.3898 Tm /F2+0 9.5 Tf 11.4 TL (coordinate-transform and registration logs.) Tj T* ET
 .72549 .768627 .752941 RG
 n 48 200.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
 BT 1 0 0 1 60 326.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (This is a research prototype screen and does not) Tj T* ET
-BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (claim clinical efficacy, quantitative accuracy, or) Tj T* ET
-BT 1 0 0 1 60 274.3898 Tm /F3+0 9 Tf 10.8 TL (commercial deployment.) Tj T* ET
+BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (Although this is delivered and maintained medical) Tj T* ET
+BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (navigation software, this case claims no clinical) Tj T* ET
+BT 1 0 0 1 60 274.3898 Tm /F3+0 9 Tf 10.8 TL (efficacy or quantitative accuracy, and excludes) Tj T* ET
+BT 1 0 0 1 60 260.3898 Tm /F3+0 9 Tf 10.8 TL (regulatory status, patient data, and) Tj T* ET
+BT 1 0 0 1 60 246.3898 Tm /F3+0 9 Tf 10.8 TL (hospital-identifying information.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (NeuroPilot navigation module: tracker, patient-marker and) Tj T* ET
-BT 1 0 0 1 60 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (coil-marker status, distance and tilt guidance to the target,) Tj T* ET
-BT 1 0 0 1 60 230.3898 Tm /F2+0 7.6 Tf 9.12 TL (and the aiming guide \(project path hidden\).) Tj T* ET
+BT 1 0 0 1 60 224.3898 Tm /F2+0 7.6 Tf 9.12 TL (NeuroPilot navigation module: tracker, patient-marker and) Tj T* ET
+BT 1 0 0 1 60 213.3898 Tm /F2+0 7.6 Tf 9.12 TL (coil-marker status, distance and tilt guidance to the target,) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.6 Tf 9.12 TL (and the aiming guide \(project path hidden\).) Tj T* ET
 .72549 .768627 .752941 RG
 n 303.6378 200.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
 BT 1 0 0 1 315.6378 326.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (Domain experts review the tracking hardware and) Tj T* ET
-BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (research workflow.) Tj T* ET
+BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (The brain-segmentation and landmark-detection) Tj T* ET
+BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (models were supplied externally and integrated) Tj T* ET
+BT 1 0 0 1 315.6378 274.3898 Tm /F3+0 9 Tf 10.8 TL (behind an adapter boundary; what I own is that) Tj T* ET
+BT 1 0 0 1 315.6378 260.3898 Tm /F3+0 9 Tf 10.8 TL (boundary, the post-processing, the license gating,) Tj T* ET
+BT 1 0 0 1 315.6378 246.3898 Tm /F3+0 9 Tf 10.8 TL (and the UI integration. Interfaces are agreed with) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 315.6378 266.3898 Tm /F2+0 7.6 Tf 9.12 TL (Connected Slicer structure, tracking devices, coordinate flow,) Tj T* ET
-BT 1 0 0 1 315.6378 255.3898 Tm /F2+0 7.6 Tf 9.12 TL (and UI into a repeatable research-navigation environment.) Tj T* ET
+BT 1 0 0 1 315.6378 224.3898 Tm /F2+0 7.6 Tf 9.12 TL (Designed a 3D Slicer workflow from procedure setup through) Tj T* ET
+BT 1 0 0 1 315.6378 213.3898 Tm /F2+0 7.6 Tf 9.12 TL (real-time coil navigation, a landmark-and-ICP registration) Tj T* ET
+BT 1 0 0 1 315.6378 202.3898 Tm /F2+0 7.6 Tf 9.12 TL (engine, optical-tracker, tablet, and robot integration, and a) Tj T* ET
+BT 1 0 0 1 315.6378 191.3898 Tm /F2+0 7.6 Tf 9.12 TL (license-gated product structure, delivered to the customer and) Tj T* ET
  
 endstream
 endobj
 34 0 obj
 <<
-/Length 2407
+/Length 2955
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1200,7 +1223,7 @@ n 48 801.8898 m 547.2756 801.8898 l S
 BT 1 0 0 1 48 810.8898 Tm /F2+0 7.5 Tf 9 TL (RECAP AND JOINT-DEVELOPMENT INVITATION) Tj T* ET
 BT 1 0 0 1 387.5307 810.8898 Tm /F2+0 7.5 Tf 9 TL (JINMIN KIM / PUBLIC TECHNICAL DOCUMENT) Tj T* ET
 n 48 32 m 547.2756 32 l S
-BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Navigation Prototype) Tj T* ET
+BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (rTMS Coil Navigation Software \(NeuroPilot\)) Tj T* ET
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (6 / 6) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
@@ -1209,16 +1232,17 @@ BT 1 0 0 1 48 761.8898 Tm /F3+0 22 Tf 26.4 TL (Recap and joint-development invit
 .062745 .090196 .082353 RG
 n 48 731.3898 m 547.2756 731.3898 l S
 .062745 .090196 .082353 rg
-BT 1 0 0 1 48 710.3898 Tm /F3+0 15 Tf 18 TL (Rapidly turn tracking and coordinate data into a repeatable Slicer) Tj T* ET
-BT 1 0 0 1 48 688.3898 Tm /F3+0 15 Tf 18 TL (navigation prototype.) Tj T* ET
+BT 1 0 0 1 48 710.3898 Tm /F3+0 15 Tf 18 TL (Turn optical tracking and 3D Slicer into a license-gated) Tj T* ET
+BT 1 0 0 1 48 688.3898 Tm /F3+0 15 Tf 18 TL (coil-navigation product that gives operators position and angle) Tj T* ET
+BT 1 0 0 1 48 666.3898 Tm /F3+0 15 Tf 18 TL (guidance they can rely on.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 646.3898 Tm /F3+0 7.5 Tf 9 TL (PRIMARY CAPABILITY) Tj T* ET
+BT 1 0 0 1 48 624.3898 Tm /F3+0 7.5 Tf 9 TL (PRIMARY CAPABILITY) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 623.3898 Tm /F2+0 9.5 Tf 11.4 TL (Medical Navigation & Visualization / 3D Geometry & Registration) Tj T* ET
+BT 1 0 0 1 48 601.3898 Tm /F2+0 9.5 Tf 11.4 TL (Medical Navigation & Visualization / 3D Geometry & Registration) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 590.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
+BT 1 0 0 1 48 568.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 566.3898 Tm /F2+0 9 Tf 10.8 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 544.3898 Tm /F2+0 9 Tf 10.8 TL (No external public link is currently registered.) Tj T* ET
 .933333 .945098 .937255 rg
 n 48 256 499.2756 154 re f*
 .047059 .419608 .368627 rg
@@ -1229,7 +1253,10 @@ BT 1 0 0 1 64 388 Tm /F3+0 7.5 Tf 9 TL (WHAT TO BRING) Tj T* ET
 BT 1 0 0 1 64 366 Tm /F3+0 13 Tf 15.6 TL (Share the problem, data or sensors, target validation, and schedule. We) Tj T* ET
 BT 1 0 0 1 64 348 Tm /F3+0 13 Tf 15.6 TL (can define coordinate and evidence boundaries together.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 326 Tm /F2+0 9.5 Tf 11.4 TL (Domain experts review the tracking hardware and research workflow.) Tj T* ET
+BT 1 0 0 1 64 326 Tm /F2+0 9.5 Tf 11.4 TL (The brain-segmentation and landmark-detection models were supplied externally and integrated behind) Tj T* ET
+BT 1 0 0 1 64 311 Tm /F2+0 9.5 Tf 11.4 TL (an adapter boundary; what I own is that boundary, the post-processing, the license gating, and the UI) Tj T* ET
+BT 1 0 0 1 64 296 Tm /F2+0 9.5 Tf 11.4 TL (integration. Interfaces are agreed with the optical-tracker and robot side, the tablet-app developer, and) Tj T* ET
+BT 1 0 0 1 64 281 Tm /F2+0 9.5 Tf 11.4 TL (one colleague.) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 240 Tm /F2+0 10 Tf 12 TL (uiop3847@naver.com) Tj T* ET
 n 48 238 m 146.5107 238 l S
@@ -1269,17 +1296,17 @@ xref
 0000839649 00000 n 
 0000841015 00000 n 
 0000841085 00000 n 
-0000841512 00000 n 
-0000841605 00000 n 
-0000844116 00000 n 
-0000847249 00000 n 
-0000853404 00000 n 
-0000856322 00000 n 
-0000860392 00000 n 
+0000841590 00000 n 
+0000841683 00000 n 
+0000844613 00000 n 
+0000848657 00000 n 
+0000855308 00000 n 
+0000858548 00000 n 
+0000864027 00000 n 
 trailer
 <<
 /ID 
-[<012116f9372e0cde102f30cd5b223c46><012116f9372e0cde102f30cd5b223c46>]
+[<876b55497633257b07fc5791ef7fb8a4><876b55497633257b07fc5791ef7fb8a4>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 27 0 R
@@ -1287,5 +1314,5 @@ trailer
 /Size 35
 >>
 startxref
-862851
+867034
 %%EOF
