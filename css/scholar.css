@@ -83,6 +83,9 @@
 .sc-block ul { margin: .4rem 0 0; padding-left: 1.3rem; }
 .sc-subcases { margin: .5rem 0 0; padding-left: 1.3rem; }
 .sc-case__links { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--sc-rule); }
+.sc-related-projects { margin-top: 2.5rem; }
+.sc-related-projects ul { margin: .5rem 0 0; padding-left: 1.3rem; }
+.sc-related-projects li + li { margin-top: .35rem; }
 .sc-case__role-label { margin-bottom: .4rem; color: var(--sc-ink); font-weight: 700; }
 .sc-story { display: grid; gap: 3rem; margin-top: 2.75rem; }
 .sc-story__section { display: grid; gap: 1.35rem; padding-top: 2rem; border-top: 1px solid var(--sc-rule); }
