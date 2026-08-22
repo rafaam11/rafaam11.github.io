@@ -1965,6 +1965,9 @@ test('story contract validates status labels, placement, media, and graph endpoi
   project.translations.en.statusLabel = 'Ongoing · Researcher Validation';
   project.storySections[0].placement = 'before-standard';
   project.relatedProjectSlugs = ['mandibular-fracture'];
+  const policy = project.storySections.flatMap((section) => section.media || []).find((item) => item.videoPolicy).videoPolicy;
+  policy.frameRate = 30;
+  policy.pixelFormat = 'yuv420p';
   assert.deepEqual(render.dataErrors(candidate), []);
 
   const mutations = [
@@ -1973,7 +1976,10 @@ test('story contract validates status labels, placement, media, and graph endpoi
     [(value) => { value.storySections[0].placement = 'sidebar'; }, /placement/i],
     [(value) => { value.storySections.find((section) => section.diagram).diagram.edges[0].to = 'missing'; }, /edge endpoint/i],
     [(value) => { value.relatedProjectSlugs = [value.slug]; }, /self reference/i],
-    [(value) => { value.relatedProjectSlugs = ['mandibular-fracture', 'mandibular-fracture']; }, /duplicate related/i]
+    [(value) => { value.relatedProjectSlugs = ['mandibular-fracture', 'mandibular-fracture']; }, /duplicate related/i],
+    [(value) => { value.relatedProjectSlugs = ['missing-project']; }, /unknown related/i],
+    [(value) => { value.storySections.flatMap((section) => section.media || []).find((item) => item.videoPolicy).videoPolicy.frameRate = 0; }, /frameRate.*positive integer/i],
+    [(value) => { value.storySections.flatMap((section) => section.media || []).find((item) => item.videoPolicy).videoPolicy.pixelFormat = 'yuv444p'; }, /pixelFormat.*yuv420p/i]
   ];
   for (const [mutate, expected] of mutations) {
     const changed = clone(candidate);
@@ -2008,6 +2014,55 @@ test('story renderer places sections around standard evidence and renders locali
   assertInOrder(html, ['통합 워크플로우', '내 역할', '결과와 근거', '한계와 팀 성과', '장기 방향', '관련 프로젝트'], 'story order');
   assert.match(html, /href="\.\.\/\.\.\/projects\/mandibular-fracture\/"[^>]*>하악골 골절 정복 최적화<\/a>/);
   assert.match(html, /class="sc-flow__track"/);
+});
+
+test('reciprocal related projects render on story and legacy cases across locales and protocols', () => {
+  const candidate = clone(data);
+  const surgical = candidate.projects.find((item) => item.slug === 'surgical-navigation');
+  const mandibular = candidate.projects.find((item) => item.slug === 'mandibular-fracture');
+  surgical.relatedProjectSlugs = ['mandibular-fracture'];
+  mandibular.relatedProjectSlugs = ['surgical-navigation'];
+  assert.deepEqual(render.dataErrors(candidate), []);
+
+  const scenarios = [
+    {
+      locale: 'ko', base: '../../', isFile: false,
+      surgicalHref: '../../projects/mandibular-fracture/',
+      mandibularHref: '../../projects/surgical-navigation/',
+      surgicalTitle: '하악골 골절 정복 최적화',
+      mandibularTitle: 'SMCNavi · HoloLens 수술내비게이션'
+    },
+    {
+      locale: 'ko', base: '../../', isFile: true,
+      surgicalHref: '../../projects/mandibular-fracture/index.html',
+      mandibularHref: '../../projects/surgical-navigation/index.html',
+      surgicalTitle: '하악골 골절 정복 최적화',
+      mandibularTitle: 'SMCNavi · HoloLens 수술내비게이션'
+    },
+    {
+      locale: 'en', base: '../../../', isFile: false,
+      surgicalHref: '../../../en/projects/mandibular-fracture/',
+      mandibularHref: '../../../en/projects/surgical-navigation/',
+      surgicalTitle: 'Mandibular Fracture Reduction Optimization',
+      mandibularTitle: 'SMCNavi · HoloLens Surgical Navigation'
+    },
+    {
+      locale: 'en', base: '../../../', isFile: true,
+      surgicalHref: '../../../en/projects/mandibular-fracture/index.html',
+      mandibularHref: '../../../en/projects/surgical-navigation/index.html',
+      surgicalTitle: 'Mandibular Fracture Reduction Optimization',
+      mandibularTitle: 'SMCNavi · HoloLens Surgical Navigation'
+    }
+  ];
+
+  for (const scenario of scenarios) {
+    const storyHtml = render.caseStudyHtml(candidate, surgical.slug, scenario.base, scenario.isFile, scenario.locale);
+    const legacyHtml = render.caseStudyHtml(candidate, mandibular.slug, scenario.base, scenario.isFile, scenario.locale);
+    assert.ok(storyHtml.includes(`<a href="${scenario.surgicalHref}">${scenario.surgicalTitle}</a>`));
+    assert.ok(legacyHtml.includes(`<a href="${scenario.mandibularHref}">${scenario.mandibularTitle}</a>`));
+    assertInOrder(storyHtml, ['sc-related-projects', 'sc-case__links'], `${scenario.locale} story related order`);
+    assertInOrder(legacyHtml, ['sc-gallery', 'sc-related-projects', 'sc-case__links'], `${scenario.locale} legacy related order`);
+  }
 });
 
 test('legacy cases retain their renderer output when optional story fields are absent', () => {
