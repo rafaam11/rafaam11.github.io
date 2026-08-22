@@ -1073,7 +1073,7 @@ function portfolioPublicText(candidate) {
 
 function portfolioPiiFindings(value) {
   const publicText = typeof value === 'string' ? value : String(value ?? '');
-  const withApprovedAnatomyProtected = publicText.replace(/악안면 30(?=개|\b)/g, '악안면 특징점');
+  const withApprovedAnatomyProtected = publicText.replace(/악안면 30개/g, '악안면 특징점');
   return publicPiiFindings(withApprovedAnatomyProtected);
 }
 
