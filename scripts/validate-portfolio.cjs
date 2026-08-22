@@ -456,9 +456,27 @@ function mp4Boxes(buffer, start = 0, end = buffer.length) {
   return offset === end ? boxes : null;
 }
 
+function isEmptyMp4MetadataWrapper(buffer, box) {
+  if (!box || box.type !== 'udta') return false;
+  const userDataChildren = mp4Boxes(buffer, box.dataStart, box.end);
+  if (!userDataChildren || userDataChildren.length !== 1 || userDataChildren[0].type !== 'meta') return false;
+  const metadata = userDataChildren[0];
+  if (metadata.end - metadata.dataStart < 4 || !buffer.subarray(metadata.dataStart, metadata.dataStart + 4).equals(Buffer.alloc(4))) return false;
+  const metadataChildren = mp4Boxes(buffer, metadata.dataStart + 4, metadata.end);
+  if (!metadataChildren || metadataChildren.length !== 2 || metadataChildren[0].type !== 'hdlr' || metadataChildren[1].type !== 'ilst') return false;
+  const handler = metadataChildren[0];
+  const itemList = metadataChildren[1];
+  if (handler.end - handler.dataStart !== 25 || itemList.end !== itemList.dataStart) return false;
+  const expectedHandler = Buffer.alloc(25);
+  expectedHandler.write('mdir', 8, 'ascii');
+  expectedHandler.write('appl', 12, 'ascii');
+  return buffer.subarray(handler.dataStart, handler.end).equals(expectedHandler);
+}
+
 function findMp4MetadataBox(buffer, boxes, depth = 0) {
   if (depth > 12) return 'excessive nesting';
   for (const box of boxes) {
+    if (isEmptyMp4MetadataWrapper(buffer, box)) continue;
     if (prohibitedMp4MetadataBoxes.has(box.type)) return box.type;
     if (!mp4ContainerBoxes.has(box.type)) continue;
     const children = mp4Boxes(buffer, box.dataStart, box.end);
@@ -513,6 +531,8 @@ function mp4TrackInfo(buffer, moovChildren) {
       }
       if (handlerType !== 'vide' || video) continue;
       let sampleEntry = '';
+      let codedWidth = null;
+      let codedHeight = null;
       for (const mediaInfo of mediaChildren.filter((box) => box.type === 'minf')) {
         const mediaInfoChildren = mp4Boxes(buffer, mediaInfo.dataStart, mediaInfo.end);
         if (!mediaInfoChildren) continue;
@@ -522,10 +542,22 @@ function mp4TrackInfo(buffer, moovChildren) {
           const sampleDescription = sampleTableChildren.find((box) => box.type === 'stsd');
           if (!sampleDescription || sampleDescription.end - sampleDescription.dataStart < 16) continue;
           const entryCount = buffer.readUInt32BE(sampleDescription.dataStart + 4);
-          if (entryCount > 0) sampleEntry = buffer.toString('latin1', sampleDescription.dataStart + 12, sampleDescription.dataStart + 16);
+          if (entryCount > 0) {
+            sampleEntry = buffer.toString('latin1', sampleDescription.dataStart + 12, sampleDescription.dataStart + 16);
+            const entryStart = sampleDescription.dataStart + 8;
+            const entrySize = buffer.readUInt32BE(entryStart);
+            if (entrySize >= 36 && entryStart + entrySize <= sampleDescription.end) {
+              codedWidth = buffer.readUInt16BE(entryStart + 32);
+              codedHeight = buffer.readUInt16BE(entryStart + 34);
+            }
+          }
         }
       }
-      video = { sampleEntry, width, height };
+      video = {
+        sampleEntry,
+        width: codedWidth > 0 ? codedWidth : width,
+        height: codedHeight > 0 ? codedHeight : height
+      };
     }
   }
   return { handlerTypes, video };
@@ -721,9 +753,21 @@ function evidenceRegistryErrors(candidate, rootDir) {
   const entriesById = new Map();
   const canonicalEntries = canonicalMediaEntries(candidate);
   const canonicalEntriesById = new Map();
+  const videoPoliciesById = new Map();
   for (const canonicalEntry of canonicalEntries) {
-    if (canonicalEntry.item && typeof canonicalEntry.item.id === 'string' && !canonicalEntriesById.has(canonicalEntry.item.id)) {
-      canonicalEntriesById.set(canonicalEntry.item.id, canonicalEntry);
+    const item = canonicalEntry.item;
+    if (!item || typeof item.id !== 'string') continue;
+    if (!canonicalEntriesById.has(item.id)) canonicalEntriesById.set(item.id, canonicalEntry);
+    if (!item.videoPolicy || typeof item.videoPolicy !== 'object' || Array.isArray(item.videoPolicy)) continue;
+    const signature = JSON.stringify(Object.fromEntries(
+      Object.keys(item.videoPolicy).sort().map((key) => [key, item.videoPolicy[key]])
+    ));
+    const previousPolicy = videoPoliciesById.get(item.id);
+    if (previousPolicy && previousPolicy.signature !== signature) {
+      errors.push(`${item.id}: conflicting video policies are declared for the same canonical media id.`);
+    } else if (!previousPolicy) {
+      videoPoliciesById.set(item.id, { signature, canonicalEntry });
+      canonicalEntriesById.set(item.id, canonicalEntry);
     }
   }
   for (const entry of register.entries) {
@@ -1027,11 +1071,17 @@ function portfolioPublicText(candidate) {
   return text;
 }
 
+function portfolioPiiFindings(value) {
+  const publicText = typeof value === 'string' ? value : String(value ?? '');
+  const withApprovedAnatomyProtected = publicText.replace(/악안면 30(?=개|\b)/g, '악안면 특징점');
+  return publicPiiFindings(withApprovedAnatomyProtected);
+}
+
 function portfolioPublicTextErrors(candidate) {
   const text = portfolioPublicText(candidate);
   const errors = [];
   if (proseContainsLocalPath(text)) errors.push('Canonical public data contains a private source path.');
-  for (const finding of publicPiiFindings(text)) {
+  for (const finding of portfolioPiiFindings(text)) {
     errors.push(`Canonical public data contains prohibited private PII (${finding}).`);
   }
   if (/(?:\b(?:PatientName|PatientID|StudyInstanceUID|SOPInstanceUID)\b|환자(?:명|번호|ID))\s*[:=]/i.test(text)) {
@@ -1389,13 +1439,21 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   const actualOutputNames = actualOutputEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
   const actualProjectNames = actualProjectEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
   const actualCvNames = actualCvEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
-  if (JSON.stringify(actualOutputNames) !== JSON.stringify(expectedOutputNames)) errors.push('output/pdf must contain exactly the sixteen canonical localized project PDFs.');
-  if (JSON.stringify(actualProjectNames) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs must contain exactly the sixteen canonical localized project PDFs.');
+  const missingOutputNames = expectedOutputNames.filter((name) => !actualOutputNames.includes(name));
+  const missingProjectNames = expectedOutputNames.filter((name) => !actualProjectNames.includes(name));
+  const unexpectedOutputNames = actualOutputNames.filter((name) => !expectedOutputNames.includes(name));
+  const unexpectedProjectNames = actualProjectNames.filter((name) => !expectedOutputNames.includes(name));
+  for (const name of missingOutputNames) errors.push(`output/pdf/${name}: missing PDF artifact.`);
+  for (const name of missingProjectNames) errors.push(`assets/pdfs/${name}: missing PDF artifact.`);
+  if (unexpectedOutputNames.length) errors.push('output/pdf must contain exactly the eighteen canonical localized project PDFs.');
+  if (unexpectedProjectNames.length) errors.push('assets/pdfs must contain exactly the eighteen canonical localized project PDFs.');
   if (JSON.stringify(actualCvNames) !== JSON.stringify(cvPdfNames.slice().sort())) errors.push('assets/cv must contain exactly the two localized CV PDFs.');
-  if (JSON.stringify(actualOutputEntries) !== JSON.stringify(expectedOutputNames.concat('manifest.json').sort())) errors.push('output/pdf contains an unexpected or missing published artifact.');
-  if (JSON.stringify(actualProjectEntries) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs contains an unexpected or missing published artifact.');
+  if (actualOutputEntries.some((name) => name !== 'manifest.json' && !expectedOutputNames.includes(name))) errors.push('output/pdf contains an unexpected published artifact.');
+  if (actualProjectEntries.some((name) => !expectedOutputNames.includes(name))) errors.push('assets/pdfs contains an unexpected published artifact.');
   if (JSON.stringify(actualCvEntries) !== JSON.stringify(cvPdfNames.slice().sort())) errors.push('assets/cv contains an unexpected or missing published artifact.');
   errors.push(...cvPdfErrors(rootDir));
+
+  if (missingOutputNames.length || missingProjectNames.length) return errors;
 
   for (const name of expectedOutputNames) {
     const publishedPath = path.join(projectRoot, name);
@@ -1472,7 +1530,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
       }
     }
     if (!Array.isArray(manifest.documents) || manifest.documents.length !== expectedDocuments.size) {
-      errors.push('output/pdf/manifest.json: documents must track exactly the sixteen generated project PDFs.');
+      errors.push('output/pdf/manifest.json: documents must track exactly the eighteen generated project PDFs.');
     } else {
       const seen = new Set();
       for (const document of manifest.documents) {
@@ -1513,7 +1571,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
       }
     }
     if (!Array.isArray(manifest.artifacts) || manifest.artifacts.length !== expectedArtifacts.size) {
-      errors.push('output/pdf/manifest.json: artifacts must track exactly 32 published files.');
+      errors.push('output/pdf/manifest.json: artifacts must track exactly 36 published files.');
     } else {
       const seen = new Set();
       for (const artifact of manifest.artifacts) {
@@ -1565,7 +1623,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     if (!/<section[^>]+data-cv-summary[^>]+aria-labelledby=/.test(html) || !/<ol\b/.test(html) || !/<ul\b/.test(html) || !/<dl\b/.test(html)) {
       errors.push(`${relativePage}: missing visible semantic HTML CV summary.`);
     }
-    const htmlPii = publicPiiFindings(html);
+    const htmlPii = portfolioPiiFindings(html);
     if (htmlPii.length) errors.push(`${relativePage}: CV HTML public surface contains prohibited private PII (${htmlPii.join('; ')}).`);
     if (sourceResult.cv !== undefined) {
       try {
@@ -2255,7 +2313,7 @@ function publicHtmlSurfaceErrors(file, html) {
   if (proseContainsLocalPath(visible)) {
     errors.push(`${file.relativePath}: visible public HTML contains a private source path or local path.`);
   }
-  for (const finding of publicPiiFindings(visible)) {
+  for (const finding of portfolioPiiFindings(visible)) {
     errors.push(`${file.relativePath}: visible public HTML contains prohibited private PII (${finding}).`);
   }
   if (/(?:\b(?:PatientName|PatientID|StudyInstanceUID|SOPInstanceUID)\b|환자(?:명|번호|ID))\s*[:=]/i.test(visible)) {

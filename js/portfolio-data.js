@@ -508,6 +508,7 @@
           }
         }
       },
+      relatedProjectSlugs: ['digital-occlusion-workflow'],
       links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '게재 논문' }, en: { label: 'Publication' } } }],
       translations: {
         ko: {
@@ -543,6 +544,317 @@
         { key: 'published-evidence', type: 'evidence', translations: { ko: { heading: '공개 근거', body: '발표, 수상, 정량 실험, 동료심사 논문을 서로 구분해 제시합니다.' }, en: { heading: 'Published evidence', body: 'Separate presentations, award, quantitative experiments, and the peer-reviewed publication.' } } },
         { key: 'research-boundary', type: 'limitation', translations: { ko: { heading: '연구 경계', body: '준비된 데이터셋의 연구 결과이며 일상 임상 사용을 주장하지 않습니다.' }, en: { heading: 'Research boundary', body: 'Prepared-dataset results do not establish routine clinical use.' } } }
       ]
+    }),
+    project({
+      slug: 'digital-occlusion-workflow',
+      tier: 'medical-core',
+      period: '2026.03 – present',
+      evidenceState: 'ongoing',
+      lifecycleState: 'research',
+      capabilityKeys: ['medical-navigation', 'registration'],
+      route: 'projects/digital-occlusion-workflow/',
+      tech: ['3D Slicer', 'C++', 'Qt', 'Python', 'VTK', 'PyBullet', 'SOFA'],
+      media: {
+        lead: {
+          id: 'digital-occlusion-workflow-demo-01',
+          type: 'video',
+          status: 'approved',
+          publicPath: 'assets/projects/digital-occlusion-workflow/digital-occlusion-workflow-demo-01.mp4',
+          preload: 'none',
+          videoPolicy: {
+            maxBytes: 20971520,
+            targetDurationSeconds: 31,
+            toleranceSeconds: 0.2,
+            width: 960,
+            height: 460,
+            frameRate: 24,
+            codec: 'h264',
+            pixelFormat: 'yuv420p',
+            requireNoAudio: true,
+            requireFastStart: true
+          }
+        },
+        video: {
+          id: 'digital-occlusion-workflow-demo-01',
+          type: 'video',
+          status: 'approved',
+          publicPath: 'assets/projects/digital-occlusion-workflow/digital-occlusion-workflow-demo-01.mp4',
+          preload: 'none'
+        },
+        poster: {
+          id: 'digital-occlusion-workflow-poster-01',
+          type: 'image',
+          status: 'approved',
+          publicPath: 'assets/projects/digital-occlusion-workflow/digital-occlusion-workflow-poster-01.png'
+        },
+        gallery: []
+      },
+      pdf: {
+        ko: 'assets/pdfs/digital-occlusion-workflow-ko.pdf',
+        en: 'assets/pdfs/digital-occlusion-workflow-en.pdf'
+      },
+      pdfSequence: {
+        middle: ['integrated-workflow', 'user-centered-decisions', 'system-architecture', 'verification-boundary'],
+        evidenceId: 'digital-occlusion-workflow-demo-01',
+        diagrams: [
+          { storySectionKey: 'integrated-workflow' },
+          { storySectionKey: 'system-architecture' }
+        ],
+        figureIds: [
+          'digital-occlusion-workflow-landmark-01',
+          'digital-occlusion-workflow-occlusion-01',
+          'digital-occlusion-workflow-evaluation-01'
+        ]
+      },
+      relatedProjectSlugs: ['mandibular-fracture'],
+      storySections: [
+        {
+          key: 'redesign-background',
+          layout: 'wide',
+          placement: 'before-standard',
+          translations: {
+            ko: {
+              heading: '왜 다시 설계했는가',
+              body: '2023.04–2023.12 유지보수·검증을 담당했던 이전 애플리케이션에서는 특징점 추출이 별도 도구로 분리되어 모델 확대·축소와 이동, 참고 사진 대조가 불편했습니다. 교합은 필요한 여러 시점을 함께 보기 어려웠고 저장·불러오기가 작업 흐름과 분리되어 있었습니다. 악안면 특징점을 활용하지 못했고 결과를 읽는 평가 화면도 충분히 설계되지 않았습니다. 임상 지식과 일부 협업 알고리즘은 이어받되, 2026.03부터 애플리케이션 구조와 워크플로우를 다시 설계했습니다. 키보드 단축키의 불편은 재설계 배경이지만 현재 버전에서 개선했다고 주장하지 않습니다.'
+            },
+            en: {
+              heading: 'Why the workflow was redesigned',
+              body: 'In the earlier application that I maintained and validated from 2023.04 to 2023.12, landmark extraction was separated into another tool, making zoom, pan, and reference-image comparison awkward. Occlusion lacked the views needed for simultaneous comparison, while save/load sat outside the working flow. Maxillofacial landmarks were not used and the evaluation screen was under-designed. Clinical knowledge and some collaborative algorithms carry forward, but the application structure and workflow have been redesigned since 2026.03. Awkward keyboard shortcuts remain background context; this case does not claim that shortcut design was improved.'
+            }
+          }
+        },
+        {
+          key: 'integrated-workflow',
+          layout: 'wide',
+          placement: 'before-standard',
+          translations: {
+            ko: {
+              heading: '한 앱으로 연결한 7단계 워크플로우',
+              body: '데이터 준비부터 평가와 내보내기까지 프로젝트 상태가 한 흐름 안에서 이어집니다.',
+              items: [
+                '8개 3D 모델 준비',
+                '치아 특징점 30개(상악 15개·하악 15개)와 악안면 특징점 30개 입력·가시화',
+                '특징점 기반 해부학적 좌표계 구성',
+                '자동 교합, 6-DOF 미세 조정, 피봇 회전',
+                '접촉 상태와 거리 가시화',
+                'RMSE·Gap·FRE 평가',
+                '프로젝트 저장과 결과 내보내기'
+              ]
+            },
+            en: {
+              heading: 'A seven-stage workflow in one application',
+              body: 'Project state remains connected from data preparation through evaluation and export.',
+              items: [
+                'Prepare eight 3D models',
+                'Enter and visualize 30 dental landmarks (15 upper and 15 lower) plus 30 maxillofacial landmarks',
+                'Construct anatomical frames from the landmarks',
+                'Run automatic occlusion, 6-DOF fine adjustment, and pivot rotation',
+                'Visualize contact state and distance',
+                'Evaluate RMSE, Gap, and FRE',
+                'Save the project and export results'
+              ]
+            }
+          },
+          diagram: {
+            kind: 'system-flow',
+            boundary: 'research-validation',
+            translations: {
+              ko: { title: '데이터 준비에서 평가까지', caption: '현재 구현된 7단계 디지털 교합 작업 흐름입니다.', boundaryLabel: '현재 구현 · 연구진 검증 중' },
+              en: { title: 'Data preparation through evaluation', caption: 'The seven-stage digital-occlusion workflow implemented in the current build.', boundaryLabel: 'Implemented scope · Under researcher validation' }
+            },
+            nodes: [
+              { key: 'prep', translations: { ko: { label: '모델 준비', detail: '8개 3D 모델' }, en: { label: 'Model preparation', detail: 'Eight 3D models' } } },
+              { key: 'landmarks', translations: { ko: { label: '특징점', detail: '치아 30개 · 악안면 30개' }, en: { label: 'Landmarks', detail: '30 dental · 30 maxillofacial' } } },
+              { key: 'frame', translations: { ko: { label: '해부학 좌표계', detail: '특징점 기반 기준 구성' }, en: { label: 'Anatomical frame', detail: 'Landmark-based reference' } } },
+              { key: 'occlusion', translations: { ko: { label: '교합·미세 조정', detail: '자동 교합 · 6-DOF · 피봇 회전' }, en: { label: 'Occlusion and adjustment', detail: 'Automatic occlusion · 6-DOF · pivot rotation' } } },
+              { key: 'contact', translations: { ko: { label: '접촉 분석', detail: '접촉 상태 · 거리 가시화' }, en: { label: 'Contact analysis', detail: 'Contact state · distance view' } } },
+              { key: 'evaluation', translations: { ko: { label: '평가', detail: 'RMSE · Gap · FRE' }, en: { label: 'Evaluation', detail: 'RMSE · Gap · FRE' } } },
+              { key: 'export', translations: { ko: { label: '저장·내보내기', detail: '프로젝트 · 평가 결과' }, en: { label: 'Save and export', detail: 'Project · evaluation results' } } }
+            ],
+            edges: [
+              { from: 'prep', to: 'landmarks', direction: 'forward', translations: { ko: { label: '준비된 모델' }, en: { label: 'Prepared models' } } },
+              { from: 'landmarks', to: 'frame', direction: 'forward', translations: { ko: { label: '입력 특징점' }, en: { label: 'Entered landmarks' } } },
+              { from: 'frame', to: 'occlusion', direction: 'forward', translations: { ko: { label: '해부학 기준' }, en: { label: 'Anatomical reference' } } },
+              { from: 'occlusion', to: 'contact', direction: 'forward', translations: { ko: { label: '조정 자세' }, en: { label: 'Adjusted pose' } } },
+              { from: 'contact', to: 'evaluation', direction: 'forward', translations: { ko: { label: '접촉·거리 결과' }, en: { label: 'Contact and distance results' } } },
+              { from: 'evaluation', to: 'export', direction: 'forward', translations: { ko: { label: '평가 결과' }, en: { label: 'Evaluation results' } } }
+            ]
+          }
+        },
+        {
+          key: 'user-centered-decisions',
+          layout: 'grid',
+          placement: 'before-standard',
+          translations: {
+            ko: {
+              heading: '연구진이 직접 쓰는 화면으로',
+              body: '기능 수를 늘리는 것보다 연구진이 반복 작업을 끊김 없이 수행하고 결과를 비교할 수 있게 하는 데 우선순위를 두었습니다.',
+              items: [
+                '확대·축소 가능한 특징점 입력 화면 옆에 참고 이미지 배치',
+                '교합 상태를 동시에 비교하는 다중 시점 화면',
+                '프로젝트 저장·불러오기 흐름 통합과 단순화',
+                '교합 과정을 확인하는 시뮬레이션 재생바',
+                '미세 조정을 위한 피봇 회전 핸들',
+                '모델 투명도와 특징점 가시성 제어'
+              ]
+            },
+            en: {
+              heading: 'Designed for direct researcher use',
+              body: 'The priority was not feature count, but helping researchers repeat the workflow without interruption and compare its results.',
+              items: [
+                'A reference image beside the zoomable landmark-entry view',
+                'Multiple simultaneous views of the occlusal state',
+                'A unified and simplified project save/load flow',
+                'A playback bar for reviewing the occlusion process',
+                'Pivot rotation handles for fine adjustment',
+                'Model-opacity and landmark-visibility controls'
+              ]
+            }
+          },
+          media: [
+            {
+              id: 'digital-occlusion-workflow-landmark-01',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/digital-occlusion-workflow/digital-occlusion-workflow-landmark-01.png',
+              translations: {
+                ko: { caption: '참고 이미지와 확대·축소 가능한 3D 뷰를 한 화면에서 확인하며 특징점을 입력합니다. 합성 테스트 데이터 화면입니다.', alt: '왼쪽 참고 이미지와 특징점 목록, 오른쪽 3D 턱 모델과 치아 특징점이 함께 보이는 화면.' },
+                en: { caption: 'Researchers enter landmarks while viewing a reference image beside a zoomable 3D view. The screen uses synthetic test data.', alt: 'Screen with a reference image and landmark list on the left and a 3D jaw model with dental landmarks on the right.' }
+              }
+            },
+            {
+              id: 'digital-occlusion-workflow-occlusion-01',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/digital-occlusion-workflow/digital-occlusion-workflow-occlusion-01.png',
+              translations: {
+                ko: { caption: '교합 상태와 접촉 거리 맵을 여러 시점에서 동시에 비교하는 작업 화면입니다. 합성 테스트 데이터 화면입니다.', alt: '주 시점과 세 보조 시점에서 붉은 접촉 거리 맵이 표시된 하악 모델을 비교하는 교합 화면.' },
+                en: { caption: 'The occlusion workspace compares the occlusal state and contact-distance map across several views. The screen uses synthetic test data.', alt: 'Occlusion screen comparing a mandibular model with a red contact-distance map in one main and three secondary views.' }
+              }
+            },
+            {
+              id: 'digital-occlusion-workflow-evaluation-01',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/digital-occlusion-workflow/digital-occlusion-workflow-evaluation-01.png',
+              translations: {
+                ko: { caption: 'RMSE·Gap·FRE 계산과 결과 내보내기를 한 흐름으로 묶은 평가 화면입니다. 표시값은 UI 예시이며 성능 결과가 아닙니다.', alt: '왼쪽 평가 항목과 결과 표, 오른쪽 접촉 거리 맵이 함께 보이는 RMSE·Gap·FRE 평가 화면.' },
+                en: { caption: 'The evaluation screen combines RMSE, Gap, and FRE calculation with result export. Displayed values illustrate the UI, not performance outcomes.', alt: 'RMSE, Gap, and FRE evaluation screen with evaluation controls and result tables on the left and a contact-distance map on the right.' }
+              }
+            }
+          ]
+        },
+        {
+          key: 'system-architecture',
+          layout: 'wide',
+          placement: 'before-standard',
+          translations: {
+            ko: { heading: 'Custom App 아키텍처와 소유권', body: '3D Slicer Custom App의 C++/Qt 셸, Python 워크플로우 모듈, 공통 상태·라이브러리를 한 구조로 설계했습니다. 협업 알고리즘과 엔진은 개인 구현으로 재귀속하지 않고, 이를 상태 흐름·UI·가시화·평가로 통합한 범위를 구분합니다.' },
+            en: { heading: 'Custom App architecture and ownership', body: 'The 3D Slicer Custom App is structured around a C++/Qt shell, Python workflow modules, and shared state and libraries. Collaborative algorithms and engines are not reassigned as individual implementations; the individually owned integration into state flow, UI, visualization, and evaluation remains explicit.' }
+          },
+          diagram: {
+            kind: 'system-flow',
+            boundary: 'ownership-boundary',
+            translations: {
+              ko: { title: 'Custom App 통합 구조', caption: '협업 알고리즘·엔진과 개인이 소유한 아키텍처·통합 범위를 분리한 구조입니다.', boundaryLabel: '개인 소유와 팀 결과 분리' },
+              en: { title: 'Custom App integration structure', caption: 'Architecture separating collaborative algorithms and engines from individually owned architecture and integration.', boundaryLabel: 'Individual ownership separated from team results' }
+            },
+            nodes: [
+              { key: 'shell', translations: { ko: { label: 'C++ / Qt 셸', detail: '개인: 전체 아키텍처' }, en: { label: 'C++ / Qt shell', detail: 'Individual: complete architecture' } } },
+              { key: 'workflow', translations: { ko: { label: 'Python 워크플로우', detail: '개인: workflow · UI/UX' }, en: { label: 'Python workflow', detail: 'Individual: workflow · UI/UX' } } },
+              { key: 'shared-state', translations: { ko: { label: '공통 상태·라이브러리', detail: '개인: 상태·데이터 흐름' }, en: { label: 'Shared state and library', detail: 'Individual: state and data flow' } } },
+              { key: 'landmarks', translations: { ko: { label: '특징점·해부학 좌표', detail: '협업 알고리즘 · 개인 통합' }, en: { label: 'Landmarks and anatomical frames', detail: 'Collaborative algorithms · individual integration' } } },
+              { key: 'engines', translations: { ko: { label: '교합 엔진', detail: 'Geometric · PyBullet · SOFA 협업 엔진 · 개인 통합' }, en: { label: 'Occlusion engines', detail: 'Collaborative Geometric · PyBullet · SOFA engines · individual integration' } } },
+              { key: 'evaluation-export', translations: { ko: { label: '평가·가시화·내보내기', detail: '지표 공동 정의 · 개인 계산·구현' }, en: { label: 'Evaluation, visualization, and export', detail: 'Metrics jointly defined · calculation and implementation individually owned' } } }
+            ],
+            edges: [
+              { from: 'shell', to: 'workflow', direction: 'bidirectional', translations: { ko: { label: 'UI 명령·화면 상태' }, en: { label: 'UI commands and view state' } } },
+              { from: 'workflow', to: 'shared-state', direction: 'bidirectional', translations: { ko: { label: '프로젝트 상태' }, en: { label: 'Project state' } } },
+              { from: 'shared-state', to: 'landmarks', direction: 'bidirectional', translations: { ko: { label: '특징점·좌표 데이터' }, en: { label: 'Landmark and frame data' } } },
+              { from: 'shared-state', to: 'engines', direction: 'bidirectional', translations: { ko: { label: '자세·접촉 상태' }, en: { label: 'Pose and contact state' } } },
+              { from: 'shared-state', to: 'evaluation-export', direction: 'forward', translations: { ko: { label: '평가 입력·결과' }, en: { label: 'Evaluation input and results' } } }
+            ]
+          }
+        },
+        {
+          key: 'verification-boundary',
+          layout: 'wide',
+          placement: 'before-standard',
+          translations: {
+            ko: {
+              heading: '현재 검증 상태와 한계',
+              body: '기능 동작과 임상 활용 가능성을 같은 주장으로 섞지 않습니다.',
+              items: [
+                '구현됨: 8개 모델 준비, 치아·악안면 특징점, 해부학 좌표계, 자동 교합·6-DOF·접촉 분석, 평가·내보내기',
+                '검증 중: 연구진이 개발·시연 빌드를 직접 사용하며 워크플로우 사용성과 교합 결과를 검토',
+                '주장하지 않음: 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성, 화면 예시값의 성능 해석'
+              ]
+            },
+            en: {
+              heading: 'Current validation state and limitations',
+              body: 'Functional operation and clinical applicability remain separate claims.',
+              items: [
+                'Implemented: eight-model preparation, dental and maxillofacial landmarks, anatomical frames, automatic occlusion, 6-DOF and contact analysis, evaluation, and export',
+                'Under review: researchers directly use development and demonstration builds to review workflow usability and occlusion output',
+                'Not claimed: hospital installation, use in real surgery, medical-device status, clinical efficacy, accuracy or safety, or performance interpretation of displayed example values'
+              ]
+            }
+          }
+        },
+        {
+          key: 'long-term-direction',
+          layout: 'wide',
+          placement: 'after-standard',
+          translations: {
+            ko: { heading: '디지털 교합에서 전체 수술계획으로', body: '다음 연구 방향은 정상 교합 기반 하악 운동을 연결하고, 장기적으로 디지털 교합·계측·하악 운동을 포함하는 전체 구강악안면 수술계획 소프트웨어로 확장하는 것입니다. 이는 구현 완료가 아닌 삼성서울병원과 DIGITRACK의 장기 R&D 방향입니다.' },
+            en: { heading: 'From digital occlusion to complete surgical planning', body: 'The next research direction connects normal-occlusion-based mandibular motion and, over the longer term, expands toward complete oral and maxillofacial surgical-planning software spanning digital occlusion, measurement, and mandibular motion. This is the long-term Samsung Medical Center and DIGITRACK R&D direction, not completed functionality.' }
+          }
+        }
+      ],
+      blocks: [],
+      links: [],
+      translations: {
+        ko: {
+          title: '구강악안면 디지털 교합 워크플로우',
+          shortTitle: '디지털 교합 워크플로우',
+          eyebrow: '의료 코어 · 임상 워크플로우 통합',
+          thesis: '분리된 특징점·교합·평가 기능을 연구진이 한 앱에서 직접 다룰 수 있는 사용자 친화적 end-to-end 워크플로우로 재설계했습니다.',
+          summary: '8개 3D 모델 준비, 치아·악안면 특징점, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
+          problem: '이전 흐름은 특징점 앱이 분리되어 참고 이미지 대조와 확대·이동이 불편했고, 교합의 다중 시점, 저장·불러오기, 악안면 특징점, 평가 화면이 충분히 통합되지 않았습니다.',
+          role: '기술 리드·메인 개발자로 C++/Qt 셸, Python 모듈, 공통 라이브러리의 전체 Custom App 아키텍처를 설계하고 end-to-end UI/UX, 알고리즘·엔진 통합, 평가·내보내기, CMake/SuperBuild·테스트·패키징을 주도했습니다.',
+          teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. DIGITRACK 협업 팀은 특징점 알고리즘과 교합 엔진 구현·연구를 지원했습니다.',
+          evidence: '특징점 입력, 다중 시점 교합, 접촉 가시화, RMSE·Gap·FRE 평가와 내보내기가 동작하는 개발 빌드 영상·화면과 연구진 직접 사용 피드백이 근거입니다.',
+          limitation: '현재는 개발·시연 빌드의 연구진 검증 단계입니다. 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성을 주장하지 않으며 화면 값도 성능 결과로 인용하지 않습니다.',
+          collaboration: '삼성서울병원과 DIGITRACK의 장기 R&D로 디지털 교합에서 정상 교합 기반 하악 운동과 전체 구강악안면 수술계획으로 확장하는 방향을 검토하고 있습니다.',
+          mediaAlt: '합성 테스트 데이터에서 특징점 입력, 다중 시점 교합, 평가 화면이 이어지는 개발 빌드 시연.',
+          mediaCaption: '합성 테스트 데이터로 특징점 입력, 다중 시점 교합, 평가 흐름을 시연한 개발 빌드입니다.',
+          periodLabel: '2026.03 – 현재',
+          roleLabel: '기술 리드 · 메인 개발자',
+          status: '진행 중 · 연구진 검증',
+          statusLabel: '진행 중 · 연구진 검증',
+          ownedRole: '전체 Custom App 아키텍처, 워크플로우·UI/UX, 협업 알고리즘·엔진 통합, 평가·내보내기 파이프라인'
+        },
+        en: {
+          title: 'Maxillofacial Digital Occlusion Workflow',
+          shortTitle: 'Digital Occlusion Workflow',
+          eyebrow: 'Medical Core · Clinical Workflow Integration',
+          thesis: 'Redesigned separate landmarking, occlusion, and evaluation tools into a user-friendly end-to-end workflow that researchers can operate in one application.',
+          summary: 'Connected eight-model preparation, dental and maxillofacial landmarks, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.',
+          problem: 'The earlier flow separated landmarking into another application, made reference comparison and view navigation awkward, lacked multi-view occlusion, fragmented save/load, omitted maxillofacial landmarks, and had no sufficiently integrated result screen.',
+          role: 'As technical lead and primary developer, designed the complete Custom App architecture across the C++/Qt shell, Python modules, and shared library, and led the end-to-end UI/UX, algorithm and engine integration, evaluation/export, CMake/SuperBuild, testing, and packaging.',
+          teamResult: 'Samsung Medical Center researchers jointly define the clinical workflow, landmarks, and evaluation metrics and directly review development builds. The DIGITRACK team supports the landmark algorithms and occlusion-engine implementation and research.',
+          evidence: 'A working development build demonstrates landmarking, multi-view occlusion, contact visualization, RMSE/Gap/FRE evaluation, and export, with direct researcher use and feedback.',
+          limitation: 'The software is under researcher validation as a development and demonstration build. This case does not claim hospital installation, use in real surgery, medical-device status, or clinical efficacy, accuracy, or safety; displayed values are not performance outcomes.',
+          collaboration: 'The long-term Samsung Medical Center and DIGITRACK R&D direction expands from digital occlusion toward normal-occlusion-based mandibular motion and complete oral and maxillofacial surgical planning.',
+          mediaAlt: 'Development-build demonstration moving from landmarking through multi-view occlusion to evaluation on synthetic test data.',
+          mediaCaption: 'Development-build demonstration of landmarking, multi-view occlusion, and evaluation using synthetic test data.',
+          periodLabel: '2026.03 – present',
+          roleLabel: 'Technical Lead · Primary Developer',
+          status: 'Ongoing · Researcher Validation',
+          statusLabel: 'Ongoing · Researcher Validation',
+          ownedRole: 'Complete Custom App architecture, workflow and UI/UX, collaborative algorithm and engine integration, and evaluation/export pipeline'
+        }
+      }
     }),
     project({
       slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',

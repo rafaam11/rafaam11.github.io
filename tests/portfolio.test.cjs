@@ -20,6 +20,7 @@ const pdfSource = require('../scripts/portfolio-pdf-source.cjs');
 const slugs = [
   'surgical-navigation',
   'mandibular-fracture',
+  'digital-occlusion-workflow',
   'life-careverse',
   'rtms-navigation',
   'respiratory-surface-guidance',
@@ -73,6 +74,8 @@ function validMp4({
   durationSeconds = 20,
   width = 1280,
   height = 720,
+  codedWidth = null,
+  codedHeight = null,
   sampleEntry = 'avc1',
   includeAudio = false,
   fastStart = true,
@@ -90,7 +93,15 @@ function validMp4({
   tkhdPayload.writeUInt32BE(Math.round(height * 65536), tkhdPayload.length - 4);
   const hdlrPayload = Buffer.alloc(24);
   hdlrPayload.write('vide', 8, 4, 'ascii');
-  const stsdPayload = Buffer.concat([Buffer.alloc(4), Buffer.from([0, 0, 0, 1]), mp4Box(sampleEntry)]);
+  const visualSamplePayload = Number.isInteger(codedWidth) && Number.isInteger(codedHeight)
+    ? (() => {
+      const payload = Buffer.alloc(28);
+      payload.writeUInt16BE(codedWidth, 24);
+      payload.writeUInt16BE(codedHeight, 26);
+      return payload;
+    })()
+    : Buffer.alloc(0);
+  const stsdPayload = Buffer.concat([Buffer.alloc(4), Buffer.from([0, 0, 0, 1]), mp4Box(sampleEntry, visualSamplePayload)]);
   const sampleTable = mp4Box('stbl', mp4Box('stsd', stsdPayload));
   const media = mp4Box('mdia', Buffer.concat([mp4Box('hdlr', hdlrPayload), mp4Box('minf', sampleTable)]));
   const tracks = [mp4Box('trak', Buffer.concat([mp4Box('tkhd', tkhdPayload), media]))];
@@ -460,6 +471,113 @@ test('canonical records retain localized evidence, attribution, media, blocks, a
     }
   }
   assert.deepEqual(data.projects.at(-1).subcases.map((item) => item.key), ['llm-wiki', 'multi-cli-work', 'daegu-bus']);
+});
+
+test('digital occlusion case preserves approved role, validation, and roadmap boundaries', () => {
+  const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
+  assert.ok(project);
+  assert.equal(project.tier, 'medical-core');
+  assert.equal(project.period, '2026.03 – present');
+  assert.equal(project.translations.ko.periodLabel, '2026.03 – 현재');
+  assert.equal(project.translations.en.periodLabel, '2026.03 – present');
+  assert.equal(project.translations.ko.roleLabel, '기술 리드 · 메인 개발자');
+  assert.equal(project.translations.en.roleLabel, 'Technical Lead · Primary Developer');
+  assert.deepEqual(project.capabilityKeys, ['medical-navigation', 'registration']);
+  assert.deepEqual(project.relatedProjectSlugs, ['mandibular-fracture']);
+  assert.equal(project.translations.ko.statusLabel, '진행 중 · 연구진 검증');
+  assert.equal(project.translations.en.statusLabel, 'Ongoing · Researcher Validation');
+  assert.match(project.translations.ko.role, /기술 리드|전체 아키텍처/);
+  assert.match(project.translations.ko.teamResult, /삼성서울병원 연구진|DIGITRACK/);
+  assert.match(project.translations.ko.limitation, /병원 설치|임상|의료기기/);
+  const claimSurfaces = ['thesis', 'summary', 'problem', 'role', 'teamResult', 'evidence', 'collaboration']
+    .map((field) => project.translations.ko[field]).join('\n');
+  assert.doesNotMatch(claimSurfaces, /기여율|실제 수술|임상 효능|사설 저장소/i);
+});
+
+test('digital occlusion routes and fallback order are canonical in both languages', () => {
+  assert.equal(i18n.routeDescriptors.length * 2, 26);
+  for (const file of [
+    'projects/digital-occlusion-workflow/index.html',
+    'en/projects/digital-occlusion-workflow/index.html'
+  ]) assert.ok(fs.existsSync(path.join(root, file)), file);
+  for (const file of ['index.html', 'projects/index.html', 'en/index.html', 'en/projects/index.html']) {
+    const html = read(file);
+    assertInOrder(html, ['mandibular-fracture', 'digital-occlusion-workflow', 'life-careverse'], file);
+  }
+});
+
+test('digital occlusion media and captions are registered as approved synthetic-data evidence', () => {
+  const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
+  const entries = validator.canonicalMediaEntries({ projects: [project] });
+  assert.deepEqual(entries.map((entry) => entry.item.id), [
+    'digital-occlusion-workflow-demo-01',
+    'digital-occlusion-workflow-demo-01',
+    'digital-occlusion-workflow-poster-01',
+    'digital-occlusion-workflow-landmark-01',
+    'digital-occlusion-workflow-occlusion-01',
+    'digital-occlusion-workflow-evaluation-01'
+  ]);
+  assert.match(project.translations.ko.mediaCaption, /합성 테스트 데이터/);
+  assert.match(project.storySections[2].media[2].translations.ko.caption, /성능 결과가 아닙니다/);
+});
+
+test('digital occlusion evidence rejects conflicting policies on a shared video id', () => {
+  const candidate = clone(data);
+  const project = candidate.projects.find((item) => item.slug === 'digital-occlusion-workflow');
+  project.media.video.videoPolicy = { ...project.media.lead.videoPolicy, width: 961 };
+  assert.match(validator.evidenceRegistryErrors(candidate, root).join('\n'), /conflicting video policies/i);
+});
+
+test('digital occlusion MP4 validation reads coded dimensions and permits an empty metadata wrapper', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'digital-occlusion-mp4-'));
+  try {
+    const filePath = path.join(temporaryRoot, 'coded-dimensions.mp4');
+    const emptyMetadataHandler = Buffer.alloc(25);
+    emptyMetadataHandler.write('mdir', 8, 'ascii');
+    emptyMetadataHandler.write('appl', 12, 'ascii');
+    const emptyMetadataWrapper = mp4Box('udta', mp4Box('meta', Buffer.concat([
+      Buffer.alloc(4),
+      mp4Box('hdlr', emptyMetadataHandler),
+      mp4Box('ilst')
+    ])));
+    fs.writeFileSync(filePath, validMp4({
+      durationSeconds: 31,
+      width: 958.9576568603516,
+      height: 460,
+      codedWidth: 960,
+      codedHeight: 460,
+      extraMoovBoxes: [emptyMetadataWrapper]
+    }));
+    assert.deepEqual(validator.approvedMp4Errors(filePath, {
+      maxBytes: 20971520,
+      targetDurationSeconds: 31,
+      toleranceSeconds: 0.2,
+      width: 960,
+      height: 460,
+      codec: 'h264',
+      requireNoAudio: true,
+      requireFastStart: true
+    }), []);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('digital occlusion anatomy counts do not weaken real Korean address detection', () => {
+  assert.doesNotMatch(render.dataErrors(data).join('\n'), /private address PII/i);
+  const unsafe = clone(data);
+  unsafe.projects.find((item) => item.slug === 'digital-occlusion-workflow').translations.ko.summary += ' 강남구 역삼동 123';
+  assert.match(render.dataErrors(unsafe).join('\n'), /private address PII/i);
+});
+
+test('digital occlusion PDF validation reports both pending localized artifacts without throwing', () => {
+  let errors;
+  assert.doesNotThrow(() => { errors = validator.pdfArtifactErrors(root); });
+  const joined = errors.join('\n').replace(/\\/g, '/');
+  for (const locale of ['ko', 'en']) {
+    assert.match(joined, new RegExp(`output/pdf/digital-occlusion-workflow-${locale}\\.pdf: missing PDF artifact`));
+    assert.match(joined, new RegExp(`assets/pdfs/digital-occlusion-workflow-${locale}\\.pdf: missing PDF artifact`));
+  }
 });
 
 test('SKADI evidence-first contract keeps the case identity and exposes localized architecture, applications, and public resources', () => {
@@ -1179,7 +1297,7 @@ test('Task 4 review rejects an approved secondary video when the approved lead i
   });
 });
 
-test('Task 4 review root inventory permits only the register and eight canonical project directories', () => {
+test('Task 4 review root inventory permits only the register and nine canonical project directories', () => {
   const registerText = fs.readFileSync(path.join(root, 'assets', 'projects', 'EVIDENCE_REGISTER.md'), 'utf8');
   withEvidenceRoot(registerText, (temporaryRoot) => {
     seedEvidenceReadmes(temporaryRoot);
@@ -1378,6 +1496,7 @@ test('Task 3 review preserves literal tier and evidence-state mappings', () => {
   assert.deepEqual(data.projects.map((project) => [project.slug, project.tier, project.evidenceState]), [
     ['surgical-navigation', 'medical-core', 'prototype'],
     ['mandibular-fracture', 'medical-core', 'verified'],
+    ['digital-occlusion-workflow', 'medical-core', 'ongoing'],
     ['life-careverse', 'medical-core', 'ongoing'],
     ['rtms-navigation', 'medical-core', 'verified'],
     ['respiratory-surface-guidance', 'medical-core', 'ongoing'],
@@ -1448,15 +1567,15 @@ test('canonical validator rejects malformed capabilities, tiers, states, blocks,
   }
 });
 
-test('route descriptors keep four public pages and eight paired case routes', () => {
+test('route descriptors keep four public pages and nine paired case routes', () => {
   assert.deepEqual(i18n.supportedNavigationPages, ['home', 'projects', 'cv', 'contact']);
   assert.deepEqual(i18n.canonicalCaseSlugs, slugs);
   assert.deepEqual(validator.portfolioRoutes().map((item) => item.route), [
     '', 'projects/', 'cv/', 'contact/', ...slugs.map((slug) => `projects/${slug}/`)
   ]);
   const files = canonicalPages();
-  assert.equal(files.length, 24);
-  assert.equal(new Set(files.map((item) => item.relativePath)).size, 24);
+  assert.equal(files.length, 26);
+  assert.equal(new Set(files.map((item) => item.relativePath)).size, 26);
 });
 
 test('route helpers preserve locale and explicit file protocol targets', () => {
@@ -2172,7 +2291,7 @@ test('SKADI evidence-first renderer leads with seven figures and preserves the a
   assertInOrder(standard, ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>', 'sc-gallery'], 'standard case remains unchanged');
 });
 
-test('Task 3 all sixteen case shells share one fetch-free, localized renderer contract', () => {
+test('Task 3 all eighteen case shells share one fetch-free, localized renderer contract', () => {
   for (const locale of ['ko', 'en']) {
     for (const project of data.projects) {
       const file = `${locale === 'en' ? 'en/' : ''}projects/${project.slug}/index.html`;
@@ -2184,7 +2303,12 @@ test('Task 3 all sixteen case shells share one fetch-free, localized renderer co
       assert.match(html, new RegExp(`data-lang="${locale}"`));
       assert.match(html, /data-portfolio="case-study"/);
       assert.match(html, new RegExp(copy.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-      assert.match(html, new RegExp(copy.summary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+      const fallbackSummary = project.slug === 'digital-occlusion-workflow'
+        ? (locale === 'ko'
+          ? '특징점·교합·평가를 연구진이 한 앱에서 다루는 end-to-end 워크플로우로 재설계했습니다.'
+          : 'Redesigned landmarking, occlusion, and evaluation as an end-to-end workflow that researchers can operate in one application.')
+        : copy.summary;
+      assert.match(html, new RegExp(fallbackSummary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
       assert.match(html, new RegExp(`${project.slug}-${locale}\\.pdf`));
       assertInOrder(html, ['site-i18n.js', 'portfolio-data.js', 'portfolio-render.js', 'nav.js'], `${file}: script order`);
       assert.doesNotMatch(html, /fetch\s*\(|fontawesome|bootstrap(?:\.bundle)?\.min\.js|spatial-signal\.js|carousel/i);
@@ -2349,7 +2473,7 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
   }
 });
 
-test('Task 5 publishes sixteen content-length project PDFs and tracks two authored CV PDFs', () => {
+test('Task 5 publishes eighteen content-length project PDFs and tracks two authored CV PDFs', () => {
   const projectNames = slugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
   const outputNames = fs.readdirSync(path.join(root, 'output', 'pdf'))
@@ -2390,12 +2514,13 @@ test('Task 5 publishes sixteen content-length project PDFs and tracks two author
   assert.deepEqual(validator.pdfArtifactErrors(root), []);
 });
 
-test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status on all sixteen PDF covers', (t) => {
+test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status on all eighteen PDF covers', (t) => {
   const python = task5Python();
   if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
   const expected = {
     'surgical-navigation': { ko: '프로토타입 · 진행 중', en: 'Prototype · Ongoing' },
     'mandibular-fracture': { ko: '검증됨 · 완료', en: 'Verified · Completed' },
+    'digital-occlusion-workflow': { ko: '진행 중 · 연구진 검증', en: 'Ongoing · Researcher Validation' },
     'life-careverse': { ko: '진행 중', en: 'Ongoing' },
     'rtms-navigation': { ko: '검증됨 · 진행 중', en: 'Verified · Ongoing' },
     'respiratory-surface-guidance': { ko: '진행 중 · 연구', en: 'Ongoing · Research' },
@@ -2576,11 +2701,11 @@ test('Task 5 generator rejects malformed nested input atomically with a controll
   }
 });
 
-test('Task 5 manifest freshness follows canonical project, evidence, and public CV content', () => {
+test('Task 5 manifest freshness follows canonical project and public CV inputs', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   assert.equal(manifest.schemaVersion, 3);
   assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
-  assert.equal(manifest.artifacts.length, 32);
+  assert.equal(manifest.artifacts.length, 36);
   assert.deepEqual([...new Set(manifest.artifacts.map((artifact) => artifact.kind))], ['project-pdf']);
 
   const changedPortfolio = clone(data);
@@ -2681,7 +2806,7 @@ test('SKADI evidence-first PDFs map the fixed five-page narrative and public lin
   }
 });
 
-test('Task 5 integrated review requires four project-specific middle blocks and eight diagram contracts', () => {
+test('Task 5 integrated review requires four middle sections across nine project sequencing contracts', () => {
   const expectedKinds = new Map([
     ['surgical-navigation', 'system-flow'],
     ['mandibular-fracture', 'optimization-loop'],
@@ -2699,25 +2824,34 @@ test('Task 5 integrated review requires four project-specific middle blocks and 
     assert.equal(new Set(project.pdfSequence.middle).size, 4, `${project.slug}: middle sequence duplicates`);
     assert.equal(project.pdfSequence.evidenceId, project.media.lead.id, `${project.slug}: evidence selection`);
 
-    if (project.slug === 'surgical-navigation') {
+    if (Array.isArray(project.storySections)) {
       const storyKeys = project.storySections.map((section) => section.key);
       for (const key of project.pdfSequence.middle) {
         assert.ok(storyKeys.includes(key), `${project.slug}: middle sequence references unknown story section ${key}`);
       }
-      assert.deepEqual(project.pdfSequence.diagram, { storySectionKey: 'system-architecture' });
-      const section = project.storySections.find((item) => item.key === project.pdfSequence.diagram.storySectionKey);
-      const diagram = section.diagram;
-      assert.equal(diagram.kind, 'system-flow');
-      assert.equal(diagram.boundary, 'prototype');
-      assert.equal(diagram.nodes.length, 6);
-      assert.equal(diagram.edges.length, 5);
-      assert.deepEqual(diagram.edges.map((edge) => [edge.from, edge.to]), diagram.nodes.slice(0, -1).map((node, index) => [node.key, diagram.nodes[index + 1].key]));
-      assert.deepEqual(['ko', 'en'].map((locale) => diagram.translations[locale].boundaryLabel), [
-        'SMCNavi–HoloLens 경로 · 연구 프로토타입',
-        'SMCNavi–HoloLens path · Research prototype'
-      ]);
-      assert.equal(seenKinds.has(diagram.kind), false, `${project.slug}: duplicate diagram kind`);
-      seenKinds.add(diagram.kind);
+      const contracts = project.pdfSequence.diagrams || [project.pdfSequence.diagram];
+      const diagrams = contracts.map((contract) => project.storySections.find((item) => item.key === contract.storySectionKey).diagram);
+      assert.ok(diagrams.every((diagram) => diagram.kind === 'system-flow'));
+      if (project.slug === 'surgical-navigation') {
+        assert.deepEqual(project.pdfSequence.diagram, { storySectionKey: 'system-architecture' });
+        const diagram = diagrams[0];
+        assert.equal(diagram.boundary, 'prototype');
+        assert.equal(diagram.nodes.length, 6);
+        assert.equal(diagram.edges.length, 5);
+        assert.deepEqual(diagram.edges.map((edge) => [edge.from, edge.to]), diagram.nodes.slice(0, -1).map((node, index) => [node.key, diagram.nodes[index + 1].key]));
+        assert.deepEqual(['ko', 'en'].map((locale) => diagram.translations[locale].boundaryLabel), [
+          'SMCNavi–HoloLens 경로 · 연구 프로토타입',
+          'SMCNavi–HoloLens path · Research prototype'
+        ]);
+        assert.equal(seenKinds.has(diagram.kind), false, `${project.slug}: duplicate diagram kind`);
+        seenKinds.add(diagram.kind);
+      } else {
+        assert.deepEqual(contracts, [
+          { storySectionKey: 'integrated-workflow' },
+          { storySectionKey: 'system-architecture' }
+        ]);
+        assert.deepEqual(diagrams.map((diagram) => diagram.boundary), ['research-validation', 'ownership-boundary']);
+      }
     } else {
       // The PDF sequence names four of the project blocks; a case may carry more than four.
       const blockKeys = project.blocks.map((block) => block.key);
@@ -2741,7 +2875,7 @@ test('Task 5 integrated review requires four project-specific middle blocks and 
 
   const malformed = clone(data);
   malformed.projects[0].pdfSequence.middle[1] = 'unknown-middle-block';
-  malformed.projects[2].pdfSequence.diagram.kind = malformed.projects[1].pdfSequence.diagram.kind;
+  malformed.projects[3].pdfSequence.diagram.kind = malformed.projects[1].pdfSequence.diagram.kind;
   assert.match(validator.portfolioDataErrors(malformed).join('\n'), /pdf sequence|middle block|diagram kind|unique/i);
 });
 
@@ -3620,7 +3754,7 @@ test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(
     [...new Set(visualFiles.map((file) => file.relativePath.replace(/\\/g, '/').split('/')[2]))].sort(),
     [...slugs].sort(),
-    'approved derivatives cover all eight cases'
+    'approved derivatives cover all nine cases'
   );
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
@@ -3631,7 +3765,7 @@ test('published localized pages never rewrite parent traversal into external URL
   }
 });
 
-test('Task 6 tracked site HTML inventory is exactly the twenty-four canonical localized routes', () => {
+test('Task 6 tracked site HTML inventory is exactly the twenty-six canonical localized routes', () => {
   const expected = canonicalPages().map((file) => file.relativePath.replace(/\\/g, '/')).sort();
   const actual = trackedFiles('*.html').filter((relativePath) => (
     !relativePath.startsWith('public/') &&
@@ -4608,6 +4742,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
   ]), [
     ['surgical-navigation', 'prototype', 'ongoing'],
     ['mandibular-fracture', 'verified', 'completed'],
+    ['digital-occlusion-workflow', 'ongoing', 'research'],
     ['life-careverse', 'ongoing', 'ongoing'],
     ['rtms-navigation', 'verified', 'ongoing'],
     ['respiratory-surface-guidance', 'ongoing', 'research'],

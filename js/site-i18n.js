@@ -6,6 +6,7 @@
   var canonicalCaseSlugs = [
     'surgical-navigation',
     'mandibular-fracture',
+    'digital-occlusion-workflow',
     'life-careverse',
     'rtms-navigation',
     'respiratory-surface-guidance',
