@@ -836,9 +836,9 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Coordinate chain) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Made the transform path visible from tracking hardware through images, tools, and HoloLens.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 444.3898 499.2756 142 re f*
+n 48 411.3898 499.2756 175 re f*
 .047059 .419608 .368627 rg
-n 48 444.3898 4 142 re f*
+n 48 411.3898 4 175 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 564.3898 Tm /F3+0 7.5 Tf 9 TL (PROBLEM) Tj T* ET
 .062745 .090196 .082353 rg
@@ -848,27 +848,27 @@ BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (cannot confidently interpret the 
 BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connect tracking devices, SDKs, coordinate transforms, data flow, and HoloLens spatial presentation into) Tj T* ET
 BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (one surgical-navigation experience.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 290.3898 499.2756 142 re f*
+n 48 257.3898 499.2756 142 re f*
 .662745 .294118 .196078 rg
-n 48 290.3898 4 142 re f*
+n 48 257.3898 4 142 re f*
 .662745 .294118 .196078 rg
-BT 1 0 0 1 64 410.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
+BT 1 0 0 1 64 377.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (The demonstration shows integrated operation on a phantom; it does not) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (claim clinical efficacy or production deployment.) Tj T* ET
+BT 1 0 0 1 64 355.3898 Tm /F3+0 13 Tf 15.6 TL (The demonstration shows integrated operation on a phantom; it does not) Tj T* ET
+BT 1 0 0 1 64 337.3898 Tm /F3+0 13 Tf 15.6 TL (claim clinical efficacy or production deployment.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Joint review spans tracking hardware, medical imaging, XR, and workflow expertise.) Tj T* ET
+BT 1 0 0 1 64 315.3898 Tm /F2+0 9.5 Tf 11.4 TL (Joint review spans tracking hardware, medical imaging, XR, and workflow expertise.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 270.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
+BT 1 0 0 1 48 237.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / Demonstration clip from the HoloLens viewpoint: a hologram registered on a skull phantom with a) Tj T* ET
-BT 1 0 0 1 48 233.3898 Tm /F2+0 9.5 Tf 11.4 TL (tracked pointer.) Tj T* ET
+BT 1 0 0 1 48 215.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / Demonstration clip from the HoloLens viewpoint: a hologram registered on a skull phantom with a) Tj T* ET
+BT 1 0 0 1 48 200.3898 Tm /F2+0 9.5 Tf 11.4 TL (tracked pointer.) Tj T* ET
  
 endstream
 endobj
 31 0 obj
 <<
-/Length 5415
+/Length 5417
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -895,9 +895,9 @@ BT 1 0 0 1 48 710.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Led the integrated software across device, SDK, coordinate transforms, and data flow, plus the) Tj T* ET
 BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (HoloLens spatial-placement and registration-feedback experience.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 549.3898 499.2756 92 re f*
+n 48 501.3898 499.2756 140 re f*
 .047059 .419608 .368627 rg
-n 48 549.3898 4 92 re f*
+n 48 501.3898 4 140 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 619.3898 Tm /F3+0 7.5 Tf 9 TL (02 / SPATIAL FEEDBACK) Tj T* ET
 .062745 .090196 .082353 rg
@@ -905,129 +905,129 @@ BT 1 0 0 1 64 597.3898 Tm /F3+0 13 Tf 15.6 TL (Spatial feedback) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 575.3898 Tm /F2+0 9.5 Tf 11.4 TL (Made registration state legible through placement and feedback rather than a hidden number.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 537.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
+BT 1 0 0 1 48 489.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 332.3898 499.2756 188 re B*
+n 48 284.3898 499.2756 188 re B*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 498.3898 Tm /F3+0 10 Tf 12 TL (Tracking coordinates to spatial feedback) Tj T* ET
+BT 1 0 0 1 62 450.3898 Tm /F3+0 10 Tf 12 TL (Tracking coordinates to spatial feedback) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 158 400.3898 m 176 400.3898 l S
+n 158 352.3898 m 176 352.3898 l S
 .047059 .419608 .368627 rg
 n
-178.2 400.3898 m
-178.2 401.6048 177.215 402.5898 176 402.5898 c
-174.785 402.5898 173.8 401.6048 173.8 400.3898 c
-173.8 399.1747 174.785 398.1898 176 398.1898 c
-177.215 398.1898 178.2 399.1747 178.2 400.3898 c
+178.2 352.3898 m
+178.2 353.6048 177.215 354.5898 176 354.5898 c
+174.785 354.5898 173.8 353.6048 173.8 352.3898 c
+173.8 351.1747 174.785 350.1898 176 350.1898 c
+177.215 350.1898 178.2 351.1747 178.2 352.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 280 400.3898 m 298 400.3898 l S
+n 280 352.3898 m 298 352.3898 l S
 .047059 .419608 .368627 rg
 n
-300.2 400.3898 m
-300.2 401.6048 299.215 402.5898 298 402.5898 c
-296.785 402.5898 295.8 401.6048 295.8 400.3898 c
-295.8 399.1747 296.785 398.1898 298 398.1898 c
-299.215 398.1898 300.2 399.1747 300.2 400.3898 c
+300.2 352.3898 m
+300.2 353.6048 299.215 354.5898 298 354.5898 c
+296.785 354.5898 295.8 353.6048 295.8 352.3898 c
+295.8 351.1747 296.785 350.1898 298 350.1898 c
+299.215 350.1898 300.2 351.1747 300.2 352.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 402 400.3898 m 420 400.3898 l S
+n 402 352.3898 m 420 352.3898 l S
 .047059 .419608 .368627 rg
 n
-422.2 400.3898 m
-422.2 401.6048 421.215 402.5898 420 402.5898 c
-418.785 402.5898 417.8 401.6048 417.8 400.3898 c
-417.8 399.1747 418.785 398.1898 420 398.1898 c
-421.215 398.1898 422.2 399.1747 422.2 400.3898 c
+422.2 352.3898 m
+422.2 353.6048 421.215 354.5898 420 354.5898 c
+418.785 354.5898 417.8 353.6048 417.8 352.3898 c
+417.8 351.1747 418.785 350.1898 420 350.1898 c
+421.215 350.1898 422.2 351.1747 422.2 352.3898 c
 f*
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-58 371.3898 m
-154 371.3898 l
-156.2112 371.3898 158 373.1786 158 375.3898 c
-158 425.3898 l
-158 427.601 156.2112 429.3898 154 429.3898 c
-58 429.3898 l
-55.7888 429.3898 54 427.601 54 425.3898 c
-54 375.3898 l
-54 373.1786 55.7888 371.3898 58 371.3898 c
+58 323.3898 m
+154 323.3898 l
+156.2112 323.3898 158 325.1786 158 327.3898 c
+158 377.3898 l
+158 379.601 156.2112 381.3898 154 381.3898 c
+58 381.3898 l
+55.7888 381.3898 54 379.601 54 377.3898 c
+54 327.3898 l
+54 325.1786 55.7888 323.3898 58 323.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 62 409.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
+BT 1 0 0 1 62 361.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (Tracking hardware) Tj T* ET
+BT 1 0 0 1 62 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Tracking hardware) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-180 371.3898 m
-276 371.3898 l
-278.2112 371.3898 280 373.1786 280 375.3898 c
-280 425.3898 l
-280 427.601 278.2112 429.3898 276 429.3898 c
-180 429.3898 l
-177.7888 429.3898 176 427.601 176 425.3898 c
-176 375.3898 l
-176 373.1786 177.7888 371.3898 180 371.3898 c
+180 323.3898 m
+276 323.3898 l
+278.2112 323.3898 280 325.1786 280 327.3898 c
+280 377.3898 l
+280 379.601 278.2112 381.3898 276 381.3898 c
+180 381.3898 l
+177.7888 381.3898 176 379.601 176 377.3898 c
+176 327.3898 l
+176 325.1786 177.7888 323.3898 180 323.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 184 409.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 184 361.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 184 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (Image and tool frames) Tj T* ET
+BT 1 0 0 1 184 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Image and tool frames) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-302 371.3898 m
-398 371.3898 l
-400.2112 371.3898 402 373.1786 402 375.3898 c
-402 425.3898 l
-402 427.601 400.2112 429.3898 398 429.3898 c
-302 429.3898 l
-299.7888 429.3898 298 427.601 298 425.3898 c
-298 375.3898 l
-298 373.1786 299.7888 371.3898 302 371.3898 c
+302 323.3898 m
+398 323.3898 l
+400.2112 323.3898 402 325.1786 402 327.3898 c
+402 377.3898 l
+402 379.601 400.2112 381.3898 398 381.3898 c
+302 381.3898 l
+299.7888 381.3898 298 379.601 298 377.3898 c
+298 327.3898 l
+298 325.1786 299.7888 323.3898 302 323.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 306 409.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 306 361.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 306 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (Registration state) Tj T* ET
+BT 1 0 0 1 306 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Registration state) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-424 371.3898 m
-520 371.3898 l
-522.2112 371.3898 524 373.1786 524 375.3898 c
-524 425.3898 l
-524 427.601 522.2112 429.3898 520 429.3898 c
-424 429.3898 l
-421.7888 429.3898 420 427.601 420 425.3898 c
-420 375.3898 l
-420 373.1786 421.7888 371.3898 424 371.3898 c
+424 323.3898 m
+520 323.3898 l
+522.2112 323.3898 524 325.1786 524 327.3898 c
+524 377.3898 l
+524 379.601 522.2112 381.3898 520 381.3898 c
+424 381.3898 l
+421.7888 381.3898 420 379.601 420 377.3898 c
+420 327.3898 l
+420 325.1786 421.7888 323.3898 424 323.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 428 409.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 428 361.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 428 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (HoloLens feedback) Tj T* ET
+BT 1 0 0 1 428 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (HoloLens feedback) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 317.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 269.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 289.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 48 241.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 265.3898 Tm /F2+0 9 Tf 10.8 TL (HoloLens 2 / Optical tracking / 3D Slicer / Unity / MRTK / OpenIGTLink) Tj T* ET
+BT 1 0 0 1 48 217.3898 Tm /F2+0 9 Tf 10.8 TL (HoloLens 2 / Optical tracking / 3D Slicer / Unity / MRTK / OpenIGTLink) Tj T* ET
  
 endstream
 endobj
 32 0 obj
 <<
-/Length 5635
+/Length 5723
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1061,96 +1061,96 @@ BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Treat the working integration de
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 594.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 400.3898 499.2756 176 re S
+n 48 436.3898 499.2756 140 re S
 q
-298.6667 0 0 168 148.3045 404.3898 cm
+234.6667 0 0 132 180.3045 440.3898 cm
 /FormXob.0400b1c8982bfa57dad94803a5475157 Do
 Q
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 386.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
+BT 1 0 0 1 48 422.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 298.3898 499.2756 66 re B*
+n 48 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 346.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 383.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 325.3898 Tm /F3+0 10 Tf 12 TL (surgical-navigation-clip-01) Tj T* ET
+BT 1 0 0 1 60 364.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-clip-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 309.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 223.3898 499.2756 66 re B*
+n 48 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 271.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 250.3898 Tm /F3+0 10 Tf 12 TL (surgical-navigation-poster-01) Tj T* ET
+BT 1 0 0 1 60 290.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-poster-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 234.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 148.3898 499.2756 66 re B*
+n 48 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 196.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 175.3898 Tm /F3+0 10 Tf 12 TL (surgical-navigation-gallery-01) Tj T* ET
+BT 1 0 0 1 60 216.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-gallery-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 159.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 73.38976 499.2756 66 re B*
+n 48 112.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 121.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 161.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 100.3898 Tm /F3+0 10 Tf 12 TL (surgical-navigation-gallery-02) Tj T* ET
+BT 1 0 0 1 60 142.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-gallery-02) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 84.38976 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 128.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -1.610236 499.2756 66 re B*
+n 304.6378 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 46.38976 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 383.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 25.38976 Tm /F3+0 10 Tf 12 TL (surgical-navigation-gallery-03) Tj T* ET
+BT 1 0 0 1 316.6378 364.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-gallery-03) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 9.389764 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -76.61024 499.2756 66 re B*
+n 304.6378 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -28.61024 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -49.61024 Tm /F3+0 10 Tf 12 TL (surgical-navigation-gallery-04) Tj T* ET
+BT 1 0 0 1 316.6378 290.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-gallery-04) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -65.61024 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -151.6102 499.2756 66 re B*
+n 304.6378 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -103.6102 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -124.6102 Tm /F3+0 10 Tf 12 TL (surgical-navigation-gallery-05) Tj T* ET
+BT 1 0 0 1 316.6378 216.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-gallery-05) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -140.6102 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -226.6102 499.2756 66 re B*
+n 304.6378 112.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -178.6102 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 161.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -199.6102 Tm /F3+0 10 Tf 12 TL (surgical-navigation-gallery-06) Tj T* ET
+BT 1 0 0 1 316.6378 142.3898 Tm /F3+0 9 Tf 10.8 TL (surgical-navigation-gallery-06) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -215.6102 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 128.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 -241.6102 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
+BT 1 0 0 1 48 98.38976 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 -265.6102 Tm /F2+0 9.5 Tf 11.4 TL (Working device connections, coordinate transforms, spatial placement, and registration-feedback demonstrations) Tj T* ET
-BT 1 0 0 1 48 -280.6102 Tm /F2+0 9.5 Tf 11.4 TL (provide the evidence.) Tj T* ET
+BT 1 0 0 1 48 74.38976 Tm /F2+0 9.5 Tf 11.4 TL (Working device connections, coordinate transforms, spatial placement, and registration-feedback demonstrations) Tj T* ET
+BT 1 0 0 1 48 59.38976 Tm /F2+0 9.5 Tf 11.4 TL (provide the evidence.) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 4303
+/Length 4386
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1172,9 +1172,9 @@ BT 1 0 0 1 48 761.8898 Tm /F3+0 22 Tf 26.4 TL (Role, team result, and limits) Tj
 .062745 .090196 .082353 RG
 n 48 731.3898 m 547.2756 731.3898 l S
 .933333 .945098 .937255 rg
-n 48 614.3898 499.2756 96 re f*
+n 48 590.3898 499.2756 120 re f*
 .662745 .294118 .196078 rg
-n 48 614.3898 4 96 re f*
+n 48 590.3898 4 120 re f*
 .662745 .294118 .196078 rg
 BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / CLINICAL BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -1182,51 +1182,52 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Clinical boundary) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (An integration demonstration does not establish clinical efficacy or production deployment.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 486.3898 499.2756 116 re f*
+n 48 462.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
-n 48 486.3898 4 116 re f*
+n 48 462.3898 4 116 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 580.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
+BT 1 0 0 1 64 556.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Led integrated software and HoloLens spatial placement and registration) Tj T* ET
-BT 1 0 0 1 64 540.3898 Tm /F3+0 13 Tf 15.6 TL (feedback.) Tj T* ET
+BT 1 0 0 1 64 534.3898 Tm /F3+0 13 Tf 15.6 TL (Led integrated software and HoloLens spatial placement and registration) Tj T* ET
+BT 1 0 0 1 64 516.3898 Tm /F3+0 13 Tf 15.6 TL (feedback.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 518.3898 Tm /F2+0 9.5 Tf 11.4 TL (Led the integrated software across device, SDK, coordinate transforms, and data flow, plus the HoloLens) Tj T* ET
-BT 1 0 0 1 64 503.3898 Tm /F2+0 9.5 Tf 11.4 TL (spatial-placement and registration-feedback experience.) Tj T* ET
+BT 1 0 0 1 64 494.3898 Tm /F2+0 9.5 Tf 11.4 TL (Led the integrated software across device, SDK, coordinate transforms, and data flow, plus the HoloLens) Tj T* ET
+BT 1 0 0 1 64 479.3898 Tm /F2+0 9.5 Tf 11.4 TL (spatial-placement and registration-feedback experience.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 358.3898 499.2756 116 re f*
+n 48 280.3898 499.2756 170 re f*
 .047059 .419608 .368627 rg
-n 48 358.3898 4 116 re f*
+n 48 280.3898 4 170 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 452.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
+BT 1 0 0 1 64 428.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (The team and external collaborators jointly conducted integration) Tj T* ET
-BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (demonstrations and acceptance reviews; those results are not attributed) Tj T* ET
+BT 1 0 0 1 64 406.3898 Tm /F3+0 13 Tf 15.6 TL (The team and external collaborators jointly conducted integration) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (demonstrations and acceptance reviews; those results are not attributed) Tj T* ET
+BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (as individual outcomes.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (Working device connections, coordinate transforms, spatial placement, and registration-feedback) Tj T* ET
-BT 1 0 0 1 64 375.3898 Tm /F2+0 9.5 Tf 11.4 TL (demonstrations provide the evidence.) Tj T* ET
+BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Working device connections, coordinate transforms, spatial placement, and registration-feedback) Tj T* ET
+BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (demonstrations provide the evidence.) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 200.3898 243.6378 146 re S
+n 48 122.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
-BT 1 0 0 1 60 326.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
+BT 1 0 0 1 60 248.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (The demonstration shows integrated operation on) Tj T* ET
-BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (a phantom; it does not claim clinical efficacy or) Tj T* ET
-BT 1 0 0 1 60 274.3898 Tm /F3+0 9 Tf 10.8 TL (production deployment.) Tj T* ET
+BT 1 0 0 1 60 224.3898 Tm /F3+0 9 Tf 10.8 TL (The demonstration shows integrated operation on) Tj T* ET
+BT 1 0 0 1 60 210.3898 Tm /F3+0 9 Tf 10.8 TL (a phantom; it does not claim clinical efficacy or) Tj T* ET
+BT 1 0 0 1 60 196.3898 Tm /F3+0 9 Tf 10.8 TL (production deployment.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (Demonstration clip from the HoloLens viewpoint: a hologram) Tj T* ET
-BT 1 0 0 1 60 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (registered on a skull phantom with a tracked pointer.) Tj T* ET
+BT 1 0 0 1 60 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (Demonstration clip from the HoloLens viewpoint: a hologram) Tj T* ET
+BT 1 0 0 1 60 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (registered on a skull phantom with a tracked pointer.) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 200.3898 243.6378 146 re S
+n 303.6378 122.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 326.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
+BT 1 0 0 1 315.6378 248.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (Joint review spans tracking hardware, medical) Tj T* ET
-BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (imaging, XR, and workflow expertise.) Tj T* ET
+BT 1 0 0 1 315.6378 224.3898 Tm /F3+0 9 Tf 10.8 TL (Joint review spans tracking hardware, medical) Tj T* ET
+BT 1 0 0 1 315.6378 210.3898 Tm /F3+0 9 Tf 10.8 TL (imaging, XR, and workflow expertise.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 315.6378 266.3898 Tm /F2+0 7.6 Tf 9.12 TL (Connect tracking devices, SDKs, coordinate transforms, data) Tj T* ET
-BT 1 0 0 1 315.6378 255.3898 Tm /F2+0 7.6 Tf 9.12 TL (flow, and HoloLens spatial presentation into one) Tj T* ET
-BT 1 0 0 1 315.6378 244.3898 Tm /F2+0 7.6 Tf 9.12 TL (surgical-navigation experience.) Tj T* ET
+BT 1 0 0 1 315.6378 188.3898 Tm /F2+0 7.6 Tf 9.12 TL (Connect tracking devices, SDKs, coordinate transforms, data) Tj T* ET
+BT 1 0 0 1 315.6378 177.3898 Tm /F2+0 7.6 Tf 9.12 TL (flow, and HoloLens spatial presentation into one) Tj T* ET
+BT 1 0 0 1 315.6378 166.3898 Tm /F2+0 7.6 Tf 9.12 TL (surgical-navigation experience.) Tj T* ET
  
 endstream
 endobj
@@ -1318,9 +1319,9 @@ xref
 0000679446 00000 n 
 0000681960 00000 n 
 0000685078 00000 n 
-0000690545 00000 n 
-0000696232 00000 n 
-0000700587 00000 n 
+0000690547 00000 n 
+0000696322 00000 n 
+0000700760 00000 n 
 trailer
 <<
 /ID 
@@ -1332,5 +1333,5 @@ trailer
 /Size 35
 >>
 startxref
-703085
+703258
 %%EOF

@@ -320,8 +320,8 @@
         diagram: {
           kind: 'sync-topology',
           translations: {
-            ko: { title: '3인 세션 공유 상태', nodes: ['의사·환자 3인 세션', 'PUN2 공유 상태', 'Photon Voice', 'DICOM 3D · 계측 패널'] },
-            en: { title: 'Three-user shared state', nodes: ['Three-user session', 'PUN2 shared state', 'Photon Voice', 'DICOM 3D and measurements'] }
+            ko: { title: '3인 세션 공유 상태', nodes: ['PUN2 공유 상태', '의사1 (Master)', '환자', '의사2'] },
+            en: { title: 'Three-user shared state', nodes: ['PUN2 shared state', 'Clinician 1 (Master)', 'Patient', 'Clinician 2'] }
           }
         }
       },
@@ -332,11 +332,11 @@
           summary: '접속 순서로 역할이 정해지는 3인 VR 상담 세션을 Unity와 Photon PUN2·Voice로 구현하고, 환자 CT에서 만든 3D 악골 모델과 계측 패널을 세 시점이 같은 상태로 공유하도록 만들었습니다.',
           problem: '턱교정 수술 상담은 2D 계측과 3D 골격 변화를 같이 설명해야 하는데, 모니터 한 대를 함께 보는 방식으로는 의료진과 환자가 같은 지점을 보고 있는지 확인할 방법이 없었습니다.',
           role: 'Unity 클라이언트 전체를 맡아 Photon 룸과 역할 배정, 모델 자세·분절·페이지 상태 동기화, 음성 채팅과 발화자 표시, DICOM 볼륨 로딩, 백엔드 연동을 구현했고, 특정 제조사 SDK 의존을 걷어내고 OpenXR·Android XR로 옮기는 이식까지 수행했습니다.',
-          teamResult: '소프트웨어 저작권 등록과 환자 데모·설문, 외부 기관 실증 계획은 연구팀 공동 결과이며 각각의 범위를 구분해 적습니다.',
-          evidence: '세 참가자 시점을 동시에 녹화한 상담 세션 클립이 근거입니다. 한 사람이 모델을 움직이면 세 화면이 같은 자세와 같은 계측값을 보여줍니다.',
+          teamResult: '소프트웨어 저작권 등록과 환자 데모·설문조사, 외부 병원 실증 계획은 연구팀 공동 결과입니다. 데모와 설문조사는 진행 중이고 외부 실증은 아직 예정 단계이므로, 확정된 것과 계획인 것을 구분해 적습니다.',
+          evidence: '세 참가자 시점을 동시에 녹화한 상담 세션 클립이 근거입니다. 왼쪽 의사1(Master), 가운데 환자, 오른쪽 의사2 화면이 한 프레임에 들어 있어, 한 사람의 조작이 나머지 두 화면에 같은 자세와 같은 계측값으로 나타나는지를 그대로 대조할 수 있습니다.',
           limitation: '클립은 동기화와 공간 배치가 동작함을 보여줄 뿐, 상담 품질이나 치료 결과가 나아졌다고 주장하지 않습니다.',
           collaboration: '구강악안면외과 의료진이 상담 시나리오와 화면 구성을 검토했고, 연구팀과 함께 착용 세션을 진행했습니다.',
-          mediaAlt: '같은 VR 상담실을 세 참가자 시점에서 동시에 보여주는 3분할 화면. 세 화면 모두 같은 3D 두개골·악골 모델을 표시한다.', mediaCaption: '3인 VR 상담 세션을 참가자별 시점으로 동시에 녹화한 24초 클립입니다. 한 사람이 모델을 움직이면 세 화면에 같이 반영됩니다.',
+          mediaAlt: '왼쪽부터 의사1(Master)·환자·의사2 시점을 나란히 놓은 3분할 화면. 세 화면 모두 같은 3D 두개골·악골 모델을 같은 자세로 표시한다.', mediaCaption: '3인 VR 상담 세션을 참가자별 시점으로 동시에 녹화한 24초 클립입니다. 왼쪽이 의사1(Master), 가운데가 환자, 오른쪽이 의사2 시점이며, 한 사람이 모델을 움직이면 세 화면에 같이 반영됩니다.',
           status: '진행 중', cardProblem: '의료진과 환자가 같은 3D 수술계획을 같은 상태로 봅니다.', cardOwnedRole: '3인 VR 상담 Unity 클라이언트 전체를 구현했습니다.', cardEvidence: '세 시점을 동시에 녹화한 상담 세션 클립이 근거입니다.', problemSummary: '3인이 같은 VR 공간에서 같은 수술계획을 보게 만듭니다.', ownedRole: 'Photon 동기화부터 DICOM 로딩, 플랫폼 이식까지 클라이언트를 구현했습니다.', verifiedEvidence: '세 시점이 같은 모델 자세와 계측값을 보여주는 상담 세션 클립이 근거입니다.', visualAlt: '3인 VR 상담 세션의 3분할 동시 시점.', visualCaption: '3인 VR 상담 세션 동시 시점 클립.'
         },
         en: {
@@ -345,19 +345,19 @@
           summary: 'Built a three-user VR consultation session in Unity with Photon PUN2 and Voice, where roles are assigned by join order and all three viewpoints share the same state of a CT-derived 3D jaw model and its measurement panel.',
           problem: 'Orthognathic consultation has to explain 2D measurements and 3D skeletal change at once, and gathering around a single monitor gave no way to confirm that clinician and patient were looking at the same thing.',
           role: 'Owned the Unity client end to end: Photon rooms and role assignment, synchronization of model pose, segments, and page state, voice chat with speaker indication, DICOM volume loading, and backend integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR.',
-          teamResult: 'Software copyright registration, the patient demonstration and survey, and the planned external validation are joint research-team results, each stated only to its own scope.',
-          evidence: 'A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence: when one person moves the model, all three views show the same pose and the same measurements.',
+          teamResult: 'Software copyright registration, the patient demonstration and survey, and the planned external-hospital validation are joint research-team results. The demonstration and survey are under way and the external validation is still planned, so what is settled is kept separate from what is intended.',
+          evidence: 'A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence. Clinician 1 (master), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one person moving the model leaves the other two views showing the same pose and the same measurements.',
           limitation: 'The clip shows that synchronization and spatial layout work; it claims no improvement in consultation quality or treatment outcome.',
           collaboration: 'Oral and maxillofacial surgeons reviewed the consultation scenario and screen layout, and ran the headset sessions with the research team.',
-          mediaAlt: 'A three-panel view showing the same VR consultation room from three participant viewpoints at once, each displaying the same 3D skull and jaw model.', mediaCaption: 'A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at once; moving the model in one view updates all three.',
+          mediaAlt: 'A three-panel view showing, left to right, the viewpoints of clinician 1 (master), the patient, and clinician 2, each displaying the same 3D skull and jaw model in the same pose.', mediaCaption: 'A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at once: clinician 1 (master) on the left, the patient in the middle, clinician 2 on the right; moving the model in one view updates all three.',
           status: 'Ongoing', cardProblem: 'Let clinicians and a patient see the same 3D surgical plan in the same state.', cardOwnedRole: 'Implemented the whole Unity client for the three-user VR consultation.', cardEvidence: 'A consultation-session clip recorded from three viewpoints at once is the evidence.', problemSummary: 'Put three people in one VR space looking at the same surgical plan.', ownedRole: 'Implemented the client from Photon synchronization to DICOM loading and the platform port.', verifiedEvidence: 'A consultation clip in which all three viewpoints show the same model pose and measurements is the evidence.', visualAlt: 'Three simultaneous viewpoints of a three-user VR consultation session.', visualCaption: 'Simultaneous three-viewpoint clip of a VR consultation session.'
         }
       },
       blocks: [
         { key: 'shared-state', type: 'system', translations: { ko: { heading: '공유 상태', body: '접속 순서로 의사·환자·의사 세 역할을 배정하고, 모델 자세와 분절 상태, 페이지 번호, 발화자 표시를 세 참가자에게 같이 반영했습니다.' }, en: { heading: 'Shared state', body: 'Assigned the clinician, patient, and clinician roles by join order, and reflected model pose, segment state, page number, and speaker indication to all three participants together.' } } },
-        { key: 'xr-application', type: 'text', translations: { ko: { heading: '클라이언트 범위', body: '로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다.' }, en: { heading: 'Client scope', body: 'Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset.' } } },
+        { key: 'xr-application', type: 'text', translations: { ko: { heading: '상담 공간과 클라이언트 범위', body: '의사1(Master)·환자·의사2 세 자리와 2D 계측 패널, 3D 모델 영역의 위치를 상담 동선에 맞춰 배치 설계했습니다. 로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다.' }, en: { heading: 'Consultation space and client scope', body: 'Laid out the room around the consultation itself: three seats for clinician 1 (master), the patient, and clinician 2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset.' } } },
         { key: 'multiuser-demo', type: 'evidence', translations: { ko: { heading: '멀티유저 시연', body: '세 참가자의 시점을 동시에 녹화해, 한쪽의 조작이 나머지 두 화면에 같은 상태로 나타나는지를 근거로 삼습니다.' }, en: { heading: 'Multi-user demonstration', body: 'Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the other two views show the same state.' } } },
-        { key: 'adoption-boundary', type: 'limitation', translations: { ko: { heading: '채택 경계', body: '연구팀의 등록·데모·실증 계획을 개인 성과나 임상 효과로 확대하지 않습니다.' }, en: { heading: 'Adoption boundary', body: 'Do not turn the research team registration, demonstrations, or validation plans into individual or clinical-outcome claims.' } } }
+        { key: 'adoption-boundary', type: 'limitation', translations: { ko: { heading: '채택 경계', body: '환자 데모와 설문조사는 진행 중이고 외부 병원 실증은 예정 단계입니다. 연구팀의 등록·데모·실증 계획을 개인 성과나 임상 효과로 확대하지 않습니다.' }, en: { heading: 'Adoption boundary', body: 'The patient demonstration and survey are under way and the external-hospital validation is still planned. Do not turn the research team registration, demonstrations, or validation plans into individual or clinical-outcome claims.' } } }
       ]
     }),
     project({
@@ -424,17 +424,23 @@
       media: {
         lead: { id: 'respiratory-surface-guidance-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-lead-01.png' },
         gallery: [
+          { id: 'respiratory-surface-guidance-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-01.png', translations: { ko: { caption: '치료 세션에서 표면유도가 맡는 자리 — 전날 레퍼런스 표면, 당일 셋업 오차 확인, 치료 중 실시간 감시', alt: '전날·당일·치료 중 세 단계로 나눈 표면유도 워크플로우 도해' }, en: { caption: 'Where surface guidance sits in a session: reference surface the day before, setup check on the day, live monitoring during treatment', alt: 'Diagram of the surface-guidance workflow in three stages: day before, treatment day, during treatment' } } },
+          { id: 'respiratory-surface-guidance-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-02.png', translations: { ko: { caption: '검증에 사용한 상용 3D 센서 5종 — ToF 3종, 구조광 1종, 액티브 스테레오 1종', alt: '책상 위에 나란히 놓인 상용 3D 깊이 센서 다섯 대' }, en: { caption: 'The five commercial 3D sensors put through validation: three ToF, one structured-light, one active-stereo', alt: 'Five commercial 3D depth sensors lined up on a desk' } } },
+          { id: 'respiratory-surface-guidance-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-03.png', translations: { ko: { caption: '센서 5종의 거리별 정밀도 σ·실측 fps·유효 픽셀 비율(본인 측정)', alt: '상용 3D 센서 5종의 거리별 정밀도 σ, 실측 fps, 유효 픽셀 비율 실측표' }, en: { caption: 'Measured precision σ, delivered fps, and fill rate for the five sensors by distance (author-measured)', alt: 'Table of measured precision, frame rate, and fill rate for five commercial 3D sensors by distance' } } },
+          { id: 'respiratory-surface-guidance-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-04.png', translations: { ko: { caption: '실측에서 나온 운용 조건 네 가지 — 근거리 노출, 워밍업, 재현성, 노출 단위 불일치', alt: '센서 검증에서 확인한 운용 조건 네 가지를 정리한 도해' }, en: { caption: 'Four operating conditions the measurements produced: near-field exposure, warm-up, repeatability, mismatched exposure units', alt: 'Figure summarising four operating conditions found during sensor validation' } } },
+          { id: 'respiratory-surface-guidance-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-05.png', translations: { ko: { caption: '원거리 트랙 — 여러 시점의 점군을 병합해 표면을 만들고 계획 CT에 정합합니다', alt: '천장 센서, 부분 점군 병합, 표면 재구성, CT 정합 네 단계를 보여주는 도해' }, en: { caption: 'Far-field track: merge point clouds from several viewpoints, reconstruct the surface, register it to the planning CT', alt: 'Diagram of four steps: ceiling sensors, partial point-cloud merge, surface reconstruction, CT registration' } } },
+          { id: 'respiratory-surface-guidance-gallery-06', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-06.png', translations: { ko: { caption: '근거리 트랙 — 흉·복부 ROI 깊이를 호흡 파형으로 바꾸고 게이팅 윈도우를 판정합니다', alt: '깊이 카메라, 흉부·복부 ROI, 정규화된 호흡 파형과 게이팅 윈도우를 보여주는 도해' }, en: { caption: 'Near-field track: chest and abdomen ROI depth becomes a respiratory waveform, and the gating window is judged on it', alt: 'Diagram of a depth camera, chest and abdomen ROIs, a normalised respiratory waveform, and the gating window' } } }
         ]
       },
       pdf: { ko: 'assets/pdfs/respiratory-surface-guidance-ko.pdf', en: 'assets/pdfs/respiratory-surface-guidance-en.pdf' },
       pdfSequence: {
-        middle: ['surface-to-signal', 'sensor-validation', 'measured-precision', 'research-boundary'],
+        middle: ['two-track-optics', 'dtdepthscan', 'validation-protocol', 'measured-findings'],
         evidenceId: 'respiratory-surface-guidance-lead-01',
         diagram: {
           kind: 'surface-gating-chain',
           translations: {
-            ko: { title: '광학 표면에서 게이팅 신호까지', nodes: ['3D 센서', '표면·ROI 깊이', '호흡 파형', '게이팅·정합 출력'] },
-            en: { title: 'Optical surface to gating signal', nodes: ['3D sensor', 'Surface and ROI depth', 'Respiratory waveform', 'Gating and registration output'] }
+            ko: { title: '두 광학 트랙이 하나의 출력으로 모인다', nodes: ['3D 광학 센서', '원거리 — 표면 재구성·CT 정합', '근거리 — ROI 깊이·호흡 파형', '셋업 오차·게이팅 트리거'] },
+            en: { title: 'Two optical tracks converging on one output', nodes: ['3D optical sensors', 'Far field: surface reconstruction and CT registration', 'Near field: ROI depth and respiratory waveform', 'Setup offset and gating trigger'] }
           }
         }
       },
@@ -442,34 +448,35 @@
         ko: {
           title: '표면유도 호흡추적 (SGRT)', shortTitle: '표면유도 호흡추적', eyebrow: '의료 코어 · 방사선치료 연구',
           thesis: '환자 체표면을 광학 3D로 읽어 셋업 정합과 호흡 게이팅 신호를 만드는 표면유도 방사선치료(SGRT)의 광학 파트를 국산 센서 스택으로 구성합니다.',
-          summary: 'K-LINAC 대과제(주관 한국전기연구원, 세부주관 ETRI)의 디지트랙 위탁 연구로, 원거리 표면 재구성과 근거리 실시간 호흡 추적을 상용 3D 센서로 구현하는 초기 단계 연구입니다.',
-          problem: '치료 중 환자의 위치와 호흡을 추가 촬영·피부 마킹 없이 알아야 하는데, 기존 상용 시스템은 고가의 외산이며 센서·알고리즘 선택 근거가 공개되어 있지 않습니다.',
-          role: '센서 검증 실험을 총괄하며 자체 검증 도구 DtDepthScan(Qt·VTK·OpenCV)을 개발했고, ROI 깊이에서 호흡 파형과 게이팅 신호를 뽑는 추적 알고리즘 설계·구현, 센서 인터페이스와 전송 프로토콜 정의, 과제 실무를 담당합니다.',
-          teamResult: '컨소시엄이 4DCT 재구성, 영상유도 체계, 임상 자문을 나누어 맡고 있으며 임상 기관은 서울성모병원 방사선종양학과입니다. 과제 전체 성과를 개인 성과로 쓰지 않습니다.',
-          evidence: '상용 3D 센서 5종을 0.5~3 m 거리에서 실리콘 인체 팬텀으로 측정한 정밀도(σ)·실측 fps·Fill rate 표와 DtDepthScan 화면이 본인 측정 근거입니다.',
+          summary: 'K-LINAC 대과제(주관 한국전기연구원, 세부주관 ETRI)의 디지트랙 위탁 연구로, 원거리 표면 재구성과 근거리 실시간 호흡 추적을 상용 3D 센서로 구현하는 초기 단계 연구입니다. 상용 시스템은 센서·알고리즘 선택 근거를 공개하지 않아, 국산 스택은 그 근거부터 직접 만들어야 합니다.',
+          problem: '치료 중 환자의 위치와 호흡을 추가 촬영이나 피부 마킹 없이 알아야 합니다. 어떤 센서가 어느 거리에서 얼마나 정확한지부터 직접 재야 했습니다.',
+          role: '센서 검증 실험을 총괄하고, 그 실험을 하려고 자체 검증 도구 DtDepthScan(Qt·VTK·OpenCV)을 먼저 만들었습니다 — Raw 연속 녹화와 취득 시각 기록, ROI 깊이 시계열, σ·실측 fps·유효 픽셀 비율 자동 산출, 외부 교차 검증용 PLY·CSV 내보내기. 이어서 ROI 깊이에서 호흡 파형과 게이팅 신호를 뽑는 추적 알고리즘 설계·구현, 센서 인터페이스와 전송 프로토콜 정의, 과제 실무를 담당합니다.',
+          teamResult: '컨소시엄이 4DCT 재구성, 영상유도 체계, 임상 자문을 나눠 맡습니다. 과제 전체 성과를 개인 성과로 쓰지 않습니다.',
+          evidence: '실리콘 인체 팬텀을 0.5~3.0 m 다섯 구간에서 상용 3D 센서 5종으로 총 55회, 회당 500프레임 측정해 정밀도 σ·실측 fps·유효 픽셀 비율을 냈습니다. 반복 재현성은 ±0.05 mm였고 σ는 약 50프레임에서 수렴했습니다. 이 실측표와 DtDepthScan 화면이 본인 측정 근거입니다.',
           limitation: '1차년도 센서 검증 결과이며 임상 성능이나 과제 목표 달성을 주장하지 않고 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
-          collaboration: '방사선종양학, 4DCT 재구성, 영상유도 체계, 통합 제어 담당 기관과 인터페이스를 맞춥니다.',
-          mediaAlt: '상용 3D 센서 5종의 거리별 정밀도 σ·fps·유효 픽셀 비율 실측표.', mediaCaption: '상용 3D 센서 5종의 거리별 정밀도 실측표(본인 측정, 자체 검증 도구 DtDepthScan)입니다.',
+          collaboration: '임상 기관은 서울성모병원 방사선종양학과이고, 4DCT 재구성·영상유도 체계·통합 제어 담당 기관과 인터페이스를 맞춥니다.',
+          mediaAlt: 'DtDepthScan 측정 화면 — 팬텀 점군 위에 지정한 ROI 상자와 시간 노이즈 σ 판독값.', mediaCaption: '자체 검증 도구 DtDepthScan으로 실리콘 인체 팬텀을 재는 화면입니다. 점군 위 ROI에서 평균 깊이와 시간 노이즈 σ를 실시간으로 산출합니다. 장비 시리얼과 주소는 가렸습니다.',
           status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측표; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '센서 정밀도 실측표.', visualCaption: '센서 5종 거리별 정밀도 실측표.'
         },
         en: {
           title: 'Surface-guided Respiratory Tracking (SGRT)', shortTitle: 'Surface-guided Respiratory Tracking', eyebrow: 'Medical Core · Radiotherapy Research',
           thesis: 'Build the optical part of surface-guided radiotherapy — patient-surface setup registration and respiratory gating — on a domestic 3D sensor stack.',
-          summary: 'An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme (led by KERI, imaging sub-project led by ETRI): far-field surface reconstruction and near-field real-time breathing tracking with commercial 3D sensors.',
-          problem: 'Patient position and breathing must be known during treatment without extra imaging or skin marks; the existing commercial system is imported and its sensor and algorithm choices are not documented publicly.',
-          role: 'Lead the sensor validation campaign and wrote the in-house validation tool DtDepthScan (Qt, VTK, OpenCV); design and implement the breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal; define the sensor interface and transport protocol; run day-to-day project work.',
-          teamResult: 'Consortium partners own 4DCT reconstruction, the image-guidance framework, and clinical advice; the clinical partner is the radiation oncology department of Seoul St. Mary\'s Hospital. Programme-level results are not attributed to me.',
-          evidence: 'My own measurements: precision (σ), measured fps, and fill rate for five commercial 3D sensors at 0.5–3 m against a silicone body phantom, plus DtDepthScan captures.',
+          summary: 'An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme (led by KERI, imaging sub-project led by ETRI): far-field surface reconstruction and near-field real-time breathing tracking with commercial 3D sensors. Commercial systems do not publish the reasoning behind their sensor and algorithm choices, so a domestic stack has to build that evidence itself.',
+          problem: 'Patient position and breathing must be known during treatment without extra imaging or skin marks.',
+          role: 'Lead the sensor validation campaign, which first required building the in-house tool DtDepthScan (Qt, VTK, OpenCV): raw continuous recording with acquisition timestamps, ROI depth time series, automatic σ, delivered fps and fill rate, and PLY/CSV export for cross-checking elsewhere. Then design and implement the breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal, define the sensor interface and transport protocol, and run day-to-day project work.',
+          teamResult: 'Consortium partners own 4DCT reconstruction, the image-guidance framework, and clinical advice. Programme-level results are not attributed to me.',
+          evidence: 'A silicone body phantom measured at five distances from 0.5 to 3.0 m with five commercial 3D sensors, 55 runs of 500 frames each, gave precision σ, delivered fps, and fill rate; repeats agreed to within ±0.05 mm. That table and the DtDepthScan captures are my own measurements.',
           limitation: 'First-year sensor validation only; no clinical performance or programme-target achievement is claimed, and programme targets, budgets, and metrics of other institutions are not published here.',
-          collaboration: 'Interfaces are agreed with radiation oncology, 4DCT reconstruction, image guidance, and integrated-control partners.',
-          mediaAlt: 'Measured precision σ, fps, and fill rate of five commercial 3D sensors by distance.', mediaCaption: 'Measured precision of five commercial 3D sensors by distance (author-measured with the in-house tool DtDepthScan).',
+          collaboration: 'The clinical partner is the radiation oncology department of Seoul St. Mary\'s Hospital; interfaces are agreed with 4DCT reconstruction, image guidance, and integrated-control partners.',
+          mediaAlt: 'DtDepthScan measurement screen with an ROI box on the phantom point cloud and the temporal-noise σ readout.', mediaCaption: 'The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise σ are computed live from the ROI on the point cloud. Device serial and address are masked.',
           status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision table by distance; no clinical claim.', problemSummary: 'Surface-based setup registration and gating signals on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate table.', visualAlt: 'Sensor precision measurement table.', visualCaption: 'Five-sensor precision table by distance.'
         }
       },
       blocks: [
-        { key: 'surface-to-signal', type: 'system', translations: { ko: { heading: '표면에서 신호까지', body: '원거리 센서는 표면 재구성과 계획 CT 정합을, 근거리 센서는 흉·복부 ROI 깊이에서 호흡 파형과 게이팅 신호를 맡도록 역할을 나눴습니다.' }, en: { heading: 'Surface to signal', body: 'Far-field sensors reconstruct the surface for planning-CT registration; near-field sensors turn chest and abdomen ROI depth into a respiratory waveform and gating signal.' } } },
-        { key: 'sensor-validation', type: 'text', translations: { ko: { heading: '센서 검증 설계', body: '카메라 추상화 구조의 DtDepthScan으로 센서 5종을 같은 절차(거리 5구간, 회당 500프레임)로 녹화해 정밀도·fps·Fill rate를 비교했습니다.' }, en: { heading: 'Sensor validation design', body: 'DtDepthScan abstracts the camera layer so five sensors run the same protocol — five distances, 500 frames per run — for precision, fps, and fill-rate comparison.' } } },
-        { key: 'measured-precision', type: 'evidence', translations: { ko: { heading: '측정 근거', body: '거리별 ROI 평균 깊이의 시간 σ, 노출·워밍업에 따른 변화, 반복 측정 재현성을 표로 남겼습니다.' }, en: { heading: 'Measured evidence', body: 'Temporal σ of ROI mean depth by distance, exposure and warm-up effects, and repeat-measurement reproducibility are tabulated.' } } },
+        { key: 'two-track-optics', type: 'system', translations: { ko: { heading: '두 트랙으로 나눈 광학', body: '원거리 센서는 점군을 병합해 표면을 만들고 계획 CT에 정합하며, 근거리 센서는 흉·복부 ROI 깊이를 호흡 파형과 게이팅 신호로 바꿉니다.' }, en: { heading: 'Two optical tracks', body: 'Far-field sensors merge point clouds into a surface and register it to the planning CT; near-field sensors turn chest and abdomen ROI depth into a respiratory waveform and gating signal.' } } },
+        { key: 'dtdepthscan', type: 'text', translations: { ko: { heading: '검증 도구를 먼저 만들었다', body: '카메라 계층을 추상화해 어떤 센서든 같은 절차를 돌립니다. 취득 시각을 남긴 Raw 연속 녹화로 실측 fps를 재고, ROI 깊이 시계열에서 σ와 유효 픽셀 비율을 자동 산출하며, PLY·CSV로 내보내 교차 검증합니다.' }, en: { heading: 'The tool came first', body: 'Abstracting the camera layer lets any sensor run the same procedure. Timestamped raw recording gives delivered fps, ROI depth time series yield σ and fill rate automatically, and PLY and CSV export allow cross-checking elsewhere.' } } },
+        { key: 'validation-protocol', type: 'list', translations: { ko: { heading: '다섯 대를 같은 절차로 재다', items: ['실리콘 인체 팬텀 고정, 0.5~3.0 m 다섯 거리', '센서 5종·조건 스윕 포함 총 55회', '회당 500프레임 연속 취득', '재현성 ±0.05 mm, σ 50프레임 수렴'] }, en: { heading: 'One procedure, five sensors', items: ['Silicone body phantom, five distances 0.5-3.0 m', 'Five sensors and condition sweeps, 55 runs', '500 frames per run', 'Repeatability ±0.05 mm, σ settles by 50 frames'] } } },
+        { key: 'measured-findings', type: 'evidence', translations: { ko: { heading: '숫자보다 조건이 남았다', body: '더 오래 쓸 결과는 운용 조건이었습니다. 0.5 m에서 기본 노출은 IR 포화로 측정이 안 되고, 콜드스타트 σ는 열평형 대비 최대 1.7배 나빠집니다. 둘 다 실시간 모듈의 설계 입력이 됐습니다.' }, en: { heading: 'The conditions outlived the numbers', body: 'The operating conditions will outlast the σ table. At 0.5 m the default exposure saturates the IR return and no depth is produced, and from a cold start σ is up to 1.7 times worse than at thermal steady state. Both became design inputs for the real-time module.' } } },
         { key: 'research-boundary', type: 'limitation', translations: { ko: { heading: '연구 경계', body: '1차년도 센서·알고리즘 기초 설계 단계이며 임상 성능이나 과제 목표 달성을 주장하지 않습니다.' }, en: { heading: 'Research boundary', body: 'First-year sensor and algorithm groundwork; no clinical performance or programme-target achievement is claimed.' } } }
       ]
     }),
@@ -665,16 +672,4 @@
         { key: 'problem-to-product', type: 'system', translations: { ko: { heading: '문제에서 제품까지', body: '마찰을 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영으로 이었습니다.' }, en: { heading: 'Problem to product', body: 'Connect friction to requirements, architecture, acceptance, tests, releases, and operations.' } } },
         { key: 'human-ai-boundary', type: 'text', translations: { ko: { heading: '사람과 AI의 경계', body: 'AI는 구현을 증폭하고 사람은 맥락·수용·릴리스 판단을 소유합니다.' }, en: { heading: 'Human-AI boundary', body: 'AI amplifies implementation; people own context, acceptance, and release decisions.' } } },
         { key: 'public-product-proof', type: 'evidence', translations: { ko: { heading: '공개 제품 근거', body: '공개 저장소, 자동화 테스트, 릴리스 아티팩트를 확인 가능한 근거로 삼습니다.' }, en: { heading: 'Public product proof', body: 'Use public repositories, automated tests, and release artifacts as observable evidence.' } } },
-        { key: 'privacy-metric-boundary', type: 'limitation', translations: { ko: { heading: '개인정보·지표 경계', body: '비공개 지식 데이터와 검증되지 않은 사용자·생산성 지표를 배제합니다.' }, en: { heading: 'Privacy and metric boundary', body: 'Exclude private knowledge data and unverified user or productivity metrics.' } } }
-      ]
-    })
-  ];
-
-  return {
-    capabilities: capabilities,
-    tiers: tiers,
-    impactMetrics: impactMetrics,
-    projects: projects,
-    highlights: highlights
-  };
-});
+        { key: 

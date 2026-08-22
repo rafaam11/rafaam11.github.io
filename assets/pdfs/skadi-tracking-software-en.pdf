@@ -806,7 +806,7 @@ endstream
 endobj
 30 0 obj
 <<
-/Length 3326
+/Length 3442
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -839,40 +839,41 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (SDK layers) Tj T* ET
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Device connection, marker and frame definitions, real-time streaming, and error states are exposed) Tj T* ET
 BT 1 0 0 1 64 629.3898 Tm /F2+0 9.5 Tf 11.4 TL (through the API with language bindings.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 444.3898 499.2756 142 re f*
+n 48 411.3898 499.2756 175 re f*
 .047059 .419608 .368627 rg
-n 48 444.3898 4 142 re f*
+n 48 411.3898 4 175 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 564.3898 Tm /F3+0 7.5 Tf 9 TL (PROBLEM) Tj T* ET
 .062745 .090196 .082353 rg
 BT 1 0 0 1 64 542.3898 Tm /F3+0 13 Tf 15.6 TL (An optical tracker is not used as bare hardware: coordinate frames,) Tj T* ET
 BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (marker definitions, real-time streaming, and error states must be exposed) Tj T* ET
+BT 1 0 0 1 64 506.3898 Tm /F3+0 13 Tf 15.6 TL (through an interface application developers can work with.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (Develop and maintain the SKADI API and SDK, the Viewer that shows device state and tracking results, and) Tj T* ET
-BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (a 3D Slicer custom-application template that lets researchers start immediately.) Tj T* ET
+BT 1 0 0 1 64 484.3898 Tm /F2+0 9.5 Tf 11.4 TL (Develop and maintain the SKADI API and SDK, the Viewer that shows device state and tracking results, and) Tj T* ET
+BT 1 0 0 1 64 469.3898 Tm /F2+0 9.5 Tf 11.4 TL (a 3D Slicer custom-application template that lets researchers start immediately.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 290.3898 499.2756 142 re f*
+n 48 257.3898 499.2756 142 re f*
 .662745 .294118 .196078 rg
-n 48 290.3898 4 142 re f*
+n 48 257.3898 4 142 re f*
 .662745 .294118 .196078 rg
-BT 1 0 0 1 64 410.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
+BT 1 0 0 1 64 377.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (Device specifications, accuracy figures, customer lists, and sales numbers) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (are company-owned and not published.) Tj T* ET
+BT 1 0 0 1 64 355.3898 Tm /F3+0 13 Tf 15.6 TL (Device specifications, accuracy figures, customer lists, and sales numbers) Tj T* ET
+BT 1 0 0 1 64 337.3898 Tm /F3+0 13 Tf 15.6 TL (are company-owned and not published.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Interfaces are agreed with optical and hardware designers, customer navigation developers, and research) Tj T* ET
-BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (users.) Tj T* ET
+BT 1 0 0 1 64 315.3898 Tm /F2+0 9.5 Tf 11.4 TL (Interfaces are agreed with optical and hardware designers, customer navigation developers, and research) Tj T* ET
+BT 1 0 0 1 64 300.3898 Tm /F2+0 9.5 Tf 11.4 TL (users.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 270.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
+BT 1 0 0 1 48 237.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / Demonstration clip: the SKADI Viewer shows a tracked instrument over a skull phantom in the 3D) Tj T* ET
-BT 1 0 0 1 48 233.3898 Tm /F2+0 9.5 Tf 11.4 TL (model and section views.) Tj T* ET
+BT 1 0 0 1 48 215.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / Demonstration clip: the SKADI Viewer shows a tracked instrument over a skull phantom in the 3D) Tj T* ET
+BT 1 0 0 1 48 200.3898 Tm /F2+0 9.5 Tf 11.4 TL (model and section views.) Tj T* ET
  
 endstream
 endobj
 31 0 obj
 <<
-/Length 5908
+/Length 5987
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -899,139 +900,140 @@ BT 1 0 0 1 48 710.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Own the design, implementation, and maintenance of the API, SDK, and Viewer; wrote the 3D Slicer) Tj T* ET
 BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (custom-application template; support customer integrations and enquiries.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 549.3898 499.2756 92 re f*
+n 48 501.3898 499.2756 140 re f*
 .047059 .419608 .368627 rg
-n 48 549.3898 4 92 re f*
+n 48 501.3898 4 140 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 619.3898 Tm /F3+0 7.5 Tf 9 TL (02 / VIEWER AND TEMPLATE) Tj T* ET
 .062745 .090196 .082353 rg
 BT 1 0 0 1 64 597.3898 Tm /F3+0 13 Tf 15.6 TL (Viewer and template) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 575.3898 Tm /F2+0 9.5 Tf 11.4 TL (The Viewer verifies device state and tracking output; the Slicer template lets researchers start a navigation) Tj T* ET
+BT 1 0 0 1 64 560.3898 Tm /F2+0 9.5 Tf 11.4 TL (prototype at once.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 537.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
+BT 1 0 0 1 48 489.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 332.3898 499.2756 188 re B*
+n 48 284.3898 499.2756 188 re B*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 498.3898 Tm /F3+0 10 Tf 12 TL (Software layers from tracker to application) Tj T* ET
+BT 1 0 0 1 62 450.3898 Tm /F3+0 10 Tf 12 TL (Software layers from tracker to application) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 439.3898 m 297.6378 433.3898 l S
+n 297.6378 391.3898 m 297.6378 385.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 433.3898 m
-299.8378 434.6048 298.8528 435.5898 297.6378 435.5898 c
-296.4228 435.5898 295.4378 434.6048 295.4378 433.3898 c
-295.4378 432.1747 296.4228 431.1898 297.6378 431.1898 c
-298.8528 431.1898 299.8378 432.1747 299.8378 433.3898 c
+299.8378 385.3898 m
+299.8378 386.6048 298.8528 387.5898 297.6378 387.5898 c
+296.4228 387.5898 295.4378 386.6048 295.4378 385.3898 c
+295.4378 384.1747 296.4228 383.1898 297.6378 383.1898 c
+298.8528 383.1898 299.8378 384.1747 299.8378 385.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 403.3898 m 297.6378 397.3898 l S
+n 297.6378 355.3898 m 297.6378 349.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 397.3898 m
-299.8378 398.6048 298.8528 399.5898 297.6378 399.5898 c
-296.4228 399.5898 295.4378 398.6048 295.4378 397.3898 c
-295.4378 396.1747 296.4228 395.1898 297.6378 395.1898 c
-298.8528 395.1898 299.8378 396.1747 299.8378 397.3898 c
+299.8378 349.3898 m
+299.8378 350.6048 298.8528 351.5898 297.6378 351.5898 c
+296.4228 351.5898 295.4378 350.6048 295.4378 349.3898 c
+295.4378 348.1747 296.4228 347.1898 297.6378 347.1898 c
+298.8528 347.1898 299.8378 348.1747 299.8378 349.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 367.3898 m 297.6378 361.3898 l S
+n 297.6378 319.3898 m 297.6378 313.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 361.3898 m
-299.8378 362.6048 298.8528 363.5898 297.6378 363.5898 c
-296.4228 363.5898 295.4378 362.6048 295.4378 361.3898 c
-295.4378 360.1747 296.4228 359.1898 297.6378 359.1898 c
-298.8528 359.1898 299.8378 360.1747 299.8378 361.3898 c
+299.8378 313.3898 m
+299.8378 314.6048 298.8528 315.5898 297.6378 315.5898 c
+296.4228 315.5898 295.4378 314.6048 295.4378 313.3898 c
+295.4378 312.1747 296.4228 311.1898 297.6378 311.1898 c
+298.8528 311.1898 299.8378 312.1747 299.8378 313.3898 c
 f*
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-203.6378 439.3898 m
-391.6378 439.3898 l
-393.849 439.3898 395.6378 441.1786 395.6378 443.3898 c
-395.6378 465.3898 l
-395.6378 467.601 393.849 469.3898 391.6378 469.3898 c
-203.6378 469.3898 l
-201.4266 469.3898 199.6378 467.601 199.6378 465.3898 c
-199.6378 443.3898 l
-199.6378 441.1786 201.4266 439.3898 203.6378 439.3898 c
+203.6378 391.3898 m
+391.6378 391.3898 l
+393.849 391.3898 395.6378 393.1786 395.6378 395.3898 c
+395.6378 417.3898 l
+395.6378 419.601 393.849 421.3898 391.6378 421.3898 c
+203.6378 421.3898 l
+201.4266 421.3898 199.6378 419.601 199.6378 417.3898 c
+199.6378 395.3898 l
+199.6378 393.1786 201.4266 391.3898 203.6378 391.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 207.6378 463.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
+BT 1 0 0 1 207.6378 415.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 207.6378 446.3898 Tm /F3+0 7.2 Tf 8.64 TL (SKADI tracker) Tj T* ET
+BT 1 0 0 1 207.6378 398.3898 Tm /F3+0 7.2 Tf 8.64 TL (SKADI tracker) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-203.6378 403.3898 m
-391.6378 403.3898 l
-393.849 403.3898 395.6378 405.1786 395.6378 407.3898 c
-395.6378 429.3898 l
-395.6378 431.601 393.849 433.3898 391.6378 433.3898 c
-203.6378 433.3898 l
-201.4266 433.3898 199.6378 431.601 199.6378 429.3898 c
-199.6378 407.3898 l
-199.6378 405.1786 201.4266 403.3898 203.6378 403.3898 c
+203.6378 355.3898 m
+391.6378 355.3898 l
+393.849 355.3898 395.6378 357.1786 395.6378 359.3898 c
+395.6378 381.3898 l
+395.6378 383.601 393.849 385.3898 391.6378 385.3898 c
+203.6378 385.3898 l
+201.4266 385.3898 199.6378 383.601 199.6378 381.3898 c
+199.6378 359.3898 l
+199.6378 357.1786 201.4266 355.3898 203.6378 355.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 207.6378 427.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 207.6378 379.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 207.6378 410.3898 Tm /F3+0 7.2 Tf 8.64 TL (API and SDK) Tj T* ET
+BT 1 0 0 1 207.6378 362.3898 Tm /F3+0 7.2 Tf 8.64 TL (API and SDK) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-203.6378 367.3898 m
-391.6378 367.3898 l
-393.849 367.3898 395.6378 369.1786 395.6378 371.3898 c
-395.6378 393.3898 l
-395.6378 395.601 393.849 397.3898 391.6378 397.3898 c
-203.6378 397.3898 l
-201.4266 397.3898 199.6378 395.601 199.6378 393.3898 c
-199.6378 371.3898 l
-199.6378 369.1786 201.4266 367.3898 203.6378 367.3898 c
+203.6378 319.3898 m
+391.6378 319.3898 l
+393.849 319.3898 395.6378 321.1786 395.6378 323.3898 c
+395.6378 345.3898 l
+395.6378 347.601 393.849 349.3898 391.6378 349.3898 c
+203.6378 349.3898 l
+201.4266 349.3898 199.6378 347.601 199.6378 345.3898 c
+199.6378 323.3898 l
+199.6378 321.1786 201.4266 319.3898 203.6378 319.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 207.6378 391.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 207.6378 343.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 207.6378 374.3898 Tm /F3+0 7.2 Tf 8.64 TL (Viewer and Slicer template) Tj T* ET
+BT 1 0 0 1 207.6378 326.3898 Tm /F3+0 7.2 Tf 8.64 TL (Viewer and Slicer template) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-203.6378 331.3898 m
-391.6378 331.3898 l
-393.849 331.3898 395.6378 333.1786 395.6378 335.3898 c
-395.6378 357.3898 l
-395.6378 359.601 393.849 361.3898 391.6378 361.3898 c
-203.6378 361.3898 l
-201.4266 361.3898 199.6378 359.601 199.6378 357.3898 c
-199.6378 335.3898 l
-199.6378 333.1786 201.4266 331.3898 203.6378 331.3898 c
+203.6378 283.3898 m
+391.6378 283.3898 l
+393.849 283.3898 395.6378 285.1786 395.6378 287.3898 c
+395.6378 309.3898 l
+395.6378 311.601 393.849 313.3898 391.6378 313.3898 c
+203.6378 313.3898 l
+201.4266 313.3898 199.6378 311.601 199.6378 309.3898 c
+199.6378 287.3898 l
+199.6378 285.1786 201.4266 283.3898 203.6378 283.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 207.6378 355.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 207.6378 307.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 207.6378 338.3898 Tm /F3+0 7.2 Tf 8.64 TL (Surgical-navigation application) Tj T* ET
+BT 1 0 0 1 207.6378 290.3898 Tm /F3+0 7.2 Tf 8.64 TL (Surgical-navigation application) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 317.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 269.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 289.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 48 241.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 265.3898 Tm /F2+0 9 Tf 10.8 TL (SKADI / C++ / Python API / Viewer / 3D Slicer / Optical tracking) Tj T* ET
+BT 1 0 0 1 48 217.3898 Tm /F2+0 9 Tf 10.8 TL (SKADI / C++ / Python API / Viewer / 3D Slicer / Optical tracking) Tj T* ET
  
 endstream
 endobj
 32 0 obj
 <<
-/Length 4775
+/Length 4845
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1065,78 +1067,78 @@ BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Working Viewer, API, and templat
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 594.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 400.3898 499.2756 176 re S
+n 48 436.3898 499.2756 140 re S
 q
-298.6667 0 0 168 148.3045 404.3898 cm
+234.6667 0 0 132 180.3045 440.3898 cm
 /FormXob.cb57d1078a1a610107db061c48890b65 Do
 Q
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 386.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
+BT 1 0 0 1 48 422.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 298.3898 499.2756 66 re B*
+n 48 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 346.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 383.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 325.3898 Tm /F3+0 10 Tf 12 TL (skadi-tracking-software-clip-01) Tj T* ET
+BT 1 0 0 1 60 364.3898 Tm /F3+0 9 Tf 10.8 TL (skadi-tracking-software-clip-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 309.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 223.3898 499.2756 66 re B*
+n 48 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 271.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 250.3898 Tm /F3+0 10 Tf 12 TL (skadi-tracking-software-poster-01) Tj T* ET
+BT 1 0 0 1 60 290.3898 Tm /F3+0 9 Tf 10.8 TL (skadi-tracking-software-poster-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 234.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 148.3898 499.2756 66 re B*
+n 48 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 196.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 175.3898 Tm /F3+0 10 Tf 12 TL (skadi-tracking-software-gallery-01) Tj T* ET
+BT 1 0 0 1 60 216.3898 Tm /F3+0 9 Tf 10.8 TL (skadi-tracking-software-gallery-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 159.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 73.38976 499.2756 66 re B*
+n 304.6378 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 121.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 383.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 100.3898 Tm /F3+0 10 Tf 12 TL (skadi-tracking-software-gallery-02) Tj T* ET
+BT 1 0 0 1 316.6378 364.3898 Tm /F3+0 9 Tf 10.8 TL (skadi-tracking-software-gallery-02) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 84.38976 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -1.610236 499.2756 66 re B*
+n 304.6378 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 46.38976 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 25.38976 Tm /F3+0 10 Tf 12 TL (skadi-tracking-software-gallery-03) Tj T* ET
+BT 1 0 0 1 316.6378 290.3898 Tm /F3+0 9 Tf 10.8 TL (skadi-tracking-software-gallery-03) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 9.389764 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -76.61024 499.2756 66 re B*
+n 304.6378 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -28.61024 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -49.61024 Tm /F3+0 10 Tf 12 TL (skadi-tracking-software-gallery-04) Tj T* ET
+BT 1 0 0 1 316.6378 216.3898 Tm /F3+0 9 Tf 10.8 TL (skadi-tracking-software-gallery-04) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -65.61024 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 -91.61024 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
+BT 1 0 0 1 48 172.3898 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 -115.6102 Tm /F2+0 9.5 Tf 11.4 TL (Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site) Tj T* ET
-BT 1 0 0 1 48 -130.6102 Tm /F2+0 9.5 Tf 11.4 TL (footage is excluded.) Tj T* ET
+BT 1 0 0 1 48 148.3898 Tm /F2+0 9.5 Tf 11.4 TL (Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site) Tj T* ET
+BT 1 0 0 1 48 133.3898 Tm /F2+0 9.5 Tf 11.4 TL (footage is excluded.) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 4492
+/Length 4585
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1158,9 +1160,9 @@ BT 1 0 0 1 48 761.8898 Tm /F3+0 22 Tf 26.4 TL (Role, team result, and limits) Tj
 .062745 .090196 .082353 RG
 n 48 731.3898 m 547.2756 731.3898 l S
 .933333 .945098 .937255 rg
-n 48 614.3898 499.2756 96 re f*
+n 48 590.3898 499.2756 120 re f*
 .662745 .294118 .196078 rg
-n 48 614.3898 4 96 re f*
+n 48 590.3898 4 120 re f*
 .662745 .294118 .196078 rg
 BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / HARDWARE BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -1168,53 +1170,54 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Hardware boundary) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Specifications, accuracy, and sales are company-owned; this case covers the software layer only.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 486.3898 499.2756 116 re f*
+n 48 462.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
-n 48 486.3898 4 116 re f*
+n 48 462.3898 4 116 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 580.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
+BT 1 0 0 1 64 556.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Own the API, SDK, Viewer, and Slicer template.) Tj T* ET
+BT 1 0 0 1 64 534.3898 Tm /F3+0 13 Tf 15.6 TL (Own the API, SDK, Viewer, and Slicer template.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 536.3898 Tm /F2+0 9.5 Tf 11.4 TL (Own the design, implementation, and maintenance of the API, SDK, and Viewer; wrote the 3D Slicer) Tj T* ET
-BT 1 0 0 1 64 521.3898 Tm /F2+0 9.5 Tf 11.4 TL (custom-application template; support customer integrations and enquiries.) Tj T* ET
+BT 1 0 0 1 64 512.3898 Tm /F2+0 9.5 Tf 11.4 TL (Own the design, implementation, and maintenance of the API, SDK, and Viewer; wrote the 3D Slicer) Tj T* ET
+BT 1 0 0 1 64 497.3898 Tm /F2+0 9.5 Tf 11.4 TL (custom-application template; support customer integrations and enquiries.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 358.3898 499.2756 116 re f*
+n 48 280.3898 499.2756 170 re f*
 .047059 .419608 .368627 rg
-n 48 358.3898 4 116 re f*
+n 48 280.3898 4 170 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 452.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
+BT 1 0 0 1 64 428.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (Device hardware, optical and mechanical design, sales, and delivery) Tj T* ET
-BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (belong to other colleagues. Delivery records and revenue are company) Tj T* ET
+BT 1 0 0 1 64 406.3898 Tm /F3+0 13 Tf 15.6 TL (Device hardware, optical and mechanical design, sales, and delivery) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (belong to other colleagues. Delivery records and revenue are company) Tj T* ET
+BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (results and are not claimed here.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site) Tj T* ET
-BT 1 0 0 1 64 375.3898 Tm /F2+0 9.5 Tf 11.4 TL (footage is excluded.) Tj T* ET
+BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site) Tj T* ET
+BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (footage is excluded.) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 200.3898 243.6378 146 re S
+n 48 122.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
-BT 1 0 0 1 60 326.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
+BT 1 0 0 1 60 248.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (Device specifications, accuracy figures, customer) Tj T* ET
-BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (lists, and sales numbers are company-owned and) Tj T* ET
-BT 1 0 0 1 60 274.3898 Tm /F3+0 9 Tf 10.8 TL (not published.) Tj T* ET
+BT 1 0 0 1 60 224.3898 Tm /F3+0 9 Tf 10.8 TL (Device specifications, accuracy figures, customer) Tj T* ET
+BT 1 0 0 1 60 210.3898 Tm /F3+0 9 Tf 10.8 TL (lists, and sales numbers are company-owned and) Tj T* ET
+BT 1 0 0 1 60 196.3898 Tm /F3+0 9 Tf 10.8 TL (not published.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (Demonstration clip: the SKADI Viewer shows a tracked) Tj T* ET
-BT 1 0 0 1 60 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (instrument over a skull phantom in the 3D model and section) Tj T* ET
-BT 1 0 0 1 60 230.3898 Tm /F2+0 7.6 Tf 9.12 TL (views.) Tj T* ET
+BT 1 0 0 1 60 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (Demonstration clip: the SKADI Viewer shows a tracked) Tj T* ET
+BT 1 0 0 1 60 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (instrument over a skull phantom in the 3D model and section) Tj T* ET
+BT 1 0 0 1 60 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (views.) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 200.3898 243.6378 146 re S
+n 303.6378 122.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 326.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
+BT 1 0 0 1 315.6378 248.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (Interfaces are agreed with optical and hardware) Tj T* ET
-BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (designers, customer navigation developers, and) Tj T* ET
-BT 1 0 0 1 315.6378 274.3898 Tm /F3+0 9 Tf 10.8 TL (research users.) Tj T* ET
+BT 1 0 0 1 315.6378 224.3898 Tm /F3+0 9 Tf 10.8 TL (Interfaces are agreed with optical and hardware) Tj T* ET
+BT 1 0 0 1 315.6378 210.3898 Tm /F3+0 9 Tf 10.8 TL (designers, customer navigation developers, and) Tj T* ET
+BT 1 0 0 1 315.6378 196.3898 Tm /F3+0 9 Tf 10.8 TL (research users.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 315.6378 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (Develop and maintain the SKADI API and SDK, the Viewer that) Tj T* ET
-BT 1 0 0 1 315.6378 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (shows device state and tracking results, and a 3D Slicer) Tj T* ET
-BT 1 0 0 1 315.6378 230.3898 Tm /F2+0 7.6 Tf 9.12 TL (custom-application template that lets researchers start) Tj T* ET
-BT 1 0 0 1 315.6378 219.3898 Tm /F2+0 7.6 Tf 9.12 TL (immediately.) Tj T* ET
+BT 1 0 0 1 315.6378 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (Develop and maintain the SKADI API and SDK, the Viewer that) Tj T* ET
+BT 1 0 0 1 315.6378 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (shows device state and tracking results, and a 3D Slicer) Tj T* ET
+BT 1 0 0 1 315.6378 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (custom-application template that lets researchers start) Tj T* ET
+BT 1 0 0 1 315.6378 141.3898 Tm /F2+0 7.6 Tf 9.12 TL (immediately.) Tj T* ET
  
 endstream
 endobj
@@ -1307,10 +1310,10 @@ xref
 0002459630 00000 n 
 0002459723 00000 n 
 0002462498 00000 n 
-0002465876 00000 n 
-0002471836 00000 n 
-0002476663 00000 n 
-0002481207 00000 n 
+0002465992 00000 n 
+0002472031 00000 n 
+0002476928 00000 n 
+0002481565 00000 n 
 trailer
 <<
 /ID 
@@ -1322,5 +1325,5 @@ trailer
 /Size 35
 >>
 startxref
-2483886
+2484244
 %%EOF
