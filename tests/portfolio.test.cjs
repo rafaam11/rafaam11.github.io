@@ -1122,10 +1122,11 @@ test('Task 3 review Home video tiles use an approved poster without autoplay or 
   assert.doesNotMatch(firstRow, /<video\b|autoplay|demo\.mp4/);
 });
 
-test('Scholar capability paragraph follows data order and the mosaic is gone', () => {
+test('Scholar capability list follows data order and the mosaic is gone', () => {
   assert.equal(render.homeEvidenceMosaicHtml, undefined);
   const index = render.capabilityIndexHtml(data, 'en');
-  assert.match(index, /^<p class="sc-capabilities">/);
+  assert.match(index, /^<dl class="sc-capabilities">/);
+  assert.equal(count(index, '<div><dt>'), data.capabilities.length);
   assertInOrder(index, data.capabilities.map((item) => item.translations.en.title.replace(/&/g, '&amp;')), 'capability paragraph');
   for (const capability of data.capabilities) {
     assert.match(index, new RegExp(capability.methods[0].replace(/&/g, '&amp;').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
@@ -1514,12 +1515,12 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
   }
 });
 
-test('Task 5 publishes exactly sixteen six-page project PDFs and two three-page CV PDFs', () => {
+test('Task 5 publishes exactly sixteen six-page project PDFs and tracks two authored CV PDFs', () => {
   const projectNames = slugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
   const outputNames = fs.readdirSync(path.join(root, 'output', 'pdf'))
     .filter((name) => name.endsWith('.pdf')).sort();
-  assert.deepEqual(outputNames, projectNames.concat(cvNames).sort());
+  assert.deepEqual(outputNames, projectNames.slice().sort());
   assert.deepEqual(fs.readdirSync(path.join(root, 'assets', 'pdfs')).filter((name) => name.endsWith('.pdf')).sort(), projectNames.sort());
   assert.deepEqual(fs.readdirSync(path.join(root, 'assets', 'cv')).filter((name) => name.endsWith('.pdf')).sort(), cvNames.sort());
 
@@ -1535,15 +1536,20 @@ test('Task 5 publishes exactly sixteen six-page project PDFs and two three-page 
     // Compressed stream bodies (embedded images) are binary; only dictionaries and metadata can leak a path.
     assert.doesNotMatch(bytes.toString('latin1').replace(/stream\r?\n[\s\S]*?endstream/g, 'stream endstream'), /(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw/i);
   }
+  // The CV PDFs are the author's own Word export, tracked in assets/cv rather than generated.
   for (const name of cvNames) {
     const asset = path.join(root, 'assets', 'cv', name);
-    const output = path.join(root, 'output', 'pdf', name);
     const bytes = fs.readFileSync(asset);
     assert.equal(bytes.subarray(0, 5).toString('ascii'), '%PDF-');
     assert.ok(bytes.length > 12_000, `${name}: unexpectedly small PDF`);
-    assert.equal(pdfPageCount(asset), 3, `${name}: CV PDF page count`);
-    assert.equal(sha256(asset), sha256(output), `${name}: output/assets checksum mismatch`);
+    assert.ok(pdfPageCount(asset) <= 4, `${name}: a public CV stays within four pages`);
+    assert.equal(fs.existsSync(path.join(root, 'output', 'pdf', name)), false, `${name}: must not be a generated artifact`);
+    const text = bytes.toString('latin1');
+    assert.match(text, /\/Author\s*\(Jinmin Kim\)/);
+    assert.doesNotMatch(text, /\/(?:Creator|Producer)\s*\((?:Microsoft|Word|Adobe)/i);
+    assert.match(text, /\/URI\s*\(/);
   }
+  assert.deepEqual(validator.cvPdfErrors(root), []);
   assert.deepEqual(validator.pdfArtifactErrors(root), []);
 });
 
@@ -1604,26 +1610,21 @@ test('Task 5 case routes expose their localized stable PDF artifacts', () => {
   }
 });
 
-test('Task 5 CV pages provide localized PDF object, raster previews, open, and download fallbacks', () => {
+test('Task 5 CV pages embed the localized PDF with open and download fallbacks', () => {
   const pages = [
-    { file: 'cv/index.html', locale: 'ko', base: '../', intro: /3D 정합과 로봇 소프트웨어/, open: /PDF 열기/, download: /PDF 다운로드/, alt: /국문 이력서 .*페이지/ },
-    { file: 'en/cv/index.html', locale: 'en', base: '../../', intro: /3D registration and robot software/i, open: /Open PDF/, download: /Download PDF/, alt: /English CV page/ }
+    { file: 'cv/index.html', locale: 'ko', base: '../', intro: /3D 정합과 로봇 소프트웨어/, open: /PDF 열기/, download: /PDF 다운로드/ },
+    { file: 'en/cv/index.html', locale: 'en', base: '../../', intro: /3D registration and robot software/i, open: /Open PDF/, download: /Download PDF/ }
   ];
   for (const page of pages) {
     const html = read(page.file);
     const pdf = `${page.base}assets/cv/jinmin-kim-cv-${page.locale}.pdf`;
     assert.match(html, page.intro);
     assert.match(html, new RegExp(`<object[^>]+data="${pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+type="application/pdf"`));
-    for (const pageNumber of [1, 2]) {
-      const preview = `${page.base}assets/cv/jinmin-kim-cv-${page.locale}-page-${pageNumber}.png`;
-      assert.match(html, new RegExp(`<img[^>]+src="${preview.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+alt="[^"]+"`));
-      assert.equal(fs.existsSync(path.join(root, 'assets', 'cv', `jinmin-kim-cv-${page.locale}-page-${pageNumber}.png`)), true);
-    }
     assert.match(html, page.open);
     assert.match(html, page.download);
     assert.match(html, new RegExp(`<a[^>]+href="${pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+target="_blank"[^>]+rel="noopener"`));
     assert.match(html, new RegExp(`<a[^>]+href="${pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]+download`));
-    assert.match(html, page.alt);
+    assert.doesNotMatch(html, /jinmin-kim-cv-(?:ko|en)-page-\d+\.png/, 'raster page strips are gone');
     assert.doesNotMatch(html, /fontawesome|bootstrap(?:\.bundle)?\.min\.js|styles\.css|cv-theme\.css/i);
   }
 });
@@ -1738,46 +1739,12 @@ test('Task 5 generator rejects malformed nested input atomically with a controll
   }
 });
 
-test('Task 5 generator publishes CV previews and digest manifest without a review directory', (t) => {
-  const python = task5Python();
-  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
-  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-no-review-'));
-  try {
-    copyApprovedEvidence(temporaryRoot);
-    const input = path.join(temporaryRoot, 'input.json');
-    const exportResult = childProcess.spawnSync(process.execPath, [
-      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
-    ], { cwd: root, encoding: 'utf8' });
-    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
-    const result = childProcess.spawnSync(python, [
-      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
-      '--input', input,
-      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
-      '--publish-root', temporaryRoot
-    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
-    assert.equal(result.status, 0, result.stderr || result.stdout);
-    const manifest = JSON.parse(fs.readFileSync(path.join(temporaryRoot, 'output', 'pdf', 'manifest.json'), 'utf8'));
-    assert.equal(manifest.schemaVersion, 3);
-    assert.equal(manifest.generatorVersion, '3.0');
-    assert.equal(manifest.generatorSha256, sha256(path.join(root, 'scripts', 'generate-portfolio-pdfs.py')));
-    assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
-    const previews = manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview');
-    assert.equal(previews.length, 6);
-    for (const preview of previews) {
-      assert.equal(fs.existsSync(path.join(temporaryRoot, preview.path)), true, preview.path);
-      assert.equal(sha256(path.join(temporaryRoot, preview.path)), preview.sha256);
-    }
-  } finally {
-    fs.rmSync(temporaryRoot, { recursive: true, force: true });
-  }
-});
-
 test('Task 5 manifest freshness follows canonical project, evidence, and public CV content', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   assert.equal(manifest.schemaVersion, 3);
   assert.match(manifest.sourceDigest, /^[a-f0-9]{64}$/);
-  assert.equal(manifest.artifacts.length, 42);
-  assert.equal(manifest.artifacts.filter((artifact) => artifact.kind === 'cv-preview').length, 6);
+  assert.equal(manifest.artifacts.length, 32);
+  assert.deepEqual([...new Set(manifest.artifacts.map((artifact) => artifact.kind))], ['project-pdf']);
 
   const changedPortfolio = clone(data);
   changedPortfolio.projects[0].translations.en.title += ' changed';
@@ -1858,7 +1825,7 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     copyApprovedEvidence(temporaryRoot);
     const approvedPath = path.join(temporaryRoot, ...localEvidence.source.split('/'));
     fs.mkdirSync(path.dirname(approvedPath), { recursive: true });
-    fs.copyFileSync(path.join(root, 'assets', 'cv', 'jinmin-kim-cv-ko-page-1.png'), approvedPath);
+    fs.copyFileSync(path.join(root, 'assets', 'projects', 'mandibular-fracture', 'mandibular-fracture-lead-01.png'), approvedPath);
 
     const generation = childProcess.spawnSync(python, [
       path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
@@ -1936,7 +1903,7 @@ test('Task 5 integrated review embeds an approved poster instead of opening a vi
     const poster = path.join(temporaryRoot, ...posterPath.split('/'));
     fs.mkdirSync(path.dirname(video), { recursive: true });
     fs.writeFileSync(video, validMp4());
-    fs.copyFileSync(path.join(root, 'assets', 'cv', 'jinmin-kim-cv-ko-page-1.png'), poster);
+    fs.copyFileSync(path.join(root, 'assets', 'projects', 'mandibular-fracture', 'mandibular-fracture-lead-01.png'), poster);
 
     const generation = childProcess.spawnSync(python, [
       path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
@@ -2037,28 +2004,6 @@ test('Task 5 integrated review manifest binds artifacts to the current generator
     copyTask5Surface(temporaryRoot);
     fs.appendFileSync(path.join(temporaryRoot, 'scripts', 'generate-portfolio-pdfs.py'), '\n# stale layout mutation\n');
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join('\n'), /generator.*(?:hash|stale)|stale.*generator/i);
-  } finally {
-    fs.rmSync(temporaryRoot, { recursive: true, force: true });
-  }
-});
-
-test('Task 5 integrated review CV HTML intrinsic dimensions match the 1241x1754 previews', () => {
-  for (const relativePath of ['cv/index.html', 'en/cv/index.html']) {
-    const html = read(relativePath);
-    const images = [...html.matchAll(/<img[^>]+jinmin-kim-cv-(?:ko|en)-page-[12]\.png[^>]*>/g)];
-    assert.equal(images.length, 2, relativePath);
-    for (const image of images) {
-      assert.match(image[0], /\bwidth="1241"/);
-      assert.match(image[0], /\bheight="1754"/);
-    }
-  }
-
-  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-cv-preview-size-'));
-  try {
-    copyTask5Surface(temporaryRoot);
-    const cvPath = path.join(temporaryRoot, 'cv', 'index.html');
-    fs.writeFileSync(cvPath, fs.readFileSync(cvPath, 'utf8').replace('width="1241"', 'width="1240"'));
-    assert.match(validator.pdfArtifactErrors(temporaryRoot).join('\n'), /cv\/index\.html.*preview.*dimension|intrinsic.*dimension/i);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
