@@ -434,7 +434,11 @@ test('Task 4 public evidence register covers every canonical media id without pr
   const aiEvidence = register.entries.filter((entry) => entry.project === 'ai-build-lab');
   assert.deepEqual(aiEvidence.map((entry) => [entry.id, entry.type, entry.state, entry.source]), [
     ['multi-cli-work-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/multi-cli-work'],
-    ['daegu-bus-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/public-transportation-info']
+    ['daegu-bus-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/public-transportation-info'],
+    ['ai-build-lab-lead-01', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-lead-01.png'],
+    ['ai-build-lab-gallery-01', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-01.png'],
+    ['ai-build-lab-gallery-02', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-02.png'],
+    ['ai-build-lab-gallery-03', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-03.png']
   ]);
 });
 
@@ -2635,7 +2639,7 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
 test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const visualFiles = validator.publicPortfolioVisualFiles(root);
-  assert.equal(visualFiles.length, 33, 'approved derivatives across seven cases');
+  assert.equal(visualFiles.length, 37, 'approved derivatives across all eight cases');
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
 
