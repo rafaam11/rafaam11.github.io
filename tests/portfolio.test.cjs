@@ -1956,6 +1956,87 @@ test('non-story cases retain the legacy case sequence and omit story markup', ()
   assert.doesNotMatch(html, /class="sc-story"|data-story-section=/);
 });
 
+test('story contract validates status labels, placement, media, and graph endpoints', () => {
+  const candidate = clone(data);
+  const project = candidate.projects.find((item) => item.slug === 'surgical-navigation');
+  project.translations.ko.periodLabel = '2023.07 – 현재';
+  project.translations.en.periodLabel = '2023.07 – present';
+  project.translations.ko.statusLabel = '진행 중 · 연구진 검증';
+  project.translations.en.statusLabel = 'Ongoing · Researcher Validation';
+  project.storySections[0].placement = 'before-standard';
+  project.relatedProjectSlugs = ['mandibular-fracture'];
+  assert.deepEqual(render.dataErrors(candidate), []);
+
+  const mutations = [
+    [(value) => { value.translations.en.periodLabel = ''; }, /periodLabel/i],
+    [(value) => { value.translations.en.statusLabel = ''; }, /statusLabel/i],
+    [(value) => { value.storySections[0].placement = 'sidebar'; }, /placement/i],
+    [(value) => { value.storySections.find((section) => section.diagram).diagram.edges[0].to = 'missing'; }, /edge endpoint/i],
+    [(value) => { value.relatedProjectSlugs = [value.slug]; }, /self reference/i],
+    [(value) => { value.relatedProjectSlugs = ['mandibular-fracture', 'mandibular-fracture']; }, /duplicate related/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const changed = clone(candidate);
+    mutate(changed.projects.find((item) => item.slug === 'surgical-navigation'));
+    assert.match(render.dataErrors(changed).join('\n'), expected);
+  }
+});
+
+test('story renderer places sections around standard evidence and renders localized related links', () => {
+  const candidate = clone(data);
+  const project = candidate.projects.find((item) => item.slug === 'surgical-navigation');
+  project.translations.ko.periodLabel = '2023.07 – 현재';
+  project.translations.en.periodLabel = '2023.07 – present';
+  project.translations.ko.statusLabel = '진행 중 · 연구진 검증';
+  project.translations.en.statusLabel = 'Ongoing · Researcher Validation';
+  project.storySections[0].placement = 'before-standard';
+  project.storySections[0].translations.ko.heading = '통합 워크플로우';
+  project.storySections[0].translations.en.heading = 'Integrated workflow';
+  project.storySections.push({
+    key: 'roadmap',
+    layout: 'wide',
+    placement: 'after-standard',
+    translations: {
+      ko: { heading: '장기 방향', body: '전체 수술계획으로 확장합니다.' },
+      en: { heading: 'Long-term direction', body: 'Expands toward complete surgical planning.' }
+    }
+  });
+  project.relatedProjectSlugs = ['mandibular-fracture'];
+  const html = render.caseStudyHtml(candidate, project.slug, '../../', false, 'ko');
+  assert.match(html, /2023\.07 – 현재/);
+  assert.match(html, /진행 중 · 연구진 검증/);
+  assertInOrder(html, ['통합 워크플로우', '내 역할', '결과와 근거', '한계와 팀 성과', '장기 방향', '관련 프로젝트'], 'story order');
+  assert.match(html, /href="\.\.\/\.\.\/projects\/mandibular-fracture\/"[^>]*>하악골 골절 정복 최적화<\/a>/);
+  assert.match(html, /class="sc-flow__track"/);
+});
+
+test('legacy cases retain their renderer output when optional story fields are absent', () => {
+  const baseline = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'ko');
+  const candidate = clone(data);
+  assert.equal(render.caseStudyHtml(candidate, 'mandibular-fracture', '../../', false, 'ko'), baseline);
+});
+
+test('story PDF sequence accepts one legacy diagram or an ordered diagram array, never both', () => {
+  const candidate = clone(data);
+  const project = candidate.projects.find((item) => item.slug === 'surgical-navigation');
+  const second = clone(project.storySections.find((section) => section.key === 'system-architecture'));
+  second.key = 'system-architecture-secondary';
+  second.media = [];
+  project.storySections.push(second);
+  project.pdfSequence.diagrams = [
+    { storySectionKey: 'system-architecture' },
+    { storySectionKey: 'system-architecture-secondary' }
+  ];
+  delete project.pdfSequence.diagram;
+  assert.deepEqual(render.dataErrors(candidate), []);
+
+  project.pdfSequence.diagram = { storySectionKey: 'system-architecture' };
+  assert.match(render.dataErrors(candidate).join('\n'), /diagram.*diagrams|never both/i);
+  delete project.pdfSequence.diagram;
+  project.pdfSequence.diagrams[1].storySectionKey = 'missing';
+  assert.match(render.dataErrors(candidate).join('\n'), /unknown story section|does not resolve/i);
+});
+
 test('Scholar case article orders header, figure, five sections, gallery, and links', () => {
   const project = clone(data.projects[1]);
   project.blocks = [
