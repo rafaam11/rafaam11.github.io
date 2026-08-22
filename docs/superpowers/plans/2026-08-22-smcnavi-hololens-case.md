@@ -988,30 +988,65 @@ media: {
 }
 ```
 
-Declare story sections in this exact order and distribution:
+Declare story sections in this exact order, with these exact translations:
 
-1. `smcnavi-overview`, `layout: 'wide'`, no media. Body states that SMCNavi combines DICOM/MPR/3D models, optical tracking, patient registration, instrument calibration, and procedure UI in one custom 3D Slicer desktop platform; the HoloLens work is a separate PC-side extension.
-2. `smcnavi-workflows`, `layout: 'wide'`, bilingual body plus the exact six workflow lists from Step 1. Media order: `surgical-navigation-smcnavi-features-01` video with nested `surgical-navigation-smcnavi-poster-01`, then `surgical-navigation-smcnavi-ui-01`, then `surgical-navigation-smcnavi-workflows-01`.
-3. `system-architecture`, `layout: 'wide'`, bilingual body and the canonical diagram below.
-4. `registration-calibration`, `layout: 'grid'`, bilingual list covering the tracking SDK/data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker calibration, and non-standard/long-instrument calibration. Media order: `surgical-navigation-gallery-02`, `surgical-navigation-gallery-03`, `surgical-navigation-bench-01`.
-5. `hololens-interface`, `layout: 'grid'`, bilingual list covering OpenIGTLink transfer, Unity/MRTK rendering, Holographic Remoting, HoloLens interaction return, and phantom integration. Media order: `surgical-navigation-gallery-05`, `surgical-navigation-gallery-06`.
+| Key / layout | Korean heading and copy | English heading and copy |
+| --- | --- | --- |
+| `smcnavi-overview` / `wide` | **SMCNavi 플랫폼 개요** — SMCNavi는 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적, 환자 정합, 기구 캘리브레이션, 수술별 UI를 하나의 맞춤형 3D Slicer 데스크톱 플랫폼에 통합합니다. HoloLens 기능은 SMCNavi와 연결되는 별도 PC 확장으로 구현했습니다. | **SMCNavi platform overview** — SMCNavi integrates DICOM and 3D-model loading, MPR and 3D visualisation, optical tracking, patient registration, instrument calibration, and procedure-specific UI in one custom 3D Slicer desktop platform. The HoloLens work is a separate PC-side extension connected to SMCNavi. |
+| `smcnavi-workflows` / `wide` | **6개 구강악안면 워크플로** — 아래 기능은 소프트웨어로 구현·시연한 워크플로이며 임상 효능을 뜻하지 않습니다. Items: `상악종양 제거술 내비게이션`, `하악종양 제거술 내비게이션`, `양악수술 내비게이션`, `하악운동 트래킹`, `골이식 위치설정`, `광대·안와 골절 미러링`. | **Six oral and maxillofacial workflows** — The following are implemented and demonstrated software workflows; they are not evidence of clinical efficacy. Items: `Maxillary tumour-removal navigation`, `Mandibular tumour-removal navigation`, `Bimaxillary-surgery navigation`, `Mandibular-motion tracking`, `Bone-graft placement`, `Zygomatic-orbital fracture mirroring`. |
+| `system-architecture` / `wide` | **SMCNavi–HoloLens 시스템 구조** — 광학 추적 관측은 SMCNavi의 변환·정합·캘리브레이션과 수술 워크플로로 들어갑니다. 승인된 변환·영상·모델 데이터는 OpenIGTLink로 PC 확장에 연결되고, 렌더링과 상호작용은 Holographic Remoting을 통해 HoloLens 2와 오갑니다. | **SMCNavi–HoloLens system architecture** — Optical-tracker observations enter SMCNavi's transforms, registration, calibration, and procedure workflows. Approved transform, image, and model data connect to the PC extension through OpenIGTLink; rendering and interaction travel between the extension and HoloLens 2 through Holographic Remoting. |
+| `registration-calibration` / `grid` | **추적·정합·캘리브레이션** — 환자·기구와 영상 모델 사이의 변환 경로를 명시적으로 구성하고 각 단계의 입력과 피드백을 검토할 수 있게 했습니다. Items: `광학 추적 SDK 연결과 실시간 도구·마커 데이터 파이프라인`, `영상·환자·마커·기구 좌표계 사이의 변환 체인`, `환자 정합과 정합 상태 피드백`, `환자·기구 마커 캘리브레이션`, `비표준 기구와 장기구 캘리브레이션`. | **Tracking, registration, and calibration** — Built explicit transform paths between the patient, instruments, and image models so the inputs and feedback at each stage could be inspected. Items: `Optical-tracker SDK integration and the live tool/marker data pipeline`, `Transform chain across image, patient, marker, and instrument frames`, `Patient registration and registration-state feedback`, `Patient and instrument marker calibration`, `Non-standard and long-instrument calibration`. |
+| `hololens-interface` / `grid` | **HoloLens 공간 인터페이스** — SMCNavi가 소유한 정합·워크플로 상태를 별도 PC 확장에서 렌더링하고 HoloLens 2의 공간 표시와 상호작용으로 연결했습니다. Items: `OpenIGTLink를 통한 변환과 승인된 영상·모델 데이터 교환`, `Unity·MRTK 기반 PC 렌더링과 공간 배치`, `Holographic Remoting을 통한 HoloLens 2 표시`, `HoloLens 상호작용 입력의 PC 확장 반환`, `광학 추적·SMCNavi·HoloLens 팬텀 통합 시험`. | **HoloLens spatial interface** — Rendered SMCNavi-owned registration and workflow state in a separate PC extension and connected it to HoloLens 2 spatial presentation and interaction. Items: `Transform and approved image/model exchange through OpenIGTLink`, `PC rendering and spatial placement with Unity and MRTK`, `HoloLens 2 presentation through Holographic Remoting`, `Return of HoloLens interaction input to the PC extension`, `Phantom integration tests across optical tracking, SMCNavi, and HoloLens`. |
 
-The supporting video uses this policy:
+The overview has no media. Use this complete supporting-video record as the first `smcnavi-workflows` media item:
 
 ```js
-videoPolicy: {
-  maxBytes: 100000000,
-  targetDurationSeconds: 90.266667,
-  toleranceSeconds: 0.2,
-  width: 960,
-  height: 720,
-  codec: 'h264',
-  requireNoAudio: true,
-  requireFastStart: true
+{
+  id: 'surgical-navigation-smcnavi-features-01',
+  type: 'video',
+  status: 'approved',
+  publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-features-01.mp4',
+  preload: 'metadata',
+  videoPolicy: {
+    maxBytes: 100000000,
+    targetDurationSeconds: 90.266667,
+    toleranceSeconds: 0.2,
+    width: 960,
+    height: 720,
+    codec: 'h264',
+    requireNoAudio: true,
+    requireFastStart: true
+  },
+  poster: {
+    id: 'surgical-navigation-smcnavi-poster-01',
+    type: 'image',
+    status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-poster-01.png'
+  },
+  translations: {
+    ko: {
+      caption: 'SMCNavi에서 6개 구강악안면 워크플로가 전환·시연되는 전체 기능 소개 영상입니다. 비식별 연구 영상이며 임상 결과 근거가 아닙니다.',
+      alt: 'SMCNavi 화면에서 종양 제거, 양악수술, 하악운동, 골이식, 골절 미러링 워크플로가 차례로 시연되는 영상.'
+    },
+    en: {
+      caption: 'Full feature video moving through six oral and maxillofacial workflows in SMCNavi. It uses de-identified research imagery and is not evidence of clinical outcome.',
+      alt: 'Video moving through SMCNavi workflows for tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and fracture mirroring.'
+    }
+  }
 }
 ```
 
-Every story media item uses bilingual caption and alt copy. Each caption identifies de-identified research imagery or phantom/integration evidence where applicable and avoids clinical-outcome language.
+Use these exact image records and section order. Each `publicPath` is `assets/projects/surgical-navigation/<id>.png`.
+
+| Section / ID | Korean caption / alt | English caption / alt |
+| --- | --- | --- |
+| `smcnavi-workflows` / `surgical-navigation-smcnavi-ui-01` | SMCNavi 통합 UI와 HoloLens–PC 연결 화면. 비식별 연구 영상 파생본이며 임상 결과 근거가 아닙니다. / 수술 유형 선택 UI, 팬텀에서 추적 기구를 사용하는 장면, HoloLens와 모니터 연결 화면을 묶은 그림. | Integrated SMCNavi UI and HoloLens–PC connection view. This derivative uses de-identified research imagery and is not evidence of clinical outcome. / Composite showing the procedure-selection UI, tracked instrument use on a phantom, HoloLens, and a connected monitor. |
+| `smcnavi-workflows` / `surgical-navigation-smcnavi-workflows-01` | 6개 구강악안면 소프트웨어 워크플로. 비식별 연구 영상 파생본이며 임상 효능을 뜻하지 않습니다. / 상악·하악 종양 제거, 양악수술, 하악운동, 골이식 위치설정, 광대·안와 골절 미러링 화면을 2×3으로 배치한 그림. | Six oral and maxillofacial software workflows. This derivative uses de-identified research imagery and does not establish clinical efficacy. / Two-by-three composite of maxillary and mandibular tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and zygomatic-orbital fracture mirroring. |
+| `registration-calibration` / `surgical-navigation-gallery-02` | 좌표계 관계 — 광학 추적 장치 기준의 환자 마커·프로브 마커 변환. / 광학 추적 장치 기준으로 환자 마커와 프로브 마커 좌표 변환을 설명하는 개념도. | Coordinate frames: patient-marker and probe-marker transforms relative to the optical tracker. / Concept diagram of patient-marker and probe-marker transforms relative to the optical tracker. |
+| `registration-calibration` / `surgical-navigation-gallery-03` | 비표준·장기구 캘리브레이션에 사용한 패시브 마커 어댑터 장착 기구. / 반사 마커 네 개가 달린 어댑터를 장착한 길이가 긴 수술 기구 사진. | Instrument with a passive-marker adapter used for non-standard and long-instrument calibration. / Long surgical instrument fitted with an adapter carrying four reflective markers. |
+| `registration-calibration` / `surgical-navigation-bench-01` | 광학 추적 장치, SMCNavi, 두개골 팬텀을 연결한 공개 안전 벤치 프레임. / 광학 추적 장치, 모니터, 두개골 팬텀, 추적 기구가 함께 보이는 벤치 시연 프레임. | Public-safe bench frame connecting the optical tracker, SMCNavi, and a skull phantom. / Bench demonstration frame showing an optical tracker, monitor, skull phantom, and tracked instrument. |
+| `hololens-interface` / `surgical-navigation-gallery-05` | HoloLens 공간 표시와 손·시선 상호작용 토글. / HoloLens에서 두개골 홀로그램과 손 추적·시선 추적 토글 패널을 함께 보여주는 화면. | HoloLens spatial presentation with hand- and eye-interaction toggles. / HoloLens view showing a skull hologram with hand-tracking and eye-tracking toggle controls. |
+| `hololens-interface` / `surgical-navigation-gallery-06` | HoloLens, 광학 추적, 두개골 팬텀을 함께 연결한 통합 시연. / HoloLens를 착용한 사용자가 광학 추적 장치 앞에서 팬텀에 기구를 맞추는 장면. | Integration demonstration connecting HoloLens, optical tracking, and a skull phantom. / User wearing HoloLens aligning an instrument on a phantom in front of the optical tracker. |
 
 - [ ] **Step 5: Add the one canonical bilingual system-flow diagram**
 
@@ -1036,7 +1071,7 @@ Use five edges in this order:
 | `pc-extension` → `remoting` | `bidirectional` | 렌더링·입력 / Rendering and input |
 | `remoting` → `hololens` | `bidirectional` | 홀로그램·상호작용 / Holograms and interaction |
 
-Use `SMCNavi–HoloLens 경로 · 연구 프로토타입` / `SMCNavi–HoloLens path · Research prototype` as the boundary labels. Caption it as an explanatory system relationship, not photographic or clinical evidence.
+Use `추적 관측에서 HoloLens 상호작용까지` / `From tracking observations to HoloLens interaction` as diagram titles. Use `설명용 시스템 관계 다이어그램이며 사진·실험·임상 결과 근거가 아닙니다.` / `Explanatory system-relationship diagram; it is not photographic, experimental, or clinical-outcome evidence.` as captions. Use `SMCNavi–HoloLens 경로 · 연구 프로토타입` / `SMCNavi–HoloLens path · Research prototype` as boundary labels.
 
 - [ ] **Step 6: Replace the PDF sequence and structural blocks**
 
@@ -1084,7 +1119,19 @@ surgical-navigation-smcnavi-workflows-01
 surgical-navigation-bench-01
 ```
 
-Each source is the lower-case project-relative path declared in data. Notes identify an approved full-length derivative, approved poster frame, approved slide-7 lower-region derivative, or approved safe video frame without recording a private source path.
+Use these exact provenance notes; each source is the lower-case project-relative path declared in data:
+
+| Evidence ID | Provenance / usage |
+| --- | --- |
+| `surgical-navigation-hololens-demo-01` | Approved full-length silent web derivative; caption in portfolio data. |
+| `surgical-navigation-hololens-poster-01` | Approved poster frame from the public HoloLens derivative. |
+| `surgical-navigation-smcnavi-features-01` | Approved full-length silent SMCNavi feature derivative; caption in portfolio data. |
+| `surgical-navigation-smcnavi-poster-01` | Approved poster frame from the public SMCNavi feature derivative. |
+| `surgical-navigation-smcnavi-ui-01` | Approved lower-region presentation derivative showing the integrated UI and HoloLens–PC view. |
+| `surgical-navigation-smcnavi-workflows-01` | Approved lower-region presentation derivative showing six software workflows with the corrected public label. |
+| `surgical-navigation-bench-01` | Approved public-safe bench frame extracted from the full-length HoloLens derivative. |
+
+Use `Superseded by the approved full-length public derivative.` for the old clip and poster, `Obsolete architecture visual; not part of the implemented public system.` for gallery 01, and `Superseded by an approved public-safe video frame.` for gallery 04. These notes deliberately avoid the retired technology and internal product names.
 
 Replace the README with:
 
@@ -1511,8 +1558,9 @@ foreach ($check in $checks) {
   if ([math]::Abs([double]$probe.format.duration - $check.Duration) -gt 0.2) { throw "$($check.Path): duration drift exceeds 0.2 seconds." }
   if ([int64]$probe.format.size -ge 100000000) { throw "$($check.Path): file is not below 100,000,000 bytes." }
   $identityTags = @('title', 'artist', 'author', 'comment', 'description', 'creation_time', 'location')
+  $formatTagNames = if ($probe.format.tags) { @($probe.format.tags.PSObject.Properties.Name) } else { @() }
   foreach ($tag in $identityTags) {
-    if ($probe.format.tags.PSObject.Properties.Name -contains $tag) { throw "$($check.Path): inherited identifying metadata $tag." }
+    if ($formatTagNames -contains $tag) { throw "$($check.Path): inherited identifying metadata $tag." }
   }
 }
 ```
