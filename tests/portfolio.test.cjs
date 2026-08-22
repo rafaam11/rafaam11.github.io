@@ -588,13 +588,12 @@ test('digital occlusion permits only the exact anatomy count without weakening K
   }
 });
 
-test('digital occlusion PDF validation reports both pending localized artifacts without throwing', () => {
+test('digital occlusion PDF validation accepts both published localized artifacts without throwing', () => {
   let errors;
   assert.doesNotThrow(() => { errors = validator.pdfArtifactErrors(root); });
   const joined = errors.join('\n').replace(/\\/g, '/');
   for (const locale of ['ko', 'en']) {
-    assert.match(joined, new RegExp(`output/pdf/digital-occlusion-workflow-${locale}\\.pdf: missing PDF artifact`));
-    assert.match(joined, new RegExp(`assets/pdfs/digital-occlusion-workflow-${locale}\\.pdf: missing PDF artifact`));
+    assert.doesNotMatch(joined, new RegExp(`digital-occlusion-workflow-${locale}\\.pdf:`));
   }
 });
 
@@ -3319,7 +3318,7 @@ test('Task 5 integrated review manifest binds artifacts to the current generator
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   const generatorPath = path.join(root, 'scripts', 'generate-portfolio-pdfs.py');
   assert.equal(manifest.schemaVersion, 3);
-  assert.equal(manifest.generatorVersion, '3.1');
+  assert.equal(manifest.generatorVersion, '3.2');
   assert.equal(manifest.generatorSha256, validator.normalizedTextSourceSha256(generatorPath));
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-generator-stale-'));
