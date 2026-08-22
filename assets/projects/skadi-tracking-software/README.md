@@ -1,3 +1,5 @@
 # SKADI Tracking Software Evidence
 
-The public video and poster slots remain pending review. This directory accepts only approved, redacted, metadata-stripped derivatives named in the public evidence register.
+This directory publishes one silent 26-second H.264 lead video, its poster, and six approved PNG evidence derivatives. The public evidence register is the source of truth for their IDs and paths.
+
+Every asset is metadata-stripped. Crops exclude faces, third-party marks, licence paths, device IDs, and internal measurements; original manuals, decks, and recordings remain outside Git.

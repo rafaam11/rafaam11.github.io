@@ -30,9 +30,19 @@
     'ai-build-lab': 'product-loop'
   };
   var blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
+  var videoPolicyKeys = [
+    'codec', 'height', 'maxBytes', 'requireFastStart', 'requireNoAudio',
+    'targetDurationSeconds', 'toleranceSeconds', 'width'
+  ];
   var mediaTypes = ['video', 'image', 'repository', 'publication'];
   var leadMediaTypes = ['video', 'image', 'repository'];
   var referenceMediaTypes = ['repository', 'publication'];
+  var caseLayouts = ['standard', 'evidence-first'];
+  var architectureStepKeys = ['define', 'open', 'track', 'apply'];
+  var architectureStepLabels = ['Define', 'Open', 'Track', 'Apply'];
+  var applicationTrackKeys = ['medical', 'industrial'];
+  var applicationTrackKinds = ['primary', 'extension'];
+  var publicResourceTypes = ['documentation', 'product'];
   var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
   var projectTranslationFields = [
     'title', 'shortTitle', 'eyebrow', 'thesis', 'summary', 'problem', 'role', 'teamResult',
@@ -53,6 +63,8 @@
       personalRole: '내 역할', teamResult: '팀 성과', period: '기간', technology: '기술',
       evidence: '근거', problem: '문제', approach: '접근', results: '결과와 근거', limits: '한계와 팀 성과',
       components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
+      evidenceGallery: '검증 가능한 증거', architecture: 'Define → Open → Track → Apply', roleAndStability: '내 역할과 API 안정성',
+      publicResources: '공개 문서와 제품 정보', ownedRole: '내 역할', teamBoundary: '팀·협력자 경계', evidenceRefs: '연결 근거',
       contact: '연락처', publications: '논문', patents: '특허', awards: '수상',
       patentSummary: function (filed, registered) { return '출원 ' + filed + '건 · 등록 ' + registered + '건'; }
     },
@@ -60,6 +72,8 @@
       personalRole: 'My role', teamResult: 'Team result', period: 'Period', technology: 'Technology',
       evidence: 'Evidence', problem: 'Problem', approach: 'Approach', results: 'Results and evidence', limits: 'Limits and team result',
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
+      evidenceGallery: 'Verifiable evidence', architecture: 'Define → Open → Track → Apply', roleAndStability: 'My role and API stability',
+      publicResources: 'Public documentation and product information', ownedRole: 'My role', teamBoundary: 'Team and partner boundary', evidenceRefs: 'Linked evidence',
       contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
       patentSummary: function (filed, registered) { return filed + ' filed · ' + registered + ' registered'; }
     }
@@ -119,6 +133,9 @@
     (project && project.blocks || []).forEach(function (block) { surfaces.push(block && block.translations); });
     (project && project.subcases || []).forEach(function (subcase) { surfaces.push(subcase && subcase.translations); });
     (project && project.links || []).forEach(function (link) { surfaces.push(link && link.translations); });
+    (project && project.architectureSteps || []).forEach(function (step) { surfaces.push(step && step.translations); });
+    (project && project.applicationTracks || []).forEach(function (track) { surfaces.push(track && track.translations); });
+    (project && project.publicResources || []).forEach(function (resource) { surfaces.push(resource && resource.translations); });
     surfaces.push(project && project.pdfSequence && project.pdfSequence.diagram && project.pdfSequence.diagram.translations);
     return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
   }
@@ -269,6 +286,7 @@
           evidenceState: project.evidenceState,
           lifecycleState: project.lifecycleState,
           route: project.route,
+          caseLayout: project.caseLayout,
           capabilityKeys: Array.isArray(project.capabilityKeys) ? project.capabilityKeys.slice() : [],
           tech: Array.isArray(project.tech) ? project.tech.slice() : [],
           media: project.media || {},
@@ -328,6 +346,24 @@
     if (item.status === 'approved' && hasPublicPath && item.type === 'video' && !isVideoPath(item.publicPath)) {
       errors.push(label + ': video media requires a video file.');
     }
+    if (item.videoPolicy !== undefined) {
+      var policyKeys = item.videoPolicy && typeof item.videoPolicy === 'object' && !Array.isArray(item.videoPolicy)
+        ? Object.keys(item.videoPolicy).sort() : [];
+      if (item.type !== 'video') errors.push(label + ': videoPolicy is allowed only for video.');
+      if (JSON.stringify(policyKeys) !== JSON.stringify(videoPolicyKeys.slice().sort())) {
+        errors.push(label + ': videoPolicy must contain exactly the canonical keys.');
+      } else {
+        var videoPolicy = item.videoPolicy;
+        if (videoPolicy.codec !== 'h264') errors.push(label + ': videoPolicy codec must be h264.');
+        if (!Number.isInteger(videoPolicy.maxBytes) || videoPolicy.maxBytes < 1 || videoPolicy.maxBytes > 100000000) errors.push(label + ': videoPolicy maxBytes must be an integer from 1 through 100000000.');
+        if (!Number.isFinite(videoPolicy.targetDurationSeconds) || videoPolicy.targetDurationSeconds <= 0) errors.push(label + ': videoPolicy targetDurationSeconds must be a finite positive number.');
+        if (!Number.isFinite(videoPolicy.toleranceSeconds) || videoPolicy.toleranceSeconds < 0 || videoPolicy.toleranceSeconds > 1) errors.push(label + ': videoPolicy toleranceSeconds must be from 0 through 1.');
+        ['width', 'height'].forEach(function (dimension) {
+          if (!Number.isInteger(videoPolicy[dimension]) || videoPolicy[dimension] <= 0) errors.push(label + ': videoPolicy ' + dimension + ' must be a positive integer.');
+        });
+        if (videoPolicy.requireFastStart !== true || videoPolicy.requireNoAudio !== true) errors.push(label + ': videoPolicy requirements must both be true.');
+      }
+    }
     return errors;
   }
 
@@ -370,6 +406,73 @@
         seen.push(item.id);
       }
       if (item && item.status === 'approved') errors = errors.concat(translationErrors(item, ['caption', 'alt'], label));
+    });
+    return errors;
+  }
+
+  function evidenceFirstErrors(project, slug) {
+    var errors = [];
+    if (project.caseLayout !== undefined && !caseLayouts.includes(project.caseLayout)) {
+      errors.push(slug + ': case layout must be standard or evidence-first.');
+      return errors;
+    }
+    if (project.caseLayout !== 'evidence-first') return errors;
+
+    var gallery = project.media && project.media.gallery;
+    if (!Array.isArray(gallery) || gallery.length !== 6 || gallery.some(function (item) { return !isApprovedImage(item); })) {
+      errors.push(slug + ': evidence-first media gallery requires exactly six approved images.');
+    }
+
+    var steps = project.architectureSteps;
+    if (!Array.isArray(steps) || steps.length !== architectureStepKeys.length ||
+        JSON.stringify(steps.map(function (step) { return step && step.key; })) !== JSON.stringify(architectureStepKeys) ||
+        JSON.stringify(steps.map(function (step) { return step && step.label; })) !== JSON.stringify(architectureStepLabels)) {
+      errors.push(slug + ': architecture steps must use ordered Define, Open, Track, Apply keys and labels.');
+    }
+    (Array.isArray(steps) ? steps : []).forEach(function (step, index) {
+      var key = architectureStepKeys[index] || (step && step.key) || String(index);
+      errors = errors.concat(translationErrors(step, ['description'], slug + ' architecture step ' + key));
+    });
+
+    var tracks = project.applicationTracks;
+    if (!Array.isArray(tracks) || tracks.length !== applicationTrackKeys.length ||
+        JSON.stringify(tracks.map(function (track) { return track && track.key; })) !== JSON.stringify(applicationTrackKeys)) {
+      errors.push(slug + ': application tracks must use ordered medical and industrial keys.');
+    }
+    var approvedGalleryIds = (Array.isArray(gallery) ? gallery : []).filter(isApprovedImage).map(function (item) { return item.id; });
+    (Array.isArray(tracks) ? tracks : []).forEach(function (track, index) {
+      var key = applicationTrackKeys[index] || (track && track.key) || String(index);
+      var label = slug + ' application track ' + key;
+      if (!track || !applicationTrackKinds.includes(track.kind) || track.kind !== applicationTrackKinds[index]) {
+        errors.push(label + ': kind must be primary or extension in canonical order.');
+      }
+      var evidenceIds = track && track.evidenceIds;
+      if (!Array.isArray(evidenceIds) || evidenceIds.length === 0 || evidenceIds.some(function (id) { return typeof id !== 'string' || !id; })) {
+        errors.push(label + ': requires evidence ids.');
+      } else {
+        if (new Set(evidenceIds).size !== evidenceIds.length) errors.push(label + ': duplicate evidence id.');
+        if (evidenceIds.some(function (id) { return !approvedGalleryIds.includes(id); })) {
+          errors.push(label + ': evidence ids must reference known approved gallery evidence.');
+        }
+      }
+      errors = errors.concat(translationErrors(track, ['title', 'summary', 'ownedRole', 'teamBoundary'], label));
+    });
+
+    var resources = project.publicResources;
+    if (!Array.isArray(resources) || resources.length !== 4) {
+      errors.push(slug + ': evidence-first case requires exactly four public resources.');
+    }
+    (Array.isArray(resources) ? resources : []).forEach(function (resource, index) {
+      var label = slug + ' public resource ' + index;
+      if (!resource || !publicResourceTypes.includes(resource.type)) {
+        errors.push(label + ': type must be documentation or product.');
+      }
+      if (!resource || !isSafeProjectLink(resource.href) || /(?:^|\.)github\.com$/i.test((function () {
+        try { return new URL(resource.href).hostname; } catch (_) { return ''; }
+      })())) {
+        errors.push(label + ': unsafe public resource URL.');
+      }
+      errors = errors.concat(translationErrors(resource, ['title', 'description'], label));
     });
     return errors;
   }
@@ -499,6 +602,7 @@
           }
           errors = errors.concat(galleryErrors(project, slug));
         }
+        errors = errors.concat(evidenceFirstErrors(project, slug));
         if (!Array.isArray(project.blocks) || project.blocks.length === 0) {
           errors.push(slug + ': missing structural blocks.');
         } else {
@@ -630,8 +734,8 @@
     return null;
   }
 
-  function figureHtml(visual, label, caption, extraClass) {
-    return '<figure class="sc-figure' + (extraClass ? ' ' + extraClass : '') + '" data-media-status="approved">' + visual +
+  function figureHtml(visual, label, caption, extraClass, extraAttributes) {
+    return '<figure class="sc-figure' + (extraClass ? ' ' + extraClass : '') + '" data-media-status="approved"' + (extraAttributes || '') + '>' + visual +
       '<figcaption><span class="sc-figure__label">' + escapeHtml(label) + '</span> ' + escapeHtml(caption) + '</figcaption></figure>';
   }
 
@@ -656,17 +760,21 @@
     return figureHtml(visual, copy.figure + ' 1.', caption, '');
   }
 
-  function caseGalleryHtml(project, locale, base, firstFigureNumber) {
+  function caseGalleryHtml(project, locale, base, firstFigureNumber, settings) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
+    var options = settings || {};
     var items = (project.media && Array.isArray(project.media.gallery) ? project.media.gallery : []).filter(isApprovedImage);
     if (!items.length) return '';
     var figures = items.map(function (item, offset) {
       var itemCopy = translation(item, normalized);
       var visual = '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || project.mediaAlt || '') + '" loading="lazy" decoding="async">';
-      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', itemCopy.caption || '', 'sc-figure--gallery');
+      var attributes = options.evidenceFirst ? ' id="evidence-' + escapeHtml(item.id) + '" data-evidence-id="' + escapeHtml(item.id) + '"' : '';
+      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', itemCopy.caption || '', 'sc-figure--gallery', attributes);
     }).join('');
-    return '<section class="sc-gallery" aria-label="' + escapeHtml(copy.figures) + '"><div class="sc-gallery__grid">' + figures + '</div></section>';
+    var sectionAttributes = options.evidenceFirst ? ' data-evidence-first-section="gallery"' : '';
+    var heading = options.evidenceFirst ? '<h2>' + escapeHtml(copy.evidenceGallery) + '</h2>' : '';
+    return '<section class="sc-gallery" aria-label="' + escapeHtml(options.evidenceFirst ? copy.evidenceGallery : copy.figures) + '"' + sectionAttributes + '>' + heading + '<div class="sc-gallery__grid">' + figures + '</div></section>';
   }
 
   function capabilityIndexHtml(data, locale) {
@@ -771,6 +879,58 @@
     }).join('') + '</ul></section>';
   }
 
+  function evidenceFirstArchitectureHtml(project, sourceProject, locale) {
+    var copy = pageCopy[localeOf(locale)];
+    var steps = (sourceProject.architectureSteps || []).map(function (step) {
+      var stepCopy = translation(step, locale);
+      return '<li class="sc-architecture__step" data-step="' + escapeHtml(step.key) + '"><span class="sc-architecture__label">' +
+        escapeHtml(step.label) + '</span><p>' + escapeHtml(stepCopy.description || '') + '</p></li>';
+    }).join('');
+    return '<section class="sc-case__section sc-architecture" data-evidence-first-section="architecture"><h2>' + escapeHtml(copy.architecture) + '</h2>' +
+      '<p>' + escapeHtml(project.problem) + '</p><p>' + escapeHtml(project.summary) + '</p><ol class="sc-architecture__steps">' + steps + '</ol></section>';
+  }
+
+  function evidenceFirstRoleHtml(project, sourceProject, locale) {
+    var copy = pageCopy[localeOf(locale)];
+    var details = (sourceProject.blocks || []).filter(function (block) {
+      return block.key === 'api-stability' || block.key === 'viewer-delivery';
+    }).map(function (block) { return blockHtml(block, locale); }).join('');
+    var changeNote = (sourceProject.links || []).filter(function (link) { return link && isSafeProjectLink(link.href); }).map(function (link) {
+      return '<p class="sc-change-note"><a href="' + escapeHtml(link.href) + '" target="_blank" rel="noopener">' +
+        escapeHtml(translatedField(link, 'label', locale)) + '</a></p>';
+    }).join('');
+    return '<section class="sc-case__section" data-evidence-first-section="role"><h2>' + escapeHtml(copy.roleAndStability) + '</h2><p>' +
+      escapeHtml(project.role) + '</p>' + details + changeNote + '</section>';
+  }
+
+  function evidenceFirstTrackHtml(sourceProject, track, locale) {
+    var normalized = localeOf(locale);
+    var copy = pageCopy[normalized];
+    var trackCopy = translation(track, normalized);
+    var gallery = sourceProject.media && Array.isArray(sourceProject.media.gallery) ? sourceProject.media.gallery : [];
+    var references = (track.evidenceIds || []).map(function (id) {
+      var index = gallery.findIndex(function (item) { return item.id === id; });
+      return '<a href="#evidence-' + escapeHtml(id) + '">' + escapeHtml(copy.figure + ' ' + (index + 2)) + '</a>';
+    }).join(', ');
+    return '<section class="sc-case__section sc-application" data-track="' + escapeHtml(track.key) + '" data-track-kind="' + escapeHtml(track.kind) + '">' +
+      '<h2>' + escapeHtml(trackCopy.title || '') + '</h2><p>' + escapeHtml(trackCopy.summary || '') + '</p>' +
+      '<dl class="sc-application__boundary"><div><dt>' + escapeHtml(copy.ownedRole) + '</dt><dd>' + escapeHtml(trackCopy.ownedRole || '') + '</dd></div>' +
+      '<div><dt>' + escapeHtml(copy.teamBoundary) + '</dt><dd>' + escapeHtml(trackCopy.teamBoundary || '') + '</dd></div></dl>' +
+      '<p class="sc-application__evidence"><span>' + escapeHtml(copy.evidenceRefs) + ':</span> ' + references + '</p></section>';
+  }
+
+  function evidenceFirstResourcesHtml(sourceProject, locale) {
+    var copy = pageCopy[localeOf(locale)];
+    var resources = (sourceProject.publicResources || []).map(function (resource) {
+      var resourceCopy = translation(resource, locale);
+      return '<li class="sc-resource-card" data-resource-type="' + escapeHtml(resource.type) + '"><a href="' + escapeHtml(resource.href) +
+        '" target="_blank" rel="noopener"><span class="sc-resource-card__type">' + escapeHtml(resource.type) + '</span><strong>' +
+        escapeHtml(resourceCopy.title || '') + '</strong><span>' + escapeHtml(resourceCopy.description || '') + '</span></a></li>';
+    }).join('');
+    return '<section class="sc-case__section" data-evidence-first-section="resources"><h2>' + escapeHtml(copy.publicResources) +
+      '</h2><ul class="sc-resource-list">' + resources + '</ul></section>';
+  }
+
   function caseStudyHtml(data, slug, base, isFile, locale) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
@@ -788,10 +948,27 @@
         return ordered.concat(project.blocks.filter(function (block) { return block.type === type; }));
       }, []).map(function (block) { return blockHtml(block, normalized); }).join('');
     }
-    return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' +
-      '<header class="sc-case__header"><h1>' + title + '</h1>' +
+    var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
         '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
-        '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>' +
+        '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
+    if (sourceProject && sourceProject.caseLayout === 'evidence-first') {
+      var tracks = (sourceProject.applicationTracks || []).map(function (track) {
+        return evidenceFirstTrackHtml(sourceProject, track, normalized);
+      }).join('');
+      var limitationBlock = (sourceProject.blocks || []).filter(function (block) { return block.key === 'integration-boundary'; })
+        .map(function (block) { return blockHtml(block, normalized); }).join('');
+      return '<article class="sc-case sc-case--evidence-first" data-case="' + escapeHtml(project.slug) + '" data-case-layout="evidence-first">' +
+        header + lead +
+        caseGalleryHtml(sourceProject, normalized, base, lead ? 2 : 1, { evidenceFirst: true }) +
+        evidenceFirstArchitectureHtml(project, sourceProject, normalized) +
+        evidenceFirstRoleHtml(project, sourceProject, normalized) + tracks +
+        evidenceFirstResourcesHtml(sourceProject, normalized) +
+        '<section class="sc-case__section" data-evidence-first-section="limits"><h2>' + escapeHtml(copy.limits) + '</h2><p>' +
+          escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + limitationBlock + '</section>' +
+        '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' +
+          ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
+    }
+    return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header +
       lead +
       '<section class="sc-case__section"><h2>' + escapeHtml(copy.problem) + '</h2><p>' + escapeHtml(project.problem) + '</p></section>' +
       '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' + escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>' +

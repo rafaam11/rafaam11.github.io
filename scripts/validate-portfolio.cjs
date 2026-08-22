@@ -478,27 +478,64 @@ function mp4DurationSeconds(buffer, movieHeader) {
   return null;
 }
 
-function mp4HasVideoTrack(buffer, moovChildren) {
+function mp4TrackInfo(buffer, moovChildren) {
+  const handlerTypes = [];
+  let video = null;
   for (const track of moovChildren.filter((box) => box.type === 'trak')) {
     const trackChildren = mp4Boxes(buffer, track.dataStart, track.end);
     if (!trackChildren) continue;
+    const trackHeader = trackChildren.find((box) => box.type === 'tkhd');
+    let width = null;
+    let height = null;
+    if (trackHeader && trackHeader.end - trackHeader.dataStart >= 8) {
+      width = buffer.readUInt32BE(trackHeader.end - 8) / 65536;
+      height = buffer.readUInt32BE(trackHeader.end - 4) / 65536;
+    }
     for (const media of trackChildren.filter((box) => box.type === 'mdia')) {
       const mediaChildren = mp4Boxes(buffer, media.dataStart, media.end);
       if (!mediaChildren) continue;
+      let handlerType = '';
       for (const handler of mediaChildren.filter((box) => box.type === 'hdlr')) {
-        if (handler.end - handler.dataStart >= 12 && buffer.toString('ascii', handler.dataStart + 8, handler.dataStart + 12) === 'vide') {
-          return true;
+        if (handler.end - handler.dataStart >= 12) {
+          handlerType = buffer.toString('ascii', handler.dataStart + 8, handler.dataStart + 12);
+          handlerTypes.push(handlerType);
+          break;
         }
       }
+      if (handlerType !== 'vide' || video) continue;
+      let sampleEntry = '';
+      for (const mediaInfo of mediaChildren.filter((box) => box.type === 'minf')) {
+        const mediaInfoChildren = mp4Boxes(buffer, mediaInfo.dataStart, mediaInfo.end);
+        if (!mediaInfoChildren) continue;
+        for (const sampleTable of mediaInfoChildren.filter((box) => box.type === 'stbl')) {
+          const sampleTableChildren = mp4Boxes(buffer, sampleTable.dataStart, sampleTable.end);
+          if (!sampleTableChildren) continue;
+          const sampleDescription = sampleTableChildren.find((box) => box.type === 'stsd');
+          if (!sampleDescription || sampleDescription.end - sampleDescription.dataStart < 16) continue;
+          const entryCount = buffer.readUInt32BE(sampleDescription.dataStart + 4);
+          if (entryCount > 0) sampleEntry = buffer.toString('latin1', sampleDescription.dataStart + 12, sampleDescription.dataStart + 16);
+        }
+      }
+      video = { sampleEntry, width, height };
     }
   }
-  return false;
+  return { handlerTypes, video };
 }
 
-function approvedMp4Errors(filePath) {
+function approvedMp4Errors(filePath, videoPolicy) {
   const errors = [];
+  const policy = videoPolicy || {
+    maxBytes: maxVideoBytes,
+    minDurationSeconds: 15,
+    maxDurationSeconds: 30
+  };
+  const usesLegacyPolicy = !videoPolicy;
   const size = fs.statSync(filePath).size;
-  if (size > maxVideoBytes) return ['approved video must be 20 MB or less.'];
+  if (size > policy.maxBytes) {
+    return [usesLegacyPolicy
+      ? 'approved video must be 20 MB or less.'
+      : `approved video must be ${policy.maxBytes} bytes or less.`];
+  }
   const buffer = fs.readFileSync(filePath);
   const boxes = mp4Boxes(buffer);
   if (!boxes || boxes.length < 3 || boxes[0].type !== 'ftyp') return ['approved video must be a structurally valid MP4 container.'];
@@ -508,13 +545,34 @@ function approvedMp4Errors(filePath) {
   }
   const movieBoxes = boxes.filter((box) => box.type === 'moov');
   const mediaBoxes = boxes.filter((box) => box.type === 'mdat' && box.end > box.dataStart);
+  const firstMediaBox = boxes.find((box) => box.type === 'mdat');
   if (movieBoxes.length !== 1 || mediaBoxes.length === 0) return ['approved video must contain one movie box and non-empty media data.'];
   const movieChildren = mp4Boxes(buffer, movieBoxes[0].dataStart, movieBoxes[0].end);
   if (!movieChildren) return ['approved video contains a malformed MP4 movie box.'];
   const movieHeaders = movieChildren.filter((box) => box.type === 'mvhd');
   const duration = movieHeaders.length === 1 ? mp4DurationSeconds(buffer, movieHeaders[0]) : null;
-  if (!Number.isFinite(duration) || duration < 15 || duration > 30) errors.push('approved video duration must be within the public 15-30 seconds target.');
-  if (!mp4HasVideoTrack(buffer, movieChildren)) errors.push('approved MP4 must contain a video track.');
+  if (usesLegacyPolicy) {
+    if (!Number.isFinite(duration) || duration < policy.minDurationSeconds || duration > policy.maxDurationSeconds) {
+      errors.push('approved video duration must be within the public 15-30 seconds target.');
+    }
+  } else if (!Number.isFinite(duration) || Math.abs(duration - policy.targetDurationSeconds) > policy.toleranceSeconds) {
+    errors.push(`approved video duration must be within ${policy.toleranceSeconds} seconds of ${policy.targetDurationSeconds} seconds.`);
+  }
+  const trackInfo = mp4TrackInfo(buffer, movieChildren);
+  if (!trackInfo.video) {
+    errors.push('approved MP4 must contain a video track.');
+  } else if (!usesLegacyPolicy) {
+    if (!['avc1', 'avc3'].includes(trackInfo.video.sampleEntry)) errors.push('approved video codec must be H.264 (avc1 or avc3).');
+    if (trackInfo.video.width !== policy.width || trackInfo.video.height !== policy.height) {
+      errors.push(`approved video dimensions must be ${policy.width} x ${policy.height}.`);
+    }
+  }
+  if (!usesLegacyPolicy && policy.requireNoAudio && trackInfo.handlerTypes.includes('soun')) {
+    errors.push('approved video must not contain an audio track.');
+  }
+  if (!usesLegacyPolicy && policy.requireFastStart && movieBoxes[0].start >= firstMediaBox.start) {
+    errors.push('approved video must use fast-start MP4 layout.');
+  }
   const metadataBox = findMp4MetadataBox(buffer, boxes);
   if (metadataBox) errors.push(`approved MP4 must be metadata-stripped; prohibited metadata box: ${metadataBox}.`);
   // Compressed sample data inside mdat is random enough to spell short path- or name-like fragments,
@@ -595,7 +653,7 @@ function inspectExactLocalPath(rootDir, relativeSource) {
   return { errors, filePath: current };
 }
 
-function approvedLocalEvidenceErrors(entry, rootDir) {
+function approvedLocalEvidenceErrors(entry, rootDir, item) {
   const errors = [];
   const source = entry.source;
   const normalizedSource = typeof source === 'string' ? source.replace(/\\/g, '/') : '';
@@ -642,7 +700,7 @@ function approvedLocalEvidenceErrors(entry, rootDir) {
         }
       }
     } else if (inspection.filePath && entry.type === 'video' && extension === '.mp4') {
-      errors.push(...approvedMp4Errors(inspection.filePath).map((error) => `${entry.id}: ${error}`));
+      errors.push(...approvedMp4Errors(inspection.filePath, item && item.videoPolicy).map((error) => `${entry.id}: ${error}`));
     }
   }
   return errors;
@@ -652,6 +710,13 @@ function evidenceRegistryErrors(candidate, rootDir) {
   const register = readEvidenceRegister(rootDir);
   const errors = register.errors.slice();
   const entriesById = new Map();
+  const canonicalEntries = canonicalMediaEntries(candidate);
+  const canonicalEntriesById = new Map();
+  for (const canonicalEntry of canonicalEntries) {
+    if (canonicalEntry.item && typeof canonicalEntry.item.id === 'string' && !canonicalEntriesById.has(canonicalEntry.item.id)) {
+      canonicalEntriesById.set(canonicalEntry.item.id, canonicalEntry);
+    }
+  }
   for (const entry of register.entries) {
     if (!entriesById.has(entry.id)) entriesById.set(entry.id, entry);
     if (!i18n.canonicalCaseSlugs.includes(entry.project)) errors.push(`${entry.id}: unknown registered project.`);
@@ -664,12 +729,12 @@ function evidenceRegistryErrors(candidate, rootDir) {
       errors.push(...publicEvidenceUrlErrors(entry.source).map((error) => `${entry.id}: unsafe external evidence source: ${error}`));
     }
     if (entry.state === 'approved-public' && ['image', 'video'].includes(entry.type)) {
-      errors.push(...approvedLocalEvidenceErrors(entry, rootDir));
+      errors.push(...approvedLocalEvidenceErrors(entry, rootDir, canonicalEntriesById.get(entry.id)?.item));
     }
   }
 
   const declaredIds = new Set();
-  for (const { project, item, slot } of canonicalMediaEntries(candidate)) {
+  for (const { project, item, slot } of canonicalEntries) {
     if (!item || typeof item.id !== 'string' || !item.id) continue;
     declaredIds.add(item.id);
     const entry = entriesById.get(item.id);
@@ -2267,6 +2332,7 @@ module.exports = {
   parseEvidenceRegister,
   readEvidenceRegister,
   evidenceRegistryErrors,
+  approvedMp4Errors,
   evidenceRootInventoryErrors,
   evidenceDirectoryErrors,
   imageDimensions,

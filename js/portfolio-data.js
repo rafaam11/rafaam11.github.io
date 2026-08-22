@@ -487,65 +487,97 @@
     }),
     project({
       slug: 'skadi-tracking-software', tier: 'platform', period: '2023.02 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
-      capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/skadi-tracking-software/',
+      capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/skadi-tracking-software/', caseLayout: 'evidence-first',
       tech: ['SKADI', 'C++', 'Python API', 'Viewer', '3D Slicer', 'Optical tracking'],
       media: {
-        lead: { id: 'skadi-tracking-software-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-clip-01.mp4' },
-        video: { id: 'skadi-tracking-software-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-clip-01.mp4' },
-        poster: { id: 'skadi-tracking-software-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-poster-01.png' },
+        lead: { id: 'skadi-workflow-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-workflow-clip-01.mp4', videoPolicy: { maxBytes: 20971520, targetDurationSeconds: 26, toleranceSeconds: 0.2, width: 1280, height: 720, codec: 'h264', requireNoAudio: true, requireFastStart: true } },
+        video: { id: 'skadi-workflow-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-workflow-clip-01.mp4', videoPolicy: { maxBytes: 20971520, targetDurationSeconds: 26, toleranceSeconds: 0.2, width: 1280, height: 720, codec: 'h264', requireNoAudio: true, requireFastStart: true } },
+        poster: { id: 'skadi-workflow-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-workflow-poster-01.png' },
         gallery: [
-          { id: 'skadi-tracking-software-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-01.png', translations: { ko: { caption: 'SKADI Viewer 홈 — 장치 연결, 추적 데이터 표, 영상 스트리밍(네트워크 주소는 가림)', alt: '장치 서버 연결 패널, 마커별 추적 데이터 표, IR 영상 스트리밍 패널이 있는 SKADI Viewer 홈 화면' }, en: { caption: 'SKADI Viewer home: device connection, tracking-data table, and video streaming (network addresses hidden)', alt: 'SKADI Viewer home screen with the device-server panel, per-marker tracking-data table, and IR video-streaming panel' } } },
-          { id: 'skadi-tracking-software-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-02.png', translations: { ko: { caption: '추적 뷰 — IR 영상 위의 마커 검출과 프로브·트레이 마커 좌표계', alt: 'IR 영상에 마커 점과 probe·tray marker 좌표축이 겹쳐 표시된 추적 뷰' }, en: { caption: 'Tracking view: marker detection on the IR image with probe and tray-marker frames', alt: 'Tracking view overlaying detected marker points and probe and tray-marker coordinate frames on the IR image' } } },
-          { id: 'skadi-tracking-software-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-03.png', translations: { ko: { caption: '추적 기록 뷰어 — 기록된 마커 자세의 3D 재생', alt: '기록된 두 마커의 자세와 궤적을 3D 좌표계에 재생하는 뷰어 화면' }, en: { caption: 'Recording viewer: 3D playback of recorded marker poses', alt: 'Viewer screen replaying the poses and trajectory of two recorded markers in a 3D coordinate frame' } } },
-          { id: 'skadi-tracking-software-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-04.png', translations: { ko: { caption: '3D Slicer 커스텀 앱 템플릿 구조 — Loadable·Scripted 모듈과 빌드 산출물', alt: 'src·Applications·Modules(Loadable, Scripted)·Resources와 rel·Slicer-build 산출물로 이어지는 템플릿 구조도' }, en: { caption: '3D Slicer custom-app template layout: Loadable and Scripted modules and build output', alt: 'Diagram of the template layout from src, Applications, Modules (Loadable, Scripted), and Resources to the rel and Slicer-build output' } } },
-          { id: 'skadi-tracking-software-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-05.png', translations: { ko: { caption: '등록 특허 「위치 추적 장치 및 방법」 특허증 (출원 10-2024-0186864)', alt: '발명의 명칭이 위치 추적 장치 및 방법으로 기재된 대한민국 특허청 발행 특허증' }, en: { caption: 'Granted patent certificate for “Position tracking device and method” (application 10-2024-0186864)', alt: 'Korean Intellectual Property Office patent certificate titled Position tracking device and method' } } },
+          { id: 'skadi-marker-workflow-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-marker-workflow-01.png', translations: { ko: { caption: 'MarkerEditor의 마커 파일 Import·Save·Export 흐름과 입력 검증', alt: 'MarkerEditor에서 마커 파일을 불러오고 점 좌표를 검증한 뒤 저장하고 내보내는 화면 구성' }, en: { caption: 'MarkerEditor marker-file import, save, and export flow with input validation', alt: 'MarkerEditor interface for importing a marker file, validating point coordinates, then saving and exporting it' } } },
+          { id: 'skadi-api-openex-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-api-openex-01.png', translations: { ko: { caption: '단일 API 진입점과 OpenEx() 성공·오류 분기', alt: '응용에서 DtSkadi.dll과 OpenEx 함수를 거쳐 준비 상태 또는 오류 처리로 분기하는 API 구조도' }, en: { caption: 'Single API entry point with OpenEx() success and error branches', alt: 'API diagram branching from the application through DtSkadi.dll and OpenEx into ready state or error handling' } } },
+          { id: 'skadi-viewer-6dof-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-viewer-6dof-01.png', translations: { ko: { caption: 'SKADI Viewer의 실시간 6DoF 마커 추적', alt: '비식별 팬텀 위 마커와 기구의 실시간 위치와 자세를 3D 및 단면 뷰로 보여주는 SKADI Viewer' }, en: { caption: 'Real-time 6DoF marker tracking in SKADI Viewer', alt: 'SKADI Viewer showing real-time position and orientation of markers and an instrument over a de-identified phantom in 3D and section views' } } },
+          { id: 'skadi-dental-registration-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-dental-registration-01.png', translations: { ko: { caption: '비식별 치과 환자–영상 정합 흐름', alt: '얼굴과 식별 정보를 제외한 치과 CT 및 트레이 기반 환자–영상 정합 흐름' }, en: { caption: 'De-identified dental patient-to-image registration flow', alt: 'Dental CT and tray-based patient-to-image registration flow with faces and identifying information excluded' } } },
+          { id: 'skadi-slicer-template-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-slicer-template-01.png', translations: { ko: { caption: '3D Slicer 커스텀 앱 템플릿 구조', alt: '소스, 애플리케이션, Loadable 및 Scripted 모듈, 리소스와 빌드 산출물로 이어지는 커스텀 앱 템플릿 구조도' }, en: { caption: '3D Slicer custom-application template structure', alt: 'Custom-application template diagram from source, application, Loadable and Scripted modules, and resources to build output' } } },
+          { id: 'skadi-robot-docking-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-robot-docking-01.png', translations: { ko: { caption: '로봇 추적과 정밀 도킹을 위한 좌표 구조', alt: '광학 트래커가 로봇 말단과 목표 마커의 위치와 자세를 제공하는 정밀 도킹 구조' }, en: { caption: 'Coordinate structure for robot tracking and precision docking', alt: 'Precision-docking structure where the optical tracker supplies the poses of the robot end effector and target marker' } } }
         ]
       },
+      architectureSteps: [
+        { key: 'define', label: 'Define', translations: { ko: { description: 'MarkerEditor에서 마커 형상을 Import·Save·Export하고 좌표 입력을 검증합니다.' }, en: { description: 'Import, save, and export marker geometry in MarkerEditor, with validation on coordinate input.' } } },
+        { key: 'open', label: 'Open', translations: { ko: { description: '응용이 DtSkadi.dll을 불러오고 OpenEx()의 성공·오류 결과에 따라 잘못된 상태로 진행하지 않게 분기합니다.' }, en: { description: 'The application loads DtSkadi.dll and branches on the OpenEx() success or error result before entering an invalid state.' } } },
+        { key: 'track', label: 'Track', translations: { ko: { description: 'Viewer와 API에서 마커의 실시간 6DoF 위치·자세와 장치 상태를 확인합니다.' }, en: { description: 'Inspect real-time 6DoF marker pose and device state through the Viewer and API.' } } },
+        { key: 'apply', label: 'Apply', translations: { ko: { description: '검증된 변환을 수술내비게이션 또는 로봇 정밀 도킹 응용이 소비합니다.' }, en: { description: 'Surgical-navigation or robot precision-docking applications consume the validated transforms.' } } }
+      ],
+      applicationTracks: [
+        {
+          key: 'medical', kind: 'primary', evidenceIds: ['skadi-viewer-6dof-01', 'skadi-dental-registration-01', 'skadi-slicer-template-01'],
+          translations: {
+            ko: { title: '의료 중심: 수술내비게이션 통합', summary: '비식별 치과 CT와 트레이를 연결하는 환자–영상 정합 흐름에서 추적 좌표를 Viewer와 API로 확인하고 Slicer 템플릿으로 응용 경계를 검증합니다.', ownedRole: 'API·Viewer 통합, 공개 문서와 템플릿 유지보수, 통합 문의 대응을 맡았습니다.', teamBoundary: '임상 워크플로와 최종 수술내비게이션 응용은 팀·협력자의 결과이며 임상 효과를 개인 성과로 주장하지 않습니다.' },
+            en: { title: 'Medical primary: surgical-navigation integration', summary: 'In a de-identified dental CT and tray workflow, tracking coordinates are inspected through the Viewer and API and the application boundary is checked with the Slicer template.', ownedRole: 'I own API and Viewer integration, public documentation and template maintenance, and integration support.', teamBoundary: 'The clinical workflow and final surgical-navigation application are team and partner results; no clinical effect is claimed as my result.' }
+          }
+        },
+        {
+          key: 'industrial', kind: 'extension', evidenceIds: ['skadi-robot-docking-01'],
+          translations: {
+            ko: { title: '산업 확장: 로봇 정밀 도킹', summary: '같은 6DoF 추적 계층을 로봇 말단과 목표 마커의 좌표 관계에 적용해 도킹 응용이 사용할 변환을 제공합니다.', ownedRole: '추적 API와 좌표 통합 지원을 맡았습니다.', teamBoundary: '로봇 제어와 최종 도킹 동작은 팀·고객의 응용 결과이며 제품 성능이나 고객 성과를 개인 성과로 주장하지 않습니다.' },
+            en: { title: 'Industrial extension: robot precision docking', summary: 'The same 6DoF tracking layer supplies the transform between robot-end and target markers for a docking application.', ownedRole: 'I own tracking-API and coordinate-integration support.', teamBoundary: 'Robot control and the final docking behavior are team and customer application results; product performance or customer outcomes are not claimed as mine.' }
+          }
+        }
+      ],
+      publicResources: [
+        { type: 'documentation', href: 'https://digitrack.notion.site/SKADI-Viewer-6a6710e4f7ba4d0b970376d07539e4c7', translations: { ko: { title: 'SKADI Viewer 문서', description: '장치 연결, 마커 편집, 실시간 추적과 Viewer 사용 흐름을 설명합니다.' }, en: { title: 'SKADI Viewer documentation', description: 'Explains device connection, marker editing, real-time tracking, and the Viewer workflow.' } } },
+        { type: 'product', href: 'https://digitrack.co.kr/business/products/3d-position-sensor/3', translations: { ko: { title: 'SKADI Viewer 제품 페이지', description: 'Viewer 제품군의 공개 소개와 적용 범위를 확인할 수 있습니다.' }, en: { title: 'SKADI Viewer product page', description: 'Public overview and application scope for the Viewer product family.' } } },
+        { type: 'documentation', href: 'https://digitrack.notion.site/SKADI-API-36c9be89b97b4dd58026021f95b06744', translations: { ko: { title: 'SKADI API 문서', description: '추적 응용이 사용하는 공개 API 진입점과 통합 흐름을 설명합니다.' }, en: { title: 'SKADI API documentation', description: 'Explains the public API entry point and integration flow used by tracking applications.' } } },
+        { type: 'product', href: 'https://digitrack.co.kr/business/products/3d-position-sensor/4', translations: { ko: { title: 'SKADI API 제품 페이지', description: 'SKADI API의 공개 제품 개요와 응용 경계를 확인할 수 있습니다.' }, en: { title: 'SKADI API product page', description: 'Public product overview and application boundary for the SKADI API.' } } }
+      ],
+      links: [
+        { href: 'https://digitrack.notion.site/Ver-7-1-2026-02-20-3071183735e080219c11ed0d51ea5b4f?pvs=25', translations: { ko: { label: '공개 API 변경 기록' }, en: { label: 'Public API change note' } } }
+      ],
       pdf: { ko: 'assets/pdfs/skadi-tracking-software-ko.pdf', en: 'assets/pdfs/skadi-tracking-software-en.pdf' },
       pdfSequence: {
-        middle: ['sdk-layers', 'viewer-and-template', 'delivery-evidence', 'hardware-boundary'],
-        evidenceId: 'skadi-tracking-software-clip-01',
+        middle: ['marker-definition', 'api-stability', 'viewer-delivery', 'integration-boundary'],
+        evidenceId: 'skadi-workflow-clip-01',
         diagram: {
           kind: 'tracking-sdk-stack',
           translations: {
-            ko: { title: '추적 장치에서 응용까지의 소프트웨어 계층', nodes: ['SKADI 트래커', 'API·SDK', 'Viewer·Slicer 템플릿', '수술내비게이션 응용'] },
-            en: { title: 'Software layers from tracker to application', nodes: ['SKADI tracker', 'API and SDK', 'Viewer and Slicer template', 'Surgical-navigation application'] }
+            ko: { title: 'Define → Open → Track → Apply', nodes: ['마커 정의·입력 검증', 'DtSkadi.dll·OpenEx()', 'Viewer·API 6DoF 추적', '의료 내비게이션·로봇 도킹'] },
+            en: { title: 'Define → Open → Track → Apply', nodes: ['Marker definition and validation', 'DtSkadi.dll and OpenEx()', 'Viewer and API 6DoF tracking', 'Medical navigation and robot docking'] }
           }
         }
       },
       translations: {
         ko: {
           title: 'SKADI 위치추적 소프트웨어 (API·Viewer)', shortTitle: 'SKADI 소프트웨어', eyebrow: '플랫폼 소프트웨어 · 광학 위치추적',
-          thesis: '자체 광학식 3차원 위치추적장치 SKADI를 수술내비게이션 기업과 연구기관이 바로 쓸 수 있게 하는 소프트웨어 계층을 만듭니다.',
-          summary: 'SKADI의 API·SDK, 장치 상태와 추적 결과를 보여주는 Viewer, 연구자가 바로 시작할 수 있는 3D Slicer 커스텀 앱 템플릿을 개발·유지보수합니다.',
-          problem: '광학 트래커는 하드웨어만으로는 쓰이지 않습니다. 좌표계, 마커 정의, 실시간 스트리밍, 오류 상태를 응용 개발자가 다루기 쉬운 인터페이스로 제공해야 합니다.',
-          role: 'API·SDK와 Viewer의 설계·구현·유지보수, 3D Slicer 커스텀 앱 템플릿 작성, 고객사 통합 지원과 문의 대응을 담당합니다.',
-          teamResult: '장치 하드웨어, 광학·기구 설계, 영업과 납품은 회사의 다른 구성원이 맡습니다. 납품 실적과 매출은 회사 성과이며 여기서 주장하지 않습니다.',
-          evidence: 'Viewer 화면, API 구조 다이어그램, Slicer 템플릿 동작 화면이 근거이며 고객 현장 영상은 싣지 않습니다.',
-          limitation: '장치 사양·정확도 수치·고객사 명단·판매 수치는 회사 소유 정보로 공개하지 않습니다.',
-          collaboration: '광학·하드웨어 설계자, 고객사 내비게이션 개발자, 연구기관 사용자와 인터페이스를 맞춥니다.',
-          mediaAlt: '모니터의 SKADI Viewer가 두개골 팬텀 위에서 추적되는 기구를 3D 모델과 단면 뷰로 표시하는 장면.', mediaCaption: 'SKADI Viewer가 두개골 팬텀 위의 추적 기구를 3D 모델과 단면 뷰로 표시하는 시연 클립입니다.',
-          status: '진행 중', cardProblem: '광학 트래커를 응용 개발자가 바로 쓰는 API·Viewer 계층으로 만듭니다.', cardOwnedRole: 'API·SDK·Viewer·Slicer 템플릿 개발·유지보수를 담당합니다.', cardEvidence: 'Viewer·추적 뷰·기록 뷰어·Slicer 템플릿 화면; 장치 사양과 판매 수치는 비공개입니다.', problemSummary: '추적 장치를 쓰기 쉬운 소프트웨어 계층으로 감쌉니다.', ownedRole: 'API·SDK·Viewer·Slicer 템플릿을 담당합니다.', verifiedEvidence: 'Viewer 시연 클립과 추적 뷰·기록 뷰어·Slicer 템플릿 화면이 근거입니다.', visualAlt: 'SKADI Viewer 추적 시연.', visualCaption: 'SKADI Viewer 추적 시연 클립.'
+          thesis: '증거에서 출발해 마커 정의부터 응용까지 이어지는 SKADI 소프트웨어 계층을 보여줍니다: Define → Open → Track → Apply.',
+          summary: 'MarkerEditor·SKADI Viewer·DtSkadi.dll을 하나의 통합 흐름으로 유지보수하고, 의료 수술내비게이션을 중심으로 로봇 정밀 도킹까지 연결합니다.',
+          problem: '광학 트래커는 하드웨어만으로 쓰이지 않습니다. 마커 정의, API 열기 실패, 실시간 6DoF 추적과 응용 좌표 전달을 개발자가 예측 가능한 인터페이스로 다뤄야 합니다.',
+          role: 'DtSkadi.dll을 응용에 통합하고 OpenEx()의 오류 분기를 정리해 열기 실패 뒤 잘못된 상태로 진행하며 발생하던 크래시를 방지했습니다. MarkerEditor 입력 검증을 구현하고, SKADI Viewer 제품군과 API의 유지보수·배포, 공개 문서와 통합 지원을 맡았습니다.',
+          teamResult: '장치 하드웨어와 광학·기구 설계, 의료·산업 최종 응용, 로봇 제어, 영업과 고객 성과는 팀·협력자의 결과입니다. 제품 성능·임상 효과·판매 성과를 개인 성과로 주장하지 않습니다.',
+          evidence: '대표 시연과 여섯 공개 파생본으로 MarkerEditor, API 오류 모델, Viewer 6DoF, 비식별 치과 정합, Slicer 템플릿, 로봇 도킹 구조를 확인할 수 있습니다.',
+          limitation: '공개 자료는 소프트웨어 인터페이스와 통합 경계만 다룹니다. 얼굴, 병원·고객 로고, 라이선스 경로, 장치 ID, 내부 수치와 성능 평가는 제외했습니다.',
+          collaboration: '광학·하드웨어 설계자, 수술내비게이션 개발자, 연구기관 사용자와 로봇 응용 팀의 인터페이스를 맞춥니다.',
+          mediaAlt: 'Define, Open, Track, Apply 네 단계와 비식별 팬텀 추적 및 의료·로봇 응용 근거를 이어 보여주는 무음 시연.', mediaCaption: 'Define → Open → Track → Apply를 따라 MarkerEditor, API, Viewer 6DoF와 의료·로봇 응용 경계를 보여주는 무음 대표 영상입니다.',
+          status: '진행 중', cardProblem: '마커 정의부터 추적 좌표 적용까지 예측 가능한 API·Viewer 계층으로 연결합니다.', cardOwnedRole: 'API 안정성, Viewer·MarkerEditor 유지보수와 공개 문서·통합 지원을 담당합니다.', cardEvidence: '대표 영상과 MarkerEditor·OpenEx·6DoF·의료·Slicer·로봇 증거 6종.', problemSummary: 'Define → Open → Track → Apply로 추적 장치를 응용에 연결합니다.', ownedRole: 'API 안정성과 Viewer·MarkerEditor 유지보수·통합 지원을 맡습니다.', verifiedEvidence: '대표 영상과 공개 파생 증거 여섯 종이 근거입니다.', visualAlt: 'SKADI API와 Viewer 통합 흐름.', visualCaption: 'SKADI evidence-first 통합 흐름.'
         },
         en: {
           title: 'SKADI Tracking Software (API and Viewer)', shortTitle: 'SKADI Software', eyebrow: 'Platform Software · Optical Tracking',
-          thesis: 'Make the in-house SKADI optical 3D tracker directly usable by surgical-navigation companies and research groups through its software layer.',
-          summary: 'Develop and maintain the SKADI API and SDK, the Viewer that shows device state and tracking results, and a 3D Slicer custom-application template that lets researchers start immediately.',
-          problem: 'An optical tracker is not used as bare hardware: coordinate frames, marker definitions, real-time streaming, and error states must be exposed through an interface application developers can work with.',
-          role: 'Own the design, implementation, and maintenance of the API, SDK, and Viewer; wrote the 3D Slicer custom-application template; support customer integrations and enquiries.',
-          teamResult: 'Device hardware, optical and mechanical design, sales, and delivery belong to other colleagues. Delivery records and revenue are company results and are not claimed here.',
-          evidence: 'Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site footage is excluded.',
-          limitation: 'Device specifications, accuracy figures, customer lists, and sales numbers are company-owned and not published.',
-          collaboration: 'Interfaces are agreed with optical and hardware designers, customer navigation developers, and research users.',
-          mediaAlt: 'SKADI Viewer on a monitor showing an instrument tracked over a skull phantom in the 3D model and section views.', mediaCaption: 'Demonstration clip: the SKADI Viewer shows a tracked instrument over a skull phantom in the 3D model and section views.',
-          status: 'Ongoing', cardProblem: 'Turn the optical tracker into an API and Viewer layer developers use directly.', cardOwnedRole: 'Own the API, SDK, Viewer, and Slicer template.', cardEvidence: 'Viewer, tracking-view, recording-viewer, and Slicer-template screens; specs and sales figures stay private.', problemSummary: 'Wrap the tracker in a usable software layer.', ownedRole: 'Own the API, SDK, Viewer, and Slicer template.', verifiedEvidence: 'The Viewer demonstration clip plus tracking-view, recording-viewer, and Slicer-template screens are the evidence.', visualAlt: 'SKADI Viewer tracking demonstration.', visualCaption: 'SKADI Viewer tracking demonstration clip.'
+          thesis: 'Start with evidence and follow the SKADI software layer from marker definition to application: Define → Open → Track → Apply.',
+          summary: 'Maintain MarkerEditor, SKADI Viewer, and DtSkadi.dll as one integration flow, centered on medical surgical navigation and extended to robot precision docking.',
+          problem: 'An optical tracker is not used as bare hardware. Developers need predictable interfaces for marker definition, API-open failures, real-time 6DoF tracking, and delivery of application transforms.',
+          role: 'Integrated DtSkadi.dll into applications, separated OpenEx() error branches so an open failure no longer continued into an invalid state and crash, and implemented MarkerEditor input validation. I maintain and release the SKADI Viewer family and API, public documentation, and integration support.',
+          teamResult: 'Device hardware, optical and mechanical design, final medical and industrial applications, robot control, sales, and customer outcomes belong to the team and partners. Product performance, clinical effects, and sales outcomes are not claimed as my results.',
+          evidence: 'The lead demonstration and six public derivatives cover MarkerEditor, the API error model, Viewer 6DoF, de-identified dental registration, the Slicer template, and the robot-docking structure.',
+          limitation: 'The public material covers only software interfaces and integration boundaries. Faces, hospital and customer logos, licence paths, device IDs, internal figures, and performance assessments are excluded.',
+          collaboration: 'Interfaces are agreed with optical and hardware designers, surgical-navigation developers, research users, and robot-application teams.',
+          mediaAlt: 'Silent demonstration connecting the four steps Define, Open, Track, and Apply with de-identified phantom tracking and medical and robot application evidence.', mediaCaption: 'Silent lead video following Define → Open → Track → Apply through MarkerEditor, the API, Viewer 6DoF, and the medical and robot application boundaries.',
+          status: 'Ongoing', cardProblem: 'Connect marker definition to tracked-transform application through a predictable API and Viewer layer.', cardOwnedRole: 'Own API stability, Viewer and MarkerEditor maintenance, public documentation, and integration support.', cardEvidence: 'Lead video plus six MarkerEditor, OpenEx, 6DoF, medical, Slicer, and robot evidence items.', problemSummary: 'Connect the tracker to applications through Define → Open → Track → Apply.', ownedRole: 'Own API stability, Viewer and MarkerEditor maintenance, and integration support.', verifiedEvidence: 'One lead video and six public evidence derivatives.', visualAlt: 'SKADI API and Viewer integration flow.', visualCaption: 'SKADI evidence-first integration flow.'
         }
       },
       blocks: [
-        { key: 'sdk-layers', type: 'system', translations: { ko: { heading: 'SDK 계층', body: '장치 연결, 마커·좌표계 정의, 실시간 스트리밍, 오류 상태를 API로 드러내고 언어 바인딩을 제공합니다.' }, en: { heading: 'SDK layers', body: 'Device connection, marker and frame definitions, real-time streaming, and error states are exposed through the API with language bindings.' } } },
-        { key: 'viewer-and-template', type: 'text', translations: { ko: { heading: 'Viewer와 템플릿', body: 'Viewer는 장치 상태와 추적 결과를 검증하는 도구이고, Slicer 템플릿은 연구자가 내비게이션 프로토타입을 바로 시작하게 합니다.' }, en: { heading: 'Viewer and template', body: 'The Viewer verifies device state and tracking output; the Slicer template lets researchers start a navigation prototype at once.' } } },
-        { key: 'delivery-evidence', type: 'evidence', translations: { ko: { heading: '동작 근거', body: 'Viewer·API·템플릿의 실제 동작 화면을 근거로 삼고 고객 현장 영상은 제외합니다.' }, en: { heading: 'Working evidence', body: 'Working Viewer, API, and template screens are the evidence; customer-site footage is excluded.' } } },
-        { key: 'hardware-boundary', type: 'limitation', translations: { ko: { heading: '하드웨어 경계', body: '장치 사양·정확도·판매 수치는 회사 소유 정보이며 이 사례는 소프트웨어 계층만 다룹니다.' }, en: { heading: 'Hardware boundary', body: 'Specifications, accuracy, and sales are company-owned; this case covers the software layer only.' } } }
+        { key: 'marker-definition', type: 'system', translations: { ko: { heading: '마커 정의와 입력 검증', body: 'MarkerEditor는 마커 형상을 Import·Save·Export하고 좌표 입력을 검증합니다.' }, en: { heading: 'Marker definition and input validation', body: 'MarkerEditor imports, saves, and exports marker geometry and validates coordinate input.' } } },
+        { key: 'api-stability', type: 'evidence', translations: { ko: { heading: 'OpenEx() 안정성', body: 'DtSkadi.dll 통합에서 OpenEx() 성공·오류 결과를 분리하고 실패 뒤 잘못된 상태로 진행하지 않게 해 크래시를 방지했습니다.' }, en: { heading: 'OpenEx() stability', body: 'In the DtSkadi.dll integration, OpenEx() success and error results are separated so failure stops before an invalid state and crash.' } } },
+        { key: 'viewer-delivery', type: 'text', translations: { ko: { heading: 'Viewer 제품군과 명칭 이력', body: 'SKADI Viewer 제품군을 유지보수·배포합니다. 마커 편집 도구 MarkerEditor는 적용 범위가 넓어지며 SkadiApp으로 이름이 바뀌었습니다.' }, en: { heading: 'Viewer family and naming history', body: 'I maintain and release the SKADI Viewer family. The marker-editing tool MarkerEditor was renamed SkadiApp as its scope expanded.' } } },
+        { key: 'integration-boundary', type: 'limitation', translations: { ko: { heading: '통합 경계', body: '플랫폼과 통합 지원은 내 역할이고, 의료·산업 최종 응용과 제품·고객 성과는 팀·협력자의 결과입니다.' }, en: { heading: 'Integration boundary', body: 'I own the platform and integration support; final medical and industrial applications and product or customer outcomes belong to the team and partners.' } } }
       ]
     }),
     project({
