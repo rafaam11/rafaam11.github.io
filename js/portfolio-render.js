@@ -671,9 +671,9 @@
 
   function capabilityIndexHtml(data, locale) {
     var localized = localizePortfolioData(data, locale);
-    return '<p class="sc-capabilities">' + localized.capabilities.map(function (capability) {
-      return '<strong>' + escapeHtml(capability.title) + '</strong> (' + capability.methods.map(escapeHtml).join(', ') + ')';
-    }).join(' · ') + '</p>';
+    return '<dl class="sc-capabilities">' + localized.capabilities.map(function (capability) {
+      return '<div><dt>' + escapeHtml(capability.title) + '</dt><dd>' + capability.methods.map(escapeHtml).join(', ') + '</dd></div>';
+    }).join('') + '</dl>';
   }
 
   function projectLinksInline(project, locale) {

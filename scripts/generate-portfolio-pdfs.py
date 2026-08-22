@@ -49,7 +49,6 @@ EXPECTED_DIAGRAM_KIND = {
     "ai-build-lab": "product-loop",
 }
 LOCALES = ["ko", "en"]
-CV_PAGES = 3
 CONTACT_EMAIL = "uiop3847@naver.com"
 PUBLIC_SITE = {
     "name": "Jinmin Kim",
@@ -1111,188 +1110,6 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     doc.save()
 
 
-def cv_labels(locale: str) -> dict[str, str]:
-    if locale == "ko":
-        return {
-            "document": "공개 이력서",
-            "profile": "프로필",
-            "education": "학력",
-            "experience": "경력",
-            "publications": "연구 실적",
-            "patents": "특허",
-            "awards": "수상",
-            "skills": "기술",
-            "languages": "어학",
-            "source": "2026-08-22 승인된 공개 사실만 사용한 CV입니다. 타인 개인정보와 미검증 성과 주장은 포함하지 않습니다.",
-            "patent_value": "출원 {applications}건 / 등록 {grants}건",
-            "award_value": "총 {total}건",
-            "granted": "등록",
-            "filed": "출원",
-            "filed_suffix": "출원",
-            "work": "직무",
-            "undergraduate": "학부",
-            "academic": "학회",
-        }
-    return {
-        "document": "Public CV",
-        "profile": "Profile",
-        "education": "Education",
-        "experience": "Experience",
-        "publications": "Publications and Presentations",
-        "patents": "Patents",
-        "awards": "Honours and Awards",
-        "skills": "Skills",
-        "languages": "Languages",
-        "source": "A CV built only from public facts approved on 2026-08-22. Personal information about other people and unverified outcome claims are excluded.",
-        "patent_value": "{applications} applications / {grants} granted",
-        "award_value": "{total} total",
-        "granted": "Granted",
-        "filed": "Filed",
-        "filed_suffix": "filed",
-        "work": "Employment",
-        "undergraduate": "Undergraduate",
-        "academic": "Academic society",
-    }
-
-
-def generate_cv_pdf(dependencies: dict[str, Any], payload: dict[str, Any], locale: str, output: Path) -> None:
-    cv = payload["cv"]
-    identity = localized(cv["identity"], locale)
-    labels = cv_labels(locale)
-    doc = TechnicalDocument(dependencies, output, f"{identity['displayName']} - CV", identity["headline"], locale, CV_PAGES)
-    width = doc.right - doc.left
-    bullet_indent = 12.0
-
-    def rule(y: float) -> float:
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.line(doc.left, y, doc.right, y)
-        return y
-
-    def bullets(items: list[str], y: float, size: float = 7.6, leading: float = 10.6,
-                max_lines: int = 4) -> float:
-        for item in items:
-            doc.text("·", doc.left + 2, y, 8, size=size, leading=leading, color="muted", max_lines=1)
-            y = doc.text(item, doc.left + bullet_indent, y, width - bullet_indent, size=size,
-                         leading=leading, color="muted", max_lines=max_lines) - 3
-        return y
-
-    def entry_head(organization: str, period: str, y: float) -> float:
-        doc.text(period, doc.right - 96, y, 96, size=7.6, leading=11, color="muted", max_lines=1)
-        return doc.text(organization, doc.left, y, width - 104, size=10.5,
-                        font="MalgunGothic-Bold", leading=14, max_lines=1)
-
-    # Page 1 - profile, education, first experience areas
-    doc.begin_page(1, labels["document"])
-    y = doc.top - 30
-    doc.label(labels["profile"], doc.left, y)
-    y = doc.text(identity["displayName"], doc.left, y - 32, width, size=25,
-                 font="MalgunGothic-Bold", leading=31, max_lines=1)
-    y = doc.text(identity["headline"], doc.left, y - 2, width, size=12.5,
-                 font="MalgunGothic-Bold", leading=18, max_lines=2) - 6
-    y = doc.text(identity["summary"], doc.left, y, width, size=8.6,
-                 leading=13, color="muted", max_lines=4) - 6
-    doc.text(cv["identity"]["location"][locale], doc.left, y, 150, size=7.5,
-             leading=11, color="muted", max_lines=1)
-    contact_x = doc.left + 104
-    for contact in cv["contacts"]:
-        contact_x += doc.link(f"{contact['label']}: {contact['value']}", contact["href"], contact_x, y, 7.5) + 14
-    y = rule(y - 14) - 20
-
-    doc.label(labels["education"], doc.left, y)
-    y -= 20
-    for entry in cv["education"]:
-        entry_copy = localized(entry, locale)
-        y = entry_head(entry["organization"], entry["period"], y)
-        y = doc.text(entry_copy["degree"], doc.left, y - 1, width, size=8.6,
-                     font="MalgunGothic-Bold", leading=12, max_lines=1) - 3
-        y = bullets(entry_copy["notes"], y) - 8
-
-    experience = cv["experience"][0]
-    experience_copy = localized(experience, locale)
-    y -= 2
-    doc.label(labels["experience"], doc.left, y)
-    y -= 20
-    y = entry_head(experience["organization"], experience["period"], y)
-    y = doc.text(experience_copy["role"], doc.left, y - 1, width, size=8.6,
-                 font="MalgunGothic-Bold", leading=12, max_lines=1)
-    y = doc.text(experience_copy["context"], doc.left, y - 1, width, size=7.4,
-                 leading=10.5, color="muted", max_lines=2) - 6
-    for area in experience["areas"][:1]:
-        area_copy = localized(area, locale)
-        y = doc.text(area_copy["title"], doc.left, y, width, size=8.2,
-                     font="MalgunGothic-Bold", leading=12, max_lines=1) - 2
-        y = bullets(area_copy["items"], y) - 4
-    doc.finish_page()
-
-    # Page 2 - remaining experience areas and publications
-    doc.begin_page(2, labels["document"])
-    y = doc.top - 30
-    doc.label(labels["experience"], doc.left, y)
-    y -= 20
-    for area in experience["areas"][1:]:
-        area_copy = localized(area, locale)
-        y = doc.text(area_copy["title"], doc.left, y, width, size=8.2,
-                     font="MalgunGothic-Bold", leading=12, max_lines=1) - 2
-        y = bullets(area_copy["items"], y) - 6
-    y = rule(y - 4) - 20
-    doc.label(labels["publications"], doc.left, y)
-    y -= 20
-    for publication in cv["publications"]:
-        publication_copy = localized(publication, locale)
-        doc.text(publication["year"], doc.left, y, 34, size=7.8,
-                 font="MalgunGothic-Bold", leading=11, max_lines=1)
-        title_y = doc.text(publication_copy["title"], doc.left + 38, y, width - 38, size=8.2,
-                           leading=11.5, max_lines=3)
-        y = doc.text(f"{publication_copy['venue']} · {publication_copy['role']}", doc.left + 38,
-                     title_y - 1, width - 38, size=7.2, leading=10, color="muted", max_lines=2) - 6
-        if publication.get("href"):
-            doc.link("Public article", publication["href"], doc.left + 38, y, 7.2)
-            y -= 12
-    doc.finish_page()
-
-    # Page 3 - patents, awards, skills
-    doc.begin_page(CV_PAGES, labels["document"])
-    y = doc.top - 30
-    granted = sum(1 for patent in cv["patents"] if patent["status"] == "granted")
-    doc.label(f"{labels['patents']} · {labels['patent_value'].format(applications=len(cv['patents']), grants=granted)}",
-              doc.left, y)
-    y -= 20
-    for patent in cv["patents"]:
-        patent_copy = localized(patent, locale)
-        doc.text(labels[patent["status"]], doc.left, y, 34, size=7.4,
-                 font="MalgunGothic-Bold", leading=11, max_lines=1)
-        title_y = doc.text(patent_copy["title"], doc.left + 38, y, width - 38, size=8.2,
-                           leading=11.5, max_lines=2)
-        y = doc.text(f"{patent['number']} · {patent['filed']} {labels['filed_suffix']} · {labels[patent['group']]}",
-                     doc.left + 38, title_y - 1, width - 38, size=7.2, leading=10,
-                     color="muted", max_lines=1) - 6
-    y = rule(y - 2) - 20
-    doc.label(f"{labels['awards']} · {labels['award_value'].format(total=len(cv['awards']))}", doc.left, y)
-    y -= 20
-    for award in cv["awards"]:
-        award_copy = localized(award, locale)
-        doc.text(award["year"], doc.left, y, 34, size=7.8,
-                 font="MalgunGothic-Bold", leading=11, max_lines=1)
-        y = doc.text(f"{award_copy['title']} — {award_copy['organization']}", doc.left + 38, y,
-                     width - 38, size=8, leading=11, max_lines=2) - 4
-    y = rule(y - 2) - 20
-    doc.label(labels["skills"], doc.left, y)
-    y -= 20
-    for skill in cv["skills"]:
-        skill_copy = localized(skill, locale)
-        doc.text(skill_copy["category"], doc.left, y, 104, size=7.8,
-                 font="MalgunGothic-Bold", leading=11, max_lines=1)
-        y = doc.text(skill_copy["items"], doc.left + 108, y, width - 108, size=7.8,
-                     leading=11, color="muted", max_lines=2) - 4
-    doc.text(labels["languages"], doc.left, y, 104, size=7.8,
-             font="MalgunGothic-Bold", leading=11, max_lines=1)
-    y = doc.text(" · ".join(item["translations"][locale] for item in cv["languages"]),
-                 doc.left + 108, y, width - 108, size=7.8, leading=11, color="muted", max_lines=2) - 10
-    doc.text(labels["source"], doc.left, y, width, size=7, leading=10, color="muted", max_lines=3)
-    doc.finish_page()
-    doc.save()
-
-
 def validate_pdf(dependencies: dict[str, Any], file_path: Path, expected_pages: int,
                  expected_name: str) -> dict[str, Any]:
     reader = dependencies["PdfReader"](str(file_path))
@@ -1322,40 +1139,6 @@ def validate_pdf(dependencies: dict[str, Any], file_path: Path, expected_pages: 
     attachments = getattr(reader, "attachments", {})
     require(not attachments, f"{file_path.name}: hidden attachment detected.")
     return {"pages": expected_pages, "links": link_count, "characters": len(extracted)}
-
-
-def render_cv_previews(dependencies: dict[str, Any], cv_pdf_paths: dict[str, Path],
-                       cv_asset_root: Path) -> list[dict[str, Any]]:
-    fitz = dependencies["fitz"]
-    Image = dependencies["Image"]
-    previews: list[dict[str, Any]] = []
-    for locale in LOCALES:
-        document = fitz.open(str(cv_pdf_paths[locale]))
-        try:
-            require(len(document) == CV_PAGES, f"CV preview source for {locale} must contain {CV_PAGES} pages.")
-            for index, page in enumerate(document):
-                pixmap = page.get_pixmap(matrix=fitz.Matrix(150 / 72, 150 / 72), alpha=False)
-                name = f"jinmin-kim-cv-{locale}-page-{index + 1}.png"
-                preview = cv_asset_root / name
-                pixmap.save(str(preview))
-                with Image.open(preview) as image:
-                    image.verify()
-                with Image.open(preview) as image:
-                    width, height = image.size
-                require(width > 0 and height > 0, f"{name}: invalid preview dimensions.")
-                previews.append({
-                    "path": f"assets/cv/{name}",
-                    "kind": "cv-preview",
-                    "locale": locale,
-                    "page": index + 1,
-                    "width": width,
-                    "height": height,
-                    "bytes": preview.stat().st_size,
-                    "sha256": sha256(preview),
-                })
-        finally:
-            document.close()
-    return previews
 
 
 def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_dir: Path) -> dict[str, Any]:
@@ -1416,17 +1199,15 @@ def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_d
 
 def validate_review_render(dependencies: dict[str, Any], review_dir: Path,
                            pdf_names: list[str], manifest: dict[str, Any]) -> None:
-    expected_pages = {
-        name: (CV_PAGES if name.startswith("jinmin-kim-cv-") else 6) for name in pdf_names
-    }
+    expected_pages = {name: 6 for name in pdf_names}
     require(set(manifest) == {"renderer", "dpi", "pageCount", "documents"},
             "Review manifest has an invalid schema.")
     require(manifest["renderer"] == "PyMuPDF fallback" and manifest["dpi"] == 120,
             "Review manifest has an invalid renderer contract.")
-    require(manifest["pageCount"] == sum(expected_pages.values()) == 96 + 2 * CV_PAGES,
-            f"Review render must contain exactly {96 + 2 * CV_PAGES} pages.")
-    require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 18,
-            "Review manifest must track exactly eighteen documents.")
+    require(manifest["pageCount"] == sum(expected_pages.values()) == 96,
+            "Review render must contain exactly 96 pages.")
+    require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 16,
+            "Review manifest must track exactly sixteen documents.")
     seen: set[str] = set()
     for document in manifest["documents"]:
         require(isinstance(document, dict) and set(document) == {"pdf", "pages", "contactSheet"},
@@ -1468,28 +1249,20 @@ def artifact_record(file_path: Path, relative_path: str, kind: str, **fields: An
 
 
 def validate_staged_publication(dependencies: dict[str, Any], output_dir: Path,
-                                project_assets: Path, cv_assets: Path,
-                                manifest: dict[str, Any]) -> None:
+                                project_assets: Path, manifest: dict[str, Any]) -> None:
     expected_project_names = {f"{slug}-{locale}.pdf" for slug in EXPECTED_SLUGS for locale in LOCALES}
-    expected_cv_names = {f"jinmin-kim-cv-{locale}.pdf" for locale in LOCALES}
-    expected_preview_names = {
-        f"jinmin-kim-cv-{locale}-page-{page}.png" for locale in LOCALES for page in range(1, CV_PAGES + 1)
-    }
-    require({item.name for item in output_dir.iterdir()} == expected_project_names | expected_cv_names | {"manifest.json"},
+    require({item.name for item in output_dir.iterdir()} == expected_project_names | {"manifest.json"},
             "Staged output/pdf contains an unexpected or missing artifact.")
     require({item.name for item in project_assets.iterdir()} == expected_project_names,
             "Staged assets/pdfs contains an unexpected or missing artifact.")
-    require({item.name for item in cv_assets.iterdir()} == expected_cv_names | expected_preview_names,
-            "Staged assets/cv contains an unexpected or missing artifact.")
     manifest_path = output_dir / "manifest.json"
     require(json.loads(manifest_path.read_text(encoding="utf-8")) == manifest,
             "Staged PDF manifest did not round-trip.")
     roots = {
         "output/pdf/": output_dir,
         "assets/pdfs/": project_assets,
-        "assets/cv/": cv_assets,
     }
-    expected_artifacts = 2 * len(EXPECTED_SLUGS) * len(LOCALES) + 2 * len(LOCALES) + CV_PAGES * len(LOCALES)
+    expected_artifacts = 2 * len(EXPECTED_SLUGS) * len(LOCALES)
     require(len(manifest["artifacts"]) == expected_artifacts,
             f"Staged PDF manifest must track exactly {expected_artifacts} artifacts.")
     for artifact in manifest["artifacts"]:
@@ -1499,15 +1272,9 @@ def validate_staged_publication(dependencies: dict[str, Any], output_dir: Path,
         require(file_path.is_file(), f"Manifest artifact is missing: {artifact['path']}.")
         require(file_path.stat().st_size == artifact["bytes"] and sha256(file_path) == artifact["sha256"],
                 f"Manifest artifact checksum mismatch: {artifact['path']}.")
-        if artifact["kind"] == "cv-preview":
-            with dependencies["Image"].open(file_path) as image:
-                require(image.size == (artifact["width"], artifact["height"]),
-                        f"Manifest preview dimensions mismatch: {artifact['path']}.")
-                image.verify()
-        else:
-            reader = dependencies["PdfReader"](str(file_path))
-            require(len(reader.pages) == artifact["pages"],
-                    f"Manifest PDF page mismatch: {artifact['path']}.")
+        reader = dependencies["PdfReader"](str(file_path))
+        require(len(reader.pages) == artifact["pages"],
+                f"Manifest PDF page mismatch: {artifact['path']}.")
 
 
 def atomic_swap_directories(publications: list[tuple[Path, Path]]) -> None:
@@ -1541,14 +1308,13 @@ def atomic_swap_directories(publications: list[tuple[Path, Path]]) -> None:
 def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: Path,
              publish_root: Path, review_dir: Path | None) -> dict[str, Any]:
     local_evidence = preflight_local_evidence(payload, publish_root, dependencies)
+    # assets/cv holds the author's own CV PDFs; they are tracked source, never generated here.
     project_assets = publish_root / "assets" / "pdfs"
-    cv_assets = publish_root / "assets" / "cv"
-    targets = [output_dir, project_assets, cv_assets]
+    targets = [output_dir, project_assets]
     token = uuid.uuid4().hex
     stages: list[Path] = []
     review_stage: Path | None = None
     expected_names = [f"{slug}-{locale}.pdf" for slug in EXPECTED_SLUGS for locale in LOCALES]
-    expected_names += [f"jinmin-kim-cv-{locale}.pdf" for locale in LOCALES]
     documents: list[dict[str, Any]] = []
     artifacts: list[dict[str, Any]] = []
     try:
@@ -1557,7 +1323,7 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
             stage = target.parent / f".{target.name}.stage-{token}"
             stage.mkdir()
             stages.append(stage)
-        staged_output, staged_projects, staged_cv = stages
+        staged_output, staged_projects = stages
         if review_dir:
             review_dir.parent.mkdir(parents=True, exist_ok=True)
             review_stage = review_dir.parent / f".{review_dir.name}.stage-{token}"
@@ -1587,29 +1353,6 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
                     locale=locale, pages=qa["pages"]
                 ))
 
-        cv_pdf_paths: dict[str, Path] = {}
-        for locale in LOCALES:
-            name = f"jinmin-kim-cv-{locale}.pdf"
-            output = staged_output / name
-            generate_cv_pdf(dependencies, payload, locale, output)
-            qa = validate_pdf(dependencies, output, CV_PAGES, localized(payload["cv"]["identity"], locale)["displayName"])
-            published = staged_cv / name
-            shutil.copyfile(output, published)
-            require(sha256(output) == sha256(published), f"{name}: staged checksum mismatch.")
-            cv_pdf_paths[locale] = published
-            documents.append({
-                "name": name, "kind": "cv", "locale": locale,
-                "pages": qa["pages"], "links": qa["links"], "characters": qa["characters"],
-                "bytes": output.stat().st_size, "sha256": sha256(output)
-            })
-            artifacts.append(artifact_record(
-                output, f"output/pdf/{name}", "cv-pdf", locale=locale, pages=qa["pages"]
-            ))
-            artifacts.append(artifact_record(
-                published, f"assets/cv/{name}", "cv-pdf", locale=locale, pages=qa["pages"]
-            ))
-
-        artifacts.extend(render_cv_previews(dependencies, cv_pdf_paths, staged_cv))
         artifacts.sort(key=lambda artifact: artifact["path"])
         manifest = {
             "schemaVersion": 3,
@@ -1621,9 +1364,9 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
             "artifacts": artifacts,
         }
         (staged_output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-        validate_staged_publication(dependencies, staged_output, staged_projects, staged_cv, manifest)
+        validate_staged_publication(dependencies, staged_output, staged_projects, manifest)
         result = dict(manifest)
-        publications = list(zip(targets, stages[:3]))
+        publications = list(zip(targets, stages[:len(targets)]))
         if review_dir and review_stage:
             staged_pdf_paths = [staged_output / name for name in expected_names]
             review_manifest = render_reviews(dependencies, staged_pdf_paths, review_stage)

@@ -47,10 +47,9 @@ const standaloneLegacyFiles = [
 const ignoredHtmlInventoryRoots = new Set(['.git', '.superpowers', 'docs', 'node_modules', 'public']);
 const evidenceRegisterRelativePath = path.join('assets', 'projects', 'EVIDENCE_REGISTER.md');
 const evidenceRegisterStates = new Set(['pending-review', 'approved-public', 'excluded']);
-// The public CV renders as three generated pages: profile and education, experience and publications,
-// then patents, awards, and skills.
-const cvPageCount = 3;
-const cvPageNumbers = Array.from({ length: cvPageCount }, (unused, index) => index + 1);
+// The two CV PDFs are the author's own Word document (ko as written, en translated), tracked in
+// assets/cv rather than generated. Their page count follows whatever the author's document runs to.
+const cvPdfNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
 const evidenceMediaTypes = new Set(['image', 'video', 'repository', 'publication']);
 const evidenceRegisterHeader = '| Evidence ID | Project | Media type | State | Public source | Provenance / usage |';
 const evidenceRegisterSeparator = '| --- | --- | --- | --- | --- | --- |';
@@ -1212,15 +1211,43 @@ function cvSummaryRecoveryArtifactErrors(rootDir) {
   return errors;
 }
 
+// The CV PDFs are authored in Word and committed, so they get their own safety gate instead of the
+// generated-artifact contract: a real PDF of sane size, sanitized metadata, a public link annotation,
+// no attachment, and no private contact detail or source path in the extractable text.
+function cvPdfErrors(rootDir) {
+  const errors = [];
+  for (const name of cvPdfNames) {
+    const filePath = path.join(rootDir, 'assets', 'cv', name);
+    if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) {
+      errors.push(`assets/cv/${name}: missing tracked CV PDF.`);
+      continue;
+    }
+    const bytes = fs.readFileSync(filePath);
+    const text = bytes.toString('latin1');
+    if (bytes.subarray(0, 5).toString('ascii') !== '%PDF-' || bytes.length <= 12_000) errors.push(`assets/cv/${name}: invalid or unexpectedly small PDF.`);
+    const pages = pdfPageCount(filePath);
+    if (pages < 1 || pages > 4) errors.push(`assets/cv/${name}: a public CV must stay within four pages (found ${pages}).`);
+    if (!/\/Author\s*\(Jinmin Kim\)/.test(text)) errors.push(`assets/cv/${name}: missing sanitized PDF author metadata.`);
+    if (/\/(?:Creator|Producer)\s*\((?:Microsoft|Word|Adobe)/i.test(text)) {
+      errors.push(`assets/cv/${name}: authoring-tool metadata must be replaced before publishing.`);
+    }
+    if (!/\/URI\s*\(/.test(text)) errors.push(`assets/cv/${name}: missing public link annotation.`);
+    if (/\/EmbeddedFiles\b|\/Filespec\b/.test(text)) errors.push(`assets/cv/${name}: hidden attachment is not allowed.`);
+    const outsideStreams = text.replace(/stream\r?\n[\s\S]*?endstream/g, 'stream endstream');
+    if (/(?:^|[\s"'(])(?:[A-Za-z]:[\\/]|\\\\)|file:\/\/|OneDrive|private[\\/]raw/i.test(outsideStreams)) {
+      errors.push(`assets/cv/${name}: PDF bytes expose a private source path.`);
+    }
+  }
+  return errors;
+}
+
 function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   const errors = cvSummaryRecoveryArtifactErrors(rootDir);
   const projectNames = i18n.canonicalCaseSlugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
-  const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
-  const expectedOutputNames = projectNames.concat(cvNames).sort();
+  const expectedOutputNames = projectNames.slice().sort();
   const outputRoot = path.join(rootDir, 'output', 'pdf');
   const projectRoot = path.join(rootDir, 'assets', 'pdfs');
   const cvRoot = path.join(rootDir, 'assets', 'cv');
-  const expectedPreviewNames = ['ko', 'en'].flatMap((locale) => cvPageNumbers.map((pageNumber) => `jinmin-kim-cv-${locale}-page-${pageNumber}.png`));
 
   for (const [directory, label] of [[outputRoot, 'output/pdf'], [projectRoot, 'assets/pdfs'], [cvRoot, 'assets/cv']]) {
     if (!fs.existsSync(directory) || !fs.lstatSync(directory).isDirectory()) errors.push(`${label}: missing PDF artifact directory.`);
@@ -1233,18 +1260,18 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   const actualOutputNames = actualOutputEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
   const actualProjectNames = actualProjectEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
   const actualCvNames = actualCvEntries.filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
-  if (JSON.stringify(actualOutputNames) !== JSON.stringify(expectedOutputNames)) errors.push('output/pdf must contain exactly twelve project PDFs and two CV PDFs.');
-  if (JSON.stringify(actualProjectNames) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs must contain exactly the twelve canonical localized project PDFs.');
-  if (JSON.stringify(actualCvNames) !== JSON.stringify(cvNames.slice().sort())) errors.push('assets/cv must contain exactly the two localized CV PDFs.');
+  if (JSON.stringify(actualOutputNames) !== JSON.stringify(expectedOutputNames)) errors.push('output/pdf must contain exactly the sixteen canonical localized project PDFs.');
+  if (JSON.stringify(actualProjectNames) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs must contain exactly the sixteen canonical localized project PDFs.');
+  if (JSON.stringify(actualCvNames) !== JSON.stringify(cvPdfNames.slice().sort())) errors.push('assets/cv must contain exactly the two localized CV PDFs.');
   if (JSON.stringify(actualOutputEntries) !== JSON.stringify(expectedOutputNames.concat('manifest.json').sort())) errors.push('output/pdf contains an unexpected or missing published artifact.');
   if (JSON.stringify(actualProjectEntries) !== JSON.stringify(projectNames.slice().sort())) errors.push('assets/pdfs contains an unexpected or missing published artifact.');
-  if (JSON.stringify(actualCvEntries) !== JSON.stringify(cvNames.concat(expectedPreviewNames).sort())) errors.push('assets/cv contains an unexpected or missing published artifact.');
+  if (JSON.stringify(actualCvEntries) !== JSON.stringify(cvPdfNames.slice().sort())) errors.push('assets/cv contains an unexpected or missing published artifact.');
+  errors.push(...cvPdfErrors(rootDir));
 
   for (const name of expectedOutputNames) {
-    const isCv = cvNames.includes(name);
-    const publishedPath = path.join(isCv ? cvRoot : projectRoot, name);
+    const publishedPath = path.join(projectRoot, name);
     const outputPath = path.join(outputRoot, name);
-    const expectedPages = isCv ? cvPageCount : 6;
+    const expectedPages = 6;
     for (const filePath of [publishedPath, outputPath]) {
       if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) {
         errors.push(`${path.relative(rootDir, filePath)}: missing PDF artifact.`);
@@ -1266,19 +1293,6 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     }
     if (fs.existsSync(publishedPath) && fs.existsSync(outputPath) && sha256File(publishedPath) !== sha256File(outputPath)) {
       errors.push(`${name}: output and published PDF checksums differ.`);
-    }
-  }
-
-  for (const locale of ['ko', 'en']) {
-    for (const pageNumber of cvPageNumbers) {
-      const name = `jinmin-kim-cv-${locale}-page-${pageNumber}.png`;
-      const preview = path.join(cvRoot, name);
-      const dimensions = fs.existsSync(preview) ? imageDimensions(preview, '.png') : null;
-      if (!dimensions) {
-        errors.push(`assets/cv/${name}: missing or invalid CV raster preview.`);
-      } else if (dimensions.width !== 1241 || dimensions.height !== 1754) {
-        errors.push(`assets/cv/${name}: CV raster preview must be exactly 1241x1754.`);
-      }
     }
   }
 
@@ -1326,11 +1340,8 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
         expectedDocuments.set(name, { kind: 'project', slug, locale, pages: 6 });
       }
     }
-    for (const locale of ['ko', 'en']) {
-      expectedDocuments.set(`jinmin-kim-cv-${locale}.pdf`, { kind: 'cv', locale, pages: cvPageCount });
-    }
     if (!Array.isArray(manifest.documents) || manifest.documents.length !== expectedDocuments.size) {
-      errors.push('output/pdf/manifest.json: documents must track exactly fourteen PDFs.');
+      errors.push('output/pdf/manifest.json: documents must track exactly the sixteen generated project PDFs.');
     } else {
       const seen = new Set();
       for (const document of manifest.documents) {
@@ -1370,17 +1381,6 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
         }
       }
     }
-    for (const locale of ['ko', 'en']) {
-      const pdfName = `jinmin-kim-cv-${locale}.pdf`;
-      for (const prefix of ['output/pdf', 'assets/cv']) {
-        expectedArtifacts.set(`${prefix}/${pdfName}`, { kind: 'cv-pdf', locale, pages: cvPageCount });
-      }
-      for (const pageNumber of cvPageNumbers) {
-        expectedArtifacts.set(`assets/cv/jinmin-kim-cv-${locale}-page-${pageNumber}.png`, {
-          kind: 'cv-preview', locale, page: pageNumber
-        });
-      }
-    }
     if (!Array.isArray(manifest.artifacts) || manifest.artifacts.length !== expectedArtifacts.size) {
       errors.push('output/pdf/manifest.json: artifacts must track exactly 32 published files.');
     } else {
@@ -1411,12 +1411,6 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
         if (!Number.isInteger(artifact.bytes) || artifact.bytes !== fs.statSync(filePath).size || artifact.sha256 !== sha256File(filePath)) {
           errors.push(`${artifact.path}: artifact manifest hash or byte count mismatch.`);
         }
-        if (expected.kind === 'cv-preview') {
-          const dimensions = imageDimensions(filePath, '.png');
-          if (!dimensions || dimensions.width !== artifact.width || dimensions.height !== artifact.height) {
-            errors.push(`${artifact.path}: preview manifest dimensions mismatch.`);
-          }
-        }
       }
       if (seen.size !== expectedArtifacts.size) errors.push('output/pdf/manifest.json: one or more canonical artifacts are missing.');
     }
@@ -1435,21 +1429,6 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     const base = locale === 'en' ? '../../' : '../';
     const pdfHref = `${base}assets/cv/jinmin-kim-cv-${locale}.pdf`;
     if (!new RegExp(`<object[^>]+data="${escapeRegExp(pdfHref)}"[^>]+type="application/pdf"`).test(html)) errors.push(`${relativePage}: missing localized PDF object.`);
-    for (const pageNumber of cvPageNumbers) {
-      const previewHref = `${base}assets/cv/jinmin-kim-cv-${locale}-page-${pageNumber}.png`;
-      const previewTag = html.match(new RegExp(`<img\\b[^>]*src="${escapeRegExp(previewHref)}"[^>]*>`, 'i'))?.[0];
-      if (!previewTag) {
-        errors.push(`${relativePage}: missing localized CV page ${pageNumber} preview.`);
-      } else {
-        const width = Number(previewTag.match(/\bwidth="(\d+)"/i)?.[1]);
-        const height = Number(previewTag.match(/\bheight="(\d+)"/i)?.[1]);
-        const previewPath = path.join(cvRoot, `jinmin-kim-cv-${locale}-page-${pageNumber}.png`);
-        const dimensions = fs.existsSync(previewPath) ? imageDimensions(previewPath, '.png') : null;
-        if (!dimensions || width !== dimensions.width || height !== dimensions.height || width !== 1241 || height !== 1754) {
-          errors.push(`${relativePage}: CV preview intrinsic dimensions must match the 1241x1754 raster artifact.`);
-        }
-      }
-    }
     if (!new RegExp(`<a[^>]+href="${escapeRegExp(pdfHref)}"[^>]+target="_blank"[^>]+rel="noopener"`).test(html)) errors.push(`${relativePage}: missing PDF open fallback.`);
     if (!new RegExp(`<a[^>]+href="${escapeRegExp(pdfHref)}"[^>]+download`).test(html)) errors.push(`${relativePage}: missing PDF download fallback.`);
     if (!/<section[^>]+data-cv-summary[^>]+aria-labelledby=/.test(html) || !/<ol\b/.test(html) || !/<ul\b/.test(html) || !/<dl\b/.test(html)) {
@@ -2294,6 +2273,7 @@ module.exports = {
   publicCvDataErrors,
   cvSummaryRecoveryArtifactErrors,
   pdfArtifactErrors,
+  cvPdfErrors,
   visualAssetErrors,
   validatePortfolio
 };
