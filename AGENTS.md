@@ -40,7 +40,7 @@ index.html                         # Home: intro (name, identity line, photo, co
 projects/index.html                # Projects groups: Medical Core (5), Platform Software (1), Industrial Spotlight (1), AI Build Lab (1)
 projects/<slug>/index.html         # 8 shared-renderer case summaries
 en/                               # English counterparts for all 12 Korean routes
-cv/index.html                      # Public-safe semantic CV plus PDF and raster fallbacks
+cv/index.html                      # Full public CV in semantic HTML plus PDF and raster fallbacks
 contact/index.html                 # Joint-development enquiry guidance
 js/portfolio-data.js               # Canonical 8 projects and 5 capability stacks
 js/portfolio-render.js             # Home, Projects, and case renderer
@@ -52,7 +52,7 @@ css/cv-pdf.css                     # CV viewer and page-preview layout
 assets/projects/EVIDENCE_REGISTER.md # Public evidence identifier and approval SSOT
 assets/projects/<slug>/            # Approved derivatives or public-safe boundary README
 assets/pdfs/                       # 16 public project PDFs
-assets/cv/                         # 2 public CV PDFs and 4 preview PNGs
+assets/cv/                         # 2 public CV PDFs (3 pages each) and 6 preview PNGs
 scripts/export-portfolio-data.cjs  # Deterministic PDF input exporter
 scripts/generate-portfolio-pdfs.py # ReportLab PDF generator and artifact publisher
 scripts/validate-portfolio.cjs     # Privacy, route, link, dependency, evidence, and PDF validator
@@ -70,6 +70,7 @@ public/                            # Generated blog output; never edit for portf
 - `portfolio-data.js` is the summary-content SSOT. Update it when a title, period, evidence state, role, team result, media declaration, PDF pair, or capability mapping changes.
 - Evidence IDs and publication state must match `assets/projects/EVIDENCE_REGISTER.md`. Pending internal media has no public path.
 - Project and CV PDFs are generated artifacts. Use the exporter/generator pipeline; do not hand-edit PDFs.
+- The CV surface is generated from `data/public-cv.json` (version 2026-08-22): `node scripts/public-cv-summary.cjs --write` rewrites the marked block on both CV pages, and the PDF generator renders the same data. Approved as public on 2026-08-22: KIPO patent application numbers and the thesis advisor's name. Other people's names, phone numbers, addresses, and patient data stay out.
 - Do not restore the removed Research/Capabilities route, excluded project routes, decorative SVG fallbacks, Bootstrap/StartBootstrap, or the old sidebar layout.
 - Home mounts: capability-index, home-projects, home-highlights; Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
 

@@ -49,6 +49,7 @@ EXPECTED_DIAGRAM_KIND = {
     "ai-build-lab": "product-loop",
 }
 LOCALES = ["ko", "en"]
+CV_PAGES = 3
 CONTACT_EMAIL = "uiop3847@naver.com"
 PUBLIC_SITE = {
     "name": "Jinmin Kim",
@@ -75,7 +76,8 @@ ASCII_HYPHENS = str.maketrans({
 })
 PUBLIC_DASH_ENTITY_PATTERN = re.compile(r"&(?:dash|hyphen|ndash|mdash);?", re.I)
 PUBLIC_PII_PATTERNS = [
-    ("phone number", re.compile(r"(?:\+82[\s()./·-]*\(?0?10\)?|\(?010\)?)[\s()./·-]*\d{3,4}[\s()./·-]*\d{4}(?!\d)", re.I)),
+    # The leading lookbehind keeps KIPO patent numbers (10-2019-0100328) from reading as 010-xxxx-xxxx.
+    ("phone number", re.compile(r"(?<![\d-])(?:\+82[\s()./·-]*\(?0?10\)?|\(?010\)?)[\s()./·-]*\d{3,4}[\s()./·-]*\d{4}(?!\d)", re.I)),
     ("explicit English age", re.compile(r"\b\d{1,3}(?:\s+years?\s+old|[-\s]year[-\s]old)\b", re.I)),
     ("explicit Korean age", re.compile(r"(?:만\s*)?\d{1,3}\s*세(?![가-힣])", re.I)),
     ("Korean address", re.compile(r"(?:서울(?:특별시|시)?|부산(?:광역시|시)?|대구(?:광역시|시)?|인천(?:광역시|시)?|광주(?:광역시|시)?|대전(?:광역시|시)?|울산(?:광역시|시)?|세종(?:특별자치시|시)?)\s+[가-힣]{1,12}(?:구|군)(?![가-힣])", re.I)),
@@ -211,9 +213,10 @@ def public_pii_findings(value: Any) -> list[str]:
 
 def validate_cv(cv_value: Any) -> dict[str, Any]:
     cv = require_object(cv_value, "PDF input public CV")
-    require(cv.get("version") == "2026-08-21", "PDF input requires the approved public CV version.")
+    require(cv.get("version") == "2026-08-22", "PDF input requires the approved public CV version.")
     identity = require_object(cv.get("identity"), "PDF input CV identity")
     require(identity.get("name") == "Jinmin Kim", "PDF input CV identity must be Jinmin Kim.")
+    validate_localized_strings(identity.get("location"), "PDF input CV identity location")
     validate_translation_record(identity, "PDF input CV identity", ["displayName", "headline", "summary"])
 
     contacts = require_array(cv.get("contacts"), "PDF input CV contacts", 3)
@@ -233,37 +236,68 @@ def validate_cv(cv_value: Any) -> dict[str, Any]:
         seen_contacts.add(label)
     require(seen_contacts == set(approved_contacts), "PDF input CV contacts must contain Email, GitHub, and LinkedIn.")
 
-    timeline = require_array(cv.get("timeline"), "PDF input CV timeline", 4)
-    for index, value in enumerate(timeline, start=1):
-        entry = require_object(value, f"PDF input CV timeline entry {index}")
-        require_text(entry.get("period"), f"PDF input CV timeline entry {index} period")
-        require_text(entry.get("organization"), f"PDF input CV timeline entry {index} organization")
-        validate_translation_record(entry, f"PDF input CV timeline entry {index}", ["role", "summary"])
+    education = require_array(cv.get("education"), "PDF input CV education", 2)
+    for index, value in enumerate(education, start=1):
+        entry = require_object(value, f"PDF input CV education entry {index}")
+        require_text(entry.get("period"), f"PDF input CV education entry {index} period")
+        require_text(entry.get("organization"), f"PDF input CV education entry {index} organization")
+        validate_translation_record(entry, f"PDF input CV education entry {index}", ["degree"])
+        for locale in LOCALES:
+            notes = entry["translations"][locale].get("notes")
+            require(isinstance(notes, list) and notes and all(isinstance(note, str) and note.strip() for note in notes),
+                    f"PDF input CV education entry {index} {locale} notes must be a non-empty string list.")
 
-    capabilities = require_array(cv.get("capabilities"), "PDF input CV capabilities", 4)
-    for index, value in enumerate(capabilities, start=1):
-        validate_translation_record(require_object(value, f"PDF input CV capability {index}"),
-                                    f"PDF input CV capability {index}", ["title", "body"])
+    experience = require_array(cv.get("experience"), "PDF input CV experience", 1)
+    for index, value in enumerate(experience, start=1):
+        entry = require_object(value, f"PDF input CV experience entry {index}")
+        require_text(entry.get("period"), f"PDF input CV experience entry {index} period")
+        require_text(entry.get("organization"), f"PDF input CV experience entry {index} organization")
+        validate_translation_record(entry, f"PDF input CV experience entry {index}", ["role", "context"])
+        areas = require_array(entry.get("areas"), f"PDF input CV experience entry {index} areas", 4)
+        for area_index, area_value in enumerate(areas, start=1):
+            area = require_object(area_value, f"PDF input CV experience area {area_index}")
+            validate_translation_record(area, f"PDF input CV experience area {area_index}", ["title"])
+            for locale in LOCALES:
+                items = area["translations"][locale].get("items")
+                require(isinstance(items, list) and items and all(isinstance(item, str) and item.strip() for item in items),
+                        f"PDF input CV experience area {area_index} {locale} items must be a non-empty string list.")
 
-    research_entries = require_array(cv.get("research"), "PDF input CV research", 2)
-    for index, value in enumerate(research_entries, start=1):
-        research = require_object(value, f"PDF input CV research entry {index}")
-        for field in ["year", "title", "venue", "role"]:
-            require_text(research.get(field), f"PDF input CV research entry {index} {field}")
-        if "href" in research:
-            href = require_text(research.get("href"), f"PDF input CV research entry {index} href")
-            require(href.startswith("https://"), f"PDF input CV research entry {index} href must use HTTPS.")
+    publications = require_array(cv.get("publications"), "PDF input CV publications", 7)
+    for index, value in enumerate(publications, start=1):
+        publication = require_object(value, f"PDF input CV publication {index}")
+        require_text(publication.get("year"), f"PDF input CV publication {index} year")
+        validate_translation_record(publication, f"PDF input CV publication {index}", ["title", "venue", "role"])
+        if "href" in publication:
+            href = require_text(publication.get("href"), f"PDF input CV publication {index} href")
+            require(href.startswith("https://"), f"PDF input CV publication {index} href must use HTTPS.")
 
-    achievements = require_object(cv.get("achievements"), "PDF input CV achievements")
-    require(achievements.get("patentApplications") == 7 and achievements.get("patentGrants") == 3 and
-            achievements.get("awardTotal") == 9,
-            "PDF input CV achievement totals must remain 7 applications, 3 grants, and 9 awards.")
-    require_text(achievements.get("asOf"), "PDF input CV achievements asOf")
-    awards = require_array(achievements.get("selectedAwards"), "PDF input CV selected awards", 3)
+    patents = require_array(cv.get("patents"), "PDF input CV patents", 7)
+    granted = 0
+    for index, value in enumerate(patents, start=1):
+        patent = require_object(value, f"PDF input CV patent {index}")
+        status = require_text(patent.get("status"), f"PDF input CV patent {index} status")
+        require(status in {"filed", "granted"}, f"PDF input CV patent {index} status must be filed or granted.")
+        granted += 1 if status == "granted" else 0
+        require(require_text(patent.get("group"), f"PDF input CV patent {index} group") in {"work", "undergraduate"},
+                f"PDF input CV patent {index} group must be work or undergraduate.")
+        require(re.fullmatch(r"10-\d{4}-\d{7}", require_text(patent.get("number"), f"PDF input CV patent {index} number")),
+                f"PDF input CV patent {index} number must be a KIPO application number.")
+        require_text(patent.get("filed"), f"PDF input CV patent {index} filed")
+        validate_translation_record(patent, f"PDF input CV patent {index}", ["title"])
+    require(granted == 3, "PDF input CV patents must record exactly 3 granted entries.")
+
+    awards = require_array(cv.get("awards"), "PDF input CV awards", 9)
     for index, value in enumerate(awards, start=1):
-        award = require_object(value, f"PDF input CV selected award {index}")
-        require_text(award.get("year"), f"PDF input CV selected award {index} year")
-        validate_localized_strings(award.get("translations"), f"PDF input CV selected award {index}")
+        award = require_object(value, f"PDF input CV award {index}")
+        require_text(award.get("year"), f"PDF input CV award {index} year")
+        require(require_text(award.get("group"), f"PDF input CV award {index} group") in {"academic", "undergraduate"},
+                f"PDF input CV award {index} group must be academic or undergraduate.")
+        validate_translation_record(award, f"PDF input CV award {index}", ["title", "organization"])
+
+    skills = require_array(cv.get("skills"), "PDF input CV skills", 5)
+    for index, value in enumerate(skills, start=1):
+        validate_translation_record(require_object(value, f"PDF input CV skill {index}"),
+                                    f"PDF input CV skill {index}", ["category", "items"])
 
     languages = require_array(cv.get("languages"), "PDF input CV languages", 2)
     for index, value in enumerate(languages, start=1):
@@ -1082,34 +1116,42 @@ def cv_labels(locale: str) -> dict[str, str]:
         return {
             "document": "공개 이력서",
             "profile": "프로필",
-            "timeline": "경력 및 학력",
-            "capabilities": "사용 및 구현 경험",
-            "research": "연구 및 공개 근거",
-            "signals": "성과 신호",
+            "education": "학력",
+            "experience": "경력",
+            "publications": "연구 실적",
             "patents": "특허",
             "awards": "수상",
-            "selected": "선정 수상",
-            "languages": "언어",
-            "projects": "대표 작업 범위",
-            "source": "2026-08-21 승인된 공개 사실만 사용한 2페이지 CV입니다.",
+            "skills": "기술",
+            "languages": "어학",
+            "source": "2026-08-22 승인된 공개 사실만 사용한 CV입니다. 타인 개인정보와 미검증 성과 주장은 포함하지 않습니다.",
             "patent_value": "출원 {applications}건 / 등록 {grants}건",
             "award_value": "총 {total}건",
+            "granted": "등록",
+            "filed": "출원",
+            "filed_suffix": "출원",
+            "work": "직무",
+            "undergraduate": "학부",
+            "academic": "학회",
         }
     return {
         "document": "Public CV",
         "profile": "Profile",
-        "timeline": "Experience and Education",
-        "capabilities": "Usage-based Engineering Experience",
-        "research": "Research and Public Evidence",
-        "signals": "Achievement Signals",
+        "education": "Education",
+        "experience": "Experience",
+        "publications": "Publications and Presentations",
         "patents": "Patents",
-        "awards": "Awards",
-        "selected": "Selected awards",
+        "awards": "Honours and Awards",
+        "skills": "Skills",
         "languages": "Languages",
-        "projects": "Representative Work Scope",
-        "source": "Two-page CV using only public facts approved on 2026-08-21.",
-        "patent_value": "{applications} applications / {grants} grants",
+        "source": "A CV built only from public facts approved on 2026-08-22. Personal information about other people and unverified outcome claims are excluded.",
+        "patent_value": "{applications} applications / {grants} granted",
         "award_value": "{total} total",
+        "granted": "Granted",
+        "filed": "Filed",
+        "filed_suffix": "filed",
+        "work": "Employment",
+        "undergraduate": "Undergraduate",
+        "academic": "Academic society",
     }
 
 
@@ -1117,103 +1159,136 @@ def generate_cv_pdf(dependencies: dict[str, Any], payload: dict[str, Any], local
     cv = payload["cv"]
     identity = localized(cv["identity"], locale)
     labels = cv_labels(locale)
-    doc = TechnicalDocument(dependencies, output, f"{identity['displayName']} - CV", identity["headline"], locale, 2)
+    doc = TechnicalDocument(dependencies, output, f"{identity['displayName']} - CV", identity["headline"], locale, CV_PAGES)
     width = doc.right - doc.left
+    bullet_indent = 12.0
 
-    # Page 1
+    def rule(y: float) -> float:
+        doc.canvas.setStrokeColor(doc.colors["line"])
+        doc.canvas.line(doc.left, y, doc.right, y)
+        return y
+
+    def bullets(items: list[str], y: float, size: float = 7.6, leading: float = 10.6,
+                max_lines: int = 4) -> float:
+        for item in items:
+            doc.text("·", doc.left + 2, y, 8, size=size, leading=leading, color="muted", max_lines=1)
+            y = doc.text(item, doc.left + bullet_indent, y, width - bullet_indent, size=size,
+                         leading=leading, color="muted", max_lines=max_lines) - 3
+        return y
+
+    def entry_head(organization: str, period: str, y: float) -> float:
+        doc.text(period, doc.right - 96, y, 96, size=7.6, leading=11, color="muted", max_lines=1)
+        return doc.text(organization, doc.left, y, width - 104, size=10.5,
+                        font="MalgunGothic-Bold", leading=14, max_lines=1)
+
+    # Page 1 - profile, education, first experience areas
     doc.begin_page(1, labels["document"])
     y = doc.top - 30
     doc.label(labels["profile"], doc.left, y)
-    y = doc.text(identity["displayName"], doc.left, y - 32, width, size=27,
-                 font="MalgunGothic-Bold", leading=34, max_lines=1)
-    y = doc.text(identity["headline"], doc.left, y - 4, width, size=14,
-                 font="MalgunGothic-Bold", leading=20, max_lines=2) - 10
-    y = doc.text(identity["summary"], doc.left, y, width, size=9.2,
-                 leading=14, color="muted", max_lines=5) - 8
-    contact_x = doc.left
+    y = doc.text(identity["displayName"], doc.left, y - 32, width, size=25,
+                 font="MalgunGothic-Bold", leading=31, max_lines=1)
+    y = doc.text(identity["headline"], doc.left, y - 2, width, size=12.5,
+                 font="MalgunGothic-Bold", leading=18, max_lines=2) - 6
+    y = doc.text(identity["summary"], doc.left, y, width, size=8.6,
+                 leading=13, color="muted", max_lines=4) - 6
+    doc.text(cv["identity"]["location"][locale], doc.left, y, 150, size=7.5,
+             leading=11, color="muted", max_lines=1)
+    contact_x = doc.left + 104
     for contact in cv["contacts"]:
-        contact_x += doc.link(f"{contact['label']}: {contact['value']}", contact["href"], contact_x, y, 7.5) + 16
-    y -= 34
-    doc.canvas.setStrokeColor(doc.colors["ink"])
-    doc.canvas.line(doc.left, y, doc.right, y)
-    y -= 22
-    doc.label(labels["timeline"], doc.left, y)
-    y -= 22
-    for entry in cv["timeline"]:
+        contact_x += doc.link(f"{contact['label']}: {contact['value']}", contact["href"], contact_x, y, 7.5) + 14
+    y = rule(y - 14) - 20
+
+    doc.label(labels["education"], doc.left, y)
+    y -= 20
+    for entry in cv["education"]:
         entry_copy = localized(entry, locale)
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.line(doc.left, y + 5, doc.right, y + 5)
-        doc.text(entry["period"], doc.left, y - 10, 104, size=8,
-                 font="MalgunGothic-Bold", leading=12, max_lines=2)
-        doc.text(entry["organization"], doc.left + 112, y - 10, 155, size=9,
-                 font="MalgunGothic-Bold", leading=13, max_lines=2)
-        role_y = doc.text(entry_copy["role"], doc.left + 275, y - 10, width - 275,
-                          size=8.5, font="MalgunGothic-Bold", leading=12, max_lines=2)
-        doc.text(entry_copy["summary"], doc.left + 275, role_y - 2, width - 275,
-                 size=7.2, leading=10.5, color="muted", max_lines=3)
-        y -= 68
-    y -= 10
-    doc.label(labels["capabilities"], doc.left, y)
-    y -= 22
-    column_width = (width - 12) / 2
-    for index, capability in enumerate(cv["capabilities"]):
-        capability_copy = localized(capability, locale)
-        x = doc.left + (index % 2) * (column_width + 12)
-        box_y = y - (index // 2) * 78
-        doc.canvas.setFillColor(doc.colors["soft"])
-        doc.canvas.rect(x, box_y - 66, column_width, 66, fill=1, stroke=0)
-        doc.text(capability_copy["title"], x + 10, box_y - 18, column_width - 20,
-                 size=8.5, font="MalgunGothic-Bold", leading=12, max_lines=2)
-        doc.text(capability_copy["body"], x + 10, box_y - 41, column_width - 20,
-                 size=6.9, leading=10, color="muted", max_lines=3)
+        y = entry_head(entry["organization"], entry["period"], y)
+        y = doc.text(entry_copy["degree"], doc.left, y - 1, width, size=8.6,
+                     font="MalgunGothic-Bold", leading=12, max_lines=1) - 3
+        y = bullets(entry_copy["notes"], y) - 8
+
+    experience = cv["experience"][0]
+    experience_copy = localized(experience, locale)
+    y -= 2
+    doc.label(labels["experience"], doc.left, y)
+    y -= 20
+    y = entry_head(experience["organization"], experience["period"], y)
+    y = doc.text(experience_copy["role"], doc.left, y - 1, width, size=8.6,
+                 font="MalgunGothic-Bold", leading=12, max_lines=1)
+    y = doc.text(experience_copy["context"], doc.left, y - 1, width, size=7.4,
+                 leading=10.5, color="muted", max_lines=2) - 6
+    for area in experience["areas"][:1]:
+        area_copy = localized(area, locale)
+        y = doc.text(area_copy["title"], doc.left, y, width, size=8.2,
+                     font="MalgunGothic-Bold", leading=12, max_lines=1) - 2
+        y = bullets(area_copy["items"], y) - 4
     doc.finish_page()
 
-    # Page 2
+    # Page 2 - remaining experience areas and publications
     doc.begin_page(2, labels["document"])
-    y = doc.heading(labels["research"], doc.top - 30, 20)
-    for research in cv["research"]:
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(doc.left, y - 96, width, 96, fill=0, stroke=1)
-        doc.label(f"{research['year']} / {research['role']}", doc.left + 12, y - 18)
-        title_y = doc.text(research["title"], doc.left + 12, y - 40, width - 24,
-                           size=9.2, font="MalgunGothic-Bold", leading=13, max_lines=3)
-        doc.text(research["venue"], doc.left + 12, title_y - 2, width - 24,
-                 size=7.5, leading=11, color="muted", max_lines=2)
-        if research.get("href"):
-            doc.link("Public article", research["href"], doc.right - 88, y - 78, 7.5)
-        y -= 106
-    y -= 4
-    doc.label(labels["signals"], doc.left, y)
-    y -= 24
-    achievements = cv["achievements"]
-    signal_items = [
-        (labels["patents"], labels["patent_value"].format(
-            applications=achievements["patentApplications"], grants=achievements["patentGrants"])),
-        (labels["awards"], labels["award_value"].format(total=achievements["awardTotal"])),
-        (labels["languages"], " / ".join(item["translations"][locale] for item in cv["languages"])),
-    ]
-    signal_width = (width - 20) / 3
-    for index, (label, value) in enumerate(signal_items):
-        x = doc.left + index * (signal_width + 10)
-        doc.canvas.setFillColor(doc.colors["soft"])
-        doc.canvas.rect(x, y - 72, signal_width, 72, fill=1, stroke=0)
-        doc.label(label, x + 10, y - 18)
-        doc.text(value, x + 10, y - 42, signal_width - 20, size=8.5,
-                 font="MalgunGothic-Bold", leading=12, max_lines=3)
-    y -= 92
-    doc.label(labels["selected"], doc.left, y)
-    y -= 21
-    for award in achievements["selectedAwards"]:
-        doc.text(f"{award['year']}  {award['translations'][locale]}", doc.left, y, width,
-                 size=8.3, leading=12, max_lines=2)
-        y -= 20
-    y -= 4
-    doc.label(labels["projects"], doc.left, y)
+    y = doc.top - 30
+    doc.label(labels["experience"], doc.left, y)
     y -= 20
-    project_titles = [localized(project, locale)["shortTitle"] for project in payload["projects"]]
-    y = doc.text(" / ".join(project_titles), doc.left, y, width, size=8.2,
-                 leading=12, color="muted", max_lines=4) - 8
-    doc.text(labels["source"], doc.left, y, width, size=7.5, leading=11, color="muted", max_lines=2)
+    for area in experience["areas"][1:]:
+        area_copy = localized(area, locale)
+        y = doc.text(area_copy["title"], doc.left, y, width, size=8.2,
+                     font="MalgunGothic-Bold", leading=12, max_lines=1) - 2
+        y = bullets(area_copy["items"], y) - 6
+    y = rule(y - 4) - 20
+    doc.label(labels["publications"], doc.left, y)
+    y -= 20
+    for publication in cv["publications"]:
+        publication_copy = localized(publication, locale)
+        doc.text(publication["year"], doc.left, y, 34, size=7.8,
+                 font="MalgunGothic-Bold", leading=11, max_lines=1)
+        title_y = doc.text(publication_copy["title"], doc.left + 38, y, width - 38, size=8.2,
+                           leading=11.5, max_lines=3)
+        y = doc.text(f"{publication_copy['venue']} · {publication_copy['role']}", doc.left + 38,
+                     title_y - 1, width - 38, size=7.2, leading=10, color="muted", max_lines=2) - 6
+        if publication.get("href"):
+            doc.link("Public article", publication["href"], doc.left + 38, y, 7.2)
+            y -= 12
+    doc.finish_page()
+
+    # Page 3 - patents, awards, skills
+    doc.begin_page(CV_PAGES, labels["document"])
+    y = doc.top - 30
+    granted = sum(1 for patent in cv["patents"] if patent["status"] == "granted")
+    doc.label(f"{labels['patents']} · {labels['patent_value'].format(applications=len(cv['patents']), grants=granted)}",
+              doc.left, y)
+    y -= 20
+    for patent in cv["patents"]:
+        patent_copy = localized(patent, locale)
+        doc.text(labels[patent["status"]], doc.left, y, 34, size=7.4,
+                 font="MalgunGothic-Bold", leading=11, max_lines=1)
+        title_y = doc.text(patent_copy["title"], doc.left + 38, y, width - 38, size=8.2,
+                           leading=11.5, max_lines=2)
+        y = doc.text(f"{patent['number']} · {patent['filed']} {labels['filed_suffix']} · {labels[patent['group']]}",
+                     doc.left + 38, title_y - 1, width - 38, size=7.2, leading=10,
+                     color="muted", max_lines=1) - 6
+    y = rule(y - 2) - 20
+    doc.label(f"{labels['awards']} · {labels['award_value'].format(total=len(cv['awards']))}", doc.left, y)
+    y -= 20
+    for award in cv["awards"]:
+        award_copy = localized(award, locale)
+        doc.text(award["year"], doc.left, y, 34, size=7.8,
+                 font="MalgunGothic-Bold", leading=11, max_lines=1)
+        y = doc.text(f"{award_copy['title']} — {award_copy['organization']}", doc.left + 38, y,
+                     width - 38, size=8, leading=11, max_lines=2) - 4
+    y = rule(y - 2) - 20
+    doc.label(labels["skills"], doc.left, y)
+    y -= 20
+    for skill in cv["skills"]:
+        skill_copy = localized(skill, locale)
+        doc.text(skill_copy["category"], doc.left, y, 104, size=7.8,
+                 font="MalgunGothic-Bold", leading=11, max_lines=1)
+        y = doc.text(skill_copy["items"], doc.left + 108, y, width - 108, size=7.8,
+                     leading=11, color="muted", max_lines=2) - 4
+    doc.text(labels["languages"], doc.left, y, 104, size=7.8,
+             font="MalgunGothic-Bold", leading=11, max_lines=1)
+    y = doc.text(" · ".join(item["translations"][locale] for item in cv["languages"]),
+                 doc.left + 108, y, width - 108, size=7.8, leading=11, color="muted", max_lines=2) - 10
+    doc.text(labels["source"], doc.left, y, width, size=7, leading=10, color="muted", max_lines=3)
     doc.finish_page()
     doc.save()
 
@@ -1257,7 +1332,7 @@ def render_cv_previews(dependencies: dict[str, Any], cv_pdf_paths: dict[str, Pat
     for locale in LOCALES:
         document = fitz.open(str(cv_pdf_paths[locale]))
         try:
-            require(len(document) == 2, f"CV preview source for {locale} must contain two pages.")
+            require(len(document) == CV_PAGES, f"CV preview source for {locale} must contain {CV_PAGES} pages.")
             for index, page in enumerate(document):
                 pixmap = page.get_pixmap(matrix=fitz.Matrix(150 / 72, 150 / 72), alpha=False)
                 name = f"jinmin-kim-cv-{locale}-page-{index + 1}.png"
@@ -1342,14 +1417,14 @@ def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_d
 def validate_review_render(dependencies: dict[str, Any], review_dir: Path,
                            pdf_names: list[str], manifest: dict[str, Any]) -> None:
     expected_pages = {
-        name: (2 if name.startswith("jinmin-kim-cv-") else 6) for name in pdf_names
+        name: (CV_PAGES if name.startswith("jinmin-kim-cv-") else 6) for name in pdf_names
     }
     require(set(manifest) == {"renderer", "dpi", "pageCount", "documents"},
             "Review manifest has an invalid schema.")
     require(manifest["renderer"] == "PyMuPDF fallback" and manifest["dpi"] == 120,
             "Review manifest has an invalid renderer contract.")
-    require(manifest["pageCount"] == sum(expected_pages.values()) == 100,
-            "Review render must contain exactly 100 pages.")
+    require(manifest["pageCount"] == sum(expected_pages.values()) == 96 + 2 * CV_PAGES,
+            f"Review render must contain exactly {96 + 2 * CV_PAGES} pages.")
     require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 18,
             "Review manifest must track exactly eighteen documents.")
     seen: set[str] = set()
@@ -1398,7 +1473,7 @@ def validate_staged_publication(dependencies: dict[str, Any], output_dir: Path,
     expected_project_names = {f"{slug}-{locale}.pdf" for slug in EXPECTED_SLUGS for locale in LOCALES}
     expected_cv_names = {f"jinmin-kim-cv-{locale}.pdf" for locale in LOCALES}
     expected_preview_names = {
-        f"jinmin-kim-cv-{locale}-page-{page}.png" for locale in LOCALES for page in [1, 2]
+        f"jinmin-kim-cv-{locale}-page-{page}.png" for locale in LOCALES for page in range(1, CV_PAGES + 1)
     }
     require({item.name for item in output_dir.iterdir()} == expected_project_names | expected_cv_names | {"manifest.json"},
             "Staged output/pdf contains an unexpected or missing artifact.")
@@ -1414,7 +1489,9 @@ def validate_staged_publication(dependencies: dict[str, Any], output_dir: Path,
         "assets/pdfs/": project_assets,
         "assets/cv/": cv_assets,
     }
-    require(len(manifest["artifacts"]) == 40, "Staged PDF manifest must track exactly 40 artifacts.")
+    expected_artifacts = 2 * len(EXPECTED_SLUGS) * len(LOCALES) + 2 * len(LOCALES) + CV_PAGES * len(LOCALES)
+    require(len(manifest["artifacts"]) == expected_artifacts,
+            f"Staged PDF manifest must track exactly {expected_artifacts} artifacts.")
     for artifact in manifest["artifacts"]:
         prefix = next((value for value in roots if artifact["path"].startswith(value)), None)
         require(prefix is not None, f"Manifest artifact has an invalid path: {artifact['path']}.")
@@ -1515,7 +1592,7 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
             name = f"jinmin-kim-cv-{locale}.pdf"
             output = staged_output / name
             generate_cv_pdf(dependencies, payload, locale, output)
-            qa = validate_pdf(dependencies, output, 2, localized(payload["cv"]["identity"], locale)["displayName"])
+            qa = validate_pdf(dependencies, output, CV_PAGES, localized(payload["cv"]["identity"], locale)["displayName"])
             published = staged_cv / name
             shutil.copyfile(output, published)
             require(sha256(output) == sha256(published), f"{name}: staged checksum mismatch.")
