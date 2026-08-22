@@ -414,13 +414,13 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 40);
+  assert.equal(register.entries.length, 41);
   assert.deepEqual(
     Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
       state,
       register.entries.filter((entry) => entry.state === state).length
     ])),
-    { 'pending-review': 0, 'approved-public': 40, excluded: 0 }
+    { 'pending-review': 0, 'approved-public': 41, excluded: 0 }
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -990,7 +990,7 @@ test('Task 3 review preserves literal tier and evidence-state mappings', () => {
     ['surgical-navigation', 'medical-core', 'ongoing'],
     ['mandibular-fracture', 'medical-core', 'verified'],
     ['life-careverse', 'medical-core', 'ongoing'],
-    ['rtms-navigation', 'medical-core', 'prototype'],
+    ['rtms-navigation', 'medical-core', 'verified'],
     ['respiratory-surface-guidance', 'medical-core', 'ongoing'],
     ['skadi-tracking-software', 'platform', 'ongoing'],
     ['unmanned-forklift', 'industrial-spotlight', 'ongoing'],
@@ -1569,7 +1569,7 @@ test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status o
     'surgical-navigation': { ko: '진행 중', en: 'Ongoing' },
     'mandibular-fracture': { ko: '검증됨 · 완료', en: 'Verified · Completed' },
     'life-careverse': { ko: '진행 중', en: 'Ongoing' },
-    'rtms-navigation': { ko: '프로토타입 · 진행 중', en: 'Prototype · Ongoing' },
+    'rtms-navigation': { ko: '검증됨 · 진행 중', en: 'Verified · Ongoing' },
     'respiratory-surface-guidance': { ko: '진행 중 · 연구', en: 'Ongoing · Research' },
     'skadi-tracking-software': { ko: '진행 중', en: 'Ongoing' },
     'unmanned-forklift': { ko: '진행 중', en: 'Ongoing' },
@@ -3627,7 +3627,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
     ['surgical-navigation', 'ongoing', 'ongoing'],
     ['mandibular-fracture', 'verified', 'completed'],
     ['life-careverse', 'ongoing', 'ongoing'],
-    ['rtms-navigation', 'prototype', 'ongoing'],
+    ['rtms-navigation', 'verified', 'ongoing'],
     ['respiratory-surface-guidance', 'ongoing', 'research'],
     ['skadi-tracking-software', 'ongoing', 'ongoing'],
     ['unmanned-forklift', 'ongoing', 'ongoing'],
@@ -3636,7 +3636,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
 
   const projectsHtml = render.projectGroupsHtml(data, '', false, 'en');
   assert.match(projectsHtml, /Verified · Completed/);
-  assert.match(projectsHtml, /Prototype · Ongoing/);
+  assert.match(projectsHtml, /Verified · Ongoing/);
   assert.match(projectsHtml, /Ongoing · Research/);
   assert.doesNotMatch(projectsHtml, /Ongoing · Ongoing/);
   const caseHtml = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'ko');

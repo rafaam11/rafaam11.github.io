@@ -301,15 +301,16 @@
     project({
       slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
-      tech: ['Meta Quest', 'Unity', 'Photon PUN2', 'Photon Voice', 'Spatial UI'],
+      tech: ['Unity 6', 'Photon PUN2', 'Photon Voice', 'OpenXR / Android XR', 'Meta Quest 3 · Galaxy XR', 'DICOM 3D'],
       media: {
         lead: { id: 'life-careverse-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-clip-01.mp4' },
         video: { id: 'life-careverse-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-clip-01.mp4' },
         poster: { id: 'life-careverse-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-poster-01.png' },
         gallery: [
-          { id: 'life-careverse-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-01.png', translations: { ko: { caption: 'Quest 패스스루 — 두개골 홀로그램과 좌표축, 메뉴 패널', alt: 'Quest 패스스루 화면에 표시된 두개골 모델, 좌표축, 파란 메뉴 패널' }, en: { caption: 'Quest passthrough: skull hologram with coordinate axes and menu panel', alt: 'Skull model, coordinate axes, and blue menu panel shown in Quest passthrough' } } },
-          { id: 'life-careverse-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-02.png', translations: { ko: { caption: '홀로그램 조작 — 모델과 마커 구', alt: '책상 위 공간에 배치된 두개골 모델과 빨간 마커 구' }, en: { caption: 'Manipulating the hologram: model and marker spheres', alt: 'Skull model and red marker spheres placed in the space above a desk' } } },
-          { id: 'life-careverse-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-03.png', translations: { ko: { caption: '가상 상담실 — 공유 화면과 사용자 아바타', alt: '공유 디스플레이와 아바타가 있는 가상 상담실 장면' }, en: { caption: 'Virtual consultation room with shared display and user avatar', alt: 'Virtual consultation room scene with a shared display and an avatar' } } },
+          { id: 'life-careverse-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-01.png', translations: { ko: { caption: 'VR 상담실 공간 배치 — 원형 테이블 3석과 공유 스크린', alt: '원형 테이블을 둘러싼 의자 3개, 벽면 공유 스크린, 조작 패널이 배치된 VR 상담실 조감도' }, en: { caption: 'VR consultation room layout: three seats around a round table and a shared screen', alt: 'Overhead view of the VR consultation room with three chairs around a round table, a wall-mounted shared screen, and a control panel' } } },
+          { id: 'life-careverse-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-02.png', translations: { ko: { caption: '세 시점에 동일하게 표시되는 수술계획 계측 패널', alt: '세 참가자 시점을 나란히 놓은 화면으로, 각 화면의 공유 스크린이 같은 계측표와 치열궁 도해를 보여준다' }, en: { caption: 'The surgical-plan measurement panel shown identically from all three viewpoints', alt: 'Three participant viewpoints side by side, each shared screen showing the same measurement table and dental-arch diagram' } } },
+          { id: 'life-careverse-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-03.png', translations: { ko: { caption: '상악 분절을 떼어낸 상태가 세 시점에 함께 반영된 장면', alt: '두개골에서 보라색 상악 분절이 분리된 3D 모델과, 같은 상태를 보고 있는 아바타 두 명' }, en: { caption: 'A detached maxillary segment reflected across all three viewpoints at once', alt: 'A 3D model with the purple maxillary segment separated from the skull, and two avatars viewing the same state' } } },
+          { id: 'life-careverse-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-gallery-04.png', translations: { ko: { caption: '병원 대기공간에서 진행한 착용 세션 (얼굴은 비식별 처리)', alt: '병원 대기공간 의자에 앉아 헤드셋을 쓰고 컨트롤러를 든 참가자 두 명, 얼굴은 모자이크 처리되어 있다' }, en: { caption: 'A headset session run in a hospital waiting area (faces de-identified)', alt: 'Two participants seated in a hospital waiting area wearing headsets and holding controllers, faces pixelated' } } },
         ]
       },
       pdf: { ko: 'assets/pdfs/life-careverse-ko.pdf', en: 'assets/pdfs/life-careverse-en.pdf' },
@@ -319,50 +320,50 @@
         diagram: {
           kind: 'sync-topology',
           translations: {
-            ko: { title: '멀티유저 공유 상태 토폴로지', nodes: ['Quest 사용자', 'PUN2 공유 상태', 'Photon Voice', '시나리오·공간 UI'] },
-            en: { title: 'Multi-user shared-state topology', nodes: ['Quest users', 'PUN2 shared state', 'Photon Voice', 'Scenario and spatial UI'] }
+            ko: { title: '3인 세션 공유 상태', nodes: ['의사·환자 3인 세션', 'PUN2 공유 상태', 'Photon Voice', 'DICOM 3D · 계측 패널'] },
+            en: { title: 'Three-user shared state', nodes: ['Three-user session', 'PUN2 shared state', 'Photon Voice', 'DICOM 3D and measurements'] }
           }
         }
       },
       translations: {
         ko: {
-          title: 'Life Careverse - 멀티유저 XR', shortTitle: 'Life Careverse', eyebrow: '의료 코어 · 멀티유저 XR',
-          thesis: 'Quest, Unity, Photon/PUN2, 음성, 스패셜 UI, 시나리오 통합으로 XR 애플리케이션 계층을 구현합니다.',
-          summary: '다수 사용자가 공간과 음성, 시나리오 상태를 공유하는 Quest 기반 XR 앱을 통합했습니다.',
-          problem: '단일 사용자 장면이 아니라 복수 사용자의 상태, 음성, 공간 UI, 시나리오를 일관되게 맞춰야 했습니다.',
-          role: 'Quest·Unity·Photon/PUN2·음성·스패셜 UI·시나리오 통합을 포함한 XR 앱 전체를 리드했습니다.',
-          teamResult: '팀의 채택, 소프트웨어 등록, 연구 테스트는 공동 결과이며 각각의 범위와 확정 수준을 구분합니다.',
-          evidence: '동작하는 멀티유저 동기화, 음성, 스패셜 UI, 시나리오 시연이 근거입니다.',
-          limitation: '시연은 공간 배치·조작 동작을 보여주며 사용자 효과나 임상 효과를 주장하지 않습니다.',
-          collaboration: '시나리오 전문가, 연구자, 소프트웨어 팀의 공동 검토로 진행했습니다.',
-          mediaAlt: 'Quest 패스스루에서 두개골 홀로그램과 좌표축, 메뉴 패널을 조작하는 장면.', mediaCaption: 'Meta Quest 패스스루에서 두개골 홀로그램과 메뉴 패널을 조작하는 시연 클립입니다.',
-          status: '진행 중', cardProblem: '다수 사용자의 공간·음성·시나리오 상태를 통합합니다.', cardOwnedRole: 'Quest 멀티유저 XR 앱 전체를 리드했습니다.', cardEvidence: 'Quest 패스스루 시연 클립과 가상 상담실 화면이 근거입니다.', problemSummary: '멀티유저 XR의 공간·음성·시나리오 상태를 통합합니다.', ownedRole: 'Quest 기반 XR 앱 전체를 리드했습니다.', verifiedEvidence: '동작하는 Quest 패스스루 시연 클립과 가상 상담실 화면이 근거입니다.', visualAlt: 'Quest 패스스루 홀로그램 조작 시연.', visualCaption: 'Quest 패스스루 홀로그램 조작 클립.'
+          title: 'OMFS VR — 멀티유저 수술상담', shortTitle: 'OMFS VR', eyebrow: '의료 코어 · 멀티유저 VR',
+          thesis: '의료진과 환자가 같은 VR 상담실에 동시 접속해 하나의 3D 악골 모델과 수술계획을 함께 보는 애플리케이션을 구현합니다.',
+          summary: '접속 순서로 역할이 정해지는 3인 VR 상담 세션을 Unity와 Photon PUN2·Voice로 구현하고, 환자 CT에서 만든 3D 악골 모델과 계측 패널을 세 시점이 같은 상태로 공유하도록 만들었습니다.',
+          problem: '턱교정 수술 상담은 2D 계측과 3D 골격 변화를 같이 설명해야 하는데, 모니터 한 대를 함께 보는 방식으로는 의료진과 환자가 같은 지점을 보고 있는지 확인할 방법이 없었습니다.',
+          role: 'Unity 클라이언트 전체를 맡아 Photon 룸과 역할 배정, 모델 자세·분절·페이지 상태 동기화, 음성 채팅과 발화자 표시, DICOM 볼륨 로딩, 백엔드 연동을 구현했고, 특정 제조사 SDK 의존을 걷어내고 OpenXR·Android XR로 옮기는 이식까지 수행했습니다.',
+          teamResult: '소프트웨어 저작권 등록과 환자 데모·설문, 외부 기관 실증 계획은 연구팀 공동 결과이며 각각의 범위를 구분해 적습니다.',
+          evidence: '세 참가자 시점을 동시에 녹화한 상담 세션 클립이 근거입니다. 한 사람이 모델을 움직이면 세 화면이 같은 자세와 같은 계측값을 보여줍니다.',
+          limitation: '클립은 동기화와 공간 배치가 동작함을 보여줄 뿐, 상담 품질이나 치료 결과가 나아졌다고 주장하지 않습니다.',
+          collaboration: '구강악안면외과 의료진이 상담 시나리오와 화면 구성을 검토했고, 연구팀과 함께 착용 세션을 진행했습니다.',
+          mediaAlt: '같은 VR 상담실을 세 참가자 시점에서 동시에 보여주는 3분할 화면. 세 화면 모두 같은 3D 두개골·악골 모델을 표시한다.', mediaCaption: '3인 VR 상담 세션을 참가자별 시점으로 동시에 녹화한 24초 클립입니다. 한 사람이 모델을 움직이면 세 화면에 같이 반영됩니다.',
+          status: '진행 중', cardProblem: '의료진과 환자가 같은 3D 수술계획을 같은 상태로 봅니다.', cardOwnedRole: '3인 VR 상담 Unity 클라이언트 전체를 구현했습니다.', cardEvidence: '세 시점을 동시에 녹화한 상담 세션 클립이 근거입니다.', problemSummary: '3인이 같은 VR 공간에서 같은 수술계획을 보게 만듭니다.', ownedRole: 'Photon 동기화부터 DICOM 로딩, 플랫폼 이식까지 클라이언트를 구현했습니다.', verifiedEvidence: '세 시점이 같은 모델 자세와 계측값을 보여주는 상담 세션 클립이 근거입니다.', visualAlt: '3인 VR 상담 세션의 3분할 동시 시점.', visualCaption: '3인 VR 상담 세션 동시 시점 클립.'
         },
         en: {
-          title: 'Life Careverse - Multi-user XR', shortTitle: 'Life Careverse', eyebrow: 'Medical Core · Multi-user XR',
-          thesis: 'Implement the XR application layer through Quest, Unity, Photon/PUN2, voice, spatial UI, and scenario integration.',
-          summary: 'Integrated a Quest-based XR application in which multiple users share spatial, voice, and scenario state.',
-          problem: 'Multiple users needed consistent state across voice, spatial UI, and scenarios rather than isolated single-user scenes.',
-          role: 'Led the XR application overall across Quest, Unity, Photon/PUN2, voice, spatial UI, and scenario integration.',
-          teamResult: 'Team adoption, software registration, and research testing remain joint results, each stated only to its qualified evidence level.',
-          evidence: 'Working multi-user synchronization, voice, spatial UI, and scenario demonstrations provide the evidence.',
-          limitation: 'The demonstration shows spatial placement and manipulation; no user-effect or clinical effect is claimed.',
-          collaboration: 'Scenario experts, researchers, and the software team reviewed the application together.',
-          mediaAlt: 'Manipulating a skull hologram, coordinate axes, and menu panel in Quest passthrough.', mediaCaption: 'Demonstration clip manipulating a skull hologram and menu panel in Meta Quest passthrough.',
-          status: 'Ongoing', cardProblem: 'Integrate spatial, voice, and scenario state across multiple users.', cardOwnedRole: 'Led the Quest multi-user XR application overall.', cardEvidence: 'Quest passthrough demonstration clip and virtual consultation-room captures are the evidence.', problemSummary: 'Integrate spatial, voice, and scenario state for a multi-user XR application.', ownedRole: 'Led the Quest-based XR application overall.', verifiedEvidence: 'A working Quest passthrough demonstration clip and virtual consultation-room captures are the evidence.', visualAlt: 'Quest passthrough hologram manipulation demonstration.', visualCaption: 'Quest passthrough hologram manipulation clip.'
+          title: 'OMFS VR — Multi-user surgical consultation', shortTitle: 'OMFS VR', eyebrow: 'Medical Core · Multi-user VR',
+          thesis: 'Build an application where clinicians and a patient join the same VR consultation room and look at one shared 3D jaw model and surgical plan together.',
+          summary: 'Built a three-user VR consultation session in Unity with Photon PUN2 and Voice, where roles are assigned by join order and all three viewpoints share the same state of a CT-derived 3D jaw model and its measurement panel.',
+          problem: 'Orthognathic consultation has to explain 2D measurements and 3D skeletal change at once, and gathering around a single monitor gave no way to confirm that clinician and patient were looking at the same thing.',
+          role: 'Owned the Unity client end to end: Photon rooms and role assignment, synchronization of model pose, segments, and page state, voice chat with speaker indication, DICOM volume loading, and backend integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR.',
+          teamResult: 'Software copyright registration, the patient demonstration and survey, and the planned external validation are joint research-team results, each stated only to its own scope.',
+          evidence: 'A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence: when one person moves the model, all three views show the same pose and the same measurements.',
+          limitation: 'The clip shows that synchronization and spatial layout work; it claims no improvement in consultation quality or treatment outcome.',
+          collaboration: 'Oral and maxillofacial surgeons reviewed the consultation scenario and screen layout, and ran the headset sessions with the research team.',
+          mediaAlt: 'A three-panel view showing the same VR consultation room from three participant viewpoints at once, each displaying the same 3D skull and jaw model.', mediaCaption: 'A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at once; moving the model in one view updates all three.',
+          status: 'Ongoing', cardProblem: 'Let clinicians and a patient see the same 3D surgical plan in the same state.', cardOwnedRole: 'Implemented the whole Unity client for the three-user VR consultation.', cardEvidence: 'A consultation-session clip recorded from three viewpoints at once is the evidence.', problemSummary: 'Put three people in one VR space looking at the same surgical plan.', ownedRole: 'Implemented the client from Photon synchronization to DICOM loading and the platform port.', verifiedEvidence: 'A consultation clip in which all three viewpoints show the same model pose and measurements is the evidence.', visualAlt: 'Three simultaneous viewpoints of a three-user VR consultation session.', visualCaption: 'Simultaneous three-viewpoint clip of a VR consultation session.'
         }
       },
       blocks: [
-        { key: 'shared-state', type: 'system', translations: { ko: { heading: '공유 상태', body: '사용자, 스패셜 객체, 음성, 시나리오 상태를 동기화했습니다.' }, en: { heading: 'Shared state', body: 'Synchronized users, spatial objects, voice, and scenario state.' } } },
-        { key: 'xr-application', type: 'text', translations: { ko: { heading: 'XR 애플리케이션', body: '장면 제작을 넘어 사용 흐름과 장치 제약을 애플리케이션 계층에서 통합했습니다.' }, en: { heading: 'XR application', body: 'Integrated user flow and device constraints beyond scene construction.' } } },
-        { key: 'multiuser-demo', type: 'evidence', translations: { ko: { heading: '멀티유저 시연', body: '동기화·음성·시나리오 재생을 동작 근거로 삼습니다.' }, en: { heading: 'Multi-user demo', body: 'Use synchronization, voice, and scenario replay as operating evidence.' } } },
-        { key: 'adoption-boundary', type: 'limitation', translations: { ko: { heading: '채택 경계', body: '팀 채택과 연구 테스트를 개인 성과나 사용자 효과로 확대하지 않습니다.' }, en: { heading: 'Adoption boundary', body: 'Do not turn team adoption or research testing into individual or user-outcome claims.' } } }
+        { key: 'shared-state', type: 'system', translations: { ko: { heading: '공유 상태', body: '접속 순서로 의사·환자·의사 세 역할을 배정하고, 모델 자세와 분절 상태, 페이지 번호, 발화자 표시를 세 참가자에게 같이 반영했습니다.' }, en: { heading: 'Shared state', body: 'Assigned the clinician, patient, and clinician roles by join order, and reflected model pose, segment state, page number, and speaker indication to all three participants together.' } } },
+        { key: 'xr-application', type: 'text', translations: { ko: { heading: '클라이언트 범위', body: '로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다.' }, en: { heading: 'Client scope', body: 'Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset.' } } },
+        { key: 'multiuser-demo', type: 'evidence', translations: { ko: { heading: '멀티유저 시연', body: '세 참가자의 시점을 동시에 녹화해, 한쪽의 조작이 나머지 두 화면에 같은 상태로 나타나는지를 근거로 삼습니다.' }, en: { heading: 'Multi-user demonstration', body: 'Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the other two views show the same state.' } } },
+        { key: 'adoption-boundary', type: 'limitation', translations: { ko: { heading: '채택 경계', body: '연구팀의 등록·데모·실증 계획을 개인 성과나 임상 효과로 확대하지 않습니다.' }, en: { heading: 'Adoption boundary', body: 'Do not turn the research team registration, demonstrations, or validation plans into individual or clinical-outcome claims.' } } }
       ]
     }),
     project({
-      slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'prototype', lifecycleState: 'ongoing',
+      slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'verified', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
-      tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'],
+      tech: ['3D Slicer', 'VTK', 'PyQt5', 'Python', 'PyTorch', 'Optical tracking', 'TCP/IP binary protocol', 'License gating'],
       media: {
         lead: { id: 'rtms-navigation-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/rtms-navigation/rtms-navigation-lead-01.png' },
         gallery: [
@@ -371,49 +372,49 @@
       },
       pdf: { ko: 'assets/pdfs/rtms-navigation-ko.pdf', en: 'assets/pdfs/rtms-navigation-en.pdf' },
       pdfSequence: {
-        middle: ['slicer-architecture', 'coordinate-visibility', 'repeatable-prototype', 'prototype-boundary'],
+        middle: ['navigation-ui-workflow', 'coordinate-registration-chain', 'device-system-integration', 'clinical-product-boundary'],
         evidenceId: 'rtms-navigation-lead-01',
         diagram: {
           kind: 'navigation-loop',
           translations: {
-            ko: { title: '표적 가시화와 반복 내비게이션 루프', nodes: ['추적 입력', '좌표 변환', '의료영상 표적', 'Slicer UI'] },
-            en: { title: 'Target-visibility navigation loop', nodes: ['Tracking input', 'Coordinate transform', 'Medical-image target', 'Slicer UI'] }
+            ko: { title: '입력에서 조준 안내까지의 좌표 루프', nodes: ['트래커·태블릿 입력', '랜드마크+ICP 정합', '환자-코일 변환 체인', 'Slicer 내비게이션 UI'] },
+            en: { title: 'Coordinate loop from input to aiming guidance', nodes: ['Tracker + tablet input', 'Landmark + ICP registration', 'Patient-coil transform chain', 'Slicer navigation UI'] }
           }
         }
       },
       translations: {
         ko: {
-          title: 'rTMS 내비게이션 프로토타입', shortTitle: 'rTMS 내비게이션', eyebrow: '의료 코어 · 프로토타입',
-          thesis: '추적과 좌표 데이터를 반복 가능한 Slicer 내비게이션 프로토타입으로 빠르게 바꿉니다.',
-          summary: '3D Slicer 구조, 추적 장치, 좌표 흐름, UI를 연결해 반복 실험이 가능한 연구 내비게이션 환경을 만들었습니다.',
-          problem: '추적 데이터와 의료영상 표적을 좌표 가정이 숨지 않는 반복 가능한 흐름으로 만들어야 했습니다.',
-          role: 'Slicer 구조, 장치 연동, 좌표 흐름, UI, 반복 실험 환경을 리드했습니다.',
-          teamResult: '팀은 동작하는 연구 프로토타입을 공유했으며 임상 효과나 정량 정확도 결과로 확대하지 않습니다.',
-          evidence: '반복 실행할 수 있는 Slicer 프로토타입과 추적·좌표·시각화 흐름이 근거입니다.',
-          limitation: '연구 프로토타입 화면이며 임상 효과, 정량 정확도, 상용 배포를 주장하지 않습니다.',
-          collaboration: '추적 장치와 연구 워크플로 검토를 위해 도메인 전문가와 협업합니다.',
+          title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '의료 코어 · 검증됨',
+          thesis: '광학 트래킹과 3D Slicer를 라이선스로 배포되는 코일 내비게이션 제품으로 완성해, 시술자가 믿고 쓸 수 있는 위치·각도 안내를 만듭니다.',
+          summary: '3D Slicer 위에 시술 준비부터 실시간 코일 내비게이션까지 이어지는 화면 흐름, 랜드마크·ICP 정합 엔진, 광학 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 설계해 고객사에 납품하고 계속 유지보수합니다.',
+          problem: '시술자가 믿을 수 있는 코일 위치·각도 안내를 받으려면 서로 다른 좌표계에 있는 의료영상, 트래커, 태블릿, 로봇을 하나의 검증 가능한 흐름으로 묶어야 했습니다. 그리고 그 결과가 연구용 스크립트가 아니라 라이선스로 배포·관리되는 제품이어야 했습니다.',
+          role: '3D Slicer 기반 시술 준비·내비게이션 화면 흐름, 랜드마크와 ICP를 함께 쓰는 정합 엔진과 좌표 변환 체인, 광학 트래커 SDK 마이그레이션·태블릿 프로토콜·로봇 연동, 라이선스 검증과 옵션 기능 게이팅을 포함한 제품 구조를 리드했습니다.',
+          teamResult: '정합, 좌표 변환, 내비게이션 UI의 핵심 구조는 직접 설계·구현했고 일부 화면 모듈에는 동료 한 명이 함께 참여했습니다. 라이선스 발급 운영과 도입 판단은 AT&C 쪽 담당이며 그 결과를 개인 성과로 옮겨 쓰지 않습니다.',
+          evidence: '라이선스로 기능이 게이팅되는 실제 배포 빌드, 이슈 단위로 쌓아 온 회귀 테스트 스위트, 좌표 변환·정합 동작 로그가 근거입니다.',
+          limitation: '납품·유지보수 중인 의료용 내비게이션 소프트웨어이지만 이 사례는 임상적 유효성이나 정량 정확도를 주장하지 않습니다. 인허가 상태, 환자 데이터, 병원 식별 정보는 포함하지 않습니다.',
+          collaboration: '뇌 영역 분할과 랜드마크 검출 모델은 외부에서 제공받아 어댑터 경계 뒤에 통합했고, 제가 소유한 부분은 그 경계 설계와 후처리, 라이선스 게이팅, UI 연동입니다. 광학 트래커·로봇 쪽, 태블릿 앱 개발자, 동료 한 명과 인터페이스를 맞춥니다.',
           mediaAlt: '추적 장치·환자 마커·코일 마커 상태와 표적 거리·기울기 안내가 표시된 NeuroPilot 내비게이션 모듈 화면.', mediaCaption: 'NeuroPilot 내비게이션 모듈 화면입니다 — 추적 장치·환자 마커·코일 마커 상태, 표적까지의 거리·기울기 안내, 조준 가이드(프로젝트 경로는 가림).',
-          status: '프로토타입 · 진행 중', cardProblem: '추적·좌표 데이터를 반복 가능한 Slicer 흐름으로 바꿉니다.', cardOwnedRole: 'Slicer 구조·장치·좌표·UI·실험 환경을 리드했습니다.', cardEvidence: '동작하는 연구 프로토타입 화면과 반복 실험 흐름.', problemSummary: '추적·좌표 데이터를 반복 가능한 내비게이션으로 바꿉니다.', ownedRole: 'Slicer 구조, 장치 연동, 좌표 흐름, UI를 리드했습니다.', verifiedEvidence: '동작하는 연구 프로토타입 화면이 근거이며 임상·정량 결과는 주장하지 않습니다.', visualAlt: 'NeuroPilot 내비게이션 프로토타입 화면.', visualCaption: 'NeuroPilot 코일 내비게이션 모듈 화면.'
+          status: '검증됨 · 진행 중', cardProblem: '서로 다른 좌표계의 장치를 하나의 제품 흐름으로 묶습니다.', cardOwnedRole: '화면 흐름·정합 엔진·장치 연동·제품 구조를 리드했습니다.', cardEvidence: '라이선스 게이팅 배포 빌드와 회귀 테스트 스위트.', problemSummary: '트래커·태블릿·로봇을 하나의 내비게이션 제품으로 묶습니다.', ownedRole: '화면 흐름, 정합 엔진, 장치 연동, 제품 구조를 리드했습니다.', verifiedEvidence: '라이선스 게이팅 배포 빌드와 이슈별 회귀 테스트가 근거이며 임상 결과는 주장하지 않습니다.', visualAlt: 'NeuroPilot 코일 내비게이션 모듈 화면.', visualCaption: 'NeuroPilot 코일 내비게이션 모듈 화면입니다.'
         },
         en: {
-          title: 'rTMS Navigation Prototype', shortTitle: 'rTMS Navigation', eyebrow: 'Medical Core · Prototype',
-          thesis: 'Rapidly turn tracking and coordinate data into a repeatable Slicer navigation prototype.',
-          summary: 'Connected Slicer structure, tracking devices, coordinate flow, and UI into a repeatable research-navigation environment.',
-          problem: 'Tracking data and medical-image targets needed a repeatable flow that did not hide coordinate assumptions.',
-          role: 'Led the Slicer structure, device integration, coordinate flow, UI, and repeatable experiment environment.',
-          teamResult: 'The team shared a working research prototype; this is not extended into a clinical-efficacy or quantitative-accuracy result.',
-          evidence: 'A repeatable Slicer prototype and visible tracking, coordinate, and visualization flow provide the evidence.',
-          limitation: 'This is a research prototype screen and does not claim clinical efficacy, quantitative accuracy, or commercial deployment.',
-          collaboration: 'Domain experts review the tracking hardware and research workflow.',
+          title: 'rTMS Coil Navigation Software (NeuroPilot)', shortTitle: 'NeuroPilot Coil Navigation', eyebrow: 'Medical Core · Verified',
+          thesis: 'Turn optical tracking and 3D Slicer into a license-gated coil-navigation product that gives operators position and angle guidance they can rely on.',
+          summary: 'Designed a 3D Slicer workflow from procedure setup through real-time coil navigation, a landmark-and-ICP registration engine, optical-tracker, tablet, and robot integration, and a license-gated product structure, delivered to the customer and maintained on an ongoing basis.',
+          problem: 'Giving an operator coil position and angle guidance they can rely on meant tying medical images, a tracker, a tablet, and a robot, each in its own coordinate frame, into one verifiable flow. That result also had to ship as a licensed, maintainable product rather than a research script.',
+          role: 'Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining landmarks and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and robot integration, and the product structure covering license verification and optional-feature gating.',
+          teamResult: 'The core registration, coordinate-transform, and navigation-UI structure was designed and built individually, with one colleague contributing to specific screen modules. License operations and adoption decisions sit with AT&C, and those outcomes are not restated here as individual results.',
+          evidence: 'The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and coordinate-transform and registration logs.',
+          limitation: 'Although this is delivered and maintained medical navigation software, this case claims no clinical efficacy or quantitative accuracy, and excludes regulatory status, patient data, and hospital-identifying information.',
+          collaboration: 'The brain-segmentation and landmark-detection models were supplied externally and integrated behind an adapter boundary; what I own is that boundary, the post-processing, the license gating, and the UI integration. Interfaces are agreed with the optical-tracker and robot side, the tablet-app developer, and one colleague.',
           mediaAlt: 'NeuroPilot navigation module screen showing tracker, patient-marker and coil-marker status with distance and tilt guidance to the target.', mediaCaption: 'NeuroPilot navigation module: tracker, patient-marker and coil-marker status, distance and tilt guidance to the target, and the aiming guide (project path hidden).',
-          status: 'Prototype · Ongoing', cardProblem: 'Turn tracking and coordinate data into a repeatable Slicer workflow.', cardOwnedRole: 'Led Slicer structure, devices, coordinates, UI, and the experiment environment.', cardEvidence: 'Working research prototype screens and a repeatable experiment flow.', problemSummary: 'Turn tracking and coordinate data into repeatable navigation.', ownedRole: 'Led Slicer structure, device integration, coordinate flow, and UI.', verifiedEvidence: 'Working research prototype screens are the evidence; no clinical or quantitative outcome claim.', visualAlt: 'NeuroPilot navigation prototype screen.', visualCaption: 'NeuroPilot coil-navigation module screen.'
+          status: 'Verified · Ongoing', cardProblem: 'Tie devices in different coordinate frames into one product flow.', cardOwnedRole: 'Led the workflow, registration engine, device integration, and product structure.', cardEvidence: 'A license-gated build and a regression-test suite.', problemSummary: 'Tie the tracker, tablet, and robot into one navigation product.', ownedRole: 'Led the workflow, registration engine, device integration, and product structure.', verifiedEvidence: 'The license-gated deployment build and issue-tracked regression tests are the evidence; no clinical outcome is claimed.', visualAlt: 'NeuroPilot coil-navigation module screen.', visualCaption: 'NeuroPilot coil-navigation module screen.'
         }
       },
       blocks: [
-        { key: 'slicer-architecture', type: 'system', translations: { ko: { heading: 'Slicer 구조', body: '장치 입력, 좌표 변환, 표적, UI를 반복 실행 가능한 구조로 연결했습니다.' }, en: { heading: 'Slicer architecture', body: 'Connected device input, transforms, targets, and UI into a repeatable structure.' } } },
-        { key: 'coordinate-visibility', type: 'text', translations: { ko: { heading: '좌표 가시성', body: '어떤 좌표계와 변환을 쓰는지 프로토타입에 드러냈습니다.' }, en: { heading: 'Coordinate visibility', body: 'Kept coordinate frames and transforms explicit in the prototype.' } } },
-        { key: 'repeatable-prototype', type: 'evidence', translations: { ko: { heading: '반복 프로토타입', body: '동일한 장치·좌표·UI 흐름을 반복 실행하는 것을 근거로 삼습니다.' }, en: { heading: 'Repeatable prototype', body: 'Use repeated execution of the same device, coordinate, and UI flow as evidence.' } } },
-        { key: 'prototype-boundary', type: 'limitation', translations: { ko: { heading: '프로토타입 경계', body: '임상 효과와 정량 정확도는 별도 검증 없이 주장하지 않습니다.' }, en: { heading: 'Prototype boundary', body: 'Clinical efficacy and quantitative accuracy require separate validation.' } } }
+        { key: 'navigation-ui-workflow', type: 'system', translations: { ko: { heading: '내비게이션 UI 워크플로', body: '홈 화면의 여섯 메뉴가 DICOM 불러오기, 볼륨 표준화, 피부·뇌 3D 재구성, 랜드마크 정합, 표적 설정, 실시간 세션 순서로 단계를 게이팅합니다. 조준 화면에는 내원·외원 오차를 보여주는 과녁 뷰, 표적까지의 거리·기울기 실시간 안내, 되돌리기, 뇌 표면 깊이 슬라이더를 뒀습니다.' }, en: { heading: 'Navigation UI workflow', body: 'Six Home-screen menus gate the sequence from loading DICOM through volume normalisation, skin and brain reconstruction, landmark registration, and target setup to the live session. The aiming screen carries a crosshair view with inner and outer error rings, live distance and tilt guidance, undo, and a brain-surface depth slider.' } } },
+        { key: 'coordinate-registration-chain', type: 'text', translations: { ko: { heading: '좌표 변환·정합 엔진', body: '영상 좌표부터 환자, 트래커, 코일 좌표까지 이어지는 변환 체인을 코드와 화면 양쪽에 명시적으로 남겼습니다. 공통 랜드마크 세 점 이상의 강체 정합에 랜드마크 단독, ICP 단독, 랜드마크와 ICP 결합 세 가지 모드를 두었고, 조용히 실패하던 자동 정합 경로를 드러내 트래킹 응답에 정합 여부를 함께 실어 보냅니다.' }, en: { heading: 'Coordinate and registration engine', body: 'The transform chain from image coordinates through patient, tracker, and coil frames stays explicit in both the code and the UI. Rigid registration on three or more shared landmarks offers three modes, landmark only, ICP only, and landmark plus ICP, and a formerly silent auto-registration failure is now surfaced, with registration state returned alongside each tracking response.' } } },
+        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '광학 트래커 SDK를 메이저 버전 단위로 마이그레이션하고, 태블릿과는 자체 TCP 바이너리 프로토콜로 통신합니다. 트래커 소유권을 한 곳에 모아 화면 간 상태 충돌을 없앴고, 로봇은 두피 위 안전 거리에서 대기했다가 공구 축을 따라 직하강해 접촉을 감지하면 멈추도록 연동했습니다.' }, en: { heading: 'Device and system integration', body: 'Migrated the optical-tracker SDK across a major version and talk to the tablet over an in-house TCP binary protocol. Tracker ownership is concentrated in one component so screens no longer contend for its state, and the robot integration holds a safe pre-pose above the scalp, then descends along the tool axis and stops on sensed contact.' } } },
+        { key: 'clinical-product-boundary', type: 'limitation', translations: { ko: { heading: '임상·제품 경계', body: '라이선스로 배포·유지보수되는 제품이지만 임상적 유효성이나 정량 정확도는 주장하지 않습니다. 인허가 상태, 환자 데이터, 병원 식별 정보는 이 사례에 포함하지 않습니다.' }, en: { heading: 'Clinical and product boundary', body: 'Although the product is licensed, delivered, and maintained, no clinical efficacy or quantitative accuracy is claimed here. Regulatory status, patient data, and hospital-identifying information stay out of this case.' } } }
       ]
     }),
     project({

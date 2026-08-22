@@ -32,6 +32,7 @@ This register is the tracked source of truth for portfolio evidence identifiers.
 | life-careverse-gallery-01 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-01.png | Approved derivative; caption in portfolio data. |
 | life-careverse-gallery-02 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-02.png | Approved derivative; caption in portfolio data. |
 | life-careverse-gallery-03 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-03.png | Approved derivative; caption in portfolio data. |
+| life-careverse-gallery-04 | life-careverse | image | approved-public | assets/projects/life-careverse/life-careverse-gallery-04.png | Approved derivative; caption in portfolio data. |
 | rtms-navigation-lead-01 | rtms-navigation | image | approved-public | assets/projects/rtms-navigation/rtms-navigation-lead-01.png | Approved derivative; caption in portfolio data. |
 | rtms-navigation-gallery-01 | rtms-navigation | image | approved-public | assets/projects/rtms-navigation/rtms-navigation-gallery-01.png | Approved derivative; caption in portfolio data. |
 | skadi-tracking-software-clip-01 | skadi-tracking-software | video | approved-public | assets/projects/skadi-tracking-software/skadi-tracking-software-clip-01.mp4 | Approved derivative; caption in portfolio data. |
