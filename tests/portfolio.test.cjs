@@ -414,13 +414,13 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 41);
+  assert.equal(register.entries.length, 47);
   assert.deepEqual(
     Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
       state,
       register.entries.filter((entry) => entry.state === state).length
     ])),
-    { 'pending-review': 0, 'approved-public': 41, excluded: 0 }
+    { 'pending-review': 0, 'approved-public': 47, excluded: 0 }
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -2639,7 +2639,7 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
 test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const visualFiles = validator.publicPortfolioVisualFiles(root);
-  assert.equal(visualFiles.length, 38, 'approved derivatives across all eight cases');
+  assert.equal(visualFiles.length, 44, 'approved derivatives across all eight cases');
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
 

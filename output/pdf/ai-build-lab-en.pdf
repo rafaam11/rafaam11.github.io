@@ -80,14 +80,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://github.com/rafaam11/multi-cli-work)
->> /Border [ 0 0 0 ] /Rect [ 435.2756 321.3898 495.3615 335.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 244.6378 360.3898 304.7237 374.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 12 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://github.com/rafaam11/public-transportation-info)
->> /Border [ 0 0 0 ] /Rect [ 435.2756 246.3898 495.3615 260.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 244.6378 286.3898 304.7237 300.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 13 0 obj
@@ -867,9 +867,9 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Problem to product) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connect friction to requirements, architecture, acceptance, tests, releases, and operations.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 444.3898 499.2756 142 re f*
+n 48 411.3898 499.2756 175 re f*
 .047059 .419608 .368627 rg
-n 48 444.3898 4 142 re f*
+n 48 411.3898 4 175 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 564.3898 Tm /F3+0 7.5 Tf 9 TL (PROBLEM) Tj T* ET
 .062745 .090196 .082353 rg
@@ -879,28 +879,28 @@ BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (rather than one-off scripts.) Tj 
 BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (One combined case connects a local-first knowledge system, a multi-CLI desktop application, and a Daegu) Tj T* ET
 BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (bus-information application through the same problem-to-product loop.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 290.3898 499.2756 142 re f*
+n 48 257.3898 499.2756 142 re f*
 .662745 .294118 .196078 rg
-n 48 290.3898 4 142 re f*
+n 48 257.3898 4 142 re f*
 .662745 .294118 .196078 rg
-BT 1 0 0 1 64 410.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
+BT 1 0 0 1 64 377.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (Never expose private knowledge-system source data or claim unverified) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (user or productivity metrics.) Tj T* ET
+BT 1 0 0 1 64 355.3898 Tm /F3+0 13 Tf 15.6 TL (Never expose private knowledge-system source data or claim unverified) Tj T* ET
+BT 1 0 0 1 64 337.3898 Tm /F3+0 13 Tf 15.6 TL (user or productivity metrics.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release) Tj T* ET
-BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (decisions.) Tj T* ET
+BT 1 0 0 1 64 315.3898 Tm /F2+0 9.5 Tf 11.4 TL (AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release) Tj T* ET
+BT 1 0 0 1 64 300.3898 Tm /F2+0 9.5 Tf 11.4 TL (decisions.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 270.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
+BT 1 0 0 1 48 237.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees.) Tj T* ET
-BT 1 0 0 1 48 233.3898 Tm /F2+0 9.5 Tf 11.4 TL (Local paths are blurred.) Tj T* ET
+BT 1 0 0 1 48 215.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees.) Tj T* ET
+BT 1 0 0 1 48 200.3898 Tm /F2+0 9.5 Tf 11.4 TL (Local paths are blurred.) Tj T* ET
  
 endstream
 endobj
 35 0 obj
 <<
-/Length 6230
+/Length 6232
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -927,9 +927,9 @@ BT 1 0 0 1 48 710.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Owned problem context, requirements, architecture, acceptance criteria, tests, releases, and operating) Tj T* ET
 BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (decisions while using AI to amplify implementation.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 549.3898 499.2756 92 re f*
+n 48 501.3898 499.2756 140 re f*
 .047059 .419608 .368627 rg
-n 48 549.3898 4 92 re f*
+n 48 501.3898 4 140 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 619.3898 Tm /F3+0 7.5 Tf 9 TL (02 / HUMAN-AI BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -937,140 +937,140 @@ BT 1 0 0 1 64 597.3898 Tm /F3+0 13 Tf 15.6 TL (Human-AI boundary) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 575.3898 Tm /F2+0 9.5 Tf 11.4 TL (AI amplifies implementation; people own context, acceptance, and release decisions.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 537.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
+BT 1 0 0 1 48 489.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 332.3898 499.2756 188 re B*
+n 48 284.3898 499.2756 188 re B*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 498.3898 Tm /F3+0 10 Tf 12 TL (Product loop from friction to operation) Tj T* ET
+BT 1 0 0 1 62 450.3898 Tm /F3+0 10 Tf 12 TL (Product loop from friction to operation) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 454.3898 m 452.6378 400.3898 l S
+n 297.6378 406.3898 m 452.6378 352.3898 l S
 .047059 .419608 .368627 rg
 n
-454.8378 400.3898 m
-454.8378 401.6048 453.8528 402.5898 452.6378 402.5898 c
-451.4228 402.5898 450.4378 401.6048 450.4378 400.3898 c
-450.4378 399.1747 451.4228 398.1898 452.6378 398.1898 c
-453.8528 398.1898 454.8378 399.1747 454.8378 400.3898 c
+454.8378 352.3898 m
+454.8378 353.6048 453.8528 354.5898 452.6378 354.5898 c
+451.4228 354.5898 450.4378 353.6048 450.4378 352.3898 c
+450.4378 351.1747 451.4228 350.1898 452.6378 350.1898 c
+453.8528 350.1898 454.8378 351.1747 454.8378 352.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 452.6378 400.3898 m 297.6378 346.3898 l S
+n 452.6378 352.3898 m 297.6378 298.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 346.3898 m
-299.8378 347.6048 298.8528 348.5898 297.6378 348.5898 c
-296.4228 348.5898 295.4378 347.6048 295.4378 346.3898 c
-295.4378 345.1747 296.4228 344.1898 297.6378 344.1898 c
-298.8528 344.1898 299.8378 345.1747 299.8378 346.3898 c
+299.8378 298.3898 m
+299.8378 299.6048 298.8528 300.5898 297.6378 300.5898 c
+296.4228 300.5898 295.4378 299.6048 295.4378 298.3898 c
+295.4378 297.1747 296.4228 296.1898 297.6378 296.1898 c
+298.8528 296.1898 299.8378 297.1747 299.8378 298.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 346.3898 m 142.6378 400.3898 l S
+n 297.6378 298.3898 m 142.6378 352.3898 l S
 .047059 .419608 .368627 rg
 n
-144.8378 400.3898 m
-144.8378 401.6048 143.8528 402.5898 142.6378 402.5898 c
-141.4228 402.5898 140.4378 401.6048 140.4378 400.3898 c
-140.4378 399.1747 141.4228 398.1898 142.6378 398.1898 c
-143.8528 398.1898 144.8378 399.1747 144.8378 400.3898 c
+144.8378 352.3898 m
+144.8378 353.6048 143.8528 354.5898 142.6378 354.5898 c
+141.4228 354.5898 140.4378 353.6048 140.4378 352.3898 c
+140.4378 351.1747 141.4228 350.1898 142.6378 350.1898 c
+143.8528 350.1898 144.8378 351.1747 144.8378 352.3898 c
 f*
 .662745 .294118 .196078 RG
 1.2 w
-n 142.6378 400.3898 m 297.6378 454.3898 l S
+n 142.6378 352.3898 m 297.6378 406.3898 l S
 .662745 .294118 .196078 rg
 n
-299.8378 454.3898 m
-299.8378 455.6048 298.8528 456.5898 297.6378 456.5898 c
-296.4228 456.5898 295.4378 455.6048 295.4378 454.3898 c
-295.4378 453.1747 296.4228 452.1898 297.6378 452.1898 c
-298.8528 452.1898 299.8378 453.1747 299.8378 454.3898 c
+299.8378 406.3898 m
+299.8378 407.6048 298.8528 408.5898 297.6378 408.5898 c
+296.4228 408.5898 295.4378 407.6048 295.4378 406.3898 c
+295.4378 405.1747 296.4228 404.1898 297.6378 404.1898 c
+298.8528 404.1898 299.8378 405.1747 299.8378 406.3898 c
 f*
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-235.6378 431.3898 m
-359.6378 431.3898 l
-361.849 431.3898 363.6378 433.1786 363.6378 435.3898 c
-363.6378 473.3898 l
-363.6378 475.601 361.849 477.3898 359.6378 477.3898 c
-235.6378 477.3898 l
-233.4266 477.3898 231.6378 475.601 231.6378 473.3898 c
-231.6378 435.3898 l
-231.6378 433.1786 233.4266 431.3898 235.6378 431.3898 c
+235.6378 383.3898 m
+359.6378 383.3898 l
+361.849 383.3898 363.6378 385.1786 363.6378 387.3898 c
+363.6378 425.3898 l
+363.6378 427.601 361.849 429.3898 359.6378 429.3898 c
+235.6378 429.3898 l
+233.4266 429.3898 231.6378 427.601 231.6378 425.3898 c
+231.6378 387.3898 l
+231.6378 385.1786 233.4266 383.3898 235.6378 383.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 239.6378 463.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
+BT 1 0 0 1 239.6378 415.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 239.6378 446.3898 Tm /F3+0 7.2 Tf 8.64 TL (Experienced friction) Tj T* ET
+BT 1 0 0 1 239.6378 398.3898 Tm /F3+0 7.2 Tf 8.64 TL (Experienced friction) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-390.6378 377.3898 m
-514.6378 377.3898 l
-516.849 377.3898 518.6378 379.1786 518.6378 381.3898 c
-518.6378 419.3898 l
-518.6378 421.601 516.849 423.3898 514.6378 423.3898 c
-390.6378 423.3898 l
-388.4266 423.3898 386.6378 421.601 386.6378 419.3898 c
-386.6378 381.3898 l
-386.6378 379.1786 388.4266 377.3898 390.6378 377.3898 c
+390.6378 329.3898 m
+514.6378 329.3898 l
+516.849 329.3898 518.6378 331.1786 518.6378 333.3898 c
+518.6378 371.3898 l
+518.6378 373.601 516.849 375.3898 514.6378 375.3898 c
+390.6378 375.3898 l
+388.4266 375.3898 386.6378 373.601 386.6378 371.3898 c
+386.6378 333.3898 l
+386.6378 331.1786 388.4266 329.3898 390.6378 329.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 394.6378 409.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 394.6378 361.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 394.6378 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (Requirements and architecture) Tj T* ET
+BT 1 0 0 1 394.6378 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Requirements and architecture) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-235.6378 323.3898 m
-359.6378 323.3898 l
-361.849 323.3898 363.6378 325.1786 363.6378 327.3898 c
-363.6378 365.3898 l
-363.6378 367.601 361.849 369.3898 359.6378 369.3898 c
-235.6378 369.3898 l
-233.4266 369.3898 231.6378 367.601 231.6378 365.3898 c
-231.6378 327.3898 l
-231.6378 325.1786 233.4266 323.3898 235.6378 323.3898 c
+235.6378 275.3898 m
+359.6378 275.3898 l
+361.849 275.3898 363.6378 277.1786 363.6378 279.3898 c
+363.6378 317.3898 l
+363.6378 319.601 361.849 321.3898 359.6378 321.3898 c
+235.6378 321.3898 l
+233.4266 321.3898 231.6378 319.601 231.6378 317.3898 c
+231.6378 279.3898 l
+231.6378 277.1786 233.4266 275.3898 235.6378 275.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 239.6378 355.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 239.6378 307.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 239.6378 338.3898 Tm /F3+0 7.2 Tf 8.64 TL (Tests and acceptance) Tj T* ET
+BT 1 0 0 1 239.6378 290.3898 Tm /F3+0 7.2 Tf 8.64 TL (Tests and acceptance) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-80.6378 377.3898 m
-204.6378 377.3898 l
-206.849 377.3898 208.6378 379.1786 208.6378 381.3898 c
-208.6378 419.3898 l
-208.6378 421.601 206.849 423.3898 204.6378 423.3898 c
-80.6378 423.3898 l
-78.4266 423.3898 76.6378 421.601 76.6378 419.3898 c
-76.6378 381.3898 l
-76.6378 379.1786 78.4266 377.3898 80.6378 377.3898 c
+80.6378 329.3898 m
+204.6378 329.3898 l
+206.849 329.3898 208.6378 331.1786 208.6378 333.3898 c
+208.6378 371.3898 l
+208.6378 373.601 206.849 375.3898 204.6378 375.3898 c
+80.6378 375.3898 l
+78.4266 375.3898 76.6378 373.601 76.6378 371.3898 c
+76.6378 333.3898 l
+76.6378 331.1786 78.4266 329.3898 80.6378 329.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 84.6378 409.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 84.6378 361.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 84.6378 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (Release and operation) Tj T* ET
+BT 1 0 0 1 84.6378 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Release and operation) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 317.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 269.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 289.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 48 241.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 265.3898 Tm /F2+0 9 Tf 10.8 TL (Electron / TypeScript / Node.js / Cloudflare / GitHub Actions / Agent workflows) Tj T* ET
+BT 1 0 0 1 48 217.3898 Tm /F2+0 9 Tf 10.8 TL (Electron / TypeScript / Node.js / Cloudflare / GitHub Actions / Agent workflows) Tj T* ET
  
 endstream
 endobj
 36 0 obj
 <<
-/Length 5156
+/Length 5341
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1104,84 +1104,86 @@ BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Use public repositories, automat
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 594.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 400.3898 499.2756 176 re S
+n 48 436.3898 499.2756 140 re S
 q
-261.9883 0 0 168 166.6436 404.3898 cm
+205.848 0 0 132 194.7138 440.3898 cm
 /FormXob.31d6eb5b60af586f232f7a164325d1bd Do
 Q
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 386.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
+BT 1 0 0 1 48 422.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 298.3898 499.2756 66 re B*
+n 48 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 346.3898 Tm /F3+0 7.5 Tf 9 TL (REPOSITORY / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 383.3898 Tm /F3+0 7.5 Tf 9 TL (REPOSITORY / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 325.3898 Tm /F3+0 10 Tf 12 TL (multi-cli-work-repository) Tj T* ET
+BT 1 0 0 1 60 364.3898 Tm /F3+0 9 Tf 10.8 TL (multi-cli-work-repository) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 309.3898 Tm /F2+0 7.4 Tf 8.88 TL (Public source and release history; registered as repository evidence, not visual media.) Tj T* ET
+BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Public source and release history; registered as repository) Tj T* ET
+BT 1 0 0 1 60 340.3898 Tm /F2+0 7.4 Tf 8.88 TL (evidence, not visual media.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 435.2756 325.3898 Tm /F2+0 8 Tf 9.6 TL (Open public link) Tj T* ET
-n 435.2756 323.3898 m 495.3615 323.3898 l S
+BT 1 0 0 1 244.6378 364.3898 Tm /F2+0 8 Tf 9.6 TL (Open public link) Tj T* ET
+n 244.6378 362.3898 m 304.7237 362.3898 l S
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 223.3898 499.2756 66 re B*
+n 48 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 271.3898 Tm /F3+0 7.5 Tf 9 TL (REPOSITORY / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 309.3898 Tm /F3+0 7.5 Tf 9 TL (REPOSITORY / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 250.3898 Tm /F3+0 10 Tf 12 TL (daegu-bus-repository) Tj T* ET
+BT 1 0 0 1 60 290.3898 Tm /F3+0 9 Tf 10.8 TL (daegu-bus-repository) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 234.3898 Tm /F2+0 7.4 Tf 8.88 TL (Public source history; registered as repository evidence, not visual media.) Tj T* ET
+BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Public source history; registered as repository evidence, not) Tj T* ET
+BT 1 0 0 1 60 266.3898 Tm /F2+0 7.4 Tf 8.88 TL (visual media.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 435.2756 250.3898 Tm /F2+0 8 Tf 9.6 TL (Open public link) Tj T* ET
-n 435.2756 248.3898 m 495.3615 248.3898 l S
+BT 1 0 0 1 244.6378 290.3898 Tm /F2+0 8 Tf 9.6 TL (Open public link) Tj T* ET
+n 244.6378 288.3898 m 304.7237 288.3898 l S
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 148.3898 499.2756 66 re B*
+n 48 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 196.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 175.3898 Tm /F3+0 10 Tf 12 TL (ai-build-lab-lead-01) Tj T* ET
+BT 1 0 0 1 60 216.3898 Tm /F3+0 9 Tf 10.8 TL (ai-build-lab-lead-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 159.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 73.38976 499.2756 66 re B*
+n 304.6378 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 121.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 383.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 100.3898 Tm /F3+0 10 Tf 12 TL (ai-build-lab-gallery-01) Tj T* ET
+BT 1 0 0 1 316.6378 364.3898 Tm /F3+0 9 Tf 10.8 TL (ai-build-lab-gallery-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 84.38976 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -1.610236 499.2756 66 re B*
+n 304.6378 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 46.38976 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 25.38976 Tm /F3+0 10 Tf 12 TL (ai-build-lab-gallery-02) Tj T* ET
+BT 1 0 0 1 316.6378 290.3898 Tm /F3+0 9 Tf 10.8 TL (ai-build-lab-gallery-02) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 9.389764 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -76.61024 499.2756 66 re B*
+n 304.6378 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -28.61024 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -49.61024 Tm /F3+0 10 Tf 12 TL (ai-build-lab-gallery-03) Tj T* ET
+BT 1 0 0 1 316.6378 216.3898 Tm /F3+0 9 Tf 10.8 TL (ai-build-lab-gallery-03) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -65.61024 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 -91.61024 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
+BT 1 0 0 1 48 172.3898 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 -115.6102 Tm /F2+0 9.5 Tf 11.4 TL (Screens from a released multi-cli-work build, together with the public repositories, tests, and releases of both) Tj T* ET
-BT 1 0 0 1 48 -130.6102 Tm /F2+0 9.5 Tf 11.4 TL (applications, provide public-safe evidence; private knowledge data is excluded.) Tj T* ET
+BT 1 0 0 1 48 148.3898 Tm /F2+0 9.5 Tf 11.4 TL (Screens from a released multi-cli-work build, together with the public repositories, tests, and releases of both) Tj T* ET
+BT 1 0 0 1 48 133.3898 Tm /F2+0 9.5 Tf 11.4 TL (applications, provide public-safe evidence; private knowledge data is excluded.) Tj T* ET
  
 endstream
 endobj
 37 0 obj
 <<
-/Length 4435
+/Length 4437
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1203,9 +1205,9 @@ BT 1 0 0 1 48 761.8898 Tm /F3+0 22 Tf 26.4 TL (Role, team result, and limits) Tj
 .062745 .090196 .082353 RG
 n 48 731.3898 m 547.2756 731.3898 l S
 .933333 .945098 .937255 rg
-n 48 614.3898 499.2756 96 re f*
+n 48 590.3898 499.2756 120 re f*
 .662745 .294118 .196078 rg
-n 48 614.3898 4 96 re f*
+n 48 590.3898 4 120 re f*
 .662745 .294118 .196078 rg
 BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / PRIVACY AND METRIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -1213,51 +1215,51 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Privacy and metric boundary) Tj T
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Exclude private knowledge data and unverified user or productivity metrics.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 486.3898 499.2756 116 re f*
+n 48 462.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
-n 48 486.3898 4 116 re f*
+n 48 462.3898 4 116 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 580.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
+BT 1 0 0 1 64 556.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Own context, architecture, acceptance criteria, tests, and releases.) Tj T* ET
+BT 1 0 0 1 64 534.3898 Tm /F3+0 13 Tf 15.6 TL (Own context, architecture, acceptance criteria, tests, and releases.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 536.3898 Tm /F2+0 9.5 Tf 11.4 TL (Owned problem context, requirements, architecture, acceptance criteria, tests, releases, and operating) Tj T* ET
-BT 1 0 0 1 64 521.3898 Tm /F2+0 9.5 Tf 11.4 TL (decisions while using AI to amplify implementation.) Tj T* ET
+BT 1 0 0 1 64 512.3898 Tm /F2+0 9.5 Tf 11.4 TL (Owned problem context, requirements, architecture, acceptance criteria, tests, releases, and operating) Tj T* ET
+BT 1 0 0 1 64 497.3898 Tm /F2+0 9.5 Tf 11.4 TL (decisions while using AI to amplify implementation.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 358.3898 499.2756 116 re f*
+n 48 280.3898 499.2756 170 re f*
 .047059 .419608 .368627 rg
-n 48 358.3898 4 116 re f*
+n 48 280.3898 4 170 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 452.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
+BT 1 0 0 1 64 428.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (Public repositories and release artifacts are observable product results; no) Tj T* ET
-BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (user-count, productivity, or maintainability metrics are claimed.) Tj T* ET
+BT 1 0 0 1 64 406.3898 Tm /F3+0 13 Tf 15.6 TL (Public repositories and release artifacts are observable product results; no) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (user-count, productivity, or maintainability metrics are claimed.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (Screens from a released multi-cli-work build, together with the public repositories, tests, and releases of) Tj T* ET
-BT 1 0 0 1 64 375.3898 Tm /F2+0 9.5 Tf 11.4 TL (both applications, provide public-safe evidence; private knowledge data is excluded.) Tj T* ET
+BT 1 0 0 1 64 366.3898 Tm /F2+0 9.5 Tf 11.4 TL (Screens from a released multi-cli-work build, together with the public repositories, tests, and releases of) Tj T* ET
+BT 1 0 0 1 64 351.3898 Tm /F2+0 9.5 Tf 11.4 TL (both applications, provide public-safe evidence; private knowledge data is excluded.) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 200.3898 243.6378 146 re S
+n 48 122.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
-BT 1 0 0 1 60 326.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
+BT 1 0 0 1 60 248.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (Never expose private knowledge-system source) Tj T* ET
-BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (data or claim unverified user or productivity) Tj T* ET
-BT 1 0 0 1 60 274.3898 Tm /F3+0 9 Tf 10.8 TL (metrics.) Tj T* ET
+BT 1 0 0 1 60 224.3898 Tm /F3+0 9 Tf 10.8 TL (Never expose private knowledge-system source) Tj T* ET
+BT 1 0 0 1 60 210.3898 Tm /F3+0 9 Tf 10.8 TL (data or claim unverified user or productivity) Tj T* ET
+BT 1 0 0 1 60 196.3898 Tm /F3+0 9 Tf 10.8 TL (metrics.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (multi-cli-work v1.24: one project opens CLI and agent sessions) Tj T* ET
-BT 1 0 0 1 60 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (alongside git status and worktrees. Local paths are blurred.) Tj T* ET
+BT 1 0 0 1 60 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (multi-cli-work v1.24: one project opens CLI and agent sessions) Tj T* ET
+BT 1 0 0 1 60 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (alongside git status and worktrees. Local paths are blurred.) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 200.3898 243.6378 146 re S
+n 303.6378 122.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 326.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
+BT 1 0 0 1 315.6378 248.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (AI amplifies implementation; people own context,) Tj T* ET
-BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (architecture, acceptance criteria, review, and) Tj T* ET
-BT 1 0 0 1 315.6378 274.3898 Tm /F3+0 9 Tf 10.8 TL (release decisions.) Tj T* ET
+BT 1 0 0 1 315.6378 224.3898 Tm /F3+0 9 Tf 10.8 TL (AI amplifies implementation; people own context,) Tj T* ET
+BT 1 0 0 1 315.6378 210.3898 Tm /F3+0 9 Tf 10.8 TL (architecture, acceptance criteria, review, and) Tj T* ET
+BT 1 0 0 1 315.6378 196.3898 Tm /F3+0 9 Tf 10.8 TL (release decisions.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 315.6378 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (One combined case connects a local-first knowledge system, a) Tj T* ET
-BT 1 0 0 1 315.6378 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (multi-CLI desktop application, and a Daegu bus-information) Tj T* ET
-BT 1 0 0 1 315.6378 230.3898 Tm /F2+0 7.6 Tf 9.12 TL (application through the same problem-to-product loop.) Tj T* ET
+BT 1 0 0 1 315.6378 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (One combined case connects a local-first knowledge system, a) Tj T* ET
+BT 1 0 0 1 315.6378 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (multi-CLI desktop application, and a Daegu bus-information) Tj T* ET
+BT 1 0 0 1 315.6378 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (application through the same problem-to-product loop.) Tj T* ET
  
 endstream
 endobj
@@ -1359,9 +1361,9 @@ xref
 0000258226 00000 n 
 0000261098 00000 n 
 0000264331 00000 n 
-0000270613 00000 n 
-0000275821 00000 n 
-0000280308 00000 n 
+0000270615 00000 n 
+0000276008 00000 n 
+0000280497 00000 n 
 trailer
 <<
 /ID 
@@ -1373,5 +1375,5 @@ trailer
 /Size 39
 >>
 startxref
-283181
+283370
 %%EOF

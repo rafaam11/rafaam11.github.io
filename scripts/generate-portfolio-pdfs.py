@@ -650,9 +650,12 @@ class TechnicalDocument:
         self.canvas.rect(self.left, y - height, 4, height, fill=1, stroke=0)
         self.label(label, self.left + 16, y - 22, accent)
         title_y = self.text(title, self.left + 16, y - 44, self.right - self.left - 32,
-                            size=13, font="MalgunGothic-Bold", leading=18, max_lines=2)
+                            size=13, font="MalgunGothic-Bold", leading=18, max_lines=4)
+        # Budget the body from the space the title actually consumed: a short title yields more
+        # body lines, and a three-line title still leaves every drawn line inside the box.
+        body_lines = max(1, int((title_y - 8 - (y - height)) / 15) + 1)
         self.text(body, self.left + 16, title_y - 4, self.right - self.left - 32,
-                  size=9.5, leading=15, color="muted", max_lines=max(1, int((height - 68) / 15)))
+                  size=9.5, leading=15, color="muted", max_lines=body_lines)
         return y - height - 12
 
     def link(self, label: Any, url: str, x: float, y: float, size: float = 9) -> float:
@@ -731,8 +734,10 @@ class TechnicalDocument:
             for index, center in enumerate(centers):
                 box(*center, 142, 48, nodes[index], index)
         elif kind == "sync-topology":
-            centers = [(center_x, center_y), (self.left + 92, center_y + 44),
-                       (self.right - 92, center_y + 44), (center_x, center_y - 56)]
+            # Node 04 sat low enough that its box crossed the frame edge and collided with the
+            # caption below, so the star is lifted to keep all four boxes inside the panel.
+            centers = [(center_x, center_y + 4), (self.left + 92, center_y + 58),
+                       (self.right - 92, center_y + 58), (center_x, center_y - 42)]
             for index in range(1, 4):
                 connector(centers[index], centers[0])
             box(*centers[0], 146, 54, nodes[0], 0)
@@ -761,13 +766,18 @@ class TechnicalDocument:
             for index, center in enumerate(centers):
                 box(*center, 132, 46, nodes[index], index)
         elif kind == "surface-gating-chain":
-            width = 104
-            centers = [(self.left + 58 + index * 122, center_y) for index in range(4)]
-            for index in range(3):
-                connector((centers[index][0] + width / 2, center_y), (centers[index + 1][0] - width / 2, center_y),
-                          "warm" if index == 2 else "signal")
-            for index, center in enumerate(centers):
-                box(*center, width, 58, nodes[index], index)
+            # One sensor stack feeds a far-field and a near-field track that converge on the
+            # same output, so this geometry forks and rejoins rather than running as a line.
+            left_center = (self.left + 78, center_y)
+            track_centers = [(center_x, center_y + 36), (center_x, center_y - 36)]
+            right_center = (self.right - 88, center_y)
+            for track in track_centers:
+                connector((left_center[0] + 60, center_y), (track[0] - 74, track[1]))
+                connector((track[0] + 74, track[1]), (right_center[0] - 62, center_y), "warm")
+            box(*left_center, 120, 50, nodes[0], 0)
+            box(*track_centers[0], 148, 44, nodes[1], 1)
+            box(*track_centers[1], 148, 44, nodes[2], 2)
+            box(*right_center, 124, 50, nodes[3], 3)
         elif kind == "tracking-sdk-stack":
             centers = [(center_x, center_y + 54 - index * 36) for index in range(4)]
             for index in range(3):
@@ -976,7 +986,7 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     first_block, first_copy = middle_blocks[0]
     y = doc.section("01 / " + first_copy["heading"], first_copy["heading"],
                     block_body(first_block, first_copy), y, 112)
-    y = doc.section(labels["problem_label"], copy["problem"], copy["summary"], y, 142)
+    y = doc.section(labels["problem_label"], copy["problem"], copy["summary"], y, 175)
     y = doc.section(labels["boundary"], copy["limitation"], copy["collaboration"], y, 142, "warm")
     doc.label(labels["state"], doc.left, y - 8)
     doc.text(f"{copy['status']} / {copy['mediaCaption']}", doc.left, y - 30, content_width,
@@ -991,7 +1001,7 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
                  leading=17, max_lines=6) - 10
     second_block, second_copy = middle_blocks[1]
     y = doc.section("02 / " + second_copy["heading"], second_copy["heading"],
-                    block_body(second_block, second_copy), y, 92)
+                    block_body(second_block, second_copy), y, 140)
     doc.label(labels["flow"], doc.left, y)
     y = doc.diagram(project["pdfSequence"]["diagram"]["kind"], diagram_copy["title"],
                     [clean_text(node) for node in diagram_copy["nodes"]], y - 17)
@@ -1012,7 +1022,7 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     if selected_image:
         doc.label(f"IMAGE / {labels['approved']}", doc.left, y)
         image_top = y - 18
-        image_height = 176
+        image_height = 140
         doc.canvas.setStrokeColor(doc.colors["line"])
         doc.canvas.rect(doc.left, image_top - image_height, content_width, image_height, fill=0, stroke=1)
         with dependencies["Image"].open(selected_image) as image:
@@ -1027,23 +1037,33 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     doc.label(labels["registered"], doc.left, y)
     y -= 22
     evidence = [entry for entry in payload["evidence"] if entry.get("project") == project["slug"]]
-    for entry in evidence:
+    # A single stacked column ran past the page edge once a project registered more than four
+    # entries, so the ledger fills two columns and every registered item stays on the page.
+    column_gap = 14
+    column_width = (content_width - column_gap) / 2
+    row_height = 66
+    row_gap = 8
+    rows = (len(evidence) + 1) // 2
+    for index, entry in enumerate(evidence):
         approved = entry.get("state") == "approved-public"
         state_label = labels["approved"] if approved else labels["pending"]
-        row_height = 66 if selected_image else 78
+        column, row = divmod(index, rows) if rows else (0, 0)
+        row_x = doc.left + column * (column_width + column_gap)
+        row_y = y - row * (row_height + row_gap)
         doc.canvas.setFillColor(doc.colors["soft"] if approved else doc.colors["paper"])
         doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(doc.left, y - row_height, content_width, row_height, fill=1, stroke=1)
-        doc.label(f"{entry.get('type', '')} / {state_label}", doc.left + 12, y - 18,
+        doc.canvas.rect(row_x, row_y - row_height, column_width, row_height, fill=1, stroke=1)
+        doc.label(f"{entry.get('type', '')} / {state_label}", row_x + 12, row_y - 17,
                   "signal" if approved else "warm")
-        doc.text(entry.get("id", ""), doc.left + 12, y - 39, content_width - 24,
-                 size=10, font="MalgunGothic-Bold", leading=14, max_lines=1)
-        note_y = doc.text(entry.get("note", ""), doc.left + 12, y - 55, content_width - 24,
-                          size=7.4, leading=10, color="muted", max_lines=1 if selected_image else 2)
+        doc.text(entry.get("id", ""), row_x + 12, row_y - 36, column_width - 70,
+                 size=9, font="MalgunGothic-Bold", leading=13, max_lines=1)
+        doc.text(entry.get("note", ""), row_x + 12, row_y - 50, column_width - 24,
+                 size=7.4, leading=10, color="muted", max_lines=2)
         source = clean_text(entry.get("source"))
         if approved and source.startswith("https://"):
-            doc.link(labels["open"], source, doc.right - 112, y - 39, 8)
-        y -= row_height + 9
+            doc.link(labels["open"], source, row_x + column_width - 46, row_y - 36, 8)
+    if evidence:
+        y -= rows * (row_height + row_gap)
     y -= 6
     doc.label(labels["evidence"], doc.left, y)
     doc.text(copy["evidence"], doc.left, y - 24, content_width, size=9.5,
@@ -1055,9 +1075,9 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
     y = doc.heading(labels["attribution"], doc.top - 32)
     fourth_block, fourth_copy = middle_blocks[3]
     y = doc.section("04 / " + fourth_copy["heading"], fourth_copy["heading"],
-                    block_body(fourth_block, fourth_copy), y, 96, "warm")
+                    block_body(fourth_block, fourth_copy), y, 120, "warm")
     y = doc.section(labels["role"], copy["ownedRole"], copy["role"], y, 116)
-    y = doc.section(labels["team"], copy["teamResult"], copy["evidence"], y, 116)
+    y = doc.section(labels["team"], copy["teamResult"], copy["evidence"], y, 170)
     column_gap = 12
     column_width = (content_width - column_gap) / 2
     for index, (label, title, body, accent) in enumerate([

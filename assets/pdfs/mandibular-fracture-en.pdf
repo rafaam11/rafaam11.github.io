@@ -80,7 +80,7 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://link.springer.com/article/10.1007/s10278-024-01014-z)
->> /Border [ 0 0 0 ] /Rect [ 435.2756 321.3898 495.3615 335.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 244.6378 360.3898 304.7237 374.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 12 0 obj
@@ -853,9 +853,9 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Problem definition) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Defined occlusion as a reproducible target for fracture reduction.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 444.3898 499.2756 142 re f*
+n 48 411.3898 499.2756 175 re f*
 .047059 .419608 .368627 rg
-n 48 444.3898 4 142 re f*
+n 48 411.3898 4 175 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 564.3898 Tm /F3+0 7.5 Tf 9 TL (PROBLEM) Tj T* ET
 .062745 .090196 .082353 rg
@@ -865,27 +865,27 @@ BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (needed a reproducible constraint 
 BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (Built a surgical-planning simulator and experiment pipeline that optimizes mandibular fragment pose using) Tj T* ET
 BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (dental features and fracture surfaces.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 290.3898 499.2756 142 re f*
+n 48 257.3898 499.2756 142 re f*
 .662745 .294118 .196078 rg
-n 48 290.3898 4 142 re f*
+n 48 257.3898 4 142 re f*
 .662745 .294118 .196078 rg
-BT 1 0 0 1 64 410.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
+BT 1 0 0 1 64 377.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (Public evidence is the published figures and presentation material; no) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (clinical use or sole first authorship is claimed.) Tj T* ET
+BT 1 0 0 1 64 355.3898 Tm /F3+0 13 Tf 15.6 TL (Public evidence is the published figures and presentation material; no) Tj T* ET
+BT 1 0 0 1 64 337.3898 Tm /F3+0 13 Tf 15.6 TL (clinical use or sole first authorship is claimed.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Clinical interpretation, algorithm design, experiment design, and writing were conducted as joint research.) Tj T* ET
+BT 1 0 0 1 64 315.3898 Tm /F2+0 9.5 Tf 11.4 TL (Clinical interpretation, algorithm design, experiment design, and writing were conducted as joint research.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 270.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
+BT 1 0 0 1 48 237.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Verified \001 Completed / Surface-distance maps between the pre-fracture mandible and the reduction model \(part of) Tj T* ET
-BT 1 0 0 1 48 233.3898 Tm /F2+0 9.5 Tf 11.4 TL (Fig. 3 in the published paper\).) Tj T* ET
+BT 1 0 0 1 48 215.3898 Tm /F2+0 9.5 Tf 11.4 TL (Verified \001 Completed / Surface-distance maps between the pre-fracture mandible and the reduction model \(part of) Tj T* ET
+BT 1 0 0 1 48 200.3898 Tm /F2+0 9.5 Tf 11.4 TL (Fig. 3 in the published paper\).) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 5983
+/Length 5985
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -912,9 +912,9 @@ BT 1 0 0 1 48 710.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Jointly led the research pipeline across problem definition, feature and optimization design, simulator,) Tj T* ET
 BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (experiments and analysis, and paper, serving as a co-first author.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 549.3898 499.2756 92 re f*
+n 48 501.3898 499.2756 140 re f*
 .047059 .419608 .368627 rg
-n 48 549.3898 4 92 re f*
+n 48 501.3898 4 140 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 619.3898 Tm /F3+0 7.5 Tf 9 TL (02 / RESEARCH PIPELINE) Tj T* ET
 .062745 .090196 .082353 rg
@@ -922,140 +922,140 @@ BT 1 0 0 1 64 597.3898 Tm /F3+0 13 Tf 15.6 TL (Research pipeline) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 575.3898 Tm /F2+0 9.5 Tf 11.4 TL (Feature design \001 Optimization \001 Simulator \001 Experiments and analysis \001 Paper) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 537.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
+BT 1 0 0 1 48 489.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 332.3898 499.2756 188 re B*
+n 48 284.3898 499.2756 188 re B*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 498.3898 Tm /F3+0 10 Tf 12 TL (Occlusion-constrained optimization loop) Tj T* ET
+BT 1 0 0 1 62 450.3898 Tm /F3+0 10 Tf 12 TL (Occlusion-constrained optimization loop) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 158 434.3898 m 437.2756 434.3898 l S
+n 158 386.3898 m 437.2756 386.3898 l S
 .047059 .419608 .368627 rg
 n
-439.4756 434.3898 m
-439.4756 435.6048 438.4906 436.5898 437.2756 436.5898 c
-436.0606 436.5898 435.0756 435.6048 435.0756 434.3898 c
-435.0756 433.1747 436.0606 432.1898 437.2756 432.1898 c
-438.4906 432.1898 439.4756 433.1747 439.4756 434.3898 c
+439.4756 386.3898 m
+439.4756 387.6048 438.4906 388.5898 437.2756 388.5898 c
+436.0606 388.5898 435.0756 387.6048 435.0756 386.3898 c
+435.0756 385.1747 436.0606 384.1898 437.2756 384.1898 c
+438.4906 384.1898 439.4756 385.1747 439.4756 386.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 437.2756 434.3898 m 437.2756 366.3898 l S
+n 437.2756 386.3898 m 437.2756 318.3898 l S
 .047059 .419608 .368627 rg
 n
-439.4756 366.3898 m
-439.4756 367.6048 438.4906 368.5898 437.2756 368.5898 c
-436.0606 368.5898 435.0756 367.6048 435.0756 366.3898 c
-435.0756 365.1747 436.0606 364.1898 437.2756 364.1898 c
-438.4906 364.1898 439.4756 365.1747 439.4756 366.3898 c
+439.4756 318.3898 m
+439.4756 319.6048 438.4906 320.5898 437.2756 320.5898 c
+436.0606 320.5898 435.0756 319.6048 435.0756 318.3898 c
+435.0756 317.1747 436.0606 316.1898 437.2756 316.1898 c
+438.4906 316.1898 439.4756 317.1747 439.4756 318.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 437.2756 366.3898 m 158 366.3898 l S
+n 437.2756 318.3898 m 158 318.3898 l S
 .047059 .419608 .368627 rg
 n
-160.2 366.3898 m
-160.2 367.6048 159.215 368.5898 158 368.5898 c
-156.785 368.5898 155.8 367.6048 155.8 366.3898 c
-155.8 365.1747 156.785 364.1898 158 364.1898 c
-159.215 364.1898 160.2 365.1747 160.2 366.3898 c
+160.2 318.3898 m
+160.2 319.6048 159.215 320.5898 158 320.5898 c
+156.785 320.5898 155.8 319.6048 155.8 318.3898 c
+155.8 317.1747 156.785 316.1898 158 316.1898 c
+159.215 316.1898 160.2 317.1747 160.2 318.3898 c
 f*
 .662745 .294118 .196078 RG
 1.2 w
-n 158 366.3898 m 158 434.3898 l S
+n 158 318.3898 m 158 386.3898 l S
 .662745 .294118 .196078 rg
 n
-160.2 434.3898 m
-160.2 435.6048 159.215 436.5898 158 436.5898 c
-156.785 436.5898 155.8 435.6048 155.8 434.3898 c
-155.8 433.1747 156.785 432.1898 158 432.1898 c
-159.215 432.1898 160.2 433.1747 160.2 434.3898 c
+160.2 386.3898 m
+160.2 387.6048 159.215 388.5898 158 388.5898 c
+156.785 388.5898 155.8 387.6048 155.8 386.3898 c
+155.8 385.1747 156.785 384.1898 158 384.1898 c
+159.215 384.1898 160.2 385.1747 160.2 386.3898 c
 f*
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-91 410.3898 m
-225 410.3898 l
-227.2112 410.3898 229 412.1786 229 414.3898 c
-229 454.3898 l
-229 456.601 227.2112 458.3898 225 458.3898 c
-91 458.3898 l
-88.7888 458.3898 87 456.601 87 454.3898 c
-87 414.3898 l
-87 412.1786 88.7888 410.3898 91 410.3898 c
+91 362.3898 m
+225 362.3898 l
+227.2112 362.3898 229 364.1786 229 366.3898 c
+229 406.3898 l
+229 408.601 227.2112 410.3898 225 410.3898 c
+91 410.3898 l
+88.7888 410.3898 87 408.601 87 406.3898 c
+87 366.3898 l
+87 364.1786 88.7888 362.3898 91 362.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 95 443.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
+BT 1 0 0 1 95 395.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 95 426.3898 Tm /F3+0 7.2 Tf 8.64 TL (Occlusion target) Tj T* ET
+BT 1 0 0 1 95 378.3898 Tm /F3+0 7.2 Tf 8.64 TL (Occlusion target) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-370.2756 410.3898 m
-504.2756 410.3898 l
-506.4868 410.3898 508.2756 412.1786 508.2756 414.3898 c
-508.2756 454.3898 l
-508.2756 456.601 506.4868 458.3898 504.2756 458.3898 c
-370.2756 458.3898 l
-368.0644 458.3898 366.2756 456.601 366.2756 454.3898 c
-366.2756 414.3898 l
-366.2756 412.1786 368.0644 410.3898 370.2756 410.3898 c
+370.2756 362.3898 m
+504.2756 362.3898 l
+506.4868 362.3898 508.2756 364.1786 508.2756 366.3898 c
+508.2756 406.3898 l
+508.2756 408.601 506.4868 410.3898 504.2756 410.3898 c
+370.2756 410.3898 l
+368.0644 410.3898 366.2756 408.601 366.2756 406.3898 c
+366.2756 366.3898 l
+366.2756 364.1786 368.0644 362.3898 370.2756 362.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 374.2756 443.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 374.2756 395.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 374.2756 426.3898 Tm /F3+0 7.2 Tf 8.64 TL (Features and surfaces) Tj T* ET
+BT 1 0 0 1 374.2756 378.3898 Tm /F3+0 7.2 Tf 8.64 TL (Features and surfaces) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-370.2756 342.3898 m
-504.2756 342.3898 l
-506.4868 342.3898 508.2756 344.1786 508.2756 346.3898 c
-508.2756 386.3898 l
-508.2756 388.601 506.4868 390.3898 504.2756 390.3898 c
-370.2756 390.3898 l
-368.0644 390.3898 366.2756 388.601 366.2756 386.3898 c
-366.2756 346.3898 l
-366.2756 344.1786 368.0644 342.3898 370.2756 342.3898 c
+370.2756 294.3898 m
+504.2756 294.3898 l
+506.4868 294.3898 508.2756 296.1786 508.2756 298.3898 c
+508.2756 338.3898 l
+508.2756 340.601 506.4868 342.3898 504.2756 342.3898 c
+370.2756 342.3898 l
+368.0644 342.3898 366.2756 340.601 366.2756 338.3898 c
+366.2756 298.3898 l
+366.2756 296.1786 368.0644 294.3898 370.2756 294.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 374.2756 375.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 374.2756 327.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 374.2756 358.3898 Tm /F3+0 7.2 Tf 8.64 TL (Optimization and simulation) Tj T* ET
+BT 1 0 0 1 374.2756 310.3898 Tm /F3+0 7.2 Tf 8.64 TL (Optimization and simulation) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-91 342.3898 m
-225 342.3898 l
-227.2112 342.3898 229 344.1786 229 346.3898 c
-229 386.3898 l
-229 388.601 227.2112 390.3898 225 390.3898 c
-91 390.3898 l
-88.7888 390.3898 87 388.601 87 386.3898 c
-87 346.3898 l
-87 344.1786 88.7888 342.3898 91 342.3898 c
+91 294.3898 m
+225 294.3898 l
+227.2112 294.3898 229 296.1786 229 298.3898 c
+229 338.3898 l
+229 340.601 227.2112 342.3898 225 342.3898 c
+91 342.3898 l
+88.7888 342.3898 87 340.601 87 338.3898 c
+87 298.3898 l
+87 296.1786 88.7888 294.3898 91 294.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 95 375.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 95 327.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 95 358.3898 Tm /F3+0 7.2 Tf 8.64 TL (Experiments and paper) Tj T* ET
+BT 1 0 0 1 95 310.3898 Tm /F3+0 7.2 Tf 8.64 TL (Experiments and paper) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 317.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 269.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 289.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 48 241.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 265.3898 Tm /F2+0 9 Tf 10.8 TL (Python / Open3D / OpenCV / SciPy / PCA / ICP / CLPSO / 3D Slicer) Tj T* ET
+BT 1 0 0 1 48 217.3898 Tm /F2+0 9 Tf 10.8 TL (Python / Open3D / OpenCV / SciPy / PCA / ICP / CLPSO / 3D Slicer) Tj T* ET
  
 endstream
 endobj
 34 0 obj
 <<
-/Length 5372
+/Length 5439
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1089,90 +1089,90 @@ BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Separate presentations, award, q
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 594.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 400.3898 499.2756 176 re S
+n 48 436.3898 499.2756 140 re S
 q
-224 0 0 168 185.6378 404.3898 cm
+176 0 0 132 209.6378 440.3898 cm
 /FormXob.1cc2c37fa0289e7c36c18edb9995ede3 Do
 Q
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 386.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
+BT 1 0 0 1 48 422.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 298.3898 499.2756 66 re B*
+n 48 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 346.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLICATION / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 383.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLICATION / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 325.3898 Tm /F3+0 10 Tf 12 TL (mandibular-publication) Tj T* ET
+BT 1 0 0 1 60 364.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-publication) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 309.3898 Tm /F2+0 7.4 Tf 8.88 TL (Public article page used as external research evidence.) Tj T* ET
+BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Public article page used as external research evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 435.2756 325.3898 Tm /F2+0 8 Tf 9.6 TL (Open public link) Tj T* ET
-n 435.2756 323.3898 m 495.3615 323.3898 l S
+BT 1 0 0 1 244.6378 364.3898 Tm /F2+0 8 Tf 9.6 TL (Open public link) Tj T* ET
+n 244.6378 362.3898 m 304.7237 362.3898 l S
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 223.3898 499.2756 66 re B*
+n 48 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 271.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 250.3898 Tm /F3+0 10 Tf 12 TL (mandibular-fracture-lead-01) Tj T* ET
+BT 1 0 0 1 60 290.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-fracture-lead-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 234.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 148.3898 499.2756 66 re B*
+n 48 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 196.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 175.3898 Tm /F3+0 10 Tf 12 TL (mandibular-fracture-gallery-01) Tj T* ET
+BT 1 0 0 1 60 216.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-fracture-gallery-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 159.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 73.38976 499.2756 66 re B*
+n 48 112.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 121.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 161.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 100.3898 Tm /F3+0 10 Tf 12 TL (mandibular-fracture-gallery-02) Tj T* ET
+BT 1 0 0 1 60 142.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-fracture-gallery-02) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 84.38976 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 128.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -1.610236 499.2756 66 re B*
+n 304.6378 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 46.38976 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 383.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 25.38976 Tm /F3+0 10 Tf 12 TL (mandibular-fracture-gallery-03) Tj T* ET
+BT 1 0 0 1 316.6378 364.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-fracture-gallery-03) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 9.389764 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -76.61024 499.2756 66 re B*
+n 304.6378 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -28.61024 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -49.61024 Tm /F3+0 10 Tf 12 TL (mandibular-fracture-gallery-04) Tj T* ET
+BT 1 0 0 1 316.6378 290.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-fracture-gallery-04) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -65.61024 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -151.6102 499.2756 66 re B*
+n 304.6378 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 -103.6102 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 -124.6102 Tm /F3+0 10 Tf 12 TL (mandibular-fracture-gallery-05) Tj T* ET
+BT 1 0 0 1 316.6378 216.3898 Tm /F3+0 9 Tf 10.8 TL (mandibular-fracture-gallery-05) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 -140.6102 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 -166.6102 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
+BT 1 0 0 1 48 98.38976 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 -190.6102 Tm /F2+0 9.5 Tf 11.4 TL (ACCAS 2022, a 2022 domestic conference, a 2023 best-paper award, a 2024 Q1 SCIE peer-reviewed paper, and) Tj T* ET
-BT 1 0 0 1 48 -205.6102 Tm /F2+0 9.5 Tf 11.4 TL (quantitative experiments provide the evidence.) Tj T* ET
+BT 1 0 0 1 48 74.38976 Tm /F2+0 9.5 Tf 11.4 TL (ACCAS 2022, a 2022 domestic conference, a 2023 best-paper award, a 2024 Q1 SCIE peer-reviewed paper, and) Tj T* ET
+BT 1 0 0 1 48 59.38976 Tm /F2+0 9.5 Tf 11.4 TL (quantitative experiments provide the evidence.) Tj T* ET
  
 endstream
 endobj
 35 0 obj
 <<
-/Length 4330
+/Length 4332
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1194,9 +1194,9 @@ BT 1 0 0 1 48 761.8898 Tm /F3+0 22 Tf 26.4 TL (Role, team result, and limits) Tj
 .062745 .090196 .082353 RG
 n 48 731.3898 m 547.2756 731.3898 l S
 .933333 .945098 .937255 rg
-n 48 614.3898 499.2756 96 re f*
+n 48 590.3898 499.2756 120 re f*
 .662745 .294118 .196078 rg
-n 48 614.3898 4 96 re f*
+n 48 590.3898 4 120 re f*
 .662745 .294118 .196078 rg
 BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / RESEARCH BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -1204,51 +1204,51 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Research boundary) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Prepared-dataset results do not establish routine clinical use.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 486.3898 499.2756 116 re f*
+n 48 462.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
-n 48 486.3898 4 116 re f*
+n 48 462.3898 4 116 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 580.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
+BT 1 0 0 1 64 556.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Jointly led the research pipeline and served as a co-first author.) Tj T* ET
+BT 1 0 0 1 64 534.3898 Tm /F3+0 13 Tf 15.6 TL (Jointly led the research pipeline and served as a co-first author.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 536.3898 Tm /F2+0 9.5 Tf 11.4 TL (Jointly led the research pipeline across problem definition, feature and optimization design, simulator,) Tj T* ET
-BT 1 0 0 1 64 521.3898 Tm /F2+0 9.5 Tf 11.4 TL (experiments and analysis, and paper, serving as a co-first author.) Tj T* ET
+BT 1 0 0 1 64 512.3898 Tm /F2+0 9.5 Tf 11.4 TL (Jointly led the research pipeline across problem definition, feature and optimization design, simulator,) Tj T* ET
+BT 1 0 0 1 64 497.3898 Tm /F2+0 9.5 Tf 11.4 TL (experiments and analysis, and paper, serving as a co-first author.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 358.3898 499.2756 116 re f*
+n 48 280.3898 499.2756 170 re f*
 .047059 .419608 .368627 rg
-n 48 358.3898 4 116 re f*
+n 48 280.3898 4 170 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 452.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
+BT 1 0 0 1 64 428.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (The joint research team produced international and domestic) Tj T* ET
-BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (presentations, an award, and a peer-reviewed publication.) Tj T* ET
+BT 1 0 0 1 64 406.3898 Tm /F3+0 13 Tf 15.6 TL (The joint research team produced international and domestic) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (presentations, an award, and a peer-reviewed publication.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (ACCAS 2022, a 2022 domestic conference, a 2023 best-paper award, a 2024 Q1 SCIE peer-reviewed paper,) Tj T* ET
-BT 1 0 0 1 64 375.3898 Tm /F2+0 9.5 Tf 11.4 TL (and quantitative experiments provide the evidence.) Tj T* ET
+BT 1 0 0 1 64 366.3898 Tm /F2+0 9.5 Tf 11.4 TL (ACCAS 2022, a 2022 domestic conference, a 2023 best-paper award, a 2024 Q1 SCIE peer-reviewed paper,) Tj T* ET
+BT 1 0 0 1 64 351.3898 Tm /F2+0 9.5 Tf 11.4 TL (and quantitative experiments provide the evidence.) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 200.3898 243.6378 146 re S
+n 48 122.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
-BT 1 0 0 1 60 326.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
+BT 1 0 0 1 60 248.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (Public evidence is the published figures and) Tj T* ET
-BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (presentation material; no clinical use or sole first) Tj T* ET
-BT 1 0 0 1 60 274.3898 Tm /F3+0 9 Tf 10.8 TL (authorship is claimed.) Tj T* ET
+BT 1 0 0 1 60 224.3898 Tm /F3+0 9 Tf 10.8 TL (Public evidence is the published figures and) Tj T* ET
+BT 1 0 0 1 60 210.3898 Tm /F3+0 9 Tf 10.8 TL (presentation material; no clinical use or sole first) Tj T* ET
+BT 1 0 0 1 60 196.3898 Tm /F3+0 9 Tf 10.8 TL (authorship is claimed.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (Surface-distance maps between the pre-fracture mandible and) Tj T* ET
-BT 1 0 0 1 60 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (the reduction model \(part of Fig. 3 in the published paper\).) Tj T* ET
+BT 1 0 0 1 60 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (Surface-distance maps between the pre-fracture mandible and) Tj T* ET
+BT 1 0 0 1 60 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (the reduction model \(part of Fig. 3 in the published paper\).) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 200.3898 243.6378 146 re S
+n 303.6378 122.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 326.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
+BT 1 0 0 1 315.6378 248.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (Clinical interpretation, algorithm design,) Tj T* ET
-BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (experiment design, and writing were conducted as) Tj T* ET
-BT 1 0 0 1 315.6378 274.3898 Tm /F3+0 9 Tf 10.8 TL (joint research.) Tj T* ET
+BT 1 0 0 1 315.6378 224.3898 Tm /F3+0 9 Tf 10.8 TL (Clinical interpretation, algorithm design,) Tj T* ET
+BT 1 0 0 1 315.6378 210.3898 Tm /F3+0 9 Tf 10.8 TL (experiment design, and writing were conducted as) Tj T* ET
+BT 1 0 0 1 315.6378 196.3898 Tm /F3+0 9 Tf 10.8 TL (joint research.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 315.6378 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (Built a surgical-planning simulator and experiment pipeline) Tj T* ET
-BT 1 0 0 1 315.6378 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (that optimizes mandibular fragment pose using dental features) Tj T* ET
-BT 1 0 0 1 315.6378 230.3898 Tm /F2+0 7.6 Tf 9.12 TL (and fracture surfaces.) Tj T* ET
+BT 1 0 0 1 315.6378 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (Built a surgical-planning simulator and experiment pipeline) Tj T* ET
+BT 1 0 0 1 315.6378 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (that optimizes mandibular fragment pose using dental features) Tj T* ET
+BT 1 0 0 1 315.6378 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (and fracture surfaces.) Tj T* ET
  
 endstream
 endobj
@@ -1343,9 +1343,9 @@ xref
 0000849226 00000 n 
 0000851860 00000 n 
 0000855033 00000 n 
-0000861068 00000 n 
-0000866492 00000 n 
-0000870874 00000 n 
+0000861070 00000 n 
+0000866561 00000 n 
+0000870945 00000 n 
 trailer
 <<
 /ID 
@@ -1357,5 +1357,5 @@ trailer
 /Size 37
 >>
 startxref
-873399
+873470
 %%EOF

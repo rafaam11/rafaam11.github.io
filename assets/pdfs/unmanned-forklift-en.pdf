@@ -837,9 +837,9 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Sensor coordinate chain) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connected RGB, ToF, LiDAR, and NAV350 to vehicle coordinates and robot pose.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 444.3898 499.2756 142 re f*
+n 48 411.3898 499.2756 175 re f*
 .047059 .419608 .368627 rg
-n 48 444.3898 4 142 re f*
+n 48 411.3898 4 175 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 564.3898 Tm /F3+0 7.5 Tf 9 TL (PROBLEM) Tj T* ET
 .062745 .090196 .082353 rg
@@ -849,26 +849,26 @@ BT 1 0 0 1 64 524.3898 Tm /F3+0 13 Tf 15.6 TL (common flow usable by safety deci
 BT 1 0 0 1 64 502.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and NAV350 3D PCD processing, robot) Tj T* ET
 BT 1 0 0 1 64 487.3898 Tm /F2+0 9.5 Tf 11.4 TL (localization, sensor fusion, safety policy, and Zenoh publication into one integration flow.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 290.3898 499.2756 142 re f*
+n 48 257.3898 499.2756 142 re f*
 .662745 .294118 .196078 rg
-n 48 290.3898 4 142 re f*
+n 48 257.3898 4 142 re f*
 .662745 .294118 .196078 rg
-BT 1 0 0 1 64 410.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
+BT 1 0 0 1 64 377.3898 Tm /F3+0 7.5 Tf 9 TL (PUBLIC BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (The public clip and photos are test-site runs; they do not claim) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (production or customer outcomes.) Tj T* ET
+BT 1 0 0 1 64 355.3898 Tm /F3+0 13 Tf 15.6 TL (The public clip and photos are test-site runs; they do not claim) Tj T* ET
+BT 1 0 0 1 64 337.3898 Tm /F3+0 13 Tf 15.6 TL (production or customer outcomes.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Vehicle control, sensing, safety, and field-validation owners integrate the system jointly.) Tj T* ET
+BT 1 0 0 1 64 315.3898 Tm /F2+0 9.5 Tf 11.4 TL (Vehicle control, sensing, safety, and field-validation owners integrate the system jointly.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 270.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
+BT 1 0 0 1 48 237.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 248.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / Screen recording of the DOTORI vision-servoing test \(3D view, camera feed, signal plots\).) Tj T* ET
+BT 1 0 0 1 48 215.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / Screen recording of the DOTORI vision-servoing test \(3D view, camera feed, signal plots\).) Tj T* ET
  
 endstream
 endobj
 31 0 obj
 <<
-/Length 5641
+/Length 5643
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -895,9 +895,9 @@ BT 1 0 0 1 48 710.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 BT 1 0 0 1 48 685.3898 Tm /F2+0 10.5 Tf 12.6 TL (Owned ToF-RGB-SAM3 registration; SICK TiM LiDAR and NAV350 3D PCD processing; robot) Tj T* ET
 BT 1 0 0 1 48 668.3898 Tm /F2+0 10.5 Tf 12.6 TL (localization; sensor fusion and safety-policy decisions; and publishing results through Zenoh.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 549.3898 499.2756 92 re f*
+n 48 501.3898 499.2756 140 re f*
 .047059 .419608 .368627 rg
-n 48 549.3898 4 92 re f*
+n 48 501.3898 4 140 re f*
 .047059 .419608 .368627 rg
 BT 1 0 0 1 64 619.3898 Tm /F3+0 7.5 Tf 9 TL (02 / PERCEPTION TO POLICY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -905,63 +905,45 @@ BT 1 0 0 1 64 597.3898 Tm /F3+0 13 Tf 15.6 TL (Perception to policy) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 575.3898 Tm /F2+0 9.5 Tf 11.4 TL (Connected registration and pose outputs to safety-policy decisions and Zenoh messages.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 537.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
+BT 1 0 0 1 48 489.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 332.3898 499.2756 188 re B*
+n 48 284.3898 499.2756 188 re B*
 .062745 .090196 .082353 rg
-BT 1 0 0 1 62 498.3898 Tm /F3+0 10 Tf 12 TL (Multi-sensor convergence to safety policy) Tj T* ET
+BT 1 0 0 1 62 450.3898 Tm /F3+0 10 Tf 12 TL (Multi-sensor convergence to safety policy) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 212 448.3898 m 353.2756 400.3898 l S
+n 212 400.3898 m 353.2756 352.3898 l S
 .047059 .419608 .368627 rg
 n
-355.4756 400.3898 m
-355.4756 401.6048 354.4906 402.5898 353.2756 402.5898 c
-352.0606 402.5898 351.0756 401.6048 351.0756 400.3898 c
-351.0756 399.1747 352.0606 398.1898 353.2756 398.1898 c
-354.4906 398.1898 355.4756 399.1747 355.4756 400.3898 c
+355.4756 352.3898 m
+355.4756 353.6048 354.4906 354.5898 353.2756 354.5898 c
+352.0606 354.5898 351.0756 353.6048 351.0756 352.3898 c
+351.0756 351.1747 352.0606 350.1898 353.2756 350.1898 c
+354.4906 350.1898 355.4756 351.1747 355.4756 352.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 212 400.3898 m 353.2756 400.3898 l S
+n 212 352.3898 m 353.2756 352.3898 l S
 .047059 .419608 .368627 rg
 n
-355.4756 400.3898 m
-355.4756 401.6048 354.4906 402.5898 353.2756 402.5898 c
-352.0606 402.5898 351.0756 401.6048 351.0756 400.3898 c
-351.0756 399.1747 352.0606 398.1898 353.2756 398.1898 c
-354.4906 398.1898 355.4756 399.1747 355.4756 400.3898 c
+355.4756 352.3898 m
+355.4756 353.6048 354.4906 354.5898 353.2756 354.5898 c
+352.0606 354.5898 351.0756 353.6048 351.0756 352.3898 c
+351.0756 351.1747 352.0606 350.1898 353.2756 350.1898 c
+354.4906 350.1898 355.4756 351.1747 355.4756 352.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 212 352.3898 m 353.2756 400.3898 l S
+n 212 304.3898 m 353.2756 352.3898 l S
 .047059 .419608 .368627 rg
 n
-355.4756 400.3898 m
-355.4756 401.6048 354.4906 402.5898 353.2756 402.5898 c
-352.0606 402.5898 351.0756 401.6048 351.0756 400.3898 c
-351.0756 399.1747 352.0606 398.1898 353.2756 398.1898 c
-354.4906 398.1898 355.4756 399.1747 355.4756 400.3898 c
+355.4756 352.3898 m
+355.4756 353.6048 354.4906 354.5898 353.2756 354.5898 c
+352.0606 354.5898 351.0756 353.6048 351.0756 352.3898 c
+351.0756 351.1747 352.0606 350.1898 353.2756 350.1898 c
+354.4906 350.1898 355.4756 351.1747 355.4756 352.3898 c
 f*
-.933333 .945098 .937255 rg
-.72549 .768627 .752941 RG
-n
-84 427.3898 m
-208 427.3898 l
-210.2112 427.3898 212 429.1786 212 431.3898 c
-212 465.3898 l
-212 467.601 210.2112 469.3898 208 469.3898 c
-84 469.3898 l
-81.7888 469.3898 80 467.601 80 465.3898 c
-80 431.3898 l
-80 429.1786 81.7888 427.3898 84 427.3898 c
-h
-B*
-.047059 .419608 .368627 rg
-BT 1 0 0 1 88 457.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
-.062745 .090196 .082353 rg
-BT 1 0 0 1 88 440.3898 Tm /F3+0 7.2 Tf 8.64 TL (RGB, ToF, and SAM3) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
@@ -977,9 +959,9 @@ n
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 88 409.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 88 409.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 88 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (LiDAR and NAV350 PCD) Tj T* ET
+BT 1 0 0 1 88 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (RGB, ToF, and SAM3) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
@@ -995,39 +977,57 @@ n
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 88 361.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 88 361.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 88 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Robot pose and fusion) Tj T* ET
+BT 1 0 0 1 88 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (LiDAR and NAV350 PCD) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-357.2756 369.3898 m
-501.2756 369.3898 l
-503.4868 369.3898 505.2756 371.1786 505.2756 373.3898 c
-505.2756 427.3898 l
-505.2756 429.601 503.4868 431.3898 501.2756 431.3898 c
-357.2756 431.3898 l
-355.0644 431.3898 353.2756 429.601 353.2756 427.3898 c
-353.2756 373.3898 l
-353.2756 371.1786 355.0644 369.3898 357.2756 369.3898 c
+84 283.3898 m
+208 283.3898 l
+210.2112 283.3898 212 285.1786 212 287.3898 c
+212 321.3898 l
+212 323.601 210.2112 325.3898 208 325.3898 c
+84 325.3898 l
+81.7888 325.3898 80 323.601 80 321.3898 c
+80 287.3898 l
+80 285.1786 81.7888 283.3898 84 283.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 361.2756 409.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 88 313.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 361.2756 392.3898 Tm /F3+0 7.2 Tf 8.64 TL (Safety policy and Zenoh) Tj T* ET
-.345098 .396078 .376471 rg
-BT 1 0 0 1 48 317.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 88 296.3898 Tm /F3+0 7.2 Tf 8.64 TL (Robot pose and fusion) Tj T* ET
+.933333 .945098 .937255 rg
+.72549 .768627 .752941 RG
+n
+357.2756 321.3898 m
+501.2756 321.3898 l
+503.4868 321.3898 505.2756 323.1786 505.2756 325.3898 c
+505.2756 379.3898 l
+505.2756 381.601 503.4868 383.3898 501.2756 383.3898 c
+357.2756 383.3898 l
+355.0644 383.3898 353.2756 381.601 353.2756 379.3898 c
+353.2756 325.3898 l
+353.2756 323.1786 355.0644 321.3898 357.2756 321.3898 c
+h
+B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 289.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 361.2756 361.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+.062745 .090196 .082353 rg
+BT 1 0 0 1 361.2756 344.3898 Tm /F3+0 7.2 Tf 8.64 TL (Safety policy and Zenoh) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 265.3898 Tm /F2+0 9 Tf 10.8 TL (C++23 / ROS 2 / Zenoh / ToF / RGB / SAM3 / SICK TiM LiDAR / NAV350) Tj T* ET
+BT 1 0 0 1 48 269.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+.047059 .419608 .368627 rg
+BT 1 0 0 1 48 241.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+.345098 .396078 .376471 rg
+BT 1 0 0 1 48 217.3898 Tm /F2+0 9 Tf 10.8 TL (C++23 / ROS 2 / Zenoh / ToF / RGB / SAM3 / SICK TiM LiDAR / NAV350) Tj T* ET
  
 endstream
 endobj
 32 0 obj
 <<
-/Length 4329
+/Length 4378
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1061,69 +1061,69 @@ BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Compared sensor alignment, point
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 594.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 400.3898 499.2756 176 re S
+n 48 436.3898 499.2756 140 re S
 q
-298.6667 0 0 168 148.3045 404.3898 cm
+234.6667 0 0 132 180.3045 440.3898 cm
 /FormXob.d2739000aab6908734bbd52b28fcf674 Do
 Q
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 386.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
+BT 1 0 0 1 48 422.3898 Tm /F3+0 7.5 Tf 9 TL (REGISTERED PUBLIC EVIDENCE) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 298.3898 499.2756 66 re B*
+n 48 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 346.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 383.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 325.3898 Tm /F3+0 10 Tf 12 TL (unmanned-forklift-clip-01) Tj T* ET
+BT 1 0 0 1 60 364.3898 Tm /F3+0 9 Tf 10.8 TL (unmanned-forklift-clip-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 309.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 223.3898 499.2756 66 re B*
+n 48 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 271.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 250.3898 Tm /F3+0 10 Tf 12 TL (unmanned-forklift-poster-01) Tj T* ET
+BT 1 0 0 1 60 290.3898 Tm /F3+0 9 Tf 10.8 TL (unmanned-forklift-poster-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 234.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 148.3898 499.2756 66 re B*
+n 48 186.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 196.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 60 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 175.3898 Tm /F3+0 10 Tf 12 TL (unmanned-forklift-gallery-01) Tj T* ET
+BT 1 0 0 1 60 216.3898 Tm /F3+0 9 Tf 10.8 TL (unmanned-forklift-gallery-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 159.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 73.38976 499.2756 66 re B*
+n 304.6378 334.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 121.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 383.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 100.3898 Tm /F3+0 10 Tf 12 TL (unmanned-forklift-gallery-02) Tj T* ET
+BT 1 0 0 1 316.6378 364.3898 Tm /F3+0 9 Tf 10.8 TL (unmanned-forklift-gallery-02) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 84.38976 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
-n 48 -1.610236 499.2756 66 re B*
+n 304.6378 260.3898 242.6378 66 re B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 60 46.38976 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
+BT 1 0 0 1 316.6378 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 25.38976 Tm /F3+0 10 Tf 12 TL (unmanned-forklift-gallery-03) Tj T* ET
+BT 1 0 0 1 316.6378 290.3898 Tm /F3+0 9 Tf 10.8 TL (unmanned-forklift-gallery-03) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 9.389764 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 -16.61024 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
+BT 1 0 0 1 48 172.3898 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 -40.61024 Tm /F2+0 9.5 Tf 11.4 TL (Registration outputs, 3D point clouds, robot pose, safety decisions, and Zenoh messages were checked through) Tj T* ET
-BT 1 0 0 1 48 -55.61024 Tm /F2+0 9.5 Tf 11.4 TL (integration and field validation.) Tj T* ET
+BT 1 0 0 1 48 148.3898 Tm /F2+0 9.5 Tf 11.4 TL (Registration outputs, 3D point clouds, robot pose, safety decisions, and Zenoh messages were checked through) Tj T* ET
+BT 1 0 0 1 48 133.3898 Tm /F2+0 9.5 Tf 11.4 TL (integration and field validation.) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 4368
+/Length 4437
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1145,9 +1145,9 @@ BT 1 0 0 1 48 761.8898 Tm /F3+0 22 Tf 26.4 TL (Role, team result, and limits) Tj
 .062745 .090196 .082353 RG
 n 48 731.3898 m 547.2756 731.3898 l S
 .933333 .945098 .937255 rg
-n 48 614.3898 499.2756 96 re f*
+n 48 590.3898 499.2756 120 re f*
 .662745 .294118 .196078 rg
-n 48 614.3898 4 96 re f*
+n 48 590.3898 4 120 re f*
 .662745 .294118 .196078 rg
 BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / FIELD BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
@@ -1155,51 +1155,52 @@ BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Field boundary) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Field validation is not production operation, deployment success, or a customer outcome.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 486.3898 499.2756 116 re f*
+n 48 462.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
-n 48 486.3898 4 116 re f*
+n 48 462.3898 4 116 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 580.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
+BT 1 0 0 1 64 556.3898 Tm /F3+0 7.5 Tf 9 TL (MY ROLE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 558.3898 Tm /F3+0 13 Tf 15.6 TL (Owned registration, PCD, localization, sensor fusion and safety policy, and) Tj T* ET
-BT 1 0 0 1 64 540.3898 Tm /F3+0 13 Tf 15.6 TL (Zenoh output.) Tj T* ET
+BT 1 0 0 1 64 534.3898 Tm /F3+0 13 Tf 15.6 TL (Owned registration, PCD, localization, sensor fusion and safety policy, and) Tj T* ET
+BT 1 0 0 1 64 516.3898 Tm /F3+0 13 Tf 15.6 TL (Zenoh output.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 518.3898 Tm /F2+0 9.5 Tf 11.4 TL (Owned ToF-RGB-SAM3 registration; SICK TiM LiDAR and NAV350 3D PCD processing; robot localization;) Tj T* ET
-BT 1 0 0 1 64 503.3898 Tm /F2+0 9.5 Tf 11.4 TL (sensor fusion and safety-policy decisions; and publishing results through Zenoh.) Tj T* ET
+BT 1 0 0 1 64 494.3898 Tm /F2+0 9.5 Tf 11.4 TL (Owned ToF-RGB-SAM3 registration; SICK TiM LiDAR and NAV350 3D PCD processing; robot localization;) Tj T* ET
+BT 1 0 0 1 64 479.3898 Tm /F2+0 9.5 Tf 11.4 TL (sensor fusion and safety-policy decisions; and publishing results through Zenoh.) Tj T* ET
 .933333 .945098 .937255 rg
-n 48 358.3898 499.2756 116 re f*
+n 48 280.3898 499.2756 170 re f*
 .047059 .419608 .368627 rg
-n 48 358.3898 4 116 re f*
+n 48 280.3898 4 170 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 452.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
+BT 1 0 0 1 64 428.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 430.3898 Tm /F3+0 13 Tf 15.6 TL (The team performed system integration and field validation. This is not) Tj T* ET
-BT 1 0 0 1 64 412.3898 Tm /F3+0 13 Tf 15.6 TL (presented as production operation, deployment success, or customer) Tj T* ET
+BT 1 0 0 1 64 406.3898 Tm /F3+0 13 Tf 15.6 TL (The team performed system integration and field validation. This is not) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (presented as production operation, deployment success, or customer) Tj T* ET
+BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (outcomes.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 390.3898 Tm /F2+0 9.5 Tf 11.4 TL (Registration outputs, 3D point clouds, robot pose, safety decisions, and Zenoh messages were checked) Tj T* ET
-BT 1 0 0 1 64 375.3898 Tm /F2+0 9.5 Tf 11.4 TL (through integration and field validation.) Tj T* ET
+BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (Registration outputs, 3D point clouds, robot pose, safety decisions, and Zenoh messages were checked) Tj T* ET
+BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (through integration and field validation.) Tj T* ET
 .72549 .768627 .752941 RG
-n 48 200.3898 243.6378 146 re S
+n 48 122.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
-BT 1 0 0 1 60 326.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
+BT 1 0 0 1 60 248.3898 Tm /F3+0 7.5 Tf 9 TL (LIMITATIONS) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 60 302.3898 Tm /F3+0 9 Tf 10.8 TL (The public clip and photos are test-site runs; they) Tj T* ET
-BT 1 0 0 1 60 288.3898 Tm /F3+0 9 Tf 10.8 TL (do not claim production or customer outcomes.) Tj T* ET
+BT 1 0 0 1 60 224.3898 Tm /F3+0 9 Tf 10.8 TL (The public clip and photos are test-site runs; they) Tj T* ET
+BT 1 0 0 1 60 210.3898 Tm /F3+0 9 Tf 10.8 TL (do not claim production or customer outcomes.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 266.3898 Tm /F2+0 7.6 Tf 9.12 TL (Screen recording of the DOTORI vision-servoing test \(3D view,) Tj T* ET
-BT 1 0 0 1 60 255.3898 Tm /F2+0 7.6 Tf 9.12 TL (camera feed, signal plots\).) Tj T* ET
+BT 1 0 0 1 60 188.3898 Tm /F2+0 7.6 Tf 9.12 TL (Screen recording of the DOTORI vision-servoing test \(3D view,) Tj T* ET
+BT 1 0 0 1 60 177.3898 Tm /F2+0 7.6 Tf 9.12 TL (camera feed, signal plots\).) Tj T* ET
 .72549 .768627 .752941 RG
-n 303.6378 200.3898 243.6378 146 re S
+n 303.6378 122.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
-BT 1 0 0 1 315.6378 326.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
+BT 1 0 0 1 315.6378 248.3898 Tm /F3+0 7.5 Tf 9 TL (COLLABORATION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 315.6378 302.3898 Tm /F3+0 9 Tf 10.8 TL (Vehicle control, sensing, safety, and) Tj T* ET
-BT 1 0 0 1 315.6378 288.3898 Tm /F3+0 9 Tf 10.8 TL (field-validation owners integrate the system) Tj T* ET
-BT 1 0 0 1 315.6378 274.3898 Tm /F3+0 9 Tf 10.8 TL (jointly.) Tj T* ET
+BT 1 0 0 1 315.6378 224.3898 Tm /F3+0 9 Tf 10.8 TL (Vehicle control, sensing, safety, and) Tj T* ET
+BT 1 0 0 1 315.6378 210.3898 Tm /F3+0 9 Tf 10.8 TL (field-validation owners integrate the system) Tj T* ET
+BT 1 0 0 1 315.6378 196.3898 Tm /F3+0 9 Tf 10.8 TL (jointly.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 315.6378 252.3898 Tm /F2+0 7.6 Tf 9.12 TL (Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and) Tj T* ET
-BT 1 0 0 1 315.6378 241.3898 Tm /F2+0 7.6 Tf 9.12 TL (NAV350 3D PCD processing, robot localization, sensor fusion,) Tj T* ET
-BT 1 0 0 1 315.6378 230.3898 Tm /F2+0 7.6 Tf 9.12 TL (safety policy, and Zenoh publication into one integration flow.) Tj T* ET
+BT 1 0 0 1 315.6378 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and) Tj T* ET
+BT 1 0 0 1 315.6378 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (NAV350 3D PCD processing, robot localization, sensor fusion,) Tj T* ET
+BT 1 0 0 1 315.6378 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (safety policy, and Zenoh publication into one integration flow.) Tj T* ET
  
 endstream
 endobj
@@ -1291,9 +1292,9 @@ xref
 0001542138 00000 n 
 0001544845 00000 n 
 0001547927 00000 n 
-0001553620 00000 n 
-0001558001 00000 n 
-0001562421 00000 n 
+0001553622 00000 n 
+0001558052 00000 n 
+0001562541 00000 n 
 trailer
 <<
 /ID 
@@ -1305,5 +1306,5 @@ trailer
 /Size 35
 >>
 startxref
-1564949
+1565069
 %%EOF
