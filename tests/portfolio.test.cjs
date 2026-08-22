@@ -2743,6 +2743,92 @@ test('Task 5 generator rejects malformed nested input atomically with a controll
   }
 });
 
+test('PDF generator default mode regenerates a changed legacy title instead of copying stale bytes', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-legacy-freshness-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const input = path.join(temporaryRoot, 'input.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+    const project = payload.projects.find((item) => item.slug === 'surgical-navigation');
+    project.translations.en.title = 'Legacy freshness sentinel';
+    const source = clone(payload);
+    delete source.sourceDigest;
+    payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+    fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+
+    const generation = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot
+    ], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+    assert.equal(generation.status, 0, generation.stderr || generation.stdout);
+    const audit = childProcess.spawnSync(python, ['-c', [
+      'import sys',
+      'from pypdf import PdfReader',
+      'print(chr(10).join((page.extract_text() or "") for page in PdfReader(sys.argv[1]).pages))'
+    ].join('\n'), path.join(temporaryRoot, 'output', 'pdf', 'surgical-navigation-en.pdf')], {
+      cwd: root, encoding: 'utf8', timeout: 30_000
+    });
+    assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+    assert.match(audit.stdout, /Legacy freshness sentinel/);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('legacy preservation opt-in rejects a baseline whose approved source digest is stale', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-legacy-baseline-'));
+  try {
+    copyTask5Surface(temporaryRoot);
+    const input = path.join(temporaryRoot, 'input.json');
+    const baselinePath = path.join(temporaryRoot, 'legacy-baseline.json');
+    const exportResult = childProcess.spawnSync(process.execPath, [
+      path.join(root, 'scripts', 'export-portfolio-data.cjs'), '--output', input
+    ], { cwd: root, encoding: 'utf8' });
+    assert.equal(exportResult.status, 0, exportResult.stderr || exportResult.stdout);
+    const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+    const legacyNames = slugs.filter((slug) => slug !== 'digital-occlusion-workflow')
+      .flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
+    const baseline = {
+      schemaVersion: 1,
+      sourceDigest: payload.sourceDigest,
+      files: legacyNames.map((name) => ({
+        name,
+        sha256: sha256(path.join(temporaryRoot, 'assets', 'pdfs', name))
+      }))
+    };
+    fs.writeFileSync(baselinePath, `\ufeff${JSON.stringify(baseline, null, 2)}\n`);
+    payload.projects.find((item) => item.slug === 'surgical-navigation').translations.en.title += ' changed';
+    const source = clone(payload);
+    delete source.sourceDigest;
+    payload.sourceDigest = crypto.createHash('sha256').update(JSON.stringify(source), 'utf8').digest('hex');
+    fs.writeFileSync(input, `${JSON.stringify(payload, null, 2)}\n`);
+    const before = treeFileHashes(temporaryRoot);
+
+    const generation = childProcess.spawnSync(python, [
+      path.join(root, 'scripts', 'generate-portfolio-pdfs.py'),
+      '--input', input,
+      '--output-dir', path.join(temporaryRoot, 'output', 'pdf'),
+      '--publish-root', temporaryRoot,
+      '--preserve-legacy-baseline', baselinePath
+    ], { cwd: root, encoding: 'utf8', timeout: 30_000 });
+    assert.equal(generation.status, 1);
+    assert.match(generation.stderr, /^PDF generation failed: Legacy preservation baseline source digest does not match the current PDF input\.\r?\n$/);
+    assert.deepEqual(treeFileHashes(temporaryRoot), before);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
 test('Task 5 manifest freshness follows canonical project and public CV inputs', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   assert.equal(manifest.schemaVersion, 3);
@@ -2798,6 +2884,41 @@ test('PDF manifest expands to eighteen documents and thirty-six published artifa
   assert.equal(manifest.documents.length, 18);
   assert.equal(manifest.artifacts.length, 36);
   assert.equal(manifest.generatorVersion, '3.2');
+});
+
+test('digital occlusion architecture PDF keeps a visible gutter between wrapped node columns', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const auditCode = [
+    'import json, sys',
+    'import fitz',
+    'result = {}',
+    'for locale, title, label, detail in [',
+    '    ("ko", "Custom App 통합 구조", "평가·가시화·내보내기", "지표 공동 정의 · 개인 계산·구현"),',
+    '    ("en", "Custom App integration structure", "Evaluation, visualization, and export", "Metrics jointly defined · calculation and implementation individually owned"),',
+    ']:',
+    '    document = fitz.open(str(sys.argv[1] + f"/output/pdf/digital-occlusion-workflow-{locale}.pdf"))',
+    '    page = next(page for page in document if title in page.get_text())',
+    '    label_rects = page.search_for(label)',
+    '    detail_rects = page.search_for(detail)',
+    '    assert label_rects and detail_rects',
+    '    result[locale] = {',
+    '        "gutter": min(rect.x0 for rect in detail_rects) - max(rect.x1 for rect in label_rects),',
+    '        "labelLines": len({round(rect.y0, 1) for rect in label_rects}),',
+    '        "detailLines": len({round(rect.y0, 1) for rect in detail_rects}),',
+    '    }',
+    'print(json.dumps(result))'
+  ].join('\n');
+  const audit = childProcess.spawnSync(python, ['-c', auditCode, root.replace(/\\/g, '/')], {
+    cwd: root, encoding: 'utf8', timeout: 30_000
+  });
+  assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+  const result = JSON.parse(audit.stdout);
+  for (const locale of ['ko', 'en']) {
+    assert.ok(result[locale].gutter >= 12, `${locale}: node label/detail gutter ${result[locale].gutter}`);
+    assert.ok(result[locale].labelLines <= 2, `${locale}: label exceeds two wrapped lines`);
+    assert.ok(result[locale].detailLines <= 2, `${locale}: detail exceeds two wrapped lines`);
+  }
 });
 
 test('SKADI evidence-first PDFs publish matching five-page KO and EN artifacts', () => {
@@ -3030,7 +3151,10 @@ test('Task 5 integrated review renders each middle block on its contracted page 
       ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', '3D Slicer · images and models · transforms, registration, calibration · six workflows', 'Research prototype', 'This case does not claim']]
     ]) {
       const text = extracted[`surgical-navigation-${locale}.pdf`];
-      for (const value of required) assert.ok(text.includes(value), `${locale}: missing ${value}`);
+      const normalizedText = text.replace(/\s+/g, ' ');
+      for (const value of required) {
+        assert.ok(normalizedText.includes(value.replace(/\s+/g, ' ')), `${locale}: missing ${value}`);
+      }
       assert.doesNotMatch(text, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|digitrack-inc|특허출원|patent application/i);
       assert.equal(text.split('→').length - 1, 1, `${locale}: one forward flow direction symbol`);
       assert.equal(text.split('⇄').length - 1, 4, `${locale}: four bidirectional flow direction symbols`);
