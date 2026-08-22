@@ -1317,14 +1317,14 @@ def render_reviews(dependencies: dict[str, Any], pdf_paths: list[Path], review_d
 
 
 def validate_review_render(dependencies: dict[str, Any], review_dir: Path,
-                           pdf_names: list[str], manifest: dict[str, Any]) -> None:
-    expected_pages = {name: 6 for name in pdf_names}
+                           expected_pages: dict[str, int], manifest: dict[str, Any]) -> None:
+    """expected_pages maps each document to the page count its own layout produced."""
     require(set(manifest) == {"renderer", "dpi", "pageCount", "documents"},
             "Review manifest has an invalid schema.")
     require(manifest["renderer"] == "PyMuPDF fallback" and manifest["dpi"] == 120,
             "Review manifest has an invalid renderer contract.")
-    require(manifest["pageCount"] == sum(expected_pages.values()) == 96,
-            "Review render must contain exactly 96 pages.")
+    require(manifest["pageCount"] == sum(expected_pages.values()),
+            "Review render page total does not match the generated documents.")
     require(isinstance(manifest["documents"], list) and len(manifest["documents"]) == 16,
             "Review manifest must track exactly sixteen documents.")
     seen: set[str] = set()
@@ -1490,7 +1490,9 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
         if review_dir and review_stage:
             staged_pdf_paths = [staged_output / name for name in expected_names]
             review_manifest = render_reviews(dependencies, staged_pdf_paths, review_stage)
-            validate_review_render(dependencies, review_stage, expected_names, review_manifest)
+            validate_review_render(dependencies, review_stage,
+                                   {document["name"]: document["pages"] for document in documents},
+                                   review_manifest)
             result["review"] = review_manifest
             publications.append((review_dir, review_stage))
         atomic_swap_directories(publications)

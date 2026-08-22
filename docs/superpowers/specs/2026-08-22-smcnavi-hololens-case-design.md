@@ -215,7 +215,7 @@ Other project PDFs must remain content-equivalent. Generator or exporter changes
 
 - `js/portfolio-data.js`
 - `js/portfolio-render.js`
-- `css/site.css`
+- `css/scholar.css`
 - `scripts/validate-portfolio.cjs`
 - `scripts/export-portfolio-data.cjs`
 - `scripts/generate-portfolio-pdfs.py`
