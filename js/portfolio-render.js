@@ -20,7 +20,7 @@
   var tierKeys = ['medical-core', 'platform', 'industrial-spotlight', 'ai-build-lab'];
   var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'respiratory-surface-guidance', 'skadi-tracking-software', 'unmanned-forklift', 'ai-build-lab'];
   var pdfDiagramKindsBySlug = {
-    'surgical-navigation': 'coordinate-chain',
+    'surgical-navigation': 'system-flow',
     'mandibular-fracture': 'optimization-loop',
     'life-careverse': 'sync-topology',
     'rtms-navigation': 'navigation-loop',
@@ -30,6 +30,10 @@
     'ai-build-lab': 'product-loop'
   };
   var blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
+  var storyLayouts = ['wide', 'grid'];
+  var storyMediaTypes = ['image', 'video'];
+  var storyDirections = ['forward', 'bidirectional'];
+  var storyMediaKeys = ['id', 'poster', 'preload', 'publicPath', 'status', 'translations', 'type', 'videoPolicy'];
   var videoPolicyKeys = [
     'codec', 'height', 'maxBytes', 'requireFastStart', 'requireNoAudio',
     'targetDurationSeconds', 'toleranceSeconds', 'width'
@@ -136,6 +140,14 @@
     (project && project.architectureSteps || []).forEach(function (step) { surfaces.push(step && step.translations); });
     (project && project.applicationTracks || []).forEach(function (track) { surfaces.push(track && track.translations); });
     (project && project.publicResources || []).forEach(function (resource) { surfaces.push(resource && resource.translations); });
+    (project && Array.isArray(project.storySections) ? project.storySections : []).forEach(function (section) {
+      surfaces.push(section && section.translations, section && section.diagram && section.diagram.translations);
+      (section && Array.isArray(section.media) ? section.media : []).forEach(function (item) {
+        surfaces.push(item && item.translations, item && item.poster);
+      });
+      (section && section.diagram && Array.isArray(section.diagram.nodes) ? section.diagram.nodes : []).forEach(function (node) { surfaces.push(node && node.translations); });
+      (section && section.diagram && Array.isArray(section.diagram.edges) ? section.diagram.edges : []).forEach(function (edge) { surfaces.push(edge && edge.translations); });
+    });
     surfaces.push(project && project.pdfSequence && project.pdfSequence.diagram && project.pdfSequence.diagram.translations);
     return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
   }
@@ -292,6 +304,7 @@
           media: project.media || {},
           pdf: project.pdf || {},
           blocks: Array.isArray(project.blocks) ? project.blocks.slice() : [],
+          storySections: Array.isArray(project.storySections) ? project.storySections.slice() : [],
           subcases: Array.isArray(project.subcases) ? project.subcases.slice() : [],
           links: Array.isArray(project.links) ? project.links.slice() : [],
           title: copy.title || '',
@@ -300,6 +313,7 @@
           thesis: copy.thesis || '',
           summary: copy.summary || '',
           problem: copy.problem || '',
+          roleLabel: copy.roleLabel || '',
           role: copy.role || '',
           teamResult: copy.teamResult || '',
           evidence: copy.evidence || '',
@@ -346,6 +360,9 @@
     if (item.status === 'approved' && hasPublicPath && item.type === 'video' && !isVideoPath(item.publicPath)) {
       errors.push(label + ': video media requires a video file.');
     }
+    if (item.preload !== undefined && (item.type !== 'video' || !['none', 'metadata'].includes(item.preload))) {
+      errors.push(label + ': preload is allowed only for video as none or metadata.');
+    }
     if (item.videoPolicy !== undefined) {
       var policyKeys = item.videoPolicy && typeof item.videoPolicy === 'object' && !Array.isArray(item.videoPolicy)
         ? Object.keys(item.videoPolicy).sort() : [];
@@ -364,6 +381,111 @@
         if (videoPolicy.requireFastStart !== true || videoPolicy.requireNoAudio !== true) errors.push(label + ': videoPolicy requirements must both be true.');
       }
     }
+    return errors;
+  }
+
+  function systemFlowDiagramErrors(diagram, label) {
+    var errors = [];
+    if (!diagram || typeof diagram !== 'object' || Array.isArray(diagram)) return [label + ': system-flow diagram must be an object.'];
+    if (JSON.stringify(Object.keys(diagram).sort()) !== JSON.stringify(['boundary', 'edges', 'kind', 'nodes', 'translations'])) {
+      errors.push(label + ': system-flow diagram must contain exactly boundary, edges, kind, nodes, and translations.');
+    }
+    if (diagram.kind !== 'system-flow') errors.push(label + ': diagram kind must be system-flow.');
+    if (diagram.boundary !== 'prototype') errors.push(label + ': diagram boundary must be prototype.');
+    errors = errors.concat(translationErrors(diagram, ['title', 'caption', 'boundaryLabel'], label + ' diagram'));
+    if (!Array.isArray(diagram.nodes) || diagram.nodes.length < 2) {
+      errors.push(label + ': system-flow diagram requires at least two nodes.');
+    }
+    var nodeKeys = Array.isArray(diagram.nodes) ? diagram.nodes.map(function (node) { return node && node.key; }) : [];
+    if (nodeKeys.some(function (key) { return typeof key !== 'string' || !key; }) || new Set(nodeKeys).size !== nodeKeys.length) {
+      errors.push(label + ': system-flow diagram requires uniquely keyed nodes.');
+    }
+    (Array.isArray(diagram.nodes) ? diagram.nodes : []).forEach(function (node, index) {
+      if (!node || typeof node !== 'object' || Array.isArray(node) || JSON.stringify(Object.keys(node).sort()) !== JSON.stringify(['key', 'translations'])) {
+        errors.push(label + ': node ' + index + ' must contain exactly key and translations.');
+      }
+      errors = errors.concat(translationErrors(node, ['label', 'detail'], label + ' node ' + index));
+    });
+    if (!Array.isArray(diagram.edges) || diagram.edges.length !== Math.max(0, nodeKeys.length - 1)) {
+      errors.push(label + ': system-flow diagram requires exactly nodes.length - 1 edges.');
+    }
+    (Array.isArray(diagram.edges) ? diagram.edges : []).forEach(function (edge, index) {
+      if (!edge || typeof edge !== 'object' || Array.isArray(edge) || JSON.stringify(Object.keys(edge).sort()) !== JSON.stringify(['direction', 'from', 'to', 'translations'])) {
+        errors.push(label + ': edge ' + index + ' must contain exactly direction, from, to, and translations.');
+      }
+      if (!edge || !nodeKeys.includes(edge.from) || !nodeKeys.includes(edge.to)) errors.push(label + ': edge endpoint must reference a known node.');
+      if (edge && (edge.from !== nodeKeys[index] || edge.to !== nodeKeys[index + 1])) errors.push(label + ': edge must follow the declared node order.');
+      if (!edge || !storyDirections.includes(edge.direction)) errors.push(label + ': edge direction must be forward or bidirectional.');
+      errors = errors.concat(translationErrors(edge, ['label'], label + ' edge ' + index));
+    });
+    return errors;
+  }
+
+  function storySectionsErrors(project, slug) {
+    if (project.storySections === undefined) return [];
+    if (!Array.isArray(project.storySections) || !project.storySections.length) return [slug + ': storySections must be a non-empty array.'];
+    var errors = [];
+    var seenSectionKeys = [];
+    var seenMediaIds = [];
+    var sourceMedia = project.media || {};
+    ['lead', 'poster'].forEach(function (slot) {
+      if (sourceMedia[slot] && typeof sourceMedia[slot].id === 'string') seenMediaIds.push(sourceMedia[slot].id);
+    });
+    (Array.isArray(sourceMedia.references) ? sourceMedia.references : []).concat(Array.isArray(sourceMedia.gallery) ? sourceMedia.gallery : []).forEach(function (item) {
+      if (item && typeof item.id === 'string') seenMediaIds.push(item.id);
+    });
+    project.storySections.forEach(function (section, sectionIndex) {
+      var label = slug + ' story section ' + sectionIndex;
+      if (!section || typeof section !== 'object' || Array.isArray(section)) {
+        errors.push(label + ': story section must be an object.');
+        return;
+      }
+      if (typeof section.key !== 'string' || !section.key) errors.push(label + ': story section requires a stable key.');
+      if (seenSectionKeys.includes(section.key)) errors.push(label + ': duplicate story section key.');
+      seenSectionKeys.push(section.key);
+      if (!storyLayouts.includes(section.layout)) errors.push(label + ': unsupported story section layout.');
+      ['ko', 'en'].forEach(function (locale) {
+        var copy = section.translations && section.translations[locale];
+        if (!copy || typeof copy.heading !== 'string' || !copy.heading.trim()) errors.push(label + ': missing ' + locale + ' story heading.');
+        if (!copy || (!(typeof copy.body === 'string' && copy.body.trim()) &&
+            !(Array.isArray(copy.items) && copy.items.length && copy.items.every(function (item) { return typeof item === 'string' && item.trim(); })))) {
+          errors.push(label + ': missing ' + locale + ' story body or list copy.');
+        }
+      });
+      if (section.media !== undefined && !Array.isArray(section.media)) {
+        errors.push(label + ': story media must be an array.');
+      }
+      (Array.isArray(section.media) ? section.media : []).forEach(function (item, mediaIndex) {
+        var mediaLabel = label + ' media ' + mediaIndex;
+        if (!item || typeof item !== 'object' || Array.isArray(item) || Object.keys(item).some(function (key) { return !storyMediaKeys.includes(key); })) {
+          errors.push(mediaLabel + ': story media contains an undeclared field.');
+        }
+        errors = errors.concat(mediaItemErrors(item, mediaLabel, storyMediaTypes));
+        errors = errors.concat(translationErrors(item, ['caption', 'alt'], mediaLabel));
+        if (item && item.status === 'approved' && (!isSafePublicPath(item.publicPath) || !item.publicPath.startsWith('assets/projects/' + slug + '/'))) {
+          errors.push(mediaLabel + ': approved story media requires a repository-relative project path.');
+        }
+        if (item && typeof item.id === 'string') {
+          if (seenMediaIds.includes(item.id)) errors.push(mediaLabel + ': duplicate story media id.');
+          seenMediaIds.push(item.id);
+        }
+        if (item && item.poster !== undefined) {
+          var posterLabel = mediaLabel + ' poster';
+          errors = errors.concat(mediaItemErrors(item.poster, posterLabel, ['image']));
+          if (item.poster && item.poster.status === 'approved' && (!isSafePublicPath(item.poster.publicPath) || !item.poster.publicPath.startsWith('assets/projects/' + slug + '/'))) {
+            errors.push(posterLabel + ': approved story poster requires a repository-relative project path.');
+          }
+          if (item.poster && typeof item.poster.id === 'string') {
+            if (seenMediaIds.includes(item.poster.id)) errors.push(posterLabel + ': duplicate story media id.');
+            seenMediaIds.push(item.poster.id);
+          }
+        }
+        if (item && item.type === 'video' && item.status === 'approved' && !isApprovedImage(item.poster)) {
+          errors.push(mediaLabel + ': approved story video requires an approved image poster.');
+        }
+      });
+      if (section.diagram !== undefined) errors = errors.concat(systemFlowDiagramErrors(section.diagram, label));
+    });
     return errors;
   }
 
@@ -514,6 +636,17 @@
     return errors;
   }
 
+  function resolvedPdfDiagram(project) {
+    var contract = project && project.pdfSequence && project.pdfSequence.diagram;
+    if (contract && typeof contract.storySectionKey === 'string') {
+      var section = (project.storySections || []).find(function (item) {
+        return item && item.key === contract.storySectionKey;
+      });
+      return section && section.diagram ? section.diagram : null;
+    }
+    return contract || null;
+  }
+
   function validatePortfolioData(data) {
     var errors = [];
     if (!data || typeof data !== 'object') return ['Portfolio data must be an object.'];
@@ -576,6 +709,10 @@
           errors.push(slug + ': missing technologies.');
         }
         errors = errors.concat(translationErrors(project, projectTranslationFields, slug));
+        var declaresRoleLabel = ['ko', 'en'].some(function (locale) {
+          return project.translations && project.translations[locale] && project.translations[locale].roleLabel !== undefined;
+        });
+        if (declaresRoleLabel) errors = errors.concat(translationErrors(project, ['roleLabel'], slug));
         ['ko', 'en'].forEach(function (locale) {
           var copy = project.translations && project.translations[locale];
           if (copy && copy.role === copy.teamResult) errors.push(slug + ': ' + locale + ' role and team result must remain separate.');
@@ -603,25 +740,17 @@
           errors = errors.concat(galleryErrors(project, slug));
         }
         errors = errors.concat(evidenceFirstErrors(project, slug));
-        if (!Array.isArray(project.blocks) || project.blocks.length === 0) {
+        var hasStorySections = Array.isArray(project.storySections) && project.storySections.length > 0;
+        errors = errors.concat(storySectionsErrors(project, slug));
+        if (!hasStorySections && (!Array.isArray(project.blocks) || project.blocks.length === 0)) {
           errors.push(slug + ': missing structural blocks.');
-        } else {
+        } else if (Array.isArray(project.blocks)) {
           project.blocks.forEach(function (block) { errors = errors.concat(blockErrors(block, slug)); });
         }
         var sequence = project.pdfSequence;
         if (!sequence || typeof sequence !== 'object' || Array.isArray(sequence)) {
           errors.push(slug + ': missing PDF sequence contract.');
         } else {
-          if (JSON.stringify(Object.keys(sequence).sort()) !== JSON.stringify(['diagram', 'evidenceId', 'middle'])) {
-            errors.push(slug + ': PDF sequence must contain exactly middle, evidenceId, and diagram.');
-          }
-          var blockKeys = Array.isArray(project.blocks) ? project.blocks.map(function (block) { return block && block.key; }) : [];
-          if (!Array.isArray(sequence.middle) || sequence.middle.length !== 4 ||
-              sequence.middle.some(function (key) { return typeof key !== 'string' || !key; }) ||
-              new Set(sequence.middle).size !== 4 ||
-              sequence.middle.some(function (key) { return !blockKeys.includes(key); })) {
-            errors.push(slug + ': PDF sequence must reference exactly four distinct known middle blocks.');
-          }
           var mediaIds = [];
           if (project.media && typeof project.media === 'object') {
             ['lead', 'video', 'poster'].forEach(function (slot) {
@@ -636,16 +765,52 @@
               !mediaIds.includes(sequence.evidenceId)) {
             errors.push(slug + ': PDF sequence evidenceId must reference the canonical lead media.');
           }
-          var diagram = sequence.diagram;
-          if (!diagram || typeof diagram !== 'object' || Array.isArray(diagram)) {
-            errors.push(slug + ': missing PDF sequence diagram contract.');
+          var diagram = resolvedPdfDiagram(project);
+          if (hasStorySections) {
+            if (JSON.stringify(Object.keys(sequence).sort()) !== JSON.stringify(['diagram', 'evidenceId', 'figureIds', 'middle'])) {
+              errors.push(slug + ': story PDF sequence must contain exactly middle, evidenceId, figureIds, and diagram.');
+            }
+            var storyKeys = project.storySections.map(function (section) { return section && section.key; });
+            if (!Array.isArray(sequence.middle) || sequence.middle.length !== 4 ||
+                sequence.middle.some(function (key) { return typeof key !== 'string' || !key; }) ||
+                new Set(sequence.middle).size !== 4 || sequence.middle.some(function (key) { return !storyKeys.includes(key); })) {
+              errors.push(slug + ': story PDF sequence must reference exactly four distinct known story sections.');
+            }
+            if (!sequence.diagram || typeof sequence.diagram !== 'object' || Array.isArray(sequence.diagram) ||
+                JSON.stringify(Object.keys(sequence.diagram).sort()) !== JSON.stringify(['storySectionKey']) ||
+                typeof sequence.diagram.storySectionKey !== 'string' || !diagram || diagram.kind !== pdfDiagramKindsBySlug[slug]) {
+              errors.push(slug + ': story PDF sequence diagram must resolve to the expected system-flow section.');
+            }
+            var approvedStoryMediaIds = [];
+            project.storySections.forEach(function (section) {
+              (Array.isArray(section && section.media) ? section.media : []).forEach(function (item) {
+                if ((isApprovedImage(item) || isApprovedVideo(item)) && typeof item.id === 'string') approvedStoryMediaIds.push(item.id);
+              });
+            });
+            if (!Array.isArray(sequence.figureIds) || sequence.figureIds.length < 1 || sequence.figureIds.length > 6 ||
+                sequence.figureIds.some(function (id) { return typeof id !== 'string' || !id; }) || new Set(sequence.figureIds).size !== sequence.figureIds.length ||
+                sequence.figureIds.some(function (id) { return !approvedStoryMediaIds.includes(id); })) {
+              errors.push(slug + ': story PDF sequence figureIds must contain one through six unique approved story media ids.');
+            }
           } else {
+            if (JSON.stringify(Object.keys(sequence).sort()) !== JSON.stringify(['diagram', 'evidenceId', 'middle'])) {
+              errors.push(slug + ': PDF sequence must contain exactly middle, evidenceId, and diagram.');
+            }
+            var blockKeys = Array.isArray(project.blocks) ? project.blocks.map(function (block) { return block && block.key; }) : [];
+            if (!Array.isArray(sequence.middle) || sequence.middle.length !== 4 ||
+                sequence.middle.some(function (key) { return typeof key !== 'string' || !key; }) ||
+                new Set(sequence.middle).size !== 4 ||
+                sequence.middle.some(function (key) { return !blockKeys.includes(key); })) {
+              errors.push(slug + ': PDF sequence must reference exactly four distinct known middle blocks.');
+            }
+            if (!diagram || typeof diagram !== 'object' || Array.isArray(diagram)) {
+              errors.push(slug + ': missing PDF sequence diagram contract.');
+            } else {
             if (JSON.stringify(Object.keys(diagram).sort()) !== JSON.stringify(['kind', 'translations'])) {
               errors.push(slug + ': PDF sequence diagram must contain exactly kind and translations.');
             }
-            if (diagram.kind !== pdfDiagramKindsBySlug[slug]) errors.push(slug + ': invalid PDF sequence diagram kind.');
-            if (seenPdfDiagramKinds.includes(diagram.kind)) errors.push(slug + ': PDF sequence diagram kind must be unique.');
-            if (typeof diagram.kind === 'string') seenPdfDiagramKinds.push(diagram.kind);
+            var expectedLegacyKind = slug === 'surgical-navigation' ? 'coordinate-chain' : pdfDiagramKindsBySlug[slug];
+            if (diagram.kind !== expectedLegacyKind) errors.push(slug + ': invalid PDF sequence diagram kind.');
             if (!diagram.translations || typeof diagram.translations !== 'object' || Array.isArray(diagram.translations) ||
                 JSON.stringify(Object.keys(diagram.translations).sort()) !== JSON.stringify(['en', 'ko'])) {
               errors.push(slug + ': PDF sequence diagram translations must contain exactly ko and en.');
@@ -661,6 +826,11 @@
                 }
               });
             }
+            }
+          }
+          if (diagram && typeof diagram.kind === 'string') {
+            if (seenPdfDiagramKinds.includes(diagram.kind)) errors.push(slug + ': PDF sequence diagram kind must be unique.');
+            seenPdfDiagramKinds.push(diagram.kind);
           }
         }
         if (project.links !== undefined && !Array.isArray(project.links)) {
@@ -739,6 +909,10 @@
       '<figcaption><span class="sc-figure__label">' + escapeHtml(label) + '</span> ' + escapeHtml(caption) + '</figcaption></figure>';
   }
 
+  function mediaPreload(item) {
+    return item && item.type === 'video' && item.preload === 'metadata' ? 'metadata' : 'none';
+  }
+
   function evidenceMediaHtml(projectRecord, locale, base, isFile) {
     void isFile;
     var normalized = localeOf(locale);
@@ -750,7 +924,7 @@
     var caption = sourceCopy.mediaCaption || projectRecord.mediaCaption || '';
     var visual = '';
     if (isApprovedVideo(media) && isApprovedImage(posterItem)) {
-      visual = '<video controls preload="none" tabindex="0" poster="' + escapeHtml(assetHref(base, posterItem.publicPath)) + '"' +
+      visual = '<video controls preload="' + escapeHtml(mediaPreload(media)) + '" tabindex="0" poster="' + escapeHtml(assetHref(base, posterItem.publicPath)) + '"' +
         ' aria-label="' + escapeHtml(alt) + '"><source src="' + escapeHtml(assetHref(base, media.publicPath)) + '"></video>';
     } else if (isApprovedImage(media)) {
       visual = '<img src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">';
@@ -758,6 +932,74 @@
       return '';
     }
     return figureHtml(visual, copy.figure + ' 1.', caption, '');
+  }
+
+  function storyMediaFigureHtml(item, locale, base, figureNumber) {
+    var normalized = localeOf(locale);
+    var itemCopy = translation(item, normalized);
+    var visual = '';
+    if (isApprovedImage(item)) {
+      visual = '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt) + '" loading="lazy" decoding="async">';
+    } else if (isApprovedVideo(item) && isApprovedImage(item.poster)) {
+      visual = '<video controls preload="' + escapeHtml(mediaPreload(item)) + '" tabindex="0" poster="' +
+        escapeHtml(assetHref(base, item.poster.publicPath)) + '" aria-label="' + escapeHtml(itemCopy.alt) + '">' +
+        '<source src="' + escapeHtml(assetHref(base, item.publicPath)) + '"></video>';
+    } else {
+      return '';
+    }
+    return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', itemCopy.caption, '');
+  }
+
+  function systemFlowDiagramHtml(diagram, locale, figureNumber) {
+    if (!diagram || diagram.kind !== 'system-flow') return '';
+    var normalized = localeOf(locale);
+    var diagramCopy = translation(diagram, normalized);
+    var figureLabel = Number.isInteger(figureNumber)
+      ? '<span class="sc-figure__label">' + escapeHtml(pageCopy[normalized].figure + ' ' + figureNumber + '.') + '</span> '
+      : '';
+    var ariaParts = [diagramCopy.title];
+    var track = (diagram.nodes || []).map(function (node, index) {
+      var nodeCopy = translation(node, normalized);
+      ariaParts.push(nodeCopy.label);
+      var edge = diagram.edges && diagram.edges[index];
+      var edgeHtml = '';
+      if (edge) {
+        var edgeCopy = translation(edge, normalized);
+        ariaParts.push(edgeCopy.label);
+        edgeHtml = '<span class="sc-flow__edge" data-direction="' + escapeHtml(edge.direction) + '"><span class="sc-flow__arrow" aria-hidden="true">' +
+          (edge.direction === 'bidirectional' ? '⇄' : '→') + '</span><small class="sc-flow__edge-label">' + escapeHtml(edgeCopy.label) + '</small></span>';
+      }
+      return '<div class="sc-flow__node"><strong>' + escapeHtml(nodeCopy.label) + '</strong><small class="sc-flow__node-detail">' + escapeHtml(nodeCopy.detail) + '</small></div>' + edgeHtml;
+    }).join('');
+    ariaParts.push(diagramCopy.boundaryLabel);
+    return '<figure class="sc-figure sc-flow-figure"><figcaption>' + figureLabel + '<strong>' + escapeHtml(diagramCopy.title) + '</strong> ' +
+      escapeHtml(diagramCopy.caption) + '</figcaption><div class="sc-flow__track" aria-label="' + escapeHtml(ariaParts.join(', ')) + '">' +
+      track + '</div><p class="sc-flow__boundary">' + escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
+  }
+
+  function storySectionsHtml(project, locale, base, firstFigureNumber) {
+    var normalized = localeOf(locale);
+    var figureNumber = firstFigureNumber;
+    var sections = (project.storySections || []).map(function (section) {
+      var sectionCopy = translation(section, normalized);
+      var copyHtml = '<div class="sc-story__copy"><h2>' + escapeHtml(sectionCopy.heading) + '</h2>';
+      if (typeof sectionCopy.body === 'string' && sectionCopy.body) copyHtml += '<p>' + escapeHtml(sectionCopy.body) + '</p>';
+      if (Array.isArray(sectionCopy.items) && sectionCopy.items.length) {
+        copyHtml += '<ul class="sc-story__list">' + sectionCopy.items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>';
+      }
+      copyHtml += '</div>';
+      var mediaHtml = (section.media || []).map(function (item) {
+        var html = storyMediaFigureHtml(item, normalized, base, figureNumber);
+        if (html) figureNumber += 1;
+        return html;
+      }).join('');
+      var diagramHtml = systemFlowDiagramHtml(section.diagram, normalized, figureNumber);
+      if (diagramHtml) figureNumber += 1;
+      mediaHtml += diagramHtml;
+      return '<section class="sc-story__section sc-story__section--' + escapeHtml(section.layout) + '" data-story-section="' +
+        escapeHtml(section.key) + '">' + copyHtml + '<div class="sc-story__media sc-story__media--' + escapeHtml(section.layout) + '">' + mediaHtml + '</div></section>';
+    }).join('');
+    return '<div class="sc-story">' + sections + '</div>';
   }
 
   function caseGalleryHtml(project, locale, base, firstFigureNumber, settings) {
@@ -943,14 +1185,16 @@
     var pdfHref = assetHref(base, project.pdf[normalized]);
     var contactHref = i18n.routeHref(base, normalized, 'contact/', Boolean(isFile));
     var lead = evidenceMediaHtml(sourceProject, normalized, base, isFile);
+    var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
+      '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
+      '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
+    var hasStory = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
+    var story = hasStory ? storySectionsHtml(sourceProject, normalized, base, lead ? 2 : 1) : '';
     function blocksOfType(types) {
       return types.reduce(function (ordered, type) {
         return ordered.concat(project.blocks.filter(function (block) { return block.type === type; }));
       }, []).map(function (block) { return blockHtml(block, normalized); }).join('');
     }
-    var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
-        '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
-        '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
     if (sourceProject && sourceProject.caseLayout === 'evidence-first') {
       var tracks = (sourceProject.applicationTracks || []).map(function (track) {
         return evidenceFirstTrackHtml(sourceProject, track, normalized);
@@ -968,14 +1212,21 @@
         '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' +
           ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
     }
+    var approach = hasStory
+      ? story
+      : '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' +
+          escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>';
+    var roleLabel = project.roleLabel
+      ? '<p class="sc-case__role-label">' + escapeHtml(project.roleLabel) + '</p>'
+      : '';
     return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header +
       lead +
       '<section class="sc-case__section"><h2>' + escapeHtml(copy.problem) + '</h2><p>' + escapeHtml(project.problem) + '</p></section>' +
-      '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' + escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>' +
-      '<section class="sc-case__section"><h2>' + escapeHtml(copy.personalRole) + '</h2><p>' + escapeHtml(project.role) + '</p></section>' +
+      approach +
+      '<section class="sc-case__section"><h2>' + escapeHtml(copy.personalRole) + '</h2>' + roleLabel + '<p>' + escapeHtml(project.role) + '</p></section>' +
       '<section class="sc-case__section"><h2>' + escapeHtml(copy.results) + '</h2><p>' + escapeHtml(project.evidence) + '</p>' + blocksOfType(['evidence']) + '</section>' +
       '<section class="sc-case__section"><h2>' + escapeHtml(copy.limits) + '</h2><p>' + escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + blocksOfType(['limitation']) + '</section>' +
-      caseGalleryHtml(project, normalized, base, lead ? 2 : 1) +
+      (hasStory ? '' : caseGalleryHtml(project, normalized, base, lead ? 2 : 1)) +
       subcasesHtml(project, normalized) +
       '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
         ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>' +
@@ -1017,8 +1268,12 @@
     capabilityIndexHtml: capabilityIndexHtml,
     highlightsHtml: highlightsHtml,
     projectGroupsHtml: projectGroupsHtml,
+    mediaPreload: mediaPreload,
     evidenceMediaHtml: evidenceMediaHtml,
     caseGalleryHtml: caseGalleryHtml,
+    storySectionsErrors: storySectionsErrors,
+    storySectionsHtml: storySectionsHtml,
+    systemFlowDiagramHtml: systemFlowDiagramHtml,
     caseStudyHtml: caseStudyHtml,
     mountAll: mountAll
   };

@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import html
 import json
+import math
 import re
 import shutil
 import sys
@@ -36,10 +37,10 @@ EXPECTED_SLUGS = [
     "unmanned-forklift",
     "ai-build-lab",
 ]
-GENERATOR_VERSION = "3.0"
+GENERATOR_VERSION = "3.1"
 GENERATOR_PUBLIC_PATH = "scripts/generate-portfolio-pdfs.py"
 EXPECTED_DIAGRAM_KIND = {
-    "surgical-navigation": "coordinate-chain",
+    "surgical-navigation": "system-flow",
     "mandibular-fracture": "optimization-loop",
     "life-careverse": "sync-topology",
     "rtms-navigation": "navigation-loop",
@@ -49,6 +50,13 @@ EXPECTED_DIAGRAM_KIND = {
     "ai-build-lab": "product-loop",
 }
 LOCALES = ["ko", "en"]
+STORY_LAYOUTS = {"wide", "grid"}
+STORY_DIRECTIONS = {"forward", "bidirectional"}
+STORY_MEDIA_KEYS = {"id", "poster", "preload", "publicPath", "status", "translations", "type", "videoPolicy"}
+VIDEO_POLICY_KEYS = {
+    "codec", "height", "maxBytes", "requireFastStart", "requireNoAudio",
+    "targetDurationSeconds", "toleranceSeconds", "width",
+}
 CONTACT_EMAIL = "uiop3847@naver.com"
 PUBLIC_SITE = {
     "name": "Jinmin Kim",
@@ -120,6 +128,152 @@ def validate_translation_record(record: dict[str, Any], label: str, fields: list
         copy = require_object(translations.get(locale), f"{label} {locale} translation")
         for field in fields:
             require_text(copy.get(field), f"{label} {locale} {field}")
+
+
+def validate_video_policy(value: Any, label: str) -> None:
+    policy = require_object(value, f"{label} videoPolicy")
+    require(set(policy) == VIDEO_POLICY_KEYS,
+            f"{label} videoPolicy must contain exactly the canonical keys.")
+    require(policy.get("codec") == "h264", f"{label} videoPolicy codec must be h264.")
+    max_bytes = policy.get("maxBytes")
+    require(isinstance(max_bytes, int) and not isinstance(max_bytes, bool) and 1 <= max_bytes <= 100_000_000,
+            f"{label} videoPolicy maxBytes must be an integer from 1 through 100000000.")
+    for field in ["targetDurationSeconds", "toleranceSeconds"]:
+        number = policy.get(field)
+        require(isinstance(number, (int, float)) and not isinstance(number, bool) and math.isfinite(number),
+                f"{label} videoPolicy {field} must be finite.")
+    require(policy["targetDurationSeconds"] > 0,
+            f"{label} videoPolicy targetDurationSeconds must be positive.")
+    require(0 <= policy["toleranceSeconds"] <= 1,
+            f"{label} videoPolicy toleranceSeconds must be from 0 through 1.")
+    for field in ["width", "height"]:
+        dimension = policy.get(field)
+        require(isinstance(dimension, int) and not isinstance(dimension, bool) and dimension > 0,
+                f"{label} videoPolicy {field} must be a positive integer.")
+    require(policy.get("requireFastStart") is True and policy.get("requireNoAudio") is True,
+            f"{label} videoPolicy requirements must both be true.")
+
+
+def validate_story_media_path(item: dict[str, Any], label: str, slug: str) -> None:
+    media_type = item.get("type")
+    status = item.get("status")
+    require(media_type in {"image", "video"}, f"{label} must be image or video media.")
+    require(status in {"approved", "pending-approval"}, f"{label} has an unknown media status.")
+    public_path = item.get("publicPath")
+    if status == "pending-approval":
+        require(public_path is None, f"{label} pending-approval media must not declare a public path.")
+    else:
+        extension = "png" if media_type == "image" else "mp4"
+        require(isinstance(public_path, str) and bool(re.fullmatch(
+            rf"assets/projects/{re.escape(slug)}/[a-z0-9][a-z0-9._/-]*\.{extension}", public_path
+        )) and all(segment not in {"", ".", ".."} for segment in public_path.split("/")),
+                f"{label} approved media requires a repository-relative project .{extension} path.")
+    if "preload" in item:
+        require(media_type == "video" and item.get("preload") in {"none", "metadata"},
+                f"{label} preload is allowed only for video as none or metadata.")
+    if "videoPolicy" in item:
+        require(media_type == "video", f"{label} videoPolicy is allowed only for video.")
+        validate_video_policy(item.get("videoPolicy"), label)
+
+
+def validate_system_flow_diagram(value: Any, label: str) -> dict[str, Any]:
+    diagram = require_object(value, f"{label} system-flow diagram")
+    require(set(diagram) == {"boundary", "edges", "kind", "nodes", "translations"},
+            f"{label} system-flow diagram must contain exactly boundary, edges, kind, nodes, and translations.")
+    require(diagram.get("kind") == "system-flow", f"{label} diagram kind must be system-flow.")
+    require(diagram.get("boundary") == "prototype", f"{label} diagram boundary must be prototype.")
+    validate_translation_record(diagram, f"{label} diagram", ["title", "caption", "boundaryLabel"])
+    nodes = require_array(diagram.get("nodes"), f"{label} diagram nodes")
+    require(len(nodes) >= 2, f"{label} system-flow diagram requires at least two nodes.")
+    node_keys: list[str] = []
+    for node_index, node_value in enumerate(nodes, start=1):
+        node = require_object(node_value, f"{label} diagram node {node_index}")
+        require(set(node) == {"key", "translations"},
+                f"{label} diagram node {node_index} must contain exactly key and translations.")
+        key = require_text(node.get("key"), f"{label} diagram node {node_index} key")
+        require(key not in node_keys, f"{label} system-flow diagram requires uniquely keyed nodes.")
+        node_keys.append(key)
+        validate_translation_record(node, f"{label} diagram node {node_index}", ["label", "detail"])
+    edges = require_array(diagram.get("edges"), f"{label} diagram edges", len(nodes) - 1)
+    for edge_index, edge_value in enumerate(edges, start=1):
+        edge = require_object(edge_value, f"{label} diagram edge {edge_index}")
+        require(set(edge) == {"direction", "from", "to", "translations"},
+                f"{label} diagram edge {edge_index} must contain exactly direction, from, to, and translations.")
+        require(edge.get("from") == node_keys[edge_index - 1] and edge.get("to") == node_keys[edge_index],
+                f"{label} diagram edge {edge_index} must follow the declared node order.")
+        require(edge.get("direction") in STORY_DIRECTIONS,
+                f"{label} diagram edge {edge_index} direction must be forward or bidirectional.")
+        validate_translation_record(edge, f"{label} diagram edge {edge_index}", ["label"])
+    return diagram
+
+
+def validate_story_sections(project: dict[str, Any], slug: str) -> tuple[list[str], dict[str, dict[str, Any]]]:
+    if "storySections" not in project:
+        return [], {}
+    sections = require_array(project.get("storySections"), f"PDF input project {slug} storySections")
+    require(bool(sections), f"PDF input project {slug} storySections must be a non-empty array.")
+    section_keys: list[str] = []
+    story_media: dict[str, dict[str, Any]] = {}
+    seen_media_ids: set[str] = set()
+    source_media = project.get("media") if isinstance(project.get("media"), dict) else {}
+    for slot in ["lead", "poster"]:
+        item = source_media.get(slot)
+        if isinstance(item, dict) and isinstance(item.get("id"), str):
+            seen_media_ids.add(item["id"])
+    for slot in ["references", "gallery"]:
+        items = source_media.get(slot)
+        for item in items if isinstance(items, list) else []:
+            if isinstance(item, dict) and isinstance(item.get("id"), str):
+                seen_media_ids.add(item["id"])
+
+    for section_index, section_value in enumerate(sections, start=1):
+        label = f"PDF input project {slug} story section {section_index}"
+        section = require_object(section_value, label)
+        key = require_text(section.get("key"), f"{label} key")
+        require(key not in section_keys, f"{label} key is duplicated: {key}.")
+        section_keys.append(key)
+        require(section.get("layout") in STORY_LAYOUTS, f"{label} has an unsupported layout.")
+        translations = require_object(section.get("translations"), f"{label} translations")
+        require(set(translations) == set(LOCALES), f"{label} translations must contain exactly ko and en.")
+        for locale in LOCALES:
+            copy = require_object(translations.get(locale), f"{label} {locale} translation")
+            require_text(copy.get("heading"), f"{label} {locale} heading")
+            body = copy.get("body")
+            items = copy.get("items")
+            valid_body = isinstance(body, str) and bool(body.strip())
+            valid_items = (isinstance(items, list) and bool(items)
+                           and all(isinstance(item, str) and bool(item.strip()) for item in items))
+            require(valid_body or valid_items, f"{label} {locale} requires body or list copy.")
+            if items is not None:
+                require(valid_items, f"{label} {locale} list copy must contain non-empty strings.")
+        media = section.get("media", [])
+        require(isinstance(media, list), f"{label} media must be an array.")
+        for media_index, media_value in enumerate(media, start=1):
+            media_label = f"{label} media {media_index}"
+            item = require_object(media_value, media_label)
+            require(set(item).issubset(STORY_MEDIA_KEYS), f"{media_label} contains an undeclared field.")
+            identifier = require_text(item.get("id"), f"{media_label} id")
+            require(identifier not in seen_media_ids, f"{media_label} id is duplicated: {identifier}.")
+            seen_media_ids.add(identifier)
+            validate_story_media_path(item, media_label, slug)
+            validate_translation_record(item, media_label, ["caption", "alt"])
+            poster = item.get("poster")
+            if poster is not None:
+                poster = require_object(poster, f"{media_label} poster")
+                poster_id = require_text(poster.get("id"), f"{media_label} poster id")
+                require(poster_id not in seen_media_ids, f"{media_label} poster id is duplicated: {poster_id}.")
+                seen_media_ids.add(poster_id)
+                validate_story_media_path(poster, f"{media_label} poster", slug)
+                require(poster.get("type") == "image", f"{media_label} poster must be image media.")
+            if item.get("type") == "video" and item.get("status") == "approved":
+                require(isinstance(poster, dict) and poster.get("type") == "image" and poster.get("status") == "approved",
+                        f"{media_label} approved story video requires an approved image poster.")
+            story_media[identifier] = item
+            if isinstance(poster, dict):
+                story_media[poster["id"]] = poster
+        if "diagram" in section:
+            validate_system_flow_diagram(section.get("diagram"), label)
+    return section_keys, story_media
 
 
 def validate_localized_strings(value: Any, label: str) -> None:
@@ -339,6 +493,7 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
     projects = require_array(payload.get("projects"), "PDF input projects", len(EXPECTED_SLUGS))
     project_slugs: list[str] = []
     project_sequence_evidence: dict[str, str] = {}
+    story_figure_contracts: dict[str, tuple[list[str], dict[str, dict[str, Any]]]] = {}
     seen_diagram_kinds: set[str] = set()
     project_copy_fields = [
         "title", "shortTitle", "eyebrow", "thesis", "summary", "problem", "role",
@@ -360,6 +515,11 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
         for item in tech:
             require_text(item, f"PDF input project {slug} tech item")
         validate_translation_record(project, f"PDF input project {slug}", project_copy_fields)
+        if any(isinstance(project.get("translations", {}).get(locale), dict)
+               and project["translations"][locale].get("roleLabel") is not None for locale in LOCALES):
+            validate_translation_record(project, f"PDF input project {slug}", ["roleLabel"])
+
+        story_keys, story_media = validate_story_sections(project, slug)
 
         blocks = require_array(project.get("blocks"), f"PDF input project {slug} blocks")
         block_keys: list[str] = []
@@ -381,15 +541,19 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
                 else:
                     require_text(copy.get("body"), f"PDF input project {slug} block {block_index} {locale} body")
 
-        require(len(block_keys) >= 4, f"PDF input project {slug} must contain at least four structural blocks.")
+        if not story_keys:
+            require(len(block_keys) >= 4, f"PDF input project {slug} must contain at least four structural blocks.")
         sequence = require_object(project.get("pdfSequence"), f"PDF input project {slug} PDF sequence")
-        require(set(sequence) == {"middle", "evidenceId", "diagram"},
-                f"PDF input project {slug} PDF sequence must contain exactly middle, evidenceId, and diagram.")
+        expected_sequence_keys = ({"middle", "evidenceId", "diagram", "figureIds"} if story_keys
+                                  else {"middle", "evidenceId", "diagram"})
+        require(set(sequence) == expected_sequence_keys,
+                f"PDF input project {slug} PDF sequence must contain exactly the canonical fields.")
         middle = require_array(sequence.get("middle"), f"PDF input project {slug} PDF sequence middle", 4)
-        for middle_index, block_key in enumerate(middle, start=1):
-            require_text(block_key, f"PDF input project {slug} PDF sequence middle {middle_index}")
-        require(len(set(middle)) == 4 and all(block_key in block_keys for block_key in middle),
-                f"PDF input project {slug} PDF sequence must reference exactly four distinct known blocks.")
+        for middle_index, section_key in enumerate(middle, start=1):
+            require_text(section_key, f"PDF input project {slug} PDF sequence middle {middle_index}")
+        known_middle_keys = story_keys if story_keys else block_keys
+        require(len(set(middle)) == 4 and all(section_key in known_middle_keys for section_key in middle),
+                f"PDF input project {slug} PDF sequence must reference exactly four distinct known sections.")
         evidence_id = require_text(sequence.get("evidenceId"), f"PDF input project {slug} PDF sequence evidenceId")
         media = require_object(project.get("media"), f"PDF input project {slug} media")
         lead = require_object(media.get("lead"), f"PDF input project {slug} lead media")
@@ -450,32 +614,64 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
                         f"PDF input project {slug} public resource {resource_index} must use a non-GitHub HTTPS URL.")
                 validate_translation_record(resource, f"PDF input project {slug} public resource {resource_index}",
                                             ["title", "description"])
-        diagram = require_object(sequence.get("diagram"), f"PDF input project {slug} PDF sequence diagram")
-        require(set(diagram) == {"kind", "translations"},
-                f"PDF input project {slug} PDF sequence diagram must contain exactly kind and translations.")
-        diagram_kind = require_text(diagram.get("kind"), f"PDF input project {slug} PDF sequence diagram kind")
-        require(diagram_kind == EXPECTED_DIAGRAM_KIND[slug],
-                f"PDF input project {slug} has an invalid PDF sequence diagram kind.")
+        diagram_contract = require_object(sequence.get("diagram"), f"PDF input project {slug} PDF sequence diagram")
+        if story_keys:
+            require(set(diagram_contract) == {"storySectionKey"},
+                    f"PDF input project {slug} story PDF sequence diagram must contain exactly storySectionKey.")
+            diagram_section_key = require_text(
+                diagram_contract.get("storySectionKey"), f"PDF input project {slug} PDF sequence diagram storySectionKey"
+            )
+            diagram_section = next((section for section in project["storySections"]
+                                    if section.get("key") == diagram_section_key), None)
+            require(isinstance(diagram_section, dict) and isinstance(diagram_section.get("diagram"), dict),
+                    f"PDF input project {slug} story PDF sequence diagram must resolve to a story section diagram.")
+            diagram = diagram_section["diagram"]
+            diagram_kind = require_text(diagram.get("kind"), f"PDF input project {slug} story diagram kind")
+            require(diagram_kind == EXPECTED_DIAGRAM_KIND[slug],
+                    f"PDF input project {slug} story diagram must be the expected system-flow kind.")
+            figure_ids = require_array(sequence.get("figureIds"),
+                                       f"PDF input project {slug} PDF sequence figureIds", 6)
+            require(all(isinstance(identifier, str) and bool(identifier) for identifier in figure_ids)
+                    and len(set(figure_ids)) == 6,
+                    f"PDF input project {slug} PDF sequence figureIds must contain six unique ids.")
+            for identifier in figure_ids:
+                item = story_media.get(identifier)
+                require(isinstance(item, dict) and isinstance(item.get("translations"), dict)
+                        and item.get("status") == "approved" and item.get("type") in {"image", "video"},
+                        f"PDF input project {slug} PDF sequence figureId {identifier} must reference approved story media.")
+                if item.get("type") == "video":
+                    poster = item.get("poster")
+                    require(isinstance(poster, dict) and story_media.get(poster.get("id")) is poster
+                            and poster.get("status") == "approved" and poster.get("type") == "image",
+                            f"PDF input project {slug} PDF sequence video figure {identifier} requires its canonical approved poster.")
+            story_figure_contracts[slug] = (figure_ids, story_media)
+        else:
+            diagram = diagram_contract
+            require(set(diagram) == {"kind", "translations"},
+                    f"PDF input project {slug} PDF sequence diagram must contain exactly kind and translations.")
+            diagram_kind = require_text(diagram.get("kind"), f"PDF input project {slug} PDF sequence diagram kind")
+            require(diagram_kind == EXPECTED_DIAGRAM_KIND[slug],
+                    f"PDF input project {slug} has an invalid PDF sequence diagram kind.")
+            diagram_translations = require_object(
+                diagram.get("translations"), f"PDF input project {slug} PDF sequence diagram translations"
+            )
+            require(set(diagram_translations) == set(LOCALES),
+                    f"PDF input project {slug} PDF sequence diagram translations must contain exactly ko and en.")
+            for locale in LOCALES:
+                diagram_copy = require_object(
+                    diagram_translations.get(locale), f"PDF input project {slug} PDF sequence diagram {locale}"
+                )
+                require(set(diagram_copy) == {"title", "nodes"},
+                        f"PDF input project {slug} PDF sequence diagram {locale} must contain title and nodes.")
+                require_text(diagram_copy.get("title"), f"PDF input project {slug} PDF sequence diagram {locale} title")
+                nodes = require_array(
+                    diagram_copy.get("nodes"), f"PDF input project {slug} PDF sequence diagram {locale} nodes", 4
+                )
+                for node_index, node in enumerate(nodes, start=1):
+                    require_text(node, f"PDF input project {slug} PDF sequence diagram {locale} node {node_index}")
         require(diagram_kind not in seen_diagram_kinds,
                 f"PDF input project {slug} PDF sequence diagram kind must be unique.")
         seen_diagram_kinds.add(diagram_kind)
-        diagram_translations = require_object(
-            diagram.get("translations"), f"PDF input project {slug} PDF sequence diagram translations"
-        )
-        require(set(diagram_translations) == set(LOCALES),
-                f"PDF input project {slug} PDF sequence diagram translations must contain exactly ko and en.")
-        for locale in LOCALES:
-            diagram_copy = require_object(
-                diagram_translations.get(locale), f"PDF input project {slug} PDF sequence diagram {locale}"
-            )
-            require(set(diagram_copy) == {"title", "nodes"},
-                    f"PDF input project {slug} PDF sequence diagram {locale} must contain title and nodes.")
-            require_text(diagram_copy.get("title"), f"PDF input project {slug} PDF sequence diagram {locale} title")
-            nodes = require_array(
-                diagram_copy.get("nodes"), f"PDF input project {slug} PDF sequence diagram {locale} nodes", 4
-            )
-            for node_index, node in enumerate(nodes, start=1):
-                require_text(node, f"PDF input project {slug} PDF sequence diagram {locale} node {node_index}")
 
         links = require_array(project.get("links"), f"PDF input project {slug} links")
         for link_index, link_value in enumerate(links, start=1):
@@ -487,12 +683,14 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
 
     evidence_entries = require_array(payload.get("evidence"), "PDF input evidence")
     evidence_ids: set[str] = set()
+    evidence_by_id: dict[str, dict[str, Any]] = {}
     for index, value in enumerate(evidence_entries, start=1):
         entry = require_object(value, f"PDF input evidence entry {index}")
         for field in ["id", "project", "type", "state", "source", "note"]:
             require_text(entry.get(field), f"PDF input evidence entry {index} {field}")
         require(entry["id"] not in evidence_ids, f"PDF input evidence id is duplicated: {entry['id']}.")
         evidence_ids.add(entry["id"])
+        evidence_by_id[entry["id"]] = entry
         require(entry["project"] in EXPECTED_SLUGS, f"PDF input evidence entry {index} has an unknown project.")
         require(entry["type"] in {"image", "video", "repository", "publication"},
                 f"PDF input evidence entry {index} has an unknown type.")
@@ -514,6 +712,22 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
     for slug, evidence_id in project_sequence_evidence.items():
         require(any(entry.get("id") == evidence_id and entry.get("project") == slug for entry in evidence_entries),
                 f"PDF input project {slug} PDF sequence evidenceId is not registered for that project.")
+
+    for slug, (figure_ids, story_media) in story_figure_contracts.items():
+        for identifier in figure_ids:
+            item = story_media[identifier]
+            entry = evidence_by_id.get(identifier)
+            require(isinstance(entry, dict) and entry.get("project") == slug
+                    and entry.get("state") == "approved-public" and entry.get("type") == item.get("type")
+                    and entry.get("source") == item.get("publicPath"),
+                    f"PDF input project {slug} figure {identifier} must match registered approved public evidence.")
+            if item.get("type") == "video":
+                poster = item["poster"]
+                poster_entry = evidence_by_id.get(poster["id"])
+                require(isinstance(poster_entry, dict) and poster_entry.get("project") == slug
+                        and poster_entry.get("state") == "approved-public" and poster_entry.get("type") == "image"
+                        and poster_entry.get("source") == poster.get("publicPath"),
+                        f"PDF input project {slug} video figure {identifier} poster must match registered approved public evidence.")
 
     validate_cv(payload.get("cv"))
     digest = require_text(payload.get("sourceDigest"), "PDF input sourceDigest")
@@ -1057,6 +1271,49 @@ class TechnicalDocument:
             raise ValueError(f"Unknown PDF diagram kind: {kind}.")
         return bottom
 
+    def system_flow_diagram(self, diagram: dict[str, Any], locale: str, y: float) -> float:
+        """Draw the canonical six-node story flow as a readable full-width stack."""
+        c = self.canvas
+        copy = localized(diagram, locale)
+        nodes = diagram["nodes"]
+        edges = diagram["edges"]
+        self.text(copy["title"], self.left, y - 10, self.right - self.left,
+                  size=10.5, font="MalgunGothic-Bold", leading=14, max_lines=1)
+        self.text(copy["caption"], self.left, y - 25, self.right - self.left,
+                  size=8, leading=11, color="muted", max_lines=1)
+
+        node_top = y - 40
+        node_height = 32
+        for index, node in enumerate(nodes):
+            node_copy = localized(node, locale)
+            node_bottom = node_top - node_height
+            c.setFillColor(self.colors["paper"])
+            c.setStrokeColor(self.colors["line"])
+            c.setLineWidth(0.8)
+            c.roundRect(self.left, node_bottom, self.right - self.left, node_height, 3, fill=1, stroke=1)
+            self.label(f"0{index + 1}", self.left + 10, node_top - 13)
+            self.text(node_copy["label"], self.left + 38, node_top - 12, 150,
+                      size=8.5, font="MalgunGothic-Bold", leading=10, max_lines=1)
+            self.text(node_copy["detail"], self.left + 194, node_top - 12, self.right - self.left - 204,
+                      size=8, leading=10, color="muted", max_lines=1)
+            if index < len(edges):
+                edge = edges[index]
+                edge_copy = localized(edge, locale)
+                edge_y = node_bottom - 12
+                c.setFillColor(self.colors["signal"])
+                c.setFont("MalgunGothic-Bold", 9)
+                c.drawString(self.left + 14, edge_y, "⇄" if edge["direction"] == "bidirectional" else "→")
+                self.text(edge_copy["label"], self.left + 38, edge_y, self.right - self.left - 48,
+                          size=7.8, leading=9, color="muted", max_lines=1)
+                node_top = node_bottom - 17
+            else:
+                node_top = node_bottom
+
+        boundary_y = node_top - 16
+        self.text(copy["boundaryLabel"], self.left, boundary_y, self.right - self.left,
+                  size=8.5, font="MalgunGothic-Bold", leading=11, color="warm", max_lines=1)
+        return boundary_y - 18
+
 
 def register_fonts(dependencies: dict[str, Any], regular: Path, bold: Path) -> None:
     require(regular.is_file(), f"Missing Korean font: {regular}")
@@ -1072,9 +1329,66 @@ def localized(record: dict[str, Any], locale: str) -> dict[str, Any]:
     return translations[locale]
 
 
-def sequence_blocks(project: dict[str, Any], locale: str) -> list[tuple[dict[str, Any], dict[str, Any]]]:
-    by_key = {block["key"]: block for block in project["blocks"]}
+def canonical_project_media(project: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Index every canonical project media surface, including nested story posters."""
+    indexed: dict[str, dict[str, Any]] = {}
+
+    def add(item: Any) -> None:
+        if not isinstance(item, dict) or not isinstance(item.get("id"), str):
+            return
+        indexed.setdefault(item["id"], item)
+
+    media = project.get("media")
+    if isinstance(media, dict):
+        for slot in ["lead", "video", "poster"]:
+            add(media.get(slot))
+        for slot in ["references", "gallery"]:
+            items = media.get(slot)
+            for item in items if isinstance(items, list) else []:
+                add(item)
+    sections = project.get("storySections")
+    for section in sections if isinstance(sections, list) else []:
+        items = section.get("media") if isinstance(section, dict) else None
+        for item in items if isinstance(items, list) else []:
+            add(item)
+            if isinstance(item, dict):
+                add(item.get("poster"))
+    return indexed
+
+
+def selected_media_image(project: dict[str, Any], item: Any) -> dict[str, Any] | None:
+    """Resolve an approved image or the canonical poster for an approved video."""
+    if not isinstance(item, dict) or item.get("status") != "approved":
+        return None
+    if item.get("type") == "image":
+        return item
+    if item.get("type") != "video":
+        return None
+    media = project.get("media")
+    lead = media.get("lead") if isinstance(media, dict) else None
+    poster = (media.get("poster") if isinstance(media, dict) else None) if (
+        isinstance(lead, dict) and lead.get("id") == item.get("id")
+    ) else item.get("poster")
+    if isinstance(poster, dict) and poster.get("type") == "image" and poster.get("status") == "approved":
+        return poster
+    return None
+
+
+def resolve_sequence_sections(project: dict[str, Any], locale: str) -> list[tuple[dict[str, Any], dict[str, Any]]]:
+    source = project.get("storySections") if project.get("storySections") else project["blocks"]
+    by_key = {section["key"]: section for section in source}
     return [(by_key[key], localized(by_key[key], locale)) for key in project["pdfSequence"]["middle"]]
+
+
+def resolve_sequence_diagram(project: dict[str, Any]) -> dict[str, Any]:
+    contract = project["pdfSequence"]["diagram"]
+    story_key = contract.get("storySectionKey") if isinstance(contract, dict) else None
+    if isinstance(story_key, str):
+        for section in project.get("storySections", []):
+            if section.get("key") == story_key:
+                return section["diagram"]
+        raise ValueError(f"{project.get('slug', 'project')}: unresolved story diagram {story_key}.")
+    return contract
 
 
 def block_body(block: dict[str, Any], copy: dict[str, Any]) -> str:
@@ -1126,14 +1440,8 @@ def selected_pdf_evidence_image(project: dict[str, Any], local_evidence: dict[st
     lead = media.get("lead")
     if not isinstance(lead, dict) or lead.get("id") != project["pdfSequence"]["evidenceId"]:
         return None
-    if lead.get("type") == "image" and lead.get("status") == "approved":
-        return local_evidence.get(lead.get("id"))
-    if lead.get("type") != "video" or lead.get("status") != "approved":
-        return None
-    poster = media.get("poster")
-    if not isinstance(poster, dict) or poster.get("type") != "image" or poster.get("status") != "approved":
-        return None
-    return local_evidence.get(poster.get("id"))
+    selected = selected_media_image(project, lead)
+    return local_evidence.get(selected.get("id")) if selected else None
 
 
 def capability_label(payload: dict[str, Any], key: str, locale: str) -> str:
@@ -1219,6 +1527,30 @@ def project_figures(project: dict[str, Any], local_evidence: dict[str, Path],
     if not isinstance(media, dict):
         return []
     copy = localized(project, locale)
+    figure_ids = project.get("pdfSequence", {}).get("figureIds")
+    if isinstance(figure_ids, list):
+        indexed = canonical_project_media(project)
+        selected_figures: list[tuple[Path, str]] = []
+        selected_ids: set[str] = set()
+
+        def add_selected(item: Any, caption: str) -> None:
+            image = selected_media_image(project, item)
+            require(isinstance(image, dict),
+                    f"{project['slug']}: PDF figure requires an approved image or poster.")
+            identifier = require_text(image.get("id"), f"{project['slug']} selected PDF figure id")
+            path = local_evidence.get(identifier)
+            require(path is not None, f"{project['slug']}: selected PDF figure {identifier} is not available.")
+            if identifier not in selected_ids:
+                selected_ids.add(identifier)
+                selected_figures.append((path, caption))
+
+        add_selected(media.get("lead"), clean_text(copy.get("mediaCaption")))
+        for identifier in figure_ids:
+            item = indexed.get(identifier)
+            require(isinstance(item, dict), f"{project['slug']}: unresolved PDF figure {identifier}.")
+            add_selected(item, clean_text(localized(item, locale).get("caption")))
+        return selected_figures
+
     figures: list[tuple[Path, str]] = []
     seen: set[str] = set()
 
@@ -1429,11 +1761,13 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
         )
     copy = localized(project, locale)
     labels = project_labels(locale)
-    diagram = project["pdfSequence"]["diagram"]
-    diagram_copy = diagram["translations"][locale]
+    has_story = bool(project.get("storySections"))
+    diagram = resolve_sequence_diagram(project)
+    diagram_copy = localized(diagram, locale)
     figures = project_figures(project, local_evidence, locale)
     blocks = [(block, localized(block, locale)) for block in project.get("blocks", [])]
-    approach = [pair for pair in blocks if pair[0]["type"] in {"system", "text", "list"}]
+    approach = (resolve_sequence_sections(project, locale) if has_story
+                else [pair for pair in blocks if pair[0]["type"] in {"system", "text", "list"}])
     evidence_blocks = [pair for pair in blocks if pair[0]["type"] == "evidence"]
     limit_blocks = [pair for pair in blocks if pair[0]["type"] == "limitation"]
     capabilities = [capability_label(payload, key, locale) for key in project.get("capabilityKeys", [])]
@@ -1445,6 +1779,13 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
         counter = {"figure": 0}
 
         def draw(items: list[tuple[Path, str]]) -> None:
+            if has_story and len(items) > 1:
+                compact = []
+                for path, caption in items[:2]:
+                    counter["figure"] += 1
+                    compact.append((path, f"{labels['figure']} {counter['figure']}.", caption))
+                doc.figure_grid(compact, columns=2, image_height=155)
+                items = items[2:]
             for path, caption in items:
                 counter["figure"] += 1
                 doc.figure(path, f"{labels['figure']} {counter['figure']}.", caption)
@@ -1466,16 +1807,27 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
 
         doc.h2(labels["decision"])
         doc.h3(labels["role"])
+        if copy.get("roleLabel"):
+            doc.para(copy["roleLabel"], font="MalgunGothic-Bold", gap=4)
         doc.para(copy["role"], color="muted")
         for block, block_copy in approach:
             doc.h3(block_copy["heading"])
-            if block["type"] == "list":
+            if has_story:
+                if block_copy.get("body"):
+                    doc.para(block_copy["body"], color="muted", gap=6)
+                if block_copy.get("items"):
+                    doc.bullets(block_copy["items"])
+            elif block["type"] == "list":
                 doc.bullets(block_copy["items"])
             else:
                 doc.para(block_copy["body"], color="muted")
-        doc.ensure(210)
-        doc.y = doc.diagram(diagram["kind"], diagram_copy["title"],
-                            [clean_text(node) for node in diagram_copy["nodes"]], doc.y) - 12
+        if diagram["kind"] == "system-flow":
+            doc.ensure(360)
+            doc.y = doc.system_flow_diagram(diagram, locale, doc.y) - 12
+        else:
+            doc.ensure(210)
+            doc.y = doc.diagram(diagram["kind"], diagram_copy["title"],
+                                [clean_text(node) for node in diagram_copy["nodes"]], doc.y) - 12
         doc.para(labels["flow_note"], size=8.5, leading=12, color="muted", gap=14)
 
         doc.h2(labels["evidence"])

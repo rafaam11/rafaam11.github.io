@@ -69,18 +69,39 @@ function mp4Box(type, payload = Buffer.alloc(0)) {
   return result;
 }
 
-function validMp4({ durationSeconds = 20, extraMoovBoxes = [], mdatPayload = Buffer.from([0]) } = {}) {
+function validMp4({
+  durationSeconds = 20,
+  width = 1280,
+  height = 720,
+  sampleEntry = 'avc1',
+  includeAudio = false,
+  fastStart = true,
+  extraMoovBoxes = [],
+  mdatPayload = Buffer.from([0])
+} = {}) {
   const ftyp = mp4Box('ftyp', Buffer.concat([
     Buffer.from('isom', 'ascii'), Buffer.alloc(4), Buffer.from('isommp42', 'ascii')
   ]));
   const mvhdPayload = Buffer.alloc(100);
   mvhdPayload.writeUInt32BE(1000, 12);
   mvhdPayload.writeUInt32BE(Math.round(durationSeconds * 1000), 16);
+  const tkhdPayload = Buffer.alloc(84);
+  tkhdPayload.writeUInt32BE(Math.round(width * 65536), tkhdPayload.length - 8);
+  tkhdPayload.writeUInt32BE(Math.round(height * 65536), tkhdPayload.length - 4);
   const hdlrPayload = Buffer.alloc(24);
   hdlrPayload.write('vide', 8, 4, 'ascii');
-  const track = mp4Box('trak', mp4Box('mdia', mp4Box('hdlr', hdlrPayload)));
-  const moov = mp4Box('moov', Buffer.concat([mp4Box('mvhd', mvhdPayload), track, ...extraMoovBoxes]));
-  return Buffer.concat([ftyp, moov, mp4Box('mdat', mdatPayload)]);
+  const stsdPayload = Buffer.concat([Buffer.alloc(4), Buffer.from([0, 0, 0, 1]), mp4Box(sampleEntry)]);
+  const sampleTable = mp4Box('stbl', mp4Box('stsd', stsdPayload));
+  const media = mp4Box('mdia', Buffer.concat([mp4Box('hdlr', hdlrPayload), mp4Box('minf', sampleTable)]));
+  const tracks = [mp4Box('trak', Buffer.concat([mp4Box('tkhd', tkhdPayload), media]))];
+  if (includeAudio) {
+    const audioHandlerPayload = Buffer.alloc(24);
+    audioHandlerPayload.write('soun', 8, 4, 'ascii');
+    tracks.push(mp4Box('trak', mp4Box('mdia', mp4Box('hdlr', audioHandlerPayload))));
+  }
+  const moov = mp4Box('moov', Buffer.concat([mp4Box('mvhd', mvhdPayload), ...tracks, ...extraMoovBoxes]));
+  const mdat = mp4Box('mdat', mdatPayload);
+  return Buffer.concat(fastStart ? [ftyp, moov, mdat] : [ftyp, mdat, moov]);
 }
 const excludedProjectSlugs = [
   'ar-distance-meter',
@@ -106,6 +127,45 @@ function read(relativePath) {
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function storyDiagramFixture() {
+  return {
+    kind: 'system-flow',
+    boundary: 'prototype',
+    translations: {
+      ko: { title: '시스템 흐름', caption: '설명용 흐름', boundaryLabel: '연구 프로토타입' },
+      en: { title: 'System flow', caption: 'Explanatory flow', boundaryLabel: 'Research prototype' }
+    },
+    nodes: [
+      { key: 'tracker', translations: { ko: { label: '추적 장치', detail: '관측' }, en: { label: 'Tracker', detail: 'Observations' } } },
+      { key: 'core', translations: { ko: { label: '코어', detail: '정합' }, en: { label: 'Core', detail: 'Registration' } } }
+    ],
+    edges: [
+      { from: 'tracker', to: 'core', direction: 'forward', translations: { ko: { label: '좌표' }, en: { label: 'Transforms' } } }
+    ]
+  };
+}
+
+function storySectionFixture() {
+  return {
+    key: 'story-overview',
+    layout: 'wide',
+    translations: {
+      ko: { heading: '개요', body: '본문' },
+      en: { heading: 'Overview', body: 'Body' }
+    },
+    media: [{
+      id: 'story-image-01',
+      type: 'image',
+      status: 'approved',
+      publicPath: 'assets/projects/surgical-navigation/story-image-01.png',
+      translations: {
+        ko: { caption: '이미지 설명', alt: '이미지 대체 텍스트' },
+        en: { caption: 'Image caption', alt: 'Image alternative text' }
+      }
+    }]
+  };
 }
 
 function count(haystack, needle) {
@@ -281,6 +341,24 @@ function evidenceRegisterText(entries) {
   ].join('\n');
 }
 
+function evidenceRowsForProjectCandidate(candidate, projectSlug, overrides = []) {
+  const declaredIds = new Set(validator.canonicalMediaEntries(candidate)
+    .filter(({ project, item }) => project.slug === projectSlug && item && typeof item.id === 'string')
+    .map(({ item }) => item.id));
+  const overridesById = new Map(overrides.map((entry) => [entry.id, entry]));
+  const rows = validator.readEvidenceRegister(root).entries
+    .filter((entry) => entry.project !== projectSlug || declaredIds.has(entry.id))
+    .map((entry) => overridesById.get(entry.id) || entry);
+  const presentIds = new Set(rows.map((entry) => entry.id));
+  for (const entry of overrides) {
+    if (entry.project === projectSlug && declaredIds.has(entry.id) && !presentIds.has(entry.id)) {
+      rows.push(entry);
+      presentIds.add(entry.id);
+    }
+  }
+  return rows;
+}
+
 function mirrorApprovedAssets(temporaryRoot, registerText) {
   // Copy the real derivative for every approved-public row the synthetic register still points at,
   // so a fixture starts from the repository's clean baseline instead of dozens of missing-asset errors.
@@ -363,7 +441,10 @@ test('canonical records retain localized evidence, attribution, media, blocks, a
     });
     assert.ok(project.capabilityKeys.every((key) => capabilityKeys.includes(key)));
     assert.ok(project.media && project.media.lead);
-    assert.ok(project.blocks.length > 0);
+    assert.ok(
+      project.blocks.length > 0 || (Array.isArray(project.storySections) && project.storySections.length > 0),
+      `${project.slug}: needs legacy blocks or story sections`
+    );
     for (const locale of ['ko', 'en']) {
       for (const field of required) assert.ok(project.translations[locale][field], `${project.slug}: missing ${locale}.${field}`);
       assert.notEqual(project.translations[locale].role, project.translations[locale].teamResult);
@@ -391,7 +472,7 @@ test('SKADI evidence-first contract keeps the case identity and exposes localize
   assert.equal(skadi.translations.ko.title, 'SKADI 위치추적 소프트웨어 (API·Viewer)');
   assert.equal(skadi.translations.en.title, 'SKADI Tracking Software (API and Viewer)');
   const expectedVideoPolicy = {
-    maxBytes: 20971520,
+    maxBytes: 20 * 1024 * 1024,
     targetDurationSeconds: 26,
     toleranceSeconds: 0.2,
     width: 1280,
@@ -476,9 +557,7 @@ test('SKADI evidence-first validation rejects malformed layout fields, evidence 
     [(project) => { project.publicResources[0].type = 'repository'; }, /public resource.*type.*documentation.*product/i],
     [(project) => { project.publicResources[0].href = 'http://digitrack.co.kr/docs'; }, /public resource.*unsafe/i],
     [(project) => { project.publicResources[0].href = 'https://localhost/private/raw/manual.pdf'; }, /public resource.*unsafe/i],
-    [(project) => { delete project.publicResources[0].translations.en.description; }, /public resource.*en.*description/i],
-    [(project) => { project.media.lead.videoPolicy.codec = 'vp9'; }, /videoPolicy codec.*h264/i],
-    [(project) => { delete project.media.lead.videoPolicy.requireFastStart; }, /videoPolicy.*canonical keys/i]
+    [(project) => { delete project.publicResources[0].translations.en.description; }, /public resource.*en.*description/i]
   ];
   for (const [mutate, expected] of mutations) {
     const candidate = clone(data);
@@ -524,13 +603,10 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 53);
+  assert.equal(new Set(register.entries.map((entry) => entry.id)).size, register.entries.length);
   assert.deepEqual(
-    Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
-      state,
-      register.entries.filter((entry) => entry.state === state).length
-    ])),
-    { 'pending-review': 0, 'approved-public': 53, excluded: 0 }
+    register.entries.filter((entry) => entry.state === 'excluded').map((entry) => entry.id).sort(),
+    ['surgical-navigation-clip-01', 'surgical-navigation-gallery-01', 'surgical-navigation-gallery-04', 'surgical-navigation-poster-01']
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -637,15 +713,15 @@ test('Task 4 approved local raster validation enforces slug containment, safe na
 
 test('Task 4 approved video requires an approved registered image poster and keeps safe playback markup', () => {
   const candidate = clone(data);
-  const project = candidate.projects[0];
+  const project = candidate.projects.find((item) => item.slug === 'life-careverse');
   project.media.lead = {
-    id: 'surgical-navigation-clip-01', type: 'video', status: 'approved',
-    publicPath: 'assets/projects/surgical-navigation/navigation-demo.mp4'
+    id: 'life-careverse-clip-01', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/life-careverse/navigation-demo.mp4'
   };
   project.media.video = { ...project.media.lead };
   project.media.poster = {
-    id: 'surgical-navigation-poster-01', type: 'image', status: 'approved',
-    publicPath: 'assets/projects/surgical-navigation/navigation-demo-poster.png'
+    id: 'life-careverse-poster-01', type: 'image', status: 'approved',
+    publicPath: 'assets/projects/life-careverse/navigation-demo-poster.png'
   };
   const canonical = validator.readEvidenceRegister(root).entries;
   const approvedRows = canonical.map((entry) => {
@@ -839,12 +915,16 @@ test('Task 4 review requires approved MP4 evidence to be bounded, playable video
     id: 'surgical-navigation-poster-01', type: 'image', status: 'approved',
     publicPath: 'assets/projects/surgical-navigation/navigation-demo-poster.png'
   };
-  const canonical = validator.readEvidenceRegister(root).entries;
-  const approved = evidenceRegisterText(canonical.map((entry) => {
-    if (entry.id === project.media.lead.id) return { ...entry, state: 'approved-public', source: project.media.lead.publicPath };
-    if (entry.id === project.media.poster.id) return { ...entry, state: 'approved-public', source: project.media.poster.publicPath };
-    return entry;
-  }));
+  const approved = evidenceRegisterText(evidenceRowsForProjectCandidate(candidate, project.slug, [
+    {
+      id: project.media.lead.id, project: project.slug, type: 'video', state: 'approved-public',
+      source: project.media.lead.publicPath
+    },
+    {
+      id: project.media.poster.id, project: project.slug, type: 'image', state: 'approved-public',
+      source: project.media.poster.publicPath
+    }
+  ]));
   const fixtures = [
     [Buffer.from('not an MP4'), /valid MP4|container/i],
     [validMp4({ durationSeconds: 10 }), /15-30 seconds|duration/i],
@@ -870,6 +950,205 @@ test('Task 4 review requires approved MP4 evidence to be bounded, playable video
     fs.writeFileSync(videoPath, validMp4());
     fs.writeFileSync(posterPath, validPng);
     assert.deepEqual(validator.evidenceRegistryErrors(candidate, temporaryRoot), []);
+  });
+});
+
+test('SMCNavi story media and nested posters join the evidence register and public visual inventory', () => {
+  const candidate = clone(data);
+  const project = candidate.projects[0];
+  project.storySections = [storySectionFixture()];
+  project.storySections[0].media.push({
+    id: 'story-video-01', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/story-video-01.mp4',
+    preload: 'metadata',
+    poster: {
+      id: 'story-video-poster-01', type: 'image', status: 'approved',
+      publicPath: 'assets/projects/surgical-navigation/story-video-poster-01.png'
+    },
+    translations: {
+      ko: { caption: '영상', alt: '영상 설명' },
+      en: { caption: 'Video', alt: 'Video description' }
+    }
+  });
+  const entries = validator.canonicalMediaEntries(candidate);
+  assert.ok(entries.some(({ item }) => item.id === 'story-image-01'));
+  assert.ok(entries.some(({ item }) => item.id === 'story-video-01'));
+  assert.ok(entries.some(({ item }) => item.id === 'story-video-poster-01'));
+  const files = validator.publicPortfolioVisualFiles(root, candidate).map((file) => file.relativePath.replace(/\\/g, '/'));
+  assert.ok(files.includes('assets/projects/surgical-navigation/story-video-poster-01.png'));
+  assert.doesNotMatch(validator.portfolioDataErrors(candidate).join('\n'), /private source path/i);
+});
+
+test('SMCNavi evidence registry returns errors for malformed sibling story media without throwing', () => {
+  const candidate = clone(data);
+  const project = candidate.projects[0];
+  project.storySections = [{
+    key: 'valid-video',
+    layout: 'wide',
+    translations: { ko: { heading: '영상', body: '본문' }, en: { heading: 'Video', body: 'Body' } },
+    media: [{
+      ...clone(project.media.lead),
+      preload: 'metadata',
+      poster: clone(project.media.poster),
+      translations: { ko: { caption: '영상', alt: '영상 설명' }, en: { caption: 'Video', alt: 'Video description' } }
+    }]
+  }, { ...storySectionFixture(), key: 'malformed-sibling', media: {} }];
+  let errors;
+  assert.doesNotThrow(() => { errors = validator.evidenceRegistryErrors(candidate, root); });
+  assert.match(errors.join('\n'), /story media must be an array/i);
+});
+
+test('SMCNavi story video HTML policy parses exact attributes without filename or data-attribute false matches', () => {
+  const canonicalRows = validator.readEvidenceRegister(root).entries;
+  const originalStoryRenderer = render.storySectionsHtml;
+  try {
+    const loopCandidate = clone(data);
+    const loopProject = loopCandidate.projects[0];
+    const loopPath = 'assets/projects/surgical-navigation/loop-demo.mp4';
+    loopProject.media.lead.publicPath = loopPath;
+    loopProject.media.video.publicPath = loopPath;
+    loopProject.storySections = [{
+      key: 'loop-video', layout: 'wide',
+      translations: { ko: { heading: '영상', body: '본문' }, en: { heading: 'Video', body: 'Body' } },
+      media: [{
+        ...clone(loopProject.media.lead), preload: 'metadata', poster: clone(loopProject.media.poster),
+        translations: { ko: { caption: '영상', alt: '영상 설명' }, en: { caption: 'Video', alt: 'Video description' } }
+      }]
+    }];
+    const loopRows = canonicalRows.map((entry) => entry.id === loopProject.media.lead.id ? { ...entry, source: loopPath } : entry);
+    withEvidenceRoot(evidenceRegisterText(loopRows), (temporaryRoot) => {
+      const target = path.join(temporaryRoot, loopPath);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.writeFileSync(target, validMp4());
+      render.storySectionsHtml = () => `<video controls preload="metadata" poster="${loopProject.media.poster.publicPath}" data-loop="filename only" aria-label="autoplay preview"><source src="${loopPath}"></video>`;
+      assert.doesNotMatch(
+        validator.evidenceRegistryErrors(loopCandidate, temporaryRoot).join('\n'),
+        /approved story video renderer/i
+      );
+    });
+
+    const spoofCandidate = clone(data);
+    const spoofProject = spoofCandidate.projects[0];
+    spoofProject.storySections = [{
+      key: 'spoof-video', layout: 'wide',
+      translations: { ko: { heading: '영상', body: '본문' }, en: { heading: 'Video', body: 'Body' } },
+      media: [{
+        ...clone(spoofProject.media.lead), preload: 'metadata', poster: clone(spoofProject.media.poster),
+        translations: { ko: { caption: '영상', alt: '영상 설명' }, en: { caption: 'Video', alt: 'Video description' } }
+      }]
+    }];
+    const spoofPath = spoofProject.media.lead.publicPath;
+    render.storySectionsHtml = () => `<video aria-label="controls" data-controls data-preload="metadata" poster="${spoofProject.media.poster.publicPath}"><source src="${spoofPath}"></video>`;
+    assert.match(validator.evidenceRegistryErrors(spoofCandidate, root).join('\n'), /approved story video renderer/i);
+
+    for (const prohibitedAttribute of ['autoplay', 'loop']) {
+      render.storySectionsHtml = () => `<video controls preload="metadata" poster="${spoofProject.media.poster.publicPath}" ${prohibitedAttribute}><source src="${spoofPath}"></video>`;
+      assert.match(validator.evidenceRegistryErrors(spoofCandidate, root).join('\n'), /approved story video renderer/i);
+    }
+  } finally {
+    render.storySectionsHtml = originalStoryRenderer;
+  }
+});
+
+test('SMCNavi video policy accepts full duration and rejects drift, audio, codec, dimensions, and non-fast-start', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'smcnavi-video-policy-'));
+  const filePath = path.join(temporaryRoot, 'demo.mp4');
+  const policy = {
+    maxBytes: 100000000,
+    targetDurationSeconds: 159.833333,
+    toleranceSeconds: 0.2,
+    width: 1280,
+    height: 720,
+    codec: 'h264',
+    requireNoAudio: true,
+    requireFastStart: true
+  };
+  try {
+    fs.writeFileSync(filePath, validMp4({ durationSeconds: 159.833333 }));
+    assert.deepEqual(validator.approvedMp4Errors(filePath, policy), []);
+    fs.writeFileSync(filePath, validMp4({ durationSeconds: 159.833333, sampleEntry: 'avc3' }));
+    assert.deepEqual(validator.approvedMp4Errors(filePath, policy), []);
+    const boundaryPolicy = { ...policy, targetDurationSeconds: 20, toleranceSeconds: 0.2 };
+    fs.writeFileSync(filePath, validMp4({ durationSeconds: 20.2 }));
+    assert.deepEqual(validator.approvedMp4Errors(filePath, boundaryPolicy), []);
+    const boundaryBytes = validMp4({ durationSeconds: 20 });
+    fs.writeFileSync(filePath, boundaryBytes);
+    assert.deepEqual(validator.approvedMp4Errors(filePath, { ...boundaryPolicy, maxBytes: boundaryBytes.length }), []);
+    assert.deepEqual(
+      validator.approvedMp4Errors(filePath, { ...boundaryPolicy, maxBytes: boundaryBytes.length - 1 }),
+      [`approved video must be ${boundaryBytes.length - 1} bytes or less.`]
+    );
+    const ftypEnd = boundaryBytes.readUInt32BE(0);
+    const moovEnd = ftypEnd + boundaryBytes.readUInt32BE(ftypEnd);
+    fs.writeFileSync(filePath, Buffer.concat([
+      boundaryBytes.subarray(0, ftypEnd),
+      mp4Box('mdat'),
+      boundaryBytes.subarray(ftypEnd, moovEnd),
+      boundaryBytes.subarray(moovEnd)
+    ]));
+    assert.match(validator.approvedMp4Errors(filePath, boundaryPolicy).join('\n'), /fast-start/i);
+    const failures = [
+      [validMp4({ durationSeconds: 159.5 }), /duration/i],
+      [validMp4({ durationSeconds: 159.833333, includeAudio: true }), /audio/i],
+      [validMp4({ durationSeconds: 159.833333, sampleEntry: 'hvc1' }), /H\.264|codec/i],
+      [validMp4({ durationSeconds: 159.833333, width: 960, height: 720 }), /1280.*720|dimensions/i],
+      [validMp4({ durationSeconds: 159.833333, fastStart: false }), /fast-start/i]
+    ];
+    for (const [bytes, expected] of failures) {
+      fs.writeFileSync(filePath, bytes);
+      assert.match(validator.approvedMp4Errors(filePath, policy).join('\n'), expected);
+    }
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('legacy approved videos retain the 20 MB and 15-30 second defaults', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'legacy-video-policy-'));
+  const filePath = path.join(temporaryRoot, 'demo.mp4');
+  try {
+    fs.writeFileSync(filePath, validMp4({ durationSeconds: 31 }));
+    assert.match(validator.approvedMp4Errors(filePath).join('\n'), /15-30 seconds/i);
+    fs.writeFileSync(filePath, Buffer.alloc(20 * 1024 * 1024 + 1));
+    assert.deepEqual(validator.approvedMp4Errors(filePath), ['approved video must be 20 MB or less.']);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('SMCNavi evidence registry applies the canonical story video policy', () => {
+  const candidate = clone(data);
+  const project = candidate.projects[0];
+  const video = {
+    id: 'story-policy-video-01', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/story-policy-video-01.mp4', preload: 'metadata',
+    poster: {
+      id: 'story-policy-poster-01', type: 'image', status: 'approved',
+      publicPath: 'assets/projects/surgical-navigation/story-policy-poster-01.png'
+    },
+    videoPolicy: {
+      maxBytes: 100000000, targetDurationSeconds: 20, toleranceSeconds: 0.2,
+      width: 1280, height: 720, codec: 'h264', requireNoAudio: true, requireFastStart: true
+    },
+    translations: { ko: { caption: '영상', alt: '영상 설명' }, en: { caption: 'Video', alt: 'Video description' } }
+  };
+  project.storySections = [{
+    key: 'policy-video', layout: 'wide', media: [video],
+    translations: { ko: { heading: '영상', body: '본문' }, en: { heading: 'Video', body: 'Body' } }
+  }];
+  const rows = evidenceRowsForProjectCandidate(candidate, project.slug, [
+    { id: video.id, project: project.slug, type: 'video', state: 'approved-public', source: video.publicPath },
+    { id: video.poster.id, project: project.slug, type: 'image', state: 'approved-public', source: video.poster.publicPath }
+  ]);
+  withEvidenceRoot(evidenceRegisterText(rows), (temporaryRoot) => {
+    const videoPath = path.join(temporaryRoot, video.publicPath);
+    const posterPath = path.join(temporaryRoot, video.poster.publicPath);
+    fs.mkdirSync(path.dirname(videoPath), { recursive: true });
+    fs.writeFileSync(videoPath, validMp4({ durationSeconds: 20 }));
+    fs.writeFileSync(posterPath, validPng);
+    assert.deepEqual(validator.evidenceRegistryErrors(candidate, temporaryRoot), []);
+    fs.writeFileSync(videoPath, validMp4({ durationSeconds: 20.3 }));
+    assert.match(validator.evidenceRegistryErrors(candidate, temporaryRoot).join('\n'), /story-policy-video-01.*duration/i);
   });
 });
 
@@ -1097,7 +1376,7 @@ test('Task 3 review preserves literal tier and evidence-state mappings', () => {
     ['ai-build-lab', 'AI 빌드 랩', 'AI Build Lab']
   ]);
   assert.deepEqual(data.projects.map((project) => [project.slug, project.tier, project.evidenceState]), [
-    ['surgical-navigation', 'medical-core', 'ongoing'],
+    ['surgical-navigation', 'medical-core', 'prototype'],
     ['mandibular-fracture', 'medical-core', 'verified'],
     ['life-careverse', 'medical-core', 'ongoing'],
     ['rtms-navigation', 'medical-core', 'verified'],
@@ -1154,7 +1433,7 @@ test('canonical validator rejects malformed capabilities, tiers, states, blocks,
     [(candidate) => { candidate.capabilities[0].key = 'unknown'; }, /known ordered keys/i],
     [(candidate) => { candidate.projects[0].tier = 'featured'; }, /unknown tier/i],
     [(candidate) => { candidate.projects[0].evidenceState = 'completed'; }, /unknown evidence state/i],
-    [(candidate) => { candidate.projects[0].blocks[0].type = 'timeline'; }, /unsupported block type/i],
+    [(candidate) => { candidate.projects[1].blocks[0].type = 'timeline'; }, /unsupported block type/i],
     [(candidate) => {
       candidate.projects[3].media.lead = { id: 'pending-with-path', type: 'image', status: 'pending-approval', publicPath: 'assets/projects/rtms-navigation/demo.png' };
       candidate.projects[3].pdfSequence.evidenceId = 'pending-with-path';
@@ -1299,7 +1578,7 @@ test('Scholar Projects page groups detailed rows by tier in data order', () => {
     assert.equal(count(group, '<li class="sc-project'), data.projects.filter((project) => project.tier === tier.key).length);
   }
   assert.match(html, /<dt>Problem<\/dt>[\s\S]*<dt>My role<\/dt>[\s\S]*<dt>Evidence<\/dt>/);
-  assert.match(html, /<h3 class="sc-project__title"><a href="\.\.\/en\/projects\/surgical-navigation\/">Surgical Navigation Systems<\/a><\/h3>/);
+  assert.match(html, /<h3 class="sc-project__title"><a href="\.\.\/en\/projects\/surgical-navigation\/">SMCNavi · HoloLens Surgical Navigation<\/a><\/h3>/);
   assert.doesNotMatch(html, /td-|Featured|More Projects/i);
 });
 
@@ -1324,7 +1603,7 @@ test('Scholar figure renderer skips pending media instead of drawing a placehold
 });
 
 test('Task 3 approved video contract is poster-led, click-to-play, and keyboard reachable', () => {
-  const project = clone(data.projects[0]);
+  const project = clone(data.projects.find((item) => item.slug === 'life-careverse'));
   project.media.lead = { id: 'approved-demo', type: 'video', status: 'approved', publicPath: 'assets/projects/demo.mp4' };
   project.media.poster = { id: 'approved-poster', type: 'image', status: 'approved', publicPath: 'assets/projects/poster.png' };
   const html = render.evidenceMediaHtml(project, 'en', '../../', false);
@@ -1335,7 +1614,7 @@ test('Task 3 approved video contract is poster-led, click-to-play, and keyboard 
 });
 
 test('Task 3 approved video without an approved poster stays an honest fallback', () => {
-  const project = clone(data.projects[0]);
+  const project = clone(data.projects.find((item) => item.slug === 'life-careverse'));
   project.media.lead = { id: 'approved-demo', type: 'video', status: 'approved', publicPath: 'assets/projects/demo.mp4' };
   project.media.poster = { id: 'pending-poster', type: 'image', status: 'pending-approval' };
   const html = render.evidenceMediaHtml(project, 'en', '../../', false);
@@ -1345,14 +1624,14 @@ test('Task 3 approved video without an approved poster stays an honest fallback'
 test('Task 3 review renderer validation matches the canonical render-required boundary', () => {
   assert.equal(typeof render.dataErrors, 'function');
   const mutations = [
-    [(candidate) => { delete candidate.projects[0].translations.en.thesis; }, /missing en translation for thesis/i],
-    [(candidate) => { delete candidate.projects[0].translations.ko.mediaAlt; }, /missing ko translation for mediaAlt/i],
-    [(candidate) => { delete candidate.projects[0].translations.en.mediaCaption; }, /missing en translation for mediaCaption/i],
-    [(candidate) => { delete candidate.projects[0].pdf; }, /missing PDF paths/i],
-    [(candidate) => { delete candidate.projects[0].media; }, /missing lead media declaration/i],
-    [(candidate) => { candidate.projects[0].blocks = []; }, /missing structural blocks/i],
-    [(candidate) => { candidate.projects[0].route = 'projects/../private/'; }, /invalid project route/i],
-    [(candidate) => { candidate.projects[0].tech = []; }, /missing technologies/i]
+    [(candidate) => { delete candidate.projects[1].translations.en.thesis; }, /missing en translation for thesis/i],
+    [(candidate) => { delete candidate.projects[1].translations.ko.mediaAlt; }, /missing ko translation for mediaAlt/i],
+    [(candidate) => { delete candidate.projects[1].translations.en.mediaCaption; }, /missing en translation for mediaCaption/i],
+    [(candidate) => { delete candidate.projects[1].pdf; }, /missing PDF paths/i],
+    [(candidate) => { delete candidate.projects[1].media; }, /missing lead media declaration/i],
+    [(candidate) => { candidate.projects[1].blocks = []; }, /missing structural blocks/i],
+    [(candidate) => { candidate.projects[1].route = 'projects/../private/'; }, /invalid project route/i],
+    [(candidate) => { candidate.projects[1].tech = []; }, /missing technologies/i]
   ];
   for (const [mutate, expected] of mutations) {
     const candidate = clone(data);
@@ -1360,7 +1639,7 @@ test('Task 3 review renderer validation matches the canonical render-required bo
     const rendererErrors = render.dataErrors(candidate);
     assert.match(rendererErrors.join(' '), expected);
     assert.deepEqual(rendererErrors, validator.portfolioDataErrors(candidate));
-    assert.equal(render.caseStudyHtml(candidate, 'surgical-navigation', '../../', false, 'en'), '');
+    assert.equal(render.caseStudyHtml(candidate, 'mandibular-fracture', '../../', false, 'en'), '');
   }
 });
 
@@ -1439,6 +1718,244 @@ test('Task 3 review rejects unsafe canonical project links before rendering', ()
   assert.match(render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'en'), /href="https:\/\/link\.springer\.com\/article\/10\.1007\/s10278-024-01014-z"/);
 });
 
+test('SMCNavi canonical case carries the approved title, workflows, ownership, team boundary, and non-claims', () => {
+  const project = data.projects.find((item) => item.slug === 'surgical-navigation');
+  assert.equal(project.period, '2023.07 – present');
+  assert.equal(project.evidenceState, 'prototype');
+  assert.equal(project.lifecycleState, 'ongoing');
+  assert.equal(project.translations.ko.title, 'SMCNavi · HoloLens 수술내비게이션');
+  assert.equal(project.translations.en.title, 'SMCNavi · HoloLens Surgical Navigation');
+  assert.equal(project.translations.ko.roleLabel, '3D 의료영상·수술내비게이션 개발자');
+  assert.equal(project.translations.en.roleLabel, '3D Medical Imaging · Surgical Navigation Developer');
+  assert.deepEqual(project.storySections.map((section) => section.key), [
+    'smcnavi-overview',
+    'smcnavi-workflows',
+    'system-architecture',
+    'registration-calibration',
+    'hololens-interface'
+  ]);
+  assert.deepEqual(project.storySections[1].translations.ko.items, [
+    '상악종양 제거술 내비게이션',
+    '하악종양 제거술 내비게이션',
+    '양악수술 내비게이션',
+    '하악운동 트래킹',
+    '골이식 위치설정',
+    '광대·안와 골절 미러링'
+  ]);
+  assert.deepEqual(project.storySections[1].translations.en.items, [
+    'Maxillary tumour-removal navigation',
+    'Mandibular tumour-removal navigation',
+    'Bimaxillary-surgery navigation',
+    'Mandibular-motion tracking',
+    'Bone-graft placement',
+    'Zygomatic-orbital fracture mirroring'
+  ]);
+  assert.deepEqual(project.pdfSequence.middle, [
+    'smcnavi-overview', 'smcnavi-workflows', 'registration-calibration', 'hololens-interface'
+  ]);
+  assert.deepEqual(project.pdfSequence.diagram, { storySectionKey: 'system-architecture' });
+  assert.equal(project.pdfSequence.figureIds.length, 6);
+  assert.deepEqual(project.blocks, []);
+  assert.deepEqual(project.links, []);
+  assert.deepEqual(render.dataErrors(data), []);
+  assert.equal(project.translations.ko.limitation, '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.');
+  assert.equal(project.translations.en.limitation, 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.');
+
+  const publicCaseCopy = JSON.stringify(project);
+  assert.doesNotMatch(publicCaseCopy, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|digitrack-inc|특허출원|patent application/i);
+});
+
+test('SMCNavi bilingual long-form renders approved workflows, organisations, media, and ten figures', () => {
+  const expectations = {
+    ko: {
+      base: '../../',
+      workflows: [
+        '상악종양 제거술 내비게이션',
+        '하악종양 제거술 내비게이션',
+        '양악수술 내비게이션',
+        '하악운동 트래킹',
+        '골이식 위치설정',
+        '광대·안와 골절 미러링'
+      ],
+      organisations: ['DIGITRACK', '삼성서울병원'],
+      roleLabel: '3D 의료영상·수술내비게이션 개발자',
+      prototype: '연구 프로토타입',
+      diagramTitle: '추적 관측에서 HoloLens 상호작용까지',
+      figureLabel: '그림'
+    },
+    en: {
+      base: '../../../',
+      workflows: [
+        'Maxillary tumour-removal navigation',
+        'Mandibular tumour-removal navigation',
+        'Bimaxillary-surgery navigation',
+        'Mandibular-motion tracking',
+        'Bone-graft placement',
+        'Zygomatic-orbital fracture mirroring'
+      ],
+      organisations: ['DIGITRACK', 'Samsung Medical Center'],
+      roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
+      prototype: 'Research prototype',
+      diagramTitle: 'From tracking observations to HoloLens interaction',
+      figureLabel: 'Figure'
+    }
+  };
+
+  for (const [locale, expected] of Object.entries(expectations)) {
+    const html = render.caseStudyHtml(data, 'surgical-navigation', expected.base, false, locale);
+    for (const workflow of expected.workflows) assert.match(html, new RegExp(workflow));
+    for (const organisation of expected.organisations) assert.match(html, new RegExp(organisation));
+    assert.match(html, new RegExp(expected.roleLabel));
+    assert.match(html, new RegExp(expected.prototype));
+    assert.match(html, /surgical-navigation-hololens-demo-01\.mp4/);
+    assert.match(html, /surgical-navigation-smcnavi-features-01\.mp4/);
+    assert.equal(count(html, '<figure'), 10, `${locale}: one lead, eight media figures, and one diagram`);
+    assert.equal(count(html, 'class="sc-figure__label"'), 10, `${locale}: every figure has a localized numeric label`);
+    assertInOrder(html, Array.from({ length: 10 }, (_, index) => `${expected.figureLabel} ${index + 1}.`), `${locale}: ten consecutive numeric figure labels`);
+    assert.match(html, new RegExp(expected.diagramTitle));
+    assert.doesNotMatch(html, /class="sc-gallery"|github\.com/i);
+  }
+});
+
+test('SMCNavi story contract rejects malformed sections, media, posters, and flow endpoints', () => {
+  const mutations = [
+    [(section) => { section.key = ''; }, /stable key/i],
+    [(section) => { section.layout = 'carousel'; }, /layout/i],
+    [(section) => { delete section.translations.en.body; }, /en.*body or list/i],
+    [(section) => { section.media[0].translations.en.alt = ''; }, /en translation for alt/i],
+    [(section) => {
+      section.media = [{
+        id: 'story-video-01', type: 'video', status: 'approved',
+        publicPath: 'assets/projects/surgical-navigation/story-video-01.mp4',
+        preload: 'metadata',
+        translations: {
+          ko: { caption: '영상', alt: '영상 설명' },
+          en: { caption: 'Video', alt: 'Video description' }
+        }
+      }];
+    }, /approved story video requires an approved image poster/i],
+    [(section) => { section.diagram = storyDiagramFixture(); section.diagram.edges[0].to = 'missing'; }, /edge endpoint/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const candidate = clone(data);
+    const project = candidate.projects[0];
+    project.storySections = [storySectionFixture()];
+    mutate(project.storySections[0]);
+    assert.match(render.dataErrors(candidate).join('\n'), expected);
+  }
+});
+
+test('SMCNavi story validation reports non-array media instead of throwing during PDF figure traversal', () => {
+  const candidate = clone(data);
+  candidate.projects[0].storySections = [{ ...storySectionFixture(), media: {} }];
+  let errors;
+  assert.doesNotThrow(() => { errors = render.dataErrors(candidate); });
+  assert.doesNotThrow(() => validator.portfolioDataErrors(candidate));
+  assert.match(errors.join('\n'), /story media must be an array/i);
+});
+
+test('SMCNavi story media contract rejects undeclared controls, invalid video policy, and missing pending copy', () => {
+  const cases = [
+    [(item) => { item.autoplay = true; }, /undeclared field/i],
+    [(item) => { item.loop = true; }, /undeclared field/i],
+    [(item) => { item.link = 'https://example.com'; }, /undeclared field/i],
+    [(item) => { item.videoPolicy = {}; }, /videoPolicy is allowed only for video|canonical keys/i],
+    [(item) => {
+      item.type = 'video';
+      item.publicPath = 'assets/projects/surgical-navigation/story-video-01.mp4';
+      item.poster = { id: 'story-video-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/story-video-poster-01.png' };
+      item.videoPolicy = { codec: 'vp9', height: 1080, maxBytes: 0, requireFastStart: true, requireNoAudio: false, targetDurationSeconds: 30, toleranceSeconds: 0.5, width: 1920 };
+    }, /codec must be h264|maxBytes must be an integer|requirements must both be true/i],
+    [(item) => {
+      item.status = 'pending-approval';
+      delete item.publicPath;
+      item.translations.en.alt = '';
+    }, /en translation for alt/i]
+  ];
+  for (const [mutate, expected] of cases) {
+    const candidate = clone(data);
+    const section = storySectionFixture();
+    candidate.projects[0].storySections = [section];
+    mutate(section.media[0]);
+    assert.match(render.dataErrors(candidate).join('\n'), expected);
+  }
+});
+
+test('SMCNavi story video defaults to preload none', () => {
+  const section = storySectionFixture();
+  section.media = [{
+    id: 'story-video-01', type: 'video', status: 'approved',
+    publicPath: 'assets/projects/surgical-navigation/story-video-01.mp4',
+    poster: { id: 'story-video-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/story-video-poster-01.png' },
+    translations: { ko: { caption: '영상', alt: '영상 설명' }, en: { caption: 'Video', alt: 'Video description' } }
+  }];
+  assert.match(render.storySectionsHtml({ storySections: [section] }, 'en', '../../', 1), /<video\b(?=[^>]*\bpreload="none")/);
+});
+
+test('SMCNavi story renderer distributes approved media, numbers figures, and keeps video user-controlled', () => {
+  const candidate = clone(data);
+  const project = candidate.projects[0];
+  project.translations.ko.roleLabel = '3D 의료영상·수술내비게이션 개발자';
+  project.translations.en.roleLabel = '3D Medical Imaging · Surgical Navigation Developer';
+  project.storySections = [storySectionFixture(), {
+    key: 'system-architecture',
+    layout: 'wide',
+    translations: {
+      ko: { heading: '구조', body: '연결 구조' },
+      en: { heading: 'Architecture', body: 'Connection architecture' }
+    },
+    media: [{
+      id: 'story-video-01', type: 'video', status: 'approved',
+      publicPath: 'assets/projects/surgical-navigation/story-video-01.mp4',
+      preload: 'metadata',
+      poster: {
+        id: 'story-video-poster-01', type: 'image', status: 'approved',
+        publicPath: 'assets/projects/surgical-navigation/story-video-poster-01.png'
+      },
+      translations: {
+        ko: { caption: '전체 영상', alt: '전체 영상 설명' },
+        en: { caption: 'Full video', alt: 'Full video description' }
+      }
+    }],
+    diagram: storyDiagramFixture()
+  }];
+  project.blocks = [];
+  project.media.gallery = [];
+  project.pdfSequence = {
+    middle: ['story-overview', 'system-architecture', 'story-overview-copy', 'system-architecture-copy'],
+    evidenceId: project.media.lead.id,
+    diagram: { storySectionKey: 'system-architecture' },
+    figureIds: ['story-image-01', 'story-video-01', 'story-image-01-copy', 'story-video-01-copy', 'story-image-01-copy-2', 'story-video-01-copy-2']
+  };
+
+  const sourceSections = clone(project.storySections);
+  sourceSections.push(
+    { ...clone(sourceSections[0]), key: 'story-overview-copy', media: [{ ...clone(sourceSections[0].media[0]), id: 'story-image-01-copy' }] },
+    { ...clone(sourceSections[1]), key: 'system-architecture-copy', media: [{ ...clone(sourceSections[1].media[0]), id: 'story-video-01-copy', poster: { ...clone(sourceSections[1].media[0].poster), id: 'story-video-poster-01-copy' } }] }
+  );
+  sourceSections[0].media.push({ ...clone(sourceSections[0].media[0]), id: 'story-image-01-copy-2' });
+  sourceSections[1].media.push({ ...clone(sourceSections[1].media[0]), id: 'story-video-01-copy-2', poster: { ...clone(sourceSections[1].media[0].poster), id: 'story-video-poster-01-copy-2' } });
+  project.storySections = sourceSections;
+
+  assert.deepEqual(render.dataErrors(candidate), []);
+  const html = render.caseStudyHtml(candidate, 'surgical-navigation', '../../../', false, 'en');
+  assert.match(html, /class="sc-story"/);
+  assert.match(html, /data-story-section="system-architecture"/);
+  assert.match(html, /<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="metadata")(?=[^>]*\bposter="\.\.\/\.\.\/\.\.\/assets\/projects\/surgical-navigation\/story-video-poster-01\.png")/);
+  assert.doesNotMatch(html, /\bautoplay\b|\bloop\b/);
+  assert.match(html, /<small class="sc-flow__node-detail">Registration<\/small>/);
+  assert.match(html, /<span class="sc-flow__arrow" aria-hidden="true">→<\/span><small class="sc-flow__edge-label">Transforms<\/small>/);
+  assert.match(html, /<\/div><p class="sc-flow__boundary">Research prototype<\/p><\/figure>/);
+  assertInOrder(html, ['Figure 1.', 'Figure 2.', 'Figure 3.', 'System flow', 'Research prototype', '3D Medical Imaging · Surgical Navigation Developer']);
+  assert.doesNotMatch(html, /class="sc-gallery"/);
+});
+
+test('non-story cases retain the legacy case sequence and omit story markup', () => {
+  const html = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'en');
+  assertInOrder(html, ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>', 'sc-gallery', 'sc-case__links']);
+  assert.doesNotMatch(html, /class="sc-story"|data-story-section=/);
+});
+
 test('Scholar case article orders header, figure, five sections, gallery, and links', () => {
   const project = clone(data.projects[1]);
   project.blocks = [
@@ -1513,8 +2030,8 @@ test('SKADI evidence-first renderer leads with seven figures and preserves the a
     assert.equal(count(html, 'Ver-7-1-2026-02-20-3071183735e080219c11ed0d51ea5b4f'), 1, 'API change note should not be duplicated');
   }
 
-  const standard = render.caseStudyHtml(data, 'surgical-navigation', '../../', false, 'en');
-  assert.match(standard, /<article class="sc-case" data-case="surgical-navigation">/);
+  const standard = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'en');
+  assert.match(standard, /<article class="sc-case" data-case="mandibular-fracture">/);
   assert.doesNotMatch(standard, /evidence-first|data-step=|sc-resource-card|data-track=/);
   assertInOrder(standard, ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>', 'sc-gallery'], 'standard case remains unchanged');
 });
@@ -1650,6 +2167,23 @@ test('Scholar CSS keeps the quiet researcher palette and no decorative devices',
   assert.deepEqual(ssClasses, ['ss-skip-link']);
 });
 
+test('SMCNavi long-form CSS provides wide, grid, and narrow flow layouts', () => {
+  const scholarCss = read('css/scholar.css');
+  for (const selector of [
+    '.sc-story', '.sc-story__section', '.sc-story__media--grid', '.sc-case__role-label',
+    '.sc-flow__track', '.sc-flow__node', '.sc-flow__node-detail', '.sc-flow__edge',
+    '.sc-flow__arrow', '.sc-flow__edge-label', '.sc-flow__boundary'
+  ]) {
+    assert.match(scholarCss, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  const narrow = cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*760px\)/i).join('\n');
+  assert.match(narrow, /\.sc-story__section--grid[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(narrow, /\.sc-story__media--grid[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(narrow, /\.sc-flow__track[\s\S]*flex-direction:\s*column/);
+  assert.match(narrow, /\.sc-flow__arrow\s*\{[^}]*transform:\s*rotate\(90deg\)/);
+  assert.doesNotMatch(narrow, /\.sc-flow__edge-label\s*\{[^}]*transform\s*:/);
+});
+
 test('Task 5 exporter produces deterministic public-safe project and CV input', () => {
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-export-'));
   try {
@@ -1724,7 +2258,7 @@ test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status o
   const python = task5Python();
   if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
   const expected = {
-    'surgical-navigation': { ko: '진행 중', en: 'Ongoing' },
+    'surgical-navigation': { ko: '프로토타입 · 진행 중', en: 'Prototype · Ongoing' },
     'mandibular-fracture': { ko: '검증됨 · 완료', en: 'Verified · Completed' },
     'life-careverse': { ko: '진행 중', en: 'Ongoing' },
     'rtms-navigation': { ko: '검증됨 · 진행 중', en: 'Verified · Ongoing' },
@@ -1930,6 +2464,16 @@ test('Task 5 manifest freshness follows canonical project, evidence, and public 
   }
 });
 
+test('SMCNavi PDF source preserves story sections, representative figures, and one canonical diagram', () => {
+  const payload = require('../scripts/export-portfolio-data.cjs').exportData();
+  const project = payload.projects.find((item) => item.slug === 'surgical-navigation');
+  assert.equal(payload.schemaVersion, 1);
+  assert.equal(project.storySections.length, 5);
+  assert.deepEqual(project.pdfSequence.diagram, { storySectionKey: 'system-architecture' });
+  assert.equal(project.pdfSequence.figureIds.length, 6);
+  assert.equal(project.storySections.find((item) => item.key === 'system-architecture').diagram.kind, 'system-flow');
+});
+
 test('SKADI evidence-first PDFs publish matching five-page KO and EN artifacts', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   const entries = manifest.artifacts.filter((artifact) => artifact.slug === 'skadi-tracking-software');
@@ -2003,7 +2547,7 @@ test('SKADI evidence-first PDFs map the fixed five-page narrative and public lin
 
 test('Task 5 integrated review requires four project-specific middle blocks and eight diagram contracts', () => {
   const expectedKinds = new Map([
-    ['surgical-navigation', 'coordinate-chain'],
+    ['surgical-navigation', 'system-flow'],
     ['mandibular-fracture', 'optimization-loop'],
     ['life-careverse', 'sync-topology'],
     ['rtms-navigation', 'navigation-loop'],
@@ -2015,23 +2559,45 @@ test('Task 5 integrated review requires four project-specific middle blocks and 
   const seenKinds = new Set();
   for (const project of data.projects) {
     assert.ok(project.pdfSequence && typeof project.pdfSequence === 'object', `${project.slug}: missing pdfSequence`);
-    // The PDF sequence names four of the project blocks; a case may carry more than four.
-    const blockKeys = project.blocks.map((block) => block.key);
     assert.equal(project.pdfSequence.middle.length, 4, `${project.slug}: middle sequence length`);
     assert.equal(new Set(project.pdfSequence.middle).size, 4, `${project.slug}: middle sequence duplicates`);
-    for (const key of project.pdfSequence.middle) {
-      assert.ok(blockKeys.includes(key), `${project.slug}: middle sequence references unknown block ${key}`);
-    }
     assert.equal(project.pdfSequence.evidenceId, project.media.lead.id, `${project.slug}: evidence selection`);
-    assert.equal(project.pdfSequence.diagram.kind, expectedKinds.get(project.slug), `${project.slug}: diagram kind`);
-    assert.equal(seenKinds.has(project.pdfSequence.diagram.kind), false, `${project.slug}: duplicate diagram kind`);
-    seenKinds.add(project.pdfSequence.diagram.kind);
-    for (const locale of ['ko', 'en']) {
-      const diagram = project.pdfSequence.diagram.translations[locale];
-      assert.equal(typeof diagram.title, 'string');
-      assert.equal(diagram.title.trim().length > 0, true);
-      assert.equal(diagram.nodes.length, 4);
-      assert.equal(diagram.nodes.every((node) => typeof node === 'string' && node.trim()), true);
+
+    if (project.slug === 'surgical-navigation') {
+      const storyKeys = project.storySections.map((section) => section.key);
+      for (const key of project.pdfSequence.middle) {
+        assert.ok(storyKeys.includes(key), `${project.slug}: middle sequence references unknown story section ${key}`);
+      }
+      assert.deepEqual(project.pdfSequence.diagram, { storySectionKey: 'system-architecture' });
+      const section = project.storySections.find((item) => item.key === project.pdfSequence.diagram.storySectionKey);
+      const diagram = section.diagram;
+      assert.equal(diagram.kind, 'system-flow');
+      assert.equal(diagram.boundary, 'prototype');
+      assert.equal(diagram.nodes.length, 6);
+      assert.equal(diagram.edges.length, 5);
+      assert.deepEqual(diagram.edges.map((edge) => [edge.from, edge.to]), diagram.nodes.slice(0, -1).map((node, index) => [node.key, diagram.nodes[index + 1].key]));
+      assert.deepEqual(['ko', 'en'].map((locale) => diagram.translations[locale].boundaryLabel), [
+        'SMCNavi–HoloLens 경로 · 연구 프로토타입',
+        'SMCNavi–HoloLens path · Research prototype'
+      ]);
+      assert.equal(seenKinds.has(diagram.kind), false, `${project.slug}: duplicate diagram kind`);
+      seenKinds.add(diagram.kind);
+    } else {
+      // The PDF sequence names four of the project blocks; a case may carry more than four.
+      const blockKeys = project.blocks.map((block) => block.key);
+      for (const key of project.pdfSequence.middle) {
+        assert.ok(blockKeys.includes(key), `${project.slug}: middle sequence references unknown block ${key}`);
+      }
+      assert.equal(project.pdfSequence.diagram.kind, expectedKinds.get(project.slug), `${project.slug}: diagram kind`);
+      assert.equal(seenKinds.has(project.pdfSequence.diagram.kind), false, `${project.slug}: duplicate diagram kind`);
+      seenKinds.add(project.pdfSequence.diagram.kind);
+      for (const locale of ['ko', 'en']) {
+        const diagram = project.pdfSequence.diagram.translations[locale];
+        assert.equal(typeof diagram.title, 'string');
+        assert.equal(diagram.title.trim().length > 0, true);
+        assert.equal(diagram.nodes.length, 4);
+        assert.equal(diagram.nodes.every((node) => typeof node === 'string' && node.trim()), true);
+      }
     }
   }
   assert.equal(seenKinds.size, 8);
@@ -2039,7 +2605,7 @@ test('Task 5 integrated review requires four project-specific middle blocks and 
 
   const malformed = clone(data);
   malformed.projects[0].pdfSequence.middle[1] = 'unknown-middle-block';
-  malformed.projects[1].pdfSequence.diagram.kind = malformed.projects[0].pdfSequence.diagram.kind;
+  malformed.projects[2].pdfSequence.diagram.kind = malformed.projects[1].pdfSequence.diagram.kind;
   assert.match(validator.portfolioDataErrors(malformed).join('\n'), /pdf sequence|middle block|diagram kind|unique/i);
 });
 
@@ -2085,10 +2651,15 @@ test('Task 5 integrated review renders each middle block on its contracted page 
       'from pypdf import PdfReader',
       'root = Path(sys.argv[1])',
       'slugs = json.loads(sys.argv[2])',
-      'result = {}',
+      'result = {"pages": {}}',
       'for slug in slugs:',
       '    reader = PdfReader(str(root / "output" / "pdf" / f"{slug}-en.pdf"))',
       '    result[slug] = chr(10).join((page.extract_text() or "") for page in reader.pages)',
+      'for locale in ["ko", "en"]:',
+      '    name = f"surgical-navigation-{locale}.pdf"',
+      '    reader = PdfReader(str(root / "output" / "pdf" / name))',
+      '    result[name] = chr(10).join((page.extract_text() or "") for page in reader.pages)',
+      '    result["pages"][name] = len(reader.pages)',
       'reader = PdfReader(str(root / "output" / "pdf" / "surgical-navigation-en.pdf"))',
       'def has_image(page):',
       '    xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
@@ -2100,16 +2671,31 @@ test('Task 5 integrated review renders each middle block on its contracted page 
       cwd: root, encoding: 'utf8', timeout: 30_000
     });
     assert.equal(audit.status, 0, audit.stderr || audit.stdout);
-    const pages = JSON.parse(audit.stdout);
+    const extracted = JSON.parse(audit.stdout);
     // Pages are no longer fixed panels, so each sequenced block has to appear somewhere in the document.
     for (const project of payload.projects) {
       for (const key of project.pdfSequence.middle) {
-        const block = project.blocks.find((candidate) => candidate.key === key);
-        assert.ok(pages[project.slug].includes(block.translations.en.heading), `${project.slug}: document omits ${key}`);
+        const section = project.storySections
+          ? project.storySections.find((candidate) => candidate.key === key)
+          : project.blocks.find((candidate) => candidate.key === key);
+        assert.ok(extracted[project.slug].includes(section.translations.en.heading), `${project.slug}: document omits ${key}`);
       }
-      assert.ok(pages[project.slug].includes(project.pdfSequence.diagram.translations.en.title), `${project.slug}: diagram title`);
+      const diagram = project.pdfSequence.diagram.storySectionKey
+        ? project.storySections.find((section) => section.key === project.pdfSequence.diagram.storySectionKey).diagram
+        : project.pdfSequence.diagram;
+      assert.ok(extracted[project.slug].includes(diagram.translations.en.title), `${project.slug}: diagram title`);
     }
-    assert.equal(pages.approvedImage, true, 'approved local images must be placed in the document');
+    assert.equal(extracted.approvedImage, true, 'approved local images must be placed in the document');
+    for (const [locale, required] of [
+      ['ko', ['SMCNavi · HoloLens 수술내비게이션', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '연구 프로토타입', '주장하지 않습니다']],
+      ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', 'Research prototype', 'This case does not claim']]
+    ]) {
+      const text = extracted[`surgical-navigation-${locale}.pdf`];
+      for (const value of required) assert.ok(text.includes(value), `${locale}: missing ${value}`);
+      assert.doesNotMatch(text, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|digitrack-inc|특허출원|patent application/i);
+    }
+    assert.equal(extracted.pages['surgical-navigation-ko.pdf'], 6);
+    assert.equal(extracted.pages['surgical-navigation-en.pdf'], 6);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
@@ -2135,6 +2721,7 @@ test('Task 5 integrated review embeds an approved poster instead of opening a vi
     project.media.poster = {
       id: 'surgical-navigation-poster-01', type: 'image', status: 'approved', publicPath: posterPath
     };
+    project.pdfSequence.evidenceId = project.media.lead.id;
     for (const entry of payload.evidence) {
       if (entry.id === project.media.lead.id) Object.assign(entry, { type: 'video', state: 'approved-public', source: videoPath });
       if (entry.id === project.media.poster.id) Object.assign(entry, { type: 'image', state: 'approved-public', source: posterPath });
@@ -2242,7 +2829,7 @@ test('Task 5 integrated review manifest binds artifacts to the current generator
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   const generatorPath = path.join(root, 'scripts', 'generate-portfolio-pdfs.py');
   assert.equal(manifest.schemaVersion, 3);
-  assert.match(manifest.generatorVersion, /^\d+\.\d+$/);
+  assert.equal(manifest.generatorVersion, '3.1');
   assert.equal(manifest.generatorSha256, sha256(generatorPath));
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-generator-stale-'));
@@ -3861,7 +4448,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
     project.evidenceState,
     project.lifecycleState
   ]), [
-    ['surgical-navigation', 'ongoing', 'ongoing'],
+    ['surgical-navigation', 'prototype', 'ongoing'],
     ['mandibular-fracture', 'verified', 'completed'],
     ['life-careverse', 'ongoing', 'ongoing'],
     ['rtms-navigation', 'verified', 'ongoing'],
@@ -3909,7 +4496,8 @@ test('Integrated review rejects private project copy and keeps AI claims factual
   }
 
   const diagramLeak = clone(data);
-  diagramLeak.projects[0].pdfSequence.diagram.translations.en.nodes[0] = 'C:\\Users\\reviewer\\private\\raw\\frame.png';
+  diagramLeak.projects[0].storySections.find((section) => section.key === 'system-architecture')
+    .diagram.nodes[0].translations.en.detail = 'C:\\Users\\reviewer\\private\\raw\\frame.png';
   assert.match(validator.portfolioDataErrors(diagramLeak).join('\n'), /private|path/i);
 });
 

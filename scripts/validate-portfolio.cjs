@@ -21,7 +21,7 @@ const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const isSafePublicPath = render.isSafePublicPath;
 const siteUrl = 'https://rafaam11.github.io/';
 const pdfGeneratorRelativePath = path.join('scripts', 'generate-portfolio-pdfs.py');
-const pdfGeneratorVersion = '3.0';
+const pdfGeneratorVersion = '3.1';
 const pageMountContracts = [
   { tag: 'header', id: 'site-nav', label: 'shared navigation mount' },
   { tag: 'main', id: 'main-content', label: 'main-content landmark' },
@@ -281,15 +281,24 @@ function canonicalMediaEntries(candidate) {
   const entries = [];
   for (const project of Array.isArray(candidate && candidate.projects) ? candidate.projects : []) {
     const media = project && project.media;
-    if (!project || !media || typeof media !== 'object') continue;
-    for (const slot of ['lead', 'video', 'poster']) {
-      if (media[slot]) entries.push({ project, item: media[slot], slot });
+    if (!project) continue;
+    if (media && typeof media === 'object') {
+      for (const slot of ['lead', 'video', 'poster']) {
+        if (media[slot]) entries.push({ project, item: media[slot], slot });
+      }
+      for (const [index, item] of (Array.isArray(media.references) ? media.references : []).entries()) {
+        entries.push({ project, item, slot: `reference ${index}` });
+      }
+      for (const [index, item] of (Array.isArray(media.gallery) ? media.gallery : []).entries()) {
+        entries.push({ project, item, slot: `gallery ${index}` });
+      }
     }
-    for (const [index, item] of (Array.isArray(media.references) ? media.references : []).entries()) {
-      entries.push({ project, item, slot: `reference ${index}` });
-    }
-    for (const [index, item] of (Array.isArray(media.gallery) ? media.gallery : []).entries()) {
-      entries.push({ project, item, slot: `gallery ${index}` });
+    for (const section of (Array.isArray(project.storySections) ? project.storySections : [])) {
+      for (const [index, item] of (Array.isArray(section && section.media) ? section.media : []).entries()) {
+        const slot = `story ${section.key} media ${index}`;
+        entries.push({ project, item, slot });
+        if (item && item.poster) entries.push({ project, item: item.poster, slot: `${slot} poster` });
+      }
     }
   }
   return entries;
@@ -772,9 +781,57 @@ function evidenceRegistryErrors(candidate, rootDir) {
       continue;
     }
     const html = render.evidenceMediaHtml(project, 'en', '', false);
-    if (!/<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="none")/i.test(html) ||
+    if (!new RegExp(`<video\\b(?=[^>]*\\bcontrols\\b)(?=[^>]*\\bpreload="${render.mediaPreload(lead)}")`, 'i').test(html) ||
         !html.includes(`<source src="${lead.publicPath}"`) || /\bautoplay\b/i.test(html)) {
-      errors.push(`${project.slug}: approved video renderer must retain controls, preload="none", a source, and no autoplay.`);
+      errors.push(`${project.slug}: approved video renderer must retain controls, preload="${render.mediaPreload(lead)}", a source, and no autoplay.`);
+    }
+  }
+
+  for (const project of Array.isArray(candidate && candidate.projects) ? candidate.projects : []) {
+    const storySections = Array.isArray(project.storySections) ? project.storySections : [];
+    let unsafeStoryShape = false;
+    for (const [sectionIndex, section] of storySections.entries()) {
+      if (!section || typeof section !== 'object' || Array.isArray(section)) {
+        errors.push(`${project.slug} story section ${sectionIndex}: story section must be an object before renderer evidence checks.`);
+        unsafeStoryShape = true;
+      } else if (section.media !== undefined && !Array.isArray(section.media)) {
+        errors.push(`${project.slug} story section ${sectionIndex}: story media must be an array before renderer evidence checks.`);
+        unsafeStoryShape = true;
+      } else if (section.diagram && section.diagram.kind === 'system-flow' && !Array.isArray(section.diagram.nodes)) {
+        errors.push(`${project.slug} story section ${sectionIndex}: diagram nodes must be an array before renderer evidence checks.`);
+        unsafeStoryShape = true;
+      }
+    }
+    const storyVideos = storySections
+      .flatMap((section) => Array.isArray(section && section.media) ? section.media : [])
+      .filter((item) => item && item.type === 'video' && item.status === 'approved');
+    if (!storyVideos.length || unsafeStoryShape) continue;
+    const html = render.storySectionsHtml(project, 'en', '', 1);
+    const renderedVideos = html.match(/<video\b[^>]*>[\s\S]*?<\/video>/gi) || [];
+    for (const item of storyVideos) {
+      const videoRecord = renderedVideos.map((videoHtml) => {
+        const tags = htmlStartTags(videoHtml);
+        return {
+          videoHtml,
+          videoTag: tags.find((tag) => tag.name === 'video'),
+          sourceTags: tags.filter((tag) => tag.name === 'source')
+        };
+      }).find((record) => record.sourceTags.some((sourceTag) => {
+        const sources = sourceTag.attributes.filter((attribute) => attribute.name === 'src');
+        return sources.length === 1 && sources[0].hasValue && sources[0].value === item.publicPath;
+      }));
+      const expectedPreload = render.mediaPreload(item);
+      const attributes = videoRecord && videoRecord.videoTag ? videoRecord.videoTag.attributes : [];
+      const controls = attributes.filter((attribute) => attribute.name === 'controls');
+      const preloads = attributes.filter((attribute) => attribute.name === 'preload');
+      const posters = attributes.filter((attribute) => attribute.name === 'poster');
+      const hasProhibitedPlaybackAttribute = attributes.some((attribute) => ['autoplay', 'loop'].includes(attribute.name));
+      if (!videoRecord || controls.length !== 1 || controls[0].hasValue ||
+          preloads.length !== 1 || !preloads[0].hasValue || preloads[0].value !== expectedPreload ||
+          posters.length !== 1 || !posters[0].hasValue || posters[0].value !== (item.poster && item.poster.publicPath) ||
+          hasProhibitedPlaybackAttribute) {
+        errors.push(`${project.slug} ${item.id}: approved story video renderer must retain controls, preload="${expectedPreload}", exact source and poster, and no autoplay or loop.`);
+      }
     }
   }
   return errors;
@@ -906,13 +963,9 @@ function evidenceDirectoryErrors(rootDir) {
 }
 
 function publicPortfolioVisualFiles(rootDir, candidate = data) {
-  const mediaItems = (Array.isArray(candidate && candidate.projects) ? candidate.projects : []).flatMap((project) => {
-    const media = project.media || {};
-    const references = Array.isArray(media.references) ? media.references : [];
-    const gallery = Array.isArray(media.gallery) ? media.gallery : [];
-    return [media.lead, media.video, media.poster].concat(references, gallery).filter(Boolean);
-  });
-  const declaredFiles = mediaItems
+  const declaredFiles = canonicalMediaEntries(candidate)
+    .map(({ item }) => item)
+    .filter(Boolean)
     .filter((item) => item.status === 'approved' && isSafePublicPath(item.publicPath) && !/^https?:\/\//i.test(item.publicPath))
     .map((item) => ({
       relativePath: path.normalize(item.publicPath),
@@ -944,6 +997,12 @@ function projectPublicText(project) {
   for (const block of project?.blocks || []) surfaces.push(block?.translations);
   for (const subcase of project?.subcases || []) surfaces.push(subcase?.translations);
   for (const link of project?.links || []) surfaces.push(link?.translations);
+  for (const section of (Array.isArray(project?.storySections) ? project.storySections : [])) {
+    surfaces.push(section?.translations, section?.diagram?.translations);
+    for (const item of (Array.isArray(section?.media) ? section.media : [])) surfaces.push(item?.translations, item?.poster?.translations);
+    for (const node of (Array.isArray(section?.diagram?.nodes) ? section.diagram.nodes : [])) surfaces.push(node?.translations);
+    for (const edge of (Array.isArray(section?.diagram?.edges) ? section.diagram.edges : [])) surfaces.push(edge?.translations);
+  }
   surfaces.push(project?.pdfSequence?.diagram?.translations);
   let text = collectPublicStrings(surfaces).join('\n');
   for (let index = 0; index < 6; index += 1) {
@@ -2323,6 +2382,7 @@ module.exports = {
   portfolioRoutes,
   publicPortfolioFiles,
   publicPortfolioVisualFiles,
+  canonicalMediaEntries,
   portfolioHtmlInventoryErrors,
   forbiddenSourceDocumentErrors,
   htmlStartTags,
