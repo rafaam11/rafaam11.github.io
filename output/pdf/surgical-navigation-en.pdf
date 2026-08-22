@@ -170,14 +170,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 255.8898 141.5852 271.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 234.8898 141.5852 250.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 22 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 235.8898 128.2212 251.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 214.8898 128.2212 230.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 23 0 obj
@@ -1130,7 +1130,7 @@ endstream
 endobj
 40 0 obj
 <<
-/Length 3482
+/Length 3584
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1159,42 +1159,44 @@ BT 1 0 0 1 48 687.8898 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 BT 1 0 0 1 48 667.8898 Tm /F2+0 10 Tf 12 TL (The demonstration shows integrated operation on a phantom; it does not claim clinical efficacy or) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 651.8898 Tm /F2+0 10 Tf 12 TL (production deployment.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 623.8898 Tm /F2+0 10 Tf 12 TL (An integration demonstration does not establish clinical efficacy or production deployment.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 594.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 622.8898 Tm /F3+0 11 Tf 13.2 TL (Clinical boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 574.8898 Tm /F2+0 10 Tf 12 TL (Joint review spans tracking hardware, medical imaging, XR, and workflow expertise.) Tj T* ET
+BT 1 0 0 1 48 602.8898 Tm /F2+0 10 Tf 12 TL (An integration demonstration does not establish clinical efficacy or production deployment.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 573.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 553.8898 Tm /F2+0 10 Tf 12 TL (Joint review spans tracking hardware, medical imaging, XR, and workflow expertise.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 542.8898 m 547.2756 542.8898 l S
+n 48 521.8898 m 547.2756 521.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 508.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 487.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 484.8898 Tm /F2+0 10 Tf 12 TL (HoloLens 2 \001 Optical tracking \001 3D Slicer \001 Unity \001 MRTK \001 OpenIGTLink) Tj T* ET
+BT 1 0 0 1 48 463.8898 Tm /F2+0 10 Tf 12 TL (HoloLens 2 \001 Optical tracking \001 3D Slicer \001 Unity \001 MRTK \001 OpenIGTLink) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 459.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 438.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 439.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Medical Navigation & Visualization \001 XR Application Engineering) Tj T* ET
+BT 1 0 0 1 48 418.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Medical Navigation & Visualization \001 XR Application Engineering) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 407.8898 m 547.2756 407.8898 l S
+n 48 386.8898 m 547.2756 386.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 373.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 352.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 349.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 328.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 320.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 299.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 300.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 279.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 284.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 263.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 259.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 257.8898 m 141.5852 257.8898 l S
+BT 1 0 0 1 48 238.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 236.8898 m 141.5852 236.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 239.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 237.8898 m 128.2212 237.8898 l S
+BT 1 0 0 1 48 218.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 216.8898 m 128.2212 216.8898 l S
  
 endstream
 endobj
@@ -1252,5 +1254,5 @@ trailer
 /Size 41
 >>
 startxref
-10956459
+10956561
 %%EOF

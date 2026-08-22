@@ -25,6 +25,7 @@
 - 수술내비게이션 한·영 PDF는 각각 기존 6쪽을 유지한다. 다른 14개 프로젝트 PDF의 공개 내용은 바꾸지 않는다.
 - 공유 작업 트리의 실시간 `git status`와 관련 diff를 각 단계 시작 전에 다시 확인한다. 다른 변경을 되돌리거나 덮어쓰거나 광범위하게 재포맷하지 않는다.
 - 이 계획 실행에서는 파일을 stage하지 않고 commit, push, 배포하지 않는다. 이는 일반적인 계획 템플릿의 빈번한 커밋 권고보다 우선한다.
+- 계획 작성 중 외부 자동 커밋 프로세스가 `main`과 `origin/main`을 이동시키는 것이 관찰됐다. 구현 시작 시 이 프로세스가 계속 동작하면 첫 소스 변경 전에 중단하고, 소유자가 자동 배포를 의도했는지 또는 프로세스를 끌 것인지 확인한다.
 - 최종 자동 검증은 `node --test`, `node scripts/validate-portfolio.cjs`, `git diff --check` 세 명령을 모두 포함한다.
 - 레이아웃 검증은 인앱 브라우저만 사용한다. 사용할 수 없으면 그 한계를 기록하고 다른 브라우저 제어 백엔드로 조용히 대체하지 않는다.
 
@@ -179,7 +180,7 @@ git status --short --branch
 git diff -- js/portfolio-data.js js/portfolio-render.js css/scholar.css scripts/validate-portfolio.cjs scripts/generate-portfolio-pdfs.py tests/portfolio.test.cjs assets/projects/EVIDENCE_REGISTER.md assets/projects/surgical-navigation/README.md output/pdf/manifest.json
 ```
 
-Expected: the executor can identify every pre-existing hunk. If any mapped file changed after this plan was written, preserve it and patch only the surgical-navigation or shared-contract lines described here.
+Expected: the executor can identify every pre-existing hunk. If any mapped file changed after this plan was written, preserve it and patch only the surgical-navigation or shared-contract lines described here. Run `git log -10 --format="%h %ad %s" --date=iso` plus `git rev-parse HEAD` and `git rev-parse origin/main`; if recent `Auto-commit:` entries show that the background process is still publishing workspace edits, stop before implementation and resolve the automatic commit/deployment authority with the owner.
 
 - [ ] **Step 2: Bind private inputs only to the current process**
 
@@ -426,6 +427,7 @@ Implement these exact rules in `js/portfolio-render.js`:
 var storyLayouts = ['wide', 'grid'];
 var storyMediaTypes = ['image', 'video'];
 var storyDirections = ['forward', 'bidirectional'];
+var storyMediaKeys = ['id', 'poster', 'preload', 'publicPath', 'status', 'translations', 'type', 'videoPolicy'];
 var videoPolicyKeys = [
   'codec', 'height', 'maxBytes', 'requireFastStart', 'requireNoAudio',
   'targetDurationSeconds', 'toleranceSeconds', 'width'
@@ -434,9 +436,10 @@ var videoPolicyKeys = [
 
 - Change `pdfDiagramKindsBySlug['surgical-navigation']` from `coordinate-chain` to `system-flow`.
 - Add `project.storySections` and `copy.roleLabel` to `localizePortfolioData`.
+- When either project locale declares `roleLabel`, require a non-empty `roleLabel` in both locales; projects that omit it keep their current valid shape.
 - Add every story translation, media translation, nested poster declaration, and diagram translation to `projectPublicCopy` so existing private-path, PII, prohibited-partner, and contribution-percentage checks cover the new surface.
 - Extend `mediaItemErrors` so `preload` is allowed only for video and must be `none` or `metadata`; `videoPolicy` is allowed only for video and must contain exactly `videoPolicyKeys` with the canonical types and values. `maxBytes` must be an integer from `1` through `100000000`, durations must be finite positive numbers, tolerance must be from `0` through `1`, dimensions must be positive integers, codec must be `h264`, and both boolean requirements must be `true`.
-- Add `storySectionsErrors(project, slug)` and a private `systemFlowDiagramErrors(diagram, label)` that enforce the canonical interfaces. Each locale must have a non-empty heading and at least one non-empty body or list. Approved story media require caption and alt in both languages. Approved story video requires an approved nested image poster. Story media and poster IDs must be unique against the project's lead/poster/reference/gallery IDs and against every preceding story record.
+- Add `storySectionsErrors(project, slug)` and a private `systemFlowDiagramErrors(diagram, label)` that enforce the canonical interfaces. `storySections` must be a non-empty array whose section keys are non-empty and unique and whose layouts belong to `storyLayouts`. Each locale must have a non-empty heading and at least one non-empty body or list. Story-media keys must be a subset of `storyMediaKeys`, so `autoplay`, `loop`, and undeclared link fields fail validation. Every story media item, including a pending item, requires caption and alt in both languages. Approved story media and nested posters must use a repository-relative path beginning `assets/projects/<slug>/`; external URLs are rejected. Approved story video requires an approved nested image poster. Story media and poster IDs must be unique against the project's lead/poster/reference/gallery IDs and against every preceding story record.
 - Require a system-flow diagram to have at least two uniquely keyed nodes and exactly `nodes.length - 1` edges. Edge `i` must connect `nodes[i].key` to `nodes[i + 1].key`; endpoints must exist; every node has bilingual `label` and `detail`; every edge has a bilingual `label`; diagram copy has bilingual `title`, `caption`, and `boundaryLabel`.
 - A project with non-empty `storySections` may use an empty `blocks` array. Projects without stories still require non-empty structural blocks.
 - For a story project, `pdfSequence` must contain exactly `diagram`, `evidenceId`, `figureIds`, and `middle`; `middle` contains four unique known story keys; `diagram` contains exactly `storySectionKey` and resolves to a section containing the expected `system-flow` diagram; `figureIds` contains one through six unique approved story-media IDs. Legacy projects retain the exact current three-key sequence and four-block diagram contract.
@@ -1209,14 +1212,14 @@ $featureOutput = Join-Path $assetDir 'surgical-navigation-smcnavi-features-01.mp
 ffmpeg -hide_banner -loglevel warning -y -i $mainSource `
   -map 0:v:0 -an -sn -dn -map_metadata -1 -map_chapters -1 `
   -vf "scale=1280:720:flags=lanczos,setsar=1" `
-  -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p `
+  -c:v libx264 -preset slow -crf 23 -maxrate 4500k -bufsize 9000k -pix_fmt yuv420p `
   -movflags +faststart $mainOutput
 if ($LASTEXITCODE -ne 0) { throw 'HoloLens video encoding failed.' }
 
 ffmpeg -hide_banner -loglevel warning -y -i $featureSource `
   -map 0:v:0 -an -sn -dn -map_metadata -1 -map_chapters -1 `
   -vf "scale=960:720:flags=lanczos,setsar=1" `
-  -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p `
+  -c:v libx264 -preset slow -crf 23 -maxrate 4500k -bufsize 9000k -pix_fmt yuv420p `
   -movflags +faststart $featureOutput
 if ($LASTEXITCODE -ne 0) { throw 'SMCNavi feature video encoding failed.' }
 ```
@@ -1279,7 +1282,7 @@ ffmpeg -hide_banner -loglevel error -y -i $slidePng `
 if ($LASTEXITCODE -ne 0) { throw 'SMCNavi UI crop failed.' }
 
 ffmpeg -hide_banner -loglevel error -y -i $slidePng `
-  -vf "crop=1040:508:862:540,drawbox=x=757:y=251:w=223:h=58:color=0xFA777B:t=fill,drawtext=fontfile='C\:/Windows/Fonts/malgunbd.ttf':text='광대·안와 골절 미러링':x=765:y=264:fontsize=24:fontcolor=white" `
+  -vf "crop=1040:470:862:540,drawbox=x=724:y=251:w=306:h=58:color=0xFA777B:t=fill,drawtext=fontfile='C\:/Windows/Fonts/malgunbd.ttf':text='광대·안와 골절 미러링':x=739:y=267:fontsize=20:fontcolor=white" `
   -frames:v 1 -map_metadata -1 `
   (Join-Path $assetDir 'surgical-navigation-smcnavi-workflows-01.png')
 if ($LASTEXITCODE -ne 0) { throw 'SMCNavi workflow crop failed.' }
@@ -1344,6 +1347,7 @@ Expected: all selected tests and evidence checks pass. The full portfolio valida
 
 **Files:**
 - Modify: `tests/portfolio.test.cjs:1751-1938,2004-2010`
+- Modify: `scripts/validate-portfolio.cjs:24`
 - Modify: `scripts/generate-portfolio-pdfs.py:39,311-430,821-918,928-1108,1130-1229,1427-1485`
 - Verify without expected edit: `scripts/export-portfolio-data.cjs`
 - Verify without expected edit: `scripts/portfolio-pdf-source.cjs`
@@ -1402,7 +1406,7 @@ Expected: failure because the Python schema only accepts blocks and legacy four-
 
 - [ ] **Step 4: Extend Python schema validation while preserving legacy projects**
 
-Set `GENERATOR_VERSION = "3.1"` and keep the top-level export `schemaVersion == 1`.
+Set `GENERATOR_VERSION = "3.1"` in Python and `pdfGeneratorVersion = '3.1'` in the Node validator. Change `EXPECTED_DIAGRAM_KIND['surgical-navigation']` from `coordinate-chain` to `system-flow`; leave the other seven mappings unchanged. Keep the top-level export `schemaVersion == 1`.
 
 In `validate_export_schema`:
 
@@ -1559,8 +1563,11 @@ foreach ($check in $checks) {
   if ([int64]$probe.format.size -ge 100000000) { throw "$($check.Path): file is not below 100,000,000 bytes." }
   $identityTags = @('title', 'artist', 'author', 'comment', 'description', 'creation_time', 'location')
   $formatTagNames = if ($probe.format.tags) { @($probe.format.tags.PSObject.Properties.Name) } else { @() }
+  $streamTagNames = @($probe.streams | ForEach-Object {
+    if ($_.tags) { $_.tags.PSObject.Properties.Name }
+  })
   foreach ($tag in $identityTags) {
-    if ($formatTagNames -contains $tag) { throw "$($check.Path): inherited identifying metadata $tag." }
+    if ($formatTagNames -contains $tag -or $streamTagNames -contains $tag) { throw "$($check.Path): inherited identifying metadata $tag." }
   }
 }
 ```

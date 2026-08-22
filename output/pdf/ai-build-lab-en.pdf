@@ -1045,7 +1045,7 @@ endstream
 endobj
 35 0 obj
 <<
-/Length 2660
+/Length 2772
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1083,21 +1083,23 @@ BT 1 0 0 1 48 316.8898 Tm /F2+0 10 Tf 12 TL (maintainability metrics are claimed
 BT 1 0 0 1 48 287.8898 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 267.8898 Tm /F2+0 10 Tf 12 TL (Never expose private knowledge-system source data or claim unverified user or productivity metrics.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 239.8898 Tm /F2+0 10 Tf 12 TL (Exclude private knowledge data and unverified user or productivity metrics.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 210.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 238.8898 Tm /F3+0 11 Tf 13.2 TL (Privacy and metric boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 190.8898 Tm /F2+0 10 Tf 12 TL (AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release) Tj T* ET
+BT 1 0 0 1 48 218.8898 Tm /F2+0 10 Tf 12 TL (Exclude private knowledge data and unverified user or productivity metrics.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 189.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 174.8898 Tm /F2+0 10 Tf 12 TL (decisions.) Tj T* ET
+BT 1 0 0 1 48 169.8898 Tm /F2+0 10 Tf 12 TL (AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 153.8898 Tm /F2+0 10 Tf 12 TL (decisions.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 142.8898 m 547.2756 142.8898 l S
+n 48 121.8898 m 547.2756 121.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 108.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 87.88976 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 84.88976 Tm /F2+0 10 Tf 12 TL (Electron \001 TypeScript \001 Node.js \001 Cloudflare \001 GitHub Actions \001 Agent workflows) Tj T* ET
+BT 1 0 0 1 48 63.88976 Tm /F2+0 10 Tf 12 TL (Electron \001 TypeScript \001 Node.js \001 Cloudflare \001 GitHub Actions \001 Agent workflows) Tj T* ET
  
 endstream
 endobj
@@ -1188,7 +1190,7 @@ xref
 0000559315 00000 n 
 0000565978 00000 n 
 0000567159 00000 n 
-0000569871 00000 n 
+0000569983 00000 n 
 trailer
 <<
 /ID 
@@ -1200,5 +1202,5 @@ trailer
 /Size 37
 >>
 startxref
-571922
+572034
 %%EOF

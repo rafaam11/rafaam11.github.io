@@ -143,21 +143,21 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://link.springer.com/article/10.1007/s10278-024-01014-z)
->> /Border [ 0 0 0 ] /Rect [ 48 284.8898 95.52319 300.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 263.8898 95.52319 279.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 201.8898 141.5852 217.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 180.8898 141.5852 196.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 20 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 181.8898 128.2212 197.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 160.8898 128.2212 176.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 21 0 obj
@@ -1105,7 +1105,7 @@ endstream
 endobj
 37 0 obj
 <<
-/Length 3606
+/Length 3708
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1139,43 +1139,45 @@ BT 1 0 0 1 48 625.8898 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 BT 1 0 0 1 48 605.8898 Tm /F2+0 10 Tf 12 TL (Public evidence is the published figures and presentation material; no clinical use or sole first authorship is) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 589.8898 Tm /F2+0 10 Tf 12 TL (claimed.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 561.8898 Tm /F2+0 10 Tf 12 TL (Prepared-dataset results do not establish routine clinical use.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 532.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 560.8898 Tm /F3+0 11 Tf 13.2 TL (Research boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 512.8898 Tm /F2+0 10 Tf 12 TL (Clinical interpretation, algorithm design, experiment design, and writing were conducted as joint research.) Tj T* ET
+BT 1 0 0 1 48 540.8898 Tm /F2+0 10 Tf 12 TL (Prepared-dataset results do not establish routine clinical use.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 511.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (Clinical interpretation, algorithm design, experiment design, and writing were conducted as joint research.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 480.8898 m 547.2756 480.8898 l S
+n 48 459.8898 m 547.2756 459.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 446.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 425.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 422.8898 Tm /F2+0 10 Tf 12 TL (Python \001 Open3D \001 OpenCV \001 SciPy \001 PCA \001 ICP \001 CLPSO \001 3D Slicer) Tj T* ET
+BT 1 0 0 1 48 401.8898 Tm /F2+0 10 Tf 12 TL (Python \001 Open3D \001 OpenCV \001 SciPy \001 PCA \001 ICP \001 CLPSO \001 3D Slicer) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 397.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 376.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 377.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Medical Navigation & Visualization) Tj T* ET
+BT 1 0 0 1 48 356.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Medical Navigation & Visualization) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 345.8898 m 547.2756 345.8898 l S
+n 48 324.8898 m 547.2756 324.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 311.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 290.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 288.8898 Tm /F2+0 9.5 Tf 11.4 TL (Publication) Tj T* ET
-n 48 286.8898 m 95.52319 286.8898 l S
+BT 1 0 0 1 48 267.8898 Tm /F2+0 9.5 Tf 11.4 TL (Publication) Tj T* ET
+n 48 265.8898 m 95.52319 265.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 266.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 245.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 246.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 225.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 230.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 209.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 205.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 203.8898 m 141.5852 203.8898 l S
+BT 1 0 0 1 48 184.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 182.8898 m 141.5852 182.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 185.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 183.8898 m 128.2212 183.8898 l S
+BT 1 0 0 1 48 164.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 162.8898 m 128.2212 162.8898 l S
  
 endstream
 endobj
@@ -1230,5 +1232,5 @@ trailer
 /Size 38
 >>
 startxref
-7704824
+7704926
 %%EOF

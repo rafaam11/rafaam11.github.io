@@ -1151,7 +1151,7 @@ endstream
 endobj
 39 0 obj
 <<
-/Length 3085
+/Length 3187
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1199,16 +1199,18 @@ BT 1 0 0 1 48 234.8919 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 BT 1 0 0 1 48 214.8919 Tm /F2+0 10 Tf 12 TL (First-year sensor validation only; no clinical performance or programme-target achievement is claimed, and) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 198.8919 Tm /F2+0 10 Tf 12 TL (programme targets, budgets, and metrics of other institutions are not published here.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 170.8919 Tm /F2+0 10 Tf 12 TL (First-year sensor and algorithm groundwork; no clinical performance or programme-target achievement is) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 154.8919 Tm /F2+0 10 Tf 12 TL (claimed.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 125.8919 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 169.8919 Tm /F3+0 11 Tf 13.2 TL (Research boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 105.8919 Tm /F2+0 10 Tf 12 TL (The clinical partner is the radiation oncology department of Seoul St. Mary's Hospital; interfaces are agreed) Tj T* ET
+BT 1 0 0 1 48 149.8919 Tm /F2+0 10 Tf 12 TL (First-year sensor and algorithm groundwork; no clinical performance or programme-target achievement is) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 89.89189 Tm /F2+0 10 Tf 12 TL (with 4DCT reconstruction, image guidance, and integrated-control partners.) Tj T* ET
+BT 1 0 0 1 48 133.8919 Tm /F2+0 10 Tf 12 TL (claimed.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 104.8919 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 84.89189 Tm /F2+0 10 Tf 12 TL (The clinical partner is the radiation oncology department of Seoul St. Mary's Hospital; interfaces are agreed) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 68.89189 Tm /F2+0 10 Tf 12 TL (with 4DCT reconstruction, image guidance, and integrated-control partners.) Tj T* ET
  
 endstream
 endobj
@@ -1306,7 +1308,7 @@ xref
 0003237422 00000 n 
 0003239758 00000 n 
 0003241113 00000 n 
-0003244250 00000 n 
+0003244352 00000 n 
 trailer
 <<
 /ID 
@@ -1318,5 +1320,5 @@ trailer
 /Size 41
 >>
 startxref
-3246552
+3246654
 %%EOF
