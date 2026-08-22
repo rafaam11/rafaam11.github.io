@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "0ed208ce23e7de7c236356bc9131ccdf506c830fded939b7cd04bab782fd88e1",
+  "sourceDigest": "a0e2c11880aeac833c19f44e57b7ff3ed4aeda4bddf12da814596e571ace4cae",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
   "generatorSha256": "d272eb42ff68fa116220821035802a06edcb46247baa1877c10cbedd44feda72",
@@ -56,9 +56,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 2864,
-      "bytes": 774866,
-      "sha256": "dc706edfe7b620f307489cf04bc0e2f1412fb8fef415357f714249643338fed6"
+      "characters": 3679,
+      "bytes": 850795,
+      "sha256": "d3644cc3565b159756c740ecd4d510f9bd4e028ee4d898e4c69895da224c77be"
     },
     {
       "name": "life-careverse-en.pdf",
@@ -67,9 +67,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 4831,
-      "bytes": 672061,
-      "sha256": "4145a8d4f95ae9c8bb4bd451f135ed6592d2b1835457b2e545b4962f6d731daa"
+      "characters": 6684,
+      "bytes": 698005,
+      "sha256": "4c6cf6af2518344718a54bf86d1d8430e6cc7706bf58199915b5447cdf409519"
     },
     {
       "name": "rtms-navigation-ko.pdf",
@@ -78,9 +78,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 2606,
-      "bytes": 965020,
-      "sha256": "aa56a6961a96d271e12852287d92835ec340bea59664f4ebc0bdbe77f103b1dd"
+      "characters": 3911,
+      "bytes": 1041932,
+      "sha256": "e6ed0b73ae0dde31bae5c337120ea192151753f222ee6914c17736bdd0f4f56a"
     },
     {
       "name": "rtms-navigation-en.pdf",
@@ -89,9 +89,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 4688,
-      "bytes": 863782,
-      "sha256": "4442c60fba6c92fc13e16e3e44eb87b16080b06a4266a89328b188f3e3e89d6e"
+      "characters": 7214,
+      "bytes": 867965,
+      "sha256": "c3868e0532fc98a195a6ef5cc156da4c791626d7a998092d613de2c4755cce16"
     },
     {
       "name": "respiratory-surface-guidance-ko.pdf",
@@ -207,8 +207,8 @@
       "slug": "life-careverse",
       "locale": "en",
       "pages": 6,
-      "bytes": 672061,
-      "sha256": "4145a8d4f95ae9c8bb4bd451f135ed6592d2b1835457b2e545b4962f6d731daa"
+      "bytes": 698005,
+      "sha256": "4c6cf6af2518344718a54bf86d1d8430e6cc7706bf58199915b5447cdf409519"
     },
     {
       "path": "assets/pdfs/life-careverse-ko.pdf",
@@ -216,8 +216,8 @@
       "slug": "life-careverse",
       "locale": "ko",
       "pages": 6,
-      "bytes": 774866,
-      "sha256": "dc706edfe7b620f307489cf04bc0e2f1412fb8fef415357f714249643338fed6"
+      "bytes": 850795,
+      "sha256": "d3644cc3565b159756c740ecd4d510f9bd4e028ee4d898e4c69895da224c77be"
     },
     {
       "path": "assets/pdfs/mandibular-fracture-en.pdf",
@@ -261,8 +261,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 863782,
-      "sha256": "4442c60fba6c92fc13e16e3e44eb87b16080b06a4266a89328b188f3e3e89d6e"
+      "bytes": 867965,
+      "sha256": "c3868e0532fc98a195a6ef5cc156da4c791626d7a998092d613de2c4755cce16"
     },
     {
       "path": "assets/pdfs/rtms-navigation-ko.pdf",
@@ -270,8 +270,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 965020,
-      "sha256": "aa56a6961a96d271e12852287d92835ec340bea59664f4ebc0bdbe77f103b1dd"
+      "bytes": 1041932,
+      "sha256": "e6ed0b73ae0dde31bae5c337120ea192151753f222ee6914c17736bdd0f4f56a"
     },
     {
       "path": "assets/pdfs/skadi-tracking-software-en.pdf",
@@ -351,8 +351,8 @@
       "slug": "life-careverse",
       "locale": "en",
       "pages": 6,
-      "bytes": 672061,
-      "sha256": "4145a8d4f95ae9c8bb4bd451f135ed6592d2b1835457b2e545b4962f6d731daa"
+      "bytes": 698005,
+      "sha256": "4c6cf6af2518344718a54bf86d1d8430e6cc7706bf58199915b5447cdf409519"
     },
     {
       "path": "output/pdf/life-careverse-ko.pdf",
@@ -360,8 +360,8 @@
       "slug": "life-careverse",
       "locale": "ko",
       "pages": 6,
-      "bytes": 774866,
-      "sha256": "dc706edfe7b620f307489cf04bc0e2f1412fb8fef415357f714249643338fed6"
+      "bytes": 850795,
+      "sha256": "d3644cc3565b159756c740ecd4d510f9bd4e028ee4d898e4c69895da224c77be"
     },
     {
       "path": "output/pdf/mandibular-fracture-en.pdf",
@@ -405,8 +405,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 863782,
-      "sha256": "4442c60fba6c92fc13e16e3e44eb87b16080b06a4266a89328b188f3e3e89d6e"
+      "bytes": 867965,
+      "sha256": "c3868e0532fc98a195a6ef5cc156da4c791626d7a998092d613de2c4755cce16"
     },
     {
       "path": "output/pdf/rtms-navigation-ko.pdf",
@@ -414,8 +414,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 965020,
-      "sha256": "aa56a6961a96d271e12852287d92835ec340bea59664f4ebc0bdbe77f103b1dd"
+      "bytes": 1041932,
+      "sha256": "e6ed0b73ae0dde31bae5c337120ea192151753f222ee6914c17736bdd0f4f56a"
     },
     {
       "path": "output/pdf/skadi-tracking-software-en.pdf",
