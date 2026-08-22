@@ -40,3 +40,7 @@ This register is the tracked source of truth for portfolio evidence identifiers.
 | skadi-tracking-software-gallery-02 | skadi-tracking-software | image | approved-public | assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-02.png | Approved derivative; caption in portfolio data. |
 | skadi-tracking-software-gallery-03 | skadi-tracking-software | image | approved-public | assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-03.png | Approved derivative; caption in portfolio data. |
 | skadi-tracking-software-gallery-04 | skadi-tracking-software | image | approved-public | assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-04.png | Approved derivative; caption in portfolio data. |
+| ai-build-lab-lead-01 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-lead-01.png | Approved derivative; caption in portfolio data. |
+| ai-build-lab-gallery-01 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-01.png | Approved derivative; caption in portfolio data. |
+| ai-build-lab-gallery-02 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-02.png | Approved derivative; caption in portfolio data. |
+| ai-build-lab-gallery-03 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-03.png | Approved derivative; caption in portfolio data. |

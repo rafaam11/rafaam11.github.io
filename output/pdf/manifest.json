@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "d3d09de378d31bde6cbeff38df3e0bc4787a3fb65b5d907bb66b42e838994211",
+  "sourceDigest": "0ed208ce23e7de7c236356bc9131ccdf506c830fded939b7cd04bab782fd88e1",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
   "generatorSha256": "d272eb42ff68fa116220821035802a06edcb46247baa1877c10cbedd44feda72",
@@ -166,9 +166,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 12,
-      "characters": 2951,
-      "bytes": 195322,
-      "sha256": "521987054fc05af3a07eb2b26a72a0c3a2dc010304826e528cd6f2fec8ee0561"
+      "characters": 3437,
+      "bytes": 404757,
+      "sha256": "419505c8ef381730b3f710b6043772377b2532fdca26f6c160217141716c3312"
     },
     {
       "name": "ai-build-lab-en.pdf",
@@ -177,9 +177,9 @@
       "locale": "en",
       "pages": 6,
       "links": 12,
-      "characters": 5477,
-      "bytes": 79839,
-      "sha256": "08f6a6d3e2349202ce90909dedee0f2ec2e4d2d6aba5c1e973de3ca7297312db"
+      "characters": 6065,
+      "bytes": 284192,
+      "sha256": "e073af33a897d96e18903ed35fa179d631dd94a960eea3eb6a2e2fb806cc2bd6"
     }
   ],
   "artifacts": [
@@ -189,8 +189,8 @@
       "slug": "ai-build-lab",
       "locale": "en",
       "pages": 6,
-      "bytes": 79839,
-      "sha256": "08f6a6d3e2349202ce90909dedee0f2ec2e4d2d6aba5c1e973de3ca7297312db"
+      "bytes": 284192,
+      "sha256": "e073af33a897d96e18903ed35fa179d631dd94a960eea3eb6a2e2fb806cc2bd6"
     },
     {
       "path": "assets/pdfs/ai-build-lab-ko.pdf",
@@ -198,8 +198,8 @@
       "slug": "ai-build-lab",
       "locale": "ko",
       "pages": 6,
-      "bytes": 195322,
-      "sha256": "521987054fc05af3a07eb2b26a72a0c3a2dc010304826e528cd6f2fec8ee0561"
+      "bytes": 404757,
+      "sha256": "419505c8ef381730b3f710b6043772377b2532fdca26f6c160217141716c3312"
     },
     {
       "path": "assets/pdfs/life-careverse-en.pdf",
@@ -333,8 +333,8 @@
       "slug": "ai-build-lab",
       "locale": "en",
       "pages": 6,
-      "bytes": 79839,
-      "sha256": "08f6a6d3e2349202ce90909dedee0f2ec2e4d2d6aba5c1e973de3ca7297312db"
+      "bytes": 284192,
+      "sha256": "e073af33a897d96e18903ed35fa179d631dd94a960eea3eb6a2e2fb806cc2bd6"
     },
     {
       "path": "output/pdf/ai-build-lab-ko.pdf",
@@ -342,8 +342,8 @@
       "slug": "ai-build-lab",
       "locale": "ko",
       "pages": 6,
-      "bytes": 195322,
-      "sha256": "521987054fc05af3a07eb2b26a72a0c3a2dc010304826e528cd6f2fec8ee0561"
+      "bytes": 404757,
+      "sha256": "419505c8ef381730b3f710b6043772377b2532fdca26f6c160217141716c3312"
     },
     {
       "path": "output/pdf/life-careverse-en.pdf",

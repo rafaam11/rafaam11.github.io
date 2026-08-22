@@ -30,7 +30,7 @@ Jinmin Kim의 연구자풍 포트폴리오입니다. 3D 정합, 의료영상, �
 
 다섯 역량 스택은 별도 라우트가 아니라 Home과 Projects의 프로젝트 근거에 연결됩니다: 3D Geometry & Registration, Sensor Fusion & Localization, Medical Navigation & Visualization, XR Application Engineering, Product Engineering with AI.
 
-실제 이미지·영상은 [공개 근거 레지스터](assets/projects/EVIDENCE_REGISTER.md)에 등록하고 승인된 파생본만 `assets/projects/<slug>/`에 둡니다. 프로젝트별 한국어·영어 PDF는 `assets/pdfs/`, 공개 안전 이력서 PDF와 페이지 미리보기는 `assets/cv/`에 있습니다. PDF 입력 내보내기와 생성기는 각각 `scripts/export-portfolio-data.cjs`, `scripts/generate-portfolio-pdfs.py`입니다.
+실제 이미지·영상은 [공개 근거 레지스터](assets/projects/EVIDENCE_REGISTER.md)에 등록하고 승인된 파생본만 `assets/projects/<slug>/`에 둡니다. 프로젝트별 한국어·영어 PDF는 `assets/pdfs/`에 생성되고, 공개 안전 이력서 PDF(국문·영문)는 생성 대상이 아니라 추적되는 원본으로 `assets/cv/`에 있습니다. PDF 입력 내보내기와 생성기는 각각 `scripts/export-portfolio-data.cjs`, `scripts/generate-portfolio-pdfs.py`입니다.
 
 ## 콘텐츠 원칙
 

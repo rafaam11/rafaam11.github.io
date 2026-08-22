@@ -414,13 +414,13 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 36);
+  assert.equal(register.entries.length, 40);
   assert.deepEqual(
     Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
       state,
       register.entries.filter((entry) => entry.state === state).length
     ])),
-    { 'pending-review': 0, 'approved-public': 36, excluded: 0 }
+    { 'pending-review': 0, 'approved-public': 40, excluded: 0 }
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -1103,6 +1103,10 @@ test('Scholar list rows show an approved lead image as a decorative thumbnail', 
   const candidate = clone(data);
   candidate.projects[0].media.lead = { id: 'surgical-navigation-public-image', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/lead.png' };
   candidate.projects[0].pdfSequence.evidenceId = candidate.projects[0].media.lead.id;
+  // Every canonical case now carries an approved thumbnail, so the text-only row is synthesized here.
+  const last = candidate.projects[candidate.projects.length - 1];
+  last.media = { lead: { id: 'repository-lead', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' }, gallery: [] };
+  last.pdfSequence.evidenceId = last.media.lead.id;
   const html = render.homeProjectGalleryHtml(candidate, '../', true, 'en');
   const firstRow = html.match(/<li class="sc-project"[\s\S]*?<\/li>/)?.[0] || '';
   assert.match(firstRow, /<a class="sc-project__thumb" href="\.\.\/en\/projects\/surgical-navigation\/index\.html" tabindex="-1" aria-hidden="true"><img src="\.\.\/assets\/projects\/surgical-navigation\/lead\.png" alt="" loading="lazy" decoding="async"><\/a>/);
@@ -1200,7 +1204,8 @@ test('Scholar figure renderer skips pending media instead of drawing a placehold
   const html = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
   assert.doesNotMatch(html, /<figure|<img|<video|role="img"|placeholder/i);
   assert.match(html, new RegExp(project.translations.en.limitation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  const repositoryLead = data.projects.find((item) => item.media.lead.type === 'repository');
+  const repositoryLead = clone(data.projects[data.projects.length - 1]);
+  repositoryLead.media = { lead: { id: 'repository-lead', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' }, gallery: [] };
   assert.equal(render.evidenceMediaHtml(repositoryLead, 'en', '', false), '');
 });
 

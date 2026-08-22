@@ -600,14 +600,21 @@
       capabilityKeys: ['ai-product-engineering'], route: 'projects/ai-build-lab/',
       tech: ['Electron', 'TypeScript', 'Node.js', 'Cloudflare', 'GitHub Actions', 'Agent workflows'],
       media: {
-        lead: { id: 'multi-cli-work-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' },
-        references: [{ id: 'daegu-bus-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/public-transportation-info' }],
-        gallery: []
+        lead: { id: 'ai-build-lab-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/ai-build-lab/ai-build-lab-lead-01.png' },
+        references: [
+          { id: 'multi-cli-work-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' },
+          { id: 'daegu-bus-repository', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/public-transportation-info' }
+        ],
+        gallery: [
+          { id: 'ai-build-lab-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/ai-build-lab/ai-build-lab-gallery-01.png', translations: { ko: { caption: '한 프로젝트 안에서 PR 리뷰·문서·터미널 두 개를 4분할로 함께 봅니다', alt: 'PR 리뷰 창, 마크다운 편집기, 두 개의 터미널이 4분할로 배치된 앱 화면' }, en: { caption: 'Four panes in one project: pull-request review, a document, and two terminals', alt: 'Application window split into four panes showing a pull-request review, a markdown editor, and two terminals' } } },
+          { id: 'ai-build-lab-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/ai-build-lab/ai-build-lab-gallery-02.png', translations: { ko: { caption: '같은 프롬프트를 선택한 여러 세션에 한 번에 보냅니다', alt: '프롬프트 입력창 아래에 전송 대상 세션 두 개가 체크된 팬아웃 대화상자' }, en: { caption: 'One prompt sent to several selected sessions at once', alt: 'Fan-out dialog with a prompt field and two target sessions checked' } } },
+          { id: 'ai-build-lab-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/ai-build-lab/ai-build-lab-gallery-03.png', translations: { ko: { caption: 'PR의 변경 파일과 diff를 앱 안에서 보고 에이전트 리뷰로 넘깁니다', alt: '변경 파일 목록과 diff, 에이전트 리뷰 요청 버튼이 있는 PR 화면' }, en: { caption: 'Changed files and diffs are read in the app, then handed to an agent review', alt: 'Pull-request pane with a changed-file list, a diff view, and agent review buttons' } } }
+        ]
       },
       pdf: { ko: 'assets/pdfs/ai-build-lab-ko.pdf', en: 'assets/pdfs/ai-build-lab-en.pdf' },
       pdfSequence: {
         middle: ['problem-to-product', 'human-ai-boundary', 'public-product-proof', 'privacy-metric-boundary'],
-        evidenceId: 'multi-cli-work-repository',
+        evidenceId: 'ai-build-lab-lead-01',
         diagram: {
           kind: 'product-loop',
           translations: {
@@ -628,11 +635,11 @@
           problem: '자주 겪는 마찰이 임시 스크립트로 남지 않고 반복 사용 가능한 제품 요구사항으로 바뀌어야 했습니다.',
           role: '문제 맥락, 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영 판단을 소유하고 AI를 구현 보조·증폭 수단으로 사용했습니다.',
           teamResult: '공개 저장소와 릴리스 아티팩트는 확인 가능한 제품 결과이지만 사용자 수, 생산성, 유지보수 효과를 주장하지 않습니다.',
-          evidence: 'multi-cli-work와 대구 버스 앱의 공개 저장소·테스트·릴리스를 근거로 삼고, 로컬 지식 시스템의 비공개 데이터는 배제합니다.',
+          evidence: 'multi-cli-work 릴리스 빌드의 실제 화면과 두 앱의 공개 저장소·테스트·릴리스를 근거로 삼고, 로컬 지식 시스템의 비공개 데이터는 배제합니다.',
           limitation: '로컬 지식 시스템의 원문·개인 데이터를 공개하지 않고 검증되지 않은 사용자·생산성 지표를 주장하지 않습니다.',
           collaboration: 'AI는 구현 증폭 수단이며 맥락, 아키텍처, 수용 기준, 리뷰와 릴리스 결정은 사람이 소유합니다.',
-          mediaAlt: 'multi-cli-work와 대구 버스 앱의 공개 저장소와 릴리스 근거.', mediaCaption: '공개 저장소와 릴리스만 참조하며 비공개 지식 데이터는 포함하지 않습니다.',
-          status: '진행 중', cardProblem: '직접 겪은 마찰을 테스트·릴리스·운영되는 도구로 바꿉니다.', cardOwnedRole: '맥락·아키텍처·수용 기준을 소유하고 AI로 구현을 증폭합니다.', cardEvidence: '공개 저장소, 테스트, 릴리스; 비공개 데이터와 지표는 배제합니다.', problemSummary: '직접 겪은 문제를 반복 사용 가능한 제품으로 바꿉니다.', ownedRole: '맥락, 아키텍처, 수용 기준, 릴리스 판단을 소유합니다.', verifiedEvidence: '공개 저장소, 테스, 릴리스 아티팩트.', visualAlt: 'AI Build Lab 공개 제품 근거.', visualCaption: '비공개 데이터와 지표는 포함하지 않습니다.'
+          mediaAlt: 'multi-cli-work 프로젝트 시작 화면 — PowerShell·Claude Code·Codex·에이전트 세션 시작 버튼과 git 상태·워크트리 카드.', mediaCaption: 'multi-cli-work v1.24 — 프로젝트 하나에서 CLI·에이전트 세션을 열고 git 상태와 워크트리를 함께 봅니다. 로컬 경로는 블러 처리했습니다.',
+          status: '진행 중', cardProblem: '직접 겪은 마찰을 테스트·릴리스·운영되는 도구로 바꿉니다.', cardOwnedRole: '맥락·아키텍처·수용 기준을 소유하고 AI로 구현을 증폭합니다.', cardEvidence: '공개 저장소, 테스트, 릴리스; 비공개 데이터와 지표는 배제합니다.', problemSummary: '직접 겪은 문제를 반복 사용 가능한 제품으로 바꿉니다.', ownedRole: '맥락, 아키텍처, 수용 기준, 릴리스 판단을 소유합니다.', verifiedEvidence: '공개 저장소, 테스트, 릴리스 아티팩트.', visualAlt: 'AI Build Lab 공개 제품 근거.', visualCaption: '비공개 데이터와 지표는 포함하지 않습니다.'
         },
         en: {
           title: 'AI Build Lab - Tools I Needed, Built and Shipped', shortTitle: 'AI Build Lab', eyebrow: 'AI Build Lab · Product Engineering',
@@ -641,10 +648,10 @@
           problem: 'Recurring friction needed to become reusable product requirements rather than one-off scripts.',
           role: 'Owned problem context, requirements, architecture, acceptance criteria, tests, releases, and operating decisions while using AI to amplify implementation.',
           teamResult: 'Public repositories and release artifacts are observable product results; no user-count, productivity, or maintainability metrics are claimed.',
-          evidence: 'Public repositories, tests, and releases for multi-cli-work and the Daegu bus app provide public-safe evidence; private knowledge data is excluded.',
+          evidence: 'Screens from a released multi-cli-work build, together with the public repositories, tests, and releases of both applications, provide public-safe evidence; private knowledge data is excluded.',
           limitation: 'Never expose private knowledge-system source data or claim unverified user or productivity metrics.',
           collaboration: 'AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release decisions.',
-          mediaAlt: 'Public repository and release evidence for multi-cli-work and the Daegu bus application.', mediaCaption: 'Only public repositories and releases are referenced; private knowledge data is excluded.',
+          mediaAlt: 'multi-cli-work project start screen with PowerShell, Claude Code, Codex, and agent session buttons beside git status and worktree cards.', mediaCaption: 'multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees. Local paths are blurred.',
           status: 'Ongoing', cardProblem: 'Turn lived friction into tested, released, and operated tools.', cardOwnedRole: 'Own context, architecture, and acceptance while AI amplifies implementation.', cardEvidence: 'Public repositories, tests, and releases; no private data or unverified metrics.', problemSummary: 'Turn personally experienced problems into reusable products.', ownedRole: 'Own context, architecture, acceptance criteria, tests, and releases.', verifiedEvidence: 'Public repositories, tests, and release artifacts.', visualAlt: 'AI Build Lab public product evidence.', visualCaption: 'Private data and unverified metrics are excluded.'
         }
       },
