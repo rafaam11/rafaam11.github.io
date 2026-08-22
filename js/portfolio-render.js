@@ -31,6 +31,7 @@
   };
   var blockTypes = ['text', 'list', 'system', 'evidence', 'limitation'];
   var storyLayouts = ['wide', 'grid'];
+  var storyPlacements = ['before-standard', 'after-standard'];
   var storyMediaTypes = ['image', 'video'];
   var storyDirections = ['forward', 'bidirectional'];
   var storyMediaKeys = ['id', 'poster', 'preload', 'publicPath', 'status', 'translations', 'type', 'videoPolicy'];
@@ -38,6 +39,7 @@
     'codec', 'height', 'maxBytes', 'requireFastStart', 'requireNoAudio',
     'targetDurationSeconds', 'toleranceSeconds', 'width'
   ];
+  var optionalVideoPolicyKeys = ['frameRate', 'pixelFormat'];
   var mediaTypes = ['video', 'image', 'repository', 'publication'];
   var leadMediaTypes = ['video', 'image', 'repository'];
   var referenceMediaTypes = ['repository', 'publication'];
@@ -69,6 +71,7 @@
       components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
       evidenceGallery: '검증 가능한 증거', architecture: 'Define → Open → Track → Apply', roleAndStability: '내 역할과 API 안정성',
       publicResources: '공개 문서와 제품 정보', ownedRole: '내 역할', teamBoundary: '팀·협력자 경계', evidenceRefs: '연결 근거',
+      relatedProjects: '관련 프로젝트',
       contact: '연락처', publications: '논문', patents: '특허', awards: '수상',
       patentSummary: function (filed, registered) { return '출원 ' + filed + '건 · 등록 ' + registered + '건'; }
     },
@@ -78,6 +81,7 @@
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
       evidenceGallery: 'Verifiable evidence', architecture: 'Define → Open → Track → Apply', roleAndStability: 'My role and API stability',
       publicResources: 'Public documentation and product information', ownedRole: 'My role', teamBoundary: 'Team and partner boundary', evidenceRefs: 'Linked evidence',
+      relatedProjects: 'Related projects',
       contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
       patentSummary: function (filed, registered) { return filed + ' filed · ' + registered + ' registered'; }
     }
@@ -294,9 +298,10 @@
         return {
           slug: project.slug,
           tier: project.tier,
-          period: project.period,
+          period: copy.periodLabel || project.period,
           evidenceState: project.evidenceState,
           lifecycleState: project.lifecycleState,
+          statusLabel: copy.statusLabel || '',
           route: project.route,
           caseLayout: project.caseLayout,
           capabilityKeys: Array.isArray(project.capabilityKeys) ? project.capabilityKeys.slice() : [],
@@ -305,6 +310,7 @@
           pdf: project.pdf || {},
           blocks: Array.isArray(project.blocks) ? project.blocks.slice() : [],
           storySections: Array.isArray(project.storySections) ? project.storySections.slice() : [],
+          relatedProjectSlugs: Array.isArray(project.relatedProjectSlugs) ? project.relatedProjectSlugs.slice() : [],
           subcases: Array.isArray(project.subcases) ? project.subcases.slice() : [],
           links: Array.isArray(project.links) ? project.links.slice() : [],
           title: copy.title || '',
@@ -367,8 +373,12 @@
       var policyKeys = item.videoPolicy && typeof item.videoPolicy === 'object' && !Array.isArray(item.videoPolicy)
         ? Object.keys(item.videoPolicy).sort() : [];
       if (item.type !== 'video') errors.push(label + ': videoPolicy is allowed only for video.');
-      if (JSON.stringify(policyKeys) !== JSON.stringify(videoPolicyKeys.slice().sort())) {
-        errors.push(label + ': videoPolicy must contain exactly the canonical keys.');
+      var missingPolicyKeys = videoPolicyKeys.some(function (key) { return !policyKeys.includes(key); });
+      var unknownPolicyKeys = policyKeys.some(function (key) {
+        return !videoPolicyKeys.includes(key) && !optionalVideoPolicyKeys.includes(key);
+      });
+      if (missingPolicyKeys || unknownPolicyKeys) {
+        errors.push(label + ': videoPolicy must contain all canonical keys and only supported optional keys.');
       } else {
         var videoPolicy = item.videoPolicy;
         if (videoPolicy.codec !== 'h264') errors.push(label + ': videoPolicy codec must be h264.');
@@ -379,6 +389,12 @@
           if (!Number.isInteger(videoPolicy[dimension]) || videoPolicy[dimension] <= 0) errors.push(label + ': videoPolicy ' + dimension + ' must be a positive integer.');
         });
         if (videoPolicy.requireFastStart !== true || videoPolicy.requireNoAudio !== true) errors.push(label + ': videoPolicy requirements must both be true.');
+        if (videoPolicy.frameRate !== undefined && (!Number.isInteger(videoPolicy.frameRate) || videoPolicy.frameRate <= 0)) {
+          errors.push(label + ': videoPolicy frameRate must be a positive integer.');
+        }
+        if (videoPolicy.pixelFormat !== undefined && videoPolicy.pixelFormat !== 'yuv420p') {
+          errors.push(label + ': videoPolicy pixelFormat must equal yuv420p.');
+        }
       }
     }
     return errors;
@@ -444,6 +460,9 @@
       if (seenSectionKeys.includes(section.key)) errors.push(label + ': duplicate story section key.');
       seenSectionKeys.push(section.key);
       if (!storyLayouts.includes(section.layout)) errors.push(label + ': unsupported story section layout.');
+      if (section.placement !== undefined && !storyPlacements.includes(section.placement)) {
+        errors.push(label + ': unsupported story section placement.');
+      }
       ['ko', 'en'].forEach(function (locale) {
         var copy = section.translations && section.translations[locale];
         if (!copy || typeof copy.heading !== 'string' || !copy.heading.trim()) errors.push(label + ': missing ' + locale + ' story heading.');
@@ -709,10 +728,12 @@
           errors.push(slug + ': missing technologies.');
         }
         errors = errors.concat(translationErrors(project, projectTranslationFields, slug));
-        var declaresRoleLabel = ['ko', 'en'].some(function (locale) {
-          return project.translations && project.translations[locale] && project.translations[locale].roleLabel !== undefined;
+        ['roleLabel', 'periodLabel', 'statusLabel'].forEach(function (field) {
+          var declared = ['ko', 'en'].some(function (locale) {
+            return project.translations && project.translations[locale] && project.translations[locale][field] !== undefined;
+          });
+          if (declared) errors = errors.concat(translationErrors(project, [field], slug));
         });
-        if (declaresRoleLabel) errors = errors.concat(translationErrors(project, ['roleLabel'], slug));
         ['ko', 'en'].forEach(function (locale) {
           var copy = project.translations && project.translations[locale];
           if (copy && copy.role === copy.teamResult) errors.push(slug + ': ' + locale + ' role and team result must remain separate.');
@@ -741,8 +762,9 @@
         }
         errors = errors.concat(evidenceFirstErrors(project, slug));
         var hasStorySections = Array.isArray(project.storySections) && project.storySections.length > 0;
-        errors = errors.concat(storySectionsErrors(project, slug));
-        if (!hasStorySections && (!Array.isArray(project.blocks) || project.blocks.length === 0)) {
+        var storyErrors = storySectionsErrors(project, slug);
+        errors = errors.concat(storyErrors);
+        if ((!hasStorySections || storyErrors.length > 0) && (!Array.isArray(project.blocks) || project.blocks.length === 0)) {
           errors.push(slug + ': missing structural blocks.');
         } else if (Array.isArray(project.blocks)) {
           project.blocks.forEach(function (block) { errors = errors.concat(blockErrors(block, slug)); });
@@ -767,18 +789,53 @@
           }
           var diagram = resolvedPdfDiagram(project);
           if (hasStorySections) {
-            if (JSON.stringify(Object.keys(sequence).sort()) !== JSON.stringify(['diagram', 'evidenceId', 'figureIds', 'middle'])) {
-              errors.push(slug + ': story PDF sequence must contain exactly middle, evidenceId, figureIds, and diagram.');
-            }
             var storyKeys = project.storySections.map(function (section) { return section && section.key; });
             if (!Array.isArray(sequence.middle) || sequence.middle.length !== 4 ||
                 sequence.middle.some(function (key) { return typeof key !== 'string' || !key; }) ||
                 new Set(sequence.middle).size !== 4 || sequence.middle.some(function (key) { return !storyKeys.includes(key); })) {
               errors.push(slug + ': story PDF sequence must reference exactly four distinct known story sections.');
             }
-            if (!sequence.diagram || typeof sequence.diagram !== 'object' || Array.isArray(sequence.diagram) ||
-                JSON.stringify(Object.keys(sequence.diagram).sort()) !== JSON.stringify(['storySectionKey']) ||
-                typeof sequence.diagram.storySectionKey !== 'string' || !diagram || diagram.kind !== pdfDiagramKindsBySlug[slug]) {
+            var hasSingularDiagram = sequence.diagram !== undefined;
+            var hasDiagramArray = sequence.diagrams !== undefined;
+            if (hasSingularDiagram && hasDiagramArray) {
+              errors.push(slug + ': story PDF sequence must never declare both diagram and diagrams.');
+            }
+            var expectedStorySequenceKeys = hasDiagramArray && !hasSingularDiagram
+              ? ['diagrams', 'evidenceId', 'figureIds', 'middle']
+              : ['diagram', 'evidenceId', 'figureIds', 'middle'];
+            if (JSON.stringify(Object.keys(sequence).sort()) !== JSON.stringify(expectedStorySequenceKeys)) {
+              errors.push(slug + ': story PDF sequence must contain exactly middle, evidenceId, figureIds, and one of diagram or diagrams.');
+            }
+            if (!hasSingularDiagram && !hasDiagramArray) {
+              errors.push(slug + ': story PDF sequence requires diagram or diagrams.');
+            }
+            if (hasDiagramArray && (!Array.isArray(sequence.diagrams) || sequence.diagrams.length === 0)) {
+              errors.push(slug + ': story PDF sequence diagrams must be a non-empty array.');
+            }
+            var diagramContracts = hasDiagramArray && Array.isArray(sequence.diagrams)
+              ? sequence.diagrams
+              : (hasSingularDiagram ? [sequence.diagram] : []);
+            var referencedStoryKeys = [];
+            diagramContracts.forEach(function (contract, index) {
+              var diagramLabel = slug + ' story PDF sequence diagram ' + index;
+              if (!contract || typeof contract !== 'object' || Array.isArray(contract) ||
+                  JSON.stringify(Object.keys(contract).sort()) !== JSON.stringify(['storySectionKey']) ||
+                  typeof contract.storySectionKey !== 'string' || !contract.storySectionKey) {
+                errors.push(diagramLabel + ': must contain exactly one storySectionKey.');
+                return;
+              }
+              if (referencedStoryKeys.includes(contract.storySectionKey)) {
+                errors.push(slug + ': story PDF sequence contains a duplicate diagram reference.');
+              }
+              referencedStoryKeys.push(contract.storySectionKey);
+              var storySection = project.storySections.find(function (section) {
+                return section && section.key === contract.storySectionKey;
+              });
+              if (!storySection || !storySection.diagram || storySection.diagram.kind !== 'system-flow') {
+                errors.push(diagramLabel + ': does not resolve to a known story section containing a system-flow diagram.');
+              }
+            });
+            if (hasSingularDiagram && (!diagram || diagram.kind !== 'system-flow')) {
               errors.push(slug + ': story PDF sequence diagram must resolve to the expected system-flow section.');
             }
             var approvedStoryMediaIds = [];
@@ -828,7 +885,7 @@
             }
             }
           }
-          if (diagram && typeof diagram.kind === 'string') {
+          if (!hasStorySections && diagram && typeof diagram.kind === 'string') {
             if (seenPdfDiagramKinds.includes(diagram.kind)) errors.push(slug + ': PDF sequence diagram kind must be unique.');
             seenPdfDiagramKinds.push(diagram.kind);
           }
@@ -853,6 +910,25 @@
               errors = errors.concat(translationErrors(subcase, ['title', 'summary'], subcase && subcase.key ? subcase.key : slug + ' unknown-subcase'));
             });
           }
+        }
+      });
+      var canonicalSlugs = data.projects.map(function (project) { return project && project.slug; });
+      data.projects.forEach(function (project) {
+        if (!project || project.relatedProjectSlugs === undefined) return;
+        var slug = project.slug || 'unknown-project';
+        if (!Array.isArray(project.relatedProjectSlugs)) {
+          errors.push(slug + ': relatedProjectSlugs must be an array.');
+          return;
+        }
+        if (project.relatedProjectSlugs.some(function (relatedSlug) { return typeof relatedSlug !== 'string' || !relatedSlug; })) {
+          errors.push(slug + ': related project slugs must be non-empty strings.');
+        }
+        if (new Set(project.relatedProjectSlugs).size !== project.relatedProjectSlugs.length) {
+          errors.push(slug + ': duplicate related project reference.');
+        }
+        if (project.relatedProjectSlugs.includes(slug)) errors.push(slug + ': related project self reference is not allowed.');
+        if (project.relatedProjectSlugs.some(function (relatedSlug) { return !canonicalSlugs.includes(relatedSlug); })) {
+          errors.push(slug + ': unknown related project reference.');
         }
       });
     }
@@ -880,6 +956,9 @@
   }
 
   function projectStateLabel(project, locale) {
+    if (project && typeof project.statusLabel === 'string' && project.statusLabel.trim()) {
+      return project.statusLabel.trim();
+    }
     var states = [project.evidenceState, project.lifecycleState].filter(function (state, index, values) {
       return state && values.indexOf(state) === index;
     });
@@ -977,10 +1056,19 @@
       track + '</div><p class="sc-flow__boundary">' + escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
   }
 
-  function storySectionsHtml(project, locale, base, firstFigureNumber) {
+  function storyPlacement(section) {
+    return section && section.placement ? section.placement : 'before-standard';
+  }
+
+  function storySectionsHtml(project, locale, base, firstFigureNumber, placement) {
     var normalized = localeOf(locale);
     var figureNumber = firstFigureNumber;
-    var sections = (project.storySections || []).map(function (section) {
+    var requestedPlacement = storyPlacements.includes(placement) ? placement : 'before-standard';
+    var matchingSections = (project.storySections || []).filter(function (section) {
+      return storyPlacement(section) === requestedPlacement;
+    });
+    if (!matchingSections.length) return '';
+    var sections = matchingSections.map(function (section) {
       var sectionCopy = translation(section, normalized);
       var copyHtml = '<div class="sc-story__copy"><h2>' + escapeHtml(sectionCopy.heading) + '</h2>';
       if (typeof sectionCopy.body === 'string' && sectionCopy.body) copyHtml += '<p>' + escapeHtml(sectionCopy.body) + '</p>';
@@ -1000,6 +1088,34 @@
         escapeHtml(section.key) + '">' + copyHtml + '<div class="sc-story__media sc-story__media--' + escapeHtml(section.layout) + '">' + mediaHtml + '</div></section>';
     }).join('');
     return '<div class="sc-story">' + sections + '</div>';
+  }
+
+  function storyFigureCount(projectRecord, placement) {
+    var requestedPlacement = storyPlacements.includes(placement) ? placement : 'before-standard';
+    return (projectRecord && Array.isArray(projectRecord.storySections) ? projectRecord.storySections : [])
+      .filter(function (section) { return storyPlacement(section) === requestedPlacement; })
+      .reduce(function (total, section) {
+        return total + (Array.isArray(section && section.media) ? section.media : []).filter(function (item) {
+          return isApprovedImage(item) || isApprovedVideo(item);
+        }).length;
+      }, 0);
+  }
+
+  function relatedProjectsHtml(data, project, locale, base, isFile) {
+    var normalized = localeOf(locale);
+    var relatedSlugs = project && Array.isArray(project.relatedProjectSlugs) ? project.relatedProjectSlugs : [];
+    var links = relatedSlugs.map(function (slug) {
+      var target = (data && Array.isArray(data.projects) ? data.projects : []).find(function (item) {
+        return item && item.slug === slug;
+      });
+      if (!target) return '';
+      var title = translatedField(target, 'title', normalized);
+      var href = i18n.routeHref(base, normalized, target.route, Boolean(isFile));
+      return '<li><a href="' + escapeHtml(href) + '">' + escapeHtml(title) + '</a></li>';
+    }).filter(Boolean).join('');
+    if (!links) return '';
+    return '<section class="sc-case__section sc-related-projects"><h2>' + escapeHtml(pageCopy[normalized].relatedProjects) +
+      '</h2><ul>' + links + '</ul></section>';
   }
 
   function caseGalleryHtml(project, locale, base, firstFigureNumber, settings) {
@@ -1189,7 +1305,6 @@
       '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
       '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
     var hasStory = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
-    var story = hasStory ? storySectionsHtml(sourceProject, normalized, base, lead ? 2 : 1) : '';
     function blocksOfType(types) {
       return types.reduce(function (ordered, type) {
         return ordered.concat(project.blocks.filter(function (block) { return block.type === type; }));
@@ -1212,25 +1327,30 @@
         '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' +
           ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
     }
-    var approach = hasStory
-      ? story
-      : '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' +
-          escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>';
+    var approach = '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' +
+      escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>';
     var roleLabel = project.roleLabel
       ? '<p class="sc-case__role-label">' + escapeHtml(project.roleLabel) + '</p>'
       : '';
-    return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header +
-      lead +
-      '<section class="sc-case__section"><h2>' + escapeHtml(copy.problem) + '</h2><p>' + escapeHtml(project.problem) + '</p></section>' +
-      approach +
-      '<section class="sc-case__section"><h2>' + escapeHtml(copy.personalRole) + '</h2>' + roleLabel + '<p>' + escapeHtml(project.role) + '</p></section>' +
-      '<section class="sc-case__section"><h2>' + escapeHtml(copy.results) + '</h2><p>' + escapeHtml(project.evidence) + '</p>' + blocksOfType(['evidence']) + '</section>' +
-      '<section class="sc-case__section"><h2>' + escapeHtml(copy.limits) + '</h2><p>' + escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + blocksOfType(['limitation']) + '</section>' +
-      (hasStory ? '' : caseGalleryHtml(project, normalized, base, lead ? 2 : 1)) +
-      subcasesHtml(project, normalized) +
-      '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
-        ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>' +
-    '</article>';
+    var problemSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.problem) + '</h2><p>' + escapeHtml(project.problem) + '</p></section>';
+    var roleSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.personalRole) + '</h2>' + roleLabel + '<p>' + escapeHtml(project.role) + '</p></section>';
+    var evidenceSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.results) + '</h2><p>' + escapeHtml(project.evidence) + '</p>' + blocksOfType(['evidence']) + '</section>';
+    var limitSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.limits) + '</h2><p>' + escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + blocksOfType(['limitation']) + '</section>';
+    var links = '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
+      ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>';
+    if (hasStory) {
+      var firstStoryFigure = lead ? 2 : 1;
+      return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header + lead + problemSection +
+        storySectionsHtml(sourceProject, normalized, base, firstStoryFigure, 'before-standard') +
+        roleSection + evidenceSection + limitSection +
+        storySectionsHtml(sourceProject, normalized, base,
+          firstStoryFigure + storyFigureCount(sourceProject, 'before-standard'), 'after-standard') +
+        relatedProjectsHtml(data, sourceProject, normalized, base, isFile) + links + '</article>';
+    }
+    return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header + lead + problemSection + approach +
+      roleSection + evidenceSection + limitSection +
+      caseGalleryHtml(project, normalized, base, lead ? 2 : 1) +
+      subcasesHtml(project, normalized) + links + '</article>';
   }
 
   function mountAll(doc, data) {
@@ -1274,6 +1394,8 @@
     storySectionsErrors: storySectionsErrors,
     storySectionsHtml: storySectionsHtml,
     systemFlowDiagramHtml: systemFlowDiagramHtml,
+    storyFigureCount: storyFigureCount,
+    relatedProjectsHtml: relatedProjectsHtml,
     caseStudyHtml: caseStudyHtml,
     mountAll: mountAll
   };
