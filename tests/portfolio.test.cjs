@@ -2462,6 +2462,30 @@ test('SMCNavi long-form CSS provides wide, grid, and narrow flow layouts', () =>
   assert.doesNotMatch(narrow, /\.sc-flow__edge-label\s*\{[^}]*transform\s*:/);
 });
 
+test('story CSS keeps media and system flow responsive without decorative components', () => {
+  const css = read('css/scholar.css');
+  for (const selector of [
+    '.sc-story__section',
+    '.sc-story__media--grid',
+    '.sc-flow__track',
+    '.sc-flow__node',
+    '.sc-flow__edge',
+    '.sc-related-projects'
+  ]) assert.match(css, new RegExp(selector.replace(/[.*+?^$()|[\]{}]/g, '\\$&')));
+  assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-story__media--grid[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-flow__track[\s\S]*flex-direction:\s*column/);
+  assert.doesNotMatch(css, /carousel|lightbox|animation-name|filter:\s*drop-shadow/i);
+});
+
+test('digital occlusion story uses headings, captions, controls, and no autoplay', () => {
+  const html = render.caseStudyHtml(data, 'digital-occlusion-workflow', '../../', false, 'ko');
+  assert.equal(count(html, '<h1'), 1);
+  assert.ok(count(html, '<h2') >= 7);
+  assert.match(html, /<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="none")/);
+  assert.doesNotMatch(html, /\bautoplay\b|\bloop\b/);
+  assert.equal(count(html, '<figcaption>'), 6);
+});
+
 test('Task 5 exporter produces deterministic public-safe project and CV input', () => {
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-export-'));
   try {
