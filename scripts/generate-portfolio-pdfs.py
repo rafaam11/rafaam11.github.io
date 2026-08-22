@@ -396,6 +396,60 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
         require(evidence_id == require_text(lead.get("id"), f"PDF input project {slug} lead media id"),
                 f"PDF input project {slug} PDF sequence evidenceId must reference lead media.")
         project_sequence_evidence[slug] = evidence_id
+        case_layout = project.get("caseLayout")
+        require(case_layout is None or case_layout in {"standard", "evidence-first"},
+                f"PDF input project {slug} case layout must be standard or evidence-first.")
+        if case_layout == "evidence-first":
+            gallery = require_array(media.get("gallery"), f"PDF input project {slug} evidence-first gallery", 6)
+            gallery_ids: set[str] = set()
+            for gallery_index, gallery_value in enumerate(gallery, start=1):
+                item = require_object(gallery_value, f"PDF input project {slug} gallery {gallery_index}")
+                identifier = require_text(item.get("id"), f"PDF input project {slug} gallery {gallery_index} id")
+                require(identifier not in gallery_ids, f"PDF input project {slug} gallery id is duplicated: {identifier}.")
+                gallery_ids.add(identifier)
+                require(item.get("type") == "image" and item.get("status") == "approved",
+                        f"PDF input project {slug} evidence-first gallery must contain approved images.")
+                validate_translation_record(item, f"PDF input project {slug} gallery {gallery_index}", ["caption", "alt"])
+
+            steps = require_array(project.get("architectureSteps"),
+                                  f"PDF input project {slug} architectureSteps", 4)
+            require([step.get("key") if isinstance(step, dict) else None for step in steps]
+                    == ["define", "open", "track", "apply"] and
+                    [step.get("label") if isinstance(step, dict) else None for step in steps]
+                    == ["Define", "Open", "Track", "Apply"],
+                    f"PDF input project {slug} architecture steps must be Define, Open, Track, Apply in order.")
+            for step_index, step_value in enumerate(steps, start=1):
+                validate_translation_record(require_object(step_value, f"PDF input project {slug} architecture step {step_index}"),
+                                            f"PDF input project {slug} architecture step {step_index}", ["description"])
+
+            tracks = require_array(project.get("applicationTracks"),
+                                   f"PDF input project {slug} applicationTracks", 2)
+            require([(track.get("key"), track.get("kind")) if isinstance(track, dict) else (None, None)
+                     for track in tracks] == [("medical", "primary"), ("industrial", "extension")],
+                    f"PDF input project {slug} application tracks must be medical primary and industrial extension.")
+            for track_index, track_value in enumerate(tracks, start=1):
+                track = require_object(track_value, f"PDF input project {slug} application track {track_index}")
+                track_evidence = require_array(track.get("evidenceIds"),
+                                               f"PDF input project {slug} application track {track_index} evidenceIds")
+                require(bool(track_evidence)
+                        and all(isinstance(identifier, str) and identifier in gallery_ids
+                                for identifier in track_evidence)
+                        and len(set(track_evidence)) == len(track_evidence),
+                        f"PDF input project {slug} application track {track_index} must reference distinct gallery evidence.")
+                validate_translation_record(track, f"PDF input project {slug} application track {track_index}",
+                                            ["title", "summary", "ownedRole", "teamBoundary"])
+
+            resources = require_array(project.get("publicResources"),
+                                      f"PDF input project {slug} publicResources", 4)
+            for resource_index, resource_value in enumerate(resources, start=1):
+                resource = require_object(resource_value, f"PDF input project {slug} public resource {resource_index}")
+                require(resource.get("type") in {"documentation", "product"},
+                        f"PDF input project {slug} public resource {resource_index} has an invalid type.")
+                href = require_text(resource.get("href"), f"PDF input project {slug} public resource {resource_index} href")
+                require(href.startswith("https://") and "github.com" not in href.lower(),
+                        f"PDF input project {slug} public resource {resource_index} must use a non-GitHub HTTPS URL.")
+                validate_translation_record(resource, f"PDF input project {slug} public resource {resource_index}",
+                                            ["title", "description"])
         diagram = require_object(sequence.get("diagram"), f"PDF input project {slug} PDF sequence diagram")
         require(set(diagram) == {"kind", "translations"},
                 f"PDF input project {slug} PDF sequence diagram must contain exactly kind and translations.")
@@ -793,6 +847,92 @@ class TechnicalDocument:
             self.y -= 12
         self.y -= 14
 
+    def figure_grid(self, items: list[tuple[Any, str, str]], columns: int = 2,
+                    image_height: float = 155) -> None:
+        """Draw compact evidence figures without changing their aspect ratio or cropping them."""
+        if not items:
+            return
+        columns = max(1, min(columns, 3))
+        gap = 14
+        cell_width = (self.right - self.left - gap * (columns - 1)) / columns
+        for row_start in range(0, len(items), columns):
+            row = items[row_start:row_start + columns]
+            prepared: list[tuple[Any, str, list[str], float, float]] = []
+            max_caption_lines = 1
+            for path, number_label, caption in row:
+                with self.d["Image"].open(path) as image:
+                    scale = min(cell_width / image.width, image_height / image.height)
+                    draw_width = image.width * scale
+                    draw_height = image.height * scale
+                lines = self.wrap(f"{number_label} {clean_text(caption)}".strip(),
+                                  "MalgunGothic", 7.7, cell_width)
+                max_caption_lines = max(max_caption_lines, len(lines))
+                prepared.append((path, number_label, lines, draw_width, draw_height))
+            row_height = image_height + 12 + max_caption_lines * 10 + 18
+            self.ensure(row_height)
+            row_top = self.y
+            for index, (path, _number_label, lines, draw_width, draw_height) in enumerate(prepared):
+                x = self.left + index * (cell_width + gap)
+                image_y = row_top - (image_height + draw_height) / 2
+                self.canvas.drawImage(str(path), x + (cell_width - draw_width) / 2, image_y,
+                                      width=draw_width, height=draw_height, preserveAspectRatio=True,
+                                      anchor="c", mask="auto")
+                caption_y = row_top - image_height - 9
+                for line in lines:
+                    self.canvas.setFillColor(self.colors["muted"])
+                    self.canvas.setFont("MalgunGothic", 7.7)
+                    self.canvas.drawString(x, caption_y, line)
+                    caption_y -= 10
+            self.y -= row_height
+
+    def note_grid(self, items: list[tuple[str, str]], height: float = 86) -> None:
+        if not items:
+            return
+        gap = 12
+        cell_width = (self.right - self.left - gap) / 2
+        self.ensure(height + 14)
+        for index, (label, body) in enumerate(items[:2]):
+            x = self.left + index * (cell_width + gap)
+            self.canvas.setFillColor(self.colors["soft"])
+            self.canvas.setStrokeColor(self.colors["line"])
+            self.canvas.roundRect(x, self.y - height, cell_width, height, 3, fill=1, stroke=1)
+            self.label(label, x + 12, self.y - 18)
+            self.text(body, x + 12, self.y - 38, cell_width - 24, size=8.2, leading=12,
+                      color="muted", max_lines=4)
+        self.y -= height + 14
+
+    def link_card_grid(self, items: list[tuple[str, str, str, str]], height: float = 72) -> None:
+        if not items:
+            return
+        gap = 10
+        cell_width = (self.right - self.left - gap) / 2
+        for row_start in range(0, len(items), 2):
+            row = items[row_start:row_start + 2]
+            self.ensure(height + 10)
+            for index, (kind, title, description, url) in enumerate(row):
+                x = self.left + index * (cell_width + gap)
+                bottom = self.y - height
+                self.canvas.setFillColor(self.colors["paper"])
+                self.canvas.setStrokeColor(self.colors["line"])
+                self.canvas.roundRect(x, bottom, cell_width, height, 3, fill=1, stroke=1)
+                self.label(kind.upper(), x + 10, self.y - 15)
+                title_lines = self.wrap(title, "MalgunGothic-Bold", 8.5, cell_width - 20)[:2]
+                title_y = self.y - 31
+                self.canvas.setFillColor(self.colors["ink"])
+                self.canvas.setFont("MalgunGothic-Bold", 8.5)
+                for line in title_lines:
+                    self.canvas.drawString(x + 10, title_y, line)
+                    title_y -= 11
+                description_lines = self.wrap(description, "MalgunGothic", 7.2, cell_width - 20)[:2]
+                self.canvas.setFillColor(self.colors["muted"])
+                self.canvas.setFont("MalgunGothic", 7.2)
+                description_y = max(bottom + 11, title_y - 2)
+                for line in description_lines:
+                    self.canvas.drawString(x + 10, description_y, line)
+                    description_y -= 9
+                self.canvas.linkURL(url, (x, bottom, x + cell_width, self.y), relative=0)
+            self.y -= height + 10
+
     def link_line(self, label: Any, url: str) -> None:
         self.ensure(20)
         self.link(label, url, self.left, self.y - 9, 9.5)
@@ -908,11 +1048,11 @@ class TechnicalDocument:
             box(*track_centers[1], 148, 44, nodes[2], 2)
             box(*right_center, 124, 50, nodes[3], 3)
         elif kind == "tracking-sdk-stack":
-            centers = [(center_x, center_y + 60 - index * 36) for index in range(4)]
+            centers = [(self.left + 62 + index * ((self.right - self.left - 124) / 3), center_y) for index in range(4)]
             for index in range(3):
-                connector((center_x, centers[index][1] - 15), (center_x, centers[index + 1][1] + 15))
+                connector((centers[index][0] + 58, center_y), (centers[index + 1][0] - 58, center_y))
             for index, center in enumerate(centers):
-                box(*center, 196, 30, nodes[index], index)
+                box(*center, 116, 58, nodes[index], index)
         else:
             raise ValueError(f"Unknown PDF diagram kind: {kind}.")
         return bottom
@@ -1127,9 +1267,166 @@ def public_project_links(payload: dict[str, Any], project: dict[str, Any],
     return links
 
 
+def evidence_first_pdf_labels(locale: str) -> dict[str, str]:
+    if locale == "ko":
+        return {
+            "overview": "개요",
+            "tool_evidence": "도구 증거",
+            "architecture_api": "아키텍처와 API",
+            "medical": "의료 적용",
+            "industrial": "산업 확장 · 공개 문서 · 한계",
+            "problem": "문제와 적용 경계",
+            "role": "내 역할과 API 안정성",
+            "owned": "내 역할",
+            "team": "팀·협력자 경계",
+            "resources": "공개 문서와 제품 정보",
+            "limits": "한계와 팀 결과",
+        }
+    return {
+        "overview": "Overview",
+        "tool_evidence": "Tool evidence",
+        "architecture_api": "Architecture and API",
+        "medical": "Medical application",
+        "industrial": "Industrial extension · public resources · limits",
+        "problem": "Problem and application boundary",
+        "role": "My role and API stability",
+        "owned": "My role",
+        "team": "Team and partner boundary",
+        "resources": "Public documentation and product information",
+        "limits": "Limits and team result",
+    }
+
+
+def generate_evidence_first_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any],
+                                        project: dict[str, Any], locale: str, output: Path,
+                                        local_evidence: dict[str, Path]) -> int:
+    """Render the SKADI evidence-first contract as exactly five authored pages."""
+    copy = localized(project, locale)
+    labels = evidence_first_pdf_labels(locale)
+    common = project_labels(locale)
+    doc = TechnicalDocument(dependencies, output, copy["title"], copy["thesis"], locale, 5)
+    gallery = project["media"]["gallery"]
+    gallery_by_id = {item["id"]: item for item in gallery}
+    figure_numbers = {item["id"]: index + 2 for index, item in enumerate(gallery)}
+
+    def begin_fixed_page(number: int, title: str) -> None:
+        if number > 1:
+            require(doc.page_no == number - 1,
+                    f"{output.name}: evidence-first page {number - 1} overflowed its fixed layout.")
+            doc.finish_page()
+        doc.page_no = number
+        doc.section_name = title
+        doc.begin_page(number, title)
+        doc.y = doc.top - 30
+
+    def gallery_figure(identifier: str) -> tuple[Path, str, str]:
+        item = gallery_by_id[identifier]
+        path = local_evidence.get(identifier)
+        require(path is not None, f"{output.name}: missing evidence image {identifier}.")
+        caption = clean_text(localized(item, locale).get("caption"))
+        return path, f"{common['figure']} {figure_numbers[identifier]}.", caption
+
+    blocks = {block["key"]: (block, localized(block, locale)) for block in project["blocks"]}
+    diagram = project["pdfSequence"]["diagram"]
+    diagram_copy = diagram["translations"][locale]
+
+    # 1 / 5: overview and poster (the video itself is never embedded as an image).
+    begin_fixed_page(1, labels["overview"])
+    doc.kicker(copy["eyebrow"])
+    doc.para(copy["title"], size=23, leading=29, font="MalgunGothic-Bold", gap=12)
+    doc.para(copy["thesis"], size=12.5, leading=19, font="MalgunGothic-Bold", gap=10)
+    doc.meta_line([
+        (common["period"], project["period"]),
+        (common["state"], copy["status"]),
+        (common["tier"], tier_label(payload, project["tier"], locale)),
+    ])
+    doc.rule(before=8, after=10)
+    doc.para(copy["summary"], color="muted", gap=10)
+    poster = selected_pdf_evidence_image(project, local_evidence)
+    require(poster is not None, f"{output.name}: evidence-first overview requires the approved poster.")
+    doc.figure(poster, f"{common['figure']} 1.", copy["mediaCaption"])
+    doc.h2(labels["problem"])
+    doc.para(copy["problem"], size=9.2, leading=13, color="muted", gap=4)
+
+    # 2 / 5: the three platform tools, before interpretation.
+    begin_fixed_page(2, labels["tool_evidence"])
+    marker_block, marker_copy = blocks["marker-definition"]
+    doc.h3(marker_copy["heading"])
+    doc.para(block_body(marker_block, marker_copy), size=9, leading=13, color="muted", gap=8)
+    tool_ids = ["skadi-marker-workflow-01", "skadi-api-openex-01", "skadi-viewer-6dof-01"]
+    doc.figure_grid([gallery_figure(identifier) for identifier in tool_ids[:2]], columns=2, image_height=140)
+    doc.figure_grid([gallery_figure(tool_ids[2])], columns=1, image_height=190)
+    doc.para(copy["evidence"], size=8.7, leading=12.5, color="muted", gap=4)
+
+    # 3 / 5: Define -> Open -> Track -> Apply, owned API stability, and the public change note.
+    begin_fixed_page(3, labels["architecture_api"])
+    doc.y = doc.diagram(diagram["kind"], diagram_copy["title"],
+                        [clean_text(node) for node in diagram_copy["nodes"]], doc.y) - 8
+    step_notes = [(step["label"], clean_text(localized(step, locale)["description"]))
+                  for step in project["architectureSteps"]]
+    doc.note_grid(step_notes[:2], height=70)
+    doc.note_grid(step_notes[2:], height=70)
+    doc.h2(labels["role"])
+    doc.para(copy["role"], size=9, leading=13, color="muted", gap=8)
+    for key in ["api-stability", "viewer-delivery"]:
+        block, block_copy = blocks[key]
+        doc.h3(block_copy["heading"])
+        doc.para(block_body(block, block_copy), size=8.7, leading=12.5, color="muted", gap=6)
+    for link in project.get("links", []):
+        doc.link_line(clean_text(localized(link, locale).get("label")), clean_text(link["href"]))
+
+    # 4 / 5: medical primary track, with the two application artifacts not already shown as tools.
+    begin_fixed_page(4, labels["medical"])
+    medical = project["applicationTracks"][0]
+    medical_copy = localized(medical, locale)
+    doc.h2(medical_copy["title"])
+    doc.para(medical_copy["summary"], size=9.5, leading=14, color="muted", gap=8)
+    medical_ids = [identifier for identifier in medical["evidenceIds"]
+                   if identifier in {"skadi-dental-registration-01", "skadi-slicer-template-01"}]
+    doc.figure_grid([gallery_figure(identifier) for identifier in medical_ids], columns=2, image_height=190)
+    doc.note_grid([
+        (labels["owned"], medical_copy["ownedRole"]),
+        (labels["team"], medical_copy["teamBoundary"]),
+    ], height=94)
+
+    # 5 / 5: industrial extension, four descriptive public resources, and explicit limits.
+    begin_fixed_page(5, labels["industrial"])
+    industrial = project["applicationTracks"][1]
+    industrial_copy = localized(industrial, locale)
+    doc.h3(industrial_copy["title"])
+    doc.para(industrial_copy["summary"], size=8.7, leading=12.5, color="muted", gap=5)
+    doc.figure_grid([gallery_figure("skadi-robot-docking-01")], columns=1, image_height=100)
+    doc.note_grid([
+        (labels["owned"], industrial_copy["ownedRole"]),
+        (labels["team"], industrial_copy["teamBoundary"]),
+    ], height=70)
+    doc.h3(labels["resources"])
+    resource_cards = []
+    for resource in project["publicResources"]:
+        resource_copy = localized(resource, locale)
+        resource_cards.append((resource["type"], resource_copy["title"],
+                               resource_copy["description"], resource["href"]))
+    doc.link_card_grid(resource_cards, height=62)
+    doc.h3(labels["limits"])
+    doc.para(copy["limitation"], size=8, leading=11, color="muted", gap=4)
+    doc.para(copy["teamResult"], size=8, leading=11, color="muted", gap=4)
+    boundary_block, boundary_copy = blocks["integration-boundary"]
+    doc.h3(boundary_copy["heading"])
+    doc.para(block_body(boundary_block, boundary_copy), size=8, leading=11, color="muted", gap=2)
+
+    require(doc.page_no == 5, f"{output.name}: evidence-first page 5 overflowed its fixed layout.")
+    doc.finish_page()
+    doc.save()
+    return 5
+
+
 def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], project: dict[str, Any],
                          locale: str, output: Path, local_evidence: dict[str, Path]) -> int:
     """Compose one case as a flowing document and return how many pages it needed."""
+    if project.get("caseLayout") == "evidence-first":
+        return generate_evidence_first_project_pdf(
+            dependencies, payload, project, locale, output, local_evidence
+        )
     copy = localized(project, locale)
     labels = project_labels(locale)
     diagram = project["pdfSequence"]["diagram"]

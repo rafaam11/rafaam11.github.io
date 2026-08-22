@@ -381,6 +381,116 @@ test('canonical records retain localized evidence, attribution, media, blocks, a
   assert.deepEqual(data.projects.at(-1).subcases.map((item) => item.key), ['llm-wiki', 'multi-cli-work', 'daegu-bus']);
 });
 
+test('SKADI evidence-first contract keeps the case identity and exposes localized architecture, applications, and public resources', () => {
+  const skadi = data.projects.find((project) => project.slug === 'skadi-tracking-software');
+  const standardProjects = data.projects.filter((project) => project.slug !== skadi.slug);
+  assert.equal(skadi.caseLayout, 'evidence-first');
+  assert.equal(skadi.period, '2023.02 – present');
+  assert.equal(skadi.evidenceState, 'ongoing');
+  assert.equal(skadi.lifecycleState, 'ongoing');
+  assert.equal(skadi.translations.ko.title, 'SKADI 위치추적 소프트웨어 (API·Viewer)');
+  assert.equal(skadi.translations.en.title, 'SKADI Tracking Software (API and Viewer)');
+  const expectedVideoPolicy = {
+    maxBytes: 20971520,
+    targetDurationSeconds: 26,
+    toleranceSeconds: 0.2,
+    width: 1280,
+    height: 720,
+    codec: 'h264',
+    requireNoAudio: true,
+    requireFastStart: true
+  };
+  assert.deepEqual(skadi.media.lead.videoPolicy, expectedVideoPolicy);
+  assert.deepEqual(skadi.media.video.videoPolicy, expectedVideoPolicy);
+  assert.deepEqual(
+    validator.approvedMp4Errors(path.join(root, skadi.media.lead.publicPath), expectedVideoPolicy),
+    [],
+    'the published SKADI lead must satisfy its strict codec, geometry, audio, duration, and fast-start policy'
+  );
+  for (const project of standardProjects) {
+    assert.equal(project.caseLayout, undefined, `${project.slug}: standard layout should remain implicit`);
+    assert.equal(project.architectureSteps, undefined, `${project.slug}: unexpected architectureSteps`);
+    assert.equal(project.applicationTracks, undefined, `${project.slug}: unexpected applicationTracks`);
+    assert.equal(project.publicResources, undefined, `${project.slug}: unexpected publicResources`);
+  }
+
+  assert.deepEqual(skadi.architectureSteps.map((step) => [step.key, step.label]), [
+    ['define', 'Define'], ['open', 'Open'], ['track', 'Track'], ['apply', 'Apply']
+  ]);
+  for (const step of skadi.architectureSteps) {
+    for (const locale of ['ko', 'en']) assert.ok(step.translations[locale].description.trim(), `${step.key}: ${locale} description`);
+  }
+
+  assert.deepEqual(skadi.applicationTracks.map((track) => [track.key, track.kind]), [
+    ['medical', 'primary'], ['industrial', 'extension']
+  ]);
+  const galleryIds = new Set(skadi.media.gallery.map((item) => item.id));
+  for (const track of skadi.applicationTracks) {
+    assert.ok(track.evidenceIds.length > 0, `${track.key}: missing evidence ids`);
+    assert.equal(new Set(track.evidenceIds).size, track.evidenceIds.length, `${track.key}: duplicate evidence ids`);
+    assert.ok(track.evidenceIds.every((id) => galleryIds.has(id)), `${track.key}: evidence must reference the six-image gallery`);
+    for (const locale of ['ko', 'en']) {
+      for (const field of ['title', 'summary', 'ownedRole', 'teamBoundary']) {
+        assert.ok(track.translations[locale][field].trim(), `${track.key}: missing ${locale}.${field}`);
+      }
+    }
+  }
+
+  assert.deepEqual(skadi.publicResources.map((resource) => [resource.type, resource.href]), [
+    ['documentation', 'https://digitrack.notion.site/SKADI-Viewer-6a6710e4f7ba4d0b970376d07539e4c7'],
+    ['product', 'https://digitrack.co.kr/business/products/3d-position-sensor/3'],
+    ['documentation', 'https://digitrack.notion.site/SKADI-API-36c9be89b97b4dd58026021f95b06744'],
+    ['product', 'https://digitrack.co.kr/business/products/3d-position-sensor/4']
+  ]);
+  for (const resource of skadi.publicResources) {
+    assert.doesNotMatch(resource.href, /github\.com/i);
+    for (const locale of ['ko', 'en']) {
+      assert.ok(resource.translations[locale].title.trim());
+      assert.ok(resource.translations[locale].description.trim());
+    }
+  }
+
+  assert.deepEqual(skadi.media.gallery.map((item) => item.id), [
+    'skadi-marker-workflow-01',
+    'skadi-api-openex-01',
+    'skadi-viewer-6dof-01',
+    'skadi-dental-registration-01',
+    'skadi-slicer-template-01',
+    'skadi-robot-docking-01'
+  ]);
+  assert.match(`${skadi.translations.ko.role}\n${skadi.translations.en.role}`, /DtSkadi\.dll/);
+  assert.match(`${skadi.translations.ko.role}\n${skadi.translations.en.role}`, /OpenEx\(\)/);
+  assert.match(`${skadi.translations.ko.role}\n${skadi.translations.en.role}`, /MarkerEditor/);
+  assert.match(JSON.stringify(skadi), /SkadiApp/);
+  assert.equal(skadi.links.some((link) => link.href === 'https://digitrack.notion.site/Ver-7-1-2026-02-20-3071183735e080219c11ed0d51ea5b4f?pvs=25'), true);
+});
+
+test('SKADI evidence-first validation rejects malformed layout fields, evidence references, and unsafe resource URLs', () => {
+  const mutations = [
+    [(project) => { project.caseLayout = 'hero-mosaic'; }, /case layout.*standard.*evidence-first/i],
+    [(project) => { delete project.architectureSteps[1].translations.en.description; }, /architecture step.*open.*en.*description/i],
+    [(project) => { project.architectureSteps[2].key = 'stream'; }, /architecture steps.*define.*open.*track.*apply/i],
+    [(project) => { project.applicationTracks[0].kind = 'clinical'; }, /application track.*medical.*kind.*primary.*extension/i],
+    [(project) => { project.applicationTracks[0].evidenceIds.push(project.applicationTracks[0].evidenceIds[0]); }, /application track.*medical.*duplicate evidence/i],
+    [(project) => { project.applicationTracks[1].evidenceIds = ['unknown-evidence']; }, /application track.*industrial.*known approved gallery evidence/i],
+    [(project) => { project.publicResources[0].type = 'repository'; }, /public resource.*type.*documentation.*product/i],
+    [(project) => { project.publicResources[0].href = 'http://digitrack.co.kr/docs'; }, /public resource.*unsafe/i],
+    [(project) => { project.publicResources[0].href = 'https://localhost/private/raw/manual.pdf'; }, /public resource.*unsafe/i],
+    [(project) => { delete project.publicResources[0].translations.en.description; }, /public resource.*en.*description/i],
+    [(project) => { project.media.lead.videoPolicy.codec = 'vp9'; }, /videoPolicy codec.*h264/i],
+    [(project) => { delete project.media.lead.videoPolicy.requireFastStart; }, /videoPolicy.*canonical keys/i]
+  ];
+  for (const [mutate, expected] of mutations) {
+    const candidate = clone(data);
+    const project = candidate.projects.find((item) => item.slug === 'skadi-tracking-software');
+    mutate(project);
+    const rendererErrors = render.dataErrors(candidate);
+    assert.match(rendererErrors.join('\n'), expected);
+    assert.deepEqual(rendererErrors, validator.portfolioDataErrors(candidate));
+    assert.equal(render.caseStudyHtml(candidate, project.slug, '../../', false, 'en'), '');
+  }
+});
+
 test('pending evidence remains pathless and approved evidence uses safe public paths', () => {
   for (const project of data.projects) {
     const lead = project.media.lead;
@@ -414,13 +524,13 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 52);
+  assert.equal(register.entries.length, 53);
   assert.deepEqual(
     Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
       state,
       register.entries.filter((entry) => entry.state === state).length
     ])),
-    { 'pending-review': 0, 'approved-public': 52, excluded: 0 }
+    { 'pending-review': 0, 'approved-public': 53, excluded: 0 }
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -1364,6 +1474,51 @@ test('Scholar case article orders header, figure, five sections, gallery, and li
   assert.doesNotMatch(pendingGallery, /sc-gallery/);
 });
 
+test('SKADI evidence-first renderer leads with seven figures and preserves the approved section order in both locales', () => {
+  const expectedResources = [
+    'https://digitrack.notion.site/SKADI-Viewer-6a6710e4f7ba4d0b970376d07539e4c7',
+    'https://digitrack.co.kr/business/products/3d-position-sensor/3',
+    'https://digitrack.notion.site/SKADI-API-36c9be89b97b4dd58026021f95b06744',
+    'https://digitrack.co.kr/business/products/3d-position-sensor/4'
+  ];
+  for (const locale of ['ko', 'en']) {
+    const html = render.caseStudyHtml(data, 'skadi-tracking-software', locale === 'ko' ? '../../' : '../../../', false, locale);
+    assert.match(html, /<article class="sc-case sc-case--evidence-first"[^>]*data-case-layout="evidence-first"/);
+    assertInOrder(html, [
+      'sc-case__header',
+      '<video',
+      'data-evidence-first-section="gallery"',
+      'data-evidence-first-section="architecture"',
+      'data-evidence-first-section="role"',
+      'data-track="medical" data-track-kind="primary"',
+      'data-track="industrial" data-track-kind="extension"',
+      'data-evidence-first-section="resources"',
+      'data-evidence-first-section="limits"',
+      'sc-case__links'
+    ], `${locale}: evidence-first sequence`);
+    assert.equal(count(html, '<figure'), 7, `${locale}: one lead and six evidence figures`);
+    assert.equal(count(html, 'class="sc-figure sc-figure--gallery"'), 6, `${locale}: exact evidence gallery`);
+    assert.match(html, /<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="none")(?=[^>]*\btabindex="0")[^>]*>/);
+    assert.doesNotMatch(html, /\bautoplay\b|\bloop\b|\bmuted\b/);
+    assertInOrder(html, ['data-step="define"', 'data-step="open"', 'data-step="track"', 'data-step="apply"'], `${locale}: architecture steps`);
+    assert.match(html, /DtSkadi\.dll/);
+    assert.match(html, /OpenEx\(\)/);
+    assert.match(html, /MarkerEditor/);
+    assert.match(html, /SkadiApp/);
+    for (const href of expectedResources) {
+      const escaped = href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      assert.match(html, new RegExp(`href="${escaped}" target="_blank" rel="noopener"`));
+    }
+    assert.equal(count(html, 'class="sc-resource-card"'), 4);
+    assert.equal(count(html, 'Ver-7-1-2026-02-20-3071183735e080219c11ed0d51ea5b4f'), 1, 'API change note should not be duplicated');
+  }
+
+  const standard = render.caseStudyHtml(data, 'surgical-navigation', '../../', false, 'en');
+  assert.match(standard, /<article class="sc-case" data-case="surgical-navigation">/);
+  assert.doesNotMatch(standard, /evidence-first|data-step=|sc-resource-card|data-track=/);
+  assertInOrder(standard, ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>', 'sc-gallery'], 'standard case remains unchanged');
+});
+
 test('Task 3 all sixteen case shells share one fetch-free, localized renderer contract', () => {
   for (const locale of ['ko', 'en']) {
     for (const project of data.projects) {
@@ -1772,6 +1927,77 @@ test('Task 5 manifest freshness follows canonical project, evidence, and public 
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /source digest|stale/i);
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('SKADI evidence-first PDFs publish matching five-page KO and EN artifacts', () => {
+  const manifest = JSON.parse(read('output/pdf/manifest.json'));
+  const entries = manifest.artifacts.filter((artifact) => artifact.slug === 'skadi-tracking-software');
+  assert.equal(entries.length, 4);
+  for (const locale of ['ko', 'en']) {
+    const output = path.join(root, 'output', 'pdf', `skadi-tracking-software-${locale}.pdf`);
+    const published = path.join(root, 'assets', 'pdfs', `skadi-tracking-software-${locale}.pdf`);
+    assert.equal(pdfPageCount(output), 5, `${locale}: canonical output page count`);
+    assert.equal(pdfPageCount(published), 5, `${locale}: public copy page count`);
+    assert.equal(sha256(output), sha256(published), `${locale}: public copy checksum`);
+    const localeEntries = entries.filter((artifact) => artifact.locale === locale);
+    assert.equal(localeEntries.length, 2);
+    assert.ok(localeEntries.every((artifact) => artifact.pages === 5));
+    assert.ok(localeEntries.every((artifact) => artifact.sha256 === sha256(output)));
+  }
+});
+
+test('SKADI evidence-first PDFs map the fixed five-page narrative and public link annotations', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const auditCode = [
+    'import json, sys',
+    'from pathlib import Path',
+    'from pypdf import PdfReader',
+    'root = Path(sys.argv[1])',
+    'result = {}',
+    'for locale in ["ko", "en"]:',
+    '    reader = PdfReader(str(root / "output" / "pdf" / f"skadi-tracking-software-{locale}.pdf"))',
+    '    texts = [(page.extract_text() or "") for page in reader.pages]',
+    '    uris = []',
+    '    images = []',
+    '    for page in reader.pages:',
+    '        annotations = page.get("/Annots") or []',
+    '        for ref in annotations:',
+    '            action = ref.get_object().get("/A") or {}',
+    '            if action.get("/URI"): uris.append(str(action.get("/URI")))',
+    '        xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
+    '        images.append(sum(1 for ref in xobjects.values() if ref.get_object().get("/Subtype") == "/Image"))',
+    '    result[locale] = {"texts": texts, "uris": uris, "images": images}',
+    'print(json.dumps(result, ensure_ascii=False))'
+  ].join('\n');
+  const audit = childProcess.spawnSync(python, ['-c', auditCode, root], { cwd: root, encoding: 'utf8', timeout: 30_000 });
+  assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+  const result = JSON.parse(audit.stdout);
+  const headings = {
+    ko: ['개요', '도구 증거', '아키텍처와 API', '의료 적용', '산업 확장 · 공개 문서 · 한계'],
+    en: ['Overview', 'Tool evidence', 'Architecture and API', 'Medical application', 'Industrial extension · public resources · limits']
+  };
+  const publicUrls = [
+    'https://digitrack.notion.site/SKADI-Viewer-6a6710e4f7ba4d0b970376d07539e4c7',
+    'https://digitrack.co.kr/business/products/3d-position-sensor/3',
+    'https://digitrack.notion.site/SKADI-API-36c9be89b97b4dd58026021f95b06744',
+    'https://digitrack.co.kr/business/products/3d-position-sensor/4',
+    'https://digitrack.notion.site/Ver-7-1-2026-02-20-3071183735e080219c11ed0d51ea5b4f?pvs=25'
+  ];
+  for (const locale of ['ko', 'en']) {
+    assert.equal(result[locale].texts.length, 5);
+    headings[locale].forEach((heading, index) => assert.match(result[locale].texts[index], new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))));
+    assert.match(result[locale].texts[1], /MarkerEditor/);
+    assert.match(result[locale].texts[2], /DtSkadi\.dll/);
+    assert.match(result[locale].texts[2], /OpenEx\(\)/);
+    assert.match(result[locale].texts[3], /Slicer/i);
+    assert.match(result[locale].texts[4], /robot|로봇/i);
+    assert.ok(result[locale].images[0] >= 1, `${locale}: poster missing from overview`);
+    assert.ok(result[locale].images[1] >= 3, `${locale}: tool evidence images missing`);
+    assert.ok(result[locale].images[3] >= 2, `${locale}: medical evidence images missing`);
+    assert.ok(result[locale].images[4] >= 1, `${locale}: robot evidence image missing`);
+    for (const url of publicUrls) assert.ok(result[locale].uris.includes(url), `${locale}: missing link annotation ${url}`);
   }
 });
 
@@ -2650,7 +2876,7 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
 test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const visualFiles = validator.publicPortfolioVisualFiles(root);
-  assert.equal(visualFiles.length, 49, 'approved derivatives across all eight cases');
+  assert.equal(visualFiles.length, 50, 'approved derivatives across all eight cases');
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
 
@@ -3812,6 +4038,16 @@ test('Scholar gallery contract accepts up to six images and rejects other shapes
     assert.match(render.dataErrors(candidate).join('\n'), expected);
     assert.match(validator.portfolioDataErrors(candidate).join('\n'), expected);
   }
+});
+
+test('SKADI evidence-first gallery uses a 3-2-1 responsive grid without changing the standard gallery', () => {
+  const css = read('css/scholar.css');
+  assert.ok(cssRuleBodies(css, '.sc-gallery__grid').some((body) => /grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/.test(body)));
+  assert.ok(cssRuleBodies(css, '.sc-case--evidence-first .sc-gallery__grid').some((body) => /grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/.test(body)));
+  const tablet = cssAtRuleBodies(css, /@media\s*\(max-width:\s*900px\)/i).join('\n');
+  assert.match(tablet, /\.sc-case--evidence-first\s+\.sc-gallery__grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
+  const mobile = cssAtRuleBodies(css, /@media\s*\(max-width:\s*620px\)/i).join('\n');
+  assert.match(mobile, /\.sc-case--evidence-first\s+\.sc-gallery__grid\s*\{[^}]*grid-template-columns:\s*1fr/s);
 });
 
 test('Scholar gallery items participate in evidence registry and public visual file checks', () => {
