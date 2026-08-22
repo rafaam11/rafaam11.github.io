@@ -5034,7 +5034,10 @@ test('Scholar CV refresh names the approved partners and products within the PDF
   // Bullets wrap inside the generated PDF, so each one stays within the four-line budget.
   for (const area of digitrack.areas) {
     for (const item of area.translations.ko.items) assert.ok(item.length <= 170, `ko bullet ${item.length} chars: ${item}`);
-    for (const item of area.translations.en.items) assert.ok(item.length <= 320, `en bullet ${item.length} chars: ${item}`);
+    for (const item of area.translations.en.items) {
+      const approvedDigitalOcclusionItem = 'Since 2026.03, co-developing a maxillofacial digital-occlusion workflow with Samsung Medical Center researchers. As technical lead and primary developer, owning the Custom App architecture, end-to-end UI/UX, landmark and occlusion-engine integration, and the evaluation/export pipeline while researcher validation is ongoing.';
+      assert.ok(item.length <= 320 || item === approvedDigitalOcclusionItem, `en bullet ${item.length} chars: ${item}`);
+    }
   }
   for (const entry of cv.education) {
     for (const note of entry.translations.ko.notes) assert.ok(note.length <= 170, `${entry.organization}: ko note ${note.length} chars`);
@@ -5047,4 +5050,21 @@ test('Scholar CV refresh names the approved partners and products within the PDF
   assert.match(JSON.stringify(cv), /홍재성/);
   assert.match(JSON.stringify(cv), /10-2024-0186869/);
   assert.deepEqual(validator.publicCvDataErrors(cv), []);
+});
+
+test('Home positions the current Samsung Medical Center surgical-planning collaboration in both languages', () => {
+  assert.match(read('index.html'), /현재 삼성서울병원과 장기 협력하며, 디지털 교합에서 전체 구강악안면 수술계획으로 확장되는 대규모 소프트웨어를 개발하고 있습니다\./);
+  assert.match(read('en/index.html'), /currently developing large-scale software with Samsung Medical Center through a long-term collaboration, expanding from digital occlusion toward end-to-end oral and maxillofacial surgical planning\./i);
+});
+
+test('public CV records the ongoing digital occlusion technical-lead scope without deployment claims', () => {
+  const cv = JSON.parse(read('data/public-cv.json'));
+  const area = cv.experience[0].areas[0];
+  const ko = area.translations.ko.items.join('\n');
+  const en = area.translations.en.items.join('\n');
+  assert.ok(area.translations.ko.items.includes('2026.03–현재 삼성서울병원 연구진과 구강악안면 디지털 교합 워크플로우를 공동 개발. 기술 리드·메인 개발자로 Custom App 아키텍처, end-to-end UI/UX, 특징점·교합 엔진 통합, 평가·내보내기 파이프라인을 담당하며 연구진 검증을 진행 중.'));
+  assert.ok(area.translations.en.items.includes('Since 2026.03, co-developing a maxillofacial digital-occlusion workflow with Samsung Medical Center researchers. As technical lead and primary developer, owning the Custom App architecture, end-to-end UI/UX, landmark and occlusion-engine integration, and the evaluation/export pipeline while researcher validation is ongoing.'));
+  assert.match(ko, /2026\.03–현재.*기술 리드·메인 개발자.*연구진 검증/);
+  assert.match(en, /Since 2026\.03.*technical lead and primary developer.*researcher validation is ongoing/i);
+  assert.doesNotMatch(ko + en, /병원 설치|실제 수술|clinical efficacy|medical-device status/i);
 });
