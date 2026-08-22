@@ -414,13 +414,13 @@ test('pending evidence remains pathless and approved evidence uses safe public p
 test('Task 4 public evidence register covers every canonical media id without private provenance', () => {
   const register = validator.readEvidenceRegister(root);
   assert.deepEqual(register.errors, []);
-  assert.equal(register.entries.length, 32);
+  assert.equal(register.entries.length, 36);
   assert.deepEqual(
     Object.fromEntries(['pending-review', 'approved-public', 'excluded'].map((state) => [
       state,
       register.entries.filter((entry) => entry.state === state).length
     ])),
-    { 'pending-review': 4, 'approved-public': 28, excluded: 0 }
+    { 'pending-review': 0, 'approved-public': 36, excluded: 0 }
   );
   assert.deepEqual(validator.evidenceRegistryErrors(data, root), []);
 
@@ -462,9 +462,10 @@ test('Task 4 evidence registry rejects missing, duplicate, mismatched, and unapp
     assert.match(errors, /mandibular-publication.*media type mismatch/i);
   });
 
-  const pendingWithPath = evidenceRegisterText(rows.map((entry) => entry.id === 'rtms-prototype-recording'
-    ? { ...entry, source: 'assets/projects/rtms-navigation/prototype.mp4' }
-    : entry));
+  const pendingWithPath = evidenceRegisterText(rows.concat({
+    id: 'rtms-navigation-pending-demo', project: 'rtms-navigation', type: 'video', state: 'pending-review',
+    source: 'assets/projects/rtms-navigation/prototype.mp4', note: 'Synthetic pending row; no public derivative approved.'
+  }));
   withEvidenceRoot(pendingWithPath, (temporaryRoot) => {
     assert.match(validator.evidenceRegistryErrors(data, temporaryRoot).join(' '), /pending-review.*must not declare a public source/i);
   });
@@ -852,9 +853,10 @@ test('Task 4 review validates source and prose columns structurally without reje
     });
   }
 
-  const blankPendingSource = evidenceRegisterText(canonical.map((entry) => entry.id === 'rtms-prototype-recording'
-    ? { ...entry, source: '' }
-    : entry));
+  const blankPendingSource = evidenceRegisterText(canonical.concat({
+    id: 'rtms-navigation-pending-demo', project: 'rtms-navigation', type: 'video', state: 'pending-review',
+    source: '', note: 'Synthetic pending row; no public derivative approved.'
+  }));
   withEvidenceRoot(blankPendingSource, (temporaryRoot) => {
     assert.match(validator.evidenceRegistryErrors(data, temporaryRoot).join(' '), /source must be exactly "-"/i);
   });
@@ -1039,7 +1041,10 @@ test('canonical validator rejects malformed capabilities, tiers, states, blocks,
     [(candidate) => { candidate.projects[0].tier = 'featured'; }, /unknown tier/i],
     [(candidate) => { candidate.projects[0].evidenceState = 'completed'; }, /unknown evidence state/i],
     [(candidate) => { candidate.projects[0].blocks[0].type = 'timeline'; }, /unsupported block type/i],
-    [(candidate) => { candidate.projects[3].media.lead.publicPath = 'assets/private/demo.mp4'; }, /pending-approval media must not declare a public path/i],
+    [(candidate) => {
+      candidate.projects[3].media.lead = { id: 'pending-with-path', type: 'image', status: 'pending-approval', publicPath: 'assets/projects/rtms-navigation/demo.png' };
+      candidate.projects[3].pdfSequence.evidenceId = 'pending-with-path';
+    }, /pending-approval media must not declare a public path/i],
     [(candidate) => { delete candidate.projects.at(-1).media.lead.publicPath; }, /approved media requires a public path/i],
     [(candidate) => { candidate.projects[0].pdf.ko = 'download.pdf'; }, /invalid ko PDF path/i]
   ];
@@ -1180,9 +1185,18 @@ test('Scholar Projects page groups detailed rows by tier in data order', () => {
 });
 
 test('Scholar figure renderer skips pending media instead of drawing a placeholder', () => {
-  const project = data.projects.find((item) => item.slug === 'rtms-navigation');
+  // Every canonical case now carries approved media, so the pending state is synthesized on a clone.
+  const pendingData = clone(data);
+  const project = pendingData.projects.find((item) => item.slug === 'rtms-navigation');
+  project.media = {
+    lead: { id: 'rtms-pending-demo', type: 'video', status: 'pending-approval' },
+    video: { id: 'rtms-pending-demo', type: 'video', status: 'pending-approval' },
+    poster: { id: 'rtms-pending-poster', type: 'image', status: 'pending-approval' },
+    gallery: []
+  };
+  project.pdfSequence.evidenceId = project.media.lead.id;
   assert.equal(render.evidenceMediaHtml(project, 'en', '../../', false), '');
-  const html = render.caseStudyHtml(data, project.slug, '../../', false, 'en');
+  const html = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
   assert.doesNotMatch(html, /<figure|<img|<video|role="img"|placeholder/i);
   assert.match(html, new RegExp(project.translations.en.limitation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   const repositoryLead = data.projects.find((item) => item.media.lead.type === 'repository');
@@ -1333,7 +1347,10 @@ test('Scholar case article orders header, figure, five sections, gallery, and li
   assert.match(html, /href="\.\.\/\.\.\/\.\.\/en\/contact\/index\.html"/);
   assert.match(html, new RegExp(project.translations.en.teamResult.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   assert.doesNotMatch(html, /td-|Decision Timeline|decision-step|Verified · Completed<\/span><span class="td/);
-  const pendingGallery = render.caseStudyHtml(data, 'rtms-navigation', '', false, 'ko');
+  const galleryless = clone(data);
+  const galleryProject = galleryless.projects.find((item) => item.slug === 'rtms-navigation');
+  galleryProject.media.gallery = [{ id: 'rtms-pending-gallery', type: 'image', status: 'pending-approval' }];
+  const pendingGallery = render.caseStudyHtml(galleryless, 'rtms-navigation', '', false, 'ko');
   assert.doesNotMatch(pendingGallery, /sc-gallery/);
 });
 
@@ -2665,7 +2682,7 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
 test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const visualFiles = validator.publicPortfolioVisualFiles(root);
-  assert.equal(visualFiles.length, 25, 'first-wave approved derivatives: 5 cases');
+  assert.equal(visualFiles.length, 33, 'approved derivatives across seven cases');
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
 

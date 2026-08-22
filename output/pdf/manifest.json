@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "b0fc9b72d5d7c5e4ce65f3990840b0b0600872a7c381e8a7785a1f0851fc885f",
+  "sourceDigest": "68842030a2514d52c7a1a1509b509eb994cfac1a873b95d5f15c5bf0e01c4941",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
   "generatorSha256": "ffb07da833d39d69353731fefa2e6407387f4bf09ec56b238a116b218d644168",
@@ -78,9 +78,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 2493,
-      "bytes": 175256,
-      "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
+      "characters": 2606,
+      "bytes": 965020,
+      "sha256": "aa56a6961a96d271e12852287d92835ec340bea59664f4ebc0bdbe77f103b1dd"
     },
     {
       "name": "rtms-navigation-en.pdf",
@@ -89,9 +89,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 4469,
-      "bytes": 76796,
-      "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
+      "characters": 4688,
+      "bytes": 863782,
+      "sha256": "4442c60fba6c92fc13e16e3e44eb87b16080b06a4266a89328b188f3e3e89d6e"
     },
     {
       "name": "respiratory-surface-guidance-ko.pdf",
@@ -122,9 +122,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 2995,
-      "bytes": 201433,
-      "sha256": "6e7eca279562cd9ac5d1a6a1189e6b8def6b6692c7e5eadf694840558cc61c23"
+      "characters": 3450,
+      "bytes": 2618884,
+      "sha256": "6c84863cf7b226cbd865051428dced2b920f2780c6656d27bfbcf082d6c67edf"
     },
     {
       "name": "skadi-tracking-software-en.pdf",
@@ -133,9 +133,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 5346,
-      "bytes": 78059,
-      "sha256": "2aa7b75bef674fc4dbe0d5302cec53f34d2ecb4cff56d779a54da5b0b7288574"
+      "characters": 5899,
+      "bytes": 2484818,
+      "sha256": "bb8f92518a912be8d0747ecd92e2aeb0430607a1058f1cbcd51eb9d67baba6fd"
     },
     {
       "name": "unmanned-forklift-ko.pdf",
@@ -337,8 +337,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 76796,
-      "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
+      "bytes": 863782,
+      "sha256": "4442c60fba6c92fc13e16e3e44eb87b16080b06a4266a89328b188f3e3e89d6e"
     },
     {
       "path": "assets/pdfs/rtms-navigation-ko.pdf",
@@ -346,8 +346,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 175256,
-      "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
+      "bytes": 965020,
+      "sha256": "aa56a6961a96d271e12852287d92835ec340bea59664f4ebc0bdbe77f103b1dd"
     },
     {
       "path": "assets/pdfs/skadi-tracking-software-en.pdf",
@@ -355,8 +355,8 @@
       "slug": "skadi-tracking-software",
       "locale": "en",
       "pages": 6,
-      "bytes": 78059,
-      "sha256": "2aa7b75bef674fc4dbe0d5302cec53f34d2ecb4cff56d779a54da5b0b7288574"
+      "bytes": 2484818,
+      "sha256": "bb8f92518a912be8d0747ecd92e2aeb0430607a1058f1cbcd51eb9d67baba6fd"
     },
     {
       "path": "assets/pdfs/skadi-tracking-software-ko.pdf",
@@ -364,8 +364,8 @@
       "slug": "skadi-tracking-software",
       "locale": "ko",
       "pages": 6,
-      "bytes": 201433,
-      "sha256": "6e7eca279562cd9ac5d1a6a1189e6b8def6b6692c7e5eadf694840558cc61c23"
+      "bytes": 2618884,
+      "sha256": "6c84863cf7b226cbd865051428dced2b920f2780c6656d27bfbcf082d6c67edf"
     },
     {
       "path": "assets/pdfs/surgical-navigation-en.pdf",
@@ -497,8 +497,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 76796,
-      "sha256": "8684c92f1ec5f1fe4c2aabb8412be37837d2a1e1c9d801a7f47970e5ce989302"
+      "bytes": 863782,
+      "sha256": "4442c60fba6c92fc13e16e3e44eb87b16080b06a4266a89328b188f3e3e89d6e"
     },
     {
       "path": "output/pdf/rtms-navigation-ko.pdf",
@@ -506,8 +506,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 175256,
-      "sha256": "d9561d4da1df3706cb6778d2aa53db7d41a0af5c60cac44158bea34076146a7f"
+      "bytes": 965020,
+      "sha256": "aa56a6961a96d271e12852287d92835ec340bea59664f4ebc0bdbe77f103b1dd"
     },
     {
       "path": "output/pdf/skadi-tracking-software-en.pdf",
@@ -515,8 +515,8 @@
       "slug": "skadi-tracking-software",
       "locale": "en",
       "pages": 6,
-      "bytes": 78059,
-      "sha256": "2aa7b75bef674fc4dbe0d5302cec53f34d2ecb4cff56d779a54da5b0b7288574"
+      "bytes": 2484818,
+      "sha256": "bb8f92518a912be8d0747ecd92e2aeb0430607a1058f1cbcd51eb9d67baba6fd"
     },
     {
       "path": "output/pdf/skadi-tracking-software-ko.pdf",
@@ -524,8 +524,8 @@
       "slug": "skadi-tracking-software",
       "locale": "ko",
       "pages": 6,
-      "bytes": 201433,
-      "sha256": "6e7eca279562cd9ac5d1a6a1189e6b8def6b6692c7e5eadf694840558cc61c23"
+      "bytes": 2618884,
+      "sha256": "6c84863cf7b226cbd865051428dced2b920f2780c6656d27bfbcf082d6c67edf"
     },
     {
       "path": "output/pdf/surgical-navigation-en.pdf",
