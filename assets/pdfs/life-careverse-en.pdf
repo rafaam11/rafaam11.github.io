@@ -143,14 +143,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 293.8898 141.5852 309.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 272.8898 141.5852 288.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 273.8898 128.2212 289.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 252.8898 128.2212 268.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 20 0 obj
@@ -1109,7 +1109,7 @@ endstream
 endobj
 36 0 obj
 <<
-/Length 3427
+/Length 3529
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1130,48 +1130,50 @@ BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 BT 1 0 0 1 48 753.8898 Tm /F2+0 10 Tf 12 TL (The clip shows that synchronization and spatial layout work; it claims no improvement in consultation) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 737.8898 Tm /F2+0 10 Tf 12 TL (quality or treatment outcome.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 709.8898 Tm /F2+0 10 Tf 12 TL (The patient demonstration and survey are under way and the external-hospital validation is still planned. Do) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 693.8898 Tm /F2+0 10 Tf 12 TL (not turn the research team registration, demonstrations, or validation plans into individual or) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 677.8898 Tm /F2+0 10 Tf 12 TL (clinical-outcome claims.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 648.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 708.8898 Tm /F3+0 11 Tf 13.2 TL (Adoption boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 628.8898 Tm /F2+0 10 Tf 12 TL (Oral and maxillofacial surgeons reviewed the consultation scenario and screen layout, and ran the headset) Tj T* ET
+BT 1 0 0 1 48 688.8898 Tm /F2+0 10 Tf 12 TL (The patient demonstration and survey are under way and the external-hospital validation is still planned. Do) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 612.8898 Tm /F2+0 10 Tf 12 TL (sessions with the research team.) Tj T* ET
+BT 1 0 0 1 48 672.8898 Tm /F2+0 10 Tf 12 TL (not turn the research team registration, demonstrations, or validation plans into individual or) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 656.8898 Tm /F2+0 10 Tf 12 TL (clinical-outcome claims.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 627.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 607.8898 Tm /F2+0 10 Tf 12 TL (Oral and maxillofacial surgeons reviewed the consultation scenario and screen layout, and ran the headset) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 591.8898 Tm /F2+0 10 Tf 12 TL (sessions with the research team.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 580.8898 m 547.2756 580.8898 l S
+n 48 559.8898 m 547.2756 559.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 546.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 525.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (Unity 6 \001 Photon PUN2 \001 Photon Voice \001 OpenXR / Android XR \001 Meta Quest 3 \001 Galaxy XR \001 DICOM 3D) Tj T* ET
+BT 1 0 0 1 48 501.8898 Tm /F2+0 10 Tf 12 TL (Unity 6 \001 Photon PUN2 \001 Photon Voice \001 OpenXR / Android XR \001 Meta Quest 3 \001 Galaxy XR \001 DICOM 3D) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 497.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 476.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 477.8898 Tm /F2+0 10 Tf 12 TL (XR Application Engineering \001 Medical Navigation & Visualization) Tj T* ET
+BT 1 0 0 1 48 456.8898 Tm /F2+0 10 Tf 12 TL (XR Application Engineering \001 Medical Navigation & Visualization) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 445.8898 m 547.2756 445.8898 l S
+n 48 424.8898 m 547.2756 424.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 411.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 390.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 387.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 366.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 358.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 337.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 338.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 317.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 322.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 301.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 297.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 295.8898 m 141.5852 295.8898 l S
+BT 1 0 0 1 48 276.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 274.8898 m 141.5852 274.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 277.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 275.8898 m 128.2212 275.8898 l S
+BT 1 0 0 1 48 256.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 254.8898 m 128.2212 254.8898 l S
  
 endstream
 endobj
@@ -1225,5 +1227,5 @@ trailer
 /Size 37
 >>
 startxref
-3005929
+3006031
 %%EOF

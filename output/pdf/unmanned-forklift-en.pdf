@@ -1016,7 +1016,7 @@ endstream
 endobj
 33 0 obj
 <<
-/Length 2768
+/Length 2867
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1054,23 +1054,25 @@ BT 1 0 0 1 48 336.0472 Tm /F2+0 10 Tf 12 TL (deployment success, or customer out
 BT 1 0 0 1 48 307.0472 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 287.0472 Tm /F2+0 10 Tf 12 TL (The public clip and photos are test-site runs; they do not claim production or customer outcomes.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 259.0472 Tm /F2+0 10 Tf 12 TL (Field validation is not production operation, deployment success, or a customer outcome.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 230.0472 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 258.0472 Tm /F3+0 11 Tf 13.2 TL (Field boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 210.0472 Tm /F2+0 10 Tf 12 TL (Vehicle control, sensing, safety, and field-validation owners integrate the system jointly.) Tj T* ET
+BT 1 0 0 1 48 238.0472 Tm /F2+0 10 Tf 12 TL (Field validation is not production operation, deployment success, or a customer outcome.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 209.0472 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 189.0472 Tm /F2+0 10 Tf 12 TL (Vehicle control, sensing, safety, and field-validation owners integrate the system jointly.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 178.0472 m 547.2756 178.0472 l S
+n 48 157.0472 m 547.2756 157.0472 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 144.0472 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 123.0472 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 120.0472 Tm /F2+0 10 Tf 12 TL (C++23 \001 ROS 2 \001 Zenoh \001 ToF \001 RGB \001 SAM3 \001 SICK TiM LiDAR \001 NAV350) Tj T* ET
+BT 1 0 0 1 48 99.04724 Tm /F2+0 10 Tf 12 TL (C++23 \001 ROS 2 \001 Zenoh \001 ToF \001 RGB \001 SAM3 \001 SICK TiM LiDAR \001 NAV350) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 95.04724 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 74.04724 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 75.04724 Tm /F2+0 10 Tf 12 TL (Sensor Fusion & Localization \001 3D Geometry & Registration) Tj T* ET
+BT 1 0 0 1 48 54.04724 Tm /F2+0 10 Tf 12 TL (Sensor Fusion & Localization \001 3D Geometry & Registration) Tj T* ET
  
 endstream
 endobj
@@ -1151,7 +1153,7 @@ xref
 0009161649 00000 n 
 0009167671 00000 n 
 0009168853 00000 n 
-0009171673 00000 n 
+0009171772 00000 n 
 trailer
 <<
 /ID 
@@ -1163,5 +1165,5 @@ trailer
 /Size 35
 >>
 startxref
-9173349
+9173448
 %%EOF

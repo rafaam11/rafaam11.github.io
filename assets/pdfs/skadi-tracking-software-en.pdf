@@ -143,14 +143,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 177.8898 141.5852 193.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 156.8898 141.5852 172.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 157.8898 128.2212 173.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 136.8898 128.2212 152.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 20 0 obj
@@ -1080,7 +1080,7 @@ endstream
 endobj
 36 0 obj
 <<
-/Length 3758
+/Length 3860
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1114,44 +1114,46 @@ BT 1 0 0 1 48 625.8898 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 BT 1 0 0 1 48 605.8898 Tm /F2+0 10 Tf 12 TL (Device specifications, accuracy figures, customer lists, and sales numbers are company-owned and not) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 589.8898 Tm /F2+0 10 Tf 12 TL (published.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 561.8898 Tm /F2+0 10 Tf 12 TL (Specifications, accuracy, and sales are company-owned; this case covers the software layer only.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 532.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 560.8898 Tm /F3+0 11 Tf 13.2 TL (Hardware boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 512.8898 Tm /F2+0 10 Tf 12 TL (Interfaces are agreed with optical and hardware designers, customer navigation developers, and research) Tj T* ET
+BT 1 0 0 1 48 540.8898 Tm /F2+0 10 Tf 12 TL (Specifications, accuracy, and sales are company-owned; this case covers the software layer only.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 511.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 496.8898 Tm /F2+0 10 Tf 12 TL (users.) Tj T* ET
+BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (Interfaces are agreed with optical and hardware designers, customer navigation developers, and research) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 475.8898 Tm /F2+0 10 Tf 12 TL (users.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 464.8898 m 547.2756 464.8898 l S
+n 48 443.8898 m 547.2756 443.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 430.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 409.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 406.8898 Tm /F2+0 10 Tf 12 TL (SKADI \003 C++ \003 Python API \003 Viewer \003 3D Slicer \003 Optical tracking) Tj T* ET
+BT 1 0 0 1 48 385.8898 Tm /F2+0 10 Tf 12 TL (SKADI \003 C++ \003 Python API \003 Viewer \003 3D Slicer \003 Optical tracking) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 381.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 360.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 361.8898 Tm /F2+0 10 Tf 12 TL (Medical Navigation & Visualization \003 3D Geometry & Registration) Tj T* ET
+BT 1 0 0 1 48 340.8898 Tm /F2+0 10 Tf 12 TL (Medical Navigation & Visualization \003 3D Geometry & Registration) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 329.8898 m 547.2756 329.8898 l S
+n 48 308.8898 m 547.2756 308.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 295.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 274.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 271.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 250.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 242.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 221.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 222.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 201.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 206.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 185.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 181.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 179.8898 m 141.5852 179.8898 l S
+BT 1 0 0 1 48 160.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 158.8898 m 141.5852 158.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 161.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 159.8898 m 128.2212 159.8898 l S
+BT 1 0 0 1 48 140.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 138.8898 m 128.2212 138.8898 l S
  
 endstream
 endobj
@@ -1205,5 +1207,5 @@ trailer
 /Size 37
 >>
 startxref
-4973995
+4974097
 %%EOF

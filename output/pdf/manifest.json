@@ -3,7 +3,7 @@
   "sourceDigest": "369db854b037043f7ba576610ee32b67c9310816b2cc0b21119654a8b667c988",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
-  "generatorSha256": "bad09e591a196521b8a45de7c10b98ecfe0b428d38f798e4c40b0276d0818c7b",
+  "generatorSha256": "d113c38fad9e197dc435b36acff6a5e314d02c639d13d9c65c867b3a05507537",
   "documents": [
     {
       "name": "surgical-navigation-ko.pdf",
@@ -12,9 +12,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 1903,
-      "bytes": 11064807,
-      "sha256": "439ac13c1eea46d3e13f661ea3c45bae96094a4e63bf993c1f22df74f4a17b6e"
+      "characters": 1909,
+      "bytes": 11065222,
+      "sha256": "ebf768e77f71b18ddc967a22526e0cd7be98de5de64e9ab84475683356a58502"
     },
     {
       "name": "surgical-navigation-en.pdf",
@@ -23,9 +23,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 3676,
-      "bytes": 10957512,
-      "sha256": "063ad7ab721afc84485e798db1756085b63faa7be2cb1af01112e6050febd9c6"
+      "characters": 3694,
+      "bytes": 10957614,
+      "sha256": "f015e8923fb8ac8e774778ebcd578f8d1ea49db5c262bea6948a1f4b2bf7f029"
     },
     {
       "name": "mandibular-fracture-ko.pdf",
@@ -34,9 +34,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 8,
-      "characters": 1789,
-      "bytes": 7810806,
-      "sha256": "e705a413b0243f5c1fcbb0a46809bcad3235bd3b71a1c5e3095f2439219cc857"
+      "characters": 1795,
+      "bytes": 7810908,
+      "sha256": "29a890497277b0d3f1d1d67ad6547ebc19fe4379fe00d3fbea52378a70eb56d3"
     },
     {
       "name": "mandibular-fracture-en.pdf",
@@ -45,9 +45,9 @@
       "locale": "en",
       "pages": 5,
       "links": 8,
-      "characters": 3587,
-      "bytes": 7705816,
-      "sha256": "d1528559f95a6f41570a87e6cb60c8c21e322c861f940398f38252a9c6555dbc"
+      "characters": 3605,
+      "bytes": 7705918,
+      "sha256": "ed5e83bc0b00e6a7875d3f851433f0f77801f99a4156c438b4c726edeaf6614a"
     },
     {
       "name": "life-careverse-ko.pdf",
@@ -56,9 +56,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 7,
-      "characters": 2644,
-      "bytes": 3150157,
-      "sha256": "387f6718fc8d1446d5adecf6b26033828dda84ac7aa1a3a3af3e2b8425fbf801"
+      "characters": 2650,
+      "bytes": 3151088,
+      "sha256": "c11b044aedf0f95c057711ca6eba14e25dae0174c1933875bad16f53a856843f"
     },
     {
       "name": "life-careverse-en.pdf",
@@ -67,9 +67,9 @@
       "locale": "en",
       "pages": 5,
       "links": 7,
-      "characters": 5155,
-      "bytes": 3006901,
-      "sha256": "9384c9118fa87178f83a18269733e12c0abcbabdadbd35b58f57b142d94b1865"
+      "characters": 5173,
+      "bytes": 3007003,
+      "sha256": "6d239f4ce09c162b7dda48175cf54673770a52c46d953f9b5c67e78838d11ead"
     },
     {
       "name": "rtms-navigation-ko.pdf",
@@ -78,9 +78,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 7,
-      "characters": 2359,
-      "bytes": 9222059,
-      "sha256": "1a57f8c4048206044dd426df72390a4b99b294177fd1a3d5d2585d9603bf648c"
+      "characters": 2368,
+      "bytes": 9222486,
+      "sha256": "e9f3db49f4ba2850581905f1abef5b7f249e82dc261c0257b95ffda77384c28b"
     },
     {
       "name": "rtms-navigation-en.pdf",
@@ -89,9 +89,9 @@
       "locale": "en",
       "pages": 5,
       "links": 7,
-      "characters": 4224,
-      "bytes": 9087429,
-      "sha256": "9e7677e01eee1c35a47bd2bfb8d171ed1625e8fa415c92c49ceda9a529525b3e"
+      "characters": 4254,
+      "bytes": 9087543,
+      "sha256": "50d8feeb064be527e03d769330c98f96b0d9ec167b2d82cbbe8171f321ba0b2c"
     },
     {
       "name": "respiratory-surface-guidance-ko.pdf",
@@ -100,9 +100,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 2984,
-      "bytes": 3408948,
-      "sha256": "cb872061a7306ee99d479e7836f969a4d5a7e958d23b9e7d42e19d357ef74905"
+      "characters": 2990,
+      "bytes": 3409050,
+      "sha256": "5a0ed9c603b90c7fa37e783023415e4b2e3540ef8095402a7a61dc3dec4e068d"
     },
     {
       "name": "respiratory-surface-guidance-en.pdf",
@@ -111,9 +111,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 5804,
-      "bytes": 3247604,
-      "sha256": "70ad43b0c619af8a3d67e45719309867a109e4d0d14fa2a9dab63ee29c73fc67"
+      "characters": 5822,
+      "bytes": 3247706,
+      "sha256": "e1edcb987ff4016cfe69ebef035a83399e9ff4f7787b37134d2e054b08a90003"
     },
     {
       "name": "skadi-tracking-software-ko.pdf",
@@ -122,9 +122,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 7,
-      "characters": 2198,
-      "bytes": 5091799,
-      "sha256": "6df2f61ed5cad54101e9daf1c0c35a8a89204ed73429925ee67ef5557f80b96e"
+      "characters": 2206,
+      "bytes": 5091909,
+      "sha256": "56208cd56267e676706ca2c18ff8d71d2abb5ca4c6e300105f5d20ea92a59b15"
     },
     {
       "name": "skadi-tracking-software-en.pdf",
@@ -133,9 +133,9 @@
       "locale": "en",
       "pages": 5,
       "links": 7,
-      "characters": 3955,
-      "bytes": 4974967,
-      "sha256": "37804dd328111d743902d141079f64e08b2b5ddfda1d8f4ab7f9cae164f4bad9"
+      "characters": 3973,
+      "bytes": 4975069,
+      "sha256": "ecfdfe6fe26e4c0b93ee46117eed55a3e5fc631c9ced0b7e145ebbd010385c32"
     },
     {
       "name": "unmanned-forklift-ko.pdf",
@@ -144,9 +144,9 @@
       "locale": "ko",
       "pages": 4,
       "links": 6,
-      "characters": 1716,
-      "bytes": 9274191,
-      "sha256": "9316fc5ce6965d8d1c94a8907fb82a54d6a4a612b1f4df363595e38c33b69cd7"
+      "characters": 1722,
+      "bytes": 9274293,
+      "sha256": "f6de4078a777d392364ce381111f815a519ca5eb70a3dd4d2f82066578b11dca"
     },
     {
       "name": "unmanned-forklift-en.pdf",
@@ -155,9 +155,9 @@
       "locale": "en",
       "pages": 5,
       "links": 7,
-      "characters": 3464,
-      "bytes": 9174281,
-      "sha256": "42ba854e1f0e4b16d1ccb90ff64433520739916375156ec8e780e576cc5dd3c9"
+      "characters": 3479,
+      "bytes": 9174380,
+      "sha256": "52df0089a5345549a9d666d9cb4a67e738709b513bd882aa1b9cfbd3a7af9789"
     },
     {
       "name": "ai-build-lab-ko.pdf",
@@ -166,9 +166,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 9,
-      "characters": 1989,
-      "bytes": 684510,
-      "sha256": "88027b016e0a26f195822e4c1da829dcff0ed9516872f7051f1d9451bdc79fa2"
+      "characters": 2000,
+      "bytes": 685066,
+      "sha256": "dcb0774631a4debbece115bad45ed6b67dd0ad4883c89e5335e256072347cbfd"
     },
     {
       "name": "ai-build-lab-en.pdf",
@@ -177,9 +177,9 @@
       "locale": "en",
       "pages": 5,
       "links": 9,
-      "characters": 3587,
-      "bytes": 572893,
-      "sha256": "59a7e637eb4321f489b019f3f2ad6bcd452d9aa51f6079f16ee8c907d5fdb045"
+      "characters": 3615,
+      "bytes": 573005,
+      "sha256": "e92d6c024114aba65af1202400c47b8b3dce12906b21faddf2aba733888a967a"
     }
   ],
   "artifacts": [
@@ -189,8 +189,8 @@
       "slug": "ai-build-lab",
       "locale": "en",
       "pages": 5,
-      "bytes": 572893,
-      "sha256": "59a7e637eb4321f489b019f3f2ad6bcd452d9aa51f6079f16ee8c907d5fdb045"
+      "bytes": 573005,
+      "sha256": "e92d6c024114aba65af1202400c47b8b3dce12906b21faddf2aba733888a967a"
     },
     {
       "path": "assets/pdfs/ai-build-lab-ko.pdf",
@@ -198,8 +198,8 @@
       "slug": "ai-build-lab",
       "locale": "ko",
       "pages": 5,
-      "bytes": 684510,
-      "sha256": "88027b016e0a26f195822e4c1da829dcff0ed9516872f7051f1d9451bdc79fa2"
+      "bytes": 685066,
+      "sha256": "dcb0774631a4debbece115bad45ed6b67dd0ad4883c89e5335e256072347cbfd"
     },
     {
       "path": "assets/pdfs/life-careverse-en.pdf",
@@ -207,8 +207,8 @@
       "slug": "life-careverse",
       "locale": "en",
       "pages": 5,
-      "bytes": 3006901,
-      "sha256": "9384c9118fa87178f83a18269733e12c0abcbabdadbd35b58f57b142d94b1865"
+      "bytes": 3007003,
+      "sha256": "6d239f4ce09c162b7dda48175cf54673770a52c46d953f9b5c67e78838d11ead"
     },
     {
       "path": "assets/pdfs/life-careverse-ko.pdf",
@@ -216,8 +216,8 @@
       "slug": "life-careverse",
       "locale": "ko",
       "pages": 5,
-      "bytes": 3150157,
-      "sha256": "387f6718fc8d1446d5adecf6b26033828dda84ac7aa1a3a3af3e2b8425fbf801"
+      "bytes": 3151088,
+      "sha256": "c11b044aedf0f95c057711ca6eba14e25dae0174c1933875bad16f53a856843f"
     },
     {
       "path": "assets/pdfs/mandibular-fracture-en.pdf",
@@ -225,8 +225,8 @@
       "slug": "mandibular-fracture",
       "locale": "en",
       "pages": 5,
-      "bytes": 7705816,
-      "sha256": "d1528559f95a6f41570a87e6cb60c8c21e322c861f940398f38252a9c6555dbc"
+      "bytes": 7705918,
+      "sha256": "ed5e83bc0b00e6a7875d3f851433f0f77801f99a4156c438b4c726edeaf6614a"
     },
     {
       "path": "assets/pdfs/mandibular-fracture-ko.pdf",
@@ -234,8 +234,8 @@
       "slug": "mandibular-fracture",
       "locale": "ko",
       "pages": 5,
-      "bytes": 7810806,
-      "sha256": "e705a413b0243f5c1fcbb0a46809bcad3235bd3b71a1c5e3095f2439219cc857"
+      "bytes": 7810908,
+      "sha256": "29a890497277b0d3f1d1d67ad6547ebc19fe4379fe00d3fbea52378a70eb56d3"
     },
     {
       "path": "assets/pdfs/respiratory-surface-guidance-en.pdf",
@@ -243,8 +243,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "en",
       "pages": 6,
-      "bytes": 3247604,
-      "sha256": "70ad43b0c619af8a3d67e45719309867a109e4d0d14fa2a9dab63ee29c73fc67"
+      "bytes": 3247706,
+      "sha256": "e1edcb987ff4016cfe69ebef035a83399e9ff4f7787b37134d2e054b08a90003"
     },
     {
       "path": "assets/pdfs/respiratory-surface-guidance-ko.pdf",
@@ -252,8 +252,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "ko",
       "pages": 6,
-      "bytes": 3408948,
-      "sha256": "cb872061a7306ee99d479e7836f969a4d5a7e958d23b9e7d42e19d357ef74905"
+      "bytes": 3409050,
+      "sha256": "5a0ed9c603b90c7fa37e783023415e4b2e3540ef8095402a7a61dc3dec4e068d"
     },
     {
       "path": "assets/pdfs/rtms-navigation-en.pdf",
@@ -261,8 +261,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 5,
-      "bytes": 9087429,
-      "sha256": "9e7677e01eee1c35a47bd2bfb8d171ed1625e8fa415c92c49ceda9a529525b3e"
+      "bytes": 9087543,
+      "sha256": "50d8feeb064be527e03d769330c98f96b0d9ec167b2d82cbbe8171f321ba0b2c"
     },
     {
       "path": "assets/pdfs/rtms-navigation-ko.pdf",
@@ -270,8 +270,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 5,
-      "bytes": 9222059,
-      "sha256": "1a57f8c4048206044dd426df72390a4b99b294177fd1a3d5d2585d9603bf648c"
+      "bytes": 9222486,
+      "sha256": "e9f3db49f4ba2850581905f1abef5b7f249e82dc261c0257b95ffda77384c28b"
     },
     {
       "path": "assets/pdfs/skadi-tracking-software-en.pdf",
@@ -279,8 +279,8 @@
       "slug": "skadi-tracking-software",
       "locale": "en",
       "pages": 5,
-      "bytes": 4974967,
-      "sha256": "37804dd328111d743902d141079f64e08b2b5ddfda1d8f4ab7f9cae164f4bad9"
+      "bytes": 4975069,
+      "sha256": "ecfdfe6fe26e4c0b93ee46117eed55a3e5fc631c9ced0b7e145ebbd010385c32"
     },
     {
       "path": "assets/pdfs/skadi-tracking-software-ko.pdf",
@@ -288,8 +288,8 @@
       "slug": "skadi-tracking-software",
       "locale": "ko",
       "pages": 5,
-      "bytes": 5091799,
-      "sha256": "6df2f61ed5cad54101e9daf1c0c35a8a89204ed73429925ee67ef5557f80b96e"
+      "bytes": 5091909,
+      "sha256": "56208cd56267e676706ca2c18ff8d71d2abb5ca4c6e300105f5d20ea92a59b15"
     },
     {
       "path": "assets/pdfs/surgical-navigation-en.pdf",
@@ -297,8 +297,8 @@
       "slug": "surgical-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 10957512,
-      "sha256": "063ad7ab721afc84485e798db1756085b63faa7be2cb1af01112e6050febd9c6"
+      "bytes": 10957614,
+      "sha256": "f015e8923fb8ac8e774778ebcd578f8d1ea49db5c262bea6948a1f4b2bf7f029"
     },
     {
       "path": "assets/pdfs/surgical-navigation-ko.pdf",
@@ -306,8 +306,8 @@
       "slug": "surgical-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 11064807,
-      "sha256": "439ac13c1eea46d3e13f661ea3c45bae96094a4e63bf993c1f22df74f4a17b6e"
+      "bytes": 11065222,
+      "sha256": "ebf768e77f71b18ddc967a22526e0cd7be98de5de64e9ab84475683356a58502"
     },
     {
       "path": "assets/pdfs/unmanned-forklift-en.pdf",
@@ -315,8 +315,8 @@
       "slug": "unmanned-forklift",
       "locale": "en",
       "pages": 5,
-      "bytes": 9174281,
-      "sha256": "42ba854e1f0e4b16d1ccb90ff64433520739916375156ec8e780e576cc5dd3c9"
+      "bytes": 9174380,
+      "sha256": "52df0089a5345549a9d666d9cb4a67e738709b513bd882aa1b9cfbd3a7af9789"
     },
     {
       "path": "assets/pdfs/unmanned-forklift-ko.pdf",
@@ -324,8 +324,8 @@
       "slug": "unmanned-forklift",
       "locale": "ko",
       "pages": 4,
-      "bytes": 9274191,
-      "sha256": "9316fc5ce6965d8d1c94a8907fb82a54d6a4a612b1f4df363595e38c33b69cd7"
+      "bytes": 9274293,
+      "sha256": "f6de4078a777d392364ce381111f815a519ca5eb70a3dd4d2f82066578b11dca"
     },
     {
       "path": "output/pdf/ai-build-lab-en.pdf",
@@ -333,8 +333,8 @@
       "slug": "ai-build-lab",
       "locale": "en",
       "pages": 5,
-      "bytes": 572893,
-      "sha256": "59a7e637eb4321f489b019f3f2ad6bcd452d9aa51f6079f16ee8c907d5fdb045"
+      "bytes": 573005,
+      "sha256": "e92d6c024114aba65af1202400c47b8b3dce12906b21faddf2aba733888a967a"
     },
     {
       "path": "output/pdf/ai-build-lab-ko.pdf",
@@ -342,8 +342,8 @@
       "slug": "ai-build-lab",
       "locale": "ko",
       "pages": 5,
-      "bytes": 684510,
-      "sha256": "88027b016e0a26f195822e4c1da829dcff0ed9516872f7051f1d9451bdc79fa2"
+      "bytes": 685066,
+      "sha256": "dcb0774631a4debbece115bad45ed6b67dd0ad4883c89e5335e256072347cbfd"
     },
     {
       "path": "output/pdf/life-careverse-en.pdf",
@@ -351,8 +351,8 @@
       "slug": "life-careverse",
       "locale": "en",
       "pages": 5,
-      "bytes": 3006901,
-      "sha256": "9384c9118fa87178f83a18269733e12c0abcbabdadbd35b58f57b142d94b1865"
+      "bytes": 3007003,
+      "sha256": "6d239f4ce09c162b7dda48175cf54673770a52c46d953f9b5c67e78838d11ead"
     },
     {
       "path": "output/pdf/life-careverse-ko.pdf",
@@ -360,8 +360,8 @@
       "slug": "life-careverse",
       "locale": "ko",
       "pages": 5,
-      "bytes": 3150157,
-      "sha256": "387f6718fc8d1446d5adecf6b26033828dda84ac7aa1a3a3af3e2b8425fbf801"
+      "bytes": 3151088,
+      "sha256": "c11b044aedf0f95c057711ca6eba14e25dae0174c1933875bad16f53a856843f"
     },
     {
       "path": "output/pdf/mandibular-fracture-en.pdf",
@@ -369,8 +369,8 @@
       "slug": "mandibular-fracture",
       "locale": "en",
       "pages": 5,
-      "bytes": 7705816,
-      "sha256": "d1528559f95a6f41570a87e6cb60c8c21e322c861f940398f38252a9c6555dbc"
+      "bytes": 7705918,
+      "sha256": "ed5e83bc0b00e6a7875d3f851433f0f77801f99a4156c438b4c726edeaf6614a"
     },
     {
       "path": "output/pdf/mandibular-fracture-ko.pdf",
@@ -378,8 +378,8 @@
       "slug": "mandibular-fracture",
       "locale": "ko",
       "pages": 5,
-      "bytes": 7810806,
-      "sha256": "e705a413b0243f5c1fcbb0a46809bcad3235bd3b71a1c5e3095f2439219cc857"
+      "bytes": 7810908,
+      "sha256": "29a890497277b0d3f1d1d67ad6547ebc19fe4379fe00d3fbea52378a70eb56d3"
     },
     {
       "path": "output/pdf/respiratory-surface-guidance-en.pdf",
@@ -387,8 +387,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "en",
       "pages": 6,
-      "bytes": 3247604,
-      "sha256": "70ad43b0c619af8a3d67e45719309867a109e4d0d14fa2a9dab63ee29c73fc67"
+      "bytes": 3247706,
+      "sha256": "e1edcb987ff4016cfe69ebef035a83399e9ff4f7787b37134d2e054b08a90003"
     },
     {
       "path": "output/pdf/respiratory-surface-guidance-ko.pdf",
@@ -396,8 +396,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "ko",
       "pages": 6,
-      "bytes": 3408948,
-      "sha256": "cb872061a7306ee99d479e7836f969a4d5a7e958d23b9e7d42e19d357ef74905"
+      "bytes": 3409050,
+      "sha256": "5a0ed9c603b90c7fa37e783023415e4b2e3540ef8095402a7a61dc3dec4e068d"
     },
     {
       "path": "output/pdf/rtms-navigation-en.pdf",
@@ -405,8 +405,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 5,
-      "bytes": 9087429,
-      "sha256": "9e7677e01eee1c35a47bd2bfb8d171ed1625e8fa415c92c49ceda9a529525b3e"
+      "bytes": 9087543,
+      "sha256": "50d8feeb064be527e03d769330c98f96b0d9ec167b2d82cbbe8171f321ba0b2c"
     },
     {
       "path": "output/pdf/rtms-navigation-ko.pdf",
@@ -414,8 +414,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 5,
-      "bytes": 9222059,
-      "sha256": "1a57f8c4048206044dd426df72390a4b99b294177fd1a3d5d2585d9603bf648c"
+      "bytes": 9222486,
+      "sha256": "e9f3db49f4ba2850581905f1abef5b7f249e82dc261c0257b95ffda77384c28b"
     },
     {
       "path": "output/pdf/skadi-tracking-software-en.pdf",
@@ -423,8 +423,8 @@
       "slug": "skadi-tracking-software",
       "locale": "en",
       "pages": 5,
-      "bytes": 4974967,
-      "sha256": "37804dd328111d743902d141079f64e08b2b5ddfda1d8f4ab7f9cae164f4bad9"
+      "bytes": 4975069,
+      "sha256": "ecfdfe6fe26e4c0b93ee46117eed55a3e5fc631c9ced0b7e145ebbd010385c32"
     },
     {
       "path": "output/pdf/skadi-tracking-software-ko.pdf",
@@ -432,8 +432,8 @@
       "slug": "skadi-tracking-software",
       "locale": "ko",
       "pages": 5,
-      "bytes": 5091799,
-      "sha256": "6df2f61ed5cad54101e9daf1c0c35a8a89204ed73429925ee67ef5557f80b96e"
+      "bytes": 5091909,
+      "sha256": "56208cd56267e676706ca2c18ff8d71d2abb5ca4c6e300105f5d20ea92a59b15"
     },
     {
       "path": "output/pdf/surgical-navigation-en.pdf",
@@ -441,8 +441,8 @@
       "slug": "surgical-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 10957512,
-      "sha256": "063ad7ab721afc84485e798db1756085b63faa7be2cb1af01112e6050febd9c6"
+      "bytes": 10957614,
+      "sha256": "f015e8923fb8ac8e774778ebcd578f8d1ea49db5c262bea6948a1f4b2bf7f029"
     },
     {
       "path": "output/pdf/surgical-navigation-ko.pdf",
@@ -450,8 +450,8 @@
       "slug": "surgical-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 11064807,
-      "sha256": "439ac13c1eea46d3e13f661ea3c45bae96094a4e63bf993c1f22df74f4a17b6e"
+      "bytes": 11065222,
+      "sha256": "ebf768e77f71b18ddc967a22526e0cd7be98de5de64e9ab84475683356a58502"
     },
     {
       "path": "output/pdf/unmanned-forklift-en.pdf",
@@ -459,8 +459,8 @@
       "slug": "unmanned-forklift",
       "locale": "en",
       "pages": 5,
-      "bytes": 9174281,
-      "sha256": "42ba854e1f0e4b16d1ccb90ff64433520739916375156ec8e780e576cc5dd3c9"
+      "bytes": 9174380,
+      "sha256": "52df0089a5345549a9d666d9cb4a67e738709b513bd882aa1b9cfbd3a7af9789"
     },
     {
       "path": "output/pdf/unmanned-forklift-ko.pdf",
@@ -468,8 +468,8 @@
       "slug": "unmanned-forklift",
       "locale": "ko",
       "pages": 4,
-      "bytes": 9274191,
-      "sha256": "9316fc5ce6965d8d1c94a8907fb82a54d6a4a612b1f4df363595e38c33b69cd7"
+      "bytes": 9274293,
+      "sha256": "f6de4078a777d392364ce381111f815a519ca5eb70a3dd4d2f82066578b11dca"
     }
   ]
 }

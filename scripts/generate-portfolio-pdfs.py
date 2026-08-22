@@ -1194,6 +1194,7 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
         doc.h3(labels["limit"])
         doc.para(copy["limitation"], color="muted")
         for block, block_copy in limit_blocks:
+            doc.h3(block_copy["heading"])
             doc.para(block_copy["body"], color="muted")
         doc.h3(labels["collaboration"])
         doc.para(copy["collaboration"], color="muted")
