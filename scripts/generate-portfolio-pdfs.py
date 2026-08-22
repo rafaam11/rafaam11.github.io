@@ -38,7 +38,7 @@ EXPECTED_SLUGS = [
     "unmanned-forklift",
     "ai-build-lab",
 ]
-PRESERVED_LEGACY_SLUGS = set(EXPECTED_SLUGS) - {"digital-occlusion-workflow"}
+LEGACY_MIGRATION_SLUGS = set(EXPECTED_SLUGS) - {"digital-occlusion-workflow"}
 GENERATOR_VERSION = "3.2"
 GENERATOR_PUBLIC_PATH = "scripts/generate-portfolio-pdfs.py"
 EXPECTED_DIAGRAM_KIND = {
@@ -206,8 +206,7 @@ def validate_system_flow_diagram(value: Any, label: str) -> dict[str, Any]:
         require(key not in node_keys, f"{label} system-flow diagram requires uniquely keyed nodes.")
         node_keys.append(key)
         validate_translation_record(node, f"{label} diagram node {node_index}", ["label", "detail"])
-    edges = require_array(diagram.get("edges"), f"{label} diagram edges")
-    require(bool(edges), f"{label} system-flow diagram requires at least one edge.")
+    edges = require_array(diagram.get("edges"), f"{label} diagram edges", len(nodes) - 1)
     for edge_index, edge_value in enumerate(edges, start=1):
         edge = require_object(edge_value, f"{label} diagram edge {edge_index}")
         require(set(edge) == {"direction", "from", "to", "translations"},
@@ -801,12 +800,54 @@ def normalized_text_source_sha256(file_path: Path) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def load_legacy_preservation_baseline(file_path: Path, payload: dict[str, Any],
+                                      project_assets: Path) -> dict[str, str]:
+    """Validate the explicit one-time migration gate before preserving legacy PDF bytes."""
+    require(file_path.is_file(), f"Missing legacy preservation baseline: {file_path}")
+    try:
+        baseline = json.loads(file_path.read_text(encoding="utf-8-sig"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"Malformed legacy preservation baseline: {error}") from error
+    require(isinstance(baseline, dict)
+            and set(baseline) == {"schemaVersion", "sourceDigest", "files"}
+            and baseline.get("schemaVersion") == 1,
+            "Legacy preservation baseline has an invalid schema.")
+    require(baseline.get("sourceDigest") == payload["sourceDigest"],
+            "Legacy preservation baseline source digest does not match the current PDF input.")
+    expected_names = {
+        f"{slug}-{locale}.pdf" for slug in LEGACY_MIGRATION_SLUGS for locale in LOCALES
+    }
+    files = require_array(baseline.get("files"), "Legacy preservation baseline files", len(expected_names))
+    approved: dict[str, str] = {}
+    for index, value in enumerate(files, start=1):
+        record = require_object(value, f"Legacy preservation baseline file {index}")
+        require(set(record) == {"name", "sha256"},
+                f"Legacy preservation baseline file {index} has invalid fields.")
+        name = require_text(record.get("name"), f"Legacy preservation baseline file {index} name")
+        digest = require_text(record.get("sha256"), f"Legacy preservation baseline file {index} sha256")
+        require(name in expected_names and name not in approved,
+                f"Legacy preservation baseline contains an unexpected or duplicate file: {name}.")
+        require(bool(re.fullmatch(r"[a-f0-9]{64}", digest)),
+                f"Legacy preservation baseline file {name} has an invalid SHA-256.")
+        source = project_assets / name
+        require(source.is_file() and sha256(source) == digest,
+                f"Legacy preservation baseline file hash does not match current assets: {name}.")
+        approved[name] = digest
+    require(set(approved) == expected_names,
+            "Legacy preservation baseline does not cover every migration PDF.")
+    return approved
+
+
 def parse_arguments(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate deterministic public portfolio PDFs.")
     parser.add_argument("--input", required=True, type=Path, help="Deterministic JSON exported by export-portfolio-data.cjs")
     parser.add_argument("--output-dir", type=Path, default=Path("output/pdf"), help="PDF-skill deliverable directory")
     parser.add_argument("--publish-root", type=Path, default=Path("."), help="Repository root containing assets/")
     parser.add_argument("--review-dir", type=Path, help="Ignored directory for all-page PNGs and contact sheets")
+    parser.add_argument(
+        "--preserve-legacy-baseline", type=Path,
+        help="One-time migration gate: preserve legacy bytes only when source digest and all approved hashes match"
+    )
     parser.add_argument("--font-regular", type=Path, default=Path(r"C:\Windows\Fonts\malgun.ttf"))
     parser.add_argument("--font-bold", type=Path, default=Path(r"C:\Windows\Fonts\malgunbd.ttf"))
     parser.add_argument("--font-symbol", type=Path, default=Path(r"C:\Windows\Fonts\NotoSansKR-VF.ttf"))
@@ -1317,30 +1358,55 @@ class TechnicalDocument:
         return bottom
 
     def system_flow_diagram(self, diagram: dict[str, Any], locale: str, y: float) -> float:
-        """Draw the canonical six-node story flow as a readable full-width stack."""
+        """Draw a canonical story flow with wrapped, non-overlapping node columns."""
         c = self.canvas
         copy = localized(diagram, locale)
         nodes = diagram["nodes"]
         edges = diagram["edges"]
+        label_x = self.left + 38
+        label_width = 180
+        column_gutter = 18
+        detail_x = label_x + label_width + column_gutter
+        detail_width = self.right - detail_x - 8
+        node_rows: list[tuple[dict[str, Any], list[str], list[str], float]] = []
+        for node in nodes:
+            node_copy = localized(node, locale)
+            label_lines = self.wrap(node_copy["label"], "MalgunGothic-Bold", 8.5, label_width)
+            detail_lines = self.wrap(node_copy["detail"], "MalgunGothic", 7.8, detail_width)
+            require(1 <= len(label_lines) <= 2,
+                    f"{diagram.get('boundary', 'system-flow')}: node label exceeds two PDF lines.")
+            require(1 <= len(detail_lines) <= 2,
+                    f"{diagram.get('boundary', 'system-flow')}: node detail exceeds two PDF lines.")
+            row_height = max(32, 16 + 11 * max(len(label_lines), len(detail_lines)))
+            node_rows.append((node_copy, label_lines, detail_lines, row_height))
+        required_height = 40 + sum(row[3] for row in node_rows) + 17 * len(edges) + 34
+        self.ensure(required_height)
+        y = self.y
         self.text(copy["title"], self.left, y - 10, self.right - self.left,
                   size=10.5, font="MalgunGothic-Bold", leading=14, max_lines=1)
         self.text(copy["caption"], self.left, y - 25, self.right - self.left,
                   size=8, leading=11, color="muted", max_lines=1)
 
         node_top = y - 40
-        node_height = 32
-        for index, node in enumerate(nodes):
-            node_copy = localized(node, locale)
+        for index, (_, label_lines, detail_lines, node_height) in enumerate(node_rows):
             node_bottom = node_top - node_height
             c.setFillColor(self.colors["paper"])
             c.setStrokeColor(self.colors["line"])
             c.setLineWidth(0.8)
             c.roundRect(self.left, node_bottom, self.right - self.left, node_height, 3, fill=1, stroke=1)
             self.label(f"0{index + 1}", self.left + 10, node_top - 13)
-            self.text(node_copy["label"], self.left + 38, node_top - 12, 150,
-                      size=8.5, font="MalgunGothic-Bold", leading=10, max_lines=1)
-            self.text(node_copy["detail"], self.left + 194, node_top - 12, self.right - self.left - 204,
-                      size=7.8, leading=10, color="muted", max_lines=1)
+            label_y = node_top - 12
+            detail_y = node_top - 12
+            c.setFillColor(self.colors["ink"])
+            c.setFont("MalgunGothic-Bold", 8.5)
+            for line in label_lines:
+                c.drawString(label_x, label_y, line)
+                label_y -= 11
+            c.setFillColor(self.colors["muted"])
+            c.setFont("MalgunGothic", 7.8)
+            for line in detail_lines:
+                c.drawString(detail_x, detail_y, line)
+                detail_y -= 11
             if index < len(edges):
                 edge = edges[index]
                 edge_copy = localized(edge, locale)
@@ -1872,8 +1938,6 @@ def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], 
         for diagram in diagrams:
             diagram_copy = localized(diagram, locale)
             if diagram["kind"] == "system-flow":
-                required_height = 360 if len(diagrams) == 1 else 82 + 49 * len(diagram["nodes"])
-                doc.ensure(required_height)
                 doc.y = doc.system_flow_diagram(diagram, locale, doc.y) - 12
             else:
                 doc.ensure(210)
@@ -2127,7 +2191,8 @@ def atomic_swap_directories(publications: list[tuple[Path, Path]]) -> None:
 
 
 def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: Path,
-             publish_root: Path, review_dir: Path | None) -> dict[str, Any]:
+             publish_root: Path, review_dir: Path | None,
+             legacy_preservation: dict[str, str] | None = None) -> dict[str, Any]:
     local_evidence = preflight_local_evidence(payload, publish_root, dependencies)
     # assets/cv holds the author's own CV PDFs; they are tracked source, never generated here.
     project_assets = publish_root / "assets" / "pdfs"
@@ -2156,7 +2221,7 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
                 name = f"{project['slug']}-{locale}.pdf"
                 output = staged_output / name
                 preserved = project_assets / name
-                if project["slug"] in PRESERVED_LEGACY_SLUGS and preserved.is_file():
+                if legacy_preservation is not None and name in legacy_preservation:
                     shutil.copyfile(preserved, output)
                     pages = len(dependencies["PdfReader"](str(output)).pages)
                 else:
@@ -2216,6 +2281,12 @@ def main(argv: list[str]) -> int:
     if options.validate_only:
         print(f"PDF input validation passed: {len(payload['projects'])} projects, 2 locales, public CV {payload['cv']['version']}.")
         return 0
+    publish_root = options.publish_root.resolve()
+    legacy_preservation = None
+    if options.preserve_legacy_baseline:
+        legacy_preservation = load_legacy_preservation_baseline(
+            options.preserve_legacy_baseline.resolve(), payload, publish_root / "assets" / "pdfs"
+        )
     dependencies = import_pdf_dependencies()
     register_fonts(
         dependencies,
@@ -2227,8 +2298,9 @@ def main(argv: list[str]) -> int:
         payload,
         dependencies,
         options.output_dir.resolve(),
-        options.publish_root.resolve(),
+        publish_root,
         options.review_dir.resolve() if options.review_dir else None,
+        legacy_preservation,
     )
     review_pages = manifest.get("review", {}).get("pageCount", 0)
     print(f"Generated {len(manifest['documents'])} PDFs ({sum(item['pages'] for item in manifest['documents'])} pages); rendered {review_pages} review pages.")
