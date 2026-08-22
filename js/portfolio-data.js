@@ -363,11 +363,16 @@
       slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'prototype', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
       tech: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'C++', 'Python'],
-      media: { lead: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, video: { id: 'rtms-prototype-recording', type: 'video', status: 'pending-approval' }, poster: { id: 'rtms-prototype-poster', type: 'image', status: 'pending-approval' }, gallery: [] },
+      media: {
+        lead: { id: 'rtms-navigation-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/rtms-navigation/rtms-navigation-lead-01.png' },
+        gallery: [
+          { id: 'rtms-navigation-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/rtms-navigation/rtms-navigation-gallery-01.png', translations: { ko: { caption: 'NeuroPilot 표적 설정 화면 — 대뇌 피질 표면 모델 위의 자극 표적 라벨', alt: '반투명 대뇌 표면 모델 위에 LEFT_DLPFC 등 자극 표적 구가 표시된 NeuroPilot 3D 뷰' }, en: { caption: 'NeuroPilot target view: stimulation targets labelled on the cortical surface model', alt: 'NeuroPilot 3D view with stimulation-target spheres such as LEFT_DLPFC on a translucent cortical surface model' } } },
+        ]
+      },
       pdf: { ko: 'assets/pdfs/rtms-navigation-ko.pdf', en: 'assets/pdfs/rtms-navigation-en.pdf' },
       pdfSequence: {
         middle: ['slicer-architecture', 'coordinate-visibility', 'repeatable-prototype', 'prototype-boundary'],
-        evidenceId: 'rtms-prototype-recording',
+        evidenceId: 'rtms-navigation-lead-01',
         diagram: {
           kind: 'navigation-loop',
           translations: {
@@ -385,10 +390,10 @@
           role: 'Slicer 구조, 장치 연동, 좌표 흐름, UI, 반복 실험 환경을 리드했습니다.',
           teamResult: '팀은 동작하는 연구 프로토타입을 공유했으며 임상 효과나 정량 정확도 결과로 확대하지 않습니다.',
           evidence: '반복 실행할 수 있는 Slicer 프로토타입과 추적·좌표·시각화 흐름이 근거입니다.',
-          limitation: '연구 프로토타입이며 임상 효과, 정량 정확도, 상용 배포를 주장하지 않습니다.',
+          limitation: '연구 프로토타입 화면이며 임상 효과, 정량 정확도, 상용 배포를 주장하지 않습니다.',
           collaboration: '추적 장치와 연구 워크플로 검토를 위해 도메인 전문가와 협업합니다.',
-          mediaAlt: '실시간 코일 자세, 환자 정합, 의료영상 표적을 표시하는 Slicer 프로토타입 녹화.', mediaCaption: '동작 프로토타입 녹화는 공개 승인 대기 중입니다.',
-          status: '프로토타입 · 진행 중', cardProblem: '추적·좌표 데이터를 반복 가능한 Slicer 흐름으로 바꿉니다.', cardOwnedRole: 'Slicer 구조·장치·좌표·UI·실험 환경을 리드했습니다.', cardEvidence: '동작하는 연구 프로토타입과 반복 실험 흐름.', problemSummary: '추적·좌표 데이터를 반복 가능한 내비게이션으로 바꿉니다.', ownedRole: 'Slicer 구조, 장치 연동, 좌표 흐름, UI를 리드했습니다.', verifiedEvidence: '동작하는 연구 프로토타입; 임상·정량 결과는 주장하지 않습니다.', visualAlt: 'Slicer 내비게이션 프로토타입.', visualCaption: '프로토타입 미디어는 승인 대기 중입니다.'
+          mediaAlt: '추적 장치·환자 마커·코일 마커 상태와 표적 거리·기울기 안내가 표시된 NeuroPilot 내비게이션 모듈 화면.', mediaCaption: 'NeuroPilot 내비게이션 모듈 화면입니다 — 추적 장치·환자 마커·코일 마커 상태, 표적까지의 거리·기울기 안내, 조준 가이드(프로젝트 경로는 가림).',
+          status: '프로토타입 · 진행 중', cardProblem: '추적·좌표 데이터를 반복 가능한 Slicer 흐름으로 바꿉니다.', cardOwnedRole: 'Slicer 구조·장치·좌표·UI·실험 환경을 리드했습니다.', cardEvidence: '동작하는 연구 프로토타입 화면과 반복 실험 흐름.', problemSummary: '추적·좌표 데이터를 반복 가능한 내비게이션으로 바꿉니다.', ownedRole: 'Slicer 구조, 장치 연동, 좌표 흐름, UI를 리드했습니다.', verifiedEvidence: '동작하는 연구 프로토타입 화면이 근거이며 임상·정량 결과는 주장하지 않습니다.', visualAlt: 'NeuroPilot 내비게이션 프로토타입 화면.', visualCaption: 'NeuroPilot 코일 내비게이션 모듈 화면.'
         },
         en: {
           title: 'rTMS Navigation Prototype', shortTitle: 'rTMS Navigation', eyebrow: 'Medical Core · Prototype',
@@ -398,10 +403,10 @@
           role: 'Led the Slicer structure, device integration, coordinate flow, UI, and repeatable experiment environment.',
           teamResult: 'The team shared a working research prototype; this is not extended into a clinical-efficacy or quantitative-accuracy result.',
           evidence: 'A repeatable Slicer prototype and visible tracking, coordinate, and visualization flow provide the evidence.',
-          limitation: 'This is a research prototype and does not claim clinical efficacy, quantitative accuracy, or commercial deployment.',
+          limitation: 'This is a research prototype screen and does not claim clinical efficacy, quantitative accuracy, or commercial deployment.',
           collaboration: 'Domain experts review the tracking hardware and research workflow.',
-          mediaAlt: 'Slicer prototype recording showing live coil pose, patient registration, and medical-image targets.', mediaCaption: 'The working prototype recording remains pending approval.',
-          status: 'Prototype · Ongoing', cardProblem: 'Turn tracking and coordinate data into a repeatable Slicer workflow.', cardOwnedRole: 'Led Slicer structure, devices, coordinates, UI, and the experiment environment.', cardEvidence: 'Working research prototype and repeatable experiment flow.', problemSummary: 'Turn tracking and coordinate data into repeatable navigation.', ownedRole: 'Led Slicer structure, device integration, coordinate flow, and UI.', verifiedEvidence: 'A working research prototype; no clinical or quantitative outcome claim.', visualAlt: 'Slicer navigation prototype.', visualCaption: 'Prototype media remains pending approval.'
+          mediaAlt: 'NeuroPilot navigation module screen showing tracker, patient-marker and coil-marker status with distance and tilt guidance to the target.', mediaCaption: 'NeuroPilot navigation module: tracker, patient-marker and coil-marker status, distance and tilt guidance to the target, and the aiming guide (project path hidden).',
+          status: 'Prototype · Ongoing', cardProblem: 'Turn tracking and coordinate data into a repeatable Slicer workflow.', cardOwnedRole: 'Led Slicer structure, devices, coordinates, UI, and the experiment environment.', cardEvidence: 'Working research prototype screens and a repeatable experiment flow.', problemSummary: 'Turn tracking and coordinate data into repeatable navigation.', ownedRole: 'Led Slicer structure, device integration, coordinate flow, and UI.', verifiedEvidence: 'Working research prototype screens are the evidence; no clinical or quantitative outcome claim.', visualAlt: 'NeuroPilot navigation prototype screen.', visualCaption: 'NeuroPilot coil-navigation module screen.'
         }
       },
       blocks: [
@@ -472,15 +477,20 @@
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/skadi-tracking-software/',
       tech: ['SKADI', 'C++', 'Python API', 'Viewer', '3D Slicer', 'Optical tracking'],
       media: {
-        lead: { id: 'skadi-viewer-demo', type: 'video', status: 'pending-approval' },
-        video: { id: 'skadi-viewer-demo', type: 'video', status: 'pending-approval' },
-        poster: { id: 'skadi-viewer-demo-poster', type: 'image', status: 'pending-approval' },
-        gallery: []
+        lead: { id: 'skadi-tracking-software-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-clip-01.mp4' },
+        video: { id: 'skadi-tracking-software-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-clip-01.mp4' },
+        poster: { id: 'skadi-tracking-software-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-poster-01.png' },
+        gallery: [
+          { id: 'skadi-tracking-software-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-01.png', translations: { ko: { caption: 'SKADI Viewer 홈 — 장치 연결, 추적 데이터 표, 영상 스트리밍(네트워크 주소는 가림)', alt: '장치 서버 연결 패널, 마커별 추적 데이터 표, IR 영상 스트리밍 패널이 있는 SKADI Viewer 홈 화면' }, en: { caption: 'SKADI Viewer home: device connection, tracking-data table, and video streaming (network addresses hidden)', alt: 'SKADI Viewer home screen with the device-server panel, per-marker tracking-data table, and IR video-streaming panel' } } },
+          { id: 'skadi-tracking-software-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-02.png', translations: { ko: { caption: '추적 뷰 — IR 영상 위의 마커 검출과 프로브·트레이 마커 좌표계', alt: 'IR 영상에 마커 점과 probe·tray marker 좌표축이 겹쳐 표시된 추적 뷰' }, en: { caption: 'Tracking view: marker detection on the IR image with probe and tray-marker frames', alt: 'Tracking view overlaying detected marker points and probe and tray-marker coordinate frames on the IR image' } } },
+          { id: 'skadi-tracking-software-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-03.png', translations: { ko: { caption: '추적 기록 뷰어 — 기록된 마커 자세의 3D 재생', alt: '기록된 두 마커의 자세와 궤적을 3D 좌표계에 재생하는 뷰어 화면' }, en: { caption: 'Recording viewer: 3D playback of recorded marker poses', alt: 'Viewer screen replaying the poses and trajectory of two recorded markers in a 3D coordinate frame' } } },
+          { id: 'skadi-tracking-software-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/skadi-tracking-software/skadi-tracking-software-gallery-04.png', translations: { ko: { caption: '3D Slicer 커스텀 앱 템플릿 구조 — Loadable·Scripted 모듈과 빌드 산출물', alt: 'src·Applications·Modules(Loadable, Scripted)·Resources와 rel·Slicer-build 산출물로 이어지는 템플릿 구조도' }, en: { caption: '3D Slicer custom-app template layout: Loadable and Scripted modules and build output', alt: 'Diagram of the template layout from src, Applications, Modules (Loadable, Scripted), and Resources to the rel and Slicer-build output' } } },
+        ]
       },
       pdf: { ko: 'assets/pdfs/skadi-tracking-software-ko.pdf', en: 'assets/pdfs/skadi-tracking-software-en.pdf' },
       pdfSequence: {
         middle: ['sdk-layers', 'viewer-and-template', 'delivery-evidence', 'hardware-boundary'],
-        evidenceId: 'skadi-viewer-demo',
+        evidenceId: 'skadi-tracking-software-clip-01',
         diagram: {
           kind: 'tracking-sdk-stack',
           translations: {
@@ -500,8 +510,8 @@
           evidence: 'Viewer 화면, API 구조 다이어그램, Slicer 템플릿 동작 화면이 근거이며 고객 현장 영상은 싣지 않습니다.',
           limitation: '장치 사양·정확도 수치·고객사 명단·판매 수치는 회사 소유 정보로 공개하지 않습니다.',
           collaboration: '광학·하드웨어 설계자, 고객사 내비게이션 개발자, 연구기관 사용자와 인터페이스를 맞춥니다.',
-          mediaAlt: 'SKADI Viewer가 추적 장치 상태와 마커 좌표를 실시간으로 표시하는 화면.', mediaCaption: 'Viewer·API 시연 클립은 공개 승인 후 게시합니다.',
-          status: '진행 중', cardProblem: '광학 트래커를 응용 개발자가 바로 쓰는 API·Viewer 계층으로 만듭니다.', cardOwnedRole: 'API·SDK·Viewer·Slicer 템플릿 개발·유지보수를 담당합니다.', cardEvidence: 'Viewer·API·템플릿 화면; 장치 사양과 판매 수치는 비공개입니다.', problemSummary: '추적 장치를 쓰기 쉬운 소프트웨어 계층으로 감쌉니다.', ownedRole: 'API·SDK·Viewer·Slicer 템플릿을 담당합니다.', verifiedEvidence: 'Viewer·API·템플릿 동작 화면이 근거입니다.', visualAlt: 'SKADI 소프트웨어 계층.', visualCaption: '시연 미디어는 승인 대기 중입니다.'
+          mediaAlt: '모니터의 SKADI Viewer가 두개골 팬텀 위에서 추적되는 기구를 3D 모델과 단면 뷰로 표시하는 장면.', mediaCaption: 'SKADI Viewer가 두개골 팬텀 위의 추적 기구를 3D 모델과 단면 뷰로 표시하는 시연 클립입니다.',
+          status: '진행 중', cardProblem: '광학 트래커를 응용 개발자가 바로 쓰는 API·Viewer 계층으로 만듭니다.', cardOwnedRole: 'API·SDK·Viewer·Slicer 템플릿 개발·유지보수를 담당합니다.', cardEvidence: 'Viewer·추적 뷰·기록 뷰어·Slicer 템플릿 화면; 장치 사양과 판매 수치는 비공개입니다.', problemSummary: '추적 장치를 쓰기 쉬운 소프트웨어 계층으로 감쌉니다.', ownedRole: 'API·SDK·Viewer·Slicer 템플릿을 담당합니다.', verifiedEvidence: 'Viewer 시연 클립과 추적 뷰·기록 뷰어·Slicer 템플릿 화면이 근거입니다.', visualAlt: 'SKADI Viewer 추적 시연.', visualCaption: 'SKADI Viewer 추적 시연 클립.'
         },
         en: {
           title: 'SKADI Tracking Software (API and Viewer)', shortTitle: 'SKADI Software', eyebrow: 'Platform Software · Optical Tracking',
@@ -513,8 +523,8 @@
           evidence: 'Viewer screens, an API structure diagram, and the Slicer template in action are the evidence; customer-site footage is excluded.',
           limitation: 'Device specifications, accuracy figures, customer lists, and sales numbers are company-owned and not published.',
           collaboration: 'Interfaces are agreed with optical and hardware designers, customer navigation developers, and research users.',
-          mediaAlt: 'SKADI Viewer showing live tracker status and marker coordinates.', mediaCaption: 'The Viewer and API demonstration clip will be published after approval.',
-          status: 'Ongoing', cardProblem: 'Turn the optical tracker into an API and Viewer layer developers use directly.', cardOwnedRole: 'Own the API, SDK, Viewer, and Slicer template.', cardEvidence: 'Viewer, API, and template screens; specs and sales figures stay private.', problemSummary: 'Wrap the tracker in a usable software layer.', ownedRole: 'Own the API, SDK, Viewer, and Slicer template.', verifiedEvidence: 'Viewer, API, and template screens.', visualAlt: 'SKADI software layers.', visualCaption: 'Demonstration media is pending approval.'
+          mediaAlt: 'SKADI Viewer on a monitor showing an instrument tracked over a skull phantom in the 3D model and section views.', mediaCaption: 'Demonstration clip: the SKADI Viewer shows a tracked instrument over a skull phantom in the 3D model and section views.',
+          status: 'Ongoing', cardProblem: 'Turn the optical tracker into an API and Viewer layer developers use directly.', cardOwnedRole: 'Own the API, SDK, Viewer, and Slicer template.', cardEvidence: 'Viewer, tracking-view, recording-viewer, and Slicer-template screens; specs and sales figures stay private.', problemSummary: 'Wrap the tracker in a usable software layer.', ownedRole: 'Own the API, SDK, Viewer, and Slicer template.', verifiedEvidence: 'The Viewer demonstration clip plus tracking-view, recording-viewer, and Slicer-template screens are the evidence.', visualAlt: 'SKADI Viewer tracking demonstration.', visualCaption: 'SKADI Viewer tracking demonstration clip.'
         }
       },
       blocks: [
