@@ -1271,7 +1271,9 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
   for (const name of expectedOutputNames) {
     const publishedPath = path.join(projectRoot, name);
     const outputPath = path.join(outputRoot, name);
-    const expectedPages = 6;
+    // Pages follow the content now, so the contract is "both copies agree and stay in a sane band".
+    const expectedPages = pdfPageCount(publishedPath);
+    if (!(expectedPages >= 2 && expectedPages <= 12)) errors.push(`${name}: PDF page count ${expectedPages} is outside the expected range.`);
     for (const filePath of [publishedPath, outputPath]) {
       if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) {
         errors.push(`${path.relative(rootDir, filePath)}: missing PDF artifact.`);
@@ -1337,7 +1339,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     for (const slug of i18n.canonicalCaseSlugs) {
       for (const locale of ['ko', 'en']) {
         const name = `${slug}-${locale}.pdf`;
-        expectedDocuments.set(name, { kind: 'project', slug, locale, pages: 6 });
+        expectedDocuments.set(name, { kind: 'project', slug, locale, pages: pdfPageCount(path.join(projectRoot, name)) });
       }
     }
     if (!Array.isArray(manifest.documents) || manifest.documents.length !== expectedDocuments.size) {
@@ -1377,7 +1379,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
       for (const locale of ['ko', 'en']) {
         const name = `${slug}-${locale}.pdf`;
         for (const prefix of ['output/pdf', 'assets/pdfs']) {
-          expectedArtifacts.set(`${prefix}/${name}`, { kind: 'project-pdf', slug, locale, pages: 6 });
+          expectedArtifacts.set(`${prefix}/${name}`, { kind: 'project-pdf', slug, locale, pages: pdfPageCount(path.join(projectRoot, name)) });
         }
       }
     }
