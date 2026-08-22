@@ -808,7 +808,7 @@ endstream
 endobj
 30 0 obj
 <<
-/Length 3672
+/Length 3819
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -870,13 +870,14 @@ BT 1 0 0 1 64 300.3898 Tm /F2+0 9.5 Tf 11.4 TL (sessions with the research team.
 BT 1 0 0 1 48 237.3898 Tm /F3+0 7.5 Tf 9 TL (EVIDENCE STATE) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 48 215.3898 Tm /F2+0 9.5 Tf 11.4 TL (Ongoing / A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at) Tj T* ET
-BT 1 0 0 1 48 200.3898 Tm /F2+0 9.5 Tf 11.4 TL (once; moving the model in one view updates all three.) Tj T* ET
+BT 1 0 0 1 48 200.3898 Tm /F2+0 9.5 Tf 11.4 TL (once: clinician 1 \(master\) on the left, the patient in the middle, clinician 2 on the right; moving the model in one) Tj T* ET
+BT 1 0 0 1 48 185.3898 Tm /F2+0 9.5 Tf 11.4 TL (view updates all three.) Tj T* ET
  
 endstream
 endobj
 31 0 obj
 <<
-/Length 6368
+/Length 6624
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -908,138 +909,139 @@ n 48 484.3898 499.2756 140 re f*
 .047059 .419608 .368627 rg
 n 48 484.3898 4 140 re f*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 64 602.3898 Tm /F3+0 7.5 Tf 9 TL (02 / CLIENT SCOPE) Tj T* ET
+BT 1 0 0 1 64 602.3898 Tm /F3+0 7.5 Tf 9 TL (02 / CONSULTATION SPACE AND CLIENT SCOPE) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 64 580.3898 Tm /F3+0 13 Tf 15.6 TL (Client scope) Tj T* ET
+BT 1 0 0 1 64 580.3898 Tm /F3+0 13 Tf 15.6 TL (Consultation space and client scope) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 558.3898 Tm /F2+0 9.5 Tf 11.4 TL (Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend) Tj T* ET
-BT 1 0 0 1 64 543.3898 Tm /F2+0 9.5 Tf 11.4 TL (loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a) Tj T* ET
-BT 1 0 0 1 64 528.3898 Tm /F2+0 9.5 Tf 11.4 TL (single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one) Tj T* ET
-BT 1 0 0 1 64 513.3898 Tm /F2+0 9.5 Tf 11.4 TL (headset.) Tj T* ET
+BT 1 0 0 1 64 558.3898 Tm /F2+0 9.5 Tf 11.4 TL (Laid out the room around the consultation itself: three seats for clinician 1 \(master\), the patient, and) Tj T* ET
+BT 1 0 0 1 64 543.3898 Tm /F2+0 9.5 Tf 11.4 TL (clinician 2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room) Tj T* ET
+BT 1 0 0 1 64 528.3898 Tm /F2+0 9.5 Tf 11.4 TL (flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and) Tj T* ET
+BT 1 0 0 1 64 513.3898 Tm /F2+0 9.5 Tf 11.4 TL (cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and) Tj T* ET
+BT 1 0 0 1 64 498.3898 Tm /F2+0 9.5 Tf 11.4 TL (Android XR standards so one build runs on more than one headset.) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 472.3898 Tm /F3+0 7.5 Tf 9 TL (SYSTEM RELATIONSHIP) Tj T* ET
 .984314 .988235 .984314 rg
 .72549 .768627 .752941 RG
-n 48 267.3898 499.2756 188 re B*
+n 48 255.3898 499.2756 200 re B*
 .062745 .090196 .082353 rg
 BT 1 0 0 1 62 433.3898 Tm /F3+0 10 Tf 12 TL (Three-user shared state) Tj T* ET
 .047059 .419608 .368627 RG
 1.2 w
-n 140 393.3898 m 297.6378 339.3898 l S
+n 140 386.3898 m 297.6378 334.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 339.3898 m
-299.8378 340.6048 298.8528 341.5898 297.6378 341.5898 c
-296.4228 341.5898 295.4378 340.6048 295.4378 339.3898 c
-295.4378 338.1747 296.4228 337.1898 297.6378 337.1898 c
-298.8528 337.1898 299.8378 338.1747 299.8378 339.3898 c
+299.8378 334.3898 m
+299.8378 335.6048 298.8528 336.5898 297.6378 336.5898 c
+296.4228 336.5898 295.4378 335.6048 295.4378 334.3898 c
+295.4378 333.1747 296.4228 332.1898 297.6378 332.1898 c
+298.8528 332.1898 299.8378 333.1747 299.8378 334.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 455.2756 393.3898 m 297.6378 339.3898 l S
+n 455.2756 386.3898 m 297.6378 334.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 339.3898 m
-299.8378 340.6048 298.8528 341.5898 297.6378 341.5898 c
-296.4228 341.5898 295.4378 340.6048 295.4378 339.3898 c
-295.4378 338.1747 296.4228 337.1898 297.6378 337.1898 c
-298.8528 337.1898 299.8378 338.1747 299.8378 339.3898 c
+299.8378 334.3898 m
+299.8378 335.6048 298.8528 336.5898 297.6378 336.5898 c
+296.4228 336.5898 295.4378 335.6048 295.4378 334.3898 c
+295.4378 333.1747 296.4228 332.1898 297.6378 332.1898 c
+298.8528 332.1898 299.8378 333.1747 299.8378 334.3898 c
 f*
 .047059 .419608 .368627 RG
 1.2 w
-n 297.6378 293.3898 m 297.6378 339.3898 l S
+n 297.6378 282.3898 m 297.6378 334.3898 l S
 .047059 .419608 .368627 rg
 n
-299.8378 339.3898 m
-299.8378 340.6048 298.8528 341.5898 297.6378 341.5898 c
-296.4228 341.5898 295.4378 340.6048 295.4378 339.3898 c
-295.4378 338.1747 296.4228 337.1898 297.6378 337.1898 c
-298.8528 337.1898 299.8378 338.1747 299.8378 339.3898 c
+299.8378 334.3898 m
+299.8378 335.6048 298.8528 336.5898 297.6378 336.5898 c
+296.4228 336.5898 295.4378 335.6048 295.4378 334.3898 c
+295.4378 333.1747 296.4228 332.1898 297.6378 332.1898 c
+298.8528 332.1898 299.8378 333.1747 299.8378 334.3898 c
 f*
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-228.6378 312.3898 m
-366.6378 312.3898 l
-368.849 312.3898 370.6378 314.1786 370.6378 316.3898 c
-370.6378 362.3898 l
-370.6378 364.601 368.849 366.3898 366.6378 366.3898 c
-228.6378 366.3898 l
-226.4266 366.3898 224.6378 364.601 224.6378 362.3898 c
-224.6378 316.3898 l
-224.6378 314.1786 226.4266 312.3898 228.6378 312.3898 c
+228.6378 311.3898 m
+366.6378 311.3898 l
+368.849 311.3898 370.6378 313.1786 370.6378 315.3898 c
+370.6378 353.3898 l
+370.6378 355.601 368.849 357.3898 366.6378 357.3898 c
+228.6378 357.3898 l
+226.4266 357.3898 224.6378 355.601 224.6378 353.3898 c
+224.6378 315.3898 l
+224.6378 313.1786 226.4266 311.3898 228.6378 311.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 232.6378 348.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
+BT 1 0 0 1 232.6378 343.3898 Tm /F3+0 7.5 Tf 9 TL (01) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 232.6378 331.3898 Tm /F3+0 7.2 Tf 8.64 TL (Three-user session) Tj T* ET
+BT 1 0 0 1 232.6378 326.3898 Tm /F3+0 7.2 Tf 8.64 TL (PUN2 shared state) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-81 370.3898 m
-199 370.3898 l
-201.2112 370.3898 203 372.1786 203 374.3898 c
-203 412.3898 l
-203 414.601 201.2112 416.3898 199 416.3898 c
-81 416.3898 l
-78.7888 416.3898 77 414.601 77 412.3898 c
-77 374.3898 l
-77 372.1786 78.7888 370.3898 81 370.3898 c
+81 363.3898 m
+199 363.3898 l
+201.2112 363.3898 203 365.1786 203 367.3898 c
+203 405.3898 l
+203 407.601 201.2112 409.3898 199 409.3898 c
+81 409.3898 l
+78.7888 409.3898 77 407.601 77 405.3898 c
+77 367.3898 l
+77 365.1786 78.7888 363.3898 81 363.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 85 402.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
+BT 1 0 0 1 85 395.3898 Tm /F3+0 7.5 Tf 9 TL (02) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 85 385.3898 Tm /F3+0 7.2 Tf 8.64 TL (PUN2 shared state) Tj T* ET
+BT 1 0 0 1 85 378.3898 Tm /F3+0 7.2 Tf 8.64 TL (Clinician 1 \(Master\)) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-396.2756 370.3898 m
-514.2756 370.3898 l
-516.4868 370.3898 518.2756 372.1786 518.2756 374.3898 c
-518.2756 412.3898 l
-518.2756 414.601 516.4868 416.3898 514.2756 416.3898 c
-396.2756 416.3898 l
-394.0644 416.3898 392.2756 414.601 392.2756 412.3898 c
-392.2756 374.3898 l
-392.2756 372.1786 394.0644 370.3898 396.2756 370.3898 c
+396.2756 363.3898 m
+514.2756 363.3898 l
+516.4868 363.3898 518.2756 365.1786 518.2756 367.3898 c
+518.2756 405.3898 l
+518.2756 407.601 516.4868 409.3898 514.2756 409.3898 c
+396.2756 409.3898 l
+394.0644 409.3898 392.2756 407.601 392.2756 405.3898 c
+392.2756 367.3898 l
+392.2756 365.1786 394.0644 363.3898 396.2756 363.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 400.2756 402.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
+BT 1 0 0 1 400.2756 395.3898 Tm /F3+0 7.5 Tf 9 TL (03) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 400.2756 385.3898 Tm /F3+0 7.2 Tf 8.64 TL (Photon Voice) Tj T* ET
+BT 1 0 0 1 400.2756 378.3898 Tm /F3+0 7.2 Tf 8.64 TL (Patient) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n
-238.6378 270.3898 m
-356.6378 270.3898 l
-358.849 270.3898 360.6378 272.1786 360.6378 274.3898 c
-360.6378 312.3898 l
-360.6378 314.601 358.849 316.3898 356.6378 316.3898 c
-238.6378 316.3898 l
-236.4266 316.3898 234.6378 314.601 234.6378 312.3898 c
-234.6378 274.3898 l
-234.6378 272.1786 236.4266 270.3898 238.6378 270.3898 c
+238.6378 259.3898 m
+356.6378 259.3898 l
+358.849 259.3898 360.6378 261.1786 360.6378 263.3898 c
+360.6378 301.3898 l
+360.6378 303.601 358.849 305.3898 356.6378 305.3898 c
+238.6378 305.3898 l
+236.4266 305.3898 234.6378 303.601 234.6378 301.3898 c
+234.6378 263.3898 l
+234.6378 261.1786 236.4266 259.3898 238.6378 259.3898 c
 h
 B*
 .047059 .419608 .368627 rg
-BT 1 0 0 1 242.6378 302.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
+BT 1 0 0 1 242.6378 291.3898 Tm /F3+0 7.5 Tf 9 TL (04) Tj T* ET
 .062745 .090196 .082353 rg
-BT 1 0 0 1 242.6378 285.3898 Tm /F3+0 7.2 Tf 8.64 TL (DICOM 3D and measurements) Tj T* ET
+BT 1 0 0 1 242.6378 274.3898 Tm /F3+0 7.2 Tf 8.64 TL (Clinician 2) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 252.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 240.3898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .047059 .419608 .368627 rg
-BT 1 0 0 1 48 224.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
+BT 1 0 0 1 48 212.3898 Tm /F3+0 7.5 Tf 9 TL (IMPLEMENTATION TECHNOLOGIES) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 200.3898 Tm /F2+0 9 Tf 10.8 TL (Unity 6 / Photon PUN2 / Photon Voice / OpenXR / Android XR / Meta Quest 3 \001 Galaxy XR / DICOM 3D) Tj T* ET
+BT 1 0 0 1 48 188.3898 Tm /F2+0 9 Tf 10.8 TL (Unity 6 / Photon PUN2 / Photon Voice / OpenXR / Android XR / Meta Quest 3 \001 Galaxy XR / DICOM 3D) Tj T* ET
  
 endstream
 endobj
 32 0 obj
 <<
-/Length 4981
+/Length 5867
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1089,7 +1091,8 @@ BT 1 0 0 1 60 383.3898 Tm /F3+0 7.5 Tf 9 TL (VIDEO / PUBLICLY INSPECTABLE) Tj T*
 .062745 .090196 .082353 rg
 BT 1 0 0 1 60 364.3898 Tm /F3+0 9 Tf 10.8 TL (life-careverse-clip-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Trimmed from an internal three-user session recording; left to) Tj T* ET
+BT 1 0 0 1 60 340.3898 Tm /F2+0 7.4 Tf 8.88 TL (right the panels are master clinician, consulted person, second) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n 48 260.3898 242.6378 66 re B*
@@ -1098,7 +1101,8 @@ BT 1 0 0 1 60 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T*
 .062745 .090196 .082353 rg
 BT 1 0 0 1 60 290.3898 Tm /F3+0 9 Tf 10.8 TL (life-careverse-poster-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Still frame from the same clip, chosen where all three) Tj T* ET
+BT 1 0 0 1 60 266.3898 Tm /F2+0 7.4 Tf 8.88 TL (viewpoints show the segmented model in one pose.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n 48 186.3898 242.6378 66 re B*
@@ -1107,7 +1111,8 @@ BT 1 0 0 1 60 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE) Tj T*
 .062745 .090196 .082353 rg
 BT 1 0 0 1 60 216.3898 Tm /F3+0 9 Tf 10.8 TL (life-careverse-gallery-01) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 60 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Room layout design: three seats for master clinician, consulted) Tj T* ET
+BT 1 0 0 1 60 192.3898 Tm /F2+0 7.4 Tf 8.88 TL (person, and second clinician, with the 2D measurement panel) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n 304.6378 334.3898 242.6378 66 re B*
@@ -1116,7 +1121,8 @@ BT 1 0 0 1 316.6378 383.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE)
 .062745 .090196 .082353 rg
 BT 1 0 0 1 316.6378 364.3898 Tm /F3+0 9 Tf 10.8 TL (life-careverse-gallery-02) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 350.3898 Tm /F2+0 7.4 Tf 8.88 TL (One moment where the shared measurement panel reads) Tj T* ET
+BT 1 0 0 1 316.6378 340.3898 Tm /F2+0 7.4 Tf 8.88 TL (identically in all three viewpoints.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n 304.6378 260.3898 242.6378 66 re B*
@@ -1125,7 +1131,8 @@ BT 1 0 0 1 316.6378 309.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE)
 .062745 .090196 .082353 rg
 BT 1 0 0 1 316.6378 290.3898 Tm /F3+0 9 Tf 10.8 TL (life-careverse-gallery-03) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 276.3898 Tm /F2+0 7.4 Tf 8.88 TL (Detached maxillary segment reflected in all three viewpoints) Tj T* ET
+BT 1 0 0 1 316.6378 266.3898 Tm /F2+0 7.4 Tf 8.88 TL (while two avatars watch the same state.) Tj T* ET
 .933333 .945098 .937255 rg
 .72549 .768627 .752941 RG
 n 304.6378 186.3898 242.6378 66 re B*
@@ -1134,18 +1141,20 @@ BT 1 0 0 1 316.6378 235.3898 Tm /F3+0 7.5 Tf 9 TL (IMAGE / PUBLICLY INSPECTABLE)
 .062745 .090196 .082353 rg
 BT 1 0 0 1 316.6378 216.3898 Tm /F3+0 9 Tf 10.8 TL (life-careverse-gallery-04) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 316.6378 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (Approved derivative; caption in portfolio data.) Tj T* ET
+BT 1 0 0 1 316.6378 202.3898 Tm /F2+0 7.4 Tf 8.88 TL (On-site headset session in a waiting area; faces and the) Tj T* ET
+BT 1 0 0 1 316.6378 192.3898 Tm /F2+0 7.4 Tf 8.88 TL (wristband are de-identified.) Tj T* ET
 .047059 .419608 .368627 rg
 BT 1 0 0 1 48 172.3898 Tm /F3+0 7.5 Tf 9 TL (VERIFICATION AND EVIDENCE LEDGER) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 48 148.3898 Tm /F2+0 9.5 Tf 11.4 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence: when) Tj T* ET
-BT 1 0 0 1 48 133.3898 Tm /F2+0 9.5 Tf 11.4 TL (one person moves the model, all three views show the same pose and the same measurements.) Tj T* ET
+BT 1 0 0 1 48 148.3898 Tm /F2+0 9.5 Tf 11.4 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence. Clinician) Tj T* ET
+BT 1 0 0 1 48 133.3898 Tm /F2+0 9.5 Tf 11.4 TL (1 \(master\), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one person moving) Tj T* ET
+BT 1 0 0 1 48 118.3898 Tm /F2+0 9.5 Tf 11.4 TL (the model leaves the other two views showing the same pose and the same measurements.) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 4991
+/Length 5659
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1175,8 +1184,9 @@ BT 1 0 0 1 64 688.3898 Tm /F3+0 7.5 Tf 9 TL (04 / ADOPTION BOUNDARY) Tj T* ET
 .062745 .090196 .082353 rg
 BT 1 0 0 1 64 666.3898 Tm /F3+0 13 Tf 15.6 TL (Adoption boundary) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (Do not turn the research team registration, demonstrations, or validation plans into individual or) Tj T* ET
-BT 1 0 0 1 64 629.3898 Tm /F2+0 9.5 Tf 11.4 TL (clinical-outcome claims.) Tj T* ET
+BT 1 0 0 1 64 644.3898 Tm /F2+0 9.5 Tf 11.4 TL (The patient demonstration and survey are under way and the external-hospital validation is still planned.) Tj T* ET
+BT 1 0 0 1 64 629.3898 Tm /F2+0 9.5 Tf 11.4 TL (Do not turn the research team registration, demonstrations, or validation plans into individual or) Tj T* ET
+BT 1 0 0 1 64 614.3898 Tm /F2+0 9.5 Tf 11.4 TL (clinical-outcome claims.) Tj T* ET
 .933333 .945098 .937255 rg
 n 48 462.3898 499.2756 116 re f*
 .047059 .419608 .368627 rg
@@ -1197,11 +1207,14 @@ n 48 280.3898 4 170 re f*
 BT 1 0 0 1 64 428.3898 Tm /F3+0 7.5 Tf 9 TL (TEAM RESULT) Tj T* ET
 .062745 .090196 .082353 rg
 BT 1 0 0 1 64 406.3898 Tm /F3+0 13 Tf 15.6 TL (Software copyright registration, the patient demonstration and survey,) Tj T* ET
-BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (and the planned external validation are joint research-team results, each) Tj T* ET
-BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (stated only to its own scope.) Tj T* ET
+BT 1 0 0 1 64 388.3898 Tm /F3+0 13 Tf 15.6 TL (and the planned external-hospital validation are joint research-team) Tj T* ET
+BT 1 0 0 1 64 370.3898 Tm /F3+0 13 Tf 15.6 TL (results. The demonstration and survey are under way; the external) Tj T* ET
+BT 1 0 0 1 64 352.3898 Tm /F3+0 13 Tf 15.6 TL (validation is still only planned.) Tj T* ET
 .345098 .396078 .376471 rg
-BT 1 0 0 1 64 348.3898 Tm /F2+0 9.5 Tf 11.4 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence:) Tj T* ET
-BT 1 0 0 1 64 333.3898 Tm /F2+0 9.5 Tf 11.4 TL (when one person moves the model, all three views show the same pose and the same measurements.) Tj T* ET
+BT 1 0 0 1 64 330.3898 Tm /F2+0 9.5 Tf 11.4 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence.) Tj T* ET
+BT 1 0 0 1 64 315.3898 Tm /F2+0 9.5 Tf 11.4 TL (Clinician 1 \(master\), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether) Tj T* ET
+BT 1 0 0 1 64 300.3898 Tm /F2+0 9.5 Tf 11.4 TL (one person moving the model leaves the other two views showing the same pose and the same) Tj T* ET
+BT 1 0 0 1 64 285.3898 Tm /F2+0 9.5 Tf 11.4 TL (measurements.) Tj T* ET
 .72549 .768627 .752941 RG
 n 48 122.3898 243.6378 146 re S
 .662745 .294118 .196078 rg
@@ -1212,8 +1225,9 @@ BT 1 0 0 1 60 210.3898 Tm /F3+0 9 Tf 10.8 TL (layout work; it claims no improvem
 BT 1 0 0 1 60 196.3898 Tm /F3+0 9 Tf 10.8 TL (consultation quality or treatment outcome.) Tj T* ET
 .345098 .396078 .376471 rg
 BT 1 0 0 1 60 174.3898 Tm /F2+0 7.6 Tf 9.12 TL (A 24-second clip of a three-user VR consultation session) Tj T* ET
-BT 1 0 0 1 60 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (recorded from each participant viewpoint at once; moving the) Tj T* ET
-BT 1 0 0 1 60 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (model in one view updates all three.) Tj T* ET
+BT 1 0 0 1 60 163.3898 Tm /F2+0 7.6 Tf 9.12 TL (recorded from each participant viewpoint at once: clinician 1) Tj T* ET
+BT 1 0 0 1 60 152.3898 Tm /F2+0 7.6 Tf 9.12 TL (\(master\) on the left, the patient in the middle, clinician 2 on) Tj T* ET
+BT 1 0 0 1 60 141.3898 Tm /F2+0 7.6 Tf 9.12 TL (the right; moving the model in one view updates all three.) Tj T* ET
 .72549 .768627 .752941 RG
 n 303.6378 122.3898 243.6378 146 re S
 .047059 .419608 .368627 rg
@@ -1319,10 +1333,10 @@ xref
 0000671841 00000 n 
 0000671934 00000 n 
 0000674734 00000 n 
-0000678458 00000 n 
-0000684878 00000 n 
-0000689911 00000 n 
-0000694954 00000 n 
+0000678605 00000 n 
+0000685281 00000 n 
+0000691200 00000 n 
+0000696911 00000 n 
 trailer
 <<
 /ID 
@@ -1334,5 +1348,5 @@ trailer
 /Size 35
 >>
 startxref
-697672
+699629
 %%EOF

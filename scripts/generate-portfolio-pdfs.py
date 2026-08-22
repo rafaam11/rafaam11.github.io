@@ -549,15 +549,19 @@ class TechnicalDocument:
         self.canvas.setCreator("Jinmin Kim Portfolio PDF Generator")
         self.canvas.setKeywords("3D registration, robot software, public portfolio")
         self.canvas._doc.info.producer = "Jinmin Kim Portfolio PDF Generator"
+        # Scholar palette, shared with the website: white paper, near-black ink, one blue accent.
         self.colors = {
-            "paper": dependencies["HexColor"]("#FBFCFB"),
-            "ink": dependencies["HexColor"]("#101715"),
-            "muted": dependencies["HexColor"]("#586560"),
-            "line": dependencies["HexColor"]("#B9C4C0"),
-            "signal": dependencies["HexColor"]("#0C6B5E"),
-            "warm": dependencies["HexColor"]("#A94B32"),
-            "soft": dependencies["HexColor"]("#EEF1EF"),
+            "paper": dependencies["HexColor"]("#FFFFFF"),
+            "ink": dependencies["HexColor"]("#1A1A1A"),
+            "muted": dependencies["HexColor"]("#555555"),
+            "line": dependencies["HexColor"]("#E0E0E0"),
+            "signal": dependencies["HexColor"]("#1A56DB"),
+            "warm": dependencies["HexColor"]("#9A3412"),
+            "soft": dependencies["HexColor"]("#F5F5F5"),
         }
+        self.page_no = 1
+        self.section_name = ""
+        self.y = self.top
 
     def begin_page(self, number: int, section: str) -> None:
         c = self.canvas
@@ -568,8 +572,8 @@ class TechnicalDocument:
         c.line(self.left, self.top + 8, self.right, self.top + 8)
         c.setFillColor(self.colors["muted"])
         c.setFont("MalgunGothic", 7.5)
-        c.drawString(self.left, self.top + 17, clean_text(section).upper())
-        c.drawRightString(self.right, self.top + 17, "JINMIN KIM / PUBLIC TECHNICAL DOCUMENT")
+        c.drawString(self.left, self.top + 17, clean_text(section))
+        c.drawRightString(self.right, self.top + 17, "Jinmin Kim / Public technical document")
         c.line(self.left, self.bottom - 10, self.right, self.bottom - 10)
         c.setFont("MalgunGothic", 7.5)
         c.drawString(self.left, self.bottom - 25, self.title)
@@ -639,8 +643,8 @@ class TechnicalDocument:
 
     def label(self, text: Any, x: float, y: float, color: str = "signal") -> None:
         self.canvas.setFillColor(self.colors[color])
-        self.canvas.setFont("MalgunGothic-Bold", 7.5)
-        self.canvas.drawString(x, y, clean_text(text).upper())
+        self.canvas.setFont("MalgunGothic-Bold", 8)
+        self.canvas.drawString(x, y, clean_text(text))
 
     def section(self, label: Any, title: Any, body: Any, y: float, height: float,
                 accent: str = "signal") -> float:
@@ -668,6 +672,132 @@ class TechnicalDocument:
         self.canvas.linkURL(url, (x, y - 4, x + width, y + size + 2), relative=0)
         return width
 
+    # ---- flowing layout -----------------------------------------------------
+    # Pages are not fixed panels any more: content is emitted top to bottom and a
+    # page break happens only when the next element would cross the bottom margin.
+
+    def start(self, section: str) -> None:
+        self.section_name = section
+        self.page_no = 1
+        self.begin_page(1, section)
+        self.y = self.top - 30
+
+    def ensure(self, height: float) -> None:
+        if self.y - height < self.bottom + 4:
+            self.finish_page()
+            self.page_no += 1
+            self.begin_page(self.page_no, self.section_name)
+            self.y = self.top - 30
+
+    def rule(self, before: float = 12, after: float = 14) -> None:
+        self.ensure(before + after)
+        self.y -= before
+        self.canvas.setStrokeColor(self.colors["line"])
+        self.canvas.setLineWidth(0.7)
+        self.canvas.line(self.left, self.y, self.right, self.y)
+        self.y -= after
+
+    def kicker(self, text: Any, color: str = "signal") -> None:
+        value = clean_text(text)
+        if not value:
+            return
+        self.ensure(18)
+        self.label(value, self.left, self.y - 8, color)
+        self.y -= 20
+
+    def para(self, text: Any, size: float = 10, leading: float = 16,
+             font: str = "MalgunGothic", color: str = "ink", gap: float = 12,
+             indent: float = 0) -> None:
+        width = self.right - self.left - indent
+        lines = self.wrap(text, font, size, width)
+        if not lines:
+            return
+        for line in lines:
+            self.ensure(leading)
+            self.canvas.setFillColor(self.colors[color])
+            self.canvas.setFont(font, size)
+            self.canvas.drawString(self.left + indent, self.y - size, line)
+            self.y -= leading
+        self.y -= gap
+
+    def bullets(self, items: Iterable[Any], size: float = 10, leading: float = 16,
+                color: str = "muted", gap: float = 12) -> None:
+        for item in items:
+            lines = self.wrap(item, "MalgunGothic", size, self.right - self.left - 16)
+            for index, line in enumerate(lines):
+                self.ensure(leading)
+                self.canvas.setFillColor(self.colors[color])
+                self.canvas.setFont("MalgunGothic", size)
+                if index == 0:
+                    self.canvas.drawString(self.left, self.y - size, "-")
+                self.canvas.drawString(self.left + 16, self.y - size, line)
+                self.y -= leading
+        self.y -= gap
+
+    def h2(self, text: Any) -> None:
+        value = clean_text(text)
+        if not value:
+            return
+        self.ensure(74)
+        self.y -= 14
+        self.canvas.setStrokeColor(self.colors["ink"])
+        self.canvas.setLineWidth(0.9)
+        self.canvas.line(self.left, self.y, self.right, self.y)
+        self.y -= 20
+        self.canvas.setFillColor(self.colors["ink"])
+        self.canvas.setFont("MalgunGothic-Bold", 14)
+        self.canvas.drawString(self.left, self.y - 14, value)
+        self.y -= 28
+
+    def h3(self, text: Any) -> None:
+        value = clean_text(text)
+        if not value:
+            return
+        self.ensure(30)
+        self.canvas.setFillColor(self.colors["ink"])
+        self.canvas.setFont("MalgunGothic-Bold", 11)
+        self.canvas.drawString(self.left, self.y - 11, value)
+        self.y -= 21
+
+    def meta_line(self, pairs: list[tuple[str, str]]) -> None:
+        parts = [f"{clean_text(label)} {clean_text(value)}" for label, value in pairs if clean_text(value)]
+        if parts:
+            self.para("   |   ".join(parts), size=9, leading=14, color="muted", gap=6)
+
+    def figure(self, path: Any, number_label: str, caption: Any) -> None:
+        """Draw one still at full column width, with its caption underneath."""
+        width = self.right - self.left
+        with self.d["Image"].open(path) as image:
+            draw_width = width
+            draw_height = width * image.height / image.width
+        # A very tall still would eat a whole page; cap it and centre what is left.
+        max_height = 300
+        if draw_height > max_height:
+            draw_width = draw_width * max_height / draw_height
+            draw_height = max_height
+        caption_lines = self.wrap(f"{number_label} {clean_text(caption)}".strip(), "MalgunGothic", 8.5, width)
+        caption_height = 14 + len(caption_lines) * 12
+        remaining = self.y - self.bottom - 4 - caption_height
+        if draw_height > remaining >= 170:
+            draw_width = draw_width * remaining / draw_height
+            draw_height = remaining
+        self.ensure(draw_height + caption_height)
+        self.canvas.drawImage(str(path), self.left + (width - draw_width) / 2, self.y - draw_height,
+                              width=draw_width, height=draw_height, preserveAspectRatio=True,
+                              anchor="c", mask="auto")
+        self.y -= draw_height + 12
+        for line in caption_lines:
+            self.canvas.setFillColor(self.colors["muted"])
+            self.canvas.setFont("MalgunGothic", 8.5)
+            self.canvas.drawString(self.left, self.y - 8.5, line)
+            self.y -= 12
+        self.y -= 14
+
+    def link_line(self, label: Any, url: str) -> None:
+        self.ensure(20)
+        self.link(label, url, self.left, self.y - 9, 9.5)
+        self.y -= 20
+
     def flow(self, labels: Iterable[str], y: float) -> float:
         items = list(labels)[:4]
         while len(items) < 4:
@@ -691,23 +821,21 @@ class TechnicalDocument:
     def diagram(self, kind: str, title: str, nodes: list[str], y: float) -> float:
         """Draw one of eight project-specific explanatory geometries."""
         c = self.canvas
-        area_height = 188
+        area_height = 170
         top = y
         bottom = y - area_height
-        c.setFillColor(self.colors["paper"])
-        c.setStrokeColor(self.colors["line"])
-        c.rect(self.left, bottom, self.right - self.left, area_height, fill=1, stroke=1)
-        self.text(title, self.left + 14, top - 22, self.right - self.left - 28,
-                  size=10, font="MalgunGothic-Bold", leading=14, max_lines=2)
+        self.text(title, self.left, top - 12, self.right - self.left,
+                  size=10.5, font="MalgunGothic-Bold", leading=14, max_lines=2)
 
         def box(cx: float, cy: float, width: float, height: float, value: str, index: int) -> None:
             x = cx - width / 2
             box_bottom = cy - height / 2
-            c.setFillColor(self.colors["soft"])
+            c.setFillColor(self.colors["paper"])
             c.setStrokeColor(self.colors["line"])
-            c.roundRect(x, box_bottom, width, height, 4, fill=1, stroke=1)
-            self.label(f"0{index + 1}", x + 8, cy + 9)
-            self.text(value, x + 8, cy - 8, width - 16, size=7.2,
+            c.setLineWidth(0.8)
+            c.roundRect(x, box_bottom, width, height, 3, fill=1, stroke=1)
+            self.label(f"0{index + 1}", x + 9, cy + 9)
+            self.text(value, x + 9, cy - 8, width - 18, size=7.4,
                       font="MalgunGothic-Bold", leading=10, max_lines=3)
 
         def connector(start: tuple[float, float], end: tuple[float, float], accent: str = "signal") -> None:
@@ -718,7 +846,7 @@ class TechnicalDocument:
             c.circle(end[0], end[1], 2.2, fill=1, stroke=0)
 
         center_x = (self.left + self.right) / 2
-        center_y = bottom + 68
+        center_y = bottom + 80
         if kind == "coordinate-chain":
             width = 104
             centers = [(self.left + 58 + index * 122, center_y) for index in range(4)]
@@ -734,33 +862,34 @@ class TechnicalDocument:
             for index, center in enumerate(centers):
                 box(*center, 142, 48, nodes[index], index)
         elif kind == "sync-topology":
-            # Node 04 sat low enough that its box crossed the frame edge and collided with the
-            # caption below, so the star is lifted to keep all four boxes inside the panel.
-            centers = [(center_x, center_y + 4), (self.left + 92, center_y + 58),
-                       (self.right - 92, center_y + 58), (center_x, center_y - 42)]
+            # Three tiers of 46pt boxes with 6pt gaps fill the panel exactly: node 04 used to
+            # cross the frame edge into the caption, and lifting it alone made it collide with
+            # the hub instead. The hub stays widest so it still reads as the shared centre.
+            centers = [(center_x, center_y + 11), (self.left + 92, center_y + 63),
+                       (self.right - 92, center_y + 63), (center_x, center_y - 41)]
             for index in range(1, 4):
                 connector(centers[index], centers[0])
-            box(*centers[0], 146, 54, nodes[0], 0)
+            box(*centers[0], 146, 46, nodes[0], 0)
             for index in range(1, 4):
                 box(*centers[index], 126, 46, nodes[index], index)
         elif kind == "navigation-loop":
-            centers = [(center_x - 150, center_y + 35), (center_x, center_y + 35),
-                       (center_x + 150, center_y + 35), (center_x, center_y - 48)]
+            centers = [(center_x - 150, center_y + 41), (center_x, center_y + 41),
+                       (center_x + 150, center_y + 41), (center_x, center_y - 42)]
             for start, end in [(0, 1), (1, 2), (2, 3), (3, 0)]:
                 connector(centers[start], centers[end], "warm" if start == 3 else "signal")
             for index, center in enumerate(centers):
                 box(*center, 124, 48, nodes[index], index)
         elif kind == "sensor-convergence":
-            centers = [(self.left + 98, center_y + 48), (self.left + 98, center_y),
-                       (self.left + 98, center_y - 48), (self.right - 118, center_y)]
+            centers = [(self.left + 98, center_y + 54), (self.left + 98, center_y + 6),
+                       (self.left + 98, center_y - 42), (self.right - 118, center_y + 6)]
             for index in range(3):
                 connector((centers[index][0] + 66, centers[index][1]), (centers[3][0] - 76, centers[3][1]))
             for index in range(3):
                 box(*centers[index], 132, 42, nodes[index], index)
             box(*centers[3], 152, 62, nodes[3], 3)
         elif kind == "product-loop":
-            centers = [(center_x, center_y + 54), (center_x + 155, center_y),
-                       (center_x, center_y - 54), (center_x - 155, center_y)]
+            centers = [(center_x, center_y + 54), (center_x + 155, center_y + 6),
+                       (center_x, center_y - 42), (center_x - 155, center_y + 6)]
             for index in range(4):
                 connector(centers[index], centers[(index + 1) % 4], "warm" if index == 3 else "signal")
             for index, center in enumerate(centers):
@@ -779,7 +908,7 @@ class TechnicalDocument:
             box(*track_centers[1], 148, 44, nodes[2], 2)
             box(*right_center, 124, 50, nodes[3], 3)
         elif kind == "tracking-sdk-stack":
-            centers = [(center_x, center_y + 54 - index * 36) for index in range(4)]
+            centers = [(center_x, center_y + 60 - index * 36) for index in range(4)]
             for index in range(3):
                 connector((center_x, centers[index][1] - 15), (center_x, centers[index + 1][1] + 15))
             for index, center in enumerate(centers):
@@ -885,6 +1014,7 @@ def project_labels(locale: str) -> dict[str, str]:
     if locale == "ko":
         return {
             "case": "기술 사례",
+            "figure": "그림",
             "state": "근거 상태",
             "period": "기간",
             "tier": "포트폴리오 구분",
@@ -913,6 +1043,7 @@ def project_labels(locale: str) -> dict[str, str]:
         }
     return {
         "case": "Technical case",
+        "figure": "Figure",
         "state": "Evidence state",
         "period": "Period",
         "tier": "Portfolio tier",
@@ -941,193 +1072,161 @@ def project_labels(locale: str) -> dict[str, str]:
     }
 
 
-def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], project: dict[str, Any],
-                         locale: str, output: Path, local_evidence: dict[str, Path]) -> None:
+def project_figures(project: dict[str, Any], local_evidence: dict[str, Path],
+                    locale: str) -> list[tuple[Path, str]]:
+    """Every approved local still for this project, in reading order, with its caption."""
+    media = project.get("media")
+    if not isinstance(media, dict):
+        return []
     copy = localized(project, locale)
-    labels = project_labels(locale)
-    middle_blocks = sequence_blocks(project, locale)
-    diagram_copy = project["pdfSequence"]["diagram"]["translations"][locale]
-    doc = TechnicalDocument(dependencies, output, copy["title"], copy["thesis"], locale, 6)
-    content_width = doc.right - doc.left
+    figures: list[tuple[Path, str]] = []
+    seen: set[str] = set()
 
-    # 1. Cover
-    doc.begin_page(1, labels["case"])
-    y = doc.top - 42
-    doc.label(copy["eyebrow"], doc.left, y)
-    y = doc.text(copy["title"], doc.left, y - 38, content_width, size=27,
-                 font="MalgunGothic-Bold", leading=34, max_lines=3)
-    doc.canvas.setFillColor(doc.colors["signal"])
-    doc.canvas.rect(doc.left, y - 15, 76, 4, fill=1, stroke=0)
-    y = doc.text(copy["thesis"], doc.left, y - 48, content_width * 0.86, size=15,
-                 font="MalgunGothic-Bold", leading=23, max_lines=4)
-    facts = [
-        (labels["state"], copy["status"]),
-        (labels["period"], project["period"]),
-        (labels["tier"], tier_label(payload, project["tier"], locale)),
-        (labels["capability"], capability_label(payload, project["capabilityKeys"][0], locale)),
-    ]
-    fact_y = max(y - 36, 330)
-    column_width = (content_width - 12) / 2
-    for index, (label, value) in enumerate(facts):
-        x = doc.left + (index % 2) * (column_width + 12)
-        row_y = fact_y - (index // 2) * 78
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(x, row_y - 58, column_width, 58, fill=0, stroke=1)
-        doc.label(label, x + 12, row_y - 18)
-        doc.text(value, x + 12, row_y - 38, column_width - 24, size=9,
-                 font="MalgunGothic-Bold", leading=13, max_lines=2)
-    doc.text(copy["summary"], doc.left, fact_y - 190, content_width, size=9.5,
-             leading=15, color="muted", max_lines=5)
-    doc.finish_page()
+    def add(item: Any, caption: str) -> None:
+        if not isinstance(item, dict) or item.get("type") != "image" or item.get("status") != "approved":
+            return
+        identifier = item.get("id")
+        path = local_evidence.get(identifier)
+        if path is None or identifier in seen:
+            return
+        seen.add(identifier)
+        figures.append((path, caption))
 
-    # 2. Problem and boundary
-    doc.begin_page(2, labels["problem"])
-    y = doc.heading(labels["problem"], doc.top - 32)
-    first_block, first_copy = middle_blocks[0]
-    y = doc.section("01 / " + first_copy["heading"], first_copy["heading"],
-                    block_body(first_block, first_copy), y, 112)
-    y = doc.section(labels["problem_label"], copy["problem"], copy["summary"], y, 175)
-    y = doc.section(labels["boundary"], copy["limitation"], copy["collaboration"], y, 142, "warm")
-    doc.label(labels["state"], doc.left, y - 8)
-    doc.text(f"{copy['status']} / {copy['mediaCaption']}", doc.left, y - 30, content_width,
-             size=9.5, leading=15, color="muted", max_lines=5)
-    doc.finish_page()
+    lead = media.get("lead")
+    lead_caption = clean_text(copy.get("mediaCaption"))
+    if isinstance(lead, dict) and lead.get("type") == "image":
+        add(lead, lead_caption)
+    else:
+        add(media.get("poster"), lead_caption)
+    gallery = media.get("gallery")
+    for item in gallery if isinstance(gallery, list) else []:
+        caption = ""
+        translations = item.get("translations") if isinstance(item, dict) else None
+        if isinstance(translations, dict) and isinstance(translations.get(locale), dict):
+            caption = clean_text(translations[locale].get("caption"))
+        add(item, caption)
+    return figures
 
-    # 3. Owned implementation and factual relationship diagram
-    doc.begin_page(3, labels["decision"])
-    y = doc.heading(labels["decision"], doc.top - 32)
-    doc.label(labels["role"], doc.left, y)
-    y = doc.text(copy["role"], doc.left, y - 25, content_width, size=10.5,
-                 leading=17, max_lines=6) - 10
-    second_block, second_copy = middle_blocks[1]
-    y = doc.section("02 / " + second_copy["heading"], second_copy["heading"],
-                    block_body(second_block, second_copy), y, 140)
-    doc.label(labels["flow"], doc.left, y)
-    y = doc.diagram(project["pdfSequence"]["diagram"]["kind"], diagram_copy["title"],
-                    [clean_text(node) for node in diagram_copy["nodes"]], y - 17)
-    y = doc.text(labels["flow_note"], doc.left, y - 15, content_width, size=8,
-                 leading=12, color="muted", max_lines=2) - 16
-    doc.label(labels["tech"], doc.left, y)
-    doc.text(" / ".join(clean_text(item) for item in project.get("tech", [])), doc.left, y - 24,
-             content_width, size=9, leading=14, color="muted", max_lines=5)
-    doc.finish_page()
 
-    # 4. Evidence ledger
-    doc.begin_page(4, labels["evidence"])
-    y = doc.heading(labels["evidence"], doc.top - 32)
-    third_block, third_copy = middle_blocks[2]
-    y = doc.section("03 / " + third_copy["heading"], third_copy["heading"],
-                    block_body(third_block, third_copy), y, 104)
-    selected_image = selected_pdf_evidence_image(project, local_evidence)
-    if selected_image:
-        doc.label(f"IMAGE / {labels['approved']}", doc.left, y)
-        image_top = y - 18
-        image_height = 140
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(doc.left, image_top - image_height, content_width, image_height, fill=0, stroke=1)
-        with dependencies["Image"].open(selected_image) as image:
-            ratio = min((content_width - 8) / image.width, (image_height - 8) / image.height)
-            draw_width = image.width * ratio
-            draw_height = image.height * ratio
-        doc.canvas.drawImage(str(selected_image), doc.left + (content_width - draw_width) / 2,
-                             image_top - (image_height + draw_height) / 2,
-                             width=draw_width, height=draw_height, preserveAspectRatio=True,
-                             anchor="c", mask="auto")
-        y = image_top - image_height - 14
-    doc.label(labels["registered"], doc.left, y)
-    y -= 22
-    evidence = [entry for entry in payload["evidence"] if entry.get("project") == project["slug"]]
-    # A single stacked column ran past the page edge once a project registered more than four
-    # entries, so the ledger fills two columns and every registered item stays on the page.
-    column_gap = 14
-    column_width = (content_width - column_gap) / 2
-    row_height = 66
-    row_gap = 8
-    rows = (len(evidence) + 1) // 2
-    for index, entry in enumerate(evidence):
-        approved = entry.get("state") == "approved-public"
-        state_label = labels["approved"] if approved else labels["pending"]
-        column, row = divmod(index, rows) if rows else (0, 0)
-        row_x = doc.left + column * (column_width + column_gap)
-        row_y = y - row * (row_height + row_gap)
-        doc.canvas.setFillColor(doc.colors["soft"] if approved else doc.colors["paper"])
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(row_x, row_y - row_height, column_width, row_height, fill=1, stroke=1)
-        doc.label(f"{entry.get('type', '')} / {state_label}", row_x + 12, row_y - 17,
-                  "signal" if approved else "warm")
-        doc.text(entry.get("id", ""), row_x + 12, row_y - 36, column_width - 70,
-                 size=9, font="MalgunGothic-Bold", leading=13, max_lines=1)
-        doc.text(entry.get("note", ""), row_x + 12, row_y - 50, column_width - 24,
-                 size=7.4, leading=10, color="muted", max_lines=2)
-        source = clean_text(entry.get("source"))
-        if approved and source.startswith("https://"):
-            doc.link(labels["open"], source, row_x + column_width - 46, row_y - 36, 8)
-    if evidence:
-        y -= rows * (row_height + row_gap)
-    y -= 6
-    doc.label(labels["evidence"], doc.left, y)
-    doc.text(copy["evidence"], doc.left, y - 24, content_width, size=9.5,
-             leading=15, color="muted", max_lines=6)
-    doc.finish_page()
-
-    # 5. Attribution
-    doc.begin_page(5, labels["attribution"])
-    y = doc.heading(labels["attribution"], doc.top - 32)
-    fourth_block, fourth_copy = middle_blocks[3]
-    y = doc.section("04 / " + fourth_copy["heading"], fourth_copy["heading"],
-                    block_body(fourth_block, fourth_copy), y, 120, "warm")
-    y = doc.section(labels["role"], copy["ownedRole"], copy["role"], y, 116)
-    y = doc.section(labels["team"], copy["teamResult"], copy["evidence"], y, 170)
-    column_gap = 12
-    column_width = (content_width - column_gap) / 2
-    for index, (label, title, body, accent) in enumerate([
-        (labels["limit"], copy["limitation"], copy["mediaCaption"], "warm"),
-        (labels["collaboration"], copy["collaboration"], copy["summary"], "signal"),
-    ]):
-        x = doc.left + index * (column_width + column_gap)
-        doc.canvas.setStrokeColor(doc.colors["line"])
-        doc.canvas.rect(x, y - 146, column_width, 146, fill=0, stroke=1)
-        doc.label(label, x + 12, y - 20, accent)
-        title_y = doc.text(title, x + 12, y - 44, column_width - 24, size=9,
-                           font="MalgunGothic-Bold", leading=14, max_lines=5)
-        doc.text(body, x + 12, title_y - 8, column_width - 24, size=7.6,
-                 leading=11, color="muted", max_lines=4)
-    doc.finish_page()
-
-    # 6. Recap and invitation
-    doc.begin_page(6, labels["recap"])
-    y = doc.heading(labels["recap"], doc.top - 32)
-    y = doc.text(copy["thesis"], doc.left, y, content_width, size=15,
-                 font="MalgunGothic-Bold", leading=22, max_lines=4) - 20
-    capability_titles = [capability_label(payload, key, locale) for key in project.get("capabilityKeys", [])]
-    doc.label(labels["capability"], doc.left, y)
-    y = doc.text(" / ".join(capability_titles), doc.left, y - 23, content_width, size=9.5,
-                 leading=15, color="muted", max_lines=3) - 18
-    public_links: list[tuple[str, str]] = []
+def public_project_links(payload: dict[str, Any], project: dict[str, Any],
+                         locale: str) -> list[tuple[str, str]]:
+    links: list[tuple[str, str]] = []
+    seen: set[str] = set()
     for link in project.get("links", []):
         link_copy = localized(link, locale)
-        public_links.append((clean_text(link_copy.get("label")), clean_text(link.get("href"))))
-    seen_urls = {url for _, url in public_links}
+        url = clean_text(link.get("href"))
+        if url and url not in seen:
+            links.append((clean_text(link_copy.get("label")), url))
+            seen.add(url)
     for entry in payload["evidence"]:
         source = clean_text(entry.get("source"))
-        if entry.get("project") == project["slug"] and entry.get("state") == "approved-public" and source.startswith("https://") and source not in seen_urls:
-            public_links.append((clean_text(entry.get("id")), source))
-            seen_urls.add(source)
-    doc.label(labels["registered"], doc.left, y)
-    y -= 24
-    if public_links:
-        for label, url in public_links:
-            doc.link(label, url, doc.left, y, 9)
-            y -= 24
-    else:
-        y = doc.text(labels["no_public"], doc.left, y, content_width, size=9,
-                     leading=14, color="muted", max_lines=2) - 10
-    y = min(y - 20, 410)
-    y = doc.section(labels["contact"], labels["contact_body"], copy["collaboration"], y, 154)
-    doc.link(CONTACT_EMAIL, f"mailto:{CONTACT_EMAIL}", doc.left, y - 4, 10)
-    doc.link("rafaam11.github.io", "https://rafaam11.github.io", doc.left + 190, y - 4, 10)
-    doc.finish_page()
-    doc.save()
+        if (entry.get("project") == project["slug"] and entry.get("state") == "approved-public"
+                and source.startswith("https://") and source not in seen):
+            links.append((source.replace("https://", ""), source))
+            seen.add(source)
+    return links
+
+
+def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], project: dict[str, Any],
+                         locale: str, output: Path, local_evidence: dict[str, Path]) -> int:
+    """Compose one case as a flowing document and return how many pages it needed."""
+    copy = localized(project, locale)
+    labels = project_labels(locale)
+    diagram = project["pdfSequence"]["diagram"]
+    diagram_copy = diagram["translations"][locale]
+    figures = project_figures(project, local_evidence, locale)
+    blocks = [(block, localized(block, locale)) for block in project.get("blocks", [])]
+    approach = [pair for pair in blocks if pair[0]["type"] in {"system", "text", "list"}]
+    evidence_blocks = [pair for pair in blocks if pair[0]["type"] == "evidence"]
+    limit_blocks = [pair for pair in blocks if pair[0]["type"] == "limitation"]
+    capabilities = [capability_label(payload, key, locale) for key in project.get("capabilityKeys", [])]
+    links = public_project_links(payload, project, locale)
+
+    def compose(total_pages: int) -> int:
+        doc = TechnicalDocument(dependencies, output, copy["title"], copy["thesis"], locale, total_pages)
+        doc.start(labels["case"])
+        counter = {"figure": 0}
+
+        def draw(items: list[tuple[Path, str]]) -> None:
+            for path, caption in items:
+                counter["figure"] += 1
+                doc.figure(path, f"{labels['figure']} {counter['figure']}.", caption)
+
+        doc.kicker(copy["eyebrow"])
+        doc.para(copy["title"], size=24, leading=31, font="MalgunGothic-Bold", gap=14)
+        doc.para(copy["thesis"], size=13, leading=20, font="MalgunGothic-Bold", gap=14)
+        doc.meta_line([
+            (labels["period"], project["period"]),
+            (labels["state"], copy["status"]),
+            (labels["tier"], tier_label(payload, project["tier"], locale)),
+        ])
+        doc.rule()
+        doc.para(copy["summary"], color="muted", gap=16)
+        draw(figures[:1])
+
+        doc.h2(labels["problem"])
+        doc.para(copy["problem"], size=11.5, leading=18, font="MalgunGothic-Bold", gap=10)
+
+        doc.h2(labels["decision"])
+        doc.h3(labels["role"])
+        doc.para(copy["role"], color="muted")
+        for block, block_copy in approach:
+            doc.h3(block_copy["heading"])
+            if block["type"] == "list":
+                doc.bullets(block_copy["items"])
+            else:
+                doc.para(block_copy["body"], color="muted")
+        doc.ensure(210)
+        doc.y = doc.diagram(diagram["kind"], diagram_copy["title"],
+                            [clean_text(node) for node in diagram_copy["nodes"]], doc.y) - 12
+        doc.para(labels["flow_note"], size=8.5, leading=12, color="muted", gap=14)
+
+        doc.h2(labels["evidence"])
+        doc.para(copy["evidence"], color="muted")
+        for block, block_copy in evidence_blocks:
+            doc.h3(block_copy["heading"])
+            doc.para(block_copy["body"], color="muted")
+        draw(figures[1:])
+
+        doc.h2(labels["attribution"])
+        doc.h3(labels["team"])
+        doc.para(copy["teamResult"], color="muted")
+        doc.h3(labels["limit"])
+        doc.para(copy["limitation"], color="muted")
+        for block, block_copy in limit_blocks:
+            doc.para(block_copy["body"], color="muted")
+        doc.h3(labels["collaboration"])
+        doc.para(copy["collaboration"], color="muted")
+
+        doc.h2(labels["tech"])
+        doc.para(" · ".join(clean_text(item) for item in project.get("tech", [])), color="muted", gap=8)
+        if capabilities:
+            doc.h3(labels["capability"])
+            doc.para(" · ".join(capabilities), color="muted")
+
+        # Links and contact share one heading: split across two, they routinely opened a
+        # final page that carried nothing else.
+        doc.h2(labels["registered"])
+        if links:
+            for label, url in links:
+                doc.link_line(label, url)
+        else:
+            doc.para(labels["no_public"], color="muted")
+        doc.h3(labels["contact"])
+        doc.para(labels["contact_body"], color="muted", gap=10)
+        doc.link_line(CONTACT_EMAIL, f"mailto:{CONTACT_EMAIL}")
+        doc.link_line("rafaam11.github.io", "https://rafaam11.github.io")
+
+        pages = doc.page_no
+        doc.finish_page()
+        doc.save()
+        return pages
+
+    pages = compose(1)
+    if pages != 1:
+        settled = compose(pages)
+        require(settled == pages, f"{output.name}: page count did not settle ({pages} then {settled}).")
+    return pages
 
 
 def validate_pdf(dependencies: dict[str, Any], file_path: Path, expected_pages: int,
@@ -1354,8 +1453,9 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
             for locale in LOCALES:
                 name = f"{project['slug']}-{locale}.pdf"
                 output = staged_output / name
-                generate_project_pdf(dependencies, payload, project, locale, output, local_evidence)
-                qa = validate_pdf(dependencies, output, 6, localized(project, locale)["title"])
+                pages = generate_project_pdf(dependencies, payload, project, locale, output, local_evidence)
+                require(2 <= pages <= 12, f"{name}: unexpected page count {pages}.")
+                qa = validate_pdf(dependencies, output, pages, localized(project, locale)["title"])
                 published = staged_projects / name
                 shutil.copyfile(output, published)
                 require(sha256(output) == sha256(published), f"{name}: staged checksum mismatch.")

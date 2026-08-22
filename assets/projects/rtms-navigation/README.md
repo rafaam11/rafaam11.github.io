@@ -1,3 +1,3 @@
 # rTMS Navigation Evidence
 
-The public video and poster slots remain pending review. This directory accepts only approved, redacted, metadata-stripped derivatives named in the public evidence register.
+This directory holds only approved, redacted, metadata-stripped derivatives named in the public evidence register. The demonstration clip is re-encoded from an exhibition recording with its audio track and container metadata removed.
