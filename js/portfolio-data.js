@@ -164,76 +164,322 @@
       slug: 'surgical-navigation',
       tier: 'medical-core',
       period: '2023.07 – present',
-      evidenceState: 'ongoing',
+      evidenceState: 'prototype',
       lifecycleState: 'ongoing',
       capabilityKeys: ['registration', 'medical-navigation', 'xr-engineering'],
       route: 'projects/surgical-navigation/',
-      tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink'],
+      tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink', 'Holographic Remoting'],
       media: {
-        lead: { id: 'surgical-navigation-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-clip-01.mp4' },
-        video: { id: 'surgical-navigation-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-clip-01.mp4' },
-        poster: { id: 'surgical-navigation-poster-01', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-poster-01.png' },
-        gallery: [
-          { id: 'surgical-navigation-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-01.png', translations: { ko: { caption: '시스템 구성 — 추적 장치·내비게이션 서버·HoloLens 2 클라이언트(ASA·PUN)', alt: '추적 장치와 내비게이션 서버, 두 대의 HoloLens 2가 ASA와 PUN으로 연결된 구성도' }, en: { caption: 'System layout: tracker, navigation server, and HoloLens 2 clients linked through ASA and PUN', alt: 'Diagram of the tracker, navigation server, and two HoloLens 2 clients connected through Azure Spatial Anchors and Photon Unity Networking' } } },
-          { id: 'surgical-navigation-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-02.png', translations: { ko: { caption: '좌표계 관계 — 추적 장치·환자 마커·프로브 마커 변환', alt: '추적 장치 기준의 환자 마커와 프로브 마커 좌표 변환 개념도' }, en: { caption: 'Coordinate frames: tracker, patient marker, and probe marker transforms', alt: 'Concept diagram of patient-marker and probe-marker transforms relative to the tracker' } } },
-          { id: 'surgical-navigation-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-03.png', translations: { ko: { caption: '패시브 마커 어댑터를 장착한 추적 수술기구', alt: '반사 마커 4개가 달린 어댑터를 장착한 수술용 기구 사진' }, en: { caption: 'Surgical instrument fitted with a passive-marker adapter', alt: 'Photo of a surgical instrument with a four-sphere reflective marker adapter' } } },
-          { id: 'surgical-navigation-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-04.png', translations: { ko: { caption: '벤치 셋업 — 광학 추적 장치·내비게이션 화면·두개골 팬텀(영상 패널 블러)', alt: '삼각대 위 광학 추적 장치, 내비게이션 SW 화면, 두개골 팬텀과 마커 기구가 놓인 작업대' }, en: { caption: 'Bench setup: optical tracker, navigation screen, and skull phantom (image panels blurred)', alt: 'Work bench with an optical tracker on a tripod, the navigation software screen, a skull phantom, and marker instruments' } } },
-          { id: 'surgical-navigation-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-05.png', translations: { ko: { caption: 'HoloLens 시점 — 두개골 홀로그램과 토글 패널', alt: 'HoloLens로 본 두개골 홀로그램과 손 추적·시선 추적 토글 패널' }, en: { caption: 'HoloLens view: skull hologram and the toggle panel', alt: 'Skull hologram and hand- and eye-tracking toggle panel seen through HoloLens' } } },
-          { id: 'surgical-navigation-gallery-06', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-06.png', translations: { ko: { caption: 'HoloLens 착용 상태의 팬텀 시연', alt: 'HoloLens를 착용한 사용자가 추적 장치 앞에서 팬텀에 기구를 맞추는 장면' }, en: { caption: 'Phantom demonstration while wearing HoloLens', alt: 'User wearing HoloLens aligning an instrument on a phantom in front of the tracker' } } },
-        ]
+        lead: {
+          id: 'surgical-navigation-hololens-demo-01',
+          type: 'video',
+          status: 'approved',
+          publicPath: 'assets/projects/surgical-navigation/surgical-navigation-hololens-demo-01.mp4',
+          preload: 'metadata',
+          videoPolicy: {
+            maxBytes: 100000000,
+            targetDurationSeconds: 159.833333,
+            toleranceSeconds: 0.2,
+            width: 1280,
+            height: 720,
+            codec: 'h264',
+            requireNoAudio: true,
+            requireFastStart: true
+          }
+        },
+        video: {
+          id: 'surgical-navigation-hololens-demo-01',
+          type: 'video',
+          status: 'approved',
+          publicPath: 'assets/projects/surgical-navigation/surgical-navigation-hololens-demo-01.mp4',
+          preload: 'metadata',
+          videoPolicy: {
+            maxBytes: 100000000,
+            targetDurationSeconds: 159.833333,
+            toleranceSeconds: 0.2,
+            width: 1280,
+            height: 720,
+            codec: 'h264',
+            requireNoAudio: true,
+            requireFastStart: true
+          }
+        },
+        poster: {
+          id: 'surgical-navigation-hololens-poster-01',
+          type: 'image',
+          status: 'approved',
+          publicPath: 'assets/projects/surgical-navigation/surgical-navigation-hololens-poster-01.png'
+        },
+        gallery: []
       },
       pdf: { ko: 'assets/pdfs/surgical-navigation-ko.pdf', en: 'assets/pdfs/surgical-navigation-en.pdf' },
       pdfSequence: {
-        middle: ['coordinate-chain', 'spatial-feedback', 'demonstration-evidence', 'clinical-boundary'],
-        evidenceId: 'surgical-navigation-clip-01',
-        diagram: {
-          kind: 'coordinate-chain',
-          translations: {
-            ko: { title: '추적 좌표에서 공간 피드백까지', nodes: ['추적 장치', '영상·도구 좌표', '정합 상태', 'HoloLens 피드백'] },
-            en: { title: 'Tracking coordinates to spatial feedback', nodes: ['Tracking hardware', 'Image and tool frames', 'Registration state', 'HoloLens feedback'] }
-          }
-        }
+        middle: ['smcnavi-overview', 'smcnavi-workflows', 'registration-calibration', 'hololens-interface'],
+        evidenceId: 'surgical-navigation-hololens-demo-01',
+        diagram: { storySectionKey: 'system-architecture' },
+        figureIds: [
+          'surgical-navigation-smcnavi-features-01',
+          'surgical-navigation-smcnavi-ui-01',
+          'surgical-navigation-smcnavi-workflows-01',
+          'surgical-navigation-gallery-02',
+          'surgical-navigation-gallery-03',
+          'surgical-navigation-gallery-05'
+        ]
       },
       translations: {
         ko: {
-          title: '수술내비게이션 시스템',
-          shortTitle: '수술내비게이션',
-          eyebrow: '의료 코어 · 통합 소프트웨어',
-          thesis: '정합 결과를 사용자가 이해하고 신뢰할 수 있는 공간 경험으로 바꿉니다.',
-          summary: '추적 장치, SDK, 좌표 변환, 데이터 흐름, HoloLens 공간 표시를 하나의 수술내비게이션 경험으로 연결합니다.',
-          problem: '장치별 좌표와 정합 상태가 분절되면 사용자는 공간 결과를 판단하기 어렵습니다.',
-          role: '장치·SDK·좌표 변환·데이터 흐름을 포함한 통합 소프트웨어와 HoloLens 공간 배치·정합 피드백 경험을 리드했습니다.',
-          teamResult: '팀과 외부 협업자가 통합 시연과 수용 검토를 함께 수행했으며, 그 결과를 개인 성과로 재귀속하지 않습니다.',
-          evidence: '동작하는 장치 연결, 좌표 변환, 공간 배치, 정합 피드백 시연이 근거입니다.',
-          limitation: '시연은 팬텀 대상의 통합 동작을 보여주며 임상 효과나 운영 배포를 주장하지 않습니다.',
-          collaboration: '추적 장치, 의료영상, XR, 워크플로 전문가와의 공동 검토가 필요합니다.',
-          mediaAlt: 'HoloLens 시점에서 두개골 팬텀 위에 정합된 붉은 홀로그램과 추적 포인터가 보이는 시연 장면.',
-          mediaCaption: 'HoloLens 시점에서 두개골 팬텀 위에 정합된 홀로그램과 추적 포인터를 보여주는 시연 클립입니다.',
-          status: '진행 중', cardProblem: '분절된 장치·좌표·XR 흐름을 하나의 내비게이션으로 연결합니다.', cardOwnedRole: '통합 SW와 HoloLens 공간 배치·정합 피드백을 리드했습니다.', cardEvidence: '장치 연결·좌표 변환·HoloLens 공간 시연 클립과 구성도·사진이 근거입니다.', problemSummary: '장치별 좌표와 정합 상태를 하나의 사용자 경험으로 연결합니다.', ownedRole: '통합 소프트웨어와 HoloLens 공간 배치·정합 피드백을 리드했습니다.', verifiedEvidence: 'HoloLens 공간 시연 클립, 시스템·좌표 구성도, 벤치 사진이 근거입니다.', visualAlt: 'HoloLens 홀로그램 정합 시연.', visualCaption: 'HoloLens 시점 홀로그램 정합 시연 클립.'
+          title: 'SMCNavi · HoloLens 수술내비게이션',
+          shortTitle: 'SMCNavi · HoloLens',
+          eyebrow: '의료 코어 · 연구 프로토타입',
+          thesis: '추적·정합·캘리브레이션을 SMCNavi에 통합하고, 그 결과를 HoloLens 공간 인터페이스까지 연결했습니다.',
+          summary: 'DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 맞춤형 3D Slicer 수술내비게이션 플랫폼과 별도 HoloLens 공간 인터페이스 확장입니다.',
+          problem: '구강악안면 내비게이션은 의료영상, 환자와 기구 좌표, 수술별 도구, 공간 표시가 한 흐름으로 맞아야 하지만 기능이 분절되면 정합 상태와 데이터 흐름을 검토하기 어렵습니다.',
+          roleLabel: '3D 의료영상·수술내비게이션 개발자',
+          role: '전체 소프트웨어 아키텍처를 설계하고 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적 SDK와 데이터 파이프라인, 영상·환자·마커·기구 좌표 변환, 환자 정합과 피드백, 마커·비표준·장기구 캘리브레이션, 6개 워크플로와 미러링, HoloLens–PC 통신·공간 표시·상호작용, 팬텀 통합 시험과 검증 도구의 주 구현을 맡았습니다.',
+          teamResult: 'DIGITRACK과 삼성서울병원 연구팀은 임상 워크플로와 요구사항 맥락, 수용 검토 기준, 통합 시연을 공동으로 검토했습니다.',
+          evidence: '두 전체 길이 영상과 승인된 화면·좌표계·기구·팬텀 파생본은 위치, 모델, 영상, 상호작용 데이터가 SMCNavi에서 HoloLens 경로까지 연결된 연구 프로토타입을 보여줍니다.',
+          limitation: '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.',
+          collaboration: '의료진의 워크플로·수용 기준과 개발팀의 추적·영상·XR 통합 검토를 분리해 기록합니다.',
+          mediaAlt: 'HoloLens 2를 착용한 사용자의 시점과 팬텀 위 홀로그램, 추적 기구, MPR 화면이 이어지는 디지털 트윈 시연 영상.',
+          mediaCaption: 'HoloLens 2 디지털 트윈과 추적 기구·영상 표시를 연결한 전체 길이 연구 프로토타입 시연입니다. 비식별 연구 영상이며 임상 결과 근거가 아닙니다.',
+          status: '프로토타입 · 진행 중',
+          cardProblem: '의료영상·추적·정합·수술별 기능을 SMCNavi와 HoloLens 경로로 연결합니다.',
+          cardOwnedRole: '전체 SW 아키텍처와 3D Slicer·추적·정합·캘리브레이션·HoloLens 통합을 주 구현했습니다.',
+          cardEvidence: '두 전체 길이 영상과 승인된 UI·좌표계·기구·팬텀 파생본이 연구 프로토타입 근거입니다.',
+          problemSummary: '분절된 영상·추적·정합·공간 표시를 하나의 검토 가능한 흐름으로 연결합니다.',
+          ownedRole: 'SMCNavi와 HoloLens 확장의 전체 소프트웨어 아키텍처 및 주 구현을 맡았습니다.',
+          verifiedEvidence: '전체 길이 SMCNavi·HoloLens 영상과 승인된 기술 파생본이 근거입니다.',
+          visualAlt: 'SMCNavi와 HoloLens를 연결한 팬텀 기반 수술내비게이션 연구 프로토타입.',
+          visualCaption: 'SMCNavi–HoloLens 전체 길이 연구 프로토타입 시연.'
         },
         en: {
-          title: 'Surgical Navigation Systems',
-          shortTitle: 'Surgical Navigation',
-          eyebrow: 'Medical Core · Integrated Software',
-          thesis: 'Registration results become a spatial experience users can understand and trust.',
-          summary: 'Connect tracking devices, SDKs, coordinate transforms, data flow, and HoloLens spatial presentation into one surgical-navigation experience.',
-          problem: 'When device coordinates and registration state stay fragmented, users cannot confidently interpret the spatial result.',
-          role: 'Led the integrated software across device, SDK, coordinate transforms, and data flow, plus the HoloLens spatial-placement and registration-feedback experience.',
-          teamResult: 'The team and external collaborators jointly conducted integration demonstrations and acceptance reviews; those results are not attributed as individual outcomes.',
-          evidence: 'Working device connections, coordinate transforms, spatial placement, and registration-feedback demonstrations provide the evidence.',
-          limitation: 'The demonstration shows integrated operation on a phantom; it does not claim clinical efficacy or production deployment.',
-          collaboration: 'Joint review spans tracking hardware, medical imaging, XR, and workflow expertise.',
-          mediaAlt: 'Demonstration seen through HoloLens: a red hologram registered on a skull phantom with a tracked pointer.',
-          mediaCaption: 'Demonstration clip from the HoloLens viewpoint: a hologram registered on a skull phantom with a tracked pointer.',
-          status: 'Ongoing', cardProblem: 'Connect fragmented device, coordinate, and XR flows into one navigation experience.', cardOwnedRole: 'Led integrated software and the HoloLens placement and registration-feedback experience.', cardEvidence: 'Device-connection, transform, and HoloLens spatial demonstration clip plus diagrams and photos are the evidence.', problemSummary: 'Connect device coordinates and registration state into one readable user experience.', ownedRole: 'Led integrated software and HoloLens spatial placement and registration feedback.', verifiedEvidence: 'The HoloLens spatial demonstration clip, system and coordinate diagrams, and bench photos are the evidence.', visualAlt: 'HoloLens hologram registration demonstration.', visualCaption: 'HoloLens-view hologram registration demonstration clip.'
+          title: 'SMCNavi · HoloLens Surgical Navigation',
+          shortTitle: 'SMCNavi · HoloLens',
+          eyebrow: 'Medical Core · Research Prototype',
+          thesis: 'Integrated tracking, registration, and calibration in SMCNavi, then carried the result into a HoloLens spatial interface.',
+          summary: 'A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a research collaboration, plus a separate HoloLens spatial-interface extension.',
+          problem: 'Oral and maxillofacial navigation must align medical images, patient and instrument coordinates, procedure-specific tools, and spatial presentation in one flow; fragmented functions make registration state and data flow difficult to inspect.',
+          roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
+          role: 'Designed the overall software architecture and served as the primary implementer for DICOM and 3D-model loading, MPR and 3D visualisation, the optical-tracker SDK and data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens–PC communication and interaction, and phantom integration tests and verification tooling.',
+          teamResult: 'The DIGITRACK and Samsung Medical Center research team jointly reviewed the clinical-workflow and requirements context, acceptance criteria, and integration demonstrations.',
+          evidence: 'Two full-length videos and approved interface, coordinate-frame, instrument, and phantom derivatives show a working research prototype carrying position, model, image, and interaction data from SMCNavi through the HoloLens path.',
+          limitation: 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.',
+          collaboration: 'Clinical workflow and acceptance criteria remain distinct from the development team\'s tracking, imaging, and XR integration review.',
+          mediaAlt: 'Digital-twin demonstration moving between a HoloLens 2 viewpoint, a hologram over a phantom, a tracked instrument, and MPR displays.',
+          mediaCaption: 'Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and image presentation. It uses de-identified research imagery and is not evidence of clinical outcome.',
+          status: 'Prototype · Ongoing',
+          cardProblem: 'Connect medical images, tracking, registration, and procedure workflows through the SMCNavi and HoloLens path.',
+          cardOwnedRole: 'Primarily implemented the full software architecture across 3D Slicer, tracking, registration, calibration, and HoloLens integration.',
+          cardEvidence: 'Two full-length videos and approved interface, coordinate, instrument, and phantom derivatives evidence the research prototype.',
+          problemSummary: 'Connect fragmented imaging, tracking, registration, and spatial presentation in one inspectable flow.',
+          ownedRole: 'Owned the overall software architecture and primary implementation of SMCNavi and the HoloLens extension.',
+          verifiedEvidence: 'Full-length SMCNavi and HoloLens videos plus approved technical derivatives provide the evidence.',
+          visualAlt: 'Phantom-based surgical-navigation research prototype connecting SMCNavi and HoloLens.',
+          visualCaption: 'Full-length SMCNavi–HoloLens research-prototype demonstration.'
         }
       },
-      blocks: [
-        { key: 'coordinate-chain', type: 'system', translations: { ko: { heading: '좌표 체인', body: '추적 장치에서 영상, 도구, HoloLens까지 변환 경로를 드러냈습니다.' }, en: { heading: 'Coordinate chain', body: 'Made the transform path visible from tracking hardware through images, tools, and HoloLens.' } } },
-        { key: 'spatial-feedback', type: 'text', translations: { ko: { heading: '공간 피드백', body: '정합 성공 여부를 단순 숫자가 아닌 배치와 표시로 판단하게 했습니다.' }, en: { heading: 'Spatial feedback', body: 'Made registration state legible through placement and feedback rather than a hidden number.' } } },
-        { key: 'demonstration-evidence', type: 'evidence', translations: { ko: { heading: '시연 근거', body: '동작하는 통합 시연을 근거로 삼되 미디어 승인 상태를 별도로 표시합니다.' }, en: { heading: 'Demonstration evidence', body: 'Treat the working integration demo as evidence while keeping media approval explicit.' } } },
-        { key: 'clinical-boundary', type: 'limitation', translations: { ko: { heading: '임상 경계', body: '통합 시연은 임상 효과나 운영 배포를 증명하지 않습니다.' }, en: { heading: 'Clinical boundary', body: 'An integration demonstration does not establish clinical efficacy or production deployment.' } } }
-      ]
+      storySections: [
+        {
+          key: 'smcnavi-overview',
+          layout: 'wide',
+          translations: {
+            ko: { heading: 'SMCNavi 플랫폼 개요', body: 'SMCNavi는 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적, 환자 정합, 기구 캘리브레이션, 수술별 UI를 하나의 맞춤형 3D Slicer 데스크톱 플랫폼에 통합합니다. HoloLens 기능은 SMCNavi와 연결되는 별도 PC 확장으로 구현했습니다.' },
+            en: { heading: 'SMCNavi platform overview', body: 'SMCNavi integrates DICOM and 3D-model loading, MPR and 3D visualisation, optical tracking, patient registration, instrument calibration, and procedure-specific UI in one custom 3D Slicer desktop platform. The HoloLens work is a separate PC-side extension connected to SMCNavi.' }
+          },
+          media: []
+        },
+        {
+          key: 'smcnavi-workflows',
+          layout: 'wide',
+          translations: {
+            ko: {
+              heading: '6개 구강악안면 워크플로',
+              body: '아래 기능은 소프트웨어로 구현·시연한 워크플로이며 임상 효능을 뜻하지 않습니다.',
+              items: ['상악종양 제거술 내비게이션', '하악종양 제거술 내비게이션', '양악수술 내비게이션', '하악운동 트래킹', '골이식 위치설정', '광대·안와 골절 미러링']
+            },
+            en: {
+              heading: 'Six oral and maxillofacial workflows',
+              body: 'The following are implemented and demonstrated software workflows; they are not evidence of clinical efficacy.',
+              items: ['Maxillary tumour-removal navigation', 'Mandibular tumour-removal navigation', 'Bimaxillary-surgery navigation', 'Mandibular-motion tracking', 'Bone-graft placement', 'Zygomatic-orbital fracture mirroring']
+            }
+          },
+          media: [
+            {
+              id: 'surgical-navigation-smcnavi-features-01',
+              type: 'video',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-features-01.mp4',
+              preload: 'metadata',
+              videoPolicy: {
+                maxBytes: 100000000,
+                targetDurationSeconds: 90.266667,
+                toleranceSeconds: 0.2,
+                width: 960,
+                height: 720,
+                codec: 'h264',
+                requireNoAudio: true,
+                requireFastStart: true
+              },
+              poster: {
+                id: 'surgical-navigation-smcnavi-poster-01',
+                type: 'image',
+                status: 'approved',
+                publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-poster-01.png'
+              },
+              translations: {
+                ko: {
+                  caption: 'SMCNavi에서 6개 구강악안면 워크플로가 전환·시연되는 전체 기능 소개 영상입니다. 비식별 연구 영상이며 임상 결과 근거가 아닙니다.',
+                  alt: 'SMCNavi 화면에서 종양 제거, 양악수술, 하악운동, 골이식, 골절 미러링 워크플로가 차례로 시연되는 영상.'
+                },
+                en: {
+                  caption: 'Full feature video moving through six oral and maxillofacial workflows in SMCNavi. It uses de-identified research imagery and is not evidence of clinical outcome.',
+                  alt: 'Video moving through SMCNavi workflows for tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and fracture mirroring.'
+                }
+              }
+            },
+            {
+              id: 'surgical-navigation-smcnavi-ui-01',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-ui-01.png',
+              translations: {
+                ko: { caption: 'SMCNavi 통합 UI와 HoloLens–PC 연결 화면. 비식별 연구 영상 파생본이며 임상 결과 근거가 아닙니다.', alt: '수술 유형 선택 UI, 팬텀에서 추적 기구를 사용하는 장면, HoloLens와 모니터 연결 화면을 묶은 그림.' },
+                en: { caption: 'Integrated SMCNavi UI and HoloLens–PC connection view. This derivative uses de-identified research imagery and is not evidence of clinical outcome.', alt: 'Composite showing the procedure-selection UI, tracked instrument use on a phantom, HoloLens, and a connected monitor.' }
+              }
+            },
+            {
+              id: 'surgical-navigation-smcnavi-workflows-01',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-workflows-01.png',
+              translations: {
+                ko: { caption: '6개 구강악안면 소프트웨어 워크플로. 비식별 연구 영상 파생본이며 임상 효능을 뜻하지 않습니다.', alt: '상악·하악 종양 제거, 양악수술, 하악운동, 골이식 위치설정, 광대·안와 골절 미러링 화면을 2×3으로 배치한 그림.' },
+                en: { caption: 'Six oral and maxillofacial software workflows. This derivative uses de-identified research imagery and does not establish clinical efficacy.', alt: 'Two-by-three composite of maxillary and mandibular tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and zygomatic-orbital fracture mirroring.' }
+              }
+            }
+          ]
+        },
+        {
+          key: 'system-architecture',
+          layout: 'wide',
+          translations: {
+            ko: { heading: 'SMCNavi–HoloLens 시스템 구조', body: '광학 추적 관측은 SMCNavi의 변환·정합·캘리브레이션과 수술 워크플로로 들어갑니다. 승인된 변환·영상·모델 데이터는 OpenIGTLink로 PC 확장에 연결되고, 렌더링과 상호작용은 Holographic Remoting을 통해 HoloLens 2와 오갑니다.' },
+            en: { heading: 'SMCNavi–HoloLens system architecture', body: 'Optical-tracker observations enter SMCNavi\'s transforms, registration, calibration, and procedure workflows. Approved transform, image, and model data connect to the PC extension through OpenIGTLink; rendering and interaction travel between the extension and HoloLens 2 through Holographic Remoting.' }
+          },
+          media: [],
+          diagram: {
+            kind: 'system-flow',
+            boundary: 'prototype',
+            translations: {
+              ko: { title: '추적 관측에서 HoloLens 상호작용까지', caption: '설명용 시스템 관계 다이어그램이며 사진·실험·임상 결과 근거가 아닙니다.', boundaryLabel: 'SMCNavi–HoloLens 경로 · 연구 프로토타입' },
+              en: { title: 'From tracking observations to HoloLens interaction', caption: 'Explanatory system-relationship diagram; it is not photographic, experimental, or clinical-outcome evidence.', boundaryLabel: 'SMCNavi–HoloLens path · Research prototype' }
+            },
+            nodes: [
+              { key: 'tracker', translations: { ko: { label: '광학 추적 장치', detail: '도구·마커 관측' }, en: { label: 'Optical tracker', detail: 'Tool and marker observations' } } },
+              { key: 'smcnavi', translations: { ko: { label: 'SMCNavi', detail: '3D Slicer · 영상·모델 · 변환·정합·캘리브레이션 · 6개 워크플로' }, en: { label: 'SMCNavi', detail: '3D Slicer · images and models · transforms, registration, calibration · six workflows' } } },
+              { key: 'openigtlink', translations: { ko: { label: 'OpenIGTLink', detail: '변환 및 승인된 영상·모델 데이터' }, en: { label: 'OpenIGTLink', detail: 'Transforms and approved image/model data' } } },
+              { key: 'pc-extension', translations: { ko: { label: 'HoloLens PC 확장', detail: 'Unity · MRTK · 렌더링' }, en: { label: 'HoloLens PC extension', detail: 'Unity · MRTK · rendering' } } },
+              { key: 'remoting', translations: { ko: { label: 'Holographic Remoting', detail: 'PC 렌더 스트림 · 입력 반환' }, en: { label: 'Holographic Remoting', detail: 'PC render stream · input return' } } },
+              { key: 'hololens', translations: { ko: { label: 'HoloLens 2', detail: '공간 표시 · 상호작용' }, en: { label: 'HoloLens 2', detail: 'Spatial presentation · interaction' } } }
+            ],
+            edges: [
+              { from: 'tracker', to: 'smcnavi', direction: 'forward', translations: { ko: { label: '도구·마커 관측' }, en: { label: 'Tool and marker observations' } } },
+              { from: 'smcnavi', to: 'openigtlink', direction: 'bidirectional', translations: { ko: { label: '변환·영상·모델' }, en: { label: 'Transforms, images, models' } } },
+              { from: 'openigtlink', to: 'pc-extension', direction: 'bidirectional', translations: { ko: { label: '연결 데이터' }, en: { label: 'Connected data' } } },
+              { from: 'pc-extension', to: 'remoting', direction: 'bidirectional', translations: { ko: { label: '렌더링·입력' }, en: { label: 'Rendering and input' } } },
+              { from: 'remoting', to: 'hololens', direction: 'bidirectional', translations: { ko: { label: '홀로그램·상호작용' }, en: { label: 'Holograms and interaction' } } }
+            ]
+          }
+        },
+        {
+          key: 'registration-calibration',
+          layout: 'grid',
+          translations: {
+            ko: {
+              heading: '추적·정합·캘리브레이션',
+              body: '환자·기구와 영상 모델 사이의 변환 경로를 명시적으로 구성하고 각 단계의 입력과 피드백을 검토할 수 있게 했습니다.',
+              items: ['광학 추적 SDK 연결과 실시간 도구·마커 데이터 파이프라인', '영상·환자·마커·기구 좌표계 사이의 변환 체인', '환자 정합과 정합 상태 피드백', '환자·기구 마커 캘리브레이션', '비표준 기구와 장기구 캘리브레이션']
+            },
+            en: {
+              heading: 'Tracking, registration, and calibration',
+              body: 'Built explicit transform paths between the patient, instruments, and image models so the inputs and feedback at each stage could be inspected.',
+              items: ['Optical-tracker SDK integration and the live tool/marker data pipeline', 'Transform chain across image, patient, marker, and instrument frames', 'Patient registration and registration-state feedback', 'Patient and instrument marker calibration', 'Non-standard and long-instrument calibration']
+            }
+          },
+          media: [
+            {
+              id: 'surgical-navigation-gallery-02',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-02.png',
+              translations: {
+                ko: { caption: '좌표계 관계 — 광학 추적 장치 기준의 환자 마커·프로브 마커 변환.', alt: '광학 추적 장치 기준으로 환자 마커와 프로브 마커 좌표 변환을 설명하는 개념도.' },
+                en: { caption: 'Coordinate frames: patient-marker and probe-marker transforms relative to the optical tracker.', alt: 'Concept diagram of patient-marker and probe-marker transforms relative to the optical tracker.' }
+              }
+            },
+            {
+              id: 'surgical-navigation-gallery-03',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-03.png',
+              translations: {
+                ko: { caption: '비표준·장기구 캘리브레이션에 사용한 패시브 마커 어댑터 장착 기구.', alt: '반사 마커 네 개가 달린 어댑터를 장착한 길이가 긴 수술 기구 사진.' },
+                en: { caption: 'Instrument with a passive-marker adapter used for non-standard and long-instrument calibration.', alt: 'Long surgical instrument fitted with an adapter carrying four reflective markers.' }
+              }
+            },
+            {
+              id: 'surgical-navigation-bench-01',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-bench-01.png',
+              translations: {
+                ko: { caption: '광학 추적 장치, SMCNavi, 두개골 팬텀을 연결한 공개 안전 벤치 프레임.', alt: '광학 추적 장치, 모니터, 두개골 팬텀, 추적 기구가 함께 보이는 벤치 시연 프레임.' },
+                en: { caption: 'Public-safe bench frame connecting the optical tracker, SMCNavi, and a skull phantom.', alt: 'Bench demonstration frame showing an optical tracker, monitor, skull phantom, and tracked instrument.' }
+              }
+            }
+          ]
+        },
+        {
+          key: 'hololens-interface',
+          layout: 'grid',
+          translations: {
+            ko: {
+              heading: 'HoloLens 공간 인터페이스',
+              body: 'SMCNavi가 소유한 정합·워크플로 상태를 별도 PC 확장에서 렌더링하고 HoloLens 2의 공간 표시와 상호작용으로 연결했습니다.',
+              items: ['OpenIGTLink를 통한 변환과 승인된 영상·모델 데이터 교환', 'Unity·MRTK 기반 PC 렌더링과 공간 배치', 'Holographic Remoting을 통한 HoloLens 2 표시', 'HoloLens 상호작용 입력의 PC 확장 반환', '광학 추적·SMCNavi·HoloLens 팬텀 통합 시험']
+            },
+            en: {
+              heading: 'HoloLens spatial interface',
+              body: 'Rendered SMCNavi-owned registration and workflow state in a separate PC extension and connected it to HoloLens 2 spatial presentation and interaction.',
+              items: ['Transform and approved image/model exchange through OpenIGTLink', 'PC rendering and spatial placement with Unity and MRTK', 'HoloLens 2 presentation through Holographic Remoting', 'Return of HoloLens interaction input to the PC extension', 'Phantom integration tests across optical tracking, SMCNavi, and HoloLens']
+            }
+          },
+          media: [
+            {
+              id: 'surgical-navigation-gallery-05',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-05.png',
+              translations: {
+                ko: { caption: 'HoloLens 공간 표시와 손·시선 상호작용 토글.', alt: 'HoloLens에서 두개골 홀로그램과 손 추적·시선 추적 토글 패널을 함께 보여주는 화면.' },
+                en: { caption: 'HoloLens spatial presentation with hand- and eye-interaction toggles.', alt: 'HoloLens view showing a skull hologram with hand-tracking and eye-tracking toggle controls.' }
+              }
+            },
+            {
+              id: 'surgical-navigation-gallery-06',
+              type: 'image',
+              status: 'approved',
+              publicPath: 'assets/projects/surgical-navigation/surgical-navigation-gallery-06.png',
+              translations: {
+                ko: { caption: 'HoloLens, 광학 추적, 두개골 팬텀을 함께 연결한 통합 시연.', alt: 'HoloLens를 착용한 사용자가 광학 추적 장치 앞에서 팬텀에 기구를 맞추는 장면.' },
+                en: { caption: 'Integration demonstration connecting HoloLens, optical tracking, and a skull phantom.', alt: 'User wearing HoloLens aligning an instrument on a phantom in front of the optical tracker.' }
+              }
+            }
+          ]
+        }
+      ],
+      blocks: [],
+      links: []
     }),
     project({
       slug: 'mandibular-fracture', tier: 'medical-core', period: '2021.12 – 2023.02', evidenceState: 'verified', lifecycleState: 'completed',
