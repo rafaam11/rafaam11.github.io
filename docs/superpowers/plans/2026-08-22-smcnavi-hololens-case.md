@@ -463,8 +463,8 @@ Add `mediaPreload`, `storyMediaFigureHtml`, `systemFlowDiagramHtml`, and `storyS
 ```html
 <div class="sc-story">
   <section class="sc-story__section sc-story__section--wide" data-story-section="system-architecture">
-    <div class="sc-story__copy"><h2>...</h2><p>...</p></div>
-    <div class="sc-story__media sc-story__media--wide">...</div>
+    <div class="sc-story__copy"><h2>System architecture</h2><p>Connection architecture.</p></div>
+    <div class="sc-story__media sc-story__media--wide"></div>
   </section>
 </div>
 ```
@@ -579,9 +579,9 @@ Add after the existing `.sc-case__links` rules:
 .sc-story__media--grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1.25rem; }
 .sc-story__media .sc-figure { margin: 0; }
 .sc-flow-figure { margin-top: 0; }
-.sc-flow { padding: 1rem; border: 1px solid var(--sc-rule); border-radius: 3px; background: var(--sc-paper); }
+.sc-flow { padding: 1rem; border: 1px solid var(--sc-rule); border-radius: 3px; background: var(--sc-bg); }
 .sc-flow__track { display: flex; align-items: stretch; gap: .45rem; min-width: 0; }
-.sc-flow__node { display: grid; align-content: center; flex: 1 1 0; min-width: 0; padding: .8rem .65rem; border: 1px solid var(--sc-rule); border-radius: 3px; background: var(--sc-bg); }
+.sc-flow__node { display: grid; align-content: center; flex: 1 1 0; min-width: 0; padding: .8rem .65rem; border: 1px solid var(--sc-rule); border-radius: 3px; background: #fafafa; }
 .sc-flow__node strong, .sc-flow__node small { overflow-wrap: anywhere; }
 .sc-flow__node small { margin-top: .25rem; color: var(--sc-muted); line-height: 1.4; }
 .sc-flow__edge { display: grid; align-content: center; justify-items: center; flex: 0 1 5.5rem; min-width: 2.7rem; color: var(--sc-muted); text-align: center; }
@@ -838,9 +838,11 @@ assert.equal(project.pdfSequence.figureIds.length, 6);
 assert.deepEqual(project.blocks, []);
 assert.deepEqual(project.links, []);
 assert.deepEqual(render.dataErrors(data), []);
+assert.equal(project.translations.ko.limitation, '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.');
+assert.equal(project.translations.en.limitation, 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.');
 
 const publicCaseCopy = JSON.stringify(project);
-assert.doesNotMatch(publicCaseCopy, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|실제 수술|real surgery|clinical efficacy|production deployment|patent|특허|digitrack-inc/i);
+assert.doesNotMatch(publicCaseCopy, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|digitrack-inc|특허출원|patent application/i);
 ```
 
 Add a second test that renders Korean and English and asserts each workflow label, both organisation names, the role label, `Research prototype`/`연구 프로토타입`, both video filenames, and ten consecutive figure labels appear in the correct locale. Assert that no `.sc-gallery` or repository link appears.
@@ -910,7 +912,31 @@ Use these exact English project translations:
 | `mediaCaption` | Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and image presentation. It uses de-identified research imagery and is not evidence of clinical outcome. |
 | `status` | Prototype · Ongoing |
 
-Update the existing card fields in both locales so they summarize the same SMCNavi core, primary implementation role, prototype evidence, and productisation boundary without adding new claims.
+Use these exact Korean card/summary fields:
+
+| Field | Copy |
+| --- | --- |
+| `cardProblem` | 의료영상·추적·정합·수술별 기능을 SMCNavi와 HoloLens 경로로 연결합니다. |
+| `cardOwnedRole` | 전체 SW 아키텍처와 3D Slicer·추적·정합·캘리브레이션·HoloLens 통합을 주 구현했습니다. |
+| `cardEvidence` | 두 전체 길이 영상과 승인된 UI·좌표계·기구·팬텀 파생본이 연구 프로토타입 근거입니다. |
+| `problemSummary` | 분절된 영상·추적·정합·공간 표시를 하나의 검토 가능한 흐름으로 연결합니다. |
+| `ownedRole` | SMCNavi와 HoloLens 확장의 전체 소프트웨어 아키텍처 및 주 구현을 맡았습니다. |
+| `verifiedEvidence` | 전체 길이 SMCNavi·HoloLens 영상과 승인된 기술 파생본이 근거입니다. |
+| `visualAlt` | SMCNavi와 HoloLens를 연결한 팬텀 기반 수술내비게이션 연구 프로토타입. |
+| `visualCaption` | SMCNavi–HoloLens 전체 길이 연구 프로토타입 시연. |
+
+Use these exact English card/summary fields:
+
+| Field | Copy |
+| --- | --- |
+| `cardProblem` | Connect medical images, tracking, registration, and procedure workflows through the SMCNavi and HoloLens path. |
+| `cardOwnedRole` | Primarily implemented the full software architecture across 3D Slicer, tracking, registration, calibration, and HoloLens integration. |
+| `cardEvidence` | Two full-length videos and approved interface, coordinate, instrument, and phantom derivatives evidence the research prototype. |
+| `problemSummary` | Connect fragmented imaging, tracking, registration, and spatial presentation in one inspectable flow. |
+| `ownedRole` | Owned the overall software architecture and primary implementation of SMCNavi and the HoloLens extension. |
+| `verifiedEvidence` | Full-length SMCNavi and HoloLens videos plus approved technical derivatives provide the evidence. |
+| `visualAlt` | Phantom-based surgical-navigation research prototype connecting SMCNavi and HoloLens. |
+| `visualCaption` | Full-length SMCNavi–HoloLens research-prototype demonstration. |
 
 - [ ] **Step 4: Declare lead media and the five story sections**
 
@@ -1306,12 +1332,12 @@ Extend the Python integration audit to extract both surgical PDFs and assert:
 
 ```js
 for (const [locale, required] of [
-  ['ko', ['SMCNavi · HoloLens 수술내비게이션', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '연구 프로토타입']],
-  ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', 'Research prototype']]
+  ['ko', ['SMCNavi · HoloLens 수술내비게이션', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '연구 프로토타입', '주장하지 않습니다']],
+  ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', 'Research prototype', 'This case does not claim']]
 ]) {
   const text = extracted[`surgical-navigation-${locale}.pdf`];
   for (const value of required) assert.ok(text.includes(value), `${locale}: missing ${value}`);
-  assert.doesNotMatch(text, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|production deployment|실제 수술|clinical efficacy|patent|특허/i);
+  assert.doesNotMatch(text, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|digitrack-inc|특허출원|patent application/i);
 }
 assert.equal(extracted.pages['surgical-navigation-ko.pdf'], 6);
 assert.equal(extracted.pages['surgical-navigation-en.pdf'], 6);
@@ -1503,13 +1529,15 @@ $publicScope = @(
   'assets/projects/surgical-navigation/README.md',
   'assets/projects/EVIDENCE_REGISTER.md'
 )
-$forbidden = 'Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|실제 수술|real surgery|clinical efficacy|production deployment|digitrack-inc|특허출원|patent application'
+node -e "const p=require('./js/portfolio-data.js').projects.find(x=>x.slug==='surgical-navigation'); const ko='장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.'; const en='Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.'; if(p.translations.ko.limitation!==ko||p.translations.en.limitation!==en) process.exit(1)"
+if ($LASTEXITCODE -ne 0) { throw 'The approved explicit non-claim boundary changed.' }
+$forbidden = 'Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|digitrack-inc|특허출원|patent application'
 $matches = rg -n -i --pcre2 $forbidden $publicScope
 if ($LASTEXITCODE -eq 0) { $matches; throw 'Forbidden SMCNavi public claim or link found.' }
 if ($LASTEXITCODE -ne 1) { throw 'Forbidden-copy search failed.' }
 ```
 
-Expected: no match. The explicit limitation sentences may say that the case does **not** claim production deployment, real-surgery use, or clinical efficacy; if those exact negations trigger this coarse search, replace the coarse assertion with a test that requires the complete negated sentence and rejects positive variants. Do not delete the approved limitations merely to satisfy a regex.
+Expected: both approved non-claim sentences match exactly and the hard-forbidden technology, internal-link, and patent-progress patterns have no match.
 
 - [ ] **Step 4: Start local HTTP preview**
 
