@@ -18,7 +18,7 @@
 - 개인 역할과 팀 결과를 분리한다. 기여율, 임상 효능·정확도·안전성·운영 효과, 실제 수술 사용, 생산 배포, 규제 승인, 특허 진행, 타 기관 수치 주장을 추가하지 않는다.
 - 공개 기관 맥락은 DIGITRACK 개발과 삼성서울병원 연구 협력까지만 쓴다. 승인되지 않은 개인 이름, 내부 제품명, 공개 SMCNavi 저장소 링크를 추가하지 않는다.
 - Azure Spatial Anchors와 Photon Unity Networking은 구현 기술로 쓰지 않는다. ASA는 초기에 검토됐지만 사용되지 않았으므로 공개 본문·그림·PDF에서 모두 제거한다.
-- 두 영상은 원본 전체 길이를 유지한다. HoloLens 영상은 약 `159.833333s`, `1280×720`, SMCNavi 기능 영상은 약 `90.266667s`, `960×720`이다. 둘 다 H.264, `yuv420p`, fast-start, 무음, 식별 메타데이터 없음, 파일당 `100,000,000`바이트 미만이어야 한다.
+- 두 영상은 원본 전체 타임라인을 유지한다. HoloLens 영상은 약 `159.833333s`, `1280×720`, SMCNavi 기능 영상은 약 `90.266667s`, `960×720`이다. 둘 다 H.264, `yuv420p`, fast-start, 무음, 식별 메타데이터 없음, 파일당 `100,000,000`바이트 미만이어야 한다. SMCNavi 기능 영상은 시간 절단 없이 승인되지 않은 앱 라벨 구간과 로컬 파일 대화상자 구간만 불투명 공간 마스킹한다.
 - 영상은 `controls`, `preload="metadata"`, 포스터를 사용하고 `autoplay`와 `loop`를 사용하지 않는다. 기존 사례 영상의 기본 `preload="none"` 동작은 바꾸지 않는다.
 - 승인된 두 영상, 발표자료 7쪽의 승인된 하단 파생본 두 장, 기존 공개 안전 이미지와 승인된 영상 프레임만 Git에 둔다. 원본·중간 산출물·절대 로컬 경로는 저장소에 기록하지 않는다.
 - 수술내비게이션 웹 사례는 이미지·영상·시스템 다이어그램을 설명 옆에 배치한다. 다른 7개 사례의 HTML 구조와 내용은 기존 분기를 그대로 사용한다.
@@ -1128,7 +1128,7 @@ Use these exact provenance notes; each source is the lower-case project-relative
 | --- | --- |
 | `surgical-navigation-hololens-demo-01` | Approved full-length silent web derivative; caption in portfolio data. |
 | `surgical-navigation-hololens-poster-01` | Approved poster frame from the public HoloLens derivative. |
-| `surgical-navigation-smcnavi-features-01` | Approved full-length silent SMCNavi feature derivative; caption in portfolio data. |
+| `surgical-navigation-smcnavi-features-01` | Approved full-length silent SMCNavi feature derivative with bounded spatial privacy masks; caption in portfolio data. |
 | `surgical-navigation-smcnavi-poster-01` | Approved poster frame from the public SMCNavi feature derivative. |
 | `surgical-navigation-smcnavi-ui-01` | Approved lower-region presentation derivative showing the integrated UI and HoloLens–PC view. |
 | `surgical-navigation-smcnavi-workflows-01` | Approved lower-region presentation derivative showing six software workflows with the corrected public label. |
@@ -1143,7 +1143,7 @@ Replace the README with:
 
 This directory contains only approved, de-identified, metadata-stripped public derivatives registered in `../EVIDENCE_REGISTER.md`.
 
-The two MP4 files preserve the approved source durations and are published without audio. PNG files are approved posters, presentation-region derivatives, technical figures, or frames from an approved public video. They support a research-prototype account and do not establish clinical efficacy, production deployment, or use in real surgery.
+The two MP4 files preserve the approved source durations and are published without audio. The SMCNavi feature derivative uses bounded opaque spatial masks over an unapproved application label and a brief private file-dialog region; it contains no temporal cut. PNG files are approved posters, presentation-region derivatives, technical figures, or frames from an approved public video. They support a research-prototype account and do not establish clinical efficacy, production deployment, or use in real surgery.
 
 Original recordings, reports, presentations, and intermediate exports remain outside this repository.
 ```
@@ -1218,13 +1218,13 @@ if ($LASTEXITCODE -ne 0) { throw 'HoloLens video encoding failed.' }
 
 ffmpeg -hide_banner -loglevel warning -y -i $featureSource `
   -map 0:v:0 -an -sn -dn -map_metadata -1 -map_chapters -1 `
-  -vf "scale=960:720:flags=lanczos,setsar=1" `
+  -vf "scale=960:720:flags=lanczos,setsar=1,drawbox=x=0:y=122:w=505:h=368:color=0x171717:t=fill:enable='between(t,68.75,70.50)',drawbox=x=48:y=122:w=132:h=28:color=0x171717:t=fill:enable='between(t,59.80,79.80)',drawtext=fontfile='C\:/Windows/Fonts/arialbd.ttf':text='SMCNavi':x=62:y=126:fontsize=15:fontcolor=white:enable='between(t,59.80,79.80)',drawtext=fontfile='C\:/Windows/Fonts/arial.ttf':text='Private interface details masked':x=103:y=300:fontsize=20:fontcolor=white:enable='between(t,68.75,70.50)'" `
   -c:v libx264 -preset slow -crf 23 -maxrate 4500k -bufsize 9000k -pix_fmt yuv420p `
   -movflags +faststart $featureOutput
 if ($LASTEXITCODE -ne 0) { throw 'SMCNavi feature video encoding failed.' }
 ```
 
-Expected: both commands retain the complete input timeline and create files below the decimal 100 MB policy.
+Expected: both commands retain the complete input timeline and create files below the decimal 100 MB policy. The feature derivative replaces only the moving application-label strip from `59.80–79.80s` and the private file-dialog rectangle from `68.75–70.50s`; the approved technical content outside those rectangles remains visible.
 
 - [ ] **Step 3: Extract the two approved posters and the safe bench frame**
 
@@ -1290,11 +1290,78 @@ if ($LASTEXITCODE -ne 0) { throw 'SMCNavi workflow crop failed.' }
 
 Expected: the first crop contains the integrated SMCNavi UI and HoloLens–PC view; the second contains only the six-workflow composite and uses `광대·안와 골절 미러링`. Slide header, portrait, individual name, patent note, planned-clinical-use text, and unrelated branding are outside both crops.
 
-- [ ] **Step 6: Visually inspect all seven new derivatives before retiring old files**
+- [ ] **Step 6: Generate exhaustive review contact sheets outside Git**
 
-Use `view_image` for the five PNGs and contact-sheet frames from both MP4s. Check legibility, no portrait/header leakage, no internal predecessor name, no unintended crop, and correct fracture label. If any check fails, regenerate from the same approved sources and repeat this step before continuing.
+Run:
 
-- [ ] **Step 7: Verify the new evidence set before deleting superseded binaries**
+```powershell
+$reviewDir = Join-Path $slideTempDir 'video-review'
+New-Item -ItemType Directory -Path $reviewDir | Out-Null
+$mainWindows = @(0, 40, 80, 120)
+foreach ($start in $mainWindows) {
+  $output = Join-Path $reviewDir ("hololens-{0:D3}.png" -f $start)
+  ffmpeg -hide_banner -loglevel error -y -i $mainOutput `
+    -vf "trim=start=${start}:end=$($start + 40),setpts=PTS-STARTPTS,fps=1,scale=256:144:flags=lanczos,tile=8x5" `
+    -frames:v 1 -map_metadata -1 $output
+  if ($LASTEXITCODE -ne 0) { throw "HoloLens contact sheet failed at $start seconds." }
+}
+$featureWindows = @(0, 30, 60)
+foreach ($start in $featureWindows) {
+  $output = Join-Path $reviewDir ("smcnavi-{0:D3}.png" -f $start)
+  ffmpeg -hide_banner -loglevel error -y -i $featureOutput `
+    -vf "trim=start=${start}:end=$($start + 30),setpts=PTS-STARTPTS,fps=1,scale=240:180:flags=lanczos,tile=6x5" `
+    -frames:v 1 -map_metadata -1 $output
+  if ($LASTEXITCODE -ne 0) { throw "SMCNavi contact sheet failed at $start seconds." }
+}
+$maskAudit = Join-Path $reviewDir 'smcnavi-mask-audit.png'
+ffmpeg -hide_banner -loglevel error -y -i $featureOutput `
+  -vf "trim=start=67:end=73,setpts=PTS-STARTPTS,fps=4,scale=240:180:flags=lanczos,tile=6x4" `
+  -frames:v 1 -map_metadata -1 $maskAudit
+if ($LASTEXITCODE -ne 0) { throw 'SMCNavi mask-audit sheet failed.' }
+```
+
+Expected: four HoloLens sheets, three SMCNavi sheets, and one high-frequency privacy-mask sheet exist only below the temporary review directory. The last partial windows may contain repeated or empty tile cells after the source ends; that is acceptable.
+
+- [ ] **Step 7: Visually inspect all seven new derivatives before retiring old files**
+
+Use `view_image` for the five PNGs and all eight contact sheets. Check legibility, no portrait/header leakage, no unapproved internal label, no readable local path or directory name, no unintended crop, and the corrected fracture label. In `smcnavi-mask-audit.png`, verify every file-dialog frame is fully opaque inside `x=0..504, y=122..489`, the safe `SMCNavi` label replaces the moving application label from `59.80–79.80s`, and no mask extends beyond its declared time window. If any check fails, widen the minimum necessary time or rectangle, regenerate from the same approved source, and repeat Steps 6–7 before continuing.
+
+- [ ] **Step 8: Remove temporary review material after inspection**
+
+Run:
+
+```powershell
+$temporaryFiles = @(
+  $slidePng,
+  (Join-Path $reviewDir 'hololens-000.png'),
+  (Join-Path $reviewDir 'hololens-040.png'),
+  (Join-Path $reviewDir 'hololens-080.png'),
+  (Join-Path $reviewDir 'hololens-120.png'),
+  (Join-Path $reviewDir 'smcnavi-000.png'),
+  (Join-Path $reviewDir 'smcnavi-030.png'),
+  (Join-Path $reviewDir 'smcnavi-060.png'),
+  $maskAudit
+)
+foreach ($target in $temporaryFiles) {
+  $relative = [IO.Path]::GetRelativePath($slideTempDir, $target)
+  if ($relative.StartsWith('..') -or [IO.Path]::IsPathRooted($relative)) {
+    throw "Refusing to remove out-of-scope temporary path: $target"
+  }
+  if (Test-Path -LiteralPath $target -PathType Leaf) {
+    Remove-Item -LiteralPath $target
+  }
+}
+if (@(Get-ChildItem -LiteralPath $reviewDir -Force).Count -ne 0) { throw 'Review directory is not empty.' }
+Remove-Item -LiteralPath $reviewDir
+if (@(Get-ChildItem -LiteralPath $slideTempDir -Force).Count -ne 0) { throw 'Slide temporary directory is not empty.' }
+Remove-Item -LiteralPath $slideTempDir
+```
+
+Do not use a recursive delete and do not delete either private source.
+
+Expected: the exported full slide and all contact sheets are gone; only the seven approved derivatives remain in the repository asset directory.
+
+- [ ] **Step 9: Verify the new evidence set before deleting superseded binaries**
 
 Run:
 
@@ -1304,7 +1371,7 @@ node -e "const d=require('./js/portfolio-data.js'); const v=require('./scripts/v
 
 Expected: zero evidence-registry errors, including size, duration, fast-start, codec, dimensions, audio, metadata, poster, source path, and ID checks.
 
-- [ ] **Step 8: Remove only the four explicitly retired files**
+- [ ] **Step 10: Remove only the four explicitly retired files**
 
 Resolve and verify each target remains under the exact project directory, then run:
 
@@ -1329,7 +1396,7 @@ foreach ($name in $retired) {
 
 Expected: retained gallery 02, 03, 05, and 06 still exist; no other asset is removed. These removals are recoverable from Git until a later explicitly authorized commit.
 
-- [ ] **Step 9: Run focused media verification**
+- [ ] **Step 11: Run focused media verification**
 
 Run:
 
@@ -1625,7 +1692,7 @@ At approximately 390×844, repeat the six-route review. The story grid and media
 
 - [ ] **Step 7: Exercise both videos without waiting through playback**
 
-On each localized surgical-navigation page, confirm both videos expose native controls, display the correct posters, do not start automatically, and report approximately 159.8s and 90.3s. Start, pause, seek near the end, and resume each video to prove the full files decode and the fast-start layout supports seeking. Confirm there is no audio control activity.
+On each localized surgical-navigation page, confirm both videos expose native controls, display the correct posters, do not start automatically, and report approximately 159.8s and 90.3s. Start, pause, seek near the end, and resume each video to prove the full files decode and the fast-start layout supports seeking. In the feature video, also seek to `60s`, `69s`, `71s`, and `79s`: the unapproved application label and private file-dialog details must remain unreadable while surrounding approved technical content remains visible. Confirm there is no audio control activity.
 
 - [ ] **Step 8: Verify direct `file://` resolution**
 

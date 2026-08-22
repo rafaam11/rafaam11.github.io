@@ -161,11 +161,12 @@ Only approved derivatives enter Git. Originals and intermediate files remain out
 2. `surgical-navigation-smcnavi-features-01.mp4`
    - complete source duration, approximately 90.3 seconds;
    - original 4:3 composition preserved at 960×720;
+   - opaque spatial privacy masks over the unapproved application label and the brief local file-dialog region; no temporal cut;
    - H.264, `yuv420p`, fast-start;
    - no audio stream and no inherited metadata;
    - poster: `surgical-navigation-smcnavi-poster-01.png`.
 
-Both videos use native controls, no autoplay, no loop, and `preload="metadata"`. Re-encoding may change container duration only within a 0.2-second tolerance. Each file must remain below GitHub's 100 MB single-file limit without distorting its aspect ratio.
+Both videos use native controls, no autoplay, no loop, and `preload="metadata"`. “Complete source duration” means that the timeline is not shortened; bounded spatial masking is required where a source frame exposes an unapproved internal label or private filesystem details. Re-encoding may change container duration only within a 0.2-second tolerance. Each file must remain below GitHub's 100 MB single-file limit without distorting its aspect ratio.
 
 ### Presentation derivatives
 
@@ -241,7 +242,7 @@ Implementation is acceptable only when all of the following pass:
 2. `ffprobe` reports no audio stream and no inherited identifying metadata.
 3. Both videos preserve aspect ratio, decode in a browser, use fast-start, and remain below 100 MB each.
 4. The Korean and English pages contain the same six workflows, technical structure, contribution boundary, evidence state, and limitations.
-5. The public repository tree and generated PDFs contain no ASA/PUN claim, unapproved individual name or standalone portrait, patent-progress statement, public SMCNavi repository link, real-surgery-use claim, or clinical-effect claim. Consented people may remain visible inside the approved demonstration videos and figures.
+5. The public repository tree, rendered video frames, and generated PDFs contain no ASA/PUN claim, unapproved internal label, private filesystem detail, unapproved individual name or standalone portrait, patent-progress statement, public SMCNavi repository link, real-surgery-use claim, or clinical-effect claim. Consented people may remain visible inside the approved demonstration videos and figures.
 6. Evidence IDs, approved paths, files, posters, captions, and alt text agree across data, register, renderer, and validator.
 7. Automated checks pass:
    - `node --test`
