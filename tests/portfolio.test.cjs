@@ -1524,7 +1524,7 @@ test('Task 5 exporter produces deterministic public-safe project and CV input', 
   }
 });
 
-test('Task 5 publishes exactly sixteen six-page project PDFs and tracks two authored CV PDFs', () => {
+test('Task 5 publishes sixteen content-length project PDFs and tracks two authored CV PDFs', () => {
   const projectNames = slugs.flatMap((slug) => ['ko', 'en'].map((locale) => `${slug}-${locale}.pdf`));
   const cvNames = ['jinmin-kim-cv-ko.pdf', 'jinmin-kim-cv-en.pdf'];
   const outputNames = fs.readdirSync(path.join(root, 'output', 'pdf'))
@@ -1539,7 +1539,10 @@ test('Task 5 publishes exactly sixteen six-page project PDFs and tracks two auth
     const bytes = fs.readFileSync(asset);
     assert.equal(bytes.subarray(0, 5).toString('ascii'), '%PDF-');
     assert.ok(bytes.length > 12_000, `${name}: unexpectedly small PDF`);
-    assert.equal(pdfPageCount(asset), 6, `${name}: project PDF page count`);
+    // The layout flows, so a case is as long as its own text and figures need.
+    const pages = pdfPageCount(asset);
+    assert.ok(pages >= 2 && pages <= 12, `${name}: project PDF page count ${pages} is outside the expected range`);
+    assert.equal(pages, pdfPageCount(output), `${name}: published and output page counts differ`);
     assert.equal(sha256(asset), sha256(output), `${name}: output/assets checksum mismatch`);
     assert.match(bytes.toString('latin1'), /\/URI\s*\(mailto:uiop3847@naver\.com\)/);
     // Compressed stream bodies (embedded images) are binary; only dictionaries and metadata can leak a path.
@@ -1786,7 +1789,13 @@ test('Task 5 integrated review requires four project-specific middle blocks and 
   const seenKinds = new Set();
   for (const project of data.projects) {
     assert.ok(project.pdfSequence && typeof project.pdfSequence === 'object', `${project.slug}: missing pdfSequence`);
-    assert.deepEqual(project.pdfSequence.middle, project.blocks.map((block) => block.key), `${project.slug}: middle sequence`);
+    // The PDF sequence names four of the project blocks; a case may carry more than four.
+    const blockKeys = project.blocks.map((block) => block.key);
+    assert.equal(project.pdfSequence.middle.length, 4, `${project.slug}: middle sequence length`);
+    assert.equal(new Set(project.pdfSequence.middle).size, 4, `${project.slug}: middle sequence duplicates`);
+    for (const key of project.pdfSequence.middle) {
+      assert.ok(blockKeys.includes(key), `${project.slug}: middle sequence references unknown block ${key}`);
+    }
     assert.equal(project.pdfSequence.evidenceId, project.media.lead.id, `${project.slug}: evidence selection`);
     assert.equal(project.pdfSequence.diagram.kind, expectedKinds.get(project.slug), `${project.slug}: diagram kind`);
     assert.equal(seenKinds.has(project.pdfSequence.diagram.kind), false, `${project.slug}: duplicate diagram kind`);
@@ -1853,10 +1862,12 @@ test('Task 5 integrated review renders each middle block on its contracted page 
       'result = {}',
       'for slug in slugs:',
       '    reader = PdfReader(str(root / "output" / "pdf" / f"{slug}-en.pdf"))',
-      '    result[slug] = [(page.extract_text() or "") for page in reader.pages[1:5]]',
-      'page = PdfReader(str(root / "output" / "pdf" / "surgical-navigation-en.pdf")).pages[3]',
-      'xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
-      'result["approvedImage"] = any(ref.get_object().get("/Subtype") == "/Image" for ref in xobjects.values())',
+      '    result[slug] = chr(10).join((page.extract_text() or "") for page in reader.pages)',
+      'reader = PdfReader(str(root / "output" / "pdf" / "surgical-navigation-en.pdf"))',
+      'def has_image(page):',
+      '    xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
+      '    return any(ref.get_object().get("/Subtype") == "/Image" for ref in xobjects.values())',
+      'result["approvedImage"] = any(has_image(page) for page in reader.pages)',
       'print(json.dumps(result))'
     ].join('\n');
     const audit = childProcess.spawnSync(python, ['-c', auditCode, temporaryRoot, JSON.stringify(slugs)], {
@@ -1864,15 +1875,15 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     });
     assert.equal(audit.status, 0, audit.stderr || audit.stdout);
     const pages = JSON.parse(audit.stdout);
+    // Pages are no longer fixed panels, so each sequenced block has to appear somewhere in the document.
     for (const project of payload.projects) {
-      for (let index = 0; index < 4; index += 1) {
-        const key = project.pdfSequence.middle[index];
+      for (const key of project.pdfSequence.middle) {
         const block = project.blocks.find((candidate) => candidate.key === key);
-        assert.ok(pages[project.slug][index].includes(block.translations.en.heading), `${project.slug}: page ${index + 2} omits ${key}`);
+        assert.ok(pages[project.slug].includes(block.translations.en.heading), `${project.slug}: document omits ${key}`);
       }
-      assert.ok(pages[project.slug][1].includes(project.pdfSequence.diagram.translations.en.title), `${project.slug}: diagram title`);
+      assert.ok(pages[project.slug].includes(project.pdfSequence.diagram.translations.en.title), `${project.slug}: diagram title`);
     }
-    assert.equal(pages.approvedImage, true, 'approved local image must be placed on evidence page');
+    assert.equal(pages.approvedImage, true, 'approved local images must be placed in the document');
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
