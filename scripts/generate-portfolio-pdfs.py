@@ -757,6 +757,11 @@ def sha256(file_path: Path) -> str:
     return digest.hexdigest()
 
 
+def normalized_text_source_sha256(file_path: Path) -> str:
+    text = file_path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
 def parse_arguments(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate deterministic public portfolio PDFs.")
     parser.add_argument("--input", required=True, type=Path, help="Deterministic JSON exported by export-portfolio-data.cjs")
@@ -2133,7 +2138,7 @@ def generate(payload: dict[str, Any], dependencies: dict[str, Any], output_dir: 
             "sourceDigest": payload["sourceDigest"],
             "generator": GENERATOR_PUBLIC_PATH,
             "generatorVersion": GENERATOR_VERSION,
-            "generatorSha256": sha256(Path(__file__).resolve()),
+            "generatorSha256": normalized_text_source_sha256(Path(__file__).resolve()),
             "documents": documents,
             "artifacts": artifacts,
         }

@@ -2827,12 +2827,27 @@ test('Task 5 integrated review failure preserves all existing public PDF trees b
   }
 });
 
+test('Task 1 normalizes generator text-source LF and CRLF digests', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-generator-eol-'));
+  try {
+    const lfPath = path.join(temporaryRoot, 'generator-lf.py');
+    const crlfPath = path.join(temporaryRoot, 'generator-crlf.py');
+    fs.writeFileSync(lfPath, 'first line\nsecond line\n', 'utf8');
+    fs.writeFileSync(crlfPath, 'first line\r\nsecond line\r\n', 'utf8');
+    const expected = 'c2097f55f01fc297fc7f4acf21438123e06e4d409a818524428534e850642f4f';
+    assert.equal(validator.normalizedTextSourceSha256(lfPath), expected);
+    assert.equal(validator.normalizedTextSourceSha256(crlfPath), expected);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
 test('Task 5 integrated review manifest binds artifacts to the current generator source', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   const generatorPath = path.join(root, 'scripts', 'generate-portfolio-pdfs.py');
   assert.equal(manifest.schemaVersion, 3);
   assert.equal(manifest.generatorVersion, '3.1');
-  assert.equal(manifest.generatorSha256, sha256(generatorPath));
+  assert.equal(manifest.generatorSha256, validator.normalizedTextSourceSha256(generatorPath));
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-generator-stale-'));
   try {
