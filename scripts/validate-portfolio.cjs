@@ -1259,6 +1259,11 @@ function sha256File(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
 }
 
+function normalizedTextSourceSha256(filePath) {
+  const text = fs.readFileSync(filePath, 'utf8').replace(/\r\n?/g, '\n');
+  return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
+}
+
 function pdfPageCount(filePath) {
   return (fs.readFileSync(filePath).toString('latin1').match(/\/Type\s*\/Page\b/g) || []).length;
 }
@@ -1451,7 +1456,7 @@ function pdfArtifactErrors(rootDir, candidatePortfolio = data) {
     const generatorPath = path.join(rootDir, pdfGeneratorRelativePath);
     if (!fs.existsSync(generatorPath) || !fs.lstatSync(generatorPath).isFile()) {
       errors.push('scripts/generate-portfolio-pdfs.py: missing current PDF generator source.');
-    } else if (manifest.generatorSha256 !== sha256File(generatorPath)) {
+    } else if (manifest.generatorSha256 !== normalizedTextSourceSha256(generatorPath)) {
       errors.push('output/pdf/manifest.json: generator source hash is stale for the current PDF layout code.');
     }
     if (!/^[a-f0-9]{64}$/.test(manifest.sourceDigest || '')) errors.push('output/pdf/manifest.json: invalid source digest.');
@@ -2400,6 +2405,7 @@ module.exports = {
   publicPiiFindings,
   publicCvDataErrors,
   cvSummaryRecoveryArtifactErrors,
+  normalizedTextSourceSha256,
   pdfArtifactErrors,
   cvPdfErrors,
   visualAssetErrors,
