@@ -3,7 +3,7 @@
   "sourceDigest": "834a4db05131dacb7c55bb3bb7c6011cbb6d8d858774f791cfbefd294a1b10c9",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.2",
-  "generatorSha256": "b2642510612e139ef219eacd6d11361cdaee7e6921783cf22f4662c18d8b82ee",
+  "generatorSha256": "a172fc8b99264c4abf00cccb4a3ec4230179dc94cdad9ae1138a3ab0c80a65e7",
   "documents": [
     {
       "name": "surgical-navigation-ko.pdf",
@@ -57,8 +57,8 @@
       "pages": 6,
       "links": 8,
       "characters": 3552,
-      "bytes": 1518865,
-      "sha256": "0b1b0f337cf8be22a2ffe6c629d8bf42207bc5a375653c69205054ac95cdb8e8"
+      "bytes": 1522370,
+      "sha256": "1bd6b3d85b460be929d203aefd5125206a3b1827fd7e846c3b354729265707a6"
     },
     {
       "name": "digital-occlusion-workflow-en.pdf",
@@ -68,8 +68,8 @@
       "pages": 6,
       "links": 8,
       "characters": 7262,
-      "bytes": 1371593,
-      "sha256": "1935a981666786891d69166c70a82490fcaaa01bce535d54f68fc74ab5a0cfce"
+      "bytes": 1375113,
+      "sha256": "1076b639d0acfa5fe335aac429ea44475f24879cc74629d9d05a020978f941c2"
     },
     {
       "name": "life-careverse-ko.pdf",
@@ -229,8 +229,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "en",
       "pages": 6,
-      "bytes": 1371593,
-      "sha256": "1935a981666786891d69166c70a82490fcaaa01bce535d54f68fc74ab5a0cfce"
+      "bytes": 1375113,
+      "sha256": "1076b639d0acfa5fe335aac429ea44475f24879cc74629d9d05a020978f941c2"
     },
     {
       "path": "assets/pdfs/digital-occlusion-workflow-ko.pdf",
@@ -238,8 +238,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "ko",
       "pages": 6,
-      "bytes": 1518865,
-      "sha256": "0b1b0f337cf8be22a2ffe6c629d8bf42207bc5a375653c69205054ac95cdb8e8"
+      "bytes": 1522370,
+      "sha256": "1bd6b3d85b460be929d203aefd5125206a3b1827fd7e846c3b354729265707a6"
     },
     {
       "path": "assets/pdfs/life-careverse-en.pdf",
@@ -391,8 +391,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "en",
       "pages": 6,
-      "bytes": 1371593,
-      "sha256": "1935a981666786891d69166c70a82490fcaaa01bce535d54f68fc74ab5a0cfce"
+      "bytes": 1375113,
+      "sha256": "1076b639d0acfa5fe335aac429ea44475f24879cc74629d9d05a020978f941c2"
     },
     {
       "path": "output/pdf/digital-occlusion-workflow-ko.pdf",
@@ -400,8 +400,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "ko",
       "pages": 6,
-      "bytes": 1518865,
-      "sha256": "0b1b0f337cf8be22a2ffe6c629d8bf42207bc5a375653c69205054ac95cdb8e8"
+      "bytes": 1522370,
+      "sha256": "1bd6b3d85b460be929d203aefd5125206a3b1827fd7e846c3b354729265707a6"
     },
     {
       "path": "output/pdf/life-careverse-en.pdf",

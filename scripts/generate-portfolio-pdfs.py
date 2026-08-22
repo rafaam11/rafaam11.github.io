@@ -800,6 +800,99 @@ def normalized_text_source_sha256(file_path: Path) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def system_flow_topological_levels(nodes: list[dict[str, Any]],
+                                   edges: list[dict[str, Any]]) -> list[list[str]]:
+    """Return stable DAG levels derived only from declared edge endpoints."""
+    order = {node["key"]: index for index, node in enumerate(nodes)}
+    indegree = {key: 0 for key in order}
+    outgoing = {key: [] for key in order}
+    for edge in edges:
+        require(edge["from"] in order and edge["to"] in order,
+                "System-flow layout edge endpoints must reference declared nodes.")
+        indegree[edge["to"]] += 1
+        outgoing[edge["from"]].append(edge["to"])
+    level_by_key = {key: 0 for key in order}
+    ready = sorted((key for key, count in indegree.items() if count == 0), key=order.get)
+    visited: list[str] = []
+    while ready:
+        key = ready.pop(0)
+        visited.append(key)
+        for target in outgoing[key]:
+            level_by_key[target] = max(level_by_key[target], level_by_key[key] + 1)
+            indegree[target] -= 1
+            if indegree[target] == 0:
+                ready.append(target)
+                ready.sort(key=order.get)
+    require(len(visited) == len(nodes), "System-flow layout requires an acyclic graph.")
+    levels: list[list[str]] = []
+    for key in sorted(order, key=order.get):
+        level = level_by_key[key]
+        while len(levels) <= level:
+            levels.append([])
+        levels[level].append(key)
+    return levels
+
+
+def system_flow_dag_layout(nodes: list[dict[str, Any]], edges: list[dict[str, Any]],
+                           node_heights: dict[str, float], left: float, right: float,
+                           top: float) -> dict[str, Any]:
+    """Lay out a system-flow DAG and resolve every connector by endpoint key."""
+    levels = system_flow_topological_levels(nodes, edges)
+    node_left = left + 32.0
+    node_width = right - node_left
+    require(node_width > 200, "System-flow layout requires a wider drawing area.")
+    incoming: dict[str, list[dict[str, Any]]] = {node["key"]: [] for node in nodes}
+    for edge in edges:
+        incoming[edge["to"]].append(edge)
+    rects: dict[str, dict[str, float | int]] = {}
+    current_top = top
+    for level_index, keys in enumerate(levels):
+        for key in keys:
+            edge_gap = max(17.0, 12.0 + 9.0 * len(incoming[key])) if incoming[key] else 0.0
+            current_top -= edge_gap
+            height = float(node_heights[key])
+            rects[key] = {
+                "left": node_left,
+                "right": right,
+                "top": current_top,
+                "bottom": current_top - height,
+                "width": node_width,
+                "height": height,
+                "level": level_index,
+            }
+            current_top -= height
+    branch_index: dict[str, int] = {key: 0 for key in rects}
+    connectors: list[dict[str, Any]] = []
+    for edge in edges:
+        source = rects[edge["from"]]
+        target = rects[edge["to"]]
+        ordinal = branch_index[edge["from"]]
+        branch_index[edge["from"]] += 1
+        trunk_x = left + 8.0 + min(ordinal, 3) * 6.0
+        source_y = (float(source["top"]) + float(source["bottom"])) / 2.0
+        target_y = (float(target["top"]) + float(target["bottom"])) / 2.0
+        connectors.append({
+            "from": edge["from"],
+            "to": edge["to"],
+            "direction": edge["direction"],
+            "points": [
+                [float(source["left"]), source_y],
+                [trunk_x, source_y],
+                [trunk_x, target_y],
+                [float(target["left"]), target_y],
+            ],
+            "label_y": float(target["top"]) + 8.0,
+        })
+    return {"levels": levels, "nodes": rects, "edges": connectors, "height": top - current_top}
+
+
+def draw_system_flow_connector(canvas: Any, connector: dict[str, Any]) -> None:
+    """Draw the resolved connector polyline; kept separate for coordinate tests."""
+    points = connector["points"]
+    for start, end in zip(points, points[1:]):
+        canvas.line(start[0], start[1], end[0], end[1])
+
+
 def load_legacy_preservation_baseline(file_path: Path, payload: dict[str, Any],
                                       project_assets: Path) -> dict[str, str]:
     """Validate the explicit one-time migration gate before preserving legacy PDF bytes."""
@@ -1358,17 +1451,19 @@ class TechnicalDocument:
         return bottom
 
     def system_flow_diagram(self, diagram: dict[str, Any], locale: str, y: float) -> float:
-        """Draw a canonical story flow with wrapped, non-overlapping node columns."""
+        """Draw a key-resolved DAG without inventing adjacency from node order."""
         c = self.canvas
         copy = localized(diagram, locale)
         nodes = diagram["nodes"]
         edges = diagram["edges"]
-        label_x = self.left + 38
-        label_width = 180
+        node_left = self.left + 32
+        label_x = node_left + 38
+        label_width = 160
         column_gutter = 18
         detail_x = label_x + label_width + column_gutter
         detail_width = self.right - detail_x - 8
-        node_rows: list[tuple[dict[str, Any], list[str], list[str], float]] = []
+        node_rows: dict[str, tuple[dict[str, Any], list[str], list[str], float]] = {}
+        node_heights: dict[str, float] = {}
         for node in nodes:
             node_copy = localized(node, locale)
             label_lines = self.wrap(node_copy["label"], "MalgunGothic-Bold", 8.5, label_width)
@@ -1378,8 +1473,10 @@ class TechnicalDocument:
             require(1 <= len(detail_lines) <= 2,
                     f"{diagram.get('boundary', 'system-flow')}: node detail exceeds two PDF lines.")
             row_height = max(32, 16 + 11 * max(len(label_lines), len(detail_lines)))
-            node_rows.append((node_copy, label_lines, detail_lines, row_height))
-        required_height = 40 + sum(row[3] for row in node_rows) + 17 * len(edges) + 34
+            node_rows[node["key"]] = (node_copy, label_lines, detail_lines, row_height)
+            node_heights[node["key"]] = row_height
+        measured_layout = system_flow_dag_layout(nodes, edges, node_heights, self.left, self.right, 0)
+        required_height = 40 + measured_layout["height"] + 34
         self.ensure(required_height)
         y = self.y
         self.text(copy["title"], self.left, y - 10, self.right - self.left,
@@ -1387,14 +1484,33 @@ class TechnicalDocument:
         self.text(copy["caption"], self.left, y - 25, self.right - self.left,
                   size=8, leading=11, color="muted", max_lines=1)
 
-        node_top = y - 40
-        for index, (_, label_lines, detail_lines, node_height) in enumerate(node_rows):
-            node_bottom = node_top - node_height
+        layout = system_flow_dag_layout(nodes, edges, node_heights, self.left, self.right, y - 40)
+        c.setStrokeColor(self.colors["signal"])
+        c.setLineWidth(0.8)
+        for edge, connector in zip(edges, layout["edges"]):
+            draw_system_flow_connector(c, connector)
+            target = layout["nodes"][edge["to"]]
+            c.setFillColor(self.colors["paper"])
+            c.circle(float(target["left"]), connector["points"][-1][1], 2.2, fill=1, stroke=0)
+            c.setFillColor(self.colors["signal"])
+            c.setFont("FlowSymbol", 8)
+            c.drawString(float(target["left"]) - 6, connector["points"][-1][1] - 3,
+                         "⇄" if edge["direction"] == "bidirectional" else "→")
+            edge_copy = localized(edge, locale)
+            self.text(edge_copy["label"], node_left + 8, connector["label_y"], self.right - node_left - 16,
+                      size=7.8, leading=9, color="muted", max_lines=1)
+
+        for index, node in enumerate(nodes):
+            node_copy, label_lines, detail_lines, _ = node_rows[node["key"]]
+            rect = layout["nodes"][node["key"]]
+            node_top = float(rect["top"])
+            node_bottom = float(rect["bottom"])
+            node_height = float(rect["height"])
             c.setFillColor(self.colors["paper"])
             c.setStrokeColor(self.colors["line"])
             c.setLineWidth(0.8)
-            c.roundRect(self.left, node_bottom, self.right - self.left, node_height, 3, fill=1, stroke=1)
-            self.label(f"0{index + 1}", self.left + 10, node_top - 13)
+            c.roundRect(float(rect["left"]), node_bottom, float(rect["width"]), node_height, 3, fill=1, stroke=1)
+            self.label(f"0{index + 1}", float(rect["left"]) + 10, node_top - 13)
             label_y = node_top - 12
             detail_y = node_top - 12
             c.setFillColor(self.colors["ink"])
@@ -1407,20 +1523,8 @@ class TechnicalDocument:
             for line in detail_lines:
                 c.drawString(detail_x, detail_y, line)
                 detail_y -= 11
-            if index < len(edges):
-                edge = edges[index]
-                edge_copy = localized(edge, locale)
-                edge_y = node_bottom - 12
-                c.setFillColor(self.colors["signal"])
-                c.setFont("FlowSymbol", 9)
-                c.drawString(self.left + 14, edge_y, "⇄" if edge["direction"] == "bidirectional" else "→")
-                self.text(edge_copy["label"], self.left + 38, edge_y, self.right - self.left - 48,
-                          size=7.8, leading=9, color="muted", max_lines=1)
-                node_top = node_bottom - 17
-            else:
-                node_top = node_bottom
 
-        boundary_y = node_top - 16
+        boundary_y = min(float(rect["bottom"]) for rect in layout["nodes"].values()) - 16
         self.text(copy["boundaryLabel"], self.left, boundary_y, self.right - self.left,
                   size=8.5, font="MalgunGothic-Bold", leading=11, color="warm", max_lines=1)
         return boundary_y - 18

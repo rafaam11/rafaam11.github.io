@@ -158,6 +158,29 @@ function storyDiagramFixture() {
   };
 }
 
+function branchingStoryDiagramFixture() {
+  return {
+    kind: 'system-flow',
+    boundary: 'prototype',
+    translations: {
+      ko: { title: '분기 흐름', caption: '분기 구조', boundaryLabel: '테스트 경계' },
+      en: { title: 'Branching flow', caption: 'Branch structure', boundaryLabel: 'Test boundary' }
+    },
+    nodes: ['A', 'B', 'C', 'D'].map((key) => ({
+      key,
+      translations: {
+        ko: { label: `${key} 노드`, detail: `${key} 상세` },
+        en: { label: `${key} node`, detail: `${key} detail` }
+      }
+    })),
+    edges: [
+      { from: 'A', to: 'B', direction: 'forward', translations: { ko: { label: 'A에서 B' }, en: { label: 'A to B' } } },
+      { from: 'B', to: 'C', direction: 'forward', translations: { ko: { label: 'B에서 C' }, en: { label: 'B to C' } } },
+      { from: 'B', to: 'D', direction: 'bidirectional', translations: { ko: { label: 'B와 D' }, en: { label: 'B and D' } } }
+    ]
+  };
+}
+
 function storySectionFixture() {
   return {
     key: 'story-overview',
@@ -2080,10 +2103,56 @@ test('SMCNavi story renderer distributes approved media, numbers figures, and ke
   assert.match(html, /<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="metadata")(?=[^>]*\bposter="\.\.\/\.\.\/\.\.\/assets\/projects\/surgical-navigation\/story-video-poster-01\.png")/);
   assert.doesNotMatch(html, /\bautoplay\b|\bloop\b/);
   assert.match(html, /<small class="sc-flow__node-detail">Registration<\/small>/);
-  assert.match(html, /<span class="sc-flow__arrow" aria-hidden="true">→<\/span><small class="sc-flow__edge-label">Transforms<\/small>/);
+  assert.match(html, /class="sc-flow__edge" data-from="tracker" data-to="core" data-direction="forward"[\s\S]*<small class="sc-flow__edge-label">Transforms<\/small>/);
   assert.match(html, /<\/div><p class="sc-flow__boundary">Research prototype<\/p><\/figure>/);
   assertInOrder(html, ['Figure 1.', 'Figure 2.', 'Figure 3.', 'System flow', 'Research prototype', '3D Medical Imaging · Surgical Navigation Developer']);
   assert.doesNotMatch(html, /class="sc-gallery"/);
+});
+
+test('system-flow web renderer preserves branching edge tuples without inventing a sibling chain', () => {
+  const diagram = branchingStoryDiagramFixture();
+  const html = render.systemFlowDiagramHtml(diagram, 'en', 1);
+  assert.deepEqual(
+    [...html.matchAll(/data-node-key="([^"]+)"/g)].map((match) => match[1]),
+    ['A', 'B', 'C', 'D']
+  );
+  assert.deepEqual(
+    [...html.matchAll(/class="sc-flow__edge" data-from="([^"]+)" data-to="([^"]+)" data-direction="([^"]+)"/g)]
+      .map((match) => match.slice(1)),
+    [['A', 'B', 'forward'], ['B', 'C', 'forward'], ['B', 'D', 'bidirectional']]
+  );
+  assert.match(html, /data-flow-level="2"[\s\S]*data-node-key="C"[\s\S]*data-node-key="D"/);
+  assert.match(html, /data-from="B" data-to="C"[\s\S]*>B node<[\s\S]*>C node</);
+  assert.match(html, /data-from="B" data-to="D"[\s\S]*>B node<[\s\S]*>D node</);
+  assert.doesNotMatch(html, /data-from="C" data-to="D"/);
+});
+
+test('FOAA architecture web flow preserves all shared-state fan-out endpoints', () => {
+  const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
+  const diagram = project.storySections.find((item) => item.key === 'system-architecture').diagram;
+  const expected = diagram.edges.map((edge) => [edge.from, edge.to, edge.direction]);
+  const html = render.systemFlowDiagramHtml(diagram, 'en', 5);
+  const actual = [...html.matchAll(/class="sc-flow__edge" data-from="([^"]+)" data-to="([^"]+)" data-direction="([^"]+)"/g)]
+    .map((match) => match.slice(1));
+  assert.deepEqual(actual, expected);
+  assert.deepEqual(actual.slice(2).map((edge) => edge[0]), ['shared-state', 'shared-state', 'shared-state']);
+  assert.doesNotMatch(html, /data-from="landmarks" data-to="engines"|data-from="engines" data-to="evaluation-export"/);
+});
+
+test('story figure counting includes before-standard diagrams so after-standard media numbering stays continuous', () => {
+  const before = {
+    key: 'before-diagram', layout: 'wide', placement: 'before-standard',
+    translations: { ko: { heading: '전', body: '전' }, en: { heading: 'Before', body: 'Before' } },
+    diagram: storyDiagramFixture()
+  };
+  const after = storySectionFixture();
+  after.key = 'after-media';
+  after.placement = 'after-standard';
+  const project = { storySections: [before, after] };
+  assert.equal(render.storyFigureCount(project, 'before-standard'), 1);
+  const html = render.storySectionsHtml(project, 'en', '../../', 1 + render.storyFigureCount(project, 'before-standard'), 'after-standard');
+  assert.match(html, /Figure 2\./);
+  assert.doesNotMatch(html, /Figure 1\./);
 });
 
 test('non-story cases retain the legacy case sequence and omit story markup', () => {
@@ -2149,7 +2218,7 @@ test('story renderer places sections around standard evidence and renders locali
   assert.match(html, /진행 중 · 연구진 검증/);
   assertInOrder(html, ['통합 워크플로우', '내 역할', '결과와 근거', '한계와 팀 성과', '장기 방향', '관련 프로젝트'], 'story order');
   assert.match(html, /href="\.\.\/\.\.\/projects\/mandibular-fracture\/"[^>]*>하악골 골절 정복 최적화<\/a>/);
-  assert.match(html, /class="sc-flow__track"/);
+  assert.match(html, /class="sc-flow__track sc-flow__levels"/);
 });
 
 test('reciprocal related projects render on story and legacy cases across locales and protocols', () => {
@@ -2448,17 +2517,30 @@ test('SMCNavi long-form CSS provides wide, grid, and narrow flow layouts', () =>
   const scholarCss = read('css/scholar.css');
   for (const selector of [
     '.sc-story', '.sc-story__section', '.sc-story__media--grid', '.sc-case__role-label',
-    '.sc-flow__track', '.sc-flow__node', '.sc-flow__node-detail', '.sc-flow__edge',
-    '.sc-flow__arrow', '.sc-flow__edge-label', '.sc-flow__boundary'
+    '.sc-flow__graph', '.sc-flow__levels', '.sc-flow__level', '.sc-flow__node', '.sc-flow__node-detail',
+    '.sc-flow__edges', '.sc-flow__edge', '.sc-flow__edge-endpoints', '.sc-flow__arrow', '.sc-flow__edge-label', '.sc-flow__boundary'
   ]) {
     assert.match(scholarCss, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   const narrow = cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*760px\)/i).join('\n');
   assert.match(narrow, /\.sc-story__section--grid[\s\S]*grid-template-columns:\s*1fr/);
   assert.match(narrow, /\.sc-story__media--grid[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(narrow, /\.sc-flow__track[\s\S]*flex-direction:\s*column/);
-  assert.match(narrow, /\.sc-flow__arrow\s*\{[^}]*transform:\s*rotate\(90deg\)/);
+  assert.match(narrow, /\.sc-flow__levels[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(narrow, /\.sc-flow__edges[\s\S]*grid-template-columns:\s*1fr/);
+  assert.doesNotMatch(narrow, /\.sc-flow__arrow\s*\{[^}]*transform\s*:/);
   assert.doesNotMatch(narrow, /\.sc-flow__edge-label\s*\{[^}]*transform\s*:/);
+});
+
+test('system-flow CSS presents topological levels and preserves explicit edge cards on narrow screens', () => {
+  const css = read('css/scholar.css');
+  for (const selector of ['.sc-flow__graph', '.sc-flow__levels', '.sc-flow__level', '.sc-flow__edges', '.sc-flow__edge-endpoints']) {
+    assert.ok(cssRuleBodies(css, selector).length, `missing selector ${selector}`);
+  }
+  assert.ok(cssRuleBodies(css, '.sc-flow__levels').some((body) => /display:\s*grid/.test(body)));
+  assert.ok(cssRuleBodies(css, '.sc-flow__level').some((body) => /display:\s*grid/.test(body)));
+  const narrow = cssAtRuleBodies(css, /@media\s*\(max-width:\s*760px\)/i).join('\n');
+  assert.match(narrow, /\.sc-flow__levels[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(narrow, /\.sc-flow__edges[\s\S]*grid-template-columns:\s*1fr/);
 });
 
 test('story CSS keeps media and system flow responsive without decorative components', () => {
@@ -2466,13 +2548,13 @@ test('story CSS keeps media and system flow responsive without decorative compon
   for (const selector of [
     '.sc-story__section',
     '.sc-story__media--grid',
-    '.sc-flow__track',
+    '.sc-flow__levels',
     '.sc-flow__node',
     '.sc-flow__edge',
     '.sc-related-projects'
   ]) assert.match(css, new RegExp(selector.replace(/[.*+?^$()|[\]{}]/g, '\\$&')));
   assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-story__media--grid[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-flow__track[\s\S]*flex-direction:\s*column/);
+  assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-flow__levels[\s\S]*grid-template-columns:\s*1fr/);
   assert.doesNotMatch(css, /carousel|lightbox|animation-name|filter:\s*drop-shadow/i);
 });
 
@@ -2883,6 +2965,48 @@ test('PDF manifest expands to eighteen documents and thirty-six published artifa
   assert.equal(manifest.documents.length, 18);
   assert.equal(manifest.artifacts.length, 36);
   assert.equal(manifest.generatorVersion, '3.2');
+});
+
+test('PDF system-flow DAG layout resolves every connector from and to its keyed node rectangle', (t) => {
+  const python = task5Python();
+  if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
+  const auditCode = [
+    'import importlib.util, json, pathlib, sys',
+    'source = pathlib.Path(sys.argv[1]) / "scripts/generate-portfolio-pdfs.py"',
+    'spec = importlib.util.spec_from_file_location("portfolio_pdf_generator", source)',
+    'module = importlib.util.module_from_spec(spec)',
+    'spec.loader.exec_module(module)',
+    'nodes = [{"key": key} for key in ["A", "B", "C", "D"]]',
+    'edges = [',
+    '  {"from": "A", "to": "B", "direction": "forward"},',
+    '  {"from": "B", "to": "C", "direction": "forward"},',
+    '  {"from": "B", "to": "D", "direction": "bidirectional"},',
+    ']',
+    'layout = module.system_flow_dag_layout(nodes, edges, {"A": 32, "B": 43, "C": 32, "D": 43}, 36, 540, 700)',
+    'contacts = []',
+    'drawn = []',
+    'class Canvas:',
+    '  def __init__(self): self.lines = []',
+    '  def line(self, x1, y1, x2, y2): self.lines.append([x1, y1, x2, y2])',
+    'for connector in layout["edges"]:',
+    '  source_rect = layout["nodes"][connector["from"]]',
+    '  target_rect = layout["nodes"][connector["to"]]',
+    '  start, end = connector["points"][0], connector["points"][-1]',
+    '  contacts.append(start[0] == source_rect["left"] and source_rect["bottom"] <= start[1] <= source_rect["top"] and end[0] == target_rect["left"] and target_rect["bottom"] <= end[1] <= target_rect["top"])',
+    '  canvas = Canvas()',
+    '  module.draw_system_flow_connector(canvas, connector)',
+    '  drawn.append(canvas.lines[0][:2] == start and canvas.lines[-1][2:] == end)',
+    'print(json.dumps({"levels": layout["levels"], "tuples": [[edge["from"], edge["to"], edge["direction"]] for edge in layout["edges"]], "contacts": contacts, "drawn": drawn}))'
+  ].join('\n');
+  const audit = childProcess.spawnSync(python, ['-c', auditCode, root.replace(/\\/g, '/')], {
+    cwd: root, encoding: 'utf8', timeout: 30_000
+  });
+  assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+  const result = JSON.parse(audit.stdout);
+  assert.deepEqual(result.levels, [['A'], ['B'], ['C', 'D']]);
+  assert.deepEqual(result.tuples, [['A', 'B', 'forward'], ['B', 'C', 'forward'], ['B', 'D', 'bidirectional']]);
+  assert.deepEqual(result.contacts, [true, true, true]);
+  assert.deepEqual(result.drawn, [true, true, true]);
 });
 
 test('digital occlusion architecture PDF keeps a visible gutter between wrapped node columns', (t) => {

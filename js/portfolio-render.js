@@ -1072,6 +1072,44 @@
     return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', itemCopy.caption, '');
   }
 
+  function systemFlowLevels(diagram) {
+    var nodes = Array.isArray(diagram && diagram.nodes) ? diagram.nodes : [];
+    var edges = Array.isArray(diagram && diagram.edges) ? diagram.edges : [];
+    var order = new Map(nodes.map(function (node, index) { return [node.key, index]; }));
+    var indegree = new Map(nodes.map(function (node) { return [node.key, 0]; }));
+    var outgoing = new Map(nodes.map(function (node) { return [node.key, []]; }));
+    edges.forEach(function (edge) {
+      if (!indegree.has(edge.from) || !indegree.has(edge.to)) return;
+      indegree.set(edge.to, indegree.get(edge.to) + 1);
+      outgoing.get(edge.from).push(edge.to);
+    });
+    var levelsByKey = new Map(nodes.map(function (node) { return [node.key, 0]; }));
+    var ready = nodes.filter(function (node) { return indegree.get(node.key) === 0; }).map(function (node) { return node.key; });
+    var visited = new Set();
+    while (ready.length) {
+      ready.sort(function (left, right) { return order.get(left) - order.get(right); });
+      var key = ready.shift();
+      if (visited.has(key)) continue;
+      visited.add(key);
+      outgoing.get(key).forEach(function (target) {
+        levelsByKey.set(target, Math.max(levelsByKey.get(target), levelsByKey.get(key) + 1));
+        indegree.set(target, indegree.get(target) - 1);
+        if (indegree.get(target) === 0) ready.push(target);
+      });
+    }
+    var fallbackLevel = Math.max(0, ...levelsByKey.values()) + 1;
+    nodes.forEach(function (node) {
+      if (!visited.has(node.key)) levelsByKey.set(node.key, fallbackLevel);
+    });
+    var levels = [];
+    nodes.forEach(function (node) {
+      var level = levelsByKey.get(node.key);
+      if (!levels[level]) levels[level] = [];
+      levels[level].push(node);
+    });
+    return levels.filter(Boolean);
+  }
+
   function systemFlowDiagramHtml(diagram, locale, figureNumber) {
     if (!diagram || diagram.kind !== 'system-flow') return '';
     var normalized = localeOf(locale);
@@ -1079,24 +1117,36 @@
     var figureLabel = Number.isInteger(figureNumber)
       ? '<span class="sc-figure__label">' + escapeHtml(pageCopy[normalized].figure + ' ' + figureNumber + '.') + '</span> '
       : '';
+    var nodes = diagram.nodes || [];
+    var nodeByKey = new Map(nodes.map(function (node) { return [node.key, node]; }));
     var ariaParts = [diagramCopy.title];
-    var track = (diagram.nodes || []).map(function (node, index) {
-      var nodeCopy = translation(node, normalized);
-      ariaParts.push(nodeCopy.label);
-      var edge = diagram.edges && diagram.edges[index];
-      var edgeHtml = '';
-      if (edge) {
-        var edgeCopy = translation(edge, normalized);
-        ariaParts.push(edgeCopy.label);
-        edgeHtml = '<span class="sc-flow__edge" data-direction="' + escapeHtml(edge.direction) + '"><span class="sc-flow__arrow" aria-hidden="true">' +
-          (edge.direction === 'bidirectional' ? '⇄' : '→') + '</span><small class="sc-flow__edge-label">' + escapeHtml(edgeCopy.label) + '</small></span>';
-      }
-      return '<div class="sc-flow__node"><strong>' + escapeHtml(nodeCopy.label) + '</strong><small class="sc-flow__node-detail">' + escapeHtml(nodeCopy.detail) + '</small></div>' + edgeHtml;
+    var levels = systemFlowLevels(diagram);
+    var levelHtml = levels.map(function (levelNodes, levelIndex) {
+      var nodeHtml = levelNodes.map(function (node) {
+        var nodeCopy = translation(node, normalized);
+        ariaParts.push(nodeCopy.label);
+        return '<div class="sc-flow__node" data-node-key="' + escapeHtml(node.key) + '" data-flow-level="' + levelIndex + '"><strong>' +
+          escapeHtml(nodeCopy.label) + '</strong><small class="sc-flow__node-detail">' + escapeHtml(nodeCopy.detail) + '</small></div>';
+      }).join('');
+      return '<div class="sc-flow__level" data-flow-level="' + levelIndex + '">' + nodeHtml + '</div>';
+    }).join('');
+    var edgeHtml = (diagram.edges || []).map(function (edge) {
+      var edgeCopy = translation(edge, normalized);
+      var sourceCopy = translation(nodeByKey.get(edge.from), normalized);
+      var targetCopy = translation(nodeByKey.get(edge.to), normalized);
+      var arrow = edge.direction === 'bidirectional' ? '⇄' : '→';
+      ariaParts.push(sourceCopy.label + ' ' + edgeCopy.label + ' ' + targetCopy.label);
+      return '<li class="sc-flow__edge" data-from="' + escapeHtml(edge.from) + '" data-to="' + escapeHtml(edge.to) +
+        '" data-direction="' + escapeHtml(edge.direction) + '"><span class="sc-flow__edge-endpoints"><span class="sc-flow__edge-from">' +
+        escapeHtml(sourceCopy.label) + '</span><span class="sc-flow__arrow" aria-hidden="true">' + arrow +
+        '</span><span class="sc-flow__edge-to">' + escapeHtml(targetCopy.label) + '</span></span><small class="sc-flow__edge-label">' +
+        escapeHtml(edgeCopy.label) + '</small></li>';
     }).join('');
     ariaParts.push(diagramCopy.boundaryLabel);
     return '<figure class="sc-figure sc-flow-figure"><figcaption>' + figureLabel + '<strong>' + escapeHtml(diagramCopy.title) + '</strong> ' +
-      escapeHtml(diagramCopy.caption) + '</figcaption><div class="sc-flow__track" aria-label="' + escapeHtml(ariaParts.join(', ')) + '">' +
-      track + '</div><p class="sc-flow__boundary">' + escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
+      escapeHtml(diagramCopy.caption) + '</figcaption><div class="sc-flow__graph" aria-label="' + escapeHtml(ariaParts.join(', ')) + '"><div class="sc-flow__track sc-flow__levels" style="--sc-flow-level-count:' +
+      levels.length + '">' + levelHtml + '</div><ol class="sc-flow__edges">' + edgeHtml + '</ol></div><p class="sc-flow__boundary">' +
+      escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
   }
 
   function storyPlacement(section) {
@@ -1138,9 +1188,11 @@
     return (projectRecord && Array.isArray(projectRecord.storySections) ? projectRecord.storySections : [])
       .filter(function (section) { return storyPlacement(section) === requestedPlacement; })
       .reduce(function (total, section) {
-        return total + (Array.isArray(section && section.media) ? section.media : []).filter(function (item) {
+        var mediaCount = (Array.isArray(section && section.media) ? section.media : []).filter(function (item) {
           return isApprovedImage(item) || isApprovedVideo(item);
         }).length;
+        var diagramCount = section && section.diagram && section.diagram.kind === 'system-flow' ? 1 : 0;
+        return total + mediaCount + diagramCount;
       }, 0);
   }
 
@@ -1438,6 +1490,7 @@
     storySectionsErrors: storySectionsErrors,
     storySectionsHtml: storySectionsHtml,
     systemFlowDiagramHtml: systemFlowDiagramHtml,
+    systemFlowLevels: systemFlowLevels,
     storyFigureCount: storyFigureCount,
     relatedProjectsHtml: relatedProjectsHtml,
     caseStudyHtml: caseStudyHtml,
