@@ -21,7 +21,7 @@ const privatePartnerPattern = render.policy.prohibitedPartnerPattern;
 const isSafePublicPath = render.isSafePublicPath;
 const siteUrl = 'https://rafaam11.github.io/';
 const pdfGeneratorRelativePath = path.join('scripts', 'generate-portfolio-pdfs.py');
-const pdfGeneratorVersion = '3.1';
+const pdfGeneratorVersion = '3.2';
 const pageMountContracts = [
   { tag: 'header', id: 'site-nav', label: 'shared navigation mount' },
   { tag: 'main', id: 'main-content', label: 'main-content landmark' },

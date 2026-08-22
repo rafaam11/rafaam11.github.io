@@ -2777,6 +2777,29 @@ test('SMCNavi PDF source preserves story sections, representative figures, and o
   assert.equal(project.storySections.find((item) => item.key === 'system-architecture').diagram.kind, 'system-flow');
 });
 
+test('PDF source preserves the digital occlusion story, two diagrams, and three selected figures', () => {
+  const payload = require('../scripts/export-portfolio-data.cjs').exportData();
+  const project = payload.projects.find((item) => item.slug === 'digital-occlusion-workflow');
+  assert.equal(payload.schemaVersion, 1);
+  assert.equal(project.storySections.length, 6);
+  assert.deepEqual(project.pdfSequence.diagrams, [
+    { storySectionKey: 'integrated-workflow' },
+    { storySectionKey: 'system-architecture' }
+  ]);
+  assert.deepEqual(project.pdfSequence.figureIds, [
+    'digital-occlusion-workflow-landmark-01',
+    'digital-occlusion-workflow-occlusion-01',
+    'digital-occlusion-workflow-evaluation-01'
+  ]);
+});
+
+test('PDF manifest expands to eighteen documents and thirty-six published artifacts', () => {
+  const manifest = JSON.parse(read('output/pdf/manifest.json'));
+  assert.equal(manifest.documents.length, 18);
+  assert.equal(manifest.artifacts.length, 36);
+  assert.equal(manifest.generatorVersion, '3.2');
+});
+
 test('SKADI evidence-first PDFs publish matching five-page KO and EN artifacts', () => {
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   const entries = manifest.artifacts.filter((artifact) => artifact.slug === 'skadi-tracking-software');
@@ -2967,11 +2990,12 @@ test('Task 5 integrated review renders each middle block on its contracted page 
       'for slug in slugs:',
       '    reader = PdfReader(str(root / "output" / "pdf" / f"{slug}-en.pdf"))',
       '    result[slug] = chr(10).join((page.extract_text() or "") for page in reader.pages)',
-      'for locale in ["ko", "en"]:',
-      '    name = f"surgical-navigation-{locale}.pdf"',
-      '    reader = PdfReader(str(root / "output" / "pdf" / name))',
-      '    result[name] = chr(10).join((page.extract_text() or "") for page in reader.pages)',
-      '    result["pages"][name] = len(reader.pages)',
+      'for slug in ["surgical-navigation", "digital-occlusion-workflow"]:',
+      '    for locale in ["ko", "en"]:',
+      '        name = f"{slug}-{locale}.pdf"',
+      '        reader = PdfReader(str(root / "output" / "pdf" / name))',
+      '        result[name] = chr(10).join((page.extract_text() or "") for page in reader.pages)',
+      '        result["pages"][name] = len(reader.pages)',
       'reader = PdfReader(str(root / "output" / "pdf" / "surgical-navigation-en.pdf"))',
       'def has_image(page):',
       '    xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
@@ -2992,10 +3016,13 @@ test('Task 5 integrated review renders each middle block on its contracted page 
           : project.blocks.find((candidate) => candidate.key === key);
         assert.ok(extracted[project.slug].includes(section.translations.en.heading), `${project.slug}: document omits ${key}`);
       }
-      const diagram = project.pdfSequence.diagram.storySectionKey
-        ? project.storySections.find((section) => section.key === project.pdfSequence.diagram.storySectionKey).diagram
-        : project.pdfSequence.diagram;
-      assert.ok(extracted[project.slug].includes(diagram.translations.en.title), `${project.slug}: diagram title`);
+      const contracts = project.pdfSequence.diagrams || [project.pdfSequence.diagram];
+      for (const contract of contracts) {
+        const diagram = contract.storySectionKey
+          ? project.storySections.find((section) => section.key === contract.storySectionKey).diagram
+          : contract;
+        assert.ok(extracted[project.slug].includes(diagram.translations.en.title), `${project.slug}: diagram title`);
+      }
     }
     assert.equal(extracted.approvedImage, true, 'approved local images must be placed in the document');
     for (const [locale, required] of [
@@ -3010,6 +3037,16 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     }
     assert.equal(extracted.pages['surgical-navigation-ko.pdf'], 6);
     assert.equal(extracted.pages['surgical-navigation-en.pdf'], 6);
+    for (const [locale, required] of [
+      ['ko', ['구강악안면 디지털 교합 워크플로우', '기술 리드', '연구진 검증', 'RMSE', 'Gap', 'FRE', '개인 소유와 팀 결과 분리']],
+      ['en', ['Maxillofacial Digital Occlusion Workflow', 'Technical Lead', 'Researcher Validation', 'RMSE', 'Gap', 'FRE', 'Individual ownership separated from team results']]
+    ]) {
+      const text = extracted[`digital-occlusion-workflow-${locale}.pdf`];
+      for (const value of required) assert.ok(text.includes(value), `${locale}: missing ${value}`);
+      assert.doesNotMatch(text, /deployed at (?:a )?hospital|used in real surgery|clinically (?:validated|effective|proven)|digitrack-inc|github\.com\/digitrack|(?:[A-Za-z]:\\|file:\/\/)/i);
+      assert.ok(extracted.pages[`digital-occlusion-workflow-${locale}.pdf`] >= 6);
+      assert.ok(extracted.pages[`digital-occlusion-workflow-${locale}.pdf`] <= 8);
+    }
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
