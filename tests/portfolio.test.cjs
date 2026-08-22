@@ -2687,12 +2687,14 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     }
     assert.equal(extracted.approvedImage, true, 'approved local images must be placed in the document');
     for (const [locale, required] of [
-      ['ko', ['SMCNavi · HoloLens 수술내비게이션', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '연구 프로토타입', '주장하지 않습니다']],
-      ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', 'Research prototype', 'This case does not claim']]
+      ['ko', ['SMCNavi · HoloLens 수술내비게이션', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '3D Slicer · 영상·모델 · 변환·정합·캘리브레이션 · 6개 워크플로', '연구 프로토타입', '주장하지 않습니다']],
+      ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', '3D Slicer · images and models · transforms, registration, calibration · six workflows', 'Research prototype', 'This case does not claim']]
     ]) {
       const text = extracted[`surgical-navigation-${locale}.pdf`];
       for (const value of required) assert.ok(text.includes(value), `${locale}: missing ${value}`);
       assert.doesNotMatch(text, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|digitrack-inc|특허출원|patent application/i);
+      assert.equal(text.split('→').length - 1, 1, `${locale}: one forward flow direction symbol`);
+      assert.equal(text.split('⇄').length - 1, 4, `${locale}: four bidirectional flow direction symbols`);
     }
     assert.equal(extracted.pages['surgical-navigation-ko.pdf'], 6);
     assert.equal(extracted.pages['surgical-navigation-en.pdf'], 6);
@@ -3463,7 +3465,12 @@ test('Task 5 review round 5 ignores and reports every stranded CV recovery artif
 test('full validator passes without decorative SVG fallback assets', () => {
   assert.deepEqual(validator.validatePortfolio(root), []);
   const visualFiles = validator.publicPortfolioVisualFiles(root);
-  assert.equal(visualFiles.length, 50, 'approved derivatives across all eight cases');
+  assert.equal(new Set(visualFiles.map((file) => file.relativePath)).size, visualFiles.length, 'public derivatives are unique');
+  assert.deepEqual(
+    [...new Set(visualFiles.map((file) => file.relativePath.replace(/\\/g, '/').split('/')[2]))].sort(),
+    [...slugs].sort(),
+    'approved derivatives cover all eight cases'
+  );
   assert.ok(visualFiles.every((file) => /\.(?:png|mp4)$/i.test(file.relativePath)), 'only PNG and MP4 derivatives are published');
 });
 
