@@ -765,6 +765,7 @@ def parse_arguments(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--review-dir", type=Path, help="Ignored directory for all-page PNGs and contact sheets")
     parser.add_argument("--font-regular", type=Path, default=Path(r"C:\Windows\Fonts\malgun.ttf"))
     parser.add_argument("--font-bold", type=Path, default=Path(r"C:\Windows\Fonts\malgunbd.ttf"))
+    parser.add_argument("--font-symbol", type=Path, default=Path(r"C:\Windows\Fonts\NotoSansKR-VF.ttf"))
     parser.add_argument("--validate-only", action="store_true", help="Validate JSON without importing PDF dependencies")
     return parser.parse_args(argv)
 
@@ -1295,13 +1296,13 @@ class TechnicalDocument:
             self.text(node_copy["label"], self.left + 38, node_top - 12, 150,
                       size=8.5, font="MalgunGothic-Bold", leading=10, max_lines=1)
             self.text(node_copy["detail"], self.left + 194, node_top - 12, self.right - self.left - 204,
-                      size=8, leading=10, color="muted", max_lines=1)
+                      size=7.8, leading=10, color="muted", max_lines=1)
             if index < len(edges):
                 edge = edges[index]
                 edge_copy = localized(edge, locale)
                 edge_y = node_bottom - 12
                 c.setFillColor(self.colors["signal"])
-                c.setFont("MalgunGothic-Bold", 9)
+                c.setFont("FlowSymbol", 9)
                 c.drawString(self.left + 14, edge_y, "⇄" if edge["direction"] == "bidirectional" else "→")
                 self.text(edge_copy["label"], self.left + 38, edge_y, self.right - self.left - 48,
                           size=7.8, leading=9, color="muted", max_lines=1)
@@ -1315,11 +1316,14 @@ class TechnicalDocument:
         return boundary_y - 18
 
 
-def register_fonts(dependencies: dict[str, Any], regular: Path, bold: Path) -> None:
+def register_fonts(dependencies: dict[str, Any], regular: Path, bold: Path,
+                   symbol: Path = Path(r"C:\Windows\Fonts\NotoSansKR-VF.ttf")) -> None:
     require(regular.is_file(), f"Missing Korean font: {regular}")
     require(bold.is_file(), f"Missing Korean bold font: {bold}")
+    require(symbol.is_file(), f"Missing flow symbol font: {symbol}")
     dependencies["pdfmetrics"].registerFont(dependencies["TTFont"]("MalgunGothic", str(regular)))
     dependencies["pdfmetrics"].registerFont(dependencies["TTFont"]("MalgunGothic-Bold", str(bold)))
+    dependencies["pdfmetrics"].registerFont(dependencies["TTFont"]("FlowSymbol", str(symbol)))
 
 
 def localized(record: dict[str, Any], locale: str) -> dict[str, Any]:
@@ -2160,7 +2164,12 @@ def main(argv: list[str]) -> int:
         print(f"PDF input validation passed: {len(payload['projects'])} projects, 2 locales, public CV {payload['cv']['version']}.")
         return 0
     dependencies = import_pdf_dependencies()
-    register_fonts(dependencies, options.font_regular.resolve(), options.font_bold.resolve())
+    register_fonts(
+        dependencies,
+        options.font_regular.resolve(),
+        options.font_bold.resolve(),
+        options.font_symbol.resolve(),
+    )
     manifest = generate(
         payload,
         dependencies,

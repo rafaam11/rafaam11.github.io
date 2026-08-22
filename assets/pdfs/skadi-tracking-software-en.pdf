@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 36 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.42e10ff6d24ddf7513f11559f9e5884b 4 0 R
+/FormXob.5b89ed9a881c008c415d203b0cda2fcb 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -72,7 +72,7 @@ endobj
 <<
 /Annots [ 6 0 R ] /Contents 37 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.6902b323ccee09583e0c276ae0ae13a3 8 0 R /FormXob.c5716744d920fcbf34f0bbcc59bf02c5 7 0 R /FormXob.e14f8d78454e92f361a9089722a69f2a 9 0 R
+/FormXob.0c3b5ab5850286aaba74679f21d01a9c 7 0 R /FormXob.40bd0ba8660152b2a5f6e6034b6cc106 9 0 R /FormXob.ddec707186d432e4ed3b211cb52b656c 8 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -131,7 +131,7 @@ endobj
 <<
 /Annots [ 14 0 R ] /Contents 39 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.3d424c2bdc6446668a2d15126453be08 16 0 R /FormXob.56f438c8bf5d681e5a66e54a82f4a136 15 0 R
+/FormXob.010af410aca72e6cd2789e4ff2394956 15 0 R /FormXob.89e3c6f51be8799151e52f17595414ea 16 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -186,7 +186,7 @@ endobj
 <<
 /Annots [ 18 0 R 20 0 R 21 0 R 22 0 R 23 0 R ] /Contents 40 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.19157af0e0c2b95a9dd57c230f269cc2 19 0 R
+/FormXob.5be82d51b50fee1aa2cb9b4e82b72a9a 19 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -849,7 +849,7 @@ BT 1 0 0 1 48 606.8898 Tm /F2+0 10 Tf 12 TL (Maintain MarkerEditor, SKADI Viewer
 BT 1 0 0 1 48 590.8898 Tm /F2+0 10 Tf 12 TL (navigation and extended to robot precision docking.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 294.0472 cm
-/FormXob.42e10ff6d24ddf7513f11559f9e5884b Do
+/FormXob.5b89ed9a881c008c415d203b0cda2fcb Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 273.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Silent lead video following Define \001 Open \001 Track \001 Apply through MarkerEditor, the API, Viewer 6DoF, and the) Tj T* ET
@@ -892,7 +892,7 @@ BT 1 0 0 1 48 752.8898 Tm /F3+0 11 Tf 13.2 TL (Marker definition and input valid
 BT 1 0 0 1 48 733.8898 Tm /F2+0 9 Tf 10.8 TL (MarkerEditor imports, saves, and exports marker geometry and validates coordinate input.) Tj T* ET
 q
 242.6378 0 0 136.4838 48 583.6479 cm
-/FormXob.c5716744d920fcbf34f0bbcc59bf02c5 Do
+/FormXob.0c3b5ab5850286aaba74679f21d01a9c Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 572.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. MarkerEditor marker-file import, save, and export flow with) Tj T* ET
@@ -900,7 +900,7 @@ BT 1 0 0 1 48 572.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. MarkerEditor marker-fi
 BT 1 0 0 1 48 562.8898 Tm /F2+0 7.7 Tf 9.24 TL (input validation) Tj T* ET
 q
 242.6378 0 0 136.4838 304.6378 583.6479 cm
-/FormXob.6902b323ccee09583e0c276ae0ae13a3 Do
+/FormXob.ddec707186d432e4ed3b211cb52b656c Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 572.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. Single API entry point with OpenEx\(\) success and error) Tj T* ET
@@ -908,7 +908,7 @@ BT 1 0 0 1 304.6378 572.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. Single API entry
 BT 1 0 0 1 304.6378 562.8898 Tm /F2+0 7.7 Tf 9.24 TL (branches) Tj T* ET
 q
 337.7778 0 0 190 128.7489 341.8898 cm
-/FormXob.e14f8d78454e92f361a9089722a69f2a Do
+/FormXob.40bd0ba8660152b2a5f6e6034b6cc106 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 332.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 4. Real-time 6DoF marker tracking in SKADI Viewer) Tj T* ET
@@ -1188,13 +1188,13 @@ BT 1 0 0 1 48 692.3898 Tm /F2+0 9.5 Tf 11.4 TL (In a de-identified dental CT and
 BT 1 0 0 1 48 678.3898 Tm /F2+0 9.5 Tf 11.4 TL (and the application boundary is checked with the Slicer template.) Tj T* ET
 q
 242.6378 0 0 136.4838 48 502.6479 cm
-/FormXob.56f438c8bf5d681e5a66e54a82f4a136 Do
+/FormXob.010af410aca72e6cd2789e4ff2394956 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 466.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 5. De-identified dental patient-to-image registration flow) Tj T* ET
 q
 242.6378 0 0 136.4838 304.6378 502.6479 cm
-/FormXob.3d424c2bdc6446668a2d15126453be08 Do
+/FormXob.89e3c6f51be8799151e52f17595414ea Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 466.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 6. 3D Slicer custom-application template structure) Tj T* ET
@@ -1265,7 +1265,7 @@ BT 1 0 0 1 48 752.8898 Tm /F3+0 11 Tf 13.2 TL (Industrial extension: robot preci
 BT 1 0 0 1 48 734.1898 Tm /F2+0 8.7 Tf 10.44 TL (The same 6DoF tracking layer supplies the transform between robot-end and target markers for a docking application.) Tj T* ET
 q
 177.7778 0 0 100 208.7489 625.3898 cm
-/FormXob.19157af0e0c2b95a9dd57c230f269cc2 Do
+/FormXob.5be82d51b50fee1aa2cb9b4e82b72a9a Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 616.3898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 7. Coordinate structure for robot tracking and precision docking) Tj T* ET
