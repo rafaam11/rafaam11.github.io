@@ -13,7 +13,7 @@ Jinmin Kim의 연구자풍 포트폴리오입니다. 3D 정합, 의료영상, �
 1. Surgical Navigation Systems
 2. Mandibular Fracture Reduction Optimization
 3. Life Careverse
-4. rTMS Navigation Prototype
+4. rTMS Coil Navigation Software (NeuroPilot)
 5. Surface-guided Respiratory Tracking (SGRT)
 
 **Platform Software**

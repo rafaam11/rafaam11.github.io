@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "a0e2c11880aeac833c19f44e57b7ff3ed4aeda4bddf12da814596e571ace4cae",
+  "sourceDigest": "452eeb3cde30185cda7bf9c501f43cbb2fc1995eb2bd2f34e4111c0ce46238f2",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.0",
   "generatorSha256": "d272eb42ff68fa116220821035802a06edcb46247baa1877c10cbedd44feda72",
@@ -78,9 +78,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 3911,
-      "bytes": 1041932,
-      "sha256": "e6ed0b73ae0dde31bae5c337120ea192151753f222ee6914c17736bdd0f4f56a"
+      "characters": 3494,
+      "bytes": 1025134,
+      "sha256": "832fecc7f5b485ca4bf338699ab76e46a9a5f8a58d5f2a0a35bc0a23d0320285"
     },
     {
       "name": "rtms-navigation-en.pdf",
@@ -89,9 +89,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 7214,
-      "bytes": 867965,
-      "sha256": "c3868e0532fc98a195a6ef5cc156da4c791626d7a998092d613de2c4755cce16"
+      "characters": 6353,
+      "bytes": 866654,
+      "sha256": "d9a2a6f933b30bc9d91666c867ed8fec8e77a8a295134394d02c5e0c0c5d3a4a"
     },
     {
       "name": "respiratory-surface-guidance-ko.pdf",
@@ -261,8 +261,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 867965,
-      "sha256": "c3868e0532fc98a195a6ef5cc156da4c791626d7a998092d613de2c4755cce16"
+      "bytes": 866654,
+      "sha256": "d9a2a6f933b30bc9d91666c867ed8fec8e77a8a295134394d02c5e0c0c5d3a4a"
     },
     {
       "path": "assets/pdfs/rtms-navigation-ko.pdf",
@@ -270,8 +270,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 1041932,
-      "sha256": "e6ed0b73ae0dde31bae5c337120ea192151753f222ee6914c17736bdd0f4f56a"
+      "bytes": 1025134,
+      "sha256": "832fecc7f5b485ca4bf338699ab76e46a9a5f8a58d5f2a0a35bc0a23d0320285"
     },
     {
       "path": "assets/pdfs/skadi-tracking-software-en.pdf",
@@ -405,8 +405,8 @@
       "slug": "rtms-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 867965,
-      "sha256": "c3868e0532fc98a195a6ef5cc156da4c791626d7a998092d613de2c4755cce16"
+      "bytes": 866654,
+      "sha256": "d9a2a6f933b30bc9d91666c867ed8fec8e77a8a295134394d02c5e0c0c5d3a4a"
     },
     {
       "path": "output/pdf/rtms-navigation-ko.pdf",
@@ -414,8 +414,8 @@
       "slug": "rtms-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 1041932,
-      "sha256": "e6ed0b73ae0dde31bae5c337120ea192151753f222ee6914c17736bdd0f4f56a"
+      "bytes": 1025134,
+      "sha256": "832fecc7f5b485ca4bf338699ab76e46a9a5f8a58d5f2a0a35bc0a23d0320285"
     },
     {
       "path": "output/pdf/skadi-tracking-software-en.pdf",
