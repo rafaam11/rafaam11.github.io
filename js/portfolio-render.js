@@ -18,7 +18,7 @@
   var lifecycleStates = ['ongoing', 'completed', 'expected', 'research'];
   var capabilityKeys = ['registration', 'sensor-fusion', 'medical-navigation', 'xr-engineering', 'ai-product-engineering'];
   var tierKeys = ['medical-core', 'platform', 'industrial-spotlight', 'ai-build-lab'];
-  var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'life-careverse', 'rtms-navigation', 'respiratory-surface-guidance', 'skadi-tracking-software', 'unmanned-forklift', 'ai-build-lab'];
+  var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'digital-occlusion-workflow', 'life-careverse', 'rtms-navigation', 'respiratory-surface-guidance', 'skadi-tracking-software', 'unmanned-forklift', 'ai-build-lab'];
   var pdfDiagramKindsBySlug = {
     'surgical-navigation': 'system-flow',
     'mandibular-fracture': 'optimization-loop',
@@ -176,11 +176,12 @@
 
   function publicCopySafetyErrors(data) {
     var copy = portfolioPublicCopy(data);
+    var addressCopy = copy.replace(/악안면 30(?=개|\b)/g, '악안면 특징점');
     var errors = [];
     if (policy.privateCopyPathPattern.test(copy)) errors.push('Shared public data contains a private source path.');
     if (policy.privateCopyPhonePattern.test(copy)) errors.push('Shared public data contains private phone PII.');
     if (policy.privateCopyAgePattern.test(copy)) errors.push('Shared public data contains private age PII.');
-    if (policy.privateCopyAddressPattern.test(copy)) errors.push('Shared public data contains private address PII.');
+    if (policy.privateCopyAddressPattern.test(addressCopy)) errors.push('Shared public data contains private address PII.');
     if (policy.privateCopyPatientPattern.test(copy)) errors.push('Shared public data contains a private patient identifier.');
     return errors;
   }
@@ -407,7 +408,9 @@
       errors.push(label + ': system-flow diagram must contain exactly boundary, edges, kind, nodes, and translations.');
     }
     if (diagram.kind !== 'system-flow') errors.push(label + ': diagram kind must be system-flow.');
-    if (diagram.boundary !== 'prototype') errors.push(label + ': diagram boundary must be prototype.');
+    if (!['prototype', 'research-validation', 'ownership-boundary'].includes(diagram.boundary)) {
+      errors.push(label + ': diagram boundary must be prototype, research-validation, or ownership-boundary.');
+    }
     errors = errors.concat(translationErrors(diagram, ['title', 'caption', 'boundaryLabel'], label + ' diagram'));
     if (!Array.isArray(diagram.nodes) || diagram.nodes.length < 2) {
       errors.push(label + ': system-flow diagram requires at least two nodes.');
@@ -422,18 +425,58 @@
       }
       errors = errors.concat(translationErrors(node, ['label', 'detail'], label + ' node ' + index));
     });
-    if (!Array.isArray(diagram.edges) || diagram.edges.length !== Math.max(0, nodeKeys.length - 1)) {
-      errors.push(label + ': system-flow diagram requires exactly nodes.length - 1 edges.');
+    if (!Array.isArray(diagram.edges) || diagram.edges.length === 0) {
+      errors.push(label + ': system-flow diagram requires connected edges.');
     }
+    var validEdges = [];
+    var seenEdges = [];
     (Array.isArray(diagram.edges) ? diagram.edges : []).forEach(function (edge, index) {
       if (!edge || typeof edge !== 'object' || Array.isArray(edge) || JSON.stringify(Object.keys(edge).sort()) !== JSON.stringify(['direction', 'from', 'to', 'translations'])) {
         errors.push(label + ': edge ' + index + ' must contain exactly direction, from, to, and translations.');
       }
-      if (!edge || !nodeKeys.includes(edge.from) || !nodeKeys.includes(edge.to)) errors.push(label + ': edge endpoint must reference a known node.');
-      if (edge && (edge.from !== nodeKeys[index] || edge.to !== nodeKeys[index + 1])) errors.push(label + ': edge must follow the declared node order.');
+      if (!edge || !nodeKeys.includes(edge.from) || !nodeKeys.includes(edge.to)) {
+        errors.push(label + ': edge endpoint must reference a known node.');
+      } else if (edge.from === edge.to) {
+        errors.push(label + ': edge self reference is not allowed.');
+      } else {
+        var edgeKey = edge.from + '\u0000' + edge.to;
+        if (seenEdges.includes(edgeKey)) errors.push(label + ': duplicate edge is not allowed.');
+        seenEdges.push(edgeKey);
+        validEdges.push(edge);
+      }
       if (!edge || !storyDirections.includes(edge.direction)) errors.push(label + ': edge direction must be forward or bidirectional.');
       errors = errors.concat(translationErrors(edge, ['label'], label + ' edge ' + index));
     });
+    if (nodeKeys.length >= 2 && validEdges.length) {
+      var neighbours = Object.fromEntries(nodeKeys.map(function (key) { return [key, []]; }));
+      var indegree = Object.fromEntries(nodeKeys.map(function (key) { return [key, 0]; }));
+      validEdges.forEach(function (edge) {
+        neighbours[edge.from].push(edge.to);
+        neighbours[edge.to].push(edge.from);
+        indegree[edge.to] += 1;
+      });
+      var connected = [];
+      var pending = [nodeKeys[0]];
+      while (pending.length) {
+        var current = pending.pop();
+        if (connected.includes(current)) continue;
+        connected.push(current);
+        neighbours[current].forEach(function (next) { if (!connected.includes(next)) pending.push(next); });
+      }
+      if (connected.length !== nodeKeys.length) errors.push(label + ': system-flow diagram edges must connect every node.');
+
+      var roots = nodeKeys.filter(function (key) { return indegree[key] === 0; });
+      var processed = 0;
+      while (roots.length) {
+        var rootKey = roots.pop();
+        processed += 1;
+        validEdges.filter(function (edge) { return edge.from === rootKey; }).forEach(function (edge) {
+          indegree[edge.to] -= 1;
+          if (indegree[edge.to] === 0) roots.push(edge.to);
+        });
+      }
+      if (processed !== nodeKeys.length) errors.push(label + ': system-flow diagram edges must remain acyclic.');
+    }
     return errors;
   }
 
@@ -697,7 +740,7 @@
     }
 
     if (!Array.isArray(data.projects) || data.projects.length !== projectSlugs.length) {
-      errors.push('Portfolio data must contain exactly eight projects.');
+      errors.push('Portfolio data must contain exactly nine projects.');
     } else {
       if (JSON.stringify(data.projects.map(function (project) { return project && project.slug; })) !== JSON.stringify(projectSlugs)) {
         errors.push('Portfolio projects must use the known ordered slugs.');
