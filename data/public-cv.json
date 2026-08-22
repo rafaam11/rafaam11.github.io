@@ -103,6 +103,7 @@
               "title": "수술내비게이션 · 의료영상",
               "items": [
                 "삼성서울병원 구강악안면외과와 3년 이상 협업 — 2023년부터 격주 임상 미팅을 이어오며 정부과제 2건과 개발용역 1건을 메인 실무로 수행했습니다.",
+                "2026.03–현재 삼성서울병원 연구진과 구강악안면 디지털 교합 워크플로우를 공동 개발. 기술 리드·메인 개발자로 Custom App 아키텍처, end-to-end UI/UX, 특징점·교합 엔진 통합, 평가·내보내기 파이프라인을 담당하며 연구진 검증을 진행 중.",
                 "병원에서 사용 중인 3D Slicer 기반 수술내비게이션 통합 소프트웨어를 전담 개발했습니다 — 수술 계획을 광학 트래킹으로 정합·오버레이하고, HoloLens 2 좌표계 정합으로 AR 수술 가이드를 구현했습니다.",
                 "Meta Quest 기반 환자-의사 상담 XR 앱 개발 — 다중 사용자의 공간·음성·시나리오 상태를 동기화했습니다.",
                 "rTMS 코일 내비게이션 시스템(NeuroPilot) 주도 개발 — AT&C에 납품된 라이선스 기반 의료용 코일 내비게이션 소프트웨어 (보건의료 정부과제).",
@@ -115,6 +116,7 @@
               "title": "Surgical navigation and medical imaging",
               "items": [
                 "Over three years of collaboration with the oral and maxillofacial surgery department of Samsung Medical Center — biweekly clinical meetings since 2023, with two government programmes and one development contract carried as the main engineer.",
+                "Since 2026.03, co-developing a maxillofacial digital-occlusion workflow with Samsung Medical Center researchers. As technical lead and primary developer, owning the Custom App architecture, end-to-end UI/UX, landmark and occlusion-engine integration, and the evaluation/export pipeline while researcher validation is ongoing.",
                 "Sole developer of the 3D Slicer-based surgical-navigation software in use at the hospital — registering and overlaying the surgical plan through optical tracking, and building an AR surgical guide on a registered HoloLens 2 coordinate frame.",
                 "Built a patient-and-clinician consultation XR application on Meta Quest, synchronising spatial, voice, and scenario state across users.",
                 "Led development of the NeuroPilot rTMS coil-navigation system — a license-gated medical navigation product delivered to AT&C and under ongoing maintenance (health-technology government programme).",
