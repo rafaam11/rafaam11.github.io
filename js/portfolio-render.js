@@ -67,7 +67,7 @@
   var pageCopy = {
     ko: {
       personalRole: '내 역할', teamResult: '팀 성과', period: '기간', technology: '기술',
-      evidence: '근거', problem: '문제', approach: '접근', results: '결과와 근거', limits: '한계와 팀 성과',
+      evidence: '근거', problem: '문제', projectOverview: '프로젝트 개요', approach: '접근', results: '결과와 근거', limits: '한계와 팀 성과',
       components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
       evidenceGallery: '검증 가능한 증거', architecture: 'Define → Open → Track → Apply', roleAndStability: '내 역할과 API 안정성',
       publicResources: '공개 문서와 제품 정보', ownedRole: '내 역할', teamBoundary: '팀·협력자 경계', evidenceRefs: '연결 근거',
@@ -77,7 +77,7 @@
     },
     en: {
       personalRole: 'My role', teamResult: 'Team result', period: 'Period', technology: 'Technology',
-      evidence: 'Evidence', problem: 'Problem', approach: 'Approach', results: 'Results and evidence', limits: 'Limits and team result',
+      evidence: 'Evidence', problem: 'Problem', projectOverview: 'Project overview', approach: 'Approach', results: 'Results and evidence', limits: 'Limits and team result',
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
       evidenceGallery: 'Verifiable evidence', architecture: 'Define → Open → Track → Apply', roleAndStability: 'My role and API stability',
       publicResources: 'Public documentation and product information', ownedRole: 'My role', teamBoundary: 'Team and partner boundary', evidenceRefs: 'Linked evidence',
@@ -701,7 +701,8 @@
   function resolvedPdfDiagram(project) {
     var contract = project && project.pdfSequence && project.pdfSequence.diagram;
     if (contract && typeof contract.storySectionKey === 'string') {
-      var section = (project.storySections || []).find(function (item) {
+      var storySections = Array.isArray(project.storySections) ? project.storySections : [];
+      var section = storySections.find(function (item) {
         return item && item.key === contract.storySectionKey;
       });
       return section && section.diagram ? section.diagram : null;
@@ -1143,7 +1144,7 @@
         escapeHtml(edgeCopy.label) + '</small></li>';
     }).join('');
     ariaParts.push(diagramCopy.boundaryLabel);
-    return '<figure class="sc-figure sc-flow-figure"><figcaption>' + figureLabel + '<strong>' + escapeHtml(diagramCopy.title) + '</strong> ' +
+    return '<figure class="sc-figure sc-flow sc-flow-figure"><figcaption>' + figureLabel + '<strong>' + escapeHtml(diagramCopy.title) + '</strong> ' +
       escapeHtml(diagramCopy.caption) + '</figcaption><div class="sc-flow__graph" aria-label="' + escapeHtml(ariaParts.join(', ')) + '"><div class="sc-flow__track sc-flow__levels" style="--sc-flow-level-count:' +
       levels.length + '">' + levelHtml + '</div><ol class="sc-flow__edges">' + edgeHtml + '</ol></div><p class="sc-flow__boundary">' +
       escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
@@ -1435,8 +1436,10 @@
       ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>';
     if (hasStory) {
       var firstStoryFigure = lead ? 2 : 1;
+      var projectOverviewSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.projectOverview) + '</h2><p>' +
+        escapeHtml(project.summary) + '</p></section>';
       return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header + lead + problemSection +
-        storySectionsHtml(sourceProject, normalized, base, firstStoryFigure, 'before-standard') +
+        projectOverviewSection + storySectionsHtml(sourceProject, normalized, base, firstStoryFigure, 'before-standard') +
         roleSection + evidenceSection + limitSection +
         storySectionsHtml(sourceProject, normalized, base,
           firstStoryFigure + storyFigureCount(sourceProject, 'before-standard'), 'after-standard') +

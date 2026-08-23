@@ -1976,6 +1976,77 @@ test('SMCNavi bilingual long-form renders approved workflows, organisations, med
   }
 });
 
+test('SMCNavi story case renders the localized canonical summary in Project overview before story and My role', () => {
+  const expectations = {
+    ko: {
+      base: '../../',
+      overview: '<h2>프로젝트 개요</h2><p>DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 맞춤형 3D Slicer 수술내비게이션 플랫폼과 별도 HoloLens 공간 인터페이스 확장입니다.</p>',
+      role: '<h2>내 역할</h2>'
+    },
+    en: {
+      base: '../../../',
+      overview: '<h2>Project overview</h2><p>A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a research collaboration, plus a separate HoloLens spatial-interface extension.</p>',
+      role: '<h2>My role</h2>'
+    }
+  };
+
+  for (const [locale, expected] of Object.entries(expectations)) {
+    const html = render.caseStudyHtml(data, 'surgical-navigation', expected.base, false, locale);
+    assert.equal(
+      html.split(expected.overview).length - 1,
+      1,
+      `${locale}: canonical project summary is rendered exactly once`
+    );
+    assertInOrder(html, [
+      expected.overview,
+      'data-story-section="smcnavi-overview"',
+      'data-story-section="smcnavi-workflows"',
+      expected.role
+    ], `${locale}: canonical project summary precedes the story and role`);
+  }
+});
+
+test('SMCNavi top-level storySections validation returns errors without throwing for a non-array value', () => {
+  const candidate = clone(data);
+  candidate.projects[0].storySections = {};
+
+  for (const [label, validate] of [
+    ['renderer', render.dataErrors],
+    ['validator', validator.portfolioDataErrors]
+  ]) {
+    let errors;
+    assert.doesNotThrow(() => { errors = validate(candidate); }, `${label}: validation must be total`);
+    assert.match(errors.join('\n'), /storySections must be a non-empty array/i, `${label}: malformed shape is reported`);
+  }
+});
+
+test('SMCNavi system-flow figure emits the existing sc-flow container class', () => {
+  const html = render.systemFlowDiagramHtml(storyDiagramFixture(), 'en', 5);
+  assert.match(html, /^<figure class="sc-figure sc-flow sc-flow-figure">/);
+});
+
+test('SMCNavi public derivatives reject unsafe hashes and bind the reviewed replacement bytes', () => {
+  const unsafeHashes = {
+    'assets/projects/surgical-navigation/surgical-navigation-smcnavi-features-01.mp4': 'e81cbc64463efc7006bac426c5b2ea125921ce743c1bc0c2ed3841cc020ffa84',
+    'assets/projects/surgical-navigation/surgical-navigation-smcnavi-poster-01.png': 'e8d3e1cb093584984ce6c8f44d81d8e164a38f5bebf7b5c07594483a55baaeb5',
+    'assets/projects/surgical-navigation/surgical-navigation-smcnavi-workflows-01.png': '08fdfe8a0413c32efcf63a0097c380538af51174afe0a3066035454c21628b70'
+  };
+  const rejectedMatches = Object.entries(unsafeHashes)
+    .filter(([relativePath, unsafeHash]) => sha256(path.join(root, relativePath)) === unsafeHash)
+    .map(([relativePath]) => relativePath);
+
+  assert.deepEqual(rejectedMatches, [], 'known public derivatives with visible internal labels must not return');
+
+  const reviewedHashes = {
+    'assets/projects/surgical-navigation/surgical-navigation-smcnavi-features-01.mp4': 'ab71b058b55e73a2c16972addf01855bc27e22691c4764141f59b1cf9dfce918',
+    'assets/projects/surgical-navigation/surgical-navigation-smcnavi-poster-01.png': '446117dfc994b3242e5d2d363875f19adecf4b96a1d235e3ea3f3de0f369ab3c',
+    'assets/projects/surgical-navigation/surgical-navigation-smcnavi-workflows-01.png': '934b2a168cdf8060b521c35b7146c25d6d4cb7f13a35b69cc1fab22a4a10a909'
+  };
+  for (const [relativePath, reviewedHash] of Object.entries(reviewedHashes)) {
+    assert.equal(sha256(path.join(root, relativePath)), reviewedHash, `${relativePath}: reviewed public bytes`);
+  }
+});
+
 test('SMCNavi story contract rejects malformed sections, media, posters, and flow endpoints', () => {
   const mutations = [
     [(section) => { section.key = ''; }, /stable key/i],
