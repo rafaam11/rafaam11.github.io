@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "834a4db05131dacb7c55bb3bb7c6011cbb6d8d858774f791cfbefd294a1b10c9",
+  "sourceDigest": "9674476cee317e751f51423e0c837d4eb68796d741ca673d9f9b0d65b278490c",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.2",
   "generatorSha256": "a172fc8b99264c4abf00cccb4a3ec4230179dc94cdad9ae1138a3ab0c80a65e7",
@@ -13,8 +13,8 @@
       "pages": 6,
       "links": 8,
       "characters": 3438,
-      "bytes": 6783159,
-      "sha256": "0a98da2df2796e8de9f284834f0ca647765474b6eba4467b7b7481bcf07fd993"
+      "bytes": 6655851,
+      "sha256": "6c22c5b7d5fec4256dd1bd6aeb9f27f62752f2636c351f616a87b15af1dff686"
     },
     {
       "name": "surgical-navigation-en.pdf",
@@ -24,8 +24,8 @@
       "pages": 6,
       "links": 8,
       "characters": 6753,
-      "bytes": 6646588,
-      "sha256": "c103d746ae828fd685fb6cbe710a85e395755a31643bc5927adf49fe9ea22dc0"
+      "bytes": 6519357,
+      "sha256": "7e4b9ff79ea4d208c3bb84a90884d68eeab6bb0d4f14777a797e85bb56b9b1e5"
     },
     {
       "name": "mandibular-fracture-ko.pdf",
@@ -337,8 +337,8 @@
       "slug": "surgical-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 6646588,
-      "sha256": "c103d746ae828fd685fb6cbe710a85e395755a31643bc5927adf49fe9ea22dc0"
+      "bytes": 6519357,
+      "sha256": "7e4b9ff79ea4d208c3bb84a90884d68eeab6bb0d4f14777a797e85bb56b9b1e5"
     },
     {
       "path": "assets/pdfs/surgical-navigation-ko.pdf",
@@ -346,8 +346,8 @@
       "slug": "surgical-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 6783159,
-      "sha256": "0a98da2df2796e8de9f284834f0ca647765474b6eba4467b7b7481bcf07fd993"
+      "bytes": 6655851,
+      "sha256": "6c22c5b7d5fec4256dd1bd6aeb9f27f62752f2636c351f616a87b15af1dff686"
     },
     {
       "path": "assets/pdfs/unmanned-forklift-en.pdf",
@@ -499,8 +499,8 @@
       "slug": "surgical-navigation",
       "locale": "en",
       "pages": 6,
-      "bytes": 6646588,
-      "sha256": "c103d746ae828fd685fb6cbe710a85e395755a31643bc5927adf49fe9ea22dc0"
+      "bytes": 6519357,
+      "sha256": "7e4b9ff79ea4d208c3bb84a90884d68eeab6bb0d4f14777a797e85bb56b9b1e5"
     },
     {
       "path": "output/pdf/surgical-navigation-ko.pdf",
@@ -508,8 +508,8 @@
       "slug": "surgical-navigation",
       "locale": "ko",
       "pages": 6,
-      "bytes": 6783159,
-      "sha256": "0a98da2df2796e8de9f284834f0ca647765474b6eba4467b7b7481bcf07fd993"
+      "bytes": 6655851,
+      "sha256": "6c22c5b7d5fec4256dd1bd6aeb9f27f62752f2636c351f616a87b15af1dff686"
     },
     {
       "path": "output/pdf/unmanned-forklift-en.pdf",
