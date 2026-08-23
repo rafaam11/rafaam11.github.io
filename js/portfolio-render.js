@@ -43,9 +43,8 @@
   var mediaTypes = ['video', 'image', 'repository', 'publication'];
   var leadMediaTypes = ['video', 'image', 'repository'];
   var referenceMediaTypes = ['repository', 'publication'];
-  var caseLayouts = ['standard', 'evidence-first'];
-  var architectureStepKeys = ['define', 'open', 'track', 'apply'];
-  var architectureStepLabels = ['Define', 'Open', 'Track', 'Apply'];
+  var caseLayouts = ['standard', 'product-console'];
+  var consoleModuleKeys = ['desktop-app', 'api'];
   var applicationTrackKeys = ['medical', 'industrial'];
   var applicationTrackKinds = ['primary', 'extension'];
   var publicResourceTypes = ['documentation', 'product'];
@@ -69,7 +68,7 @@
       personalRole: '내 역할', teamResult: '팀 성과', period: '기간', technology: '기술',
       evidence: '근거', problem: '문제', projectOverview: '프로젝트 개요', approach: '접근', results: '결과와 근거', limits: '한계와 팀 성과',
       components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
-      evidenceGallery: '검증 가능한 증거', architecture: 'Define → Open → Track → Apply', roleAndStability: '내 역할과 API 안정성',
+      productHistory: '제품 명칭 안내', apiFlow: 'API 연결 흐름',
       publicResources: '공개 문서와 제품 정보', ownedRole: '내 역할', teamBoundary: '팀·협력자 경계', evidenceRefs: '연결 근거',
       relatedProjects: '관련 프로젝트',
       contact: '연락처', publications: '논문', patents: '특허', awards: '수상',
@@ -79,7 +78,7 @@
       personalRole: 'My role', teamResult: 'Team result', period: 'Period', technology: 'Technology',
       evidence: 'Evidence', problem: 'Problem', projectOverview: 'Project overview', approach: 'Approach', results: 'Results and evidence', limits: 'Limits and team result',
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
-      evidenceGallery: 'Verifiable evidence', architecture: 'Define → Open → Track → Apply', roleAndStability: 'My role and API stability',
+      productHistory: 'Product naming note', apiFlow: 'API connection flow',
       publicResources: 'Public documentation and product information', ownedRole: 'My role', teamBoundary: 'Team and partner boundary', evidenceRefs: 'Linked evidence',
       relatedProjects: 'Related projects',
       contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
@@ -141,7 +140,9 @@
     (project && project.blocks || []).forEach(function (block) { surfaces.push(block && block.translations); });
     (project && project.subcases || []).forEach(function (subcase) { surfaces.push(subcase && subcase.translations); });
     (project && project.links || []).forEach(function (link) { surfaces.push(link && link.translations); });
-    (project && project.architectureSteps || []).forEach(function (step) { surfaces.push(step && step.translations); });
+    surfaces.push(project && project.productHistory && project.productHistory.translations);
+    (project && project.consoleModules || []).forEach(function (module) { surfaces.push(module && module.translations); });
+    surfaces.push(project && project.apiFlow && project.apiFlow.translations);
     (project && project.applicationTracks || []).forEach(function (track) { surfaces.push(track && track.translations); });
     (project && project.publicResources || []).forEach(function (resource) { surfaces.push(resource && resource.translations); });
     (project && Array.isArray(project.storySections) ? project.storySections : []).forEach(function (section) {
@@ -594,36 +595,69 @@
     return errors;
   }
 
-  function evidenceFirstErrors(project, slug) {
+  function productConsoleErrors(project, slug) {
     var errors = [];
     if (project.caseLayout !== undefined && !caseLayouts.includes(project.caseLayout)) {
-      errors.push(slug + ': case layout must be standard or evidence-first.');
+      errors.push(slug + ': case layout must be standard or product-console.');
       return errors;
     }
-    if (project.caseLayout !== 'evidence-first') return errors;
+    if (project.caseLayout !== 'product-console') return errors;
 
+    var mediaItems = [];
+    if (project.media && project.media.lead) mediaItems.push(project.media.lead);
     var gallery = project.media && project.media.gallery;
-    if (!Array.isArray(gallery) || gallery.length !== 6 || gallery.some(function (item) { return !isApprovedImage(item); })) {
-      errors.push(slug + ': evidence-first media gallery requires exactly six approved images.');
+    if (Array.isArray(gallery)) mediaItems = mediaItems.concat(gallery);
+    if (mediaItems.length !== 5 || mediaItems.some(function (item) { return !isApprovedImage(item); })) {
+      errors.push(slug + ': product-console case requires exactly five approved image media items.');
     }
+    if (project.media && (project.media.video !== undefined || project.media.poster !== undefined) ||
+        mediaItems.some(function (item) { return item && item.type === 'video'; })) {
+      errors.push(slug + ': product-console case must not declare video or poster media.');
+    }
+    var approvedMediaIds = mediaItems.filter(isApprovedImage).map(function (item) { return item.id; });
 
-    var steps = project.architectureSteps;
-    if (!Array.isArray(steps) || steps.length !== architectureStepKeys.length ||
-        JSON.stringify(steps.map(function (step) { return step && step.key; })) !== JSON.stringify(architectureStepKeys) ||
-        JSON.stringify(steps.map(function (step) { return step && step.label; })) !== JSON.stringify(architectureStepLabels)) {
-      errors.push(slug + ': architecture steps must use ordered Define, Open, Track, Apply keys and labels.');
+    errors = errors.concat(translationErrors(project.productHistory, ['body'], slug + ' product history'));
+
+    var modules = project.consoleModules;
+    if (!Array.isArray(modules) || modules.length !== consoleModuleKeys.length ||
+        JSON.stringify(modules.map(function (module) { return module && module.key; })) !== JSON.stringify(consoleModuleKeys)) {
+      errors.push(slug + ': console modules must use ordered desktop-app and api keys.');
     }
-    (Array.isArray(steps) ? steps : []).forEach(function (step, index) {
-      var key = architectureStepKeys[index] || (step && step.key) || String(index);
-      errors = errors.concat(translationErrors(step, ['description'], slug + ' architecture step ' + key));
+    (Array.isArray(modules) ? modules : []).forEach(function (module, index) {
+      var key = consoleModuleKeys[index] || (module && module.key) || String(index);
+      var label = slug + ' console module ' + key;
+      var evidenceIds = module && module.evidenceIds;
+      if (!Array.isArray(evidenceIds) || evidenceIds.length === 0 ||
+          evidenceIds.some(function (id) { return typeof id !== 'string' || !id; })) {
+        errors.push(label + ': requires evidence ids.');
+      } else {
+        if (new Set(evidenceIds).size !== evidenceIds.length) errors.push(label + ': duplicate evidence id.');
+        if (evidenceIds.some(function (id) { return !approvedMediaIds.includes(id); })) {
+          errors.push(label + ': evidence ids must reference approved SKADI media.');
+        }
+      }
+      errors = errors.concat(translationErrors(module, ['title', 'summary', 'ownedRole', 'teamBoundary'], label));
     });
+
+    var flow = project.apiFlow;
+    if (!flow || typeof flow !== 'object' || Array.isArray(flow)) {
+      errors.push(slug + ': missing API flow.');
+    } else {
+      if (JSON.stringify(flow.nodes) !== JSON.stringify(['Application', 'DtSkadi.dll', 'OpenEx()'])) {
+        errors.push(slug + ': API flow nodes must be ordered Application, DtSkadi.dll, OpenEx().');
+      }
+      if (JSON.stringify(flow.outcomes) !== JSON.stringify(['Ready', 'Error handled'])) {
+        errors.push(slug + ': API flow outcomes must be ordered Ready and Error handled.');
+      }
+      if (!isSafeProjectLink(flow.changeNoteHref)) errors.push(slug + ': API flow has an unsafe change note URL.');
+      errors = errors.concat(translationErrors(flow, ['title', 'summary', 'changeNoteLabel'], slug + ' API flow'));
+    }
 
     var tracks = project.applicationTracks;
     if (!Array.isArray(tracks) || tracks.length !== applicationTrackKeys.length ||
         JSON.stringify(tracks.map(function (track) { return track && track.key; })) !== JSON.stringify(applicationTrackKeys)) {
       errors.push(slug + ': application tracks must use ordered medical and industrial keys.');
     }
-    var approvedGalleryIds = (Array.isArray(gallery) ? gallery : []).filter(isApprovedImage).map(function (item) { return item.id; });
     (Array.isArray(tracks) ? tracks : []).forEach(function (track, index) {
       var key = applicationTrackKeys[index] || (track && track.key) || String(index);
       var label = slug + ' application track ' + key;
@@ -635,8 +669,8 @@
         errors.push(label + ': requires evidence ids.');
       } else {
         if (new Set(evidenceIds).size !== evidenceIds.length) errors.push(label + ': duplicate evidence id.');
-        if (evidenceIds.some(function (id) { return !approvedGalleryIds.includes(id); })) {
-          errors.push(label + ': evidence ids must reference known approved gallery evidence.');
+        if (evidenceIds.some(function (id) { return !approvedMediaIds.includes(id); })) {
+          errors.push(label + ': evidence ids must reference approved SKADI media.');
         }
       }
       errors = errors.concat(translationErrors(track, ['title', 'summary', 'ownedRole', 'teamBoundary'], label));
@@ -644,7 +678,7 @@
 
     var resources = project.publicResources;
     if (!Array.isArray(resources) || resources.length !== 4) {
-      errors.push(slug + ': evidence-first case requires exactly four public resources.');
+      errors.push(slug + ': product-console case requires exactly four public resources.');
     }
     (Array.isArray(resources) ? resources : []).forEach(function (resource, index) {
       var label = slug + ' public resource ' + index;
@@ -658,6 +692,7 @@
       }
       errors = errors.concat(translationErrors(resource, ['title', 'description'], label));
     });
+    if (/SkadiApp/i.test(projectPublicCopy(project))) errors.push(slug + ': product-console copy must not use the unverified SkadiApp name.');
     return errors;
   }
 
@@ -804,10 +839,10 @@
           }
           errors = errors.concat(galleryErrors(project, slug));
         }
-        errors = errors.concat(evidenceFirstErrors(project, slug));
         var hasStorySections = Array.isArray(project.storySections) && project.storySections.length > 0;
         var storyErrors = storySectionsErrors(project, slug);
         errors = errors.concat(storyErrors);
+        errors = errors.concat(productConsoleErrors(project, slug));
         if ((!hasStorySections || storyErrors.length > 0) && (!Array.isArray(project.blocks) || project.blocks.length === 0)) {
           errors.push(slug + ': missing structural blocks.');
         } else if (Array.isArray(project.blocks)) {
@@ -1217,18 +1252,14 @@
   function caseGalleryHtml(project, locale, base, firstFigureNumber, settings) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
-    var options = settings || {};
     var items = (project.media && Array.isArray(project.media.gallery) ? project.media.gallery : []).filter(isApprovedImage);
     if (!items.length) return '';
     var figures = items.map(function (item, offset) {
       var itemCopy = translation(item, normalized);
       var visual = '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || project.mediaAlt || '') + '" loading="lazy" decoding="async">';
-      var attributes = options.evidenceFirst ? ' id="evidence-' + escapeHtml(item.id) + '" data-evidence-id="' + escapeHtml(item.id) + '"' : '';
-      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', itemCopy.caption || '', 'sc-figure--gallery', attributes);
+      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', itemCopy.caption || '', 'sc-figure--gallery', '');
     }).join('');
-    var sectionAttributes = options.evidenceFirst ? ' data-evidence-first-section="gallery"' : '';
-    var heading = options.evidenceFirst ? '<h2>' + escapeHtml(copy.evidenceGallery) + '</h2>' : '';
-    return '<section class="sc-gallery" aria-label="' + escapeHtml(options.evidenceFirst ? copy.evidenceGallery : copy.figures) + '"' + sectionAttributes + '>' + heading + '<div class="sc-gallery__grid">' + figures + '</div></section>';
+    return '<section class="sc-gallery" aria-label="' + escapeHtml(copy.figures) + '"><div class="sc-gallery__grid">' + figures + '</div></section>';
   }
 
   function capabilityIndexHtml(data, locale) {
@@ -1333,47 +1364,101 @@
     }).join('') + '</ul></section>';
   }
 
-  function evidenceFirstArchitectureHtml(project, sourceProject, locale) {
-    var copy = pageCopy[localeOf(locale)];
-    var steps = (sourceProject.architectureSteps || []).map(function (step) {
-      var stepCopy = translation(step, locale);
-      return '<li class="sc-architecture__step" data-step="' + escapeHtml(step.key) + '"><span class="sc-architecture__label">' +
-        escapeHtml(step.label) + '</span><p>' + escapeHtml(stepCopy.description || '') + '</p></li>';
-    }).join('');
-    return '<section class="sc-case__section sc-architecture" data-evidence-first-section="architecture"><h2>' + escapeHtml(copy.architecture) + '</h2>' +
-      '<p>' + escapeHtml(project.problem) + '</p><p>' + escapeHtml(project.summary) + '</p><ol class="sc-architecture__steps">' + steps + '</ol></section>';
+  function productConsoleMediaItems(sourceProject) {
+    var items = [];
+    if (sourceProject.media && sourceProject.media.lead) items.push(sourceProject.media.lead);
+    return items.concat(sourceProject.media && Array.isArray(sourceProject.media.gallery) ? sourceProject.media.gallery : []);
   }
 
-  function evidenceFirstRoleHtml(project, sourceProject, locale) {
-    var copy = pageCopy[localeOf(locale)];
-    var details = (sourceProject.blocks || []).filter(function (block) {
-      return block.key === 'api-stability' || block.key === 'viewer-delivery';
-    }).map(function (block) { return blockHtml(block, locale); }).join('');
-    var changeNote = (sourceProject.links || []).filter(function (link) { return link && isSafeProjectLink(link.href); }).map(function (link) {
-      return '<p class="sc-change-note"><a href="' + escapeHtml(link.href) + '" target="_blank" rel="noopener">' +
-        escapeHtml(translatedField(link, 'label', locale)) + '</a></p>';
-    }).join('');
-    return '<section class="sc-case__section" data-evidence-first-section="role"><h2>' + escapeHtml(copy.roleAndStability) + '</h2><p>' +
-      escapeHtml(project.role) + '</p>' + details + changeNote + '</section>';
-  }
-
-  function evidenceFirstTrackHtml(sourceProject, track, locale) {
+  function productConsoleFigureHtml(sourceProject, identifier, locale, base, modifier) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
-    var trackCopy = translation(track, normalized);
-    var gallery = sourceProject.media && Array.isArray(sourceProject.media.gallery) ? sourceProject.media.gallery : [];
-    var references = (track.evidenceIds || []).map(function (id) {
-      var index = gallery.findIndex(function (item) { return item.id === id; });
-      return '<a href="#evidence-' + escapeHtml(id) + '">' + escapeHtml(copy.figure + ' ' + (index + 2)) + '</a>';
-    }).join(', ');
-    return '<section class="sc-case__section sc-application" data-track="' + escapeHtml(track.key) + '" data-track-kind="' + escapeHtml(track.kind) + '">' +
-      '<h2>' + escapeHtml(trackCopy.title || '') + '</h2><p>' + escapeHtml(trackCopy.summary || '') + '</p>' +
-      '<dl class="sc-application__boundary"><div><dt>' + escapeHtml(copy.ownedRole) + '</dt><dd>' + escapeHtml(trackCopy.ownedRole || '') + '</dd></div>' +
-      '<div><dt>' + escapeHtml(copy.teamBoundary) + '</dt><dd>' + escapeHtml(trackCopy.teamBoundary || '') + '</dd></div></dl>' +
-      '<p class="sc-application__evidence"><span>' + escapeHtml(copy.evidenceRefs) + ':</span> ' + references + '</p></section>';
+    var items = productConsoleMediaItems(sourceProject);
+    var item = items.find(function (candidate) { return candidate.id === identifier; });
+    if (!isApprovedImage(item)) return '';
+    var itemCopy = translation(item, normalized);
+    var number = items.findIndex(function (candidate) { return candidate.id === identifier; }) + 1;
+    return '<figure class="sc-product-figure sc-product-figure--' + escapeHtml(modifier || 'default') + '" id="evidence-' +
+      escapeHtml(item.id) + '" data-media-status="approved" data-evidence-id="' + escapeHtml(item.id) + '">' +
+      '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || '') + '" loading="lazy" decoding="async">' +
+      '<figcaption><span class="sc-figure__label">' + escapeHtml(copy.figure + ' ' + number + '.') + '</span> ' +
+      escapeHtml(itemCopy.caption || '') + '</figcaption></figure>';
   }
 
-  function evidenceFirstResourcesHtml(sourceProject, locale) {
+  function productConsoleBoundaryHtml(record, locale) {
+    var normalized = localeOf(locale);
+    var copy = pageCopy[normalized];
+    var recordCopy = translation(record, normalized);
+    return '<dl class="sc-boundary-panel"><div><dt>' + escapeHtml(copy.ownedRole) + '</dt><dd>' + escapeHtml(recordCopy.ownedRole || '') +
+      '</dd></div><div><dt>' + escapeHtml(copy.teamBoundary) + '</dt><dd>' + escapeHtml(recordCopy.teamBoundary || '') + '</dd></div></dl>';
+  }
+
+  function productConsoleEvidenceLinksHtml(sourceProject, evidenceIds, locale) {
+    var normalized = localeOf(locale);
+    var copy = pageCopy[normalized];
+    var items = productConsoleMediaItems(sourceProject);
+    var links = (evidenceIds || []).map(function (id) {
+      var index = items.findIndex(function (item) { return item.id === id; });
+      if (index < 0) return '';
+      return '<a href="#evidence-' + escapeHtml(id) + '">' + escapeHtml(copy.figure + ' ' + (index + 1)) + '</a>';
+    }).filter(Boolean).join(', ');
+    return links ? '<p class="sc-product-evidence"><span>' + escapeHtml(copy.evidenceRefs) + ':</span> ' + links + '</p>' : '';
+  }
+
+  function productConsoleHistoryHtml(sourceProject, locale) {
+    var normalized = localeOf(locale);
+    var copy = pageCopy[normalized];
+    var historyCopy = translation(sourceProject.productHistory, normalized);
+    return '<section class="sc-product-history" data-product-console-section="history"><h2>' + escapeHtml(copy.productHistory) +
+      '</h2><p>' + escapeHtml(historyCopy.body || '') + '</p></section>';
+  }
+
+  function productConsoleDesktopHtml(sourceProject, module, locale, base) {
+    var moduleCopy = translation(module, locale);
+    var figures = (module.evidenceIds || []).map(function (id) {
+      return productConsoleFigureHtml(sourceProject, id, locale, base, 'console');
+    }).join('');
+    return '<section class="sc-product-console" data-product-console-section="desktop-app"><div class="sc-product-console__heading">' +
+      '<span class="sc-product-console__signal" aria-hidden="true"></span><div><p class="sc-product-console__kicker">Desktop product / live state</p>' +
+      '<h2>' + escapeHtml(moduleCopy.title || '') + '</h2><p>' + escapeHtml(moduleCopy.summary || '') + '</p></div></div>' +
+      '<div class="sc-product-console__screens">' + figures + '</div>' + productConsoleBoundaryHtml(module, locale) + '</section>';
+  }
+
+  function productConsoleApiHtml(sourceProject, module, locale) {
+    var normalized = localeOf(locale);
+    var moduleCopy = translation(module, normalized);
+    var flow = sourceProject.apiFlow;
+    var flowCopy = translation(flow, normalized);
+    var nodeKeys = ['application', 'library', 'entry'];
+    var outcomeKeys = ['ready', 'error-handled'];
+    var nodes = flow.nodes.map(function (node, index) {
+      return '<li data-api-node="' + nodeKeys[index] + '"><code>' + escapeHtml(node) + '</code></li>';
+    }).join('');
+    var outcomes = flow.outcomes.map(function (outcome, index) {
+      return '<li data-api-outcome="' + outcomeKeys[index] + '"><code>' + escapeHtml(outcome) + '</code></li>';
+    }).join('');
+    var titleId = 'sc-api-flow-title-' + normalized;
+    return '<section class="sc-case__section sc-product-api" data-product-console-section="api"><h2>' + escapeHtml(moduleCopy.title || '') +
+      '</h2><p>' + escapeHtml(moduleCopy.summary || '') + '</p><div class="sc-api-flow" role="group" aria-labelledby="' + titleId + '">' +
+      '<div class="sc-api-flow__heading"><h3 id="' + titleId + '">' + escapeHtml(flowCopy.title || pageCopy[normalized].apiFlow) + '</h3><p>' +
+      escapeHtml(flowCopy.summary || '') + '</p></div><ol class="sc-api-flow__nodes">' + nodes + '</ol><div class="sc-api-flow__outcomes"><span aria-hidden="true">↳</span>' +
+      '<ul>' + outcomes + '</ul></div><p class="sc-change-note"><a href="' + escapeHtml(flow.changeNoteHref) + '" target="_blank" rel="noopener">' +
+      escapeHtml(flowCopy.changeNoteLabel || '') + '</a></p></div>' + productConsoleBoundaryHtml(module, normalized) +
+      productConsoleEvidenceLinksHtml(sourceProject, module.evidenceIds, normalized) + '</section>';
+  }
+
+  function productConsoleTrackHtml(sourceProject, track, locale, base) {
+    var trackCopy = translation(track, locale);
+    var figures = (track.evidenceIds || []).map(function (id) {
+      return productConsoleFigureHtml(sourceProject, id, locale, base, track.key);
+    }).join('');
+    return '<section class="sc-case__section sc-product-application" data-product-console-section="' + escapeHtml(track.key) + '" data-track="' +
+      escapeHtml(track.key) + '" data-track-kind="' + escapeHtml(track.kind) + '"><p class="sc-product-application__kind">' +
+      escapeHtml(track.kind) + '</p><h2>' + escapeHtml(trackCopy.title || '') + '</h2><p>' + escapeHtml(trackCopy.summary || '') + '</p>' +
+      '<div class="sc-product-application__screens">' + figures + '</div>' + productConsoleBoundaryHtml(track, locale) + '</section>';
+  }
+
+  function productConsoleResourcesHtml(sourceProject, locale) {
     var copy = pageCopy[localeOf(locale)];
     var resources = (sourceProject.publicResources || []).map(function (resource) {
       var resourceCopy = translation(resource, locale);
@@ -1381,7 +1466,7 @@
         '" target="_blank" rel="noopener"><span class="sc-resource-card__type">' + escapeHtml(resource.type) + '</span><strong>' +
         escapeHtml(resourceCopy.title || '') + '</strong><span>' + escapeHtml(resourceCopy.description || '') + '</span></a></li>';
     }).join('');
-    return '<section class="sc-case__section" data-evidence-first-section="resources"><h2>' + escapeHtml(copy.publicResources) +
+    return '<section class="sc-case__section" data-product-console-section="resources"><h2>' + escapeHtml(copy.publicResources) +
       '</h2><ul class="sc-resource-list">' + resources + '</ul></section>';
   }
 
@@ -1406,20 +1491,18 @@
         return ordered.concat(project.blocks.filter(function (block) { return block.type === type; }));
       }, []).map(function (block) { return blockHtml(block, normalized); }).join('');
     }
-    if (sourceProject && sourceProject.caseLayout === 'evidence-first') {
+    if (sourceProject && sourceProject.caseLayout === 'product-console') {
+      var modules = sourceProject.consoleModules || [];
       var tracks = (sourceProject.applicationTracks || []).map(function (track) {
-        return evidenceFirstTrackHtml(sourceProject, track, normalized);
+        return productConsoleTrackHtml(sourceProject, track, normalized, base);
       }).join('');
-      var limitationBlock = (sourceProject.blocks || []).filter(function (block) { return block.key === 'integration-boundary'; })
-        .map(function (block) { return blockHtml(block, normalized); }).join('');
-      return '<article class="sc-case sc-case--evidence-first" data-case="' + escapeHtml(project.slug) + '" data-case-layout="evidence-first">' +
-        header + lead +
-        caseGalleryHtml(sourceProject, normalized, base, lead ? 2 : 1, { evidenceFirst: true }) +
-        evidenceFirstArchitectureHtml(project, sourceProject, normalized) +
-        evidenceFirstRoleHtml(project, sourceProject, normalized) + tracks +
-        evidenceFirstResourcesHtml(sourceProject, normalized) +
-        '<section class="sc-case__section" data-evidence-first-section="limits"><h2>' + escapeHtml(copy.limits) + '</h2><p>' +
-          escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + limitationBlock + '</section>' +
+      return '<article class="sc-case sc-case--product-console" data-case="' + escapeHtml(project.slug) + '" data-case-layout="product-console">' +
+        header + productConsoleHistoryHtml(sourceProject, normalized) +
+        productConsoleDesktopHtml(sourceProject, modules[0], normalized, base) +
+        productConsoleApiHtml(sourceProject, modules[1], normalized) + tracks +
+        productConsoleResourcesHtml(sourceProject, normalized) +
+        '<section class="sc-case__section sc-product-limits" data-product-console-section="limits"><h2>' + escapeHtml(copy.limits) + '</h2><p>' +
+          escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p></section>' +
         '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' +
           ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
     }

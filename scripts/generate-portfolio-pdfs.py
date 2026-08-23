@@ -582,30 +582,51 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
                 f"PDF input project {slug} PDF sequence evidenceId must reference lead media.")
         project_sequence_evidence[slug] = evidence_id
         case_layout = project.get("caseLayout")
-        require(case_layout is None or case_layout in {"standard", "evidence-first"},
-                f"PDF input project {slug} case layout must be standard or evidence-first.")
-        if case_layout == "evidence-first":
-            gallery = require_array(media.get("gallery"), f"PDF input project {slug} evidence-first gallery", 6)
-            gallery_ids: set[str] = set()
-            for gallery_index, gallery_value in enumerate(gallery, start=1):
-                item = require_object(gallery_value, f"PDF input project {slug} gallery {gallery_index}")
-                identifier = require_text(item.get("id"), f"PDF input project {slug} gallery {gallery_index} id")
-                require(identifier not in gallery_ids, f"PDF input project {slug} gallery id is duplicated: {identifier}.")
-                gallery_ids.add(identifier)
+        require(case_layout is None or case_layout in {"standard", "product-console"},
+                f"PDF input project {slug} case layout must be standard or product-console.")
+        if case_layout == "product-console":
+            require("video" not in media and "poster" not in media,
+                    f"PDF input project {slug} product-console media must not contain video or poster entries.")
+            gallery = require_array(media.get("gallery"), f"PDF input project {slug} product-console gallery", 4)
+            media_items = [lead, *gallery]
+            media_ids: set[str] = set()
+            for media_index, media_value in enumerate(media_items, start=1):
+                item = require_object(media_value, f"PDF input project {slug} product media {media_index}")
+                identifier = require_text(item.get("id"), f"PDF input project {slug} product media {media_index} id")
+                require(identifier not in media_ids, f"PDF input project {slug} product media id is duplicated: {identifier}.")
+                media_ids.add(identifier)
                 require(item.get("type") == "image" and item.get("status") == "approved",
-                        f"PDF input project {slug} evidence-first gallery must contain approved images.")
-                validate_translation_record(item, f"PDF input project {slug} gallery {gallery_index}", ["caption", "alt"])
+                        f"PDF input project {slug} product-console media must contain five approved images.")
+                validate_translation_record(item, f"PDF input project {slug} product media {media_index}", ["caption", "alt"])
 
-            steps = require_array(project.get("architectureSteps"),
-                                  f"PDF input project {slug} architectureSteps", 4)
-            require([step.get("key") if isinstance(step, dict) else None for step in steps]
-                    == ["define", "open", "track", "apply"] and
-                    [step.get("label") if isinstance(step, dict) else None for step in steps]
-                    == ["Define", "Open", "Track", "Apply"],
-                    f"PDF input project {slug} architecture steps must be Define, Open, Track, Apply in order.")
-            for step_index, step_value in enumerate(steps, start=1):
-                validate_translation_record(require_object(step_value, f"PDF input project {slug} architecture step {step_index}"),
-                                            f"PDF input project {slug} architecture step {step_index}", ["description"])
+            history = require_object(project.get("productHistory"), f"PDF input project {slug} productHistory")
+            validate_translation_record(history, f"PDF input project {slug} productHistory", ["body"])
+
+            modules = require_array(project.get("consoleModules"),
+                                    f"PDF input project {slug} consoleModules", 2)
+            require([module.get("key") if isinstance(module, dict) else None for module in modules]
+                    == ["desktop-app", "api"],
+                    f"PDF input project {slug} console modules must be desktop-app and api in order.")
+            for module_index, module_value in enumerate(modules, start=1):
+                module = require_object(module_value, f"PDF input project {slug} console module {module_index}")
+                module_evidence = require_array(module.get("evidenceIds"),
+                                                f"PDF input project {slug} console module {module_index} evidenceIds")
+                require(bool(module_evidence)
+                        and all(isinstance(identifier, str) and identifier in media_ids for identifier in module_evidence)
+                        and len(set(module_evidence)) == len(module_evidence),
+                        f"PDF input project {slug} console module {module_index} must reference distinct product media.")
+                validate_translation_record(module, f"PDF input project {slug} console module {module_index}",
+                                            ["title", "summary", "ownedRole", "teamBoundary"])
+
+            flow = require_object(project.get("apiFlow"), f"PDF input project {slug} apiFlow")
+            require(flow.get("nodes") == ["Application", "DtSkadi.dll", "OpenEx()"],
+                    f"PDF input project {slug} API flow nodes are invalid.")
+            require(flow.get("outcomes") == ["Ready", "Error handled"],
+                    f"PDF input project {slug} API flow outcomes are invalid.")
+            require(require_text(flow.get("changeNoteHref"), f"PDF input project {slug} API change note").startswith("https://"),
+                    f"PDF input project {slug} API change note must use HTTPS.")
+            validate_translation_record(flow, f"PDF input project {slug} apiFlow",
+                                        ["title", "summary", "changeNoteLabel"])
 
             tracks = require_array(project.get("applicationTracks"),
                                    f"PDF input project {slug} applicationTracks", 2)
@@ -617,10 +638,10 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
                 track_evidence = require_array(track.get("evidenceIds"),
                                                f"PDF input project {slug} application track {track_index} evidenceIds")
                 require(bool(track_evidence)
-                        and all(isinstance(identifier, str) and identifier in gallery_ids
+                        and all(isinstance(identifier, str) and identifier in media_ids
                                 for identifier in track_evidence)
                         and len(set(track_evidence)) == len(track_evidence),
-                        f"PDF input project {slug} application track {track_index} must reference distinct gallery evidence.")
+                        f"PDF input project {slug} application track {track_index} must reference distinct product media.")
                 validate_translation_record(track, f"PDF input project {slug} application track {track_index}",
                                             ["title", "summary", "ownedRole", "teamBoundary"])
 
@@ -1818,16 +1839,17 @@ def public_project_links(payload: dict[str, Any], project: dict[str, Any],
     return links
 
 
-def evidence_first_pdf_labels(locale: str) -> dict[str, str]:
+def product_console_pdf_labels(locale: str) -> dict[str, str]:
     if locale == "ko":
         return {
             "overview": "개요",
-            "tool_evidence": "도구 증거",
-            "architecture_api": "아키텍처와 API",
-            "medical": "의료 적용",
+            "desktop_app": "데스크톱 앱",
+            "api_role": "API·개인 역할",
+            "medical": "의료 통합",
             "industrial": "산업 확장 · 공개 문서 · 한계",
-            "problem": "문제와 적용 경계",
-            "role": "내 역할과 API 안정성",
+            "history": "제품 명칭 안내",
+            "problem": "제품이 다루는 문제",
+            "api_flow": "API 연결 흐름",
             "owned": "내 역할",
             "team": "팀·협력자 경계",
             "resources": "공개 문서와 제품 정보",
@@ -1835,12 +1857,13 @@ def evidence_first_pdf_labels(locale: str) -> dict[str, str]:
         }
     return {
         "overview": "Overview",
-        "tool_evidence": "Tool evidence",
-        "architecture_api": "Architecture and API",
-        "medical": "Medical application",
+        "desktop_app": "Desktop app",
+        "api_role": "API · personal role",
+        "medical": "Medical integration",
         "industrial": "Industrial extension · public resources · limits",
-        "problem": "Problem and application boundary",
-        "role": "My role and API stability",
+        "history": "Product naming note",
+        "problem": "Product problem",
+        "api_flow": "API connection flow",
         "owned": "My role",
         "team": "Team and partner boundary",
         "resources": "Public documentation and product information",
@@ -1848,30 +1871,42 @@ def evidence_first_pdf_labels(locale: str) -> dict[str, str]:
     }
 
 
-def generate_evidence_first_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any],
-                                        project: dict[str, Any], locale: str, output: Path,
-                                        local_evidence: dict[str, Path]) -> int:
-    """Render the SKADI evidence-first contract as exactly five authored pages."""
+def generate_product_console_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any],
+                                         project: dict[str, Any], locale: str, output: Path,
+                                         local_evidence: dict[str, Path]) -> int:
+    """Render the SKADI product-console contract as exactly five authored pages."""
     copy = localized(project, locale)
-    labels = evidence_first_pdf_labels(locale)
+    labels = product_console_pdf_labels(locale)
     common = project_labels(locale)
     doc = TechnicalDocument(dependencies, output, copy["title"], copy["thesis"], locale, 5)
-    gallery = project["media"]["gallery"]
-    gallery_by_id = {item["id"]: item for item in gallery}
-    figure_numbers = {item["id"]: index + 2 for index, item in enumerate(gallery)}
+    media_items = [project["media"]["lead"], *project["media"]["gallery"]]
+    media_by_id = {item["id"]: item for item in media_items}
+    figure_numbers = {item["id"]: index + 1 for index, item in enumerate(media_items)}
+    modules = project["consoleModules"]
+    desktop = modules[0]
+    desktop_copy = localized(desktop, locale)
+    api = modules[1]
+    api_copy = localized(api, locale)
+    medical = project["applicationTracks"][0]
+    medical_copy = localized(medical, locale)
+    industrial = project["applicationTracks"][1]
+    industrial_copy = localized(industrial, locale)
+    history_copy = localized(project["productHistory"], locale)
+    flow = project["apiFlow"]
+    flow_copy = localized(flow, locale)
 
     def begin_fixed_page(number: int, title: str) -> None:
         if number > 1:
             require(doc.page_no == number - 1,
-                    f"{output.name}: evidence-first page {number - 1} overflowed its fixed layout.")
+                    f"{output.name}: product-console page {number - 1} overflowed its fixed layout.")
             doc.finish_page()
         doc.page_no = number
         doc.section_name = title
         doc.begin_page(number, title)
         doc.y = doc.top - 30
 
-    def gallery_figure(identifier: str) -> tuple[Path, str, str]:
-        item = gallery_by_id[identifier]
+    def media_figure(identifier: str) -> tuple[Path, str, str]:
+        item = media_by_id[identifier]
         path = local_evidence.get(identifier)
         require(path is not None, f"{output.name}: missing evidence image {identifier}.")
         caption = clean_text(localized(item, locale).get("caption"))
@@ -1881,7 +1916,7 @@ def generate_evidence_first_project_pdf(dependencies: dict[str, Any], payload: d
     diagram = project["pdfSequence"]["diagram"]
     diagram_copy = diagram["translations"][locale]
 
-    # 1 / 5: overview and poster (the video itself is never embedded as an image).
+    # 1 / 5: product overview, naming note, and the app-to-application sequence.
     begin_fixed_page(1, labels["overview"])
     doc.kicker(copy["eyebrow"])
     doc.para(copy["title"], size=23, leading=29, font="MalgunGothic-Bold", gap=12)
@@ -1893,48 +1928,44 @@ def generate_evidence_first_project_pdf(dependencies: dict[str, Any], payload: d
     ])
     doc.rule(before=8, after=10)
     doc.para(copy["summary"], color="muted", gap=10)
-    poster = selected_pdf_evidence_image(project, local_evidence)
-    require(poster is not None, f"{output.name}: evidence-first overview requires the approved poster.")
-    doc.figure(poster, f"{common['figure']} 1.", copy["mediaCaption"])
+    doc.h2(labels["history"])
+    doc.para(history_copy["body"], size=9.2, leading=13, color="muted", gap=6)
     doc.h2(labels["problem"])
     doc.para(copy["problem"], size=9.2, leading=13, color="muted", gap=4)
+    doc.note_grid([(desktop_copy["title"], desktop_copy["summary"]),
+                   (api_copy["title"], api_copy["summary"])], height=78)
+    doc.note_grid([(medical_copy["title"], medical_copy["summary"]),
+                   (industrial_copy["title"], industrial_copy["summary"])], height=78)
 
-    # 2 / 5: the three platform tools, before interpretation.
-    begin_fixed_page(2, labels["tool_evidence"])
-    marker_block, marker_copy = blocks["marker-definition"]
-    doc.h3(marker_copy["heading"])
-    doc.para(block_body(marker_block, marker_copy), size=9, leading=13, color="muted", gap=8)
-    tool_ids = ["skadi-marker-workflow-01", "skadi-api-openex-01", "skadi-viewer-6dof-01"]
-    doc.figure_grid([gallery_figure(identifier) for identifier in tool_ids[:2]], columns=2, image_height=140)
-    doc.figure_grid([gallery_figure(tool_ids[2])], columns=1, image_height=190)
-    doc.para(copy["evidence"], size=8.7, leading=12.5, color="muted", gap=4)
+    # 2 / 5: the same desktop product across marker/file work and tracker/6DoF state.
+    begin_fixed_page(2, labels["desktop_app"])
+    doc.h2(desktop_copy["title"])
+    doc.para(desktop_copy["summary"], size=9.5, leading=14, color="muted", gap=8)
+    doc.figure_grid([media_figure(desktop["evidenceIds"][0])], columns=1, image_height=130)
+    doc.figure_grid([media_figure(desktop["evidenceIds"][1])], columns=1, image_height=195)
+    doc.note_grid([(labels["owned"], desktop_copy["ownedRole"]),
+                   (labels["team"], desktop_copy["teamBoundary"])], height=92)
+    doc.para(copy["evidence"], size=8.2, leading=11.5, color="muted", gap=2)
 
-    # 3 / 5: Define -> Open -> Track -> Apply, owned API stability, and the public change note.
-    begin_fixed_page(3, labels["architecture_api"])
+    # 3 / 5: accessible web flow mirrored as a PDF diagram with explicit personal ownership.
+    begin_fixed_page(3, labels["api_role"])
+    doc.h2(api_copy["title"])
+    doc.para(api_copy["summary"], size=9.5, leading=14, color="muted", gap=8)
     doc.y = doc.diagram(diagram["kind"], diagram_copy["title"],
                         [clean_text(node) for node in diagram_copy["nodes"]], doc.y) - 8
-    step_notes = [(step["label"], clean_text(localized(step, locale)["description"]))
-                  for step in project["architectureSteps"]]
-    doc.note_grid(step_notes[:2], height=70)
-    doc.note_grid(step_notes[2:], height=70)
-    doc.h2(labels["role"])
-    doc.para(copy["role"], size=9, leading=13, color="muted", gap=8)
-    for key in ["api-stability", "viewer-delivery"]:
-        block, block_copy = blocks[key]
-        doc.h3(block_copy["heading"])
-        doc.para(block_body(block, block_copy), size=8.7, leading=12.5, color="muted", gap=6)
-    for link in project.get("links", []):
-        doc.link_line(clean_text(localized(link, locale).get("label")), clean_text(link["href"]))
+    doc.note_grid([(labels["owned"], api_copy["ownedRole"]),
+                   (labels["team"], api_copy["teamBoundary"])], height=100)
+    api_block, api_block_copy = blocks["api-stability"]
+    doc.h3(api_block_copy["heading"])
+    doc.para(block_body(api_block, api_block_copy), size=8.7, leading=12.5, color="muted", gap=6)
+    doc.para(flow_copy["summary"], size=8.4, leading=12, color="muted", gap=4)
+    doc.link_line(clean_text(flow_copy["changeNoteLabel"]), clean_text(flow["changeNoteHref"]))
 
-    # 4 / 5: medical primary track, with the two application artifacts not already shown as tools.
+    # 4 / 5: medical primary integration with its two approved real screens.
     begin_fixed_page(4, labels["medical"])
-    medical = project["applicationTracks"][0]
-    medical_copy = localized(medical, locale)
     doc.h2(medical_copy["title"])
     doc.para(medical_copy["summary"], size=9.5, leading=14, color="muted", gap=8)
-    medical_ids = [identifier for identifier in medical["evidenceIds"]
-                   if identifier in {"skadi-dental-registration-01", "skadi-slicer-template-01"}]
-    doc.figure_grid([gallery_figure(identifier) for identifier in medical_ids], columns=2, image_height=190)
+    doc.figure_grid([media_figure(identifier) for identifier in medical["evidenceIds"]], columns=2, image_height=220)
     doc.note_grid([
         (labels["owned"], medical_copy["ownedRole"]),
         (labels["team"], medical_copy["teamBoundary"]),
@@ -1942,30 +1973,25 @@ def generate_evidence_first_project_pdf(dependencies: dict[str, Any], payload: d
 
     # 5 / 5: industrial extension, four descriptive public resources, and explicit limits.
     begin_fixed_page(5, labels["industrial"])
-    industrial = project["applicationTracks"][1]
-    industrial_copy = localized(industrial, locale)
     doc.h3(industrial_copy["title"])
     doc.para(industrial_copy["summary"], size=8.7, leading=12.5, color="muted", gap=5)
-    doc.figure_grid([gallery_figure("skadi-robot-docking-01")], columns=1, image_height=100)
+    doc.figure_grid([media_figure(industrial["evidenceIds"][0])], columns=1, image_height=125)
     doc.note_grid([
         (labels["owned"], industrial_copy["ownedRole"]),
         (labels["team"], industrial_copy["teamBoundary"]),
-    ], height=70)
+    ], height=66)
     doc.h3(labels["resources"])
     resource_cards = []
     for resource in project["publicResources"]:
         resource_copy = localized(resource, locale)
         resource_cards.append((resource["type"], resource_copy["title"],
                                resource_copy["description"], resource["href"]))
-    doc.link_card_grid(resource_cards, height=62)
+    doc.link_card_grid(resource_cards, height=58)
     doc.h3(labels["limits"])
     doc.para(copy["limitation"], size=8, leading=11, color="muted", gap=4)
     doc.para(copy["teamResult"], size=8, leading=11, color="muted", gap=4)
-    boundary_block, boundary_copy = blocks["integration-boundary"]
-    doc.h3(boundary_copy["heading"])
-    doc.para(block_body(boundary_block, boundary_copy), size=8, leading=11, color="muted", gap=2)
 
-    require(doc.page_no == 5, f"{output.name}: evidence-first page 5 overflowed its fixed layout.")
+    require(doc.page_no == 5, f"{output.name}: product-console page 5 overflowed its fixed layout.")
     doc.finish_page()
     doc.save()
     return 5
@@ -1974,8 +2000,8 @@ def generate_evidence_first_project_pdf(dependencies: dict[str, Any], payload: d
 def generate_project_pdf(dependencies: dict[str, Any], payload: dict[str, Any], project: dict[str, Any],
                          locale: str, output: Path, local_evidence: dict[str, Path]) -> int:
     """Compose one case as a flowing document and return how many pages it needed."""
-    if project.get("caseLayout") == "evidence-first":
-        return generate_evidence_first_project_pdf(
+    if project.get("caseLayout") == "product-console":
+        return generate_product_console_project_pdf(
             dependencies, payload, project, locale, output, local_evidence
         )
     copy = localized(project, locale)
