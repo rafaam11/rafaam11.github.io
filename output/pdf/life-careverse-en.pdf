@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.98112e114dae4178f7a6a1c5a11218ee 4 0 R
+/FormXob.2b8783cd76b4fe6284fcf65330b4e678 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -89,7 +89,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.44c240b47c6d311f01342a4494239ed3 11 0 R /FormXob.aa6fb9bec86dbda0ad311127c7d25f7b 9 0 R
+/FormXob.44f1c4cd901bad9865304094442800e2 9 0 R /FormXob.ea4935ff2d80e6ef7af3d011ab889321 11 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -124,7 +124,7 @@ endobj
 <<
 /Annots [ 13 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.11962bb31afd91aee3a2c8f40eef718c 15 0 R /FormXob.4aca00d8c73c6e61f9b40de3c26ee1cb 14 0 R
+/FormXob.b3e32b4b5b59c39ca86c09f423e2e863 14 0 R /FormXob.c93030c6d0197e7299dd78b3c678d9c9 15 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -817,7 +817,7 @@ BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (join order and all three viewpoints
 BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (panel.) Tj T* ET
 q
 499.2756 0 0 171.626 48 312.2638 cm
-/FormXob.98112e114dae4178f7a6a1c5a11218ee Do
+/FormXob.2b8783cd76b4fe6284fcf65330b4e678 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 291.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at once: clinician 1) Tj T* ET
@@ -1041,7 +1041,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 434.1564 0 0 300 80.55961 463.8898 cm
-/FormXob.aa6fb9bec86dbda0ad311127c7d25f7b Do
+/FormXob.44f1c4cd901bad9865304094442800e2 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. VR consultation room layout: three seats for clinician 1 \(master\), the patient, and clinician 2, plus the 2D measurement) Tj T* ET
@@ -1049,7 +1049,7 @@ BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. VR consultation room l
 BT 1 0 0 1 48 431.3898 Tm /F2+0 8.5 Tf 10.2 TL (panel and 3D model area) Tj T* ET
 q
 499.2756 0 0 171.626 48 242.2638 cm
-/FormXob.44c240b47c6d311f01342a4494239ed3 Do
+/FormXob.ea4935ff2d80e6ef7af3d011ab889321 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 221.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The measurement panel shown identically from all three viewpoints: clinician 1 \(master\), the patient, clinician 2) Tj T* ET
@@ -1077,7 +1077,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 171.626 48 592.2638 cm
-/FormXob.4aca00d8c73c6e61f9b40de3c26ee1cb Do
+/FormXob.b3e32b4b5b59c39ca86c09f423e2e863 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 571.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. A detached maxillary segment reflected across all three viewpoints at once, with two avatars visible in the right-hand) Tj T* ET
@@ -1085,7 +1085,7 @@ BT 1 0 0 1 48 571.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. A detached maxillary s
 BT 1 0 0 1 48 559.7638 Tm /F2+0 8.5 Tf 10.2 TL (view) Tj T* ET
 q
 499.2756 0 0 281.282 48 260.9818 cm
-/FormXob.11962bb31afd91aee3a2c8f40eef718c Do
+/FormXob.c93030c6d0197e7299dd78b3c678d9c9 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 240.4818 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. A headset session run in a hospital waiting area \(faces de-identified\)) Tj T* ET

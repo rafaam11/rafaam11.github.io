@@ -1315,11 +1315,19 @@
   }
 
   function homeProjectGalleryHtml(data, base, isFile, locale) {
-    return projectListHtml(data, base, isFile, locale, { detailed: false, groupHeadingTag: 'h3', headingTag: 'h4' });
+    var projects = validProjects(data, locale);
+    if (!projects.length) return '';
+    var selected = (data.homeProjectSlugs || []).map(function (slug) {
+      return projects.find(function (project) { return project.slug === slug; });
+    }).filter(Boolean);
+    if (!selected.length) return '';
+    return '<ol class="sc-project-list">' + selected.map(function (project) {
+      return projectItemHtml(project, base, isFile, locale, { detailed: false, headingTag: 'h3' });
+    }).join('') + '</ol>';
   }
 
   function projectGroupsHtml(data, base, isFile, locale) {
-    return projectListHtml(data, base, isFile, locale, { detailed: true, groupHeadingTag: 'h2', headingTag: 'h3' });
+    return projectListHtml(data, base, isFile, locale, { detailed: false, groupHeadingTag: 'h2', headingTag: 'h3' });
   }
 
   function highlightsHtml(data, locale) {
@@ -1486,9 +1494,20 @@
       '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
       '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
     var hasStory = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
+    var redundantLimitBlockKeys = {
+      'mandibular-fracture': 'research-boundary',
+      'rtms-navigation': 'clinical-product-boundary',
+      'respiratory-surface-guidance': 'research-boundary',
+      'unmanned-forklift': 'field-boundary',
+      'ai-build-lab': 'privacy-metric-boundary'
+    };
     function blocksOfType(types) {
       return types.reduce(function (ordered, type) {
-        return ordered.concat(project.blocks.filter(function (block) { return block.type === type; }));
+        // Only these reviewed PDF boundary blocks repeat their case-level paragraph.
+        // New limitations and the distinct OMFS validation status remain visible.
+        return ordered.concat(project.blocks.filter(function (block) {
+          return block.type === type && !(type === 'limitation' && block.key === redundantLimitBlockKeys[project.slug]);
+        }));
       }, []).map(function (block) { return blockHtml(block, normalized); }).join('');
     }
     if (sourceProject && sourceProject.caseLayout === 'product-console') {
@@ -1552,7 +1571,7 @@
 
     fill('[data-portfolio="home-projects"]', function () { return homeProjectGalleryHtml(data, base, isFile, locale); });
     fill('[data-portfolio="capability-index"]', function () { return capabilityIndexHtml(data, locale); });
-    fill('[data-portfolio="home-highlights"]', function () { return highlightsHtml(data, locale); });
+    // Home achievements are generated from public-cv.json and remain accessible without JavaScript.
     fill('[data-portfolio="project-groups"]', function () { return projectGroupsHtml(data, base, isFile, locale); });
     fill('[data-portfolio="case-study"]', function (node) {
       var slug = node && node.getAttribute ? node.getAttribute('data-project') : '';

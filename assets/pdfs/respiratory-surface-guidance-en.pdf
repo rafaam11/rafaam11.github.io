@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.887545c5b261537b70bde4308b95f6dd 4 0 R
+/FormXob.6e0c6d703478b2824a9cb10eb2360f52 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 37 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.6deaefd8426e405d7fe17ed624d45aa5 10 0 R /FormXob.815c671c7a1de63aa068a13c7b3a9f96 9 0 R
+/FormXob.1b8c440a5623bc2701205f8c8a0866cb 9 0 R /FormXob.a7d5e52dfa5a341eb7cf12e13975a391 10 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -116,7 +116,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 38 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.78dc0f62e2c00a9b92758da1f604e49e 13 0 R /FormXob.aaf60b48213cbff0cc47c61bb933ac83 14 0 R
+/FormXob.7984deddcbf69a264ab4ac24149ab399 13 0 R /FormXob.940c240ccad1375f451d8123df09242f 14 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -151,7 +151,7 @@ endobj
 <<
 /Annots [ 16 0 R ] /Contents 39 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.4c004ccc7ab8694541698f2f2b24693f 18 0 R /FormXob.58bad8b0f77f4c9c395dfe2c627062dd 17 0 R
+/FormXob.7c52391f250d4237c580e29d5ddc1952 17 0 R /FormXob.7da1d5a6e5d4b8726d1d30768714c2a3 18 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -846,7 +846,7 @@ BT 1 0 0 1 48 525.8898 Tm /F2+0 10 Tf 12 TL (with commercial 3D sensors. Commerc
 BT 1 0 0 1 48 509.8898 Tm /F2+0 10 Tf 12 TL (algorithm choices, so a domestic stack has to build that evidence itself.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 207.0472 cm
-/FormXob.887545c5b261537b70bde4308b95f6dd Do
+/FormXob.6e0c6d703478b2824a9cb10eb2360f52 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 186.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise \002 are) Tj T* ET
@@ -1098,7 +1098,7 @@ BT 1 0 0 1 48 672.8898 Tm /F2+0 10 Tf 12 TL (no depth is produced, and from a co
 BT 1 0 0 1 48 656.8898 Tm /F2+0 10 Tf 12 TL (became design inputs for the real-time module.) Tj T* ET
 q
 499.2756 0 0 183.1717 48 455.718 cm
-/FormXob.815c671c7a1de63aa068a13c7b3a9f96 Do
+/FormXob.1b8c440a5623bc2701205f8c8a0866cb Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 435.218 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Where surface guidance sits in a session: reference surface the day before, setup check on the day, live monitoring) Tj T* ET
@@ -1106,7 +1106,7 @@ BT 1 0 0 1 48 435.218 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Where surface guidance 
 BT 1 0 0 1 48 423.218 Tm /F2+0 8.5 Tf 10.2 TL (during treatment) Tj T* ET
 q
 400 0 0 300 97.6378 105.718 cm
-/FormXob.6deaefd8426e405d7fe17ed624d45aa5 Do
+/FormXob.a7d5e52dfa5a341eb7cf12e13975a391 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 85.21803 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The five commercial 3D sensors put through validation: three ToF, one structured-light, one active-stereo) Tj T* ET
@@ -1134,13 +1134,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 400 0 0 300 97.6378 463.8898 cm
-/FormXob.78dc0f62e2c00a9b92758da1f604e49e Do
+/FormXob.7984deddcbf69a264ab4ac24149ab399 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Measured precision \002, delivered fps, and fill rate for the five sensors by distance \(author-measured\)) Tj T* ET
 q
 499.2756 0 0 222.1776 48 203.7121 cm
-/FormXob.aaf60b48213cbff0cc47c61bb933ac83 Do
+/FormXob.940c240ccad1375f451d8123df09242f Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 183.2121 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Four operating conditions the measurements produced: near-field exposure, warm-up, repeatability, mismatched) Tj T* ET
@@ -1170,13 +1170,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (5 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 149.7827 48 614.1071 cm
-/FormXob.58bad8b0f77f4c9c395dfe2c627062dd Do
+/FormXob.7c52391f250d4237c580e29d5ddc1952 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 593.6071 Tm /F2+0 8.5 Tf 10.2 TL (Figure 6. Far-field track: merge point clouds from several viewpoints, reconstruct the surface, register it to the planning CT) Tj T* ET
 q
 499.2756 0 0 153.2152 48 422.8919 cm
-/FormXob.4c004ccc7ab8694541698f2f2b24693f Do
+/FormXob.7da1d5a6e5d4b8726d1d30768714c2a3 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 402.3919 Tm /F2+0 8.5 Tf 10.2 TL (Figure 7. Near-field track: chest and abdomen ROI depth becomes a respiratory waveform, and the gating window is judged on) Tj T* ET

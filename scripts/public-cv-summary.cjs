@@ -281,7 +281,7 @@ function renderPublicCvSummary(cvValue, locale) {
     boundary: 'Only approved public facts appear here. Personal information about other people and unverified outcome claims are excluded.'
   };
 
-  const entryHead = (organization, period) => `<p class="sc-cv__head"><strong>${htmlEscape(organization)}</strong><time>${htmlEscape(period)}</time></p>`;
+  const entryHead = (organization, period) => `<p class="sc-cv__head"><strong>${htmlEscape(locale === 'ko' ? ({'DGIST': '대구경북과학기술원 (DGIST)', 'Kumoh National Institute of Technology': '금오공과대학교', 'DIGITRACK Inc.': '㈜디지트랙'}[organization] || organization) : organization)}</strong><time>${htmlEscape(locale === 'ko' ? period.replace(/Present/gi, '현재') : period)}</time></p>`;
   const listItems = (items, label) => items.map((item, index) => `            <li>${htmlEscape(requireText(item, `${label} item ${index + 1}`))}</li>`).join('\n');
 
   const educationHtml = education.map((entry, index) => {
@@ -417,7 +417,7 @@ ${awardHtml}
 ${skillHtml}
           <div><dt>${copy.languages}</dt><dd>${languageHtml}</dd></div>
     </dl>
-    <p class="sc-cv__note">${copy.boundary}</p>
+    <p class="sc-cv__note"><a href="../projects/index.html">${locale === 'ko' ? '연구와 구현의 상세 내용은 프로젝트에서 확인할 수 있습니다.' : 'Explore the projects for research and implementation details.'}</a></p>
   </section>`;
   const summaryDigest = digest(`${locale}\n${sourceDigest}\n${body}`);
   const html = `<section class="sc-cv" data-cv-summary data-cv-source-digest="${sourceDigest}" data-cv-summary-digest="${summaryDigest}" aria-labelledby="cv-summary-title">\n${body}\n</section>`;
@@ -570,6 +570,8 @@ function main(argv) {
   }
   if (!write) throw new Error('Use --write to refresh the canonical KO/EN CV summaries.');
   const results = refreshCvSummaries(rootDir);
+  const cv = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/public-cv.json'), 'utf8'));
+  require('./profile-home.cjs').writePages(cv, rootDir);
   process.stdout.write(`Public CV summaries refreshed: ${results.map((result) => `${result.locale}:${result.changed ? 'updated' : 'unchanged'}`).join(', ')}.\n`);
 }
 

@@ -16,6 +16,7 @@
   ];
   var routeDescriptors = [
     { page: 'home', route: '', file: 'index.html', navigation: 'brand' },
+    { page: 'news', route: 'news/', file: 'news/index.html', navigation: 'link' },
     { page: 'projects', route: 'projects/', file: 'projects/index.html', navigation: 'link' },
     { page: 'cv', route: 'cv/', file: 'cv/index.html', navigation: 'link', allowsNamedEmployer: true },
     { page: 'contact', route: 'contact/', file: 'contact/index.html', navigation: 'link' }
@@ -29,6 +30,7 @@
   var ui = {
     ko: {
       nav: {
+        news: '소식',
         projects: '프로젝트',
         cv: 'CV',
         contact: '연락처',
@@ -67,6 +69,7 @@
     },
     en: {
       nav: {
+        news: 'News',
         projects: 'Projects',
         cv: 'CV',
         contact: 'Contact',

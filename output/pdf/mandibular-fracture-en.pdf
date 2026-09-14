@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 32 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.1cc2c37fa0289e7c36c18edb9995ede3 4 0 R
+/FormXob.c40cf1b968d2e94888f0b4bd13556615 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -89,7 +89,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 32 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.403b244d3bcb865ce080ae661dbece6a 11 0 R /FormXob.8e6f8b5f6ac95b64245fb77b68c8f2e4 10 0 R /FormXob.f09833d71a21eecd227019d99247b524 9 0 R
+/FormXob.031af0ddf39c3b41a2c7609df8c585b5 11 0 R /FormXob.8365f4949ea8e0cc5256e5adc7650b17 10 0 R /FormXob.a183f6acdcc359b215871b9a05dead2a 9 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -124,7 +124,7 @@ endobj
 <<
 /Annots [ 13 0 R ] /Contents 36 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 32 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.4b03c8b87848b4b9c0fb82e82c86ec4c 14 0 R /FormXob.a30734774b4c315f6da1d8dc56db84cf 15 0 R
+/FormXob.68a3a935778a27bc6498420fe7b156ad 14 0 R /FormXob.7d5d68d78b0b0b2cf4bc6a37867a6eb7 15 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -820,7 +820,7 @@ BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Built a surgical-planning simulator
 BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (dental features and fracture surfaces.) Tj T* ET
 q
 400 0 0 300 97.6378 219.8898 cm
-/FormXob.1cc2c37fa0289e7c36c18edb9995ede3 Do
+/FormXob.c40cf1b968d2e94888f0b4bd13556615 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 199.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Surface-distance maps between the pre-fracture mandible and the reduction model \(part of Fig. 3 in the published) Tj T* ET
@@ -1031,7 +1031,7 @@ endstream
 endobj
 35 0 obj
 <<
-/Length 1486
+/Length 1487
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1050,19 +1050,19 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 201.1733 48 562.7164 cm
-/FormXob.f09833d71a21eecd227019d99247b524 Do
+/FormXob.a183f6acdcc359b215871b9a05dead2a Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 542.2164 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Dental landmark extraction: maxilla alignment, arch-line fit, slicing, central groove, and buccal cusp) Tj T* ET
+BT 1 0 0 1 48 542.2164 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Dental landmark extraction: maxilla alignment, arch-line fit, slicing, central groove, and lingual cusp) Tj T* ET
 q
 499.2756 0 0 237.3845 48 287.3319 cm
-/FormXob.8e6f8b5f6ac95b64245fb77b68c8f2e4 Do
+/FormXob.8365f4949ea8e0cc5256e5adc7650b17 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 266.8319 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. General positioning of fracture segments: arch alignment, fracture-surface features, and overlap error) Tj T* ET
 q
 499.2756 0 0 142.2935 48 107.0384 cm
-/FormXob.403b244d3bcb865ce080ae661dbece6a Do
+/FormXob.031af0ddf39c3b41a2c7609df8c585b5 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 86.53839 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Surface-distance maps for different fracture and tooth conditions: 10-4 split, 11-3 split, two missing teeth) Tj T* ET
@@ -1090,13 +1090,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 295.6385 48 468.2513 cm
-/FormXob.4b03c8b87848b4b9c0fb82e82c86ec4c Do
+/FormXob.68a3a935778a27bc6498420fe7b156ad Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 447.7513 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Arch-line-based alignment of mandibular segments \(ACCAS 2022\)) Tj T* ET
 q
 400 0 0 300 97.6378 130.2513 cm
-/FormXob.a30734774b4c315f6da1d8dc56db84cf Do
+/FormXob.7d5d68d78b0b0b2cf4bc6a37867a6eb7 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 109.7513 Tm /F2+0 8.5 Tf 10.2 TL (Figure 6. Presenting at ACCAS 2022, Khon Kaen) Tj T* ET
@@ -1219,8 +1219,8 @@ xref
 0007688842 00000 n 
 0007691544 00000 n 
 0007698491 00000 n 
-0007700029 00000 n 
-0007701166 00000 n 
+0007700030 00000 n 
+0007701167 00000 n 
 trailer
 <<
 /ID 
@@ -1232,5 +1232,5 @@ trailer
 /Size 38
 >>
 startxref
-7704926
+7704927
 %%EOF

@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.31d6eb5b60af586f232f7a164325d1bd 4 0 R
+/FormXob.7ada26aa6ceee50d0905497a2acb0f66 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.6c3212515ef14ef25a2ed898c1d360fa 9 0 R /FormXob.a11fb1ee4652e8b7dd0425ee584dce3f 10 0 R
+/FormXob.804136391111cc1718f7866cb799fe3c 9 0 R /FormXob.e19fe1578db628ad831d28108955cd73 10 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -108,7 +108,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.2eef4bd1fc2174e920113d07fb2422a6 13 0 R
+/FormXob.8ac5307c27e0594a6fe5d9e4e53d3726 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -813,7 +813,7 @@ BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (One combined case connects a local-
 BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (bus-information application through the same problem-to-product loop.) Tj T* ET
 q
 467.8363 0 0 300 63.71967 199.8898 cm
-/FormXob.31d6eb5b60af586f232f7a164325d1bd Do
+/FormXob.7ada26aa6ceee50d0905497a2acb0f66 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 179.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees. Local paths are) Tj T* ET
@@ -1030,13 +1030,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 468.2927 0 0 300 63.49145 463.8898 cm
-/FormXob.6c3212515ef14ef25a2ed898c1d360fa Do
+/FormXob.804136391111cc1718f7866cb799fe3c Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Four panes in one project: pull-request review, a document, and two terminals) Tj T* ET
 q
 468.2927 0 0 300 63.49145 125.8898 cm
-/FormXob.a11fb1ee4652e8b7dd0425ee584dce3f Do
+/FormXob.e19fe1578db628ad831d28108955cd73 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 105.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. One prompt sent to several selected sessions at once) Tj T* ET
@@ -1064,7 +1064,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 468.2927 0 0 300 63.49145 463.8898 cm
-/FormXob.2eef4bd1fc2174e920113d07fb2422a6 Do
+/FormXob.8ac5307c27e0594a6fe5d9e4e53d3726 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Changed files and diffs are read in the app, then handed to an agent review) Tj T* ET

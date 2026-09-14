@@ -126,38 +126,240 @@
   }
 
   var highlights = {
-    publications: [
-      { year: '2024', href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: {
-        ko: { title: 'A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery', venue: 'Journal of Imaging Informatics in Medicine (SCIE Q1) · 공동 제1저자' },
-        en: { title: 'A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery', venue: 'Journal of Imaging Informatics in Medicine (SCIE Q1) · joint first author' } } },
-      { year: '2022', translations: {
-        ko: { title: 'Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery', venue: 'ACCAS 2022, Bangkok · 구두 발표' },
-        en: { title: 'Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery', venue: 'ACCAS 2022, Bangkok · oral presentation' } } },
-      { year: '2019', translations: {
-        ko: { title: 'Design of Ping-Pong Ball Launcher', venue: 'ISM 2019 — International Symposium on Mechatronics' },
-        en: { title: 'Design of Ping-Pong Ball Launcher', venue: 'ISM 2019 — International Symposium on Mechatronics' } } }
-    ],
-    patents: {
-      filed: 7,
-      registered: 3,
-      items: [
-        { year: '2024', status: 'registered', translations: { ko: { title: '수술도구의 실시간 3차원 위치추적을 위한 좌표계 정합 방법' }, en: { title: 'Coordinate-system registration method for real-time 3D tracking of surgical instruments' } } },
-        { year: '2024', status: 'registered', translations: { ko: { title: '위치 추적 장치 및 방법' }, en: { title: 'Position tracking apparatus and method' } } },
-        { year: '2015', status: 'registered', translations: { ko: { title: '일회용 종이컵 수거함' }, en: { title: 'Disposable paper-cup collection box' } } }
-      ]
+  "publications": [
+    {
+      "year": "2026",
+      "translations": {
+        "ko": {
+          "title": "Development and Clinical Evaluation of an Extended Reality-Based Consultation Platform \"OMFS VR Consultation App\" for Enhanced Patient Understanding in Orthognathic Surgery",
+          "venue": "2026 의료메타버스학회 춘계 학술대회 · 포스터 발표 · 공동저자"
+        },
+        "en": {
+          "title": "Development and Clinical Evaluation of an Extended Reality-Based Consultation Platform \"OMFS VR Consultation App\" for Enhanced Patient Understanding in Orthognathic Surgery",
+          "venue": "2026 Spring Conference, Korean Society of Medical Metaverse · Poster presentation · Co-author"
+        }
+      }
     },
-    awards: [
-      { year: '2024', translations: { ko: { title: '의료메타버스학회 우수포스터상' }, en: { title: 'Best Poster Award, Korean Society of Medical Metaverse' } } },
-      { year: '2023', translations: { ko: { title: '대한의료로봇학회 우수논문상' }, en: { title: 'Best Paper Award, Korean Society of Medical Robotics' } } },
-      { year: '2020', translations: { ko: { title: 'KIT 엔지니어링 페어 장려상 (4족 보행 로봇)' }, en: { title: 'Encouragement Award, KIT Engineering Fair (quadruped robot)' } } },
-      { year: '2020', translations: { ko: { title: 'ROS 기반 자율주행 교육 동상' }, en: { title: 'Bronze Prize, ROS-based Autonomous Driving Course' } } },
-      { year: '2019', translations: { ko: { title: '국제 TRIZ 경진대회 대상' }, en: { title: 'Grand Prize, International TRIZ Competition' } } },
-      { year: '2019', translations: { ko: { title: '창업아이디어 경진대회 최우수상' }, en: { title: 'First Prize, Startup Idea Competition' } } },
-      { year: '2019', translations: { ko: { title: '효성 GREEN 지구 공모전 우수상' }, en: { title: 'Excellence Award, Hyosung GREEN Earth Contest' } } },
-      { year: '2019', translations: { ko: { title: '대학창의발명대회 후원기관상' }, en: { title: 'Sponsor Award, University Creative Invention Contest' } } },
-      { year: '2015', translations: { ko: { title: '대학창의발명대회 우수상' }, en: { title: 'Excellence Award, University Creative Invention Contest' } } }
+    {
+      "year": "2024",
+      "href": "https://link.springer.com/article/10.1007/s10278-024-01014-z",
+      "translations": {
+        "ko": {
+          "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
+          "venue": "Journal of Imaging Informatics in Medicine (SCIE, Q1) · 학술지 논문 · 공동 제1저자 (Joint first author)"
+        },
+        "en": {
+          "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
+          "venue": "Journal of Imaging Informatics in Medicine (SCIE, Q1) · Journal article · Joint first author"
+        }
+      }
+    },
+    {
+      "year": "2022",
+      "translations": {
+        "ko": {
+          "title": "Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery",
+          "venue": "ACCAS 2022 · 국제학회 논문 · 제1저자"
+        },
+        "en": {
+          "title": "Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery",
+          "venue": "ACCAS 2022 · International conference paper · First author"
+        }
+      }
+    }
+  ],
+  "patents": {
+    "filed": 7,
+    "registered": 3,
+    "items": [
+      {
+        "year": "2024",
+        "status": "registered",
+        "translations": {
+          "ko": {
+            "title": "수술도구의 실시간 3차원 위치추적을 위한 좌표계 정합 방법"
+          },
+          "en": {
+            "title": "Coordinate-frame registration method for real-time 3D tracking of surgical instruments"
+          }
+        }
+      },
+      {
+        "year": "2024",
+        "status": "registered",
+        "translations": {
+          "ko": {
+            "title": "위치 추적 장치 및 방법"
+          },
+          "en": {
+            "title": "Position tracking device and method"
+          }
+        }
+      },
+      {
+        "year": "2024",
+        "status": "filed",
+        "translations": {
+          "ko": {
+            "title": "2축 회전 방식의 스테레오 카메라 구동 장치 및 방법"
+          },
+          "en": {
+            "title": "Two-axis rotating stereo-camera actuation device and method"
+          }
+        }
+      },
+      {
+        "year": "2021",
+        "status": "filed",
+        "translations": {
+          "ko": {
+            "title": "다관절 링크구조를 이용한 4족 보행 로봇"
+          },
+          "en": {
+            "title": "Quadruped walking robot using a multi-joint link structure"
+          }
+        }
+      },
+      {
+        "year": "2019",
+        "status": "registered",
+        "translations": {
+          "ko": {
+            "title": "탄성부를 포함하는 옷걸이"
+          },
+          "en": {
+            "title": "Clothes hanger with an elastic section"
+          }
+        }
+      },
+      {
+        "year": "2019",
+        "status": "filed",
+        "translations": {
+          "ko": {
+            "title": "조립하여 수납공간을 조절할 수 있는 캐리어"
+          },
+          "en": {
+            "title": "Assemblable carrier with adjustable storage space"
+          }
+        }
+      },
+      {
+        "year": "2015",
+        "status": "filed",
+        "translations": {
+          "ko": {
+            "title": "일회용 종이컵 수거함"
+          },
+          "en": {
+            "title": "Disposable paper-cup collection bin"
+          }
+        }
+      }
     ]
-  };
+  },
+  "awards": [
+    {
+      "year": "2024",
+      "translations": {
+        "ko": {
+          "title": "우수포스터상"
+        },
+        "en": {
+          "title": "Best Poster Award"
+        }
+      }
+    },
+    {
+      "year": "2023",
+      "translations": {
+        "ko": {
+          "title": "우수논문상"
+        },
+        "en": {
+          "title": "Best Paper Award"
+        }
+      }
+    },
+    {
+      "year": "2020",
+      "translations": {
+        "ko": {
+          "title": "엔지니어링 페어 장려상 (5절 링크 기반 4족 보행 로봇)"
+        },
+        "en": {
+          "title": "Encouragement Prize, Engineering Fair (five-bar-linkage quadruped robot)"
+        }
+      }
+    },
+    {
+      "year": "2020",
+      "translations": {
+        "ko": {
+          "title": "ROS 기반 자율주행 교육 동상"
+        },
+        "en": {
+          "title": "Bronze Prize, ROS-based autonomous-driving training"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "translations": {
+        "ko": {
+          "title": "국제 TRIZ 경진대회 대상"
+        },
+        "en": {
+          "title": "Grand Prize, International TRIZ Competition"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "translations": {
+        "ko": {
+          "title": "창업아이디어 경진대회 최우수상"
+        },
+        "en": {
+          "title": "Grand Prize, Startup Idea Competition"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "translations": {
+        "ko": {
+          "title": "대학창의발명대회 후원기관상"
+        },
+        "en": {
+          "title": "Sponsor's Award, University Creative Invention Contest"
+        }
+      }
+    },
+    {
+      "year": "2019",
+      "translations": {
+        "ko": {
+          "title": "GREEN 지구 공모전 우수상"
+        },
+        "en": {
+          "title": "Excellence Award, GREEN Earth Competition"
+        }
+      }
+    },
+    {
+      "year": "2015",
+      "translations": {
+        "ko": {
+          "title": "대학창의발명대회 우수상"
+        },
+        "en": {
+          "title": "Excellence Award, University Creative Invention Contest"
+        }
+      }
+    }
+  ]
+};
 
   var projects = [
     project({
@@ -237,11 +439,11 @@
           roleLabel: '3D 의료영상·수술내비게이션 개발자',
           role: '전체 소프트웨어 아키텍처를 설계하고 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적 SDK와 데이터 파이프라인, 영상·환자·마커·기구 좌표 변환, 환자 정합과 피드백, 마커·비표준·장기구 캘리브레이션, 6개 워크플로와 미러링, HoloLens–PC 통신·공간 표시·상호작용, 팬텀 통합 시험과 검증 도구의 주 구현을 맡았습니다.',
           teamResult: 'DIGITRACK과 삼성서울병원 연구팀은 임상 워크플로와 요구사항 맥락, 수용 검토 기준, 통합 시연을 공동으로 검토했습니다.',
-          evidence: '두 전체 길이 영상과 승인된 화면·좌표계·기구·팬텀 파생본은 위치, 모델, 영상, 상호작용 데이터가 SMCNavi에서 HoloLens 경로까지 연결된 연구 프로토타입을 보여줍니다.',
+          evidence: '두 전체 길이 영상과 화면·좌표계·기구·팬텀 그림은 위치, 모델, 영상, 상호작용 데이터가 SMCNavi에서 HoloLens 경로까지 연결된 연구 프로토타입을 보여줍니다.',
           limitation: '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.',
           collaboration: '의료진의 워크플로·수용 기준과 개발팀의 추적·영상·XR 통합 검토를 분리해 기록합니다.',
           mediaAlt: 'HoloLens 2를 착용한 사용자의 시점과 팬텀 위 홀로그램, 추적 기구, MPR 화면이 이어지는 디지털 트윈 시연 영상.',
-          mediaCaption: 'HoloLens 2 디지털 트윈과 추적 기구·영상 표시를 연결한 전체 길이 연구 프로토타입 시연입니다. 비식별 연구 영상이며 임상 결과 근거가 아닙니다.',
+          mediaCaption: 'HoloLens 2 디지털 트윈과 추적 기구·영상 표시를 연결한 전체 길이 연구 프로토타입 시연입니다.',
           status: '프로토타입 · 진행 중',
           cardProblem: '의료영상·추적·정합·수술별 기능을 SMCNavi와 HoloLens 경로로 연결합니다.',
           cardOwnedRole: '전체 SW 아키텍처와 3D Slicer·추적·정합·캘리브레이션·HoloLens 통합을 주 구현했습니다.',
@@ -262,11 +464,11 @@
           roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
           role: 'Designed the overall software architecture and served as the primary implementer for DICOM and 3D-model loading, MPR and 3D visualisation, the optical-tracker SDK and data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens–PC communication and interaction, and phantom integration tests and verification tooling.',
           teamResult: 'The DIGITRACK and Samsung Medical Center research team jointly reviewed the clinical-workflow and requirements context, acceptance criteria, and integration demonstrations.',
-          evidence: 'Two full-length videos and approved interface, coordinate-frame, instrument, and phantom derivatives show a working research prototype carrying position, model, image, and interaction data from SMCNavi through the HoloLens path.',
+          evidence: 'Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working research prototype carrying position, model, image, and interaction data from SMCNavi through the HoloLens path.',
           limitation: 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.',
           collaboration: 'Clinical workflow and acceptance criteria remain distinct from the development team\'s tracking, imaging, and XR integration review.',
           mediaAlt: 'Digital-twin demonstration moving between a HoloLens 2 viewpoint, a hologram over a phantom, a tracked instrument, and MPR displays.',
-          mediaCaption: 'Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and image presentation. It uses de-identified research imagery and is not evidence of clinical outcome.',
+          mediaCaption: 'Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and image presentation.',
           status: 'Prototype · Ongoing',
           cardProblem: 'Connect medical images, tracking, registration, and procedure workflows through the SMCNavi and HoloLens path.',
           cardOwnedRole: 'Primarily implemented the full software architecture across 3D Slicer, tracking, registration, calibration, and HoloLens integration.',
@@ -328,11 +530,11 @@
               },
               translations: {
                 ko: {
-                  caption: 'SMCNavi에서 6개 구강악안면 워크플로가 전환·시연되는 전체 기능 소개 영상입니다. 비식별 연구 영상이며 임상 결과 근거가 아닙니다.',
+                  caption: 'SMCNavi에서 6개 구강악안면 워크플로가 전환·시연되는 전체 기능 소개 영상입니다.',
                   alt: 'SMCNavi 화면에서 종양 제거, 양악수술, 하악운동, 골이식, 골절 미러링 워크플로가 차례로 시연되는 영상.'
                 },
                 en: {
-                  caption: 'Full feature video moving through six oral and maxillofacial workflows in SMCNavi. It uses de-identified research imagery and is not evidence of clinical outcome.',
+                  caption: 'Full feature video moving through six oral and maxillofacial workflows in SMCNavi.',
                   alt: 'Video moving through SMCNavi workflows for tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and fracture mirroring.'
                 }
               }
@@ -343,8 +545,8 @@
               status: 'approved',
               publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-ui-01.png',
               translations: {
-                ko: { caption: 'SMCNavi 통합 UI와 HoloLens–PC 연결 화면. 비식별 연구 영상 파생본이며 임상 결과 근거가 아닙니다.', alt: '수술 유형 선택 UI, 팬텀에서 추적 기구를 사용하는 장면, HoloLens와 모니터 연결 화면을 묶은 그림.' },
-                en: { caption: 'Integrated SMCNavi UI and HoloLens–PC connection view. This derivative uses de-identified research imagery and is not evidence of clinical outcome.', alt: 'Composite showing the procedure-selection UI, tracked instrument use on a phantom, HoloLens, and a connected monitor.' }
+                ko: { caption: 'SMCNavi 통합 UI와 HoloLens–PC 연결 화면.', alt: '수술 유형 선택 UI, 팬텀에서 추적 기구를 사용하는 장면, HoloLens와 모니터 연결 화면을 묶은 그림.' },
+                en: { caption: 'Integrated SMCNavi UI and HoloLens–PC connection view.', alt: 'Composite showing the procedure-selection UI, tracked instrument use on a phantom, HoloLens, and a connected monitor.' }
               }
             },
             {
@@ -353,8 +555,8 @@
               status: 'approved',
               publicPath: 'assets/projects/surgical-navigation/surgical-navigation-smcnavi-workflows-01.png',
               translations: {
-                ko: { caption: '6개 구강악안면 소프트웨어 워크플로. 비식별 연구 영상 파생본이며 임상 효능을 뜻하지 않습니다.', alt: '상악·하악 종양 제거, 양악수술, 하악운동, 골이식 위치설정, 광대·안와 골절 미러링 화면을 2×3으로 배치한 그림.' },
-                en: { caption: 'Six oral and maxillofacial software workflows. This derivative uses de-identified research imagery and does not establish clinical efficacy.', alt: 'Two-by-three composite of maxillary and mandibular tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and zygomatic-orbital fracture mirroring.' }
+                ko: { caption: '6개 구강악안면 소프트웨어 워크플로.', alt: '상악·하악 종양 제거, 양악수술, 하악운동, 골이식 위치설정, 광대·안와 골절 미러링 화면을 2×3으로 배치한 그림.' },
+                en: { caption: 'Six oral and maxillofacial software workflows.', alt: 'Two-by-three composite of maxillary and mandibular tumour removal, bimaxillary surgery, mandibular motion, bone-graft placement, and zygomatic-orbital fracture mirroring.' }
               }
             }
           ]
@@ -489,7 +691,7 @@
         lead: { id: 'mandibular-fracture-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-lead-01.png' },
         references: [{ id: 'mandibular-publication', type: 'publication', status: 'approved', publicPath: 'https://link.springer.com/article/10.1007/s10278-024-01014-z' }],
         gallery: [
-          { id: 'mandibular-fracture-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-01.png', translations: { ko: { caption: '치아 랜드마크 추출 — 상악 정렬·치열궁 곡선·단면·중심구·협측 교두', alt: '상악 모델 정렬, 치열궁 피팅, 수직 단면, 그래프 피크, 중심구와 설측 교두 추출 과정 그림' }, en: { caption: 'Dental landmark extraction: maxilla alignment, arch-line fit, slicing, central groove, and buccal cusp', alt: 'Figure showing maxilla alignment, arch-line fitting, perpendicular slicing, graph peaks, and central-groove and lingual-cusp extraction' } } },
+          { id: 'mandibular-fracture-gallery-01', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-01.png', translations: { ko: { caption: '치아 랜드마크 추출 — 상악 정렬·치열궁 곡선·단면·중심구·설측 교두', alt: '상악 모델 정렬, 치열궁 피팅, 수직 단면, 그래프 피크, 중심구와 설측 교두 추출 과정 그림' }, en: { caption: 'Dental landmark extraction: maxilla alignment, arch-line fit, slicing, central groove, and lingual cusp', alt: 'Figure showing maxilla alignment, arch-line fitting, perpendicular slicing, graph peaks, and central-groove and lingual-cusp extraction' } } },
           { id: 'mandibular-fracture-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-02.png', translations: { ko: { caption: '골절편의 일반 위치 맞춤 — 치열궁 정렬·골절면 특징·중첩 오차', alt: '상악 치열궁에 맞춘 두 하악골 골절편, 협측 교두 추출, 골절면 특징점과 비틀림·부피 중첩 오차 그림' }, en: { caption: 'General positioning of fracture segments: arch alignment, fracture-surface features, and overlap error', alt: 'Figure of two mandibular segments aligned to the maxillary arch, buccal-cusp extraction, fracture-section features, and twisting and volume-overlap error' } } },
           { id: 'mandibular-fracture-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-03.png', translations: { ko: { caption: '다양한 골절·치아 조건의 표면 거리 맵 — 10–4 분할, 11–3 분할, 치아 2개 결손', alt: '세 가지 골절·결손 조건에서 정복 모델의 표면 거리 맵' }, en: { caption: 'Surface-distance maps for different fracture and tooth conditions: 10–4 split, 11–3 split, two missing teeth', alt: 'Surface-distance maps of the reduction model in three fracture and tooth-loss conditions' } } },
           { id: 'mandibular-fracture-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/mandibular-fracture/mandibular-fracture-gallery-04.png', translations: { ko: { caption: '치열궁 기반 하악 분절 정렬(ACCAS 2022 발표)', alt: '상악 치열궁을 거울 대칭해 두 하악 분절을 정렬하는 개념도' }, en: { caption: 'Arch-line-based alignment of mandibular segments (ACCAS 2022)', alt: 'Concept figure aligning two lower segments to the mirrored upper arch' } } },
@@ -948,7 +1150,7 @@
       translations: {
         ko: {
           title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '의료 코어 · 검증됨',
-          thesis: '광학 트래킹과 3D Slicer를 라이선스로 배포되는 코일 내비게이션 제품으로 완성해, 시술자가 믿고 쓸 수 있는 위치·각도 안내를 만듭니다.',
+          thesis: '광학 트래킹과 3D Slicer를 라이선스로 배포되는 코일 내비게이션 제품으로 완성해, 코일의 위치·각도와 타깃 오차를 표시합니다.',
           summary: '3D Slicer 위에 시술 준비부터 실시간 코일 내비게이션까지 이어지는 화면 흐름, 랜드마크·ICP 정합 엔진, 광학 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 설계해 고객사에 납품하고 계속 유지보수합니다.',
           problem: '서로 다른 좌표계에 있는 의료영상, 트래커, 태블릿, 로봇을 하나의 검증 가능한 흐름으로 묶어야 했습니다.',
           role: '3D Slicer 기반 시술 준비·내비게이션 화면 흐름, 랜드마크와 ICP를 함께 쓰는 정합 엔진과 좌표 변환 체인, 광학 트래커 SDK 마이그레이션·태블릿 프로토콜·로봇 연동, 라이선스 검증과 옵션 기능 게이팅을 포함한 제품 구조를 리드했습니다.',
@@ -1137,7 +1339,7 @@
           problem: '광학 트래커를 응용에 연결하려면 마커 정의, 장치 상태, API 열기 실패와 추적 좌표 전달을 예측 가능한 제품 인터페이스로 다뤄야 합니다.',
           role: 'DtSkadi.dll을 응용에 통합하고 OpenEx()의 오류 분기를 정리해 열기 실패 뒤 잘못된 상태로 진행하며 발생하던 크래시를 방지했습니다. MarkerEditor 입력 검증을 구현하고, 데스크톱 앱과 API의 유지보수·배포, 공개 문서와 통합 지원을 맡았습니다.',
           teamResult: '장치 하드웨어와 광학·기구 설계, 의료·산업 최종 응용, 로봇 제어, 영업과 고객 성과는 팀·협력자의 결과입니다. 제품 성능·임상 효과·판매 성과를 개인 성과로 주장하지 않습니다.',
-          evidence: '마커 정의·파일 작업, 트래커 상태·6DoF, 비식별 의료 트레이, CT 작업 화면, 로봇 추적 현장까지 승인된 실제 화면 다섯 종을 공개합니다.',
+          evidence: '마커 정의·파일 작업, 트래커 상태·6DoF, 비식별 의료 트레이, CT 작업 화면, 로봇 추적 현장까지 실제 화면 다섯 종이 근거입니다.',
           limitation: '공개 자료는 제품 인터페이스와 통합 경계만 다룹니다. 얼굴, 장치 ID, 좌표값, 로고, 버전, 라이선스 경로와 성능 평가는 제외했습니다.',
           collaboration: '광학·하드웨어 설계자, 수술내비게이션 개발자, 연구기관 사용자와 로봇 응용 팀의 인터페이스를 맞춥니다.',
           mediaAlt: '마커 형상을 정의하고 파일을 불러오거나 저장하는 SKADI 데스크톱 앱 화면.', mediaCaption: '데스크톱 앱의 마커 정의와 파일 작업 화면입니다.',
@@ -1299,7 +1501,181 @@
     })
   ];
 
+  // Event dates retain the precision supported by the public record.
+  var news = [
+    { id: 'multi-cli-work-v1-29-0', eventDate: '2026-09-04', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.29.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.29.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.29.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.29.0을 공개했습니다. 프로젝트 태그와 그룹 설정을 추가했습니다.' }, en: { body: 'Released multi-cli-work v1.29.0, adding project tags and group settings.' } } },
+    { id: 'multi-cli-work-v1-28-0', eventDate: '2026-09-02', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.28.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.28.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.28.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.28.0을 공개했습니다. 세션과 워크스페이스를 한 패널에서 다루도록 구성했습니다.' }, en: { body: 'Released multi-cli-work v1.28.0, bringing sessions and workspaces together in one panel.' } } },
+    { id: 'multi-cli-work-v1-24-0', eventDate: '2026-08-16', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.24.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.24.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.24.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.24.0을 공개했습니다. 세션과 문서의 순서를 드래그로 변경하는 기능을 추가했습니다.' }, en: { body: 'Released multi-cli-work v1.24.0, adding drag-and-drop reordering for sessions and documents.' } } },
+    { id: 'multi-cli-work-v1-10-0', eventDate: '2026-08-04', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.10.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.10.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.10.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.10.0을 공개했습니다. 저장소와 문서를 연결하는 작업 프로젝트 계층을 추가했습니다.' }, en: { body: 'Released multi-cli-work v1.10.0, adding a work-project hierarchy that connects repositories and documents.' } } },
+    { id: 'multi-cli-work-v1-7-0', eventDate: '2026-07-27', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.7.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.7.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.7.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.7.0을 공개했습니다. GitHub PR을 검토하는 작업 흐름을 추가했습니다.' }, en: { body: 'Released multi-cli-work v1.7.0, adding a workflow for reviewing GitHub pull requests.' } } },
+    { id: 'bus-info-v0-7-3', eventDate: '2026-07-25', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/public-transportation-info v0.7.3', dateSource: 'https://github.com/rafaam11/public-transportation-info/releases/tag/v0.7.3', contentSource: 'https://github.com/rafaam11/public-transportation-info/compare/v0.6.1...v0.7.3' },
+      links: [{ href: 'https://github.com/rafaam11/public-transportation-info/releases/tag/v0.7.3', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: '대구 버스 정보 앱 v0.7.3을 공개했습니다. 정류장 중심의 검색과 지도 사용 흐름을 개선했습니다.' }, en: { body: 'Released v0.7.3 of the Daegu bus-information app, improving stop-centred search and map interactions.' } } },
+    { id: 'multi-cli-work-v1-3-0', eventDate: '2026-07-19', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.3.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.3.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.3.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.3.0을 공개했습니다. 세션 상태 저장과 에이전트 오케스트레이션 CLI를 추가했습니다.' }, en: { body: 'Released multi-cli-work v1.3.0, adding session persistence and an agent-orchestration CLI.' } } },
+    { id: 'bus-info-v0-6-0', eventDate: '2026-07-17', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/public-transportation-info v0.6.0', dateSource: 'https://github.com/rafaam11/public-transportation-info/releases/tag/v0.6.0' },
+      links: [{ href: 'https://github.com/rafaam11/public-transportation-info/releases/tag/v0.6.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: '직접 필요한 대중교통 정보를 다루는 대구 버스 정보 앱 v0.6.0을 공개했습니다.' }, en: { body: 'Released v0.6.0 of the Daegu bus-information app, a personal software project for public-transport information.' } } },
+    { id: 'multi-cli-work-v1-2-0', eventDate: '2026-07-13', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.2.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.2.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.2.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.2.0을 공개했습니다. Git worktree와 여러 에이전트 세션을 다루는 기능을 추가했습니다.' }, en: { body: 'Released multi-cli-work v1.2.0, adding support for Git worktrees and multiple agent sessions.' } } },
+    { id: 'multi-cli-work-v1-0-0', eventDate: '2026-07-12', datePrecision: 'day',
+      evidence: { path: 'data/news-software-sources.json', locator: 'rafaam11/multi-cli-work v1.0.0', dateSource: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.0.0' },
+      links: [{ href: 'https://github.com/rafaam11/multi-cli-work/releases/tag/v1.0.0', translations: { ko: { label: '릴리스' }, en: { label: 'Release' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],
+      translations: { ko: { body: 'multi-cli-work v1.0.0의 첫 Windows 설치형 릴리스를 공개했습니다. CLI 세션을 프로젝트별로 묶어 다루는 데스크톱 앱입니다.' }, en: { body: 'Published the first installable Windows release of multi-cli-work, v1.0.0: a desktop application for grouping CLI sessions by project.' } } },
+    { id: 'surface-guidance-research-2026', eventDate: '2026-06', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'experience[0].areas[0]: surface-guided respiratory tracking, 2026.06' },
+      links: [{ route: 'projects/respiratory-surface-guidance/', translations: { ko: { label: '표면유도 호흡추적 연구' }, en: { label: 'Surface-guided respiratory tracking' } } }],
+      translations: { ko: { body: '방사선치료용 3차원 표면유도 호흡추적과 4D CT 정합 연구를 시작했습니다. 첫해 센서·알고리즘 검증을 담당합니다.' }, en: { body: 'Began research on 3D surface-guided respiratory tracking and 4D CT registration for radiotherapy, working on first-year sensor and algorithm validation.' } } },
+    { id: 'omfs-vr-poster-2026', eventDate: '2026-04-03', datePrecision: 'day',
+      evidence: { path: 'data/public-cv.json', locator: 'publications: OMFS VR Consultation App', dateSource: 'https://kasne.or.kr/board/contents/article/274393', dateSourceNote: 'Society conference announcement reproduced by the Korean Academic Society of Nursing Education: 2026-04-03.' },
+      links: [{ route: 'projects/life-careverse/', translations: { ko: { label: 'OMFS VR 연구' }, en: { label: 'OMFS VR project' } } }],
+      translations: { ko: { body: 'OMFS VR 상담 플랫폼 연구가 2026 의료메타버스학회 춘계 학술대회 포스터로 발표되었습니다. 공동저자로 참여했습니다.' }, en: { body: 'The OMFS VR consultation-platform study was presented as a poster at the 2026 Spring Conference of the Korean Society of Medical Metaverse. I contributed as a co-author.' } } },
+    { id: 'digital-occlusion-redesign-2026', eventDate: '2026-03', datePrecision: 'month',
+      evidence: { path: 'js/portfolio-data.js', locator: 'digital-occlusion-workflow: period' },
+      links: [{ route: 'projects/digital-occlusion-workflow/', translations: { ko: { label: '디지털 교합 워크플로우' }, en: { label: 'Digital occlusion workflow' } } }],
+      translations: { ko: { body: '삼성서울병원 연구진과 디지털 교합 애플리케이션의 구조와 워크플로우 재설계를 시작했습니다. 특징점·교합·평가를 한 앱으로 연결하며 연구진 검증을 진행하고 있습니다.' }, en: { body: 'Began redesigning the digital-occlusion application architecture and workflow with Samsung Medical Center researchers, connecting landmarks, occlusion, and evaluation in one application. Researcher validation is ongoing.' } } },
+    { id: 'tracking-patent-applications-2024', eventDate: '2024-12', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'patents[0:2].filed: 2024.12' },
+      links: [{ route: 'cv/', translations: { ko: { label: '특허 목록' }, en: { label: 'Patent list' } } }],
+      translations: { ko: { body: '수술도구의 실시간 3차원 위치추적을 위한 좌표계 정합 방법과 위치 추적 장치·방법에 관한 특허 2건이 출원되었습니다.' }, en: { body: 'Two patent applications were filed: coordinate-frame registration for real-time 3D tracking of surgical instruments, and a position-tracking device and method.' } } },
+    { id: 'stereo-camera-patent-application-2024', eventDate: '2024-09', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'patents[2].filed: 2024.09' },
+      links: [{ route: 'cv/', translations: { ko: { label: '특허 목록' }, en: { label: 'Patent list' } } }],
+      translations: { ko: { body: '2축 회전 방식의 스테레오 카메라 구동 장치 및 방법에 관한 특허가 출원되었습니다.' }, en: { body: 'A patent application was filed for a two-axis rotating stereo-camera actuation device and method.' } } },
+    { id: 'rtms-navigation-development-2024', eventDate: '2024-07', datePrecision: 'month',
+      evidence: { path: 'js/portfolio-data.js', locator: 'projects: rtms-navigation.period, 2024.07' },
+      links: [{ route: 'projects/rtms-navigation/', translations: { ko: { label: 'NeuroPilot 사례' }, en: { label: 'NeuroPilot project' } } }],
+      translations: { ko: { body: '광학 트래킹과 의료영상을 연결하는 rTMS 코일 내비게이션 소프트웨어 개발을 시작했습니다. 코일 위치와 자세를 시각화하는 소프트웨어를 담당합니다.' }, en: { body: 'Began developing rTMS coil-navigation software connecting optical tracking and medical images, with responsibility for software that visualises coil position and pose.' } } },
+    { id: 'mandibular-paper-2024', eventDate: '2024-02-08', datePrecision: 'day',
+      evidence: { path: 'data/public-cv.json', locator: 'publications: A Proof of Concept', dateSource: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC11574221/', dateSourceNote: 'Journal record: 2024 Feb 8;37(3):1151–1159.' },
+      links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '논문' }, en: { label: 'Paper' } } }, { route: 'projects/mandibular-fracture/', translations: { ko: { label: '연구 사례' }, en: { label: 'Research project' } } }],
+      translations: { ko: { body: '치아 교합 기반 하악골 골절 정복 최적화 연구가 Journal of Imaging Informatics in Medicine에 게재되었습니다. 공동 제1저자로 참여했습니다.' }, en: { body: 'Our study of dental-occlusion-based mandibular fracture reduction was published in the Journal of Imaging Informatics in Medicine. I contributed as a joint first author.' } } },
+    { id: 'haptic-occlusion-poster-award-2024', eventDate: '2024', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'publications[2] and awards[0]: 2024 haptic occlusion poster and Best Poster Award' },
+      links: [{ route: 'cv/', translations: { ko: { label: '논문·학회 발표와 수상' }, en: { label: 'Publications, presentations & awards' } } }],
+      translations: { ko: { body: '햅틱 장치를 활용한 양악수술 최종 교합 설정 연구가 의료메타버스학회 춘계 학술대회 포스터로 발표되어 우수포스터상을 받았습니다. 공동저자로 참여했습니다.' }, en: { body: 'The study on setting final dental occlusion with a haptic device was presented as a poster at the Korean Society of Medical Metaverse Spring Conference and received a Best Poster Award. I contributed as a co-author.' } } },
+    { id: 'smcnavi-development-2023', eventDate: '2023-07', datePrecision: 'month',
+      evidence: { path: 'js/portfolio-data.js', locator: 'projects: surgical-navigation.period, 2023.07' },
+      links: [{ route: 'projects/surgical-navigation/', translations: { ko: { label: 'SMCNavi 연구' }, en: { label: 'SMCNavi project' } } }],
+      translations: { ko: { body: 'SMCNavi 수술내비게이션 소프트웨어 개발을 시작했습니다. 의료영상·광학 추적·HoloLens를 연결하는 연구 프로토타입을 다룹니다.' }, en: { body: 'Began developing SMCNavi surgical-navigation software, working on a research prototype connecting medical images, optical tracking, and HoloLens.' } } },
+    { id: 'omfs-vr-development-2023', eventDate: '2023-07', datePrecision: 'month',
+      evidence: { path: 'js/portfolio-data.js', locator: 'projects: life-careverse.period, 2023.07' },
+      links: [{ route: 'projects/life-careverse/', translations: { ko: { label: 'OMFS VR 연구' }, en: { label: 'OMFS VR project' } } }],
+      translations: { ko: { body: '의사와 환자가 하나의 VR 상담 공간에서 3D 턱뼈 모델과 수술계획을 함께 보는 OMFS VR 애플리케이션 개발을 시작했습니다.' }, en: { body: 'Began developing the OMFS VR application, where clinicians and a patient share a 3D jaw model and surgical plan in one virtual consultation room.' } } },
+    { id: 'digitrack-researcher-2023', eventDate: '2023-02', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'experience[0].period: 2023.02 - Present' },
+      links: [{ route: 'cv/', translations: { ko: { label: '경력' }, en: { label: 'Experience' } } }, { route: 'projects/skadi-tracking-software/', translations: { ko: { label: 'SKADI 소프트웨어' }, en: { label: 'SKADI software' } } }],
+      translations: { ko: { body: '디지트랙에 소프트웨어 개발 연구원으로 합류했습니다. 의료영상·수술내비게이션과 3차원 위치추적 소프트웨어를 개발합니다.' }, en: { body: 'Joined DIGITRACK as a researcher in software development, working on medical imaging, surgical navigation, and 3D tracking software.' } } },
+    { id: 'dgist-masters-degree-2023', eventDate: '2023-02', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'education[0].period and thesis: 2021.03 - 2023.02' },
+      links: [{ route: 'cv/', translations: { ko: { label: '학력' }, en: { label: 'Education' } } }, { route: 'projects/mandibular-fracture/', translations: { ko: { label: '학위 연구' }, en: { label: 'Thesis research' } } }],
+      translations: { ko: { body: 'DGIST에서 로봇및기계전자공학 석사학위를 취득했습니다. 치아 교합 기반 하악골 골절 정복 계획 최적화를 연구했습니다.' }, en: { body: 'Completed my M.S. in Robotics and Mechatronics Engineering at DGIST, researching dental-occlusion-based virtual reduction planning for mandibular fracture surgery.' } } },
+    { id: 'mandibular-conference-award-2023', eventDate: '2023', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'publications[3] and awards[1]: 14th Korean Society of Medical Robotics conference' },
+      links: [{ route: 'projects/mandibular-fracture/', translations: { ko: { label: '하악골 골절 연구' }, en: { label: 'Mandibular fracture research' } } }],
+      translations: { ko: { body: '치아 교합 기반 턱뼈 모델 최적화 연구가 제14회 대한의료로봇학회 학술대회에서 구두 발표되어 우수논문상을 받았습니다. 공동저자로 참여했습니다.' }, en: { body: 'The occlusion-based jawbone model optimisation study was presented orally at the 14th Conference of the Korean Society of Medical Robotics and received a Best Paper Award. I contributed as a co-author.' } } },
+    { id: 'accas-occlusion-paper-2022', eventDate: '2022', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'publications[4]: Dental Occlusion Model Using Arch Line, ACCAS 2022' },
+      links: [{ route: 'projects/mandibular-fracture/', translations: { ko: { label: '하악골 골절 연구' }, en: { label: 'Mandibular fracture research' } } }],
+      translations: { ko: { body: '치열궁을 이용한 하악골 골절 수술용 치아 교합 모델 연구가 ACCAS 2022 학회 논문으로 발표되었습니다. 제1저자로 참여했습니다.' }, en: { body: 'Dental Occlusion Model Using Arch Line for Mandibular Fracture Surgery was presented as a conference paper at ACCAS 2022. I contributed as first author.' } } },
+    { id: 'virtual-jawbone-presentation-2022', eventDate: '2022', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'publications[5]: 13th Korean Society of Medical Robotics conference' },
+      links: [{ route: 'projects/mandibular-fracture/', translations: { ko: { label: '하악골 골절 연구' }, en: { label: 'Mandibular fracture research' } } }],
+      translations: { ko: { body: '하악골 골절 수술 가이드를 위한 가상 턱뼈 모델 재구성 연구가 제13차 대한의료로봇학회 학술대회에서 구두 발표되었습니다. 제1저자로 참여했습니다.' }, en: { body: 'The study on virtual jawbone model reconstruction for mandibular fracture surgery guidance was presented orally at the 13th Conference of the Korean Society of Medical Robotics. I contributed as first author.' } } },
+    { id: 'mandibular-research-start-2021', eventDate: '2021-12', datePrecision: 'month',
+      evidence: { path: 'js/portfolio-data.js', locator: 'projects: mandibular-fracture.period, 2021.12 - 2023.02' },
+      links: [{ route: 'projects/mandibular-fracture/', translations: { ko: { label: '하악골 골절 연구' }, en: { label: 'Mandibular fracture research' } } }],
+      translations: { ko: { body: '치아 교합과 골절면의 기하 정보를 이용한 하악골 골절 정복 최적화 연구를 시작했습니다.' }, en: { body: 'Began research on optimising mandibular fracture reduction using dental occlusion and fracture-surface geometry.' } } },
+    { id: 'ar-surgery-research-2021', eventDate: '2021-06', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'education[0].translations: multicentre oral and maxillofacial AR programme, 2021.06 - 2023.05' },
+      links: [{ route: 'cv/', translations: { ko: { label: '연구 경력' }, en: { label: 'Research experience' } } }],
+      translations: { ko: { body: '구강악안면 AR 수술 다기관 과제에 참여하기 시작했습니다. Unity 기반 AR 내비게이션의 초기·지원 개발을 맡았습니다.' }, en: { body: 'Joined a multicentre oral and maxillofacial AR surgery programme, contributing early and supporting development of Unity-based AR navigation.' } } },
+    { id: 'dgist-masters-start-2021', eventDate: '2021-03', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'education[0].period: 2021.03 - 2023.02' },
+      links: [{ route: 'cv/', translations: { ko: { label: '학력과 연구' }, en: { label: 'Education & research' } } }],
+      translations: { ko: { body: 'DGIST 로봇및기계전자공학 석사과정을 시작하고 수술로봇및증강현실연구실의 수술내비게이션팀에서 연구했습니다.' }, en: { body: 'Started the M.S. programme in Robotics and Mechatronics Engineering at DGIST, researching with the surgical-navigation team in the Surgical Robotics and Augmented Reality Laboratory.' } } },
+    { id: 'kumoh-bachelors-degree-2021', eventDate: '2021-02', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'education[1].period: 2015.03 - 2021.02' },
+      links: [{ route: 'cv/', translations: { ko: { label: '학력' }, en: { label: 'Education' } } }],
+      translations: { ko: { body: '금오공과대학교에서 기계시스템공학 학사학위를 취득했습니다. 학부에서 기구 설계, 기구학 모델링, 로봇 제어를 공부했습니다.' }, en: { body: 'Completed my B.S. in Mechanical System Engineering at Kumoh National Institute of Technology, with undergraduate work in mechanism design, kinematic modelling, and robot control.' } } },
+    { id: 'quadruped-patent-application-2021', eventDate: '2021-01', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'patents[3].filed: 2021.01' },
+      links: [{ route: 'cv/', translations: { ko: { label: '특허와 학부 연구' }, en: { label: 'Patents & undergraduate research' } } }],
+      translations: { ko: { body: '다관절 링크구조를 이용한 4족 보행 로봇에 관한 특허가 출원되었습니다.' }, en: { body: 'A patent application was filed for a quadruped walking robot using a multi-joint link structure.' } } },
+    { id: 'quadruped-engineering-award-2020', eventDate: '2020', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[2]: 2020 Engineering Fair; education[1]: quadruped robot' },
+      links: [{ route: 'cv/', translations: { ko: { label: '학부 연구와 수상' }, en: { label: 'Undergraduate research & awards' } } }],
+      translations: { ko: { body: '5절 링크 기반 4족 보행 로봇 프로젝트가 금오공과대학교 엔지니어링 페어 장려상을 받았습니다. 기구 설계, 기구학 모델링과 제어 구현을 수행했습니다.' }, en: { body: 'The five-bar-linkage quadruped robot project received an Encouragement Prize at the Kumoh Engineering Fair. My work covered mechanism design, kinematic modelling, and control implementation.' } } },
+    { id: 'ros-training-award-2020', eventDate: '2020', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[3]: 2020 ROS-based autonomous-driving training' },
+      links: [{ route: 'cv/', translations: { ko: { label: '수상 목록' }, en: { label: 'Awards' } } }],
+      translations: { ko: { body: 'ROS 기반 자율주행 교육 경진에서 동상을 받았습니다.' }, en: { body: 'Received a Bronze Prize in ROS-based autonomous-driving training.' } } },
+    { id: 'hanger-patent-application-2019', eventDate: '2019-08', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'patents[4].filed: 2019.08' },
+      links: [{ route: 'cv/', translations: { ko: { label: '특허 목록' }, en: { label: 'Patent list' } } }],
+      translations: { ko: { body: '탄성부를 포함하는 옷걸이에 관한 특허가 출원되었습니다.' }, en: { body: 'A patent application was filed for a clothes hanger with an elastic section.' } } },
+    { id: 'carrier-patent-application-2019', eventDate: '2019-01', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'patents[5].filed: 2019.01' },
+      links: [{ route: 'cv/', translations: { ko: { label: '특허 목록' }, en: { label: 'Patent list' } } }],
+      translations: { ko: { body: '조립하여 수납공간을 조절할 수 있는 캐리어에 관한 특허가 출원되었습니다.' }, en: { body: 'A patent application was filed for an assemblable carrier with adjustable storage space.' } } },
+    { id: 'ism-launcher-paper-2019', eventDate: '2019', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'publications[6]: Design of Ping-Pong Ball Launcher, ISM 2019' },
+      links: [{ route: 'cv/', translations: { ko: { label: '논문·학회 발표' }, en: { label: 'Publications & presentations' } } }],
+      translations: { ko: { body: '탁구공 발사장치 설계 연구가 ISM 2019 국제 메카트로닉스 심포지엄의 학회 논문으로 발표되었습니다. 제1저자로 참여했습니다.' }, en: { body: 'Design of Ping-Pong Ball Launcher was presented as a conference paper at ISM 2019, the International Symposium on Mechatronics. I contributed as first author.' } } },
+    { id: 'triz-grand-prize-2019', eventDate: '2019', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[4]: 2019 International TRIZ Competition' },
+      links: [{ route: 'cv/', translations: { ko: { label: '수상 목록' }, en: { label: 'Awards' } } }],
+      translations: { ko: { body: '국제 TRIZ 경진대회 대상을 받았습니다.' }, en: { body: 'Received the Grand Prize at the International TRIZ Competition.' } } },
+    { id: 'startup-idea-award-2019', eventDate: '2019', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[5]: 2019 Startup Idea Competition' },
+      links: [{ route: 'cv/', translations: { ko: { label: '수상 목록' }, en: { label: 'Awards' } } }],
+      translations: { ko: { body: '금오공과대학교 창업아이디어 경진대회 최우수상을 받았습니다.' }, en: { body: 'Received the Grand Prize in the Startup Idea Competition at Kumoh National Institute of Technology.' } } },
+    { id: 'invention-sponsor-award-2019', eventDate: '2019', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[6]: 2019 University Creative Invention Contest' },
+      links: [{ route: 'cv/', translations: { ko: { label: '수상 목록' }, en: { label: 'Awards' } } }],
+      translations: { ko: { body: '대학창의발명대회에서 후원기관상을 받았습니다.' }, en: { body: 'Received a Sponsor’s Award at the University Creative Invention Contest.' } } },
+    { id: 'green-earth-award-2019', eventDate: '2019', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[7]: 2019 GREEN Earth Competition' },
+      links: [{ route: 'cv/', translations: { ko: { label: '수상 목록' }, en: { label: 'Awards' } } }],
+      translations: { ko: { body: 'GREEN 지구 공모전에서 우수상을 받았습니다.' }, en: { body: 'Received an Excellence Award in the GREEN Earth Competition.' } } },
+    { id: 'undergraduate-research-2019', eventDate: '2019', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'education[1].translations: System & Vision Lab undergraduate researcher, 2019 - 2020' },
+      links: [{ route: 'cv/', translations: { ko: { label: '학부 연구' }, en: { label: 'Undergraduate research' } } }],
+      translations: { ko: { body: 'System & Vision Lab.에서 학부연구생으로 연구를 시작했습니다.' }, en: { body: 'Started undergraduate research in the System & Vision Lab.' } } },
+    { id: 'paper-cup-patent-application-2015', eventDate: '2015-08', datePrecision: 'month',
+      evidence: { path: 'data/public-cv.json', locator: 'patents[6].filed: 2015.08' },
+      links: [{ route: 'cv/', translations: { ko: { label: '특허 목록' }, en: { label: 'Patent list' } } }],
+      translations: { ko: { body: '일회용 종이컵 수거함에 관한 특허가 출원되었습니다.' }, en: { body: 'A patent application was filed for a disposable paper-cup collection bin.' } } },
+    { id: 'invention-excellence-award-2015', eventDate: '2015', datePrecision: 'year',
+      evidence: { path: 'data/public-cv.json', locator: 'awards[8]: 2015 University Creative Invention Contest' },
+      links: [{ route: 'cv/', translations: { ko: { label: '수상 목록' }, en: { label: 'Awards' } } }],
+      translations: { ko: { body: '대학창의발명대회에서 우수상을 받았습니다.' }, en: { body: 'Received an Excellence Award at the University Creative Invention Contest.' } } }
+  ];
+
   return {
+    homeProjectSlugs: ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'],
+    news: news,
     capabilities: capabilities,
     tiers: tiers,
     impactMetrics: impactMetrics,

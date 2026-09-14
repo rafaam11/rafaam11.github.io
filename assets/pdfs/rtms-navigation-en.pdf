@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 31 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 30 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.f89e8211936e7eaa489111eeb8d13801 4 0 R
+/FormXob.a23d27c9972ffc873a553691856dcdc5 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 30 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.8f5b0d28f77f4da31b6df0ea4a1711d1 9 0 R /FormXob.e903b933b747321cd7bc0ba2545bb4e9 10 0 R
+/FormXob.35cfbfc57179eee317c32c9c41af0ec8 9 0 R /FormXob.95aa835f3b4117f48510001e3c38744e 10 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -116,7 +116,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 30 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.1652e92c0bb6aa97e55759496808b369 14 0 R /FormXob.af6b592b30c29444de29410dff8d8592 13 0 R
+/FormXob.21ce1fc2a943bff822c8ca0bbc4587bb 14 0 R /FormXob.c42562732fb1773fc5e95f247ef6749f 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -805,7 +805,7 @@ BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Designed the 3D Slicer workflow fro
 BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (registration engine, tracker, tablet, and robot integration, and a license-gated product structure.) Tj T* ET
 q
 225 0 0 300 185.1378 219.8898 cm
-/FormXob.f89e8211936e7eaa489111eeb8d13801 Do
+/FormXob.a23d27c9972ffc873a553691856dcdc5 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 199.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Demonstration of the TMS coil-navigation robot system on an exhibition stand: robot arm, treatment chair, coil, and) Tj T* ET
@@ -1028,7 +1028,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 254.2199 48 509.6699 cm
-/FormXob.8f5b0d28f77f4da31b6df0ea4a1711d1 Do
+/FormXob.35cfbfc57179eee317c32c9c41af0ec8 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 489.1699 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. NeuroPilot navigation module: tracker, patient-marker and coil-marker status with distance and tilt guidance to the) Tj T* ET
@@ -1036,7 +1036,7 @@ BT 1 0 0 1 48 489.1699 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. NeuroPilot navigation 
 BT 1 0 0 1 48 477.1699 Tm /F2+0 8.5 Tf 10.2 TL (target) Tj T* ET
 q
 369.5221 0 0 300 112.8767 159.6699 cm
-/FormXob.e903b933b747321cd7bc0ba2545bb4e9 Do
+/FormXob.95aa835f3b4117f48510001e3c38744e Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 139.1699 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. NeuroPilot target view: stimulation targets labelled on the cortical surface model) Tj T* ET
@@ -1064,7 +1064,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 458.9674 0 0 300 68.1541 463.8898 cm
-/FormXob.af6b592b30c29444de29410dff8d8592 Do
+/FormXob.c42562732fb1773fc5e95f247ef6749f Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. AI brain segmentation: a skull-stripped 3D brain model with tissue segmentation on the axial, coronal, and sagittal) Tj T* ET
@@ -1072,7 +1072,7 @@ BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. AI brain segmentation:
 BT 1 0 0 1 48 431.3898 Tm /F2+0 8.5 Tf 10.2 TL (slices) Tj T* ET
 q
 497.9534 0 0 300 48.66108 113.8898 cm
-/FormXob.1652e92c0bb6aa97e55759496808b369 Do
+/FormXob.21ce1fc2a943bff822c8ca0bbc4587bb Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 93.38976 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Cortical parcellation: region-coded segmentation overlaid on the slice views, with the reconstructed head surface) Tj T* ET
