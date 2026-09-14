@@ -95,7 +95,7 @@ Commit and push to `main` only when deployment is intended. GitHub Pages must re
 
 - Home selects digital-occlusion-workflow, mandibular-fracture, and surgical-navigation; Projects retains all nine cases.
 - News is maintained bilingually in `js/portfolio-data.js`; preserve event-date precision and public evidence. Home shows at most five, and News groups the full list by year.
-- News covers research, conferences, awards, career, patent applications, and meaningful personal-software releases. Combine an award with its corresponding presentation. Filing dates are not grant dates. Selected public release timestamps are recorded in `data/news-software-sources.json` and displayed in Asia/Seoul time.
+- News covers research, conferences, awards, career, patent applications, and meaningful personal-software releases or public repositories. Combine an award with its corresponding presentation. Filing dates are not grant dates. Selected release and repository timestamps are recorded in `data/news-software-sources.json` and `data/news-repository-sources.json`, displayed in Asia/Seoul time.
 - `node scripts/public-cv-summary.cjs --write` refreshes CV and generated Home/News content. Home publications/patents/awards derive from `data/public-cv.json`.
 - `sourcePdfs` pins each reviewed CV PDF SHA-256. A changed edition requires explicit content synchronization review; do not blindly update the hashes.
 - `python scripts/check-cv-pdf-sync.py` compares selected PDF terms, periods, publication titles, and patent states/dates; arbitrary prose equivalence is a manual review. The validator CLI runs it (PyMuPDF required, as for PDF generation).

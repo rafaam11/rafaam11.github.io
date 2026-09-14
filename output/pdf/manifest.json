@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "0ae3018f7f55379f76fe380d242b445888774e2325613c1ce1dad172ceb74f8d",
+  "sourceDigest": "eb0a187cc27fdc218ef72b81d4025083c1d21ad30fe92fe8c6d934afecd6c701",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.2",
   "generatorSha256": "525860742344e4d7f6120de6bcde2cd15a49907fdbf5b296fc7b0e7da9acec16",
@@ -166,9 +166,9 @@
       "locale": "ko",
       "pages": 4,
       "links": 6,
-      "characters": 1722,
-      "bytes": 9274293,
-      "sha256": "cf5844c93111365af89b4d8052b05ace7fac48fa6ec0de97086fff8ba41f959f"
+      "characters": 1725,
+      "bytes": 9274296,
+      "sha256": "d7f0572d866c75b67661690186b5e40e835928255ea707a6a6ddf02b192f6c8f"
     },
     {
       "name": "unmanned-forklift-en.pdf",
@@ -177,9 +177,9 @@
       "locale": "en",
       "pages": 5,
       "links": 7,
-      "characters": 3479,
-      "bytes": 9174380,
-      "sha256": "0ceec11552b37f9b7561e746dc3b6c06429328f1a792c26ce771387e22ddcd7f"
+      "characters": 3482,
+      "bytes": 9174383,
+      "sha256": "4a9c7cfc4ef9497d2106b65bfc2378f05003101eb749f3d5935c2b3bfd7b2e65"
     },
     {
       "name": "ai-build-lab-ko.pdf",
@@ -355,8 +355,8 @@
       "slug": "unmanned-forklift",
       "locale": "en",
       "pages": 5,
-      "bytes": 9174380,
-      "sha256": "0ceec11552b37f9b7561e746dc3b6c06429328f1a792c26ce771387e22ddcd7f"
+      "bytes": 9174383,
+      "sha256": "4a9c7cfc4ef9497d2106b65bfc2378f05003101eb749f3d5935c2b3bfd7b2e65"
     },
     {
       "path": "assets/pdfs/unmanned-forklift-ko.pdf",
@@ -364,8 +364,8 @@
       "slug": "unmanned-forklift",
       "locale": "ko",
       "pages": 4,
-      "bytes": 9274293,
-      "sha256": "cf5844c93111365af89b4d8052b05ace7fac48fa6ec0de97086fff8ba41f959f"
+      "bytes": 9274296,
+      "sha256": "d7f0572d866c75b67661690186b5e40e835928255ea707a6a6ddf02b192f6c8f"
     },
     {
       "path": "output/pdf/ai-build-lab-en.pdf",
@@ -517,8 +517,8 @@
       "slug": "unmanned-forklift",
       "locale": "en",
       "pages": 5,
-      "bytes": 9174380,
-      "sha256": "0ceec11552b37f9b7561e746dc3b6c06429328f1a792c26ce771387e22ddcd7f"
+      "bytes": 9174383,
+      "sha256": "4a9c7cfc4ef9497d2106b65bfc2378f05003101eb749f3d5935c2b3bfd7b2e65"
     },
     {
       "path": "output/pdf/unmanned-forklift-ko.pdf",
@@ -526,8 +526,8 @@
       "slug": "unmanned-forklift",
       "locale": "ko",
       "pages": 4,
-      "bytes": 9274293,
-      "sha256": "cf5844c93111365af89b4d8052b05ace7fac48fa6ec0de97086fff8ba41f959f"
+      "bytes": 9274296,
+      "sha256": "d7f0572d866c75b67661690186b5e40e835928255ea707a6a6ddf02b192f6c8f"
     }
   ]
 }

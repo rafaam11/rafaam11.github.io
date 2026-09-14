@@ -1,0 +1,21 @@
+{
+  "checkedOn": "2026-09-14",
+  "displayTimezone": "Asia/Seoul",
+  "repositories": [
+    {
+      "repository": "rafaam11/server-client-study",
+      "createdAt": "2025-04-26T10:46:43Z",
+      "url": "https://github.com/rafaam11/server-client-study"
+    },
+    {
+      "repository": "rafaam11/FeatureMatch_LightGlue",
+      "createdAt": "2025-04-14T09:11:18Z",
+      "url": "https://github.com/rafaam11/FeatureMatch_LightGlue"
+    },
+    {
+      "repository": "rafaam11/samurai_test",
+      "createdAt": "2025-04-14T06:34:44Z",
+      "url": "https://github.com/rafaam11/samurai_test"
+    }
+  ]
+}
