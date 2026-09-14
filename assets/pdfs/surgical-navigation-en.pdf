@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 39 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 38 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.ca1f3238b7326524d8d64bcac1b4d42c 4 0 R
+/FormXob.7bc2cd895291c2e69fedfcd0335f0fd1 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -114,7 +114,7 @@ endobj
 <<
 /Annots [ 10 0 R ] /Contents 42 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 38 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.117ed547950801fce38c05fe8f2bc953 12 0 R /FormXob.4240025041f00e9b91051dd17ae65707 13 0 R /FormXob.8e355654763dd73db9d134aee40e10b1 14 0 R /FormXob.c4d59d5df8da339bc71ba6d766ee2cbe 11 0 R
+/FormXob.035024ba3ef4486352dbb9856c8d85a3 12 0 R /FormXob.1963563575b6f391f0ca3c574b6f13b8 14 0 R /FormXob.363ab09a3d4c00d30bd20be541a254ea 11 0 R /FormXob.87205962d467003b19f08d9e8c68382c 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -149,7 +149,7 @@ endobj
 <<
 /Annots [ 16 0 R ] /Contents 43 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 38 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.615de8a22ca9a6e8662864e137c83928 18 0 R /FormXob.a0b0f3d2b3c617ae2a210b6571c99f87 17 0 R
+/FormXob.2a7a036919f1f468732c21c59e0b08b5 18 0 R /FormXob.a84ceeb3b6a19529188876c1cfa106f8 17 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -1032,7 +1032,7 @@ endobj
 endobj
 39 0 obj
 <<
-/Length 2925
+/Length 2845
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1068,12 +1068,12 @@ BT 1 0 0 1 48 588.8898 Tm /F2+0 10 Tf 12 TL (A custom 3D Slicer surgical-navigat
 BT 1 0 0 1 48 572.8898 Tm /F2+0 10 Tf 12 TL (research collaboration, plus a separate HoloLens spatial-interface extension.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 270.0472 cm
-/FormXob.ca1f3238b7326524d8d64bcac1b4d42c Do
+/FormXob.7bc2cd895291c2e69fedfcd0335f0fd1 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 249.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 237.5472 Tm /F2+0 8.5 Tf 10.2 TL (image presentation. It uses de-identified research imagery and is not evidence of clinical outcome.) Tj T* ET
+BT 1 0 0 1 48 237.5472 Tm /F2+0 8.5 Tf 10.2 TL (image presentation.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
 n 48 206.0472 m 547.2756 206.0472 l S
@@ -1202,7 +1202,7 @@ endstream
 endobj
 41 0 obj
 <<
-/Length 8630
+/Length 8617
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1440,17 +1440,17 @@ n 48 306.8898 m 547.2756 306.8898 l S
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 272.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 248.8898 Tm /F2+0 10 Tf 12 TL (Two full-length videos and approved interface, coordinate-frame, instrument, and phantom derivatives show) Tj T* ET
+BT 1 0 0 1 48 248.8898 Tm /F2+0 10 Tf 12 TL (Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 232.8898 Tm /F2+0 10 Tf 12 TL (a working research prototype carrying position, model, image, and interaction data from SMCNavi through) Tj T* ET
+BT 1 0 0 1 48 232.8898 Tm /F2+0 10 Tf 12 TL (research prototype carrying position, model, image, and interaction data from SMCNavi through the) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 216.8898 Tm /F2+0 10 Tf 12 TL (the HoloLens path.) Tj T* ET
+BT 1 0 0 1 48 216.8898 Tm /F2+0 10 Tf 12 TL (HoloLens path.) Tj T* ET
  
 endstream
 endobj
 42 0 obj
 <<
-/Length 2344
+/Length 1724
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1469,35 +1469,27 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 206.6667 0 0 155 65.98556 608.8898 cm
-/FormXob.c4d59d5df8da339bc71ba6d766ee2cbe Do
+/FormXob.363ab09a3d4c00d30bd20be541a254ea Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 599.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. Full feature video moving through six oral and maxillofacial) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (workflows in SMCNavi. It uses de-identified research imagery and is) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 579.8898 Tm /F2+0 7.7 Tf 9.24 TL (not evidence of clinical outcome.) Tj T* ET
+BT 1 0 0 1 48 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (workflows in SMCNavi.) Tj T* ET
 q
 242.6378 0 0 147.4402 304.6378 612.6697 cm
-/FormXob.117ed547950801fce38c05fe8f2bc953 Do
+/FormXob.035024ba3ef4486352dbb9856c8d85a3 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 599.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. Integrated SMCNavi UI and HoloLens-PC connection view.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 304.6378 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (This derivative uses de-identified research imagery and is not) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 304.6378 579.8898 Tm /F2+0 7.7 Tf 9.24 TL (evidence of clinical outcome.) Tj T* ET
 q
-499.2756 0 0 225.6342 48 323.2556 cm
-/FormXob.4240025041f00e9b91051dd17ae65707 Do
+499.2756 0 0 225.6342 48 333.2556 cm
+/FormXob.87205962d467003b19f08d9e8c68382c Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 302.7556 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Six oral and maxillofacial software workflows. This derivative uses de-identified research imagery and does not) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 290.7556 Tm /F2+0 8.5 Tf 10.2 TL (establish clinical efficacy.) Tj T* ET
+BT 1 0 0 1 48 312.7556 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Six oral and maxillofacial software workflows.) Tj T* ET
 q
-360.4408 0 0 201.2556 117.4174 72 cm
-/FormXob.8e355654763dd73db9d134aee40e10b1 Do
+399.842 0 0 223.2556 97.71682 72 cm
+/FormXob.1963563575b6f391f0ca3c574b6f13b8 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 51.5 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Coordinate frames: patient-marker and probe-marker transforms relative to the optical tracker.) Tj T* ET
@@ -1525,13 +1517,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (5 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 222.4897 48 541.4001 cm
-/FormXob.a0b0f3d2b3c617ae2a210b6571c99f87 Do
+/FormXob.a84ceeb3b6a19529188876c1cfa106f8 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 520.9001 Tm /F2+0 8.5 Tf 10.2 TL (Figure 6. Instrument with a passive-marker adapter used for non-standard and long-instrument calibration.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 222.5576 cm
-/FormXob.615de8a22ca9a6e8662864e137c83928 Do
+/FormXob.2a7a036919f1f468732c21c59e0b08b5 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 202.0576 Tm /F2+0 8.5 Tf 10.2 TL (Figure 7. HoloLens spatial presentation with hand- and eye-interaction toggles.) Tj T* ET
@@ -1657,11 +1649,11 @@ xref
 0006491854 00000 n 
 0006492330 00000 n 
 0006492423 00000 n 
-0006495400 00000 n 
-0006502013 00000 n 
-0006510695 00000 n 
-0006513091 00000 n 
-0006514915 00000 n 
+0006495320 00000 n 
+0006501933 00000 n 
+0006510602 00000 n 
+0006512378 00000 n 
+0006514202 00000 n 
 trailer
 <<
 /ID 
@@ -1673,5 +1665,5 @@ trailer
 /Size 45
 >>
 startxref
-6518225
+6517512
 %%EOF

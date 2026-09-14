@@ -248,3 +248,15 @@
 @media (prefers-reduced-motion: reduce) {
   .td-shell *, .td-shell *::before, .td-shell *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; }
 }
+/* Research profile updates: dates stay readable at narrow widths. */
+.sc-news-list { list-style: none; padding: 0; margin: 0; }
+.sc-news-item { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 1rem; padding: .85rem 0; border-bottom: 1px solid #e6e8eb; }
+.sc-news-item time { color: #667085; font-variant-numeric: tabular-nums; }
+.sc-news-item p { margin: 0; }
+.sc-news-item .sc-news-links { margin-top: .35rem; font-size: .9rem; }
+.sc-news-year { margin-top: 2rem; }
+.sc-implementation-list { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; padding-left: 1.2rem; }
+.sc-list__venue { font-size: .9rem; color: #667085; margin: .2rem 0 .8rem; }
+@media (max-width: 540px) {
+  .sc-news-item { grid-template-columns: 1fr; gap: .25rem; }
+}

@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 36 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.90a64fb4a3ee67cc6e5ba6355294dd98 4 0 R
+/FormXob.ed711ded2cd7bb7696da03e17dc3d2e1 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -123,7 +123,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 40 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.79311662701ea097ffad67c85f78caf6 13 0 R /FormXob.86ad7ba436ef8fb2aaefb1e43fb5f660 15 0 R /FormXob.fb76279009de8d5d4f0e6cb7e5dbec14 14 0 R
+/FormXob.065bf8bf84337ecc5b3ee6aa0a736974 15 0 R /FormXob.ba028070e07cd20cad9bf237cc3f27e5 14 0 R /FormXob.d301ebc0be86d43c4504a7552481061a 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -1044,7 +1044,7 @@ BT 1 0 0 1 48 568.8898 Tm /F2+0 10 Tf 12 TL (Connected eight-model preparation, 
 BT 1 0 0 1 48 552.8898 Tm /F2+0 10 Tf 12 TL (occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.) Tj T* ET
 q
 499.2756 0 0 239.2362 48 291.6535 cm
-/FormXob.90a64fb4a3ee67cc6e5ba6355294dd98 Do
+/FormXob.ed711ded2cd7bb7696da03e17dc3d2e1 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 271.1535 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Development-build demonstration of landmarking, multi-view occlusion, and evaluation using synthetic test data.) Tj T* ET
@@ -1709,7 +1709,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (5 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 242.6378 0 0 116.2639 48 628.2578 cm
-/FormXob.79311662701ea097ffad67c85f78caf6 Do
+/FormXob.d301ebc0be86d43c4504a7552481061a Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 599.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. Researchers enter landmarks while viewing a reference) Tj T* ET
@@ -1719,7 +1719,7 @@ BT 1 0 0 1 48 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (image beside a zoomable 3D view.
 BT 1 0 0 1 48 579.8898 Tm /F2+0 7.7 Tf 9.24 TL (data.) Tj T* ET
 q
 242.6378 0 0 116.2639 304.6378 628.2578 cm
-/FormXob.fb76279009de8d5d4f0e6cb7e5dbec14 Do
+/FormXob.ba028070e07cd20cad9bf237cc3f27e5 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 599.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. The occlusion workspace compares the occlusal state and) Tj T* ET
@@ -1729,7 +1729,7 @@ BT 1 0 0 1 304.6378 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (contact-distance map acros
 BT 1 0 0 1 304.6378 579.8898 Tm /F2+0 7.7 Tf 9.24 TL (test data.) Tj T* ET
 q
 499.2756 0 0 239.2362 48 309.6535 cm
-/FormXob.86ad7ba436ef8fb2aaefb1e43fb5f660 Do
+/FormXob.065bf8bf84337ecc5b3ee6aa0a736974 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 289.1535 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. The evaluation screen combines RMSE, Gap, and FRE calculation with result export. Displayed values illustrate the UI,) Tj T* ET

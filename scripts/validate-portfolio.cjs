@@ -1168,7 +1168,13 @@ function publicCvDataErrors(candidate) {
     const match = serialized.match(pattern);
     if (match) errors.push(`Public CV data contains a prohibited private or unverified claim: ${match[0]}.`);
   }
-  requireKeys(candidate, ['version', 'identity', 'contacts', 'education', 'experience', 'publications', 'patents', 'awards', 'skills', 'languages'], 'Public CV data');
+  requireKeys(candidate, ['version', 'identity', 'contacts', 'education', 'experience', 'publications', 'patents', 'awards', 'skills', 'languages', 'sourcePdfs'], 'Public CV data');
+  if (/4D\s*CBCT/i.test(serialized)) errors.push('Public CV must use the PDF term 4D CT.');
+  if (/\?{2,}|\ufffd/.test(serialized)) errors.push('Public CV contains damaged text encoding.');
+  const reviewedPatentStates = {'10-2024-0186869':'granted','10-2024-0186864':'granted','10-2024-0127937':'filed','10-2021-0008332':'filed','10-2019-0100328':'granted','10-2019-0010185':'filed','10-2015-0122661':'filed'};
+  if (JSON.stringify((Array.isArray(candidate.patents) ? candidate.patents : []).map(p => p?.number).sort()) !== JSON.stringify(Object.keys(reviewedPatentStates).sort())) errors.push('Public CV patent inventory differs from the reviewed PDF.');
+  for (const patent of Array.isArray(candidate.patents) ? candidate.patents : []) { if (!patent || reviewedPatentStates[patent.number] !== patent.status) errors.push('Public CV patent status differs from the reviewed PDF.'); }
+  for (const locale of ['ko', 'en']) { if (!/^[a-f0-9]{64}$/.test(candidate.sourcePdfs?.[locale]?.sha256 || '')) errors.push('Public CV requires reviewed source PDF SHA-256 for ' + locale); }
   if (candidate.version !== '2026-08-22') errors.push('Public CV data requires the approved 2026-08-22 version.');
   if (requireKeys(candidate.identity, ['name', 'location', 'translations'], 'Public CV identity')) {
     if (candidate.identity.name !== 'Jinmin Kim') errors.push('Public CV identity must be Jinmin Kim.');
@@ -1395,6 +1401,8 @@ function cvSummaryRecoveryArtifactErrors(rootDir) {
 // no attachment, and no private contact detail or source path in the extractable text.
 function cvPdfErrors(rootDir) {
   const errors = [];
+  let cv;
+  try { cv = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/public-cv.json'), 'utf8')); } catch { errors.push('CV PDF synchronization review requires public-cv.json.'); }
   for (const name of cvPdfNames) {
     const filePath = path.join(rootDir, 'assets', 'cv', name);
     if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isFile()) {
@@ -1402,6 +1410,8 @@ function cvPdfErrors(rootDir) {
       continue;
     }
     const bytes = fs.readFileSync(filePath);
+    const locale = name.includes('-ko.') ? 'ko' : 'en';
+    if (cv?.sourcePdfs?.[locale]?.sha256 !== crypto.createHash('sha256').update(bytes).digest('hex')) errors.push(name + ': PDF edition changed; synchronization review is required.');
     const text = bytes.toString('latin1');
     if (bytes.subarray(0, 5).toString('ascii') !== '%PDF-' || bytes.length <= 12_000) errors.push(`assets/cv/${name}: invalid or unexpectedly small PDF.`);
     const pages = pdfPageCount(filePath);
@@ -2385,6 +2395,11 @@ function staticPageErrors(file, html, rootDir) {
 
 function validatePortfolio(rootDir) {
   const errors = portfolioDataErrors(data).slice();
+  try {
+    const profile = require('./profile-home.cjs');
+    const cv = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/public-cv.json'), 'utf8'));
+    errors.push(...profile.newsErrors(), ...profile.freshnessErrors(cv, rootDir));
+  } catch (error) { errors.push(`Profile generation validation failed: ${error.message}`); }
   errors.push(...forbiddenSourceDocumentErrors(rootDir));
   errors.push(...portfolioHtmlInventoryErrors(rootDir));
   errors.push(...evidenceRegistryErrors(data, rootDir));
@@ -2433,6 +2448,8 @@ function validatePortfolio(rootDir) {
 if (require.main === module) {
   const rootDir = path.join(__dirname, '..');
   const errors = validatePortfolio(rootDir);
+  const sync = require('node:child_process').spawnSync('python', [path.join(__dirname, 'check-cv-pdf-sync.py'), '--root', rootDir], { encoding: 'utf8' });
+  if (sync.status !== 0) errors.push(`CV PDF fact comparison failed: ${sync.error?.message || sync.stderr || sync.stdout}`);
   if (errors.length) {
     for (const error of errors) process.stderr.write(`- ${error}\n`);
     process.exitCode = 1;

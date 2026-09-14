@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 30 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 29 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.d2739000aab6908734bbd52b28fcf674 4 0 R
+/FormXob.19b063d99f272bd72d5eb47086b6b398 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 29 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.00f707f3238ebd94b3775df47522cdf9 9 0 R /FormXob.19f35710090d260bd7c6086aeef485a1 10 0 R
+/FormXob.2d5a90ab03289793665632a1815d064d 10 0 R /FormXob.7cb97161b753edc599e63b9ece43c4da 9 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -108,7 +108,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 29 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.099dcbb615c6f972bcb764e506ce0521 13 0 R
+/FormXob.cdbefebdc27bbdbbb1d38253beb50e3f 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -797,7 +797,7 @@ BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Connected ToF-RGB-SAM3 registration
 BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (sensor fusion, safety policy, and Zenoh publication into one integration flow.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 239.0472 cm
-/FormXob.d2739000aab6908734bbd52b28fcf674 Do
+/FormXob.19b063d99f272bd72d5eb47086b6b398 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 218.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Screen recording of the DOTORI vision-servoing test \(3D view, camera feed, signal plots\).) Tj T* ET
@@ -1001,13 +1001,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 280.8425 48 483.0472 cm
-/FormXob.00f707f3238ebd94b3775df47522cdf9 Do
+/FormXob.7cb97161b753edc599e63b9ece43c4da Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 462.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Fork alignment just before pallet entry during the full-scenario test) Tj T* ET
 q
 499.2756 0 0 280.8425 48 164.2047 cm
-/FormXob.19f35710090d260bd7c6086aeef485a1 Do
+/FormXob.2d5a90ab03289793665632a1815d064d Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 143.7047 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. Trajectory-following drive test, wide view of the test site) Tj T* ET
@@ -1035,7 +1035,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 280.8425 48 483.0472 cm
-/FormXob.099dcbb615c6f972bcb764e506ce0521 Do
+/FormXob.cdbefebdc27bbdbbb1d38253beb50e3f Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 462.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Fork-lift test lifting a cart) Tj T* ET

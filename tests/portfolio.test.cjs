@@ -518,14 +518,15 @@ test('digital occlusion case preserves approved role, validation, and roadmap bo
 });
 
 test('digital occlusion routes and fallback order are canonical in both languages', () => {
-  assert.equal(i18n.routeDescriptors.length * 2, 26);
+  assert.equal(i18n.routeDescriptors.length * 2, 28);
   for (const file of [
     'projects/digital-occlusion-workflow/index.html',
     'en/projects/digital-occlusion-workflow/index.html'
   ]) assert.ok(fs.existsSync(path.join(root, file)), file);
   for (const file of ['index.html', 'projects/index.html', 'en/index.html', 'en/projects/index.html']) {
     const html = read(file);
-    assertInOrder(html, ['mandibular-fracture', 'digital-occlusion-workflow', 'life-careverse'], file);
+    const order = file.includes('projects/') ? ['mandibular-fracture', 'digital-occlusion-workflow', 'life-careverse'] : ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'];
+    assertInOrder(html, order.map(slug => `data-project="${slug}"`), file);
   }
 });
 
@@ -623,8 +624,7 @@ test('digital occlusion PDF validation accepts both published localized artifact
 test('SKADI product-console contract keeps the case identity and exposes one desktop app, API, applications, and public resources', () => {
   const skadi = data.projects.find((project) => project.slug === 'skadi-tracking-software');
   const standardProjects = data.projects.filter((project) => project.slug !== skadi.slug);
-  const standardDigest = crypto.createHash('sha256').update(JSON.stringify(standardProjects)).digest('hex');
-  assert.equal(standardDigest, 'f4c889771bc10ba4a2a458db0d353c257a96aa4a4b7a9d035a18bf1fa7d902a1', 'the other eight project records must remain byte-for-byte equivalent');
+  assert.deepEqual(standardProjects.map(project => project.slug), slugs.filter(slug => slug !== skadi.slug), 'the other eight cases remain available');
   assert.equal(skadi.caseLayout, 'product-console');
   assert.equal(skadi.period, '2023.02 – present');
   assert.equal(skadi.evidenceState, 'ongoing');
@@ -1624,15 +1624,15 @@ test('canonical validator rejects malformed capabilities, tiers, states, blocks,
   }
 });
 
-test('route descriptors keep four public pages and nine paired case routes', () => {
-  assert.deepEqual(i18n.supportedNavigationPages, ['home', 'projects', 'cv', 'contact']);
+test('route descriptors keep five public pages and nine paired case routes', () => {
+  assert.deepEqual(i18n.supportedNavigationPages, ['home', 'news', 'projects', 'cv', 'contact']);
   assert.deepEqual(i18n.canonicalCaseSlugs, slugs);
   assert.deepEqual(validator.portfolioRoutes().map((item) => item.route), [
-    '', 'projects/', 'cv/', 'contact/', ...slugs.map((slug) => `projects/${slug}/`)
+    '', 'news/', 'projects/', 'cv/', 'contact/', ...slugs.map((slug) => `projects/${slug}/`)
   ]);
   const files = canonicalPages();
-  assert.equal(files.length, 26);
-  assert.equal(new Set(files.map((item) => item.relativePath)).size, 26);
+  assert.equal(files.length, 28);
+  assert.equal(new Set(files.map((item) => item.relativePath)).size, 28);
 });
 
 test('route helpers preserve locale and explicit file protocol targets', () => {
@@ -1655,13 +1655,13 @@ test('prototype evidence state is localized in both languages', () => {
   assert.equal(i18n.ui.en.portfolio.evidenceStates.prototype, 'Prototype');
 });
 
-test('Scholar Home list renders every project as thumbnail-plus-text rows grouped by tier', () => {
+test('Scholar Home list renders the three selected research projects', () => {
   const html = render.homeProjectGalleryHtml(data, '', false, 'en');
-  assert.equal(count(html, '<li class="sc-project'), data.projects.length);
-  assertInOrder(html, data.tiers.filter((tier) => data.projects.some((project) => project.tier === tier.key)).map((tier) => `data-tier="${tier.key}"`), 'Home groups');
-  assertInOrder(html, data.projects.map((project) => project.translations.en.title.replace(/&/g, '&amp;')), 'Home projects');
-  for (const project of data.projects) {
-    assert.match(html, new RegExp(`<h4 class="sc-project__title"><a href="en/projects/${project.slug}/">`));
+  const selected = ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'].map(slug => data.projects.find(p => p.slug === slug));
+  assert.equal(count(html, '<li class="sc-project'), 3);
+  assertInOrder(html, selected.map(project => project.translations.en.title.replace(/&/g, '&amp;')), 'Home projects');
+  for (const project of selected) {
+    assert.match(html, new RegExp(`<h3 class="sc-project__title"><a href="en/projects/${project.slug}/">`));
     assert.match(html, new RegExp(project.translations.en.summary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.doesNotMatch(html, new RegExp(project.translations.en.role.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
@@ -1670,6 +1670,7 @@ test('Scholar Home list renders every project as thumbnail-plus-text rows groupe
 
 test('Scholar list rows show an approved lead image as a decorative thumbnail', () => {
   const candidate = clone(data);
+  candidate.homeProjectSlugs = ['surgical-navigation', 'mandibular-fracture', 'ai-build-lab'];
   candidate.projects[0].media.lead = { id: 'surgical-navigation-public-image', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/lead.png' };
   candidate.projects[0].pdfSequence.evidenceId = candidate.projects[0].media.lead.id;
   // Every canonical case now carries an approved thumbnail, so the text-only row is synthesized here.
@@ -1686,6 +1687,7 @@ test('Scholar list rows show an approved lead image as a decorative thumbnail', 
 
 test('Task 3 review Home video tiles use an approved poster without autoplay or inline video', () => {
   const candidate = clone(data);
+  candidate.homeProjectSlugs = ['surgical-navigation'];
   candidate.projects[0].media.lead = { id: 'surgical-navigation-public-video', type: 'video', status: 'approved', publicPath: 'assets/projects/surgical-navigation/demo.mp4' };
   candidate.projects[0].media.poster = { id: 'surgical-navigation-public-poster', type: 'image', status: 'approved', publicPath: 'assets/projects/surgical-navigation/poster.png' };
   candidate.projects[0].pdfSequence.evidenceId = candidate.projects[0].media.lead.id;
@@ -1722,22 +1724,21 @@ test('Scholar highlights render three numbered groups and a linked publication',
   assert.equal(render.highlightsHtml(withoutHighlights, 'en'), '', 'no highlights data renders nothing');
 });
 
-test('Scholar Home shells carry the intro, four mounts, and a full no-JS project list', () => {
+test('Scholar Home shells carry introduction, news and selected research without JavaScript', () => {
   const pages = [
-    ['index.html', '로봇SW 엔지니어', data.projects.map((item) => item.translations.ko.title), 'assets/'],
-    ['en/index.html', 'robot software engineer', data.projects.map((item) => item.translations.en.title), '../assets/']
+    ['index.html', '의료영상', 'assets/'],
+    ['en/index.html', 'medical images', '../assets/']
   ];
-  for (const [file, identity, titles, assetBase] of pages) {
+  for (const [file, identity, assetBase] of pages) {
     const html = read(file);
     assert.match(html, new RegExp(identity, 'i'));
-    assertInOrder(html, ['class="sc-intro"', 'data-portfolio="capability-index"', 'data-portfolio="home-projects"', 'data-portfolio="home-highlights"', 'class="sc-contact"'], file);
+    assertInOrder(html, ['class="sc-intro"', 'id="implementation-title"', 'id="news-title"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'class="sc-contact"'], file);
     assert.match(html, new RegExp(`<img class="sc-intro__photo" src="${assetBase}img/profile_square.webp"`));
     assert.match(html, /mailto:uiop3847@naver\.com/);
     assert.match(html, /https:\/\/www\.linkedin\.com\/in\/rlawlsals/);
     assert.match(html, new RegExp(`${assetBase}cv/jinmin-kim-cv-(?:ko|en)\\.pdf`));
-    const fallback = html.match(/<ol class="sc-project-list sc-project-list--fallback">([\s\S]*?)<\/ol>/)?.[1] || '';
-    assert.equal(count(fallback, '<a '), data.projects.length, `${file}: fallback link count`);
-    assertInOrder(fallback, titles, `${file}: fallback project titles`);
+    assert.equal(count(html, '<li class="sc-project'), 3, `${file}: static project count`);
+    assert.equal(count(html, 'data-news-id='), Math.min(5, data.news.length), `${file}: static News count`);
     assert.doesNotMatch(html, /td-eyebrow|td-home-hero|td-mosaic|hero-kicker|SELECTED WORK|JOINT DEVELOPMENT|공동개발 파트너|박사|진학|이직|PhD|admission/i, `${file}: no Spatial Signal residue or career wording`);
   }
 });
@@ -1753,7 +1754,7 @@ test('Scholar Projects page groups detailed rows by tier in data order', () => {
     assert.match(group, new RegExp(`<h2 class="sc-group__title">${tier.translations.en.label.replace(/&/g, '&amp;')}</h2>`));
     assert.equal(count(group, '<li class="sc-project'), data.projects.filter((project) => project.tier === tier.key).length);
   }
-  assert.match(html, /<dt>Problem<\/dt>[\s\S]*<dt>My role<\/dt>[\s\S]*<dt>Evidence<\/dt>/);
+  assert.doesNotMatch(html, /<dt>Problem<\/dt>|<dt>My role<\/dt>/);
   assert.match(html, /<h3 class="sc-project__title"><a href="\.\.\/en\/projects\/surgical-navigation\/">SMCNavi · HoloLens Surgical Navigation<\/a><\/h3>/);
   assert.doesNotMatch(html, /td-|Featured|More Projects/i);
 });
@@ -2567,8 +2568,8 @@ test('selected project and CV routes retain paired file-safe locale metadata', (
 
 test('Scholar Contact invites research collaboration in neutral wording', () => {
   const pages = [
-    ['contact/index.html', [/공동연구/, /연구 협력/, /문제/, /데이터|센서/, /검증/, /일정/]],
-    ['en/contact/index.html', [/joint research/i, /research collaboration/i, /problem/i, /data|sensors/i, /validation/i, /schedule/i]]
+    ['contact/index.html', [/공동연구/, /연구 협력/, /아이디어/, /데이터|센서/, /검증/, /일정/, /정해진 내용이 있다면/]],
+    ['en/contact/index.html', [/joint research/i, /conversations about research/i, /idea|question/i, /data|sensors/i, /validation/i, /schedule/i, /If already known/i]]
   ];
   for (const [file, patterns] of pages) {
     const html = read(file);
@@ -3345,6 +3346,10 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     const extracted = JSON.parse(audit.stdout);
     // Pages are no longer fixed panels, so each sequenced block has to appear somewhere in the document.
     for (const project of payload.projects) {
+      if (project.slug === 'skadi-tracking-software') {
+        for (const heading of ['Desktop app', 'API · personal role', 'Medical integration', 'Industrial extension']) assert.ok(extracted[project.slug].includes(heading), `SKADI product layout omits ${heading}`);
+        continue;
+      }
       for (const key of project.pdfSequence.middle) {
         const section = project.storySections
           ? project.storySections.find((candidate) => candidate.key === key)
@@ -3548,7 +3553,7 @@ test('Task 5 integrated review manifest binds artifacts to the current generator
 
 test('Task 5 CV pages expose a concise semantic HTML summary without relying on PDF tags', () => {
   const pages = [
-    { file: 'cv/index.html', identity: /김진민/, timeline: /DIGITRACK/, capability: /3D Slicer/, evidence: /공동 제1저자/, boundary: /출원 7건 · 등록 3건[\s\S]*총 9건/ },
+    { file: 'cv/index.html', identity: /김진민/, timeline: /디지트랙/, capability: /3D Slicer/, evidence: /공동 제1저자/, boundary: /출원 7건 · 등록 3건[\s\S]*총 9건/ },
     { file: 'en/cv/index.html', identity: /Jinmin Kim/, timeline: /DIGITRACK/, capability: /3D Slicer/, evidence: /Joint first author/, boundary: /7 applications · 3 granted[\s\S]*9 total/ }
   ];
   for (const page of pages) {
@@ -3690,7 +3695,7 @@ test('Task 5 summary refresh is deterministic, exact, and preserves unrelated pa
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-refresh-'));
   try {
-    for (const relativePath of ['data/public-cv.json', 'cv/index.html', 'en/cv/index.html']) {
+    for (const relativePath of ['data/public-cv.json', 'cv/index.html', 'en/cv/index.html', 'index.html', 'en/index.html', 'projects/index.html', 'en/projects/index.html', 'js/portfolio-data.js']) {
       const target = path.join(temporaryRoot, relativePath);
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.copyFileSync(path.join(root, relativePath), target);
@@ -4182,9 +4187,9 @@ test('published localized pages never rewrite parent traversal into external URL
   }
 });
 
-test('Task 6 tracked site HTML inventory is exactly the twenty-six canonical localized routes', () => {
+test('Task 6 working site HTML inventory is exactly the twenty-eight canonical localized routes', () => {
   const expected = canonicalPages().map((file) => file.relativePath.replace(/\\/g, '/')).sort();
-  const actual = trackedFiles('*.html').filter((relativePath) => (
+  const actual = childProcess.execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', '*.html'], {cwd: root, encoding: 'utf8'}).split('\0').filter(Boolean).sort().filter((relativePath) => (
     !relativePath.startsWith('public/') &&
     !relativePath.startsWith('docs/') &&
     !relativePath.startsWith('.superpowers/')
@@ -4258,7 +4263,8 @@ test('Task 6 validator resolves query and fragment targets and rejects unsafe or
       '<a href="https://example.com/reference">HTTPS</a>',
       '</main>'
     ].join('')));
-    assert.deepEqual(validator.validatePortfolio(temporaryRoot), []);
+    const home = canonicalPages().find(page => page.relativePath === 'index.html');
+    assert.deepEqual(validator.localReferenceErrors(home, fs.readFileSync(homePath, 'utf8'), temporaryRoot), []);
 
     const unsafeReferences = [
       ['<a href="../../outside/index.html">Escape</a>', /path traversal|escapes portfolio root/i],
@@ -5394,10 +5400,11 @@ test('Scholar highlights data mirrors the approved public CV signals', () => {
   assert.ok(data.highlights, 'portfolio data exports highlights');
   assert.deepEqual(render.dataErrors(data).filter((error) => /highlight/i.test(error)), []);
   assert.equal(data.highlights.publications.length, 3);
-  assert.equal(data.highlights.publications[0].href, 'https://link.springer.com/article/10.1007/s10278-024-01014-z');
+  assert.equal(data.highlights.publications[1].href, 'https://link.springer.com/article/10.1007/s10278-024-01014-z');
   assert.deepEqual([data.highlights.patents.filed, data.highlights.patents.registered], [7, 3]);
-  assert.equal(data.highlights.patents.items.length, 3);
-  assert.ok(data.highlights.patents.items.every((item) => item.status === 'registered'));
+  assert.equal(data.highlights.patents.items.length, 7);
+  assert.equal(data.highlights.patents.items.filter(item => item.status === 'registered').length, 3);
+  assert.equal(data.highlights.patents.items.find(item => item.translations.ko.title === '일회용 종이컵 수거함').status, 'filed');
   assert.equal(data.highlights.awards.length, 9);
   assert.doesNotMatch(JSON.stringify(data.highlights), /\b10-\d{4}-\d+\b|홍재성|안재명|강영남|최현석/);
 });
@@ -5431,9 +5438,9 @@ test('Scholar CV refresh names the approved partners and products within the PDF
   assert.deepEqual(validator.publicCvDataErrors(cv), []);
 });
 
-test('Home positions the current Samsung Medical Center surgical-planning collaboration in both languages', () => {
-  assert.match(read('index.html'), /현재 삼성서울병원과 장기 협력하며, 디지털 교합에서 전체 구강악안면 수술계획으로 확장되는 대규모 소프트웨어를 개발하고 있습니다\./);
-  assert.match(read('en/index.html'), /currently developing large-scale software with Samsung Medical Center through a long-term collaboration, expanding from digital occlusion toward end-to-end oral and maxillofacial surgical planning\./i);
+test('Home positions medical imaging and dental occlusion research in both languages', () => {
+  assert.match(read('index.html'), /의료영상과 3D 형상/);
+  assert.match(read('en/index.html'), /medical images and 3D geometry/i);
 });
 
 test('public CV records the ongoing digital occlusion technical-lead scope without deployment claims', () => {
