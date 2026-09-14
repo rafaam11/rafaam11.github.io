@@ -108,5 +108,28 @@ test('historical News preserves filing dates, shared authorship, and coverage wi
   assert.match(find('haptic-occlusion-poster-award-2024').translations.en.body,/Best Poster Award.*co-author/);
   assert.match(find('mandibular-conference-award-2023').translations.en.body,/Best Paper Award.*co-author/);
   assert.match(find('virtual-jawbone-presentation-2022').translations.en.body,/was presented orally/);
-  assert.equal(data.news.filter(item=>item.id.includes('forklift') || item.id.includes('ai-build-start')).length,0);
+  assert.equal(data.news.filter(item=>item.id.includes('ai-build-start')).length,0);
+});
+
+test('2025 News records the confirmed DOTORI start and three public repository milestones', () => {
+  const expected = [
+    ['dotori-development-start-2025','2025-11','month','projects/unmanned-forklift/'],
+    ['server-client-study-public-2025','2025-04-26','day','https://github.com/rafaam11/server-client-study'],
+    ['lightglue-experiment-public-2025','2025-04-14','day','https://github.com/rafaam11/FeatureMatch_LightGlue'],
+    ['samurai-yolo-experiment-public-2025','2025-04-14','day','https://github.com/rafaam11/samurai_test']
+  ];
+  const entries = data.news.filter(item=>item.eventDate.startsWith('2025'));
+  assert.equal(entries.length,4);
+  for (const [id,eventDate,datePrecision,target] of expected) {
+    const item = entries.find(candidate=>candidate.id===id);
+    assert.ok(item, id);
+    assert.equal(item.eventDate,eventDate);
+    assert.equal(item.datePrecision,datePrecision);
+    assert.ok(item.links.some(link=>link.route===target || link.href===target));
+    assert.ok(item.translations.ko.body);
+    assert.ok(item.translations.en.body);
+  }
+  const forklift = data.projects.find(project=>project.slug==='unmanned-forklift');
+  assert.equal(forklift.period,'2025.11 – present');
+  assert.equal(data.news.length,46);
 });
