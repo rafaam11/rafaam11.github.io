@@ -2107,11 +2107,17 @@ function pageDependencyErrors(file, html, parsedTags) {
   const relativePath = toPosix(file.relativePath);
   const depth = relativePath.split('/').length - 1;
   const base = '../'.repeat(depth);
+  const hasActivityOverlay = html.includes(`${base}js/local-feed.js`);
   const requiredStyles = [`${base}css/site.css`, `${base}css/scholar.css`];
   if (file.page === 'cv') requiredStyles.push(`${base}css/cv-pdf.css`);
+  if (hasActivityOverlay) requiredStyles.push(`${base}css/local-feed.css`, `${base}css/local-projects.css`);
   const requiredScripts = [`${base}js/site-i18n.js`, `${base}js/nav.js`];
   if (file.page === 'home' || file.page === 'projects') {
     requiredScripts.splice(1, 0, `${base}js/portfolio-data.js`, `${base}js/portfolio-render.js`);
+  }
+  if (hasActivityOverlay) {
+    if (!requiredScripts.includes(`${base}js/portfolio-data.js`)) requiredScripts.push(`${base}js/portfolio-data.js`);
+    requiredScripts.push(`${base}js/local-media-data.js`, `${base}js/local-feed.js`, `${base}js/local-projects.js`);
   }
 
   const tags = parsedTags || htmlStartTags(html);
