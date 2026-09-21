@@ -286,7 +286,8 @@ function copyTask6Surface(targetRoot) {
     'assets/projects',
     'assets/pdfs',
     'assets/cv',
-    'output/pdf'
+    'output/pdf',
+    'assets/local-review'
   ]) {
     fs.cpSync(path.join(root, relativePath), path.join(targetRoot, relativePath), { recursive: true });
   }
@@ -304,6 +305,11 @@ function copyTask6Surface(targetRoot) {
     'js/portfolio-data.js',
     'js/portfolio-render.js',
     'js/nav.js',
+    'js/local-media-data.js',
+    'js/local-feed.js',
+    'js/local-projects.js',
+    'css/local-feed.css',
+    'css/local-projects.css',
     'scripts/generate-portfolio-pdfs.py'
   ]) {
     const target = path.join(targetRoot, relativePath);
