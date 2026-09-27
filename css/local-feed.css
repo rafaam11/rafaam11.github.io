@@ -1,34 +1,33 @@
 /* Local review overlay: the original scholar typography remains the foundation. */
-.lf-local-note, .lf-selected-intro { color: #536679; font-size: .92rem; }
+.lf-local-note, .lf-selected-intro { color: var(--sc-faint); font-size: var(--sc-meta); }
 .lf-filters { display: flex; flex-wrap: wrap; gap: 1rem 1.4rem; align-items: end; margin: 1.6rem 0 .5rem; padding: 1rem 0; border-bottom: 1px solid var(--sc-rule); }
 .lf-filters label { display: grid; gap: .3rem; color: var(--sc-muted); font-size: .9rem; }
 .lf-filters select { min-height: 42px; min-width: 145px; padding: .45rem 2.25rem .45rem .7rem; color: var(--sc-ink); border: 1px solid #a9b7c4; border-radius: 3px; background: #fff; font: inherit; }
-.td-shell .lf-filters #feed-count { margin: 0 0 .5rem auto; color: #536679; font-size: .9rem; }
+.td-shell .lf-filters #feed-count { margin: 0 0 .5rem auto; color: var(--sc-faint); font-size: var(--sc-meta); }
 .lf-filters select:focus-visible, .lf-empty button:focus-visible { outline: 2px solid #315d80; outline-offset: 3px; }
 .lf-feed { list-style: none; margin: 0; padding: 0; }
 .lf-event { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 1.5rem; padding: 1.65rem 0; border-bottom: 1px solid var(--sc-rule); scroll-margin-top: 2rem; }
 .lf-event:target { background: #f3f7fa; box-shadow: -10px 0 #f3f7fa, 10px 0 #f3f7fa; }
-.lf-event-date { padding-top: .15rem; color: #536679; font-size: .91rem; font-variant-numeric: tabular-nums; }
+.lf-event-date { padding-top: .15rem; color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; }
 .lf-category { display: block; margin-top: .35rem; font-size: .79rem; }
-.td-shell .lf-event-content h2 { margin: 0; border: 0; padding: 0; font-size: 1.13rem; line-height: 1.45; }
+.td-shell .lf-event-content h2 { margin: 0; border: 0; padding: 0; font-size: 1.2rem; line-height: 1.45; }
 .lf-event-content { min-width: 0; }
 .td-shell .lf-event-content > p { line-height: 1.75; }
-.td-shell .lf-links { font-size: .9rem; }
 .lf-media { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 1rem; margin-top: 1rem; }
 .lf-media figure { min-width: 0; margin: 0; }
 .lf-media figure > a { display: block; background: #f3f5f7; }
 .td-shell .lf-media img, .td-shell .lf-media video { display: block; width: 100%; height: 290px; object-fit: contain; background: #f3f5f7; border-radius: 2px; }
-.lf-media figcaption { margin-top: .45rem; color: #52606d; font-size: .83rem; line-height: 1.6; }
+.lf-media figcaption { margin-top: .45rem; color: var(--sc-faint); font-size: .83rem; line-height: 1.6; }
 .lf-review-note { display: block; margin-top: .35rem; color: #665b48; font-size: .79rem; }
 .lf-empty { padding: 2rem 0 3rem; }
 .lf-empty button { margin-top: 1rem; min-height: 44px; padding: .5rem 1rem; border: 1px solid #8ca2b3; border-radius: 3px; color: #244b6a; background: #f5f8fa; font: inherit; cursor: pointer; }
 .lf-activity-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 1.2rem; }
 .lf-activity { min-width: 0; }
-.lf-activity > time { color: #536679; font-size: .9rem; font-variant-numeric: tabular-nums; }
-.td-shell .lf-activity h3 { margin: .25rem 0 0; font-size: 1rem; line-height: 1.5; }
+.lf-activity > time { color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; }
+.td-shell .lf-activity h3 { margin: .25rem 0 0; font-size: 1.1rem; line-height: 1.5; }
 .td-shell .lf-activity h3 a { color: var(--sc-ink); }
 .lf-activity .lf-media { display: block; margin-top: .7rem; }
-.td-shell .lf-activity .lf-media img { height: 170px; }
+.td-shell .lf-activity .lf-media img { height: 220px; }
 .lf-activity .lf-media figcaption { font-size: .8rem; }
 @media (max-width: 650px) {
   .lf-event { grid-template-columns: minmax(0, 1fr); gap: .55rem; padding: 1.4rem 0; }
@@ -36,7 +35,7 @@
   .lf-category { margin: 0; }
   .lf-activity-grid { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
   .lf-activity { padding-bottom: 1rem; border-bottom: 1px solid var(--sc-rule); }
-  .td-shell .lf-activity .lf-media img { height: 220px; }
+  .td-shell .lf-activity .lf-media img { height: 260px; }
   .td-shell .lf-media img, .td-shell .lf-media video { height: 245px; }
   .lf-filters { gap: .8rem; }
   .lf-filters label { flex: 1; min-width: 0; }
