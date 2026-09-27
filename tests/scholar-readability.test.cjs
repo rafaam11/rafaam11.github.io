@@ -93,3 +93,15 @@ test('Projects pages carry the capability list above the project groups', () => 
     assert.equal(html.split('<div><dt>').length - 1, 5, `${file}: five capability rows`);
   }
 });
+
+test('Case pages render no internal review artefacts', () => {
+  const projects = require('../js/local-projects.js');
+  const media = { M1: { type: 'image', path: 'assets/x.png', translations: { ko: { alt: 'a', caption: 'c', note: 'review note' }, en: { alt: 'a', caption: 'c', note: 'review note' } } } };
+  const html = projects.figure('M1', 'ko', '', media);
+  assert.ok(html.includes('<figcaption><p>c</p></figcaption>'), 'caption only');
+  assert.ok(!html.includes('pf-review-note') && !html.includes('review note'), 'no review note');
+  const source = read('js/local-projects.js');
+  for (const marker of ['pf-gap', 'early-ar', 'const gaps', 'M162', 'M159']) assert.ok(!source.includes(marker), `no ${marker} in local-projects.js`);
+  const css = read('css/local-projects.css');
+  assert.ok(!css.includes('pf-gap') && !css.includes('pf-review-note'), 'no orphan review styles');
+});
