@@ -98,7 +98,7 @@
 
 .sc-cv__head time,
 .sc-cv__meta {
-  color: var(--sc-muted);
+  color: var(--sc-faint);
   font-size: .95rem;
 }
 
@@ -147,7 +147,7 @@
 .sc-cv__list time,
 .sc-cv__state {
   grid-row: span 2;
-  color: var(--sc-muted);
+  color: var(--sc-faint);
   font-size: .95rem;
 }
 
