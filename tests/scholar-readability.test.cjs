@@ -32,7 +32,9 @@ test('Scholar v2 declares faint and meta tokens and a larger heading scale', () 
   assert.match(css, /--sc-meta:\s*\.9rem/);
   assert.ok(ruleBodies(css, '.td-shell h1').some((body) => /font-size:\s*2\.25rem/.test(body) && /line-height:\s*1\.2/.test(body)), 'h1 2.25rem/1.2');
   const h2 = ruleBodies(css, '.td-shell h2');
-  assert.ok(h2.some((body) => /font-size:\s*1\.6rem/.test(body) && /margin-top:\s*4rem/.test(body)), 'h2 1.6rem with 4rem margin');
+  assert.match(css, /--sc-h2:\s*1\.6rem/);
+  assert.match(css, /--sc-h2-gap:\s*4rem/);
+  assert.ok(h2.some((body) => /font-size:\s*var\(--sc-h2\)/.test(body) && /margin-top:\s*var\(--sc-h2-gap\)/.test(body)), 'h2 reads its size and rhythm from tokens so component h2 rules win at every width');
   assert.ok(h2.every((body) => !/border-bottom/.test(body)), 'h2 carries no under-rule');
   assert.ok(ruleBodies(css, '.td-shell h3').some((body) => /font-size:\s*1\.2rem/.test(body)), 'h3 1.2rem');
   assert.ok(ruleBodies(css, '.td-shell .sc-group__title').length, 'tier heading correction outranks .td-shell h2');
@@ -42,7 +44,9 @@ test('Scholar v2 declares faint and meta tokens and a larger heading scale', () 
   assert.ok(ruleBodies(css, '.sc-project__summary').some((body) => /max-width:\s*60ch/.test(body)), 'summary measure 60ch');
   const narrow = atRuleBody(css, /@media\s*\(max-width:\s*700px\)/);
   assert.match(narrow, /\.td-shell h1\s*\{[^}]*font-size:\s*1\.7rem/);
-  assert.match(narrow, /\.td-shell h2\s*\{[^}]*font-size:\s*1\.4rem/);
+  assert.doesNotMatch(narrow, /\.td-shell h2\s*\{/, 'no global h2 override inside the 700px query (it would outrank component h2 rules)');
+  assert.match(narrow, /:root\s*\{[^}]*--sc-h2:\s*1\.4rem/);
+  assert.match(narrow, /:root\s*\{[^}]*--sc-h2-gap:\s*3rem/);
 });
 
 test('Scholar v2 gives meta text one faint tone and keeps secondary links quiet', () => {
@@ -90,7 +94,7 @@ test('Projects pages carry the capability list above the project groups', () => 
     const marks = ['class="sc-page-header"', 'id="implementation-title"', '<dl class="sc-capabilities">', 'data-portfolio="project-groups"'];
     const positions = marks.map((mark) => html.indexOf(mark));
     assert.ok(positions.every((pos, i) => pos !== -1 && (i === 0 || pos > positions[i - 1])), `${file}: ${JSON.stringify(positions)}`);
-    assert.equal(html.split('<div><dt>').length - 1, 5, `${file}: five capability rows`);
+    assert.equal(html.split('<div><dt>').length - 1, require('../js/portfolio-data.js').capabilities.length, `${file}: one row per capability`);
   }
 });
 

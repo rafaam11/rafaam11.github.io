@@ -9,6 +9,8 @@
   --sc-body: 1.0625rem;
   --sc-faint: #6b7280;
   --sc-meta: .9rem;
+  --sc-h2: 1.6rem;
+  --sc-h2-gap: 4rem;
 }
 
 .td-shell { color: var(--sc-ink); background: var(--sc-bg); font-size: var(--sc-body); line-height: 1.7; word-break: keep-all; overflow-wrap: break-word; }
@@ -18,7 +20,7 @@
 .td-shell a:focus-visible, .td-shell video:focus-visible, .td-shell [tabindex]:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 3px; }
 .td-shell h1, .td-shell h2, .td-shell h3, .td-shell h4 { margin: 0; color: var(--sc-ink); font-weight: 700; line-height: 1.3; letter-spacing: -.01em; }
 .td-shell h1 { font-size: 2.25rem; line-height: 1.2; }
-.td-shell h2 { font-size: 1.6rem; margin-top: 4rem; }
+.td-shell h2 { font-size: var(--sc-h2); margin-top: var(--sc-h2-gap); }
 .td-shell h3 { font-size: 1.2rem; margin-top: 1.75rem; }
 .td-shell h4 { font-size: var(--sc-body); }
 .td-shell p { margin: .6rem 0 0; }
@@ -235,7 +237,7 @@
 
 @media (max-width: 700px) {
   .td-shell h1 { font-size: 1.7rem; }
-  .td-shell h2 { font-size: 1.4rem; margin-top: 3rem; }
+  :root { --sc-h2: 1.4rem; --sc-h2-gap: 3rem; } /* tokens, not a selector: component h2 rules keep winning */
   .sc-project { grid-template-columns: 1fr; }
   .sc-project__thumb { max-width: 320px; }
 }
