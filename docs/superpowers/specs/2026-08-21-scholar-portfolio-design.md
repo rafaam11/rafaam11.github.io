@@ -1,6 +1,8 @@
 # Scholar Portfolio Design Specification
 
 > 2026-08-21 · supersedes the visual and information-architecture sections of `2026-08-16-3d-registration-partner-portfolio.md`. Privacy, evidence, and validation rules from that spec remain in force unless restated here.
+>
+> Partially superseded by `2026-09-28-scholar-readability-design.md`: the Home information architecture and the type-scale values below are replaced there; palette, forbidden devices, media and privacy rules stay as written here.
 
 ## Goal
 
