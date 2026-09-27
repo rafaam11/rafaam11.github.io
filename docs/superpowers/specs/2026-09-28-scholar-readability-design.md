@@ -46,7 +46,9 @@ The capability list (`<dl class="sc-capabilities">`, `id="implementation-title"`
 
 ## Public review artefacts
 
-Internal review text is not rendered on public pages: `js/local-projects.js` no longer appends the `pf-gap` "material needed" aside, the `pf-review-note` lines, or the SMCNavi "early AR exploration · association pending" section; `js/local-feed.js` no longer prints media review notes. Figure placement, video hygiene and figure renumbering stay. The media records remain in `js/local-media-data.js` for later reintroduction once their links are confirmed.
+The following review artefacts are no longer rendered on public pages: the `pf-gap` "material needed" aside, the `pf-review-note` caption lines and the SMCNavi "early AR exploration · association pending" section in `js/local-projects.js`, and the media review notes in `js/local-feed.js`. Figure placement, video hygiene and figure renumbering stay. The media records remain in `js/local-media-data.js` for later reintroduction once their links are confirmed.
+
+Still visible, and outside this change: some media captions and the mandibular stage prose in `js/local-media-data.js` / `js/local-projects.js` keep candidate wording ("…연결할 후보입니다", "remains unconfirmed"). Rewriting that copy is an owner decision for a later pass.
 
 ## Non-goals
 
