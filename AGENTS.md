@@ -11,7 +11,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 - **Audience:** 연구 협력자(의료영상·3D 정합)와 일반 방문자(리크루터·지인)
 - **Structure:** Home / News / Projects / CV / Contact
 - **Canonical cases:** 9 projects, paired in Korean and English
-- **Capabilities:** 5 implementation-backed stacks on Home above News, without per-stack project lists; no standalone route
+- **Capabilities:** 5 implementation-backed stacks at the top of Projects (above project-groups), without per-stack project lists; Home shows only their titles as one topics line under the intro; no standalone route
 - **Deploy:** `main` push 후 GitHub Pages가 root를 직접 서빙
 - **Preview:** `python -m http.server 8000` or direct `file://` open
 
@@ -36,8 +36,8 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 ## File structure
 
 ```text
-index.html                         # Home: intro (name, identity line, photo, contacts), interests paragraph, grouped project rows, Publications · Patents · Awards, contact line
-projects/index.html                # Projects groups: Medical Core (6), Platform Software (1), Industrial Spotlight (1), AI Build Lab (1)
+index.html                         # Home: intro (name, lede, affiliation, capability topics line, contacts, photo), selected research (3), publications + patents/awards line, News (4, curated), selected activities (local-feed overlay), contact line
+projects/index.html                # Capability list, then Projects groups: Medical Core (6), Platform Software (1), Industrial Spotlight (1), AI Build Lab (1)
 projects/<slug>/index.html         # 9 shared-renderer case summaries
 en/                               # English counterparts for all 13 Korean routes
 cv/index.html                      # Full public CV in semantic HTML plus PDF and raster fallbacks
@@ -47,7 +47,7 @@ js/portfolio-render.js             # Home, Projects, and case renderer
 js/site-i18n.js                    # Canonical route descriptors and localized UI copy
 js/nav.js                          # Shared nav/footer; file:// and HTTP compatible
 css/site.css                       # Shared portfolio components
-css/scholar.css                    # Researcher-style visual system (2026-08-21)
+css/scholar.css                    # Researcher-style visual system (2026-08-21; type scale and meta tone revised 2026-09-28, see docs/superpowers/specs/2026-09-28-scholar-readability-design.md)
 css/cv-pdf.css                     # CV viewer and page-preview layout
 assets/projects/EVIDENCE_REGISTER.md # Public evidence identifier and approval SSOT
 assets/projects/<slug>/            # Approved derivatives or public-safe boundary README
@@ -73,7 +73,7 @@ public/                            # Generated blog output; never edit for portf
 - The CV page body is generated from `data/public-cv.json` (version 2026-08-22): `node scripts/public-cv-summary.cjs --write` rewrites the marked block on both CV pages.
 - The two PDFs in `assets/cv/` are **not** generated here. They are the author's own Word CV, localized and sanitized by `tools/cv-media/` in the LLMwiki workspace and committed as source; the generator never writes to `assets/cv/`. Keep `data/public-cv.json` in step with whatever those PDFs say. Approved as public on 2026-08-22: KIPO patent application numbers and the thesis advisor's name. Other people's names, phone numbers, addresses, and patient data stay out.
 - Do not restore the removed Research/Capabilities route, excluded project routes, decorative SVG fallbacks, Bootstrap/StartBootstrap, or the old sidebar layout.
-- Home uses generated introduction, News, achievements and implementation links; home-projects can also render at runtime. The home-highlights block is generated from CV data and is not replaced by JavaScript. Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
+- Home uses generated introduction (including the capability topics line), selected research, achievements and curated News; home-projects can also render at runtime. The home-highlights block closes the publications section, is generated from CV data and is not replaced by JavaScript. `js/local-feed.js` inserts the selected-activities block after the Home News section. Projects carries the generated capability list above project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
 
 ## Required verification
 
@@ -94,7 +94,7 @@ Commit and push to `main` only when deployment is intended. GitHub Pages must re
 ## Research profile maintenance
 
 - Home selects digital-occlusion-workflow, mandibular-fracture, and surgical-navigation; Projects retains all nine cases.
-- News is maintained bilingually in `js/portfolio-data.js`; preserve event-date precision and public evidence. Home shows at most five, and News groups the full list by year.
+- News is maintained bilingually in `js/portfolio-data.js`; preserve event-date precision and public evidence. Home shows four items chosen by `homeNews()` in `scripts/profile-home.cjs`: the newest software release (evidence path `data/news-software-sources.json`) at most once, then the newest remaining items. News groups the full list by year.
 - News covers research, conferences, awards, career, patent applications, and meaningful personal-software releases or public repositories. Combine an award with its corresponding presentation. Filing dates are not grant dates. Selected release and repository timestamps are recorded in `data/news-software-sources.json` and `data/news-repository-sources.json`, displayed in Asia/Seoul time.
 - `node scripts/public-cv-summary.cjs --write` refreshes CV and generated Home/News content. Home publications/patents/awards derive from `data/public-cv.json`.
 - `sourcePdfs` pins each reviewed CV PDF SHA-256. A changed edition requires explicit content synchronization review; do not blindly update the hashes.
