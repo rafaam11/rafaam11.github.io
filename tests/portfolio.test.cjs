@@ -132,6 +132,8 @@ const standaloneLegacyFiles = [
   'css/spatial-signal.css'
 ];
 
+const profileHome = require('../scripts/profile-home.cjs');
+
 function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
 }
@@ -1738,13 +1740,15 @@ test('Scholar Home shells carry introduction, news and selected research without
   for (const [file, identity, assetBase] of pages) {
     const html = read(file);
     assert.match(html, new RegExp(identity, 'i'));
-    assertInOrder(html, ['class="sc-intro"', 'id="implementation-title"', 'id="news-title"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'class="sc-contact"'], file);
+    assertInOrder(html, ['class="sc-intro"', 'class="sc-intro__topics"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'id="news-title"', 'class="sc-contact"'], file);
+    assert.doesNotMatch(html, /id="implementation-title"|id="highlights-title"/, `${file}: capabilities live on Projects and highlights close the publications section`);
     assert.match(html, new RegExp(`<img class="sc-intro__photo" src="${assetBase}img/profile_square.webp"`));
     assert.match(html, /mailto:uiop3847@naver\.com/);
     assert.match(html, /https:\/\/www\.linkedin\.com\/in\/rlawlsals/);
     assert.match(html, new RegExp(`${assetBase}cv/jinmin-kim-cv-(?:ko|en)\\.pdf`));
     assert.equal(count(html, '<li class="sc-project'), 3, `${file}: static project count`);
-    assert.equal(count(html, 'data-news-id='), Math.min(5, data.news.length), `${file}: static News count`);
+    assert.equal(count(html, 'data-news-id='), profileHome.homeNews().length, `${file}: curated News count`);
+    assert.ok(count(html, 'data-news-id="multi-cli-work-') + count(html, 'data-news-id="bus-info-') <= 1, `${file}: at most one software release on Home`);
     assert.doesNotMatch(html, /td-eyebrow|td-home-hero|td-mosaic|hero-kicker|SELECTED WORK|JOINT DEVELOPMENT|공동개발 파트너|박사|진학|이직|PhD|admission/i, `${file}: no Spatial Signal residue or career wording`);
   }
 });

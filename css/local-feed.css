@@ -18,7 +18,6 @@
 .lf-media figure > a { display: block; background: #f3f5f7; }
 .td-shell .lf-media img, .td-shell .lf-media video { display: block; width: 100%; height: 290px; object-fit: contain; background: #f3f5f7; border-radius: 2px; }
 .lf-media figcaption { margin-top: .45rem; color: var(--sc-faint); font-size: .83rem; line-height: 1.6; }
-.lf-review-note { display: block; margin-top: .35rem; color: #665b48; font-size: .79rem; }
 .lf-empty { padding: 2rem 0 3rem; }
 .lf-empty button { margin-top: 1rem; min-height: 44px; padding: .5rem 1rem; border: 1px solid #8ca2b3; border-radius: 3px; color: #244b6a; background: #f5f8fa; font: inherit; cursor: pointer; }
 .lf-activity-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 1.2rem; }

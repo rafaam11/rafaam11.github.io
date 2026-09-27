@@ -57,8 +57,8 @@
     'invention-excellence-award-2015': ['award', '대학창의발명대회 우수상', 'University Creative Invention Contest Excellence Award']
   };
   var copy = {
-    ko: { title: '소식', intro: '연구, 발표, 수상과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '학회 발표와 로봇 제작의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', local: '활동 기록에 연결된 공개 사진·영상입니다.', review: '활동 기록 연결', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', patent: '특허 출원', software: '소프트웨어' } },
-    en: { title: 'News', intro: 'Research, presentations, awards and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of conference presentations and building robots.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', local: 'Public photos and videos linked to the activity records.', review: 'Activity record link', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', patent: 'Patent applications', software: 'Software' } }
+    ko: { title: '소식', intro: '연구, 발표, 수상과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '학회 발표와 로봇 제작의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', patent: '특허 출원', software: '소프트웨어' } },
+    en: { title: 'News', intro: 'Research, presentations, awards and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of conference presentations and building robots.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', patent: 'Patent applications', software: 'Software' } }
   };
   function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
   function locale(lang) { return lang === 'en' ? 'en' : 'ko'; }
@@ -98,7 +98,7 @@
       var translation = item.translations[options.lang];
       var src = (options.base || '') + item.path;
       var visual = item.type === 'video' ? '<video controls muted playsinline preload="none"' + (item.poster ? ' poster="' + esc((options.base || '') + item.poster) + '"' : '') + ' aria-label="' + esc(translation.alt) + '"><source src="' + esc(src) + '" type="video/mp4"><a href="' + esc(src) + '">' + esc(translation.alt) + '</a></video>' : '<a href="' + esc(options.compact ? eventHref(event, options) : src) + '"><img src="' + esc(src) + '" alt="' + esc(translation.alt) + '" loading="lazy" decoding="async"></a>';
-      return '<figure data-media-id="' + esc(item.id) + '">' + visual + '<figcaption>' + esc(translation.caption) + (translation.note ? '<span class="lf-review-note">' + esc(translation.note) + '</span>' : '') + '</figcaption></figure>';
+      return '<figure data-media-id="' + esc(item.id) + '">' + visual + '<figcaption>' + esc(translation.caption) + '</figcaption></figure>';
     }).join('') + '</div>';
   }
   function eventHtml(event, options) {
@@ -130,8 +130,8 @@
     var options = { lang: locale(body.dataset.lang), base: body.dataset.base || '' };
     var events = buildModel(portfolio.news, options.lang, mediaData);
     if (page === 'home') {
-      var highlights = main.querySelector('[aria-labelledby="highlights-title"]');
-      if (highlights) highlights.insertAdjacentHTML('afterend', selectedActivitiesHtml(events, options));
+      var news = main.querySelector('[aria-labelledby="news-title"]');
+      if (news) news.insertAdjacentHTML('afterend', selectedActivitiesHtml(events, options));
       else { var contact = main.querySelector('.sc-contact'); if (contact) contact.insertAdjacentHTML('beforebegin', selectedActivitiesHtml(events, options)); }
     } else {
       var header = main.querySelector('.sc-page-header');

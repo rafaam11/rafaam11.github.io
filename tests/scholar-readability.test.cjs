@@ -69,3 +69,27 @@ test('Scholar v2 aligns the local feed and CV sheets with the shared tokens', ()
   assert.ok(ruleBodies(cv, '.sc-cv__meta').some((body) => /var\(--sc-faint\)/.test(body)), 'CV meta uses --sc-faint');
   assert.ok(ruleBodies(cv, '.sc-cv__intro h2').some((body) => /margin(?:-top)?:\s*0\b/.test(body)), 'CV intro heading ignores the global 4rem');
 });
+
+test('Local feed renders no review notes and mounts activities after Home News', () => {
+  const feed = require('../js/local-feed.js');
+  const event = { id: 'x', eventDate: '2022-01-01', links: [], media: [{ id: 'M1', type: 'image', path: 'assets/x.png', translations: { ko: { alt: 'a', caption: 'c', note: 'review note' }, en: { alt: 'a', caption: 'c', note: 'review note' } } }] };
+  for (const compact of [true, false]) {
+    const html = feed.mediaHtml(event, { lang: 'ko', base: '', compact });
+    assert.ok(html.includes('<figcaption>c</figcaption>'), 'caption only');
+    assert.ok(!html.includes('lf-review-note') && !html.includes('review note'), 'no review note');
+  }
+  const source = read('js/local-feed.js');
+  assert.ok(source.includes('[aria-labelledby="news-title"]'), 'home anchor is the News section');
+  assert.ok(!source.includes('highlights-title'), 'no stale anchor');
+  assert.ok(!read('css/local-feed.css').includes('lf-review-note'), 'no orphan review-note style');
+});
+
+test('Projects pages carry the capability list above the project groups', () => {
+  for (const file of ['projects/index.html', 'en/projects/index.html']) {
+    const html = read(file);
+    const marks = ['class="sc-page-header"', 'id="implementation-title"', '<dl class="sc-capabilities">', 'data-portfolio="project-groups"'];
+    const positions = marks.map((mark) => html.indexOf(mark));
+    assert.ok(positions.every((pos, i) => pos !== -1 && (i === 0 || pos > positions[i - 1])), `${file}: ${JSON.stringify(positions)}`);
+    assert.equal(html.split('<div><dt>').length - 1, 5, `${file}: five capability rows`);
+  }
+});
