@@ -133,3 +133,11 @@ test('2025 News records the confirmed DOTORI start and three public repository m
   assert.equal(forklift.period,'2025.11 – present');
   assert.equal(data.news.length,46);
 });
+test('Home News keeps only the newest software release and then the newest other items', () => {
+  const release = (id, date) => ({...data.news[0], id, eventDate: date, datePrecision: 'day', evidence: {...data.news[0].evidence, path: 'data/news-software-sources.json'}});
+  const other = (id, date) => ({...data.news[0], id, eventDate: date, datePrecision: 'day', evidence: {...data.news[0].evidence, path: 'data/public-cv.json'}});
+  const entries = [other('paper-a', '2026-06-01'), release('app-v3', '2026-09-04'), release('app-v2', '2026-09-02'), other('talk-b', '2026-04-03'), release('app-v1', '2026-08-16'), other('start-c', '2026-03-01'), other('old-d', '2025-11-01')];
+  assert.deepEqual(profile.homeNews(entries, 4).map((item) => item.id), ['app-v3', 'paper-a', 'talk-b', 'start-c']);
+  assert.equal(profile.homeNews(data.news).length, 4);
+  assert.equal(profile.homeNews(data.news).filter((item) => item.evidence.path === 'data/news-software-sources.json').length, 1);
+});
