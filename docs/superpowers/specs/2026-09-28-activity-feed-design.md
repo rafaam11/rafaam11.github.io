@@ -20,7 +20,7 @@ Use the owner's private activity media (`assets/usermedia/`, 592 MB, git-ignored
 | Budget | `assets/local-review/` ≤16 MiB (10.3 MiB at 71 records) |
 | Evidence | CV facts cite `data/public-cv.json`; photo-only events cite `{ path: 'data/activity-media.json', locator: 'M###' }` and the record must list the event |
 | Category | New `activity` (대외활동 / Activities); extra categories live in `labels[id][3]` |
-| Chapters | DIGITRACK (2023-02–) · DGIST M.S. (2021-03–) · Kumoh (–2021-02); year-precision dates fall into the earlier chapter; `dgist-masters-degree-2023` overrides to DGIST |
+| Order | One chronological list, newest first (career chapters were tried and dropped at the owner's request, 2026-09-29). Software releases: only the first public release of each app |
 | Media per event | Three photos and one video visible; further photos fold into `<details>`; images carry width/height |
 | Home | Selected activities: quadruped robot (2020), ISM 2019, ACCAS 2022 |
 
@@ -30,4 +30,4 @@ Use the owner's private activity media (`assets/usermedia/`, 592 MB, git-ignored
 
 ## Tests
 
-`tests/activity-media.test.cjs` (ignore rule, caption hygiene, SSOT, budget, evidence), `tests/activity-media-pipeline.test.cjs` (parsers, ffmpeg arguments, write guard), `tests/activity-feed.test.cjs` (chapters, filters, folded media, Home selection).
+`tests/activity-media.test.cjs` (ignore rule, caption hygiene, SSOT, budget, evidence), `tests/activity-media-pipeline.test.cjs` (parsers, ffmpeg arguments, write guard), `tests/activity-feed.test.cjs` (chronological list, folded media, Home selection).

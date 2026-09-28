@@ -90,7 +90,7 @@ test('software News dates match public release evidence in Asia/Seoul', () => {
     assert.ok(item.links.some(link=>link.href===release.url));
     assert.ok(item.links.some(link=>link.route==='projects/ai-build-lab/'));
   }
-  assert.equal(software.find(item=>item.id==='multi-cli-work-v1-7-0').eventDate,'2026-07-27');
+  assert.equal(software.find(item=>item.id==='multi-cli-work-v1-0-0').eventDate,'2026-07-12');
 });
 test('historical News preserves filing dates, shared authorship, and coverage without duplicated conference awards', () => {
   const find = id => data.news.find(item=>item.id===id);
@@ -131,7 +131,7 @@ test('2025 News records the confirmed DOTORI start and three public repository m
   }
   const forklift = data.projects.find(project=>project.slug==='unmanned-forklift');
   assert.equal(forklift.period,'2025.11 – present');
-  assert.equal(data.news.length,62);
+  assert.equal(data.news.length,54);
 });
 test('Home News keeps only the newest software release and then the newest other items', () => {
   const release = (id, date) => ({...data.news[0], id, eventDate: date, datePrecision: 'day', evidence: {...data.news[0].evidence, path: 'data/news-software-sources.json'}});

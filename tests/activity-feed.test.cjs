@@ -12,43 +12,16 @@ function positions(html, markers) {
   return markers.map((marker) => html.indexOf(marker));
 }
 
-test('chapters run from the latest career stage back to the first', () => {
-  assert.deepEqual(feed.chapters.map((chapter) => chapter.id), ['digitrack', 'dgist', 'kumoh']);
-  for (const chapter of feed.chapters) {
-    for (const locale of ['ko', 'en']) {
-      assert.ok(chapter[locale].title && chapter[locale].lede, `${chapter.id} ${locale} copy`);
-      assert.doesNotMatch(chapter[locale].title + chapter[locale].lede, /박사|진학|이직|PhD|admission/i);
-    }
-  }
-  const html = feed.chapteredFeedHtml(events, { lang: 'ko' });
-  const marks = positions(html, ['id="chapter-digitrack"', 'id="chapter-dgist"', 'id="chapter-kumoh"']);
-  assert.ok(marks.every((value, index) => value !== -1 && (index === 0 || value > marks[index - 1])), JSON.stringify(marks));
-  assert.equal(html.split('<section class="lf-chapter"').length - 1, 3);
-  assert.equal(html.split('class="lf-chapter-lede"').length - 1, 3);
-  assert.equal(html.split('data-news-id=').length - 1, events.length, 'every event rendered once');
-});
-
-test('every event belongs to exactly one chapter, including boundary dates', () => {
-  const ids = new Set(feed.chapters.map((chapter) => chapter.id));
-  for (const event of events) assert.ok(ids.has(feed.chapterFor(event)), event.id);
-  const byId = Object.fromEntries(events.map((event) => [event.id, feed.chapterFor(event)]));
-  assert.equal(byId['digitrack-researcher-2023'], 'digitrack');
-  assert.equal(byId['dgist-masters-degree-2023'], 'dgist');
-  assert.equal(byId['mandibular-conference-award-2023'], 'dgist');
-  assert.equal(byId['dgist-masters-start-2021'], 'dgist');
-  assert.equal(byId['kumoh-bachelors-degree-2021'], 'kumoh');
-  assert.equal(byId['motion-control-internship-2021'], 'kumoh');
-  assert.equal(byId['multi-cli-work-v1-29-0'], 'digitrack');
-});
-
-test('filters hide chapters that have no matching events', () => {
-  const activities = feed.chapteredFeedHtml(feed.filterEvents(events, { type: 'activity' }), { lang: 'en' });
-  assert.ok(!activities.includes('id="chapter-digitrack"'), 'no DIGITRACK-era activity events');
-  assert.ok(activities.includes('id="chapter-kumoh"'));
-  const year2019 = feed.chapteredFeedHtml(feed.filterEvents(events, { year: '2019' }), { lang: 'en' });
-  assert.deepEqual(['digitrack', 'dgist', 'kumoh'].filter((id) => year2019.includes(`id="chapter-${id}"`)), ['kumoh']);
-  const empty = feed.chapteredFeedHtml([], { lang: 'ko' });
-  assert.match(empty, /lf-empty/);
+test('News lists every event in one chronological list without chapters', () => {
+  assert.equal(feed.chapters, undefined);
+  assert.equal(feed.chapteredFeedHtml, undefined);
+  const html = feed.feedHtml(events, { lang: 'ko' });
+  assert.equal(html.split('<ol class="lf-feed">').length - 1, 1);
+  assert.ok(!html.includes('lf-chapter'));
+  const dates = [...html.matchAll(/<time datetime="([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(dates.length, events.length);
+  for (let i = 1; i < dates.length; i += 1) assert.ok(dates[i - 1] >= dates[i], dates[i - 1] + ' before ' + dates[i]);
+  assert.match(html, /<article class="lf-event-content"[^>]*><h2 id="title-/);
 });
 
 test('media beyond three photos fold into a details element and every image carries its size', () => {
@@ -66,12 +39,6 @@ test('media beyond three photos fold into a details element and every image carr
   const compact = feed.mediaHtml(four, { lang: 'ko', base: '', compact: true });
   assert.equal(compact.split('<img ').length - 1, 1);
   assert.ok(!compact.includes('<details'));
-});
-
-test('event titles sit one level below chapter headings', () => {
-  const html = feed.chapteredFeedHtml(events.slice(0, 5), { lang: 'ko' });
-  assert.match(html, /<section class="lf-chapter"[^>]*><h2 id="chapter-/);
-  assert.match(html, /<article class="lf-event-content"[^>]*><h3 id="title-/);
 });
 
 test('Home selected activities span robot building, an overseas symposium and a conference', () => {
