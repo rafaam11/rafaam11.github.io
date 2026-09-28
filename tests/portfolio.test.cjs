@@ -3774,7 +3774,7 @@ test('Task 5 validator rejects HTML summary mutation and digest-only spoofing', 
     const original = fs.readFileSync(htmlPath, 'utf8');
     assert.match(original, /data-cv-summary-digest="[a-f0-9]{64}"/);
 
-    fs.writeFileSync(htmlPath, original.replace('Robot Software Engineer', 'Mutated headline'));
+    fs.writeFileSync(htmlPath, original.replace('Robotics &amp; Computer Vision R&amp;D Engineer', 'Mutated headline'));
     assert.match(validator.pdfArtifactErrors(temporaryRoot).join(' '), /semantic HTML CV summary.*(?:stale|match)|does not match.*canonical/i);
 
     fs.writeFileSync(htmlPath, original.replace(/data-cv-summary-digest="[a-f0-9]{64}"/, `data-cv-summary-digest="${'0'.repeat(64)}"`));
