@@ -33,16 +33,17 @@ Page-level rules stay: `.sc-intro`, `.sc-page-header` and `.sc-case__header` kee
 
 ## Home information architecture (`scripts/profile-home.cjs` → `renderHome`)
 
-Six sections, in this order:
+Seven sections, in this order:
 
-1. **Intro** — name, lede, two affiliation lines, one `sc-intro__topics` line listing the five capability titles joined by " · " (no tool lists), contact links, photo.
-2. **Selected research** — three rows (`data-portfolio="home-projects"`).
-3. **Selected publications & presentations** — three items, "all N" link, then the patents/awards line (`data-portfolio="home-highlights"`) closing the same section. No separate heading.
-4. **News** — four items from `homeNews()`: the newest software release (evidence path `data/news-software-sources.json`) at most once, then the newest remaining items. "All news (N)" link.
-5. **Selected activities** — inserted by `js/local-feed.js` after the News section (fallback: before contact).
-6. **Contact**.
+1. **Intro** — name, lede, two affiliation lines, contact links, photo.
+2. **Capabilities** — the five-stack `<dl class="sc-capabilities">` (`id="implementation-title"`), kept on Home at the owner's request (2026-09-28 review of the local preview).
+3. **Selected research** — three rows (`data-portfolio="home-projects"`).
+4. **Selected publications & presentations** — three items, "all N" link, then the patents/awards line (`data-portfolio="home-highlights"`) closing the same section. No separate heading.
+5. **News** — four items from `homeNews()`: the newest software release (evidence path `data/news-software-sources.json`) at most once, then the newest remaining items. "All news (N)" link.
+6. **Selected activities** — inserted by `js/local-feed.js` after the News section (fallback: before contact).
+7. **Contact**.
 
-The capability list (`<dl class="sc-capabilities">`, `id="implementation-title"`) moves to the top of the Projects page, above `project-groups`. No standalone route.
+Projects does not repeat the capability list. No standalone route.
 
 ## Public review artefacts
 

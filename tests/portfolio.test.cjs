@@ -1740,8 +1740,8 @@ test('Scholar Home shells carry introduction, news and selected research without
   for (const [file, identity, assetBase] of pages) {
     const html = read(file);
     assert.match(html, new RegExp(identity, 'i'));
-    assertInOrder(html, ['class="sc-intro"', 'class="sc-intro__topics"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'id="news-title"', 'class="sc-contact"'], file);
-    assert.doesNotMatch(html, /id="implementation-title"|id="highlights-title"/, `${file}: capabilities live on Projects and highlights close the publications section`);
+    assertInOrder(html, ['class="sc-intro"', 'id="implementation-title"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'id="news-title"', 'class="sc-contact"'], file);
+    assert.doesNotMatch(html, /id="highlights-title"|sc-intro__topics/, `${file}: highlights close the publications section; capabilities are the dl, not a topics line`);
     assert.match(html, new RegExp(`<img class="sc-intro__photo" src="${assetBase}img/profile_square.webp"`));
     assert.match(html, /mailto:uiop3847@naver\.com/);
     assert.match(html, /https:\/\/www\.linkedin\.com\/in\/rlawlsals/);

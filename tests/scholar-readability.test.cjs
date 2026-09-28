@@ -38,7 +38,6 @@ test('Scholar v2 declares faint and meta tokens and a larger heading scale', () 
   assert.ok(h2.every((body) => !/border-bottom/.test(body)), 'h2 carries no under-rule');
   assert.ok(ruleBodies(css, '.td-shell h3').some((body) => /font-size:\s*1\.2rem/.test(body)), 'h3 1.2rem');
   assert.ok(ruleBodies(css, '.td-shell .sc-group__title').length, 'tier heading correction outranks .td-shell h2');
-  assert.ok(ruleBodies(css, '.sc-intro__topics').length, 'topics line style exists');
   assert.ok(ruleBodies(css, '.sc-intro__lede').some((body) => /font-size:\s*1\.25rem/.test(body) && /max-width:\s*34em/.test(body)), 'lede 1.25rem/34em');
   assert.ok(ruleBodies(css, '.sc-project').some((body) => /grid-template-columns:\s*240px 1fr/.test(body)), 'project thumb column 240px');
   assert.ok(ruleBodies(css, '.sc-project__summary').some((body) => /max-width:\s*60ch/.test(body)), 'summary measure 60ch');
@@ -88,13 +87,16 @@ test('Local feed renders no review notes and mounts activities after Home News',
   assert.ok(!read('css/local-feed.css').includes('lf-review-note'), 'no orphan review-note style');
 });
 
-test('Projects pages carry the capability list above the project groups', () => {
-  for (const file of ['projects/index.html', 'en/projects/index.html']) {
+test('Home keeps the capability list between the intro and selected research; Projects does not repeat it', () => {
+  for (const file of ['index.html', 'en/index.html']) {
     const html = read(file);
-    const marks = ['class="sc-page-header"', 'id="implementation-title"', '<dl class="sc-capabilities">', 'data-portfolio="project-groups"'];
+    const marks = ['class="sc-intro"', 'id="implementation-title"', '<dl class="sc-capabilities">', 'data-portfolio="home-projects"'];
     const positions = marks.map((mark) => html.indexOf(mark));
     assert.ok(positions.every((pos, i) => pos !== -1 && (i === 0 || pos > positions[i - 1])), `${file}: ${JSON.stringify(positions)}`);
     assert.equal(html.split('<div><dt>').length - 1, require('../js/portfolio-data.js').capabilities.length, `${file}: one row per capability`);
+  }
+  for (const file of ['projects/index.html', 'en/projects/index.html']) {
+    assert.ok(!read(file).includes('id="implementation-title"'), `${file}: no duplicate capability list`);
   }
 });
 
