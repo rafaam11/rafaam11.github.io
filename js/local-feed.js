@@ -11,12 +11,19 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   var selectedIds = ['accas-occlusion-paper-2022', 'quadruped-engineering-award-2020', 'ism-launcher-paper-2019'];
-  var mediaIds = {
-    'accas-occlusion-paper-2022': ['M012'],
-    'quadruped-engineering-award-2020': ['M039', 'M043'],
-    'ism-launcher-paper-2019': ['M185'],
-    'invention-sponsor-award-2019': ['M146']
-  };
+  // Media attach to events through each record's eventIds (data/activity-media.json), ordered by 'order'.
+  function mediaIndex(mediaData) {
+    var media = mediaData && (mediaData.media || mediaData) || {};
+    var index = {};
+    Object.keys(media).forEach(function (id) {
+      var record = media[id];
+      (record.eventIds || []).forEach(function (eventId) { (index[eventId] = index[eventId] || []).push(record); });
+    });
+    Object.keys(index).forEach(function (eventId) {
+      index[eventId].sort(function (a, b) { return (a.order || 0) - (b.order || 0) || String(a.id).localeCompare(String(b.id)); });
+    });
+    return index;
+  }
   // Editorial labels only. Event dates, prose, links and evidence stay canonical.
   var labels = {
     'surface-guidance-research-2026': ['research', '표면유도 호흡추적 연구 시작', 'Surface-guided respiratory tracking research'],
@@ -71,13 +78,13 @@
   }
   function buildModel(news, lang, mediaData) {
     lang = locale(lang);
-    var media = mediaData && (mediaData.media || mediaData) || {};
+    var mediaByEvent = mediaIndex(mediaData);
     var seen = new Set();
     return (news || []).filter(function (event) { if (seen.has(event.id)) return false; seen.add(event.id); return true; }).map(function (event, index) {
       var category = labels[event.id] ? labels[event.id][0] : 'software';
       return { id: event.id, eventDate: event.eventDate, datePrecision: event.datePrecision, year: event.eventDate.slice(0, 4), title: titleFor(event, lang), category: category,
         categories: /(?:haptic-occlusion-poster-award|mandibular-conference-award)/.test(event.id) ? ['award', 'conference'] : [category],
-        body: event.translations[lang].body, links: event.links || [], evidence: event.evidence, media: (mediaIds[event.id] || []).map(function (id) { return media[id]; }).filter(Boolean), originalIndex: index };
+        body: event.translations[lang].body, links: event.links || [], evidence: event.evidence, media: (mediaByEvent[event.id] || []).slice(), originalIndex: index };
     }).sort(function (a, b) { return b.eventDate.localeCompare(a.eventDate) || a.originalIndex - b.originalIndex; });
   }
   function filterEvents(events, filters) {
@@ -148,5 +155,5 @@
     }
     main.dataset.localFeedMounted = 'true';
   }
-  return { selectedIds: selectedIds, mediaIds: mediaIds, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, routeHref: routeHref, mount: mount };
+  return { selectedIds: selectedIds, mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, routeHref: routeHref, mount: mount };
 });
