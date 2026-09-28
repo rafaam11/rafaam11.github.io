@@ -9,13 +9,13 @@
     "translations": {
       "ko": {
         "displayName": "김진민",
-        "headline": "3D 정합·의료영상·로봇 시스템을 잇는 로봇SW 엔지니어",
-        "summary": "수술내비게이션에서 시작해 XR, 3D 정합, 다중 센서 통합, 무인지게차 현장 배치까지 확장해 온 연구개발 엔지니어입니다. 좌표계와 알고리즘을 실제 장치, 사용자 인터페이스, 검증 흐름으로 연결합니다."
+        "headline": "수술 로보틱스·컴퓨터비전 R&D 엔지니어 — 수술 내비게이션 · 3D 정합 · 광학 추적 · XR · 로봇 통합",
+        "summary": "광학식 3차원 위치추적·좌표계 변환·3D 정합·수술 내비게이션·XR·로봇 시스템 통합을 개발해 온 로보틱스·컴퓨터비전 R&D 엔지니어입니다. DGIST에서 컴퓨터 보조 수술과 정합을 연구했고, 삼성서울병원 구강악안면외과와 3년 이상 공동 R&D로 디지털 수술계획·XR 상담·영상유도 수술 내비게이션을 개발했습니다. 연구 방향은 수술 로보틱스, Physical AI, Surgical AI, 3D Vision, 로봇 인지, 멀티모달 인지, 공간 지능입니다."
       },
       "en": {
         "displayName": "Jinmin Kim",
-        "headline": "Robot Software Engineer — 3D Registration, Medical Imaging, Robot Systems",
-        "summary": "An R&D engineer whose work spans surgical navigation, XR, 3D registration, multi-sensor integration, and autonomous-forklift field deployment. I connect coordinate models and algorithms to physical devices, user interfaces, and explicit validation flows."
+        "headline": "Robotics & Computer Vision R&D Engineer — Surgical Navigation, 3D Registration, Optical Tracking, XR, Robotics Integration",
+        "summary": "Robotics and computer vision R&D engineer developing optical 3D tracking, coordinate transformation, 3D registration, surgical navigation, XR and robotic system integration. Researched computer-assisted surgery and registration at DGIST, and 3+ years of collaborative R&D with Samsung Medical Center oral and maxillofacial surgery on digital surgical planning, XR consultation and image-guided navigation. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence."
       }
     }
   },
@@ -88,23 +88,41 @@
       "organization": "DIGITRACK Inc.",
       "translations": {
         "ko": {
-          "role": "연구원 · 소프트웨어 개발",
-          "context": "DGIST 창업 의료기기·로봇 기업 (마커 기반 3차원 위치추적장치와 소프트웨어), 대구"
+          "role": "연구원 · 소프트웨어 R&D",
+          "context": "DGIST 연구실 기술 기반 창업 — 고정밀 광학식 3차원 위치추적·수술내비게이션·로봇 R&D 기업, 대구"
         },
         "en": {
-          "role": "Researcher · Software Development",
-          "context": "A DGIST spin-off medical-device and robotics company (marker-based 3D optical tracking devices and software), Daegu"
+          "role": "Research Engineer · Software R&D",
+          "context": "DGIST spin-off developing high-accuracy optical 3D tracking systems, surgical navigation software, and robotic/automation solutions, Daegu"
         }
       },
       "areas": [
         {
           "translations": {
             "ko": {
-              "title": "수술내비게이션 · 의료영상",
+              "title": "광학식 3차원 위치추적 소프트웨어",
+              "items": [
+                "자체 광학식 3차원 위치추적장치 SKADI의 API·Viewer 소프트웨어 개발·유지보수 — 광학 마커 추적·캘리브레이션·좌표계 변환·3D 시각화·수술도구 추적, 국내 수술내비게이션 기업·연구기관 납품 제품군의 SW 계층을 담당합니다."
+              ]
+            },
+            "en": {
+              "title": "Optical 3D Tracking Software",
+              "items": [
+                "Develop and maintain the API and Viewer of the in-house optical 3D tracker SKADI — optical marker tracking, calibration, coordinate transformation, 3D visualisation and surgical tool tracking; the software layer of a product line supplied to Korean surgical-navigation companies and research institutes."
+              ]
+            }
+          }
+        },
+        {
+          "translations": {
+            "ko": {
+              "title": "수술내비게이션 · 의료 R&D — 삼성서울병원 장기 공동연구",
               "items": [
                 "삼성서울병원 구강악안면외과와 3년 이상 협업 — 2023년부터 격주 임상 미팅을 이어오며 정부과제 2건과 개발용역 1건을 메인 실무로 수행했습니다.",
+                "수술계획 → AI 보조 계획 → XR 상담 → 수술내비게이션으로 이어지는 구강악안면 디지털 수술 워크플로우를 단계별 소프트웨어로 연결했습니다.",
                 "2026.03–현재 삼성서울병원 연구진과 구강악안면 디지털 교합 워크플로우를 공동 개발. 기술 리드·메인 개발자로 Custom App 아키텍처, end-to-end UI/UX, 특징점·교합 엔진 통합, 평가·내보내기 파이프라인을 담당하며 연구진 검증을 진행 중.",
-                "병원에서 사용 중인 3D Slicer 기반 수술내비게이션 통합 소프트웨어를 전담 개발했습니다 (수술내비게이션·HoloLens 2·Meta Quest 통합).",
+                "디지털 교합 워크플로우에 AI 기반 3D 해부학적 특징점 검출 모델을 통합해 수술계획·정합 단계와 연결했습니다.",
+                "병원에서 사용 중인 3D Slicer 기반 수술내비게이션 통합 소프트웨어를 전담 개발했습니다 (CT·환자·트래커·수술도구 좌표 정합·캘리브레이션, 6종 악안면 수술 워크플로, HoloLens 2·Meta Quest 통합).",
                 "rTMS 코일 내비게이션 시스템(NeuroPilot) 주도 개발 — 코일 위치 디지털트윈 가시화 (보건의료 정부과제).",
                 "저선량 C-Arm 3차원 내비게이션 — C-Arm 영상과 3차원 내비게이션 워크플로를 연결하고 담당 기능 범위를 구현했습니다.",
                 "방사선치료용 3차원 표면유도 호흡추적과 4DCT 정합 담당 (한국전기연구원 대형과제, 2026.06 - ).",
@@ -112,11 +130,13 @@
               ]
             },
             "en": {
-              "title": "Surgical navigation and medical imaging",
+              "title": "Surgical Navigation & Medical R&D — long-term collaboration with Samsung Medical Center",
               "items": [
                 "Over three years of collaboration with the oral and maxillofacial surgery department of Samsung Medical Center — biweekly clinical meetings since 2023, with two government programmes and one development contract carried as the main engineer.",
+                "Connected an oral and maxillofacial digital surgical workflow — surgical planning → AI-assisted planning → XR consultation → surgical navigation — as stage-by-stage software.",
                 "Since 2026.03, co-developing a maxillofacial digital-occlusion workflow with Samsung Medical Center researchers. As technical lead and primary developer, owning the Custom App architecture, end-to-end UI/UX, landmark and occlusion-engine integration, and the evaluation/export pipeline while researcher validation is ongoing.",
-                "Sole developer of the 3D Slicer-based integrated surgical-navigation software in use at the hospital (surgical navigation, HoloLens 2, and Meta Quest integration).",
+                "Integrated an AI-based 3D anatomical landmark detection model into the digital occlusion workflow, linking it to surgical planning and registration.",
+                "Sole developer of the 3D Slicer-based integrated surgical-navigation software used at the hospital (CT–patient–tracker–instrument registration and calibration, six maxillofacial surgical workflows, HoloLens 2 and Meta Quest integration).",
                 "Led development of the rTMS coil-navigation system (NeuroPilot) — digital-twin visualisation of coil pose (health-technology government programme).",
                 "Low-dose C-arm 3D navigation — connected C-arm imaging to the 3D navigation workflow and implemented the owned feature scope.",
                 "Own surface-guided respiratory tracking and 4D CT registration for radiotherapy (large KERI programme, 2026.06 - ).",
@@ -128,31 +148,17 @@
         {
           "translations": {
             "ko": {
-              "title": "3차원 위치추적장치 소프트웨어",
+              "title": "로보틱스·비전 — 무인지게차 (2025.11 - )",
               "items": [
-                "자체 광학식 3차원 위치추적장치 SKADI의 API·Viewer 소프트웨어 개발·유지보수 — 국내 수술내비게이션 기업과 연구기관에 납품되는 제품군의 소프트웨어 계층을 담당합니다."
-              ]
-            },
-            "en": {
-              "title": "3D optical tracking software",
-              "items": [
-                "Develop and maintain the API and Viewer software for SKADI, the in-house optical 3D tracker — the software layer of a product line delivered to Korean surgical-navigation companies and research institutes."
-              ]
-            }
-          }
-        },
-        {
-          "translations": {
-            "ko": {
-              "title": "산업 로봇 — 무인지게차 (2025 - )",
-              "items": [
+                "광학 추적·좌표계 정합 경험을 로봇–카메라 좌표 통합과 로봇 비전·센서 통합으로 확장하고 있습니다.",
                 "자체 무인지게차 솔루션(DOTORI)의 안전정책 관리자(safety_manager) 설계·구현, 라이다·ToF 센서의 Zenoh/ROS 2 네트워크 통합.",
                 "비전 R&D 담당 — 트럭 로딩 비전(ToF+RGB, SAM 계열 세그멘테이션 PoC와 행동트리 연동) 개발."
               ]
             },
             "en": {
-              "title": "Industrial robotics — autonomous forklift (2025 - )",
+              "title": "Robotics & Vision — Autonomous Forklift (2025.11 - )",
               "items": [
+                "Extending optical tracking and coordinate registration experience to robot–camera coordinate integration, robot vision and sensor integration.",
                 "Designed and implemented the safety-policy manager for the in-house autonomous-forklift solution (DOTORI) and integrated LiDAR and ToF sensors over the Zenoh and ROS 2 network.",
                 "Own vision R&D — truck-loading vision with ToF and RGB fusion, a SAM-family segmentation proof of concept, and behaviour-tree integration."
               ]
@@ -518,36 +524,24 @@
     {
       "translations": {
         "ko": {
-          "category": "프로그래밍",
-          "items": "Python, C++, C#"
+          "category": "수술 내비게이션·의료영상",
+          "items": "3D Slicer, DICOM, 광학 추적, 좌표계 변환, 캘리브레이션, 영상·점군 정합, OpenIGTLink"
         },
         "en": {
-          "category": "Programming",
-          "items": "Python, C++, C#"
+          "category": "Surgical navigation & medical imaging",
+          "items": "3D Slicer, DICOM, optical tracking, coordinate transformation, calibration, image/point-cloud registration, OpenIGTLink"
         }
       }
     },
     {
       "translations": {
         "ko": {
-          "category": "의료영상",
-          "items": "3D Slicer, DICOM, 영상 정합(rigid·ICP), 세그멘테이션(SAM 계열)"
+          "category": "컴퓨터비전·3D",
+          "items": "점군 처리, Rigid·ICP 정합, 세그멘테이션(SAM 계열), 3D 시각화, PyTorch"
         },
         "en": {
-          "category": "Medical imaging",
-          "items": "3D Slicer, DICOM, image registration (rigid, ICP), segmentation (SAM family)"
-        }
-      }
-    },
-    {
-      "translations": {
-        "ko": {
-          "category": "3D · XR",
-          "items": "Unity, HoloLens 2 (MRTK), Meta Quest, 광학 트래킹"
-        },
-        "en": {
-          "category": "3D and XR",
-          "items": "Unity, HoloLens 2 (MRTK), Meta Quest, optical tracking"
+          "category": "Computer vision & 3D",
+          "items": "Point clouds, rigid/ICP registration, segmentation (SAM family), 3D visualisation, PyTorch"
         }
       }
     },
@@ -555,23 +549,35 @@
       "translations": {
         "ko": {
           "category": "로봇",
-          "items": "ROS 2, Zenoh, Isaac Sim, 행동트리"
+          "items": "ROS 2, Zenoh, Isaac Sim, 행동트리, 비전·센서 통합"
         },
         "en": {
           "category": "Robotics",
-          "items": "ROS 2, Zenoh, Isaac Sim, behaviour trees"
+          "items": "ROS 2, Zenoh, Isaac Sim, behaviour trees, vision and sensor integration"
         }
       }
     },
     {
       "translations": {
         "ko": {
-          "category": "AI 도구",
-          "items": "PyTorch, LLM 에이전트 기반 개발 워크플로"
+          "category": "XR·공간 컴퓨팅",
+          "items": "Unity, OpenXR, MRTK, HoloLens 2, Meta Quest, Galaxy XR"
         },
         "en": {
-          "category": "AI tooling",
-          "items": "PyTorch, LLM-agent-based development workflow"
+          "category": "XR & spatial computing",
+          "items": "Unity, OpenXR, MRTK, HoloLens 2, Meta Quest, Galaxy XR"
+        }
+      }
+    },
+    {
+      "translations": {
+        "ko": {
+          "category": "프로그래밍",
+          "items": "Python, C++, C#"
+        },
+        "en": {
+          "category": "Programming",
+          "items": "Python, C++, C#"
         }
       }
     }
@@ -594,10 +600,10 @@
   ],
   "sourcePdfs": {
     "ko": {
-      "sha256": "997348fbb9599716dc5c2446f1dc9a6371ab2d0c8498f7bd86dd0b72c2de4e85"
+      "sha256": "56086019d10f0596454eb7580f005390995e7fa29feea594e47ce5eae6757f52"
     },
     "en": {
-      "sha256": "49ec577fa301d28d136606b07e7f5f7bbb427a850d935aa14a8fadc5bffffa16"
+      "sha256": "b8792a8f838028d3e243134ab3e3cd69c233050d71351c5da14b649dae551906"
     }
   }
 }
