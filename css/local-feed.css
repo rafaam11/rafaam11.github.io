@@ -10,7 +10,7 @@
 .lf-event:target { background: #f3f7fa; box-shadow: -10px 0 #f3f7fa, 10px 0 #f3f7fa; }
 .lf-event-date { padding-top: .15rem; color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; }
 .lf-category { display: block; margin-top: .35rem; font-size: .79rem; }
-.td-shell .lf-event-content h3 { margin: 0; border: 0; padding: 0; font-size: 1.2rem; line-height: 1.45; }
+.td-shell .lf-event-content h2 { margin: 0; border: 0; padding: 0; font-size: 1.2rem; line-height: 1.45; }
 .lf-event-content { min-width: 0; }
 .td-shell .lf-event-content > p { line-height: 1.75; }
 .lf-media { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 1rem; margin-top: 1rem; }
@@ -41,9 +41,7 @@
   .lf-filters select { width: 100%; min-width: 0; }
   .td-shell .lf-filters #feed-count { flex-basis: 100%; margin: .2rem 0 0; }
 }
-/* Career chapters and folded photos on the News page. */
-.td-shell .lf-chapter > h2 { margin-top: 3rem; }
-.lf-chapter-lede { max-width: 62ch; margin: .5rem 0 .5rem; color: var(--sc-muted); }
+/* Folded photos on the News page. */
 .lf-more { margin-top: .75rem; }
 .lf-more > summary { cursor: pointer; color: var(--sc-muted); font-size: var(--sc-meta); }
 .lf-more > summary:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 3px; }

@@ -66,7 +66,7 @@ test('Scholar v2 aligns the local feed and CV sheets with the shared tokens', ()
   const feed = read('css/local-feed.css');
   assert.doesNotMatch(feed, /#536679|#52606d/, 'local-feed uses --sc-faint instead of private greys');
   assert.equal(ruleBodies(feed, '.td-shell .lf-links').length, 0, 'lf-links sizing comes from scholar.css');
-  assert.ok(ruleBodies(feed, '.td-shell .lf-event-content h3').some((body) => /font-size:\s*1\.2rem/.test(body)));
+  assert.ok(ruleBodies(feed, '.td-shell .lf-event-content h2').some((body) => /font-size:\s*1\.2rem/.test(body)));
   assert.ok(ruleBodies(feed, '.td-shell .lf-activity .lf-media img').some((body) => /height:\s*220px/.test(body)));
   const cv = read('css/cv-pdf.css');
   assert.ok(ruleBodies(cv, '.sc-cv__meta').some((body) => /var\(--sc-faint\)/.test(body)), 'CV meta uses --sc-faint');
