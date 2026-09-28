@@ -133,6 +133,7 @@ const standaloneLegacyFiles = [
 ];
 
 const profileHome = require('../scripts/profile-home.cjs');
+const { privatePeoplePattern } = require('./helpers/private-people.cjs');
 
 function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -5442,7 +5443,7 @@ test('Scholar CV refresh names the approved partners and products within the PDF
   assert.equal(cv.patents.filter((patent) => patent.status === 'granted').length, 3);
   assert.equal(cv.awards.length, 9);
   // 2026-08-22: the thesis advisor and KIPO application numbers are approved; other people stay out.
-  assert.doesNotMatch(JSON.stringify(cv), /박사|진학|이직|PhD|admission|안재명|강영남|최현석/);
+  assert.doesNotMatch(JSON.stringify(cv), new RegExp('박사|진학|이직|PhD|admission|' + privatePeoplePattern.source));
   assert.match(JSON.stringify(cv), /홍재성/);
   assert.match(JSON.stringify(cv), /10-2024-0186869/);
   assert.deepEqual(validator.publicCvDataErrors(cv), []);
