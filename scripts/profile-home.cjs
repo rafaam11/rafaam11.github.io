@@ -78,8 +78,8 @@ function renderHome(locale, cv = readCv()) {
 <section class="sc-intro" aria-labelledby="home-title"><div><h1 id="home-title">${ko ? '김진민 <span lang="en">Jinmin Kim</span>' : 'Jinmin Kim'}</h1>
 <p class="sc-intro__lede">${ko ? '의료영상과 3D 형상에서 수술계획에 필요한 좌표 관계를 연구합니다. 치아 교합 기반의 하악골 정복 최적화와 디지털 교합 워크플로우를 중심으로, 정합 알고리즘을 내비게이션 소프트웨어와 실제 장치에 연결합니다.' : 'I study coordinate relationships in medical images and 3D geometry for surgical planning. My work focuses on dental-occlusion-based mandibular reduction and digital occlusion workflows, connecting registration algorithms to navigation software and physical devices.'}</p>
 <p class="sc-intro__affiliation">${ko ? '㈜디지트랙 연구원 · 소프트웨어 개발<br>DGIST 로봇및기계전자공학 석사' : 'Researcher · Software Development, DIGITRACK Inc.<br>M.S. in Robotics and Mechatronics Engineering, DGIST'}</p>
-<p class="sc-intro__topics">${data.capabilities.map(c => esc(c.translations[locale].title)).join(' · ')}</p>
 <p class="sc-intro__links">${cv.contacts.map(c => `<a href="${esc(c.href)}">${esc(c.label)}</a>`).join(' · ')} · <a href="${base}assets/cv/jinmin-kim-cv-${locale}.pdf">CV (PDF)</a></p></div><img class="sc-intro__photo" src="${base}assets/img/profile_square.webp" alt="${ko ? '김진민 프로필 사진' : 'Portrait of Jinmin Kim'}" width="160" height="160"></section>
+${capabilitiesHtml(locale)}
 <section aria-labelledby="projects-title"><h2 id="projects-title">${ko ? '대표 연구' : 'Selected research'}</h2><div data-portfolio="home-projects">${render.homeProjectGalleryHtml(data,base,true,locale)}</div><p><a href="${href(base,locale,'projects/')}">${ko ? '전체 프로젝트 9개' : 'All 9 projects'}</a></p></section>
 ${achievementsHtml(locale,cv,base)}
 <section aria-labelledby="news-title"><h2 id="news-title">${ko ? '소식' : 'News'}</h2>${renderNews(locale, homeNews(), {base, groupYears:false})}<p><a href="${href(base,locale,'news/')}">${ko ? `모든 소식 (${data.news.length}건)` : `All news (${data.news.length})`}</a></p></section>
@@ -106,7 +106,7 @@ function generationUpdates(cv, rootDir = root) {
     updates.set(homeFile,home);
     updates.set(`${prefix}news/index.html`,newsPage(locale));
     const projectsFile = `${prefix}projects/index.html`;
-    const projects = fs.readFileSync(path.join(rootDir,projectsFile),'utf8').replace(/(<main\b[^>]*>)[\s\S]*?(<\/main>)/, `$1\n<header class="sc-page-header"><h1>${locale === 'ko' ? '프로젝트' : 'Projects'}</h1><p>${locale === 'ko' ? '의료영상·3D 정합 연구와 이를 연결하는 플랫폼·로봇 소프트웨어 프로젝트입니다.' : 'Medical imaging and 3D registration research, with platform and robot software that connects the work to applications.'}</p></header>\n${capabilitiesHtml(locale)}\n<div data-portfolio="project-groups">${render.projectGroupsHtml(data,base,true,locale)}</div>\n$2`);
+    const projects = fs.readFileSync(path.join(rootDir,projectsFile),'utf8').replace(/(<main\b[^>]*>)[\s\S]*?(<\/main>)/, `$1\n<header class="sc-page-header"><h1>${locale === 'ko' ? '프로젝트' : 'Projects'}</h1><p>${locale === 'ko' ? '의료영상·3D 정합 연구와 이를 연결하는 플랫폼·로봇 소프트웨어 프로젝트입니다.' : 'Medical imaging and 3D registration research, with platform and robot software that connects the work to applications.'}</p></header>\n<div data-portfolio="project-groups">${render.projectGroupsHtml(data,base,true,locale)}</div>\n$2`);
     updates.set(projectsFile,projects);
   }
   const dataFile = 'js/portfolio-data.js';
