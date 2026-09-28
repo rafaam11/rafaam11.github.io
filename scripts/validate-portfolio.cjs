@@ -2404,7 +2404,7 @@ function validatePortfolio(rootDir) {
   try {
     const profile = require('./profile-home.cjs');
     const cv = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/public-cv.json'), 'utf8'));
-    errors.push(...profile.newsErrors(), ...profile.freshnessErrors(cv, rootDir));
+    errors.push(...profile.newsErrors(), ...profile.activityMediaErrors(profile.readActivityMedia(rootDir)), ...profile.freshnessErrors(cv, rootDir));
   } catch (error) { errors.push(`Profile generation validation failed: ${error.message}`); }
   errors.push(...forbiddenSourceDocumentErrors(rootDir));
   errors.push(...portfolioHtmlInventoryErrors(rootDir));

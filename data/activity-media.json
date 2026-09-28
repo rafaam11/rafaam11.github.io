@@ -1,6 +1,5 @@
-/* Generated from data/activity-media.json by scripts/profile-home.cjs (node scripts/public-cv-summary.cjs --write). Do not edit. */
-(function(r){const d={
-  "localOnly": false,
+{
+  "schema": 1,
   "media": {
     "M007": {
       "id": "M007",
@@ -8,8 +7,15 @@
       "path": "assets/local-review/M007.webp",
       "width": 1400,
       "height": 1050,
+      "sourceId": "M007",
+      "sourcePath": "2021 대한민국과학기술대전 부스운영/20211223_140058.jpg",
+      "sourceSha256": "eca5b3d5381da941f1d25e575c0f3cbd16be428b9e617c8113b7875a35ef16a7",
+      "derivativeSha256": "4c5bfb9d83ce8ca0b94457bab7a17135f39475abb07a03e35314fcd3169c7e35",
+      "takenAt": "2021-12-23",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "2021 대한민국과학기술대전의 연구실 전시 부스.",
@@ -27,10 +33,17 @@
       "path": "assets/local-review/M012.webp",
       "width": 1400,
       "height": 1050,
+      "sourceId": "M012",
+      "sourcePath": "2022 ACCAS 학회발표/20220825_083726.jpg",
+      "sourceSha256": "359df05338baadefb87122174ddce8c4f5ac9f2ea42e77a644c9e40854b94dd5",
+      "derivativeSha256": "eb4a45857aacf7c5e567d955391bfc26d9b65ba083f77507aa75e66ccea550c6",
+      "takenAt": "2022-08-25",
+      "takenAtSource": "filename",
       "eventIds": [
         "accas-occlusion-paper-2022"
       ],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "ACCAS 2022 발표 현장.",
@@ -48,10 +61,17 @@
       "path": "assets/local-review/M039.webp",
       "width": 1400,
       "height": 1050,
+      "sourceId": "M039",
+      "sourcePath": "5절링크구조 4족보행로봇/20201116_152722.jpg",
+      "sourceSha256": "09aeb126a462722d57dc0c40e7c19ae116d86ddef25309a56cf29df9cd06e03b",
+      "derivativeSha256": "be36cf7d648b976d2692d9db6a1fcd782c5ebb2605c04cae08b1269d42f521a7",
+      "takenAt": "2020-11-16",
+      "takenAtSource": "filename",
       "eventIds": [
         "quadruped-engineering-award-2020"
       ],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "흰 링크와 서보, 제어 보드를 연결한 4족 로봇. 설계가 실제 장치가 되는 과정.",
@@ -70,10 +90,21 @@
       "poster": "assets/local-review/M043-poster.jpg",
       "width": 960,
       "height": 540,
+      "sourceId": "M043",
+      "sourcePath": "5절링크구조 4족보행로봇/20201121_182159.mp4",
+      "sourceSha256": "d2d2529ea28b748507cd755f7f166a8f0f6fe35b8f92be9e1652340423a0d659",
+      "derivativeSha256": "5ee5590a660d567726a4a3c0c71912afa123b7bc8685469cd71f475ece612124",
+      "takenAt": "2020-11-21",
+      "takenAtSource": "filename",
       "eventIds": [
         "quadruped-engineering-award-2020"
       ],
       "order": 2,
+      "approval": "approved-public",
+      "clip": {
+        "start": 4,
+        "duration": 12
+      },
       "translations": {
         "ko": {
           "caption": "받침 위에서 움직이는 5절 링크 다리.",
@@ -91,8 +122,15 @@
       "path": "assets/local-review/M076.webp",
       "width": 1188,
       "height": 909,
+      "sourceId": "M076",
+      "sourcePath": "교합연구/1649774994953.png",
+      "sourceSha256": "c92d24ccc8df98972d8200b3c006e9c8d03b231c755dd98ec744d5b3116353de",
+      "derivativeSha256": "98feb7b5bb4ef73c19981e7417af7aa5457bd3596cd466f5f4354fc79ee602e0",
+      "takenAt": "2022-04-12",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "점군으로 본 치열 단면.",
@@ -110,8 +148,15 @@
       "path": "assets/local-review/M077.webp",
       "width": 800,
       "height": 600,
+      "sourceId": "M077",
+      "sourcePath": "교합연구/1649774996435.png",
+      "sourceSha256": "2706963052471b7d111900832a3b601c06bf5d04d49d411ab24fdedbdeb27ff7",
+      "derivativeSha256": "f3bcc6de9366c1730b1837e7d41fe4e38bc8e685697ca7d71427ee3edf04d17d",
+      "takenAt": "2022-04-12",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "치열궁 곡선과 단면 방향.",
@@ -129,8 +174,15 @@
       "path": "assets/local-review/M084.webp",
       "width": 1244,
       "height": 1100,
+      "sourceId": "M084",
+      "sourcePath": "교합연구/1650026162719-0.png",
+      "sourceSha256": "60e68a6785f3f4d2b85bfd2ccc8871ea0f6e90bda4253afd85d307803f04652c",
+      "derivativeSha256": "396e10336c1dfa3e3a86bcdb1475e3934e8614d4ee5c71a95734bf512dfed9cb",
+      "takenAt": "2022-04-15",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "치아별 구조를 색으로 구분한 점군.",
@@ -148,10 +200,17 @@
       "path": "assets/local-review/M146.webp",
       "width": 1400,
       "height": 1050,
+      "sourceId": "M146",
+      "sourcePath": "발명대회/20191106_154622.jpg",
+      "sourceSha256": "aea7dfa5cf5b110c489b064974e53e3f209db109434e503d96237c53775c0124",
+      "derivativeSha256": "7cf3117af8623ebc4df48a766818592858d31db4c461d0727e800e91180f0281",
+      "takenAt": "2019-11-06",
+      "takenAtSource": "filename",
       "eventIds": [
         "invention-sponsor-award-2019"
       ],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "2019 대학창의발명대회 시상 현장.",
@@ -169,8 +228,15 @@
       "path": "assets/local-review/M159.webp",
       "width": 1400,
       "height": 1050,
+      "sourceId": "M159",
+      "sourcePath": "스마트폰AR마커인식기/20210811_190826.jpg",
+      "sourceSha256": "2535eea2c96d03adcf45230d94f052ffacdd833897571ff2c812e72ffc5b17ec",
+      "derivativeSha256": "8bc470e89ad89f66f6acd1f5536b7add2eac20933d56fab6e0d7b989d7942779",
+      "takenAt": "2021-08-11",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "스마트폰 AR 마커 실험 배치 (2021).",
@@ -188,8 +254,15 @@
       "path": "assets/local-review/M160.webp",
       "width": 1400,
       "height": 1050,
+      "sourceId": "M160",
+      "sourcePath": "스마트폰AR마커인식기/20210825_191850.jpg",
+      "sourceSha256": "ec40e0f949f9af6b3ae3454a54b52bb1899a2267bfcaf43518697b55240887e0",
+      "derivativeSha256": "8a55e68a372e891b3727392722e39c211b2be1bd661fec7870cebbfafafc0bf7",
+      "takenAt": "2021-08-25",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "두 마커 사이 거리를 캘리퍼스로 재는 장면.",
@@ -208,8 +281,19 @@
       "poster": "assets/local-review/M162-poster.jpg",
       "width": 960,
       "height": 2026,
+      "sourceId": "M162",
+      "sourcePath": "스마트폰AR마커인식기/Screen_Recording_20210513-103718_Measure_Dist_Ang.mp4",
+      "sourceSha256": "57ad73d39bf896a16de5c006b2bb06f5c1b3c6c45b12920b9241ff1d2a0dd4b6",
+      "derivativeSha256": "c7c7608509175a4b9fa8310ec5558dd76a1370c3c0126bed6e69d86a32a63045",
+      "takenAt": "2021-05-13",
+      "takenAtSource": "filename",
       "eventIds": [],
       "order": 1,
+      "approval": "approved-public",
+      "clip": {
+        "start": 20,
+        "duration": 8
+      },
       "translations": {
         "ko": {
           "caption": "마커 기반 AR 거리 측정 시연 (2021).",
@@ -227,10 +311,17 @@
       "path": "assets/local-review/M185.webp",
       "width": 720,
       "height": 960,
+      "sourceId": "M185",
+      "sourcePath": "일본심포지엄/IMG_5794.JPG",
+      "sourceSha256": "f4bf95a1fbef7e8a1656bd7515315b581c2e0642234833e4f5513d3f1529a4aa",
+      "derivativeSha256": "2f4cf0188677bf7a4f239292c36dd85e4981d4c3edf98428fab71bc760fe156c",
+      "takenAt": "2019-01",
+      "takenAtSource": "folder",
       "eventIds": [
         "ism-launcher-paper-2019"
       ],
       "order": 1,
+      "approval": "approved-public",
       "translations": {
         "ko": {
           "caption": "ISM 2019에서 탁구공 발사장치 설계 포스터 옆에서.",
@@ -243,4 +334,4 @@
       }
     }
   }
-}; if(typeof module!=="undefined")module.exports=d;r.LocalMediaData=d;})(typeof globalThis!=="undefined"?globalThis:this);
+}

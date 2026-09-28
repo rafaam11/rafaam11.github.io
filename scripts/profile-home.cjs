@@ -7,6 +7,42 @@ const root = path.resolve(__dirname, '..');
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 const readCv = (rootDir = root) => JSON.parse(fs.readFileSync(path.join(rootDir, 'data/public-cv.json'), 'utf8'));
 const href = (base, locale, route) => i18n.routeHref(base, locale, route, true);
+const readActivityMedia = (rootDir = root) => JSON.parse(fs.readFileSync(path.join(rootDir, 'data/activity-media.json'), 'utf8'));
+const publicMediaFields = ['id', 'type', 'path', 'poster', 'width', 'height', 'eventIds', 'order', 'translations'];
+function publicMediaRecord(record) {
+  const out = {};
+  for (const key of publicMediaFields) if (record[key] !== undefined && record[key] !== null) out[key] = record[key];
+  return out;
+}
+function localMediaSource(mediaJson) {
+  // Only approved records reach the public bundle, and only their public fields.
+  const media = {};
+  for (const [id, record] of Object.entries(mediaJson.media)) if (record.approval === 'approved-public') media[id] = publicMediaRecord(record);
+  return '/* Generated from data/activity-media.json by scripts/profile-home.cjs (node scripts/public-cv-summary.cjs --write). Do not edit. */\n' +
+    '(function(r){const d=' + JSON.stringify({localOnly: false, media}, null, 2) + '; if(typeof module!=="undefined")module.exports=d;r.LocalMediaData=d;})(typeof globalThis!=="undefined"?globalThis:this);\n';
+}
+function activityMediaErrors(mediaJson = readActivityMedia(), news = data.news) {
+  const errors = [], newsIds = new Set(news.map(item => item.id));
+  if (!mediaJson || mediaJson.schema !== 1 || !mediaJson.media) return ['activity media: schema 1 with a media map is required'];
+  for (const [key, record] of Object.entries(mediaJson.media)) {
+    const label = 'activity media ' + key;
+    if (record.id !== key) errors.push(label + ': id must match its key');
+    if (!/^assets\/local-review\//.test(record.path || '')) errors.push(label + ': path must live under assets/local-review/');
+    if (!['image', 'video'].includes(record.type)) errors.push(label + ': type must be image or video');
+    if (!['approved-public', 'draft'].includes(record.approval)) errors.push(label + ': approval must be approved-public or draft');
+    if (!Array.isArray(record.eventIds)) errors.push(label + ': eventIds must be an array');
+    else for (const eventId of record.eventIds) if (!newsIds.has(eventId)) errors.push(label + ': unknown eventId ' + eventId);
+    if (!Number.isInteger(record.order)) errors.push(label + ': order must be an integer');
+    if (!Number.isInteger(record.width) || !Number.isInteger(record.height)) errors.push(label + ': width and height are required');
+    if (record.type === 'video' && (!record.poster || !record.clip)) errors.push(label + ': video needs poster and clip');
+    for (const locale of ['ko', 'en']) for (const field of ['caption', 'alt']) {
+      const text = record.translations?.[locale]?.[field];
+      if (typeof text !== 'string' || !text.trim()) errors.push(label + ': ' + locale + ' ' + field + ' is required');
+      else if (/^TODO/i.test(text) && record.approval === 'approved-public') errors.push(label + ': ' + locale + ' ' + field + ' is still a TODO');
+    }
+  }
+  return errors;
+}
 
 function sortedNews(entries = data.news) {
   // Partial dates are not expanded into invented event days. Unknown months follow known months in the same year.
@@ -112,6 +148,7 @@ function generationUpdates(cv, rootDir = root) {
   const dataFile = 'js/portfolio-data.js';
   const source = fs.readFileSync(path.join(rootDir,dataFile),'utf8');
   updates.set(dataFile,source.replace(/  var highlights = \{[\s\S]*?\n  \};\n\n  var projects =/, `  var highlights = ${JSON.stringify(highlightsFromCv(cv),null,2)};\n\n  var projects =`));
+  updates.set('js/local-media-data.js', localMediaSource(readActivityMedia(rootDir)));
   return updates;
 }
 function freshnessErrors(cv, rootDir = root) {
@@ -123,9 +160,9 @@ function generatePages({write = false, cv, rootDir = root} = {}) {
   return write ? [...updates.keys()] : freshnessErrors(cv,rootDir);
 }
 const writePages = (cv, rootDir = root) => generatePages({write:true,cv,rootDir});
-module.exports = {sortedNews,homeNews,newsErrors,renderNews,renderHome,selectedPublications,highlightsFromCv,achievementsHtml,generationUpdates,freshnessErrors,generatePages,writePages};
+module.exports = {sortedNews,homeNews,newsErrors,readActivityMedia,publicMediaRecord,localMediaSource,activityMediaErrors,renderNews,renderHome,selectedPublications,highlightsFromCv,achievementsHtml,generationUpdates,freshnessErrors,generatePages,writePages};
 if (require.main === module) {
-  const errors = newsErrors();
+  const errors = [...newsErrors(), ...activityMediaErrors()];
   if (errors.length) throw new Error(errors.join('\n'));
   const result = generatePages({write:process.argv.includes('--write')});
   if (!process.argv.includes('--write') && result.length) { console.error(result.join('\n')); process.exitCode = 1; }

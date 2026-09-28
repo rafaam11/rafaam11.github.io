@@ -299,6 +299,7 @@ function copyTask6Surface(targetRoot) {
   }
   for (const relativePath of [
     'data/public-cv.json',
+    'data/activity-media.json',
     'assets/img/favicon.ico',
     'assets/img/profile_square.webp',
     'css/site.css',
