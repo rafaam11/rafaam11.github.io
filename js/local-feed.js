@@ -10,7 +10,7 @@
   }
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  var selectedIds = ['accas-occlusion-paper-2022', 'quadruped-engineering-award-2020', 'ism-launcher-paper-2019'];
+  var selectedIds = ['quadruped-engineering-award-2020', 'ism-launcher-paper-2019', 'accas-occlusion-paper-2022'];
   // Media attach to events through each record's eventIds (data/activity-media.json), ordered by 'order'.
   function mediaIndex(mediaData) {
     var media = mediaData && (mediaData.media || mediaData) || {};
@@ -81,8 +81,8 @@
     'invention-excellence-award-2015': ['award', '대학창의발명대회 우수상', 'University Creative Invention Contest Excellence Award']
   };
   var copy = {
-    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '학회 발표와 로봇 제작의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' } },
-    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of conference presentations and building robots.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' } }
+    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '로봇 제작, 해외 심포지엄, 학회 발표의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' } },
+    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of building robots, an overseas symposium and a conference presentation.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' } }
   };
   function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
   function locale(lang) { return lang === 'en' ? 'en' : 'ko'; }
@@ -108,26 +108,67 @@
     filters = filters || {};
     return events.filter(function (event) { return (!filters.year || filters.year === 'all' || event.year === filters.year) && (!filters.type || filters.type === 'all' || event.categories.indexOf(filters.type) !== -1); });
   }
+  // Career chapters for the News page, newest first. An event belongs to the first chapter whose start it reaches;
+  // year-precision dates compare as month 00, so they fall into the earlier chapter unless overridden.
+  var chapters = [
+    { id: 'digitrack', from: '2023-02',
+      ko: { title: '디지트랙 · 광학 추적에서 수술 내비게이션과 로봇으로', lede: '광학식 3차원 위치추적 소프트웨어를 바탕으로 삼성서울병원과 수술 내비게이션을 개발하고, 로봇 비전과 센서 통합으로 넓혀 왔습니다.' },
+      en: { title: 'DIGITRACK · From optical tracking to surgical navigation and robotics', lede: 'Building on optical 3D tracking software, I developed surgical navigation with Samsung Medical Center and extended the work to robot vision and sensor integration.' } },
+    { id: 'dgist', from: '2021-03',
+      ko: { title: 'DGIST 석사 · 수술 내비게이션과 3D 정합 연구', lede: '수술로봇및증강현실연구실에서 치아 교합 기반 하악골 정복 계획과 AR 수술 내비게이션을 연구했습니다.' },
+      en: { title: 'DGIST M.S. · Surgical navigation and 3D registration research', lede: 'At the Surgical Robotics and Augmented Reality Lab I researched occlusion-based mandibular reduction planning and AR surgical navigation.' } },
+    { id: 'kumoh', from: '0000-00',
+      ko: { title: '금오공대 · 기계공학, 발명, 로봇 제작', lede: '기계시스템공학을 공부하며 발명동아리와 학부 연구에서 설계·제작·특허·발표를 처음 경험했습니다.' },
+      en: { title: 'Kumoh · Mechanical engineering, invention and robot building', lede: 'While studying mechanical systems engineering, I first practised design, fabrication, patenting and presenting through the invention club and undergraduate research.' } }
+  ];
+  var chapterOverrides = { 'dgist-masters-degree-2023': 'dgist' };
+  function chapterFor(event) {
+    if (chapterOverrides[event.id]) return chapterOverrides[event.id];
+    var key = event.eventDate.length === 4 ? event.eventDate + '-00' : event.eventDate.slice(0, 7);
+    for (var i = 0; i < chapters.length; i += 1) if (key >= chapters[i].from) return chapters[i].id;
+    return chapters[chapters.length - 1].id;
+  }
+  function chapteredFeedHtml(events, options) {
+    options = Object.assign({ lang: 'ko', base: '' }, options || {}); options.lang = locale(options.lang);
+    if (!events.length) return feedHtml(events, options);
+    return chapters.map(function (chapter) {
+      var inChapter = events.filter(function (event) { return chapterFor(event) === chapter.id; });
+      if (!inChapter.length) return '';
+      var text = chapter[options.lang];
+      return '<section class="lf-chapter" aria-labelledby="chapter-' + chapter.id + '"><h2 id="chapter-' + chapter.id + '">' + esc(text.title) + '</h2><p class="lf-chapter-lede">' + esc(text.lede) + '</p>' + feedHtml(inChapter, options) + '</section>';
+    }).join('');
+  }
   function selectActivities(events) { return selectedIds.map(function (id) { return events.find(function (event) { return event.id === id; }); }).filter(Boolean); }
   function eventHref(event, options) { return routeHref(options.base, options.lang, 'news/') + '#news-' + event.id; }
   function linksHtml(event, options) {
     return event.links.map(function (link) { var href = link.route ? routeHref(options.base, options.lang, link.route) : link.href; return '<a href="' + esc(href) + '">' + esc(link.translations[options.lang].label) + '</a>'; }).join('<span aria-hidden="true"> · </span>');
   }
+  function figureHtml(item, event, options) {
+    var translation = item.translations[options.lang];
+    var src = (options.base || '') + item.path;
+    var size = item.width && item.height ? ' width="' + item.width + '" height="' + item.height + '"' : '';
+    var visual = item.type === 'video' ? '<video controls muted playsinline preload="none"' + size + (item.poster ? ' poster="' + esc((options.base || '') + item.poster) + '"' : '') + ' aria-label="' + esc(translation.alt) + '"><source src="' + esc(src) + '" type="video/mp4"><a href="' + esc(src) + '">' + esc(translation.alt) + '</a></video>' : '<a href="' + esc(options.compact ? eventHref(event, options) : src) + '"><img src="' + esc(src) + '" alt="' + esc(translation.alt) + '"' + size + ' loading="lazy" decoding="async"></a>';
+    return '<figure data-media-id="' + esc(item.id) + '">' + visual + '<figcaption>' + esc(translation.caption) + '</figcaption></figure>';
+  }
   function mediaHtml(event, options) {
-    var images = 0, videos = 0;
-    var items = event.media.filter(function (item) { return item.type === 'video' ? ++videos <= 1 : ++images <= (options.compact ? 1 : 3); });
-    if (options.compact) items = items.filter(function (item) { return item.type !== 'video'; }).slice(0, 1);
-    if (!items.length) return '';
-    return '<div class="lf-media">' + items.map(function (item) {
-      var translation = item.translations[options.lang];
-      var src = (options.base || '') + item.path;
-      var visual = item.type === 'video' ? '<video controls muted playsinline preload="none"' + (item.poster ? ' poster="' + esc((options.base || '') + item.poster) + '"' : '') + ' aria-label="' + esc(translation.alt) + '"><source src="' + esc(src) + '" type="video/mp4"><a href="' + esc(src) + '">' + esc(translation.alt) + '</a></video>' : '<a href="' + esc(options.compact ? eventHref(event, options) : src) + '"><img src="' + esc(src) + '" alt="' + esc(translation.alt) + '" loading="lazy" decoding="async"></a>';
-      return '<figure data-media-id="' + esc(item.id) + '">' + visual + '<figcaption>' + esc(translation.caption) + '</figcaption></figure>';
-    }).join('') + '</div>';
+    var images = event.media.filter(function (item) { return item.type !== 'video'; });
+    var video = event.media.filter(function (item) { return item.type === 'video'; }).slice(0, 1);
+    if (options.compact) {
+      return images.length ? '<div class="lf-media">' + figureHtml(images[0], event, options) + '</div>' : '';
+    }
+    var shown = images.slice(0, 3).concat(video);
+    var more = images.slice(3);
+    if (!shown.length) return '';
+    var html = '<div class="lf-media">' + shown.map(function (item) { return figureHtml(item, event, options); }).join('') + '</div>';
+    if (more.length) {
+      var label = options.lang === 'en' ? more.length + ' more photo' + (more.length > 1 ? 's' : '') : '사진 ' + more.length + '장 더';
+      html += '<details class="lf-more"><summary>' + label + '</summary><div class="lf-media">' + more.map(function (item) { return figureHtml(item, event, options); }).join('') + '</div></details>';
+    }
+    return html;
   }
   function eventHtml(event, options) {
     var c = copy[options.lang];
-    return '<li class="lf-event" id="news-' + esc(event.id) + '" data-news-id="' + esc(event.id) + '"><div class="lf-event-date"><time datetime="' + esc(event.eventDate) + '">' + esc(event.eventDate.replace(/-/g, '.')) + '</time><span class="lf-category">' + esc(event.categories.map(function (category) { return c.types[category]; }).join(' · ')) + '</span></div><article class="lf-event-content" aria-labelledby="title-' + esc(event.id) + '"><h2 id="title-' + esc(event.id) + '">' + esc(event.title) + '</h2><p>' + esc(event.body) + '</p><p class="lf-links">' + linksHtml(event, options) + '</p>' + mediaHtml(event, options) + '</article></li>';
+    return '<li class="lf-event" id="news-' + esc(event.id) + '" data-news-id="' + esc(event.id) + '"><div class="lf-event-date"><time datetime="' + esc(event.eventDate) + '">' + esc(event.eventDate.replace(/-/g, '.')) + '</time><span class="lf-category">' + esc(event.categories.map(function (category) { return c.types[category]; }).join(' · ')) + '</span></div><article class="lf-event-content" aria-labelledby="title-' + esc(event.id) + '"><h3 id="title-' + esc(event.id) + '">' + esc(event.title) + '</h3><p>' + esc(event.body) + '</p><p class="lf-links">' + linksHtml(event, options) + '</p>' + mediaHtml(event, options) + '</article></li>';
   }
   function feedHtml(events, options) {
     options = Object.assign({ lang: 'ko', base: '' }, options || {}); options.lang = locale(options.lang);
@@ -162,9 +203,9 @@
       var last = main.lastElementChild;
       var back = last && last.tagName === 'P' && last.querySelector('a') ? last.outerHTML : '';
       var headerHtml = header ? header.outerHTML : '<header class="sc-page-header"><h1>' + copy[options.lang].title + '</h1><p>' + copy[options.lang].intro + '</p></header>';
-      main.innerHTML = headerHtml + '<p class="lf-local-note">' + copy[options.lang].local + '</p>' + controlsHtml(events, options.lang) + '<div id="feed-results">' + feedHtml(events, options) + '</div>' + back;
+      main.innerHTML = headerHtml + '<p class="lf-local-note">' + copy[options.lang].local + '</p>' + controlsHtml(events, options.lang) + '<div id="feed-results">' + chapteredFeedHtml(events, options) + '</div>' + back;
       var year = doc.getElementById('feed-year'), type = doc.getElementById('feed-type'), results = doc.getElementById('feed-results'), count = doc.getElementById('feed-count');
-      function render() { var filtered = filterEvents(events, { year: year.value, type: type.value }); results.innerHTML = feedHtml(filtered, options); count.textContent = countText(filtered.length, events.length, options.lang); }
+      function render() { var filtered = filterEvents(events, { year: year.value, type: type.value }); results.innerHTML = chapteredFeedHtml(filtered, options); count.textContent = countText(filtered.length, events.length, options.lang); }
       year.addEventListener('change', render); type.addEventListener('change', render);
       results.addEventListener('click', function (event) { if (event.target.closest('[data-feed-reset]')) { year.value = 'all'; type.value = 'all'; render(); year.focus(); } });
       var view = doc.defaultView;
@@ -172,5 +213,5 @@
     }
     main.dataset.localFeedMounted = 'true';
   }
-  return { selectedIds: selectedIds, mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, routeHref: routeHref, mount: mount };
+  return { selectedIds: selectedIds, chapters: chapters, chapterOverrides: chapterOverrides, chapterFor: chapterFor, chapteredFeedHtml: chapteredFeedHtml, mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, routeHref: routeHref, mount: mount };
 });
