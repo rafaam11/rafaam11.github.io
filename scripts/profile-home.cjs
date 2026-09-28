@@ -54,6 +54,11 @@ function homeNews(entries = data.news, limit = 4) {
   let releaseSeen = false;
   return sortedNews(entries).filter(item => !isReleaseNews(item) || (!releaseSeen && (releaseSeen = true))).slice(0, limit);
 }
+let activityMediaCache = null;
+function activityMediaForNews() {
+  if (!activityMediaCache) activityMediaCache = readActivityMedia();
+  return activityMediaCache;
+}
 function newsErrors(entries = data.news) {
   const errors = [], ids = new Set();
   for (const item of entries) {
@@ -66,6 +71,12 @@ function newsErrors(entries = data.news) {
       if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== item.eventDate) errors.push(`Invalid News calendar date: ${item.id}`);
     }
     if (!item.evidence?.path || !item.evidence?.locator || !fs.existsSync(path.join(root, item.evidence.path))) errors.push(`News requires public evidence: ${item.id}`);
+    else if (item.evidence.path === 'data/activity-media.json') {
+      // Photo-backed events: the cited record must be approved and must list this event.
+      const record = activityMediaForNews().media[item.evidence.locator];
+      if (!record || record.approval !== 'approved-public') errors.push(`News evidence must cite an approved activity media record: ${item.id} → ${item.evidence.locator}`);
+      else if (!(record.eventIds || []).includes(item.id)) errors.push(`News evidence record ${item.evidence.locator} does not list ${item.id}`);
+    }
     for (const locale of ['ko','en']) {
       if (!item.translations?.[locale]?.body) errors.push(`News requires ${locale}: ${item.id}`);
       for (const link of item.links || []) {
@@ -125,8 +136,8 @@ ${achievementsHtml(locale,cv,base)}
 function newsPage(locale) {
   const ko = locale === 'ko', base = ko ? '../' : '../../', route = ko ? 'news/' : 'en/news/';
   return `<!doctype html>
-<html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Jinmin Kim"><meta name="description" content="${ko ? '김진민의 연구, 학회와 소프트웨어 소식.' : 'Research, conference and software news from Jinmin Kim.'}"><title>${ko ? '소식 · 김진민' : 'News · Jinmin Kim'}</title><link rel="canonical" href="https://rafaam11.github.io/${route}"><link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/news/"><link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/news/"><link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/news/"><link rel="icon" href="${base}assets/img/favicon.ico"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css"><link rel="stylesheet" href="${base}css/site.css"><link rel="stylesheet" href="${base}css/scholar.css"><link rel="stylesheet" href="${base}css/local-feed.css"><link rel="stylesheet" href="${base}css/local-projects.css"></head>
-<body class="td-shell" data-base="${base}" data-page="news" data-lang="${locale}" data-route="news/"><header id="site-nav"></header><main id="main-content" tabindex="-1"><header class="sc-page-header"><h1>${ko ? '소식' : 'News'}</h1><p>${ko ? '연구·학회·커리어와 소프트웨어 소식을 기록합니다.' : 'Updates on research, conferences, career, and software.'}</p></header>${renderNews(locale)}<p><a href="${href(base,locale,'')}">${ko ? '홈으로' : 'Back to Home'}</a></p></main><footer id="site-footer"></footer><script src="${base}js/site-i18n.js"></script><script src="${base}js/nav.js"></script><script src="${base}js/portfolio-data.js"></script><script src="${base}js/local-media-data.js"></script><script src="${base}js/local-feed.js"></script><script src="${base}js/local-projects.js"></script></body></html>
+<html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Jinmin Kim"><meta name="description" content="${ko ? '김진민의 연구, 학회, 활동과 소프트웨어 소식.' : 'Research, conference, activity and software news from Jinmin Kim.'}"><title>${ko ? '소식 · 김진민' : 'News · Jinmin Kim'}</title><link rel="canonical" href="https://rafaam11.github.io/${route}"><link rel="alternate" hreflang="ko" href="https://rafaam11.github.io/news/"><link rel="alternate" hreflang="en" href="https://rafaam11.github.io/en/news/"><link rel="alternate" hreflang="x-default" href="https://rafaam11.github.io/news/"><link rel="icon" href="${base}assets/img/favicon.ico"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css"><link rel="stylesheet" href="${base}css/site.css"><link rel="stylesheet" href="${base}css/scholar.css"><link rel="stylesheet" href="${base}css/local-feed.css"><link rel="stylesheet" href="${base}css/local-projects.css"></head>
+<body class="td-shell" data-base="${base}" data-page="news" data-lang="${locale}" data-route="news/"><header id="site-nav"></header><main id="main-content" tabindex="-1"><header class="sc-page-header"><h1>${ko ? '소식' : 'News'}</h1><p>${ko ? '연구·학회·커리어·대외활동과 소프트웨어 소식을 기록합니다.' : 'Updates on research, conferences, career, activities, and software.'}</p></header>${renderNews(locale)}<p><a href="${href(base,locale,'')}">${ko ? '홈으로' : 'Back to Home'}</a></p></main><footer id="site-footer"></footer><script src="${base}js/site-i18n.js"></script><script src="${base}js/nav.js"></script><script src="${base}js/portfolio-data.js"></script><script src="${base}js/local-media-data.js"></script><script src="${base}js/local-feed.js"></script><script src="${base}js/local-projects.js"></script></body></html>
 `;
 }
 function capabilitiesHtml(locale) {

@@ -81,9 +81,51 @@ test('local feed attaches media from record eventIds in order', () => {
   const media = require('../js/local-media-data.js');
   const events = feed.buildModel(portfolioData.news, 'ko', media);
   const byId = Object.fromEntries(events.map((event) => [event.id, event]));
-  assert.deepEqual(byId['accas-occlusion-paper-2022'].media.map((item) => item.id), ['M012']);
-  assert.deepEqual(byId['quadruped-engineering-award-2020'].media.map((item) => item.id), ['M039', 'M043']);
-  assert.deepEqual(byId['ism-launcher-paper-2019'].media.map((item) => item.id), ['M185']);
+  assert.deepEqual(byId['accas-occlusion-paper-2022'].media.map((item) => item.id), ['M012', 'M013', 'M014']);
+  assert.deepEqual(byId['quadruped-engineering-award-2020'].media.map((item) => item.id), ['M039', 'M036', 'M043']);
+  assert.deepEqual(byId['ism-launcher-paper-2019'].media.map((item) => item.id), ['M185', 'M183', 'M172']);
   assert.ok(!('mediaIds' in feed), 'the mediaIds literal is gone; mediaIndex derives from records');
   assert.equal(typeof feed.mediaIndex, 'function');
+});
+
+test('every derivative is approved, captioned, clean and within budget', () => {
+  const pipeline = require('../scripts/activity-media.cjs');
+  const json = JSON.parse(read('data/activity-media.json'));
+  const records = Object.values(json.media);
+  assert.equal(records.filter((record) => record.approval !== 'approved-public').length, 0, 'no draft records on the branch');
+  for (const record of records) {
+    for (const locale of ['ko', 'en']) for (const field of ['caption', 'alt']) assert.doesNotMatch(record.translations[locale][field], /^TODO/i, `${record.id} ${locale} ${field}`);
+  }
+  const result = pipeline.checkRecords(json);
+  assert.deepEqual(result.errors, []);
+  assert.ok(result.totalBytes <= pipeline.LIMITS.maxTotalBytes, 'assets/local-review stays within budget');
+  assert.ok(records.filter((record) => record.type === 'video').length <= 5, 'at most five videos');
+});
+
+test('news events, labels and activity-media evidence agree', () => {
+  const feed = require('../js/local-feed.js');
+  const json = JSON.parse(read('data/activity-media.json'));
+  const knownCategories = new Set(['research', 'conference', 'award', 'career', 'patent', 'software', 'activity']);
+  const release = (item) => item.evidence && item.evidence.path === 'data/news-software-sources.json';
+  for (const item of portfolioData.news) {
+    if (!release(item)) assert.ok(feed.labels[item.id], `${item.id}: has an editorial label`);
+    if (feed.labels[item.id]) {
+      assert.ok(knownCategories.has(feed.labels[item.id][0]), `${item.id}: known category`);
+      for (const extra of feed.labels[item.id][3] || []) assert.ok(knownCategories.has(extra), `${item.id}: known extra category`);
+    }
+    for (const locale of ['ko', 'en']) assert.doesNotMatch(item.translations[locale].body, /박사|진학|이직|PhD|admission/i, `${item.id} ${locale}: career wording`);
+    if (item.evidence.path === 'data/activity-media.json') {
+      const record = json.media[item.evidence.locator];
+      assert.ok(record && record.approval === 'approved-public', `${item.id}: evidence record ${item.evidence.locator} is approved`);
+      assert.ok(record.eventIds.includes(item.id), `${item.id}: evidence record lists the event`);
+    }
+  }
+  for (const record of Object.values(json.media)) {
+    for (const eventId of record.eventIds) assert.ok(portfolioData.news.some((item) => item.id === eventId), `${record.id}: eventId ${eventId} exists`);
+  }
+  assert.ok(Object.keys(feed.labels).length >= portfolioData.news.filter((item) => !release(item)).length, 'labels cover the non-release news');
+  assert.deepEqual(profileHome.homeNews().map((item) => item.id), ['multi-cli-work-v1-29-0', 'surface-guidance-research-2026', 'omfs-vr-poster-2026', 'digital-occlusion-redesign-2026'], 'Home picks are unchanged');
+  const broken = { ...portfolioData.news[0], id: 'broken-event', evidence: { path: 'data/activity-media.json', locator: 'M012' } };
+  assert.ok(profileHome.newsErrors([broken]).some((message) => /M012/.test(message)), 'evidence record must list the event');
+  assert.ok(portfolioData.news.length >= 60, 'activity events were added');
 });

@@ -1,6 +1,118 @@
 {
   "schema": 1,
   "media": {
+    "M001": {
+      "id": "M001",
+      "type": "image",
+      "path": "assets/local-review/M001.webp",
+      "sourceId": "M001",
+      "sourcePath": "2020-겨울방학 모션컨트롤연구실 연구인턴/1612434610976.jpg",
+      "sourceSha256": "38a3c0df74aa2e5a98a2c04a52f3ced981c53bc84744139eceb5162311b95d37",
+      "takenAt": "2021-02-04",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "motion-control-internship-2021"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "겨울방학 연구인턴 수료식.",
+          "alt": "강의실에서 수료증을 든 인턴들"
+        },
+        "en": {
+          "caption": "Winter research internship completion.",
+          "alt": "Interns holding certificates in a lecture room"
+        }
+      },
+      "width": 1280,
+      "height": 610,
+      "derivativeSha256": "b216cad2d36c85f34f5ed35a0a5cd6fce6f30f0aa143fdf0e9ce48231583c729"
+    },
+    "M002": {
+      "id": "M002",
+      "type": "image",
+      "path": "assets/local-review/M002.webp",
+      "sourceId": "M002",
+      "sourcePath": "2020-겨울방학 모션컨트롤연구실 연구인턴/1612434665147.jpg",
+      "sourceSha256": "a0201a5efaba224aad5ec2a644b3ab9594a506fe270b7e0467765c31e94a218c",
+      "takenAt": "2021-02-04",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "motion-control-internship-2021"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "수료증 수여.",
+          "alt": "수료증을 건네받는 모습"
+        },
+        "en": {
+          "caption": "Receiving the certificate.",
+          "alt": "A certificate being handed over"
+        }
+      },
+      "width": 1280,
+      "height": 610,
+      "derivativeSha256": "80517a3856f2affb3827e8c59bacebec1cfc3ce0035c00c6bfee0e3872a7d409"
+    },
+    "M003": {
+      "id": "M003",
+      "type": "image",
+      "path": "assets/local-review/M003.webp",
+      "sourceId": "M003",
+      "sourcePath": "2021 대한민국과학기술대전 부스운영/1640072024095-0.jpg",
+      "sourceSha256": "0448b7136445f3d6761b088463938546f43a50bedfddc711733b8df1355c7f2d",
+      "takenAt": "2021-12-21",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "science-expo-booth-2021"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "연구실 부스.",
+          "alt": "포스터와 장비가 놓인 전시 부스"
+        },
+        "en": {
+          "caption": "The lab booth.",
+          "alt": "Exhibition booth with posters and equipment"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "2dcd09bf8cfe8641b9c3dc319d4b6c3f365d2f3c48981de80215ea8a79f9324d"
+    },
+    "M005": {
+      "id": "M005",
+      "type": "image",
+      "path": "assets/local-review/M005.webp",
+      "sourceId": "M005",
+      "sourcePath": "2021 대한민국과학기술대전 부스운영/20211223_125216.jpg",
+      "sourceSha256": "7ea95611047de2e7e4faf4c7b7d88ac37e903bd2031af9a78add138d45cd8cfa",
+      "takenAt": "2021-12-23",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "science-expo-booth-2021"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2021 대한민국과학기술대전 출입증.",
+          "alt": "손에 든 행사 출입증"
+        },
+        "en": {
+          "caption": "Visitor badge for the 2021 Korea Science and Technology Exhibition.",
+          "alt": "An event badge held in a hand"
+        }
+      },
+      "width": 882,
+      "height": 1280,
+      "derivativeSha256": "af08730d7a4f846c9ed1a8d5140cfb4f792af54799d3b3587bd913383f4a1f24"
+    },
     "M007": {
       "id": "M007",
       "type": "image",
@@ -13,7 +125,9 @@
       "derivativeSha256": "4c5bfb9d83ce8ca0b94457bab7a17135f39475abb07a03e35314fcd3169c7e35",
       "takenAt": "2021-12-23",
       "takenAtSource": "filename",
-      "eventIds": [],
+      "eventIds": [
+        "science-expo-booth-2021"
+      ],
       "order": 1,
       "approval": "approved-public",
       "translations": {
@@ -54,6 +168,286 @@
           "alt": "A person in a suit standing in front of the ACCAS 2022 event backdrop"
         }
       }
+    },
+    "M013": {
+      "id": "M013",
+      "type": "image",
+      "path": "assets/local-review/M013.webp",
+      "sourceId": "M013",
+      "sourcePath": "2022 ACCAS 학회발표/20220825_085712.jpg",
+      "sourceSha256": "69d437e80414dfb0c582eb6f7cd66fed2c7a1846626f0183b8be7f3550e66f22",
+      "takenAt": "2022-08-25",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "accas-occlusion-paper-2022"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "ACCAS 2022 참가자 명찰.",
+          "alt": "손에 든 학회 명찰"
+        },
+        "en": {
+          "caption": "ACCAS 2022 participant badge.",
+          "alt": "A conference badge held in a hand"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "f1b32a43b478a0f2b292cd588d45ee2321e072ee556c8c541444d7b735c0cdd4"
+    },
+    "M014": {
+      "id": "M014",
+      "type": "image",
+      "path": "assets/local-review/M014.webp",
+      "sourceId": "M014",
+      "sourcePath": "2022 ACCAS 학회발표/20220825_085857.jpg",
+      "sourceSha256": "7af946d48dafad9eebee28384b4beb8df0e53cbe2a35d100f23c0e78d2f06629",
+      "takenAt": "2022-08-25",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "accas-occlusion-paper-2022"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "ACCAS 2022 학회장에서.",
+          "alt": "명찰을 든 셀카"
+        },
+        "en": {
+          "caption": "At the ACCAS 2022 venue.",
+          "alt": "Selfie holding the badge"
+        }
+      },
+      "width": 974,
+      "height": 1280,
+      "derivativeSha256": "8b021bd9394b6cbd5e1b53cfd6f17b5bee2fe7d334544a2d4ce148f9e5a6b07d"
+    },
+    "M016": {
+      "id": "M016",
+      "type": "image",
+      "path": "assets/local-review/M016.webp",
+      "sourceId": "M016",
+      "sourcePath": "5절링크구조 4족보행로봇/1598174021676.png",
+      "sourceSha256": "6d48dec8ed4017d763ffa0d92a431ea469058b983070e886616b15f2ced44d46",
+      "takenAt": "2020-08-23",
+      "takenAtSource": "filename",
+      "eventIds": [
+        "quadruped-patent-application-2021"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "특허 출원 도면의 기반이 된 CAD 모델.",
+          "alt": "CAD 화면의 4족 로봇 모델"
+        },
+        "en": {
+          "caption": "The CAD model behind the patent drawings.",
+          "alt": "A quadruped model on a CAD screen"
+        }
+      },
+      "width": 1280,
+      "height": 720,
+      "derivativeSha256": "80a924666a227aa2b1ae9b6f796fb9a1b1793c782e9c9f3f52667632d12864ed"
+    },
+    "M021": {
+      "id": "M021",
+      "type": "image",
+      "path": "assets/local-review/M021.webp",
+      "sourceId": "M021",
+      "sourcePath": "5절링크구조 4족보행로봇/20190928_165144.jpg",
+      "sourceSha256": "95458be204804845f458d1cc41ff06fafa6c3ab60f0792c21e6e03cf5546bea0",
+      "takenAt": "2019-09-28",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "printing-contest-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "3D 프린팅 경진대회 현수막.",
+          "alt": "복도에 걸린 대회 현수막"
+        },
+        "en": {
+          "caption": "Banner of the 3D printing contest.",
+          "alt": "A contest banner hung in a corridor"
+        }
+      },
+      "width": 1280,
+      "height": 606,
+      "derivativeSha256": "5c5104301be9d5037d7b1779a6d3f2544773d5329bf2f8cc9af64e981f7c2146"
+    },
+    "M022": {
+      "id": "M022",
+      "type": "image",
+      "path": "assets/local-review/M022.webp",
+      "sourceId": "M022",
+      "sourcePath": "5절링크구조 4족보행로봇/20191105_122038.jpg",
+      "sourceSha256": "a233f776649bc24e707c71585ffa1aa61175d1c3b4e08481b2605c1b0843bda6",
+      "takenAt": "2019-11-05",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "scholarship-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "장학증서.",
+          "alt": "액자에 든 장학증서"
+        },
+        "en": {
+          "caption": "Scholarship certificate.",
+          "alt": "A framed scholarship certificate"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "e28a1f302d25028a1686ecb1339375aa7b358704290fd6e91933e5459fbd4c1c"
+    },
+    "M027": {
+      "id": "M027",
+      "type": "image",
+      "path": "assets/local-review/M027.webp",
+      "sourceId": "M027",
+      "sourcePath": "5절링크구조 4족보행로봇/20200616_142445.jpg",
+      "sourceSha256": "adcbb03967fcaec989769d0593ead5a7c7833e6b8a2ee24d46e528b91375eb21",
+      "takenAt": "2020-06-16",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "quadruped-build-start-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "3D 프린터로 뽑은 링크 부품.",
+          "alt": "파란 3D 프린팅 부품들"
+        },
+        "en": {
+          "caption": "Linkage parts from the 3D printer.",
+          "alt": "Blue 3D-printed parts laid out"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "cffe0679cdc490a01b5320a1795d20cb7b86dacf6144f4bab6b6e5b8f04953be"
+    },
+    "M030": {
+      "id": "M030",
+      "type": "image",
+      "path": "assets/local-review/M030.webp",
+      "sourceId": "M030",
+      "sourcePath": "5절링크구조 4족보행로봇/20200619_145807.jpg",
+      "sourceSha256": "aed8da9656ee90270144aa8f4f4c40bcfe809b967c4457dabac6876f68261da2",
+      "takenAt": "2020-06-19",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "quadruped-build-start-2019"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "첫 번째 보행 시제품.",
+          "alt": "아두이노와 파란 다리를 단 시제품"
+        },
+        "en": {
+          "caption": "The first walking prototype.",
+          "alt": "A prototype with an Arduino board and blue legs"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "da448c90c9496e97849b3401c97b2fad51fa35780920b61a0e4b0cf6541278b6"
+    },
+    "M034": {
+      "id": "M034",
+      "type": "image",
+      "path": "assets/local-review/M034.webp",
+      "sourceId": "M034",
+      "sourcePath": "5절링크구조 4족보행로봇/20200823_172435.jpg",
+      "sourceSha256": "8b1d5ec0031308ba9d1a9710724901a112f24b7cae3dafba5c9b60ff48b2eb8b",
+      "takenAt": "2020-08-23",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "quadruped-patent-application-2021"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "5절 링크 다리 CAD.",
+          "alt": "링크 기구 CAD 모델"
+        },
+        "en": {
+          "caption": "CAD of the five-bar linkage leg.",
+          "alt": "CAD model of the linkage mechanism"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "d1be983510360d1da9be669b1f67263ca4b95120e6a2568acbe65843460d371e"
+    },
+    "M035": {
+      "id": "M035",
+      "type": "image",
+      "path": "assets/local-review/M035.webp",
+      "sourceId": "M035",
+      "sourcePath": "5절링크구조 4족보행로봇/20200823_172510.jpg",
+      "sourceSha256": "6059c18bd87df879d412050159d6f0264c2bdb3af6fbd18061c5387ca0e6d580",
+      "takenAt": "2020-08-23",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "quadruped-build-start-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "5절 링크 다리의 손 스케치.",
+          "alt": "종이에 그린 링크 기구 스케치"
+        },
+        "en": {
+          "caption": "Hand sketch of the five-bar linkage leg.",
+          "alt": "A pen sketch of the linkage on paper"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "745f4c41c4c7190239521c90ee453f2af01186c56c4e946e1480e619ed8f40c3"
+    },
+    "M036": {
+      "id": "M036",
+      "type": "image",
+      "path": "assets/local-review/M036.webp",
+      "sourceId": "M036",
+      "sourcePath": "5절링크구조 4족보행로봇/20200903_163010.jpg",
+      "sourceSha256": "84b79123d16aca0764579b72c03797bad7aa5f5caa6673232aff4ac83bc3e0e0",
+      "takenAt": "2020-09-03",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "quadruped-engineering-award-2020"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "흰 링크로 다시 만든 몸체.",
+          "alt": "흰 다리 네 개가 달린 로봇 몸체"
+        },
+        "en": {
+          "caption": "The body rebuilt with white linkages.",
+          "alt": "A robot body with four white legs"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "4071ed4daad5b6007d0e968b6e85cccaff838cc67bcb2e297903e205f8b666ac"
     },
     "M039": {
       "id": "M039",
@@ -99,7 +493,7 @@
       "eventIds": [
         "quadruped-engineering-award-2020"
       ],
-      "order": 2,
+      "order": 3,
       "approval": "approved-public",
       "clip": {
         "start": 4,
@@ -116,6 +510,258 @@
         }
       }
     },
+    "M044": {
+      "id": "M044",
+      "type": "image",
+      "path": "assets/local-review/M044.webp",
+      "sourceId": "M044",
+      "sourcePath": "5절링크구조 4족보행로봇/20210219_134139.jpg",
+      "sourceSha256": "848d8bf84a57827d64800d6366392c59e9713309bf5ff09b2265ffb40170b9a3",
+      "takenAt": "2021-02-19",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "kumoh-bachelors-degree-2021"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "System & Vision Lab. 앞에서.",
+          "alt": "연구실 앞에 선 네 사람"
+        },
+        "en": {
+          "caption": "In front of the System & Vision Lab.",
+          "alt": "Four people in front of the lab"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "dae45d72ceff7840c70201e2b2b8c9a53adc1ef5673dd7222b049065c636da0a"
+    },
+    "M052": {
+      "id": "M052",
+      "type": "image",
+      "path": "assets/local-review/M052.webp",
+      "sourceId": "M052",
+      "sourcePath": "거북선신화 친목활동/1613727079587-16.jpg",
+      "sourceSha256": "35eeffd1ffb0b09feaf0cea9c015b37fe717ca106bd1c3fb09d5f79420bbd937",
+      "takenAt": "2021-02-19",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "kumoh-bachelors-degree-2021"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "학사 졸업식 날 친구들과.",
+          "alt": "정장 차림으로 찍은 셀카"
+        },
+        "en": {
+          "caption": "Graduation day with friends.",
+          "alt": "Selfie in suits"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "ab0c072c7179212b8cb0edb32d82061e83a9e5eca2981cec4bdb20bc4431a991"
+    },
+    "M056": {
+      "id": "M056",
+      "type": "image",
+      "path": "assets/local-review/M056.webp",
+      "sourceId": "M056",
+      "sourcePath": "거북선신화 친목활동/7615516A-235C-4B3D-96BB-E49025E37103.jpg",
+      "sourceSha256": "7cec45d044825622e706c120d412aa2727cbcd8cfaeef0ee96c87d37f8717e73",
+      "takenAt": "2018-10-11",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "club-exhibition-2018"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2018 거북선신화·ECRC 연합 교내전시회.",
+          "alt": "조형물 앞에서 현수막을 든 단체 사진"
+        },
+        "en": {
+          "caption": "The 2018 joint on-campus exhibition of the two clubs.",
+          "alt": "Group holding a banner in front of a sculpture"
+        }
+      },
+      "width": 1280,
+      "height": 850,
+      "derivativeSha256": "5192f9ad7f0cc1da8f31b2bea173dcacb15fcd96bcf8a54d296bbab6104bece3"
+    },
+    "M061": {
+      "id": "M061",
+      "type": "image",
+      "path": "assets/local-review/M061.webp",
+      "sourceId": "M061",
+      "sourcePath": "거북선신화MT/4442B151-91DC-4CA9-8300-384500591807.jpg",
+      "sourceSha256": "8d68d04729ddb1a995d78b503d7d0dc98428c2ad6ccc6716071a13337bf56436",
+      "takenAt": "2018-05-07",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "club-mt-2018"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2018년 봄 MT, 숙소 앞 단체 사진.",
+          "alt": "펜션 앞에 모인 동아리원들"
+        },
+        "en": {
+          "caption": "Spring club trip 2018: group photo at the lodge.",
+          "alt": "Club members gathered in front of the lodge"
+        }
+      },
+      "width": 1280,
+      "height": 852,
+      "derivativeSha256": "d6a9e56a50005b584ed38427d85e88b9c15c068255a6d7d0bcc21135f483e85c"
+    },
+    "M062": {
+      "id": "M062",
+      "type": "image",
+      "path": "assets/local-review/M062.webp",
+      "sourceId": "M062",
+      "sourcePath": "거북선신화MT/AE271A33-14FC-48FF-BFE5-8451761908C0.jpg",
+      "sourceSha256": "d0eba376cd8cbe8ecaac05bbb4fd0f03f1f635ed7082cdb2114c9edc906c45aa",
+      "takenAt": "2019-05-04",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "club-mt-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2019년 봄 MT.",
+          "alt": "팻말을 들고 서 있는 동아리원들"
+        },
+        "en": {
+          "caption": "Spring club trip 2019.",
+          "alt": "Club members standing with signs"
+        }
+      },
+      "width": 1280,
+      "height": 852,
+      "derivativeSha256": "5bf026d68d36e8181626f55ab9c1187bb8802484f397f34e2ad6bba6dee78806"
+    },
+    "M065": {
+      "id": "M065",
+      "type": "image",
+      "path": "assets/local-review/M065.webp",
+      "sourceId": "M065",
+      "sourcePath": "거북선신화MT/IMG_2248.JPG",
+      "sourceSha256": "90d187a2e731cf90c0428772cc474d90de2c0bb30e82ff815f56bed80ee8d46d",
+      "takenAt": "2018-05-05",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "club-mt-2018"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "MT 가는 길에 팻말을 들고.",
+          "alt": "손으로 쓴 팻말을 든 세 사람"
+        },
+        "en": {
+          "caption": "Holding hand-written signs on the way to the trip.",
+          "alt": "Three people holding hand-written signs"
+        }
+      },
+      "width": 750,
+      "height": 1000,
+      "derivativeSha256": "7a3ab1dd2de6bc7493e9fe97aaec67306417d0fbae464e59cf97e3343a4ccd3c"
+    },
+    "M066": {
+      "id": "M066",
+      "type": "image",
+      "path": "assets/local-review/M066.webp",
+      "sourceId": "M066",
+      "sourcePath": "거북선신화MT/IMG_2483.JPG",
+      "sourceSha256": "df6418ea33a74787738b913df9e53285b69f243e7c0c229eeccf0ef61fdffaf7",
+      "takenAt": "2018-05",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "club-mt-2018"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "길가에서 팻말을 들고 MT 가는 길.",
+          "alt": "도로변에서 팻말을 든 동아리원들"
+        },
+        "en": {
+          "caption": "Holding signs by the road on the way to the trip.",
+          "alt": "Club members holding signs by the road"
+        }
+      },
+      "width": 960,
+      "height": 720,
+      "derivativeSha256": "7fb55291313c9ee2e6d6118319255d219fa8d0f603d35772588c31d136dfc655"
+    },
+    "M071": {
+      "id": "M071",
+      "type": "image",
+      "path": "assets/local-review/M071.webp",
+      "sourceId": "M071",
+      "sourcePath": "거북선신화MT/IMG_7054.JPG",
+      "sourceSha256": "751b8748678e551bfd5b3d1b2a5865daada7738f6a4419ec8a1ed5170683e611",
+      "takenAt": "2019-05",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "club-mt-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "MT 가는 길.",
+          "alt": "팻말을 든 친구들과 찍은 셀카"
+        },
+        "en": {
+          "caption": "On the way to the trip.",
+          "alt": "Selfie with friends holding signs"
+        }
+      },
+      "width": 960,
+      "height": 720,
+      "derivativeSha256": "d5789748086bcc1eb490899c33ad5d8b5c2de88d61d7cf09755018f82e5e3b63"
+    },
+    "M075": {
+      "id": "M075",
+      "type": "image",
+      "path": "assets/local-review/M075.webp",
+      "sourceId": "M075",
+      "sourcePath": "거북선신화MT/IMG_7145.JPG",
+      "sourceSha256": "6a86f4914827e49f10fb72a7ec5519ee999d6ab63897f21d0ff994fb020a2a01",
+      "takenAt": "2019-05-04",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "club-mt-2019"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "숙소에서의 저녁.",
+          "alt": "밤에 야외 테이블에 모인 사람들"
+        },
+        "en": {
+          "caption": "Evening at the lodge.",
+          "alt": "People gathered at outdoor tables at night"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "a63a46a04932a8c3b61fddc3a59d11a02e88fa514d825db3849496f68ce8f49d"
+    },
     "M076": {
       "id": "M076",
       "type": "image",
@@ -128,7 +774,9 @@
       "derivativeSha256": "98feb7b5bb4ef73c19981e7417af7aa5457bd3596cd466f5f4354fc79ee602e0",
       "takenAt": "2022-04-12",
       "takenAtSource": "filename",
-      "eventIds": [],
+      "eventIds": [
+        "mandibular-research-start-2021"
+      ],
       "order": 1,
       "approval": "approved-public",
       "translations": {
@@ -168,6 +816,34 @@
         }
       }
     },
+    "M083": {
+      "id": "M083",
+      "type": "image",
+      "path": "assets/local-review/M083.webp",
+      "sourceId": "M083",
+      "sourcePath": "교합연구/1649860210812-3.png",
+      "sourceSha256": "071184e4664e99044416ad936cf3e2150df1f5e9d2a15d3f12ba525f05581594",
+      "takenAt": "2022-04-13",
+      "takenAtSource": "filename",
+      "eventIds": [
+        "mandibular-research-start-2021"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "치열 점군의 3차원 뷰.",
+          "alt": "파란 점으로 표시된 치열 점군"
+        },
+        "en": {
+          "caption": "3D view of the dental point cloud.",
+          "alt": "A dental point cloud plotted in blue"
+        }
+      },
+      "width": 1210,
+      "height": 1188,
+      "derivativeSha256": "9591daa42df1081f6e618981f0a59980c44ed7bb9b5edf79c30a147397a8182c"
+    },
     "M084": {
       "id": "M084",
       "type": "image",
@@ -180,8 +856,10 @@
       "derivativeSha256": "396e10336c1dfa3e3a86bcdb1475e3934e8614d4ee5c71a95734bf512dfed9cb",
       "takenAt": "2022-04-15",
       "takenAtSource": "filename",
-      "eventIds": [],
-      "order": 1,
+      "eventIds": [
+        "mandibular-research-start-2021"
+      ],
+      "order": 2,
       "approval": "approved-public",
       "translations": {
         "ko": {
@@ -193,6 +871,566 @@
           "alt": "Top view of a dental point cloud with different colours for individual teeth"
         }
       }
+    },
+    "M092": {
+      "id": "M092",
+      "type": "image",
+      "path": "assets/local-review/M092.webp",
+      "sourceId": "M092",
+      "sourcePath": "동아리행사운영/1570338705664.jpg",
+      "sourceSha256": "f590f12c9d9f22202e9480ba5ac4899e926c67d62f1a743b3c3a52ea32c6a32c",
+      "takenAt": "2019-10-06",
+      "takenAtSource": "filename",
+      "eventIds": [
+        "invention-club-general-meeting-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "거북선신화 29대 정기총회.",
+          "alt": "강당에서 현수막과 함께 찍은 단체 사진"
+        },
+        "en": {
+          "caption": "The 29th general meeting of the invention club.",
+          "alt": "Group photo with a banner in the auditorium"
+        }
+      },
+      "width": 960,
+      "height": 720,
+      "derivativeSha256": "44ac5dfaf569adefd660f3851cadb96862e15b0db6edb6d071c1837996452970"
+    },
+    "M093": {
+      "id": "M093",
+      "type": "image",
+      "path": "assets/local-review/M093.webp",
+      "sourceId": "M093",
+      "sourcePath": "동아리행사운영/1570338775084.jpg",
+      "sourceSha256": "2ed57b49f7c241bff727eaa01f24689441ae4de131ed74ca3683a35349921619",
+      "takenAt": "2019-10-06",
+      "takenAtSource": "filename",
+      "eventIds": [
+        "invention-club-general-meeting-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "29대 임원진.",
+          "alt": "무대 앞에 선 신임 임원들"
+        },
+        "en": {
+          "caption": "The newly elected officers.",
+          "alt": "New officers standing in front of the stage"
+        }
+      },
+      "width": 960,
+      "height": 720,
+      "derivativeSha256": "f73fca75cda533ecf47710321c5d8eb6f84dc9ac4cd577e4559d1265469b6bfe"
+    },
+    "M097": {
+      "id": "M097",
+      "type": "image",
+      "path": "assets/local-review/M097.webp",
+      "sourceId": "M097",
+      "sourcePath": "동아리행사운영/IMG_4167.HEIC",
+      "sourceSha256": "be6688742f4684478dc2874c56852773afbfd279f23363152dac55dbd650b947",
+      "takenAt": "2018-08-01",
+      "takenAtSource": "shell",
+      "eventIds": [
+        "invention-club-camp-2018"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "조별 활동을 돕는 시간.",
+          "alt": "책상에 둘러앉아 활동하는 학생들"
+        },
+        "en": {
+          "caption": "Helping with group activities.",
+          "alt": "Students working at tables in groups"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "cb0783b6cad7adde62a57636530c0668c1eb4d897464e894c53820cfa7283cb8"
+    },
+    "M099": {
+      "id": "M099",
+      "type": "image",
+      "path": "assets/local-review/M099.webp",
+      "sourceId": "M099",
+      "sourcePath": "동아리행사운영/IMG_4179.HEIC",
+      "sourceSha256": "d6aba10ba478e17c137bf5294650e5d394556c9f502775cef4a98e7434b90d68",
+      "takenAt": "2018-08",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "invention-club-camp-2018"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "체육관 레크리에이션 시간.",
+          "alt": "체육관에 서 있는 캠프 참가자들"
+        },
+        "en": {
+          "caption": "Recreation time in the gymnasium.",
+          "alt": "Camp participants standing in the gymnasium"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "08264bf909d9755694d460cda84265ae359a758bc493fe425e94cfe2de28d40b"
+    },
+    "M101": {
+      "id": "M101",
+      "type": "image",
+      "path": "assets/local-review/M101.webp",
+      "sourceId": "M101",
+      "sourcePath": "동아리행사운영/IMG_4301.JPG",
+      "sourceSha256": "ae937926a0ba84c0d0c56040388dd1036f86f41509e9d2dedbde3fa2e223834f",
+      "takenAt": "2018-08",
+      "takenAtSource": "event",
+      "eventIds": [
+        "invention-club-camp-2018"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2018 kit 하계 발명&창의 캠프 참가자와 운영진.",
+          "alt": "강당 무대 앞에 모인 캠프 참가자 단체 사진"
+        },
+        "en": {
+          "caption": "Participants and staff of the 2018 KIT summer invention camp.",
+          "alt": "Camp participants gathered in front of the auditorium stage"
+        }
+      },
+      "width": 1280,
+      "height": 850,
+      "derivativeSha256": "fc585a7255e65172793e3df8b432c016a26cf0801a81ecb5f85f98257f5badee"
+    },
+    "M102": {
+      "id": "M102",
+      "type": "image",
+      "path": "assets/local-review/M102.webp",
+      "sourceId": "M102",
+      "sourcePath": "동아리행사운영/IMG_4751.HEIC",
+      "sourceSha256": "f75344d51a46036b5dea443318be84e79d41fd48d4b3609d38ff39ea76887d05",
+      "takenAt": "2018-10",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "club-exhibition-2018"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "전시회 부스에서 작품을 설명하는 모습.",
+          "alt": "전시 테이블 앞의 학생들"
+        },
+        "en": {
+          "caption": "Explaining projects at the exhibition booth.",
+          "alt": "Students at the exhibition table"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "ca1a78757cba8b602ff1b0075a804f4f9ce62f6bfac790f56c65d207121307ab"
+    },
+    "M104": {
+      "id": "M104",
+      "type": "image",
+      "path": "assets/local-review/M104.webp",
+      "sourceId": "M104",
+      "sourcePath": "동아리행사운영/IMG_4752.HEIC",
+      "sourceSha256": "33a6d81223930c32b1f8c12e1f9a9061077dfffb31b9d7d10ac5c8ddbba72476",
+      "takenAt": "2018-10",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "club-exhibition-2018"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "전시 부스와 작품들.",
+          "alt": "작품이 놓인 전시 테이블"
+        },
+        "en": {
+          "caption": "The exhibition booth and its projects.",
+          "alt": "Exhibition table with displayed projects"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "1b40ae12a9e538600777235ac3846f069b570767ddc0e44097cab5da555bcce8"
+    },
+    "M113": {
+      "id": "M113",
+      "type": "image",
+      "path": "assets/local-review/M113.webp",
+      "sourceId": "M113",
+      "sourcePath": "동아리행사운영/IMG_8975.HEIC",
+      "sourceSha256": "c407b888a7e75e4a4df0ffef0a54eab82474cb9bd32056483c36ecd389bb73b8",
+      "takenAt": "2019-07",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "invention-club-camp-2019"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "체육관에서 진행한 캠프 프로그램.",
+          "alt": "체육관 바닥에 모여 앉은 참가자들"
+        },
+        "en": {
+          "caption": "A camp session in the gymnasium.",
+          "alt": "Participants seated on the gymnasium floor"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "c6c30e2100184867dd5026854fda0a77490a24616eae23575aed68d90f35bdae"
+    },
+    "M119": {
+      "id": "M119",
+      "type": "image",
+      "path": "assets/local-review/M119.webp",
+      "sourceId": "M119",
+      "sourcePath": "동아리행사운영/IMG_9029.JPG",
+      "sourceSha256": "c1f98900ae9f4f12b81274e351522ced9be82f3741cd119553d14d70873cd607",
+      "takenAt": "2019-07",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "invention-club-camp-2019"
+      ],
+      "order": 4,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "캠프 운영진.",
+          "alt": "무대 앞에 앉은 운영진"
+        },
+        "en": {
+          "caption": "The camp staff.",
+          "alt": "Staff seated at the front of the stage"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "4209a16dede56a5e9ed96cc07b023c40baa954754e296a0336f75bc7e3662992"
+    },
+    "M120": {
+      "id": "M120",
+      "type": "image",
+      "path": "assets/local-review/M120.webp",
+      "sourceId": "M120",
+      "sourcePath": "동아리행사운영/IMG_9039.JPG",
+      "sourceSha256": "63de770bdb40c4b28a4c1d24447d6f97b517cb2e4a1440db941d6adc5f200e03",
+      "takenAt": "2019-07",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "invention-club-camp-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "캠프 운영진과 참가자.",
+          "alt": "무대에 모여 앉은 단체 사진"
+        },
+        "en": {
+          "caption": "Camp staff and participants.",
+          "alt": "Group seated on the stage"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "c0fb5d665972b00c2d70931564967b54119e112e758c877e444e0fc2b5ea9d6e"
+    },
+    "M122": {
+      "id": "M122",
+      "type": "image",
+      "path": "assets/local-review/M122.webp",
+      "sourceId": "M122",
+      "sourcePath": "동아리행사운영/IMG_9041.JPG",
+      "sourceSha256": "ec9273829215a4bf61e6c3221ba61c6f24c819de0f00d22c540f41e724c9bdfa",
+      "takenAt": "2019-07-30",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "invention-club-camp-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2019 kit 하계 발명&창의 캠프 무대.",
+          "alt": "무대 위에 선 조 참가자들"
+        },
+        "en": {
+          "caption": "On stage at the 2019 KIT summer invention camp.",
+          "alt": "A team standing on the stage"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "2517d4c06240184c2af76df874e30ac3f584924bc4921b5899ac71b62265792d"
+    },
+    "M125": {
+      "id": "M125",
+      "type": "image",
+      "path": "assets/local-review/M125.webp",
+      "sourceId": "M125",
+      "sourcePath": "디지스트기타/2020-10-23-13-03-13-363.jpg",
+      "sourceSha256": "1d315190cf379fe6d0843927d4e6ba522c88b5c526e3412a48a2a81d9e4a83e5",
+      "takenAt": "2020-10-23",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "dgist-first-visit-2020"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "DGIST 정문 조형물 앞에서.",
+          "alt": "DGIST 조형물 앞에서 찍은 셀카"
+        },
+        "en": {
+          "caption": "In front of the DGIST landmark sign.",
+          "alt": "Selfie in front of the DGIST sign"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "3cdce68618281ebcd46a080cb09b3e48ad43d2b6801c14ee83d57bc2a5bfba7f"
+    },
+    "M126": {
+      "id": "M126",
+      "type": "image",
+      "path": "assets/local-review/M126.webp",
+      "sourceId": "M126",
+      "sourcePath": "디지스트기타/20201023_131412.jpg",
+      "sourceSha256": "a7bd57cc83e8d9bd8aa478bb522bdb4d27ca7448070487cbf1eaf1a4cf84e2ac",
+      "takenAt": "2020-10-23",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "dgist-first-visit-2020"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "DGIST 캠퍼스.",
+          "alt": "건물과 조형물이 보이는 캠퍼스 풍경"
+        },
+        "en": {
+          "caption": "The DGIST campus.",
+          "alt": "Campus view with buildings and a sculpture"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "27a9c9d75e9d5df6a572254448e18f02cbc9c439eec766815dbe5d60735e7c9b"
+    },
+    "M127": {
+      "id": "M127",
+      "type": "image",
+      "path": "assets/local-review/M127.webp",
+      "sourceId": "M127",
+      "sourcePath": "디지스트기타/20201023_132743.jpg",
+      "sourceSha256": "7a30a68a83fb1b312a2304349c866ee10bb18dfd25fd42e2558f6ac788b3e179",
+      "takenAt": "2020-10-23",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "dgist-first-visit-2020"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "로봇공학전공 건물 입구.",
+          "alt": "로봇공학전공 표지가 있는 유리문"
+        },
+        "en": {
+          "caption": "Entrance of the Robotics Engineering building.",
+          "alt": "Glass doors with the Robotics Engineering sign"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "17e76f39955b12f452e4b7edd21d8dabb1f305662e0901dff577f980f13feb99"
+    },
+    "M128": {
+      "id": "M128",
+      "type": "image",
+      "path": "assets/local-review/M128.webp",
+      "sourceId": "M128",
+      "sourcePath": "디지스트기타/20220604_150205.jpg",
+      "sourceSha256": "a93e43b6405dee4c94a797e886201b9c71b3a12b546791ba1a0a4a0f7bc16448",
+      "takenAt": "2022-06-04",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "mini-md-workshop-2022"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "대한의료로봇학회 제10차 Mini-MD 워크숍.",
+          "alt": "워크숍 현수막이 걸린 강당"
+        },
+        "en": {
+          "caption": "The 10th Mini-MD workshop of the Korean Society of Medical Robotics.",
+          "alt": "Auditorium with the workshop banner"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "10badd94b1dfc7aeda511f8c2fce479a36df3cd143cdb34878cd2eeac5aeb960"
+    },
+    "M137": {
+      "id": "M137",
+      "type": "image",
+      "path": "assets/local-review/M137.webp",
+      "sourceId": "M137",
+      "sourcePath": "디지스트기타/20221125_121313.jpg",
+      "sourceSha256": "5de60931452e393886b6ca65ecb5e684afde55ab7a1a0f2cae85de7f10033e39",
+      "takenAt": "2022-11-25",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "virtual-jawbone-presentation-2022"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "제13차 대한의료로봇학회 학술대회 명찰.",
+          "alt": "학술대회 명찰"
+        },
+        "en": {
+          "caption": "Name tag from the 13th Conference of the Korean Society of Medical Robotics.",
+          "alt": "A conference name tag"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "77e2ae7aa48a1e8f8838f1f706c4bb8611421a4e0abfa5ec87621604bf8f737c"
+    },
+    "M138": {
+      "id": "M138",
+      "type": "image",
+      "path": "assets/local-review/M138.webp",
+      "sourceId": "M138",
+      "sourcePath": "디지스트기타/20230216_105719.jpg",
+      "sourceSha256": "6b0d350018d88a7a03c666850344fe8cf657e59bce33b352dc4801ed00ae3b02",
+      "takenAt": "2023-02-16",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "dgist-masters-degree-2023"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "졸업 가운을 입고.",
+          "alt": "졸업 가운 차림의 셀카"
+        },
+        "en": {
+          "caption": "In the graduation gown.",
+          "alt": "Selfie in a graduation gown"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "69ae86f54293ab5de070fc24c0c5b2f726c120e049074e3b95996cec39494473"
+    },
+    "M139": {
+      "id": "M139",
+      "type": "image",
+      "path": "assets/local-review/M139.webp",
+      "sourceId": "M139",
+      "sourcePath": "디지스트기타/20230216_134339.jpg",
+      "sourceSha256": "a93bb995ca21d349259ca6d48aa0bf82d7bea841c7e9c8e29bbf8678a553ce57",
+      "takenAt": "2023-02-16",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "dgist-masters-degree-2023"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "DGIST 석사 졸업식.",
+          "alt": "DGIST 포토월 앞에서 꽃다발을 든 졸업생"
+        },
+        "en": {
+          "caption": "DGIST master’s graduation.",
+          "alt": "A graduate with a bouquet in front of the DGIST photo wall"
+        }
+      },
+      "width": 1280,
+      "height": 1280,
+      "derivativeSha256": "22fefbd7bbadd53f38a2d8d1cb48745509571607efdbf9a9d3c98e8c0a7dd59d"
+    },
+    "M141": {
+      "id": "M141",
+      "type": "image",
+      "path": "assets/local-review/M141.webp",
+      "sourceId": "M141",
+      "sourcePath": "디지스트기타/20230216_194949.jpg",
+      "sourceSha256": "31cd95e3564d9aebdb56be3d2608b9f4f865797ceadce14116080c9fadb7a307",
+      "takenAt": "2023-02-16",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "dgist-masters-degree-2023"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "학위증과 꽃다발.",
+          "alt": "꽃다발 옆에 놓인 학위증"
+        },
+        "en": {
+          "caption": "Diploma and flowers.",
+          "alt": "A diploma placed beside a bouquet"
+        }
+      },
+      "width": 1280,
+      "height": 1280,
+      "derivativeSha256": "56a96ae0e83fd281ee2f400ccfa854ab4c5e6851d43213eda3f2c3ec85a009f5"
+    },
+    "M145": {
+      "id": "M145",
+      "type": "image",
+      "path": "assets/local-review/M145.webp",
+      "sourceId": "M145",
+      "sourcePath": "발명대회/20191106_154431.jpg",
+      "sourceSha256": "23528f5dd7f7cf2dfef5a65b7b4f1aea0760881a9d96d360eaa7e6d79c20f330",
+      "takenAt": "2019-11-06",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "invention-sponsor-award-2019"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "시상식에서 팀원들과.",
+          "alt": "무대 앞에서 상장을 든 단체 사진"
+        },
+        "en": {
+          "caption": "With the team at the award ceremony.",
+          "alt": "Group holding certificates in front of the stage"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "035e3d259fef9bfb12ebbeab845edad593cdd7fd0e26c7453ff093ad456c65d3"
     },
     "M146": {
       "id": "M146",
@@ -222,6 +1460,146 @@
         }
       }
     },
+    "M150": {
+      "id": "M150",
+      "type": "image",
+      "path": "assets/local-review/M150.webp",
+      "sourceId": "M150",
+      "sourcePath": "발명대회/20191116_142409.jpg",
+      "sourceSha256": "444ccb2195f5e42097db32d8c48f2ac195134fb8e50eaad525ad2c91a391b5ca",
+      "takenAt": "2019-11-16",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "startup-idea-award-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "창업아이디어 경진대회 최우수상.",
+          "alt": "수상 팻말을 든 사람"
+        },
+        "en": {
+          "caption": "Grand prize at the startup idea competition.",
+          "alt": "A person holding the award sign"
+        }
+      },
+      "width": 720,
+      "height": 1280,
+      "derivativeSha256": "8756c6ec178d2a283b46964bcd0eaea9e9f9cf953b3f64f283be7da8f2261faf"
+    },
+    "M151": {
+      "id": "M151",
+      "type": "image",
+      "path": "assets/local-review/M151.webp",
+      "sourceId": "M151",
+      "sourcePath": "발명대회/20191116_142442.jpg",
+      "sourceSha256": "7c13a9426efc14f7230067c0bec22af38f82f722cb26e3fca5924884967ffdba",
+      "takenAt": "2019-11-16",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "startup-idea-award-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "수상 팀.",
+          "alt": "팻말을 든 세 사람"
+        },
+        "en": {
+          "caption": "The winning team.",
+          "alt": "Three people holding the award sign"
+        }
+      },
+      "width": 1280,
+      "height": 720,
+      "derivativeSha256": "4ba1b222f7a1e6446a30477c6db950e9991e7a5948c4450b443350c47f5b191b"
+    },
+    "M152": {
+      "id": "M152",
+      "type": "image",
+      "path": "assets/local-review/M152.webp",
+      "sourceId": "M152",
+      "sourcePath": "발명대회/20191126_174920.jpg",
+      "sourceSha256": "018c063d144db7d989fc898ab17bdc7b85c36b722c78670c799c87b77d92ffff",
+      "takenAt": "2019-11-26",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "triz-grand-prize-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "TRIZ 경진대회 시상 후.",
+          "alt": "인증서를 들고 나란히 선 참가자들"
+        },
+        "en": {
+          "caption": "After the TRIZ award ceremony.",
+          "alt": "Participants standing in a row with certificates"
+        }
+      },
+      "width": 1280,
+      "height": 720,
+      "derivativeSha256": "edca709d1b48943f6e52582bd3c4592298ed5a62ccb577011ce15c235e923975"
+    },
+    "M153": {
+      "id": "M153",
+      "type": "image",
+      "path": "assets/local-review/M153.webp",
+      "sourceId": "M153",
+      "sourcePath": "발명대회/20191126_180327.jpg",
+      "sourceSha256": "7ca704e9ce41859b61616a9236d7840c5f1fe78c3d0aeeb6e97cc80b24399f23",
+      "takenAt": "2019-11-26",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "triz-grand-prize-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "국제 TRIZ 경진대회 수상 인증서.",
+          "alt": "TRIZ 협회 인증서"
+        },
+        "en": {
+          "caption": "International TRIZ competition certificate.",
+          "alt": "A TRIZ Association certificate"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "874c133ffc770c8877a4742b52a2a02fcaa1587bcdb69ec61bab5c0fe64a4711"
+    },
+    "M154": {
+      "id": "M154",
+      "type": "image",
+      "path": "assets/local-review/M154.webp",
+      "sourceId": "M154",
+      "sourcePath": "발명대회/20191128_183154.jpg",
+      "sourceSha256": "98824ef96eef0e144e57946452f12ba099c9a883b7232528c60f991a620ba0b3",
+      "takenAt": "2019-11-28",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "invention-sponsor-award-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2019 대학창의발명대회 후원기관상 상장.",
+          "alt": "액자에 든 상장"
+        },
+        "en": {
+          "caption": "Sponsor’s Award certificate, 2019 University Creative Invention Contest.",
+          "alt": "A framed certificate"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "1ddf0123340e006bded276b006d050efaf915973f1dafb84cf720b2efb910fdc"
+    },
     "M159": {
       "id": "M159",
       "type": "image",
@@ -234,8 +1612,10 @@
       "derivativeSha256": "8bc470e89ad89f66f6acd1f5536b7add2eac20933d56fab6e0d7b989d7942779",
       "takenAt": "2021-08-11",
       "takenAtSource": "filename",
-      "eventIds": [],
-      "order": 1,
+      "eventIds": [
+        "ar-measure-prototype-2021"
+      ],
+      "order": 3,
       "approval": "approved-public",
       "translations": {
         "ko": {
@@ -260,8 +1640,10 @@
       "derivativeSha256": "8a55e68a372e891b3727392722e39c211b2be1bd661fec7870cebbfafafc0bf7",
       "takenAt": "2021-08-25",
       "takenAtSource": "filename",
-      "eventIds": [],
-      "order": 1,
+      "eventIds": [
+        "ar-measure-prototype-2021"
+      ],
+      "order": 2,
       "approval": "approved-public",
       "translations": {
         "ko": {
@@ -287,8 +1669,10 @@
       "derivativeSha256": "c7c7608509175a4b9fa8310ec5558dd76a1370c3c0126bed6e69d86a32a63045",
       "takenAt": "2021-05-13",
       "takenAtSource": "filename",
-      "eventIds": [],
-      "order": 1,
+      "eventIds": [
+        "ar-measure-prototype-2021"
+      ],
+      "order": 4,
       "approval": "approved-public",
       "clip": {
         "start": 20,
@@ -304,6 +1688,118 @@
           "alt": "An AR demonstration with overlaid markers, reference points and values"
         }
       }
+    },
+    "M166": {
+      "id": "M166",
+      "type": "image",
+      "path": "assets/local-review/M166.webp",
+      "sourceId": "M166",
+      "sourcePath": "스마트폰AR마커인식기/Screenshot_20210825-163147_measure_vuforia10.jpg",
+      "sourceSha256": "a42a9f3b27433494c4ae30c79f7766cf9d80fadecb8ca6456cc0873ec8a22d0f",
+      "takenAt": "2021-08-25",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "ar-measure-prototype-2021"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "마커 두 개 사이 거리를 재는 앱 화면.",
+          "alt": "마커와 측정값이 표시된 스마트폰 화면"
+        },
+        "en": {
+          "caption": "The app measuring the distance between two markers.",
+          "alt": "Phone screen showing markers and measured values"
+        }
+      },
+      "width": 1280,
+      "height": 606,
+      "derivativeSha256": "4174f32488a7de3448d374513c98101851ae9c97b09d577ebeebb6d6f984a260"
+    },
+    "M170": {
+      "id": "M170",
+      "type": "image",
+      "path": "assets/local-review/M170.webp",
+      "sourceId": "M170",
+      "sourcePath": "유니스트/20200706_152823.jpg",
+      "sourceSha256": "7baf0bb7f1fceae89a6aefee65957fbdaa3c605b9fa5d3dca48eac40de2b649c",
+      "takenAt": "2020-07-06",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "unist-internship-2020"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "UNIST 도서관 임시 출입카드.",
+          "alt": "손에 든 출입카드"
+        },
+        "en": {
+          "caption": "Temporary access card for the UNIST library.",
+          "alt": "An access card held in a hand"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "28f1645a6e521b42babe791c1e4cc51ffdf4753d57979a2850a3201c70f93468"
+    },
+    "M172": {
+      "id": "M172",
+      "type": "image",
+      "path": "assets/local-review/M172.webp",
+      "sourceId": "M172",
+      "sourcePath": "일본심포지엄/2019012920153115.jpg",
+      "sourceSha256": "fcb2c1021a7187864f605f6d82d7127029eeb680dfc8af3135ac770619b6add1",
+      "takenAt": "2019-01-26",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "ism-launcher-paper-2019"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "ISM 2019 참가자 단체 사진.",
+          "alt": "강의실에 정장 차림으로 모인 참가자들"
+        },
+        "en": {
+          "caption": "ISM 2019 participants.",
+          "alt": "Participants in suits gathered in a lecture room"
+        }
+      },
+      "width": 600,
+      "height": 274,
+      "derivativeSha256": "96b8b869665be413c54a4497233f174c8fb8f93abeafbae09a8355de994df0fe"
+    },
+    "M183": {
+      "id": "M183",
+      "type": "image",
+      "path": "assets/local-review/M183.webp",
+      "sourceId": "M183",
+      "sourcePath": "일본심포지엄/IMG_5753.HEIC",
+      "sourceSha256": "b20e45d08e2b427d6841e5596f76dce030752cd31e7446fc9c5824bfc41297b4",
+      "takenAt": "2019-01-25",
+      "takenAtSource": "shell",
+      "eventIds": [
+        "ism-launcher-paper-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "ISM 2019 포스터: 탁구공 발사장치 설계.",
+          "alt": "게시판에 붙은 학회 포스터"
+        },
+        "en": {
+          "caption": "ISM 2019 poster: design of a ping-pong ball launcher.",
+          "alt": "Conference poster pinned to a board"
+        }
+      },
+      "width": 960,
+      "height": 1280,
+      "derivativeSha256": "e00822abcc4d38f455764138ec17a583a387240122c97f48e08f243691bb530b"
     },
     "M185": {
       "id": "M185",
@@ -332,6 +1828,174 @@
           "alt": "A person standing beside a poster about ping-pong ball launcher design"
         }
       }
+    },
+    "M189": {
+      "id": "M189",
+      "type": "image",
+      "path": "assets/local-review/M189.webp",
+      "sourceId": "M189",
+      "sourcePath": "일본어학연수/AB1F4020-12FC-497C-AA09-686601C46AE4.jpg",
+      "sourceSha256": "7f53e226dac2fdd850dd9887fcffdaceb4aef0984d91b4230b034e0bc1cb86b1",
+      "takenAt": "2019-07",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "tmu-summer-school-2019"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "TMU Japanese Summer School 수료증과 기념품.",
+          "alt": "수료증, 폴더, 펜이 놓인 테이블"
+        },
+        "en": {
+          "caption": "Completion certificate and keepsakes from the TMU Japanese Summer School.",
+          "alt": "A certificate, folder and pen on a table"
+        }
+      },
+      "width": 1024,
+      "height": 1280,
+      "derivativeSha256": "d4f2f67a89c43f785128b89544bfce279f38562335e09163da138ce877f85884"
+    },
+    "M198": {
+      "id": "M198",
+      "type": "image",
+      "path": "assets/local-review/M198.webp",
+      "sourceId": "M198",
+      "sourcePath": "일본어학연수/IMG_7822.HEIC",
+      "sourceSha256": "9649660f1f0537b77f5ab668ad991f6840ec1b460cef264ff2d06d82dba35ff1",
+      "takenAt": "2019-07",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "tmu-summer-school-2019"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "도쿄 야경.",
+          "alt": "야경을 배경으로 선 사람"
+        },
+        "en": {
+          "caption": "Tokyo at night.",
+          "alt": "A person standing against the night skyline"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "a6c5fc23c32fc7aed467526a7deb7f0374c1e4666d20c3ca23e3dcbd070234f0"
+    },
+    "M204": {
+      "id": "M204",
+      "type": "image",
+      "path": "assets/local-review/M204.webp",
+      "sourceId": "M204",
+      "sourcePath": "일본어학연수/IMG_8067.JPG",
+      "sourceSha256": "06dcaac34e00b8f91b9d09248290da66bd0a1c1f2b6066eb1a50f916137c6a78",
+      "takenAt": "2019-07",
+      "takenAtSource": "sequence",
+      "eventIds": [
+        "tmu-summer-school-2019"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "서예 수업 시간.",
+          "alt": "작품을 든 수강생들의 단체 사진"
+        },
+        "en": {
+          "caption": "Calligraphy class.",
+          "alt": "Students holding their calligraphy work"
+        }
+      },
+      "width": 1280,
+      "height": 960,
+      "derivativeSha256": "1a92514dd85d84263e7f43a1cd726756ad0e4039e0f2759305c92dbefb64c575"
+    },
+    "M214": {
+      "id": "M214",
+      "type": "image",
+      "path": "assets/local-review/M214.webp",
+      "sourceId": "M214",
+      "sourcePath": "중국상하이로봇박람회/IMG_3276.HEIC",
+      "sourceSha256": "a226641f2fca51cf507ac6c6d14c93df4a33133f52dafb64ebf60f06beb99d2d",
+      "takenAt": "2018-07-05",
+      "takenAtSource": "shell",
+      "eventIds": [
+        "shanghai-field-trip-2018"
+      ],
+      "order": 3,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "CiROS 2018 전시장에서.",
+          "alt": "CiROS 로고 앞에서 찍은 두 사람"
+        },
+        "en": {
+          "caption": "At the CiROS 2018 show.",
+          "alt": "Two people in front of the CiROS logo"
+        }
+      },
+      "width": 1280,
+      "height": 962,
+      "derivativeSha256": "d88829815e8fa6328efce9b6897a7f5b3b0ebda4f0a2107bff2fd98e628bff68"
+    },
+    "M216": {
+      "id": "M216",
+      "type": "image",
+      "path": "assets/local-review/M216.webp",
+      "sourceId": "M216",
+      "sourcePath": "중국상하이로봇박람회/IMG_4296.JPG",
+      "sourceSha256": "839eb00956d72b264818a566d72bc97e809fb9cf85a10ba7bde1aa7ec8d34d53",
+      "takenAt": "2014-01-01",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "shanghai-field-trip-2018"
+      ],
+      "order": 1,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "2018 CiROS 중국 국제로봇전시회 견학.",
+          "alt": "전시장 앞에서 현수막을 든 탐방단 단체 사진"
+        },
+        "en": {
+          "caption": "Visiting the CiROS 2018 China International Robot Show.",
+          "alt": "The tour group holding a banner in front of the exhibition hall"
+        }
+      },
+      "width": 1280,
+      "height": 718,
+      "derivativeSha256": "d848115e36daad7be10a124621093362ccda7d60b389a3339f093c27e85178d4"
+    },
+    "M217": {
+      "id": "M217",
+      "type": "image",
+      "path": "assets/local-review/M217.webp",
+      "sourceId": "M217",
+      "sourcePath": "중국상하이로봇박람회/IMG_4297.JPG",
+      "sourceSha256": "925c4c4f8e8cde1baf043b0f18019f4e064e47aa7967176b3263ab988cb297ec",
+      "takenAt": "2014-01-01",
+      "takenAtSource": "exif",
+      "eventIds": [
+        "shanghai-field-trip-2018"
+      ],
+      "order": 2,
+      "approval": "approved-public",
+      "translations": {
+        "ko": {
+          "caption": "상하이 Lenovo 현장 탐방.",
+          "alt": "Lenovo 로비에서 실험복을 입고 현수막을 든 단체 사진"
+        },
+        "en": {
+          "caption": "Site visit to Lenovo in Shanghai.",
+          "alt": "Group in lab coats holding a banner in the Lenovo lobby"
+        }
+      },
+      "width": 1280,
+      "height": 718,
+      "derivativeSha256": "f55937b055379279da5487ea79a5007fc92a71731d84afd064e2818cbebe7efb"
     }
   }
 }

@@ -557,7 +557,7 @@ function commandDerive(args) {
     if (item.kind === 'image') {
       const result = convertImage({ src, out: path.join(root, record.path), crop });
       if (result.leaks.length) throw new Error(`${id}: metadata leak ${result.leaks.join(', ')}`);
-      if (Math.max(result.width, result.height) < LIMITS.minDecodedEdge) throw new Error(`${id}: decoded image is only ${result.width}x${result.height}; check the HEIC grid/stream selection`);
+      if (isHeif(src) && Math.max(result.width, result.height) < LIMITS.minDecodedEdge) throw new Error(`${id}: decoded HEIC is only ${result.width}x${result.height}; check the grid/stream selection`);
       if (result.bytes > LIMITS.maxImageBytes) throw new Error(`${id}: ${result.bytes} bytes exceeds the ${LIMITS.maxImageBytes}-byte image cap`);
       Object.assign(record, { width: result.width, height: result.height, derivativeSha256: result.sha256 });
       if (crop) record.crop = crop; else delete record.crop;

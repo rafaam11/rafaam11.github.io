@@ -26,6 +26,23 @@
   }
   // Editorial labels only. Event dates, prose, links and evidence stay canonical.
   var labels = {
+    'shanghai-field-trip-2018': ['activity', '상하이 로봇전시회·글로벌 기업 탐방', 'Shanghai robot show and company tour'],
+    'club-mt-2018': ['activity', '발명동아리 봄 MT', 'Invention club spring trip'],
+    'invention-club-camp-2018': ['activity', '2018 하계 발명·창의 캠프 운영', '2018 summer invention camp'],
+    'club-exhibition-2018': ['activity', '동아리 연합 교내전시회', 'Joint club exhibition on campus'],
+    'club-mt-2019': ['activity', '발명동아리 봄 MT 2019', 'Invention club spring trip 2019'],
+    'invention-club-camp-2019': ['activity', '2019 하계 발명·창의 캠프 운영', '2019 summer invention camp'],
+    'tmu-summer-school-2019': ['activity', 'TMU Japanese Summer School', 'TMU Japanese Summer School'],
+    'printing-contest-2019': ['activity', '3D 프린팅 경진대회 참가', '3D printing contest'],
+    'invention-club-general-meeting-2019': ['activity', '발명동아리 부회장 선출', 'Elected club vice-president'],
+    'scholarship-2019': ['award', '장학증서 수여', 'Scholarship certificate'],
+    'quadruped-build-start-2019': ['research', '4족 보행 로봇 제작 시작', 'Quadruped robot build begins'],
+    'unist-internship-2020': ['research', 'UNIST 방학 연구 인턴', 'Summer research internship at UNIST'],
+    'dgist-first-visit-2020': ['career', 'DGIST 캠퍼스 첫 방문', 'First visit to DGIST'],
+    'motion-control-internship-2021': ['research', '겨울방학 연구인턴 수료 (DGIST)', 'Winter research internship at DGIST'],
+    'ar-measure-prototype-2021': ['research', 'AR 마커 거리·각도 측정 프로토타입', 'AR marker measurement prototype'],
+    'science-expo-booth-2021': ['activity', '과학기술대전 연구실 부스 운영', 'Lab booth at the science exhibition'],
+    'mini-md-workshop-2022': ['conference', 'Mini-MD 워크숍 참가', 'Mini-MD workshop'],
     'surface-guidance-research-2026': ['research', '표면유도 호흡추적 연구 시작', 'Surface-guided respiratory tracking research'],
     'omfs-vr-poster-2026': ['conference', 'OMFS VR 상담 플랫폼 포스터 발표', 'OMFS VR consultation poster'],
     'digital-occlusion-redesign-2026': ['research', '디지털 교합 워크플로우 재설계', 'Digital occlusion workflow redesign'],
@@ -37,12 +54,12 @@
     'stereo-camera-patent-application-2024': ['patent', '스테레오 카메라 구동 특허 출원', 'Stereo-camera actuation patent application'],
     'rtms-navigation-development-2024': ['research', 'rTMS 코일 내비게이션 개발 시작', 'rTMS coil-navigation development'],
     'mandibular-paper-2024': ['research', '하악골 골절 정복 연구 논문 게재', 'Mandibular fracture reduction paper published'],
-    'haptic-occlusion-poster-award-2024': ['award', '햅틱 교합 연구 발표·우수포스터상', 'Haptic occlusion poster and Best Poster Award'],
+    'haptic-occlusion-poster-award-2024': ['award', '햅틱 교합 연구 발표·우수포스터상', 'Haptic occlusion poster and Best Poster Award', ['conference']],
     'smcnavi-development-2023': ['research', 'SMCNavi 수술내비게이션 개발 시작', 'SMCNavi surgical-navigation development'],
     'omfs-vr-development-2023': ['research', 'OMFS VR 상담 애플리케이션 개발 시작', 'OMFS VR consultation application development'],
     'digitrack-researcher-2023': ['career', '디지트랙 소프트웨어 연구원 합류', 'Joined DIGITRACK as a software researcher'],
     'dgist-masters-degree-2023': ['career', 'DGIST 로봇및기계전자공학 석사 졸업', 'M.S. completed at DGIST'],
-    'mandibular-conference-award-2023': ['award', '턱뼈 모델 최적화 발표·우수논문상', 'Jawbone optimisation presentation and Best Paper Award'],
+    'mandibular-conference-award-2023': ['award', '턱뼈 모델 최적화 발표·우수논문상', 'Jawbone optimisation presentation and Best Paper Award', ['conference']],
     'accas-occlusion-paper-2022': ['conference', 'ACCAS 2022 치열궁 기반 교합 연구 발표', 'Dental-arch occlusion research at ACCAS 2022'],
     'virtual-jawbone-presentation-2022': ['conference', '가상 턱뼈 모델 재구성 연구 발표', 'Virtual jawbone reconstruction presentation'],
     'mandibular-research-start-2021': ['research', '하악골 골절 정복 최적화 연구 시작', 'Mandibular fracture reduction research'],
@@ -64,8 +81,8 @@
     'invention-excellence-award-2015': ['award', '대학창의발명대회 우수상', 'University Creative Invention Contest Excellence Award']
   };
   var copy = {
-    ko: { title: '소식', intro: '연구, 발표, 수상과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '학회 발표와 로봇 제작의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', patent: '특허 출원', software: '소프트웨어' } },
-    en: { title: 'News', intro: 'Research, presentations, awards and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of conference presentations and building robots.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', patent: 'Patent applications', software: 'Software' } }
+    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '학회 발표와 로봇 제작의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' } },
+    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of conference presentations and building robots.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' } }
   };
   function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
   function locale(lang) { return lang === 'en' ? 'en' : 'ko'; }
@@ -83,7 +100,7 @@
     return (news || []).filter(function (event) { if (seen.has(event.id)) return false; seen.add(event.id); return true; }).map(function (event, index) {
       var category = labels[event.id] ? labels[event.id][0] : 'software';
       return { id: event.id, eventDate: event.eventDate, datePrecision: event.datePrecision, year: event.eventDate.slice(0, 4), title: titleFor(event, lang), category: category,
-        categories: /(?:haptic-occlusion-poster-award|mandibular-conference-award)/.test(event.id) ? ['award', 'conference'] : [category],
+        categories: labels[event.id] && labels[event.id][3] ? [category].concat(labels[event.id][3]) : [category],
         body: event.translations[lang].body, links: event.links || [], evidence: event.evidence, media: (mediaByEvent[event.id] || []).slice(), originalIndex: index };
     }).sort(function (a, b) { return b.eventDate.localeCompare(a.eventDate) || a.originalIndex - b.originalIndex; });
   }
