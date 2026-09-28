@@ -26,11 +26,11 @@
     </header>
 
     <!-- PUBLIC CV SUMMARY:START -->
-    <section class="sc-cv" data-cv-summary data-cv-source-digest="94f63f3fafbc18240fae5a29b8d8f2097a7e3e282145b2c9afda2f06661f996f" data-cv-summary-digest="72682c12f2631373b2f04b074bcb903428b5ad6aa597444e789e8e51992b03ec" aria-labelledby="cv-summary-title">
+    <section class="sc-cv" data-cv-summary data-cv-source-digest="9e8a5ae7ca2f7458fadea69ab3b9ff07d93731d7d00058fc4f3301a9ff52aa85" data-cv-summary-digest="9561f3c61a41ae6666dae869bb9ce5da839c86b0c7643080febf06c6d149dc0a" aria-labelledby="cv-summary-title">
       <header class="sc-cv__intro">
         <h2 id="cv-summary-title">Jinmin Kim<small lang="ko">김진민</small></h2>
-        <p class="sc-cv__headline">Robot Software Engineer — 3D Registration, Medical Imaging, Robot Systems</p>
-        <p class="sc-cv__summary">An R&amp;D engineer whose work spans surgical navigation, XR, 3D registration, multi-sensor integration, and autonomous-forklift field deployment. I connect coordinate models and algorithms to physical devices, user interfaces, and explicit validation flows.</p>
+        <p class="sc-cv__headline">Robotics &amp; Computer Vision R&amp;D Engineer — Surgical Navigation, 3D Registration, Optical Tracking, XR, Robotics Integration</p>
+        <p class="sc-cv__summary">Robotics and computer vision R&amp;D engineer developing optical 3D tracking, coordinate transformation, 3D registration, surgical navigation, XR and robotic system integration. Researched computer-assisted surgery and registration at DGIST, and 3+ years of collaborative R&amp;D with Samsung Medical Center oral and maxillofacial surgery on digital surgical planning, XR consultation and image-guided navigation. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence.</p>
         <address class="sc-cv__contacts" aria-label="Public contacts">
           <ul>
             <li>Daegu, Republic of Korea</li>
@@ -68,14 +68,22 @@
         <ol class="sc-cv__entries">
             <li>
               <p class="sc-cv__head"><strong>DIGITRACK Inc.</strong><time>2023.02 - Present</time></p>
-              <p class="sc-cv__role">Researcher · Software Development</p>
-              <p class="sc-cv__note">A DGIST spin-off medical-device and robotics company (marker-based 3D optical tracking devices and software), Daegu</p>
+              <p class="sc-cv__role">Research Engineer · Software R&amp;D</p>
+              <p class="sc-cv__note">DGIST spin-off developing high-accuracy optical 3D tracking systems, surgical navigation software, and robotic/automation solutions, Daegu</p>
               <div class="sc-cv__area">
-                <h4>Surgical navigation and medical imaging</h4>
+                <h4>Optical 3D Tracking Software</h4>
+                <ul>
+                <li>Develop and maintain the API and Viewer of the in-house optical 3D tracker SKADI — optical marker tracking, calibration, coordinate transformation, 3D visualisation and surgical tool tracking; the software layer of a product line supplied to Korean surgical-navigation companies and research institutes.</li>
+                </ul>
+              </div>
+              <div class="sc-cv__area">
+                <h4>Surgical Navigation &amp; Medical R&amp;D — long-term collaboration with Samsung Medical Center</h4>
                 <ul>
                 <li>Over three years of collaboration with the oral and maxillofacial surgery department of Samsung Medical Center — biweekly clinical meetings since 2023, with two government programmes and one development contract carried as the main engineer.</li>
+                <li>Connected an oral and maxillofacial digital surgical workflow — surgical planning → AI-assisted planning → XR consultation → surgical navigation — as stage-by-stage software.</li>
                 <li>Since 2026.03, co-developing a maxillofacial digital-occlusion workflow with Samsung Medical Center researchers. As technical lead and primary developer, owning the Custom App architecture, end-to-end UI/UX, landmark and occlusion-engine integration, and the evaluation/export pipeline while researcher validation is ongoing.</li>
-                <li>Sole developer of the 3D Slicer-based integrated surgical-navigation software in use at the hospital (surgical navigation, HoloLens 2, and Meta Quest integration).</li>
+                <li>Integrated an AI-based 3D anatomical landmark detection model into the digital occlusion workflow, linking it to surgical planning and registration.</li>
+                <li>Sole developer of the 3D Slicer-based integrated surgical-navigation software used at the hospital (CT–patient–tracker–instrument registration and calibration, six maxillofacial surgical workflows, HoloLens 2 and Meta Quest integration).</li>
                 <li>Led development of the rTMS coil-navigation system (NeuroPilot) — digital-twin visualisation of coil pose (health-technology government programme).</li>
                 <li>Low-dose C-arm 3D navigation — connected C-arm imaging to the 3D navigation workflow and implemented the owned feature scope.</li>
                 <li>Own surface-guided respiratory tracking and 4D CT registration for radiotherapy (large KERI programme, 2026.06 - ).</li>
@@ -83,14 +91,9 @@
                 </ul>
               </div>
               <div class="sc-cv__area">
-                <h4>3D optical tracking software</h4>
+                <h4>Robotics &amp; Vision — Autonomous Forklift (2025.11 - )</h4>
                 <ul>
-                <li>Develop and maintain the API and Viewer software for SKADI, the in-house optical 3D tracker — the software layer of a product line delivered to Korean surgical-navigation companies and research institutes.</li>
-                </ul>
-              </div>
-              <div class="sc-cv__area">
-                <h4>Industrial robotics — autonomous forklift (2025 - )</h4>
-                <ul>
+                <li>Extending optical tracking and coordinate registration experience to robot–camera coordinate integration, robot vision and sensor integration.</li>
                 <li>Designed and implemented the safety-policy manager for the in-house autonomous-forklift solution (DOTORI) and integrated LiDAR and ToF sensors over the Zenoh and ROS 2 network.</li>
                 <li>Own vision R&amp;D — truck-loading vision with ToF and RGB fusion, a SAM-family segmentation proof of concept, and behaviour-tree integration.</li>
                 </ul>
@@ -145,11 +148,11 @@
       <section data-cv-section="skills" aria-labelledby="cv-skills-title">
         <h3 id="cv-skills-title">Skills and languages</h3>
         <dl class="sc-cv__skills">
+              <div><dt>Surgical navigation &amp; medical imaging</dt><dd>3D Slicer, DICOM, optical tracking, coordinate transformation, calibration, image/point-cloud registration, OpenIGTLink</dd></div>
+              <div><dt>Computer vision &amp; 3D</dt><dd>Point clouds, rigid/ICP registration, segmentation (SAM family), 3D visualisation, PyTorch</dd></div>
+              <div><dt>Robotics</dt><dd>ROS 2, Zenoh, Isaac Sim, behaviour trees, vision and sensor integration</dd></div>
+              <div><dt>XR &amp; spatial computing</dt><dd>Unity, OpenXR, MRTK, HoloLens 2, Meta Quest, Galaxy XR</dd></div>
               <div><dt>Programming</dt><dd>Python, C++, C#</dd></div>
-              <div><dt>Medical imaging</dt><dd>3D Slicer, DICOM, image registration (rigid, ICP), segmentation (SAM family)</dd></div>
-              <div><dt>3D and XR</dt><dd>Unity, HoloLens 2 (MRTK), Meta Quest, optical tracking</dd></div>
-              <div><dt>Robotics</dt><dd>ROS 2, Zenoh, Isaac Sim, behaviour trees</dd></div>
-              <div><dt>AI tooling</dt><dd>PyTorch, LLM-agent-based development workflow</dd></div>
               <div><dt>Languages</dt><dd>English - Intermediate (paper writing and reading) · Japanese - JLPT N2 (2021)</dd></div>
         </dl>
         <p class="sc-cv__note"><a href="../projects/index.html">Explore the projects for research and implementation details.</a></p>

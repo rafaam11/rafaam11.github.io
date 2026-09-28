@@ -5457,7 +5457,7 @@ test('Home positions medical imaging and dental occlusion research in both langu
 
 test('public CV records the ongoing digital occlusion technical-lead scope without deployment claims', () => {
   const cv = JSON.parse(read('data/public-cv.json'));
-  const area = cv.experience[0].areas[0];
+  const area = cv.experience[0].areas.find((candidate) => /삼성서울병원/.test(candidate.translations.ko.title));
   const ko = area.translations.ko.items.join('\n');
   const en = area.translations.en.items.join('\n');
   assert.ok(area.translations.ko.items.includes('2026.03–현재 삼성서울병원 연구진과 구강악안면 디지털 교합 워크플로우를 공동 개발. 기술 리드·메인 개발자로 Custom App 아키텍처, end-to-end UI/UX, 특징점·교합 엔진 통합, 평가·내보내기 파이프라인을 담당하며 연구진 검증을 진행 중.'));
