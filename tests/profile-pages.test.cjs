@@ -131,7 +131,7 @@ test('2025 News records the confirmed DOTORI start and three public repository m
   }
   const forklift = data.projects.find(project=>project.slug==='unmanned-forklift');
   assert.equal(forklift.period,'2025.11 – present');
-  assert.equal(data.news.length,46);
+  assert.equal(data.news.length,63);
 });
 test('Home News keeps only the newest software release and then the newest other items', () => {
   const release = (id, date) => ({...data.news[0], id, eventDate: date, datePrecision: 'day', evidence: {...data.news[0].evidence, path: 'data/news-software-sources.json'}});
