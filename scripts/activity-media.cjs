@@ -20,6 +20,7 @@
 'use strict';
 
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { execFileSync } = require('node:child_process');
@@ -276,7 +277,7 @@ function ffmpegArgsForPoster({ src, out, at = 1 }) {
 }
 
 function run(bin, args) {
-  return execFileSync(bin, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 });
+  return execFileSync(bin, args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 });
 }
 
 function probe(file) {
@@ -303,22 +304,40 @@ function orientationOf(src) {
   }
 }
 
+function isHeif(file) {
+  return /\.hei[cf]$/i.test(file);
+}
+
+// Tiled iPhone HEIC is assembled by an implicit complex filtergraph, which cannot be combined with -vf.
+// Decode it to a temporary PNG first (default mapping = full grid, orientation applied), then filter that.
+function decodeHeifToPng(src) {
+  const tmp = path.join(os.tmpdir(), `activity-media-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.png`);
+  run('ffmpeg', ['-v', 'error', '-y', '-i', src, '-frames:v', '1', '-map_metadata', '-1', tmp]);
+  return tmp;
+}
+
 function convertImage({ src, out, crop = null, maxEdge = LIMITS.maxEdge, allowOutside = false }) {
   if (!allowOutside) assertWritable(out);
   fs.mkdirSync(path.dirname(out), { recursive: true });
-  const source = probe(src);
-  const orientation = orientationOf(src);
-  run('ffmpeg', ffmpegArgsForImage({ src, out, crop, maxEdge }));
-  let buf = fs.readFileSync(out);
-  let size = webpSize(buf);
-  // ffmpeg normally applies EXIF orientation itself; if a rotated source came out unrotated, redo it explicitly.
-  if (orientation && orientation >= 5 && size && source.width && source.height && (source.width > source.height) === (size.width > size.height)) {
-    run('ffmpeg', ffmpegArgsForImage({ src, out, orientation, crop, maxEdge }));
-    buf = fs.readFileSync(out);
-    size = webpSize(buf);
+  const decoded = isHeif(src) ? decodeHeifToPng(src) : null;
+  const input = decoded || src;
+  try {
+    const source = probe(input);
+    const orientation = orientationOf(input);
+    run('ffmpeg', ffmpegArgsForImage({ src: input, out, crop, maxEdge }));
+    let buf = fs.readFileSync(out);
+    let size = webpSize(buf);
+    // ffmpeg normally applies EXIF orientation itself; if a rotated source came out unrotated, redo it explicitly.
+    if (orientation && orientation >= 5 && size && source.width && source.height && (source.width > source.height) === (size.width > size.height)) {
+      run('ffmpeg', ffmpegArgsForImage({ src: input, out, orientation, crop, maxEdge }));
+      buf = fs.readFileSync(out);
+      size = webpSize(buf);
+    }
+    if (!size) throw new Error(`could not read WEBP dimensions of ${out}`);
+    return { width: size.width, height: size.height, bytes: buf.length, sha256: sha256(buf), leaks: metadataLeaks(buf, 'webp') };
+  } finally {
+    if (decoded) fs.rmSync(decoded, { force: true });
   }
-  if (!size) throw new Error(`could not read WEBP dimensions of ${out}`);
-  return { width: size.width, height: size.height, bytes: buf.length, sha256: sha256(buf), leaks: metadataLeaks(buf, 'webp') };
 }
 
 function convertVideo({ src, out, poster, start = 0, duration, audio = false, allowOutside = false }) {
@@ -431,7 +450,15 @@ function commandSheet(args) {
   const thumbsDir = path.join(outDir, 'thumbs');
   assertWritable(thumbsDir);
   fs.mkdirSync(thumbsDir, { recursive: true });
-  const font = fs.existsSync('C:/Windows/Fonts/arial.ttf') ? 'C\\:/Windows/Fonts/arial.ttf' : null;
+  // drawtext cannot take a drive letter (the colon breaks the filtergraph parser); copy the font next to the thumbs.
+  let font = null;
+  for (const candidate of ['C:/Windows/Fonts/arial.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf']) {
+    if (fs.existsSync(candidate)) {
+      fs.copyFileSync(candidate, path.join(thumbsDir, 'label.ttf'));
+      font = path.relative(root, path.join(thumbsDir, 'label.ttf')).split(path.sep).join('/');
+      break;
+    }
+  }
   const usable = [];
   for (const id of ids) {
     const item = byId.get(id);
@@ -441,12 +468,17 @@ function commandSheet(args) {
     if (!fs.existsSync(thumb)) {
       const label = font ? `,drawtext=fontfile=${font}:text='${escapeDrawtext(id)}':x=6:y=h-th-6:fontsize=22:fontcolor=white:box=1:boxcolor=black@0.6:boxborderw=4` : '';
       const vf = `scale=240:240:force_original_aspect_ratio=decrease,pad=240:240:(ow-iw)/2:(oh-ih)/2:color=white${label}`;
-      const inputArgs = item.kind === 'video' ? ['-ss', '1', '-i', src] : ['-i', src];
+      let decoded = null;
       try {
-        run('ffmpeg', ['-v', 'error', '-y', ...inputArgs, '-frames:v', '1', '-vf', vf, '-map_metadata', '-1', thumb]);
+        decoded = isHeif(src) ? decodeHeifToPng(src) : null;
+        const inputArgs = item.kind === 'video' ? ['-ss', '1', '-i', src] : ['-i', decoded || src];
+        // One pixel format for every thumbnail: a format change mid-sequence resets the tile filter and drops frames.
+        run('ffmpeg', ['-v', 'error', '-y', ...inputArgs, '-frames:v', '1', '-vf', vf, '-pix_fmt', 'rgb24', '-map_metadata', '-1', thumb]);
       } catch (error) {
         console.warn(`thumbnail failed for ${id} (${item.relPath}): ${String(error.message).split('\n')[0]}`);
         continue;
+      } finally {
+        if (decoded) fs.rmSync(decoded, { force: true });
       }
     }
     usable.push(item);
