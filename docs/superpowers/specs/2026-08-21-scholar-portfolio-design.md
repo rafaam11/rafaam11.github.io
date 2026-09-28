@@ -67,7 +67,7 @@ Slug order is a contract shared by `js/portfolio-data.js`, `js/portfolio-render.
 
 - `assets/projects/EVIDENCE_REGISTER.md` stays the single source of truth. Every lead, clip, poster, and gallery item has a register row; only `approved-public` rows have a public path.
 - Originals stay outside Git in their private source folder. Candidate extraction, review sheets, and intermediate derivatives live outside this repository; only approved, cropped or blurred, metadata-stripped derivatives enter `assets/projects/<slug>/`.
-- Never publish patient data, CT/MRI, identifiable people, contracts, certificates, internal code, secret infrastructure, other people's names, budgets, or document numbers.
+- Never publish patient data, CT/MRI, identifiable people (except activity photos on News, amended 2026-09-28 — see 2026-09-28-activity-feed-design.md), contracts, certificates, internal code, secret infrastructure, other people's names, budgets, or document numbers.
 - Individual decisions, implementation, and verification stay separate from team results. No contribution percentages. No unverified productivity, clinical, operational, or maintenance claims.
 
 ## PDF and CV
