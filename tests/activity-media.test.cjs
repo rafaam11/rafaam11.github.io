@@ -19,3 +19,27 @@ test('original usermedia is git-ignored and never tracked', () => {
   }
   assert.equal(tracked.trim(), '', 'no original media file is tracked');
 });
+
+const { privatePeoplePattern, honorificPattern, reviewWordingPattern } = require('./helpers/private-people.cjs');
+
+function loadMedia() {
+  const data = require('../js/local-media-data.js');
+  return Object.values(data.media || data);
+}
+
+test('activity media captions speak in public voice and carry no review notes', () => {
+  const records = loadMedia();
+  assert.ok(records.length >= 12, 'media records present');
+  for (const record of records) {
+    assert.ok(!('note' in record.translations.ko) && !('note' in record.translations.en), `${record.id}: no note field`);
+    for (const locale of ['ko', 'en']) {
+      for (const field of ['caption', 'alt']) {
+        const text = record.translations[locale][field];
+        assert.ok(typeof text === 'string' && text.trim(), `${record.id} ${locale} ${field} present`);
+        assert.doesNotMatch(text, reviewWordingPattern, `${record.id} ${locale} ${field}: review wording`);
+        assert.doesNotMatch(text, privatePeoplePattern, `${record.id} ${locale} ${field}: private person`);
+        assert.doesNotMatch(text, honorificPattern, `${record.id} ${locale} ${field}: named third person`);
+      }
+    }
+  }
+});
