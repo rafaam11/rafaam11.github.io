@@ -281,34 +281,6 @@
       "height": 606,
       "derivativeSha256": "5c5104301be9d5037d7b1779a6d3f2544773d5329bf2f8cc9af64e981f7c2146"
     },
-    "M022": {
-      "id": "M022",
-      "type": "image",
-      "path": "assets/local-review/M022.webp",
-      "sourceId": "M022",
-      "sourcePath": "5절링크구조 4족보행로봇/20191105_122038.jpg",
-      "sourceSha256": "a233f776649bc24e707c71585ffa1aa61175d1c3b4e08481b2605c1b0843bda6",
-      "takenAt": "2019-11-05",
-      "takenAtSource": "exif",
-      "eventIds": [
-        "scholarship-2019"
-      ],
-      "order": 1,
-      "approval": "approved-public",
-      "translations": {
-        "ko": {
-          "caption": "장학증서.",
-          "alt": "액자에 든 장학증서"
-        },
-        "en": {
-          "caption": "Scholarship certificate.",
-          "alt": "A framed scholarship certificate"
-        }
-      },
-      "width": 960,
-      "height": 1280,
-      "derivativeSha256": "e28a1f302d25028a1686ecb1339375aa7b358704290fd6e91933e5459fbd4c1c"
-    },
     "M027": {
       "id": "M027",
       "type": "image",
@@ -319,7 +291,7 @@
       "takenAt": "2020-06-16",
       "takenAtSource": "exif",
       "eventIds": [
-        "quadruped-build-start-2019"
+        "quadruped-build-start-2020"
       ],
       "order": 1,
       "approval": "approved-public",
@@ -347,7 +319,7 @@
       "takenAt": "2020-06-19",
       "takenAtSource": "exif",
       "eventIds": [
-        "quadruped-build-start-2019"
+        "quadruped-build-start-2020"
       ],
       "order": 3,
       "approval": "approved-public",
@@ -403,7 +375,7 @@
       "takenAt": "2020-08-23",
       "takenAtSource": "exif",
       "eventIds": [
-        "quadruped-build-start-2019"
+        "quadruped-build-start-2020"
       ],
       "order": 2,
       "approval": "approved-public",
@@ -802,8 +774,10 @@
       "derivativeSha256": "f3bcc6de9366c1730b1837e7d41fe4e38bc8e685697ca7d71427ee3edf04d17d",
       "takenAt": "2022-04-12",
       "takenAtSource": "filename",
-      "eventIds": [],
-      "order": 1,
+      "eventIds": [
+        "mandibular-research-start-2021"
+      ],
+      "order": 4,
       "approval": "approved-public",
       "translations": {
         "ko": {
@@ -1376,34 +1350,6 @@
       "height": 1280,
       "derivativeSha256": "22fefbd7bbadd53f38a2d8d1cb48745509571607efdbf9a9d3c98e8c0a7dd59d"
     },
-    "M141": {
-      "id": "M141",
-      "type": "image",
-      "path": "assets/local-review/M141.webp",
-      "sourceId": "M141",
-      "sourcePath": "디지스트기타/20230216_194949.jpg",
-      "sourceSha256": "31cd95e3564d9aebdb56be3d2608b9f4f865797ceadce14116080c9fadb7a307",
-      "takenAt": "2023-02-16",
-      "takenAtSource": "exif",
-      "eventIds": [
-        "dgist-masters-degree-2023"
-      ],
-      "order": 3,
-      "approval": "approved-public",
-      "translations": {
-        "ko": {
-          "caption": "학위증과 꽃다발.",
-          "alt": "꽃다발 옆에 놓인 학위증"
-        },
-        "en": {
-          "caption": "Diploma and flowers.",
-          "alt": "A diploma placed beside a bouquet"
-        }
-      },
-      "width": 1280,
-      "height": 1280,
-      "derivativeSha256": "56a96ae0e83fd281ee2f400ccfa854ab4c5e6851d43213eda3f2c3ec85a009f5"
-    },
     "M145": {
       "id": "M145",
       "type": "image",
@@ -1416,7 +1362,7 @@
       "eventIds": [
         "invention-sponsor-award-2019"
       ],
-      "order": 3,
+      "order": 2,
       "approval": "approved-public",
       "translations": {
         "ko": {
@@ -1528,7 +1474,7 @@
       "eventIds": [
         "triz-grand-prize-2019"
       ],
-      "order": 2,
+      "order": 1,
       "approval": "approved-public",
       "translations": {
         "ko": {
@@ -1543,62 +1489,6 @@
       "width": 1280,
       "height": 720,
       "derivativeSha256": "edca709d1b48943f6e52582bd3c4592298ed5a62ccb577011ce15c235e923975"
-    },
-    "M153": {
-      "id": "M153",
-      "type": "image",
-      "path": "assets/local-review/M153.webp",
-      "sourceId": "M153",
-      "sourcePath": "발명대회/20191126_180327.jpg",
-      "sourceSha256": "7ca704e9ce41859b61616a9236d7840c5f1fe78c3d0aeeb6e97cc80b24399f23",
-      "takenAt": "2019-11-26",
-      "takenAtSource": "exif",
-      "eventIds": [
-        "triz-grand-prize-2019"
-      ],
-      "order": 1,
-      "approval": "approved-public",
-      "translations": {
-        "ko": {
-          "caption": "국제 TRIZ 경진대회 수상 인증서.",
-          "alt": "TRIZ 협회 인증서"
-        },
-        "en": {
-          "caption": "International TRIZ competition certificate.",
-          "alt": "A TRIZ Association certificate"
-        }
-      },
-      "width": 960,
-      "height": 1280,
-      "derivativeSha256": "874c133ffc770c8877a4742b52a2a02fcaa1587bcdb69ec61bab5c0fe64a4711"
-    },
-    "M154": {
-      "id": "M154",
-      "type": "image",
-      "path": "assets/local-review/M154.webp",
-      "sourceId": "M154",
-      "sourcePath": "발명대회/20191128_183154.jpg",
-      "sourceSha256": "98824ef96eef0e144e57946452f12ba099c9a883b7232528c60f991a620ba0b3",
-      "takenAt": "2019-11-28",
-      "takenAtSource": "exif",
-      "eventIds": [
-        "invention-sponsor-award-2019"
-      ],
-      "order": 2,
-      "approval": "approved-public",
-      "translations": {
-        "ko": {
-          "caption": "2019 대학창의발명대회 후원기관상 상장.",
-          "alt": "액자에 든 상장"
-        },
-        "en": {
-          "caption": "Sponsor’s Award certificate, 2019 University Creative Invention Contest.",
-          "alt": "A framed certificate"
-        }
-      },
-      "width": 960,
-      "height": 1280,
-      "derivativeSha256": "1ddf0123340e006bded276b006d050efaf915973f1dafb84cf720b2efb910fdc"
     },
     "M159": {
       "id": "M159",

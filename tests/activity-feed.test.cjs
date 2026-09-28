@@ -59,8 +59,8 @@ test('media beyond three photos fold into a details element and every image carr
   assert.equal(html4.split('<details class="lf-more">').length - 1, 1);
   assert.ok(html4.indexOf('M4.webp') > html4.indexOf('<details class="lf-more">'), '4th photo is inside details');
   assert.ok(html4.indexOf('M3.webp') < html4.indexOf('<details class="lf-more">'), 'first three stay visible');
-  assert.match(html4, /<summary>사진 1장 더<\/summary>/);
-  assert.match(feed.mediaHtml(four, { lang: 'en', base: '' }), /<summary>1 more photo<\/summary>/);
+  assert.match(html4, /<summary[^>]*>사진 1장 더<\/summary>/);
+  assert.match(feed.mediaHtml(four, { lang: 'en', base: '' }), /<summary[^>]*>1 more photo<\/summary>/);
   assert.ok(!feed.mediaHtml(three, { lang: 'ko', base: '' }).includes('<details'));
   for (const img of html4.match(/<img [^>]*>/g)) assert.match(img, /width="1280" height="960"/);
   const compact = feed.mediaHtml(four, { lang: 'ko', base: '', compact: true });
@@ -80,4 +80,10 @@ test('Home selected activities span robot building, an overseas symposium and a 
   assert.equal(html.split('<article class="lf-activity"').length - 1, 3);
   assert.equal(html.split('<img ').length - 1, 3);
   assert.ok(!html.includes('<video'));
+});
+
+test('folded photos name their event for assistive technology', () => {
+  const photo = (id) => ({ id, type: 'image', path: `assets/local-review/${id}.webp`, width: 4, height: 3, translations: { ko: { alt: 'a', caption: 'c' }, en: { alt: 'a', caption: 'c' } } });
+  const html = feed.mediaHtml({ id: 'x', title: 'DGIST 졸업', eventDate: '2023-02-16', links: [], media: ['M1', 'M2', 'M3', 'M4'].map(photo) }, { lang: 'ko', base: '' });
+  assert.match(html, /<summary aria-label="DGIST 졸업 — 사진 1장 더">사진 1장 더<\/summary>/);
 });

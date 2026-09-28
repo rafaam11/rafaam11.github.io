@@ -27,7 +27,7 @@ function activityMediaErrors(mediaJson = readActivityMedia(), news = data.news) 
   for (const [key, record] of Object.entries(mediaJson.media)) {
     const label = 'activity media ' + key;
     if (record.id !== key) errors.push(label + ': id must match its key');
-    if (!/^assets\/local-review\//.test(record.path || '')) errors.push(label + ': path must live under assets/local-review/');
+    if (!/^assets\/local-review\/[^/]+$/.test(record.path || '') || /\.\./.test(record.path || '')) errors.push(label + ': path must be a file directly under assets/local-review/');
     if (!['image', 'video'].includes(record.type)) errors.push(label + ': type must be image or video');
     if (!['approved-public', 'draft'].includes(record.approval)) errors.push(label + ': approval must be approved-public or draft');
     if (!Array.isArray(record.eventIds)) errors.push(label + ': eventIds must be an array');

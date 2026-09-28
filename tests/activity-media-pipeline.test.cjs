@@ -158,3 +158,37 @@ test('convertImage produces a clean WEBP no larger than the edge cap', { skip: !
   assert.equal(result.sha256, pipeline.sha256(buf));
   fs.rmSync(dir, { recursive: true, force: true });
 });
+
+test('frozen ids keep existing files stable and give new files the next free id', () => {
+  const list = [
+    { relPath: '0새폴더/a.jpg', sha256: 'new-a' },
+    { relPath: 'x/b.jpg', sha256: 'sha-b' },
+    { relPath: 'y/c.jpg', sha256: 'sha-c' },
+    { relPath: 'y/copy-of-c.jpg', sha256: 'sha-c' }
+  ];
+  const frozen = { 'sha-b': 'M001', 'sha-c': 'M002', 'sha-gone': 'M217' };
+  const { items, ids } = pipeline.assignFrozenIds(list, frozen);
+  assert.deepEqual(items.map((item) => [item.relPath, item.id]), [['0새폴더/a.jpg', 'M218'], ['x/b.jpg', 'M001'], ['y/c.jpg', 'M002'], ['y/copy-of-c.jpg', 'M219']]);
+  assert.equal(ids['new-a'], 'M218');
+  assert.equal(ids['sha-gone'], 'M217', 'ids of removed files are never reused');
+});
+
+test('the committed id map covers every published record', () => {
+  const map = JSON.parse(fs.readFileSync(path.join(root, 'data/activity-media-ids.json'), 'utf8'));
+  assert.equal(map.schema, 1);
+  assert.ok(Object.keys(map.ids).length >= 217);
+  const records = JSON.parse(fs.readFileSync(path.join(root, 'data/activity-media.json'), 'utf8')).media;
+  for (const record of Object.values(records)) assert.equal(map.ids[record.sourceSha256], record.id, `${record.id} is frozen`);
+  assert.equal(new Set(Object.values(map.ids)).size, Object.keys(map.ids).length, 'no id is assigned twice');
+});
+
+test('write guard ignores letter case on Windows and rejects traversal', { skip: process.platform !== 'win32' }, () => {
+  assert.throws(() => pipeline.assertWritable(path.join(root, 'assets', 'UserMedia', 'x.png')), /usermedia/i);
+  pipeline.setExtraOutputDir(path.join(root, 'assets'));
+  try {
+    assert.throws(() => pipeline.assertWritable(path.join(root, 'assets', 'USERMEDIA', 'review', 'x.png')), /usermedia/i);
+  } finally {
+    pipeline.setExtraOutputDir(null);
+  }
+  assert.throws(() => pipeline.assertWritable(path.join(pipeline.DERIVED_DIR, '..', 'usermedia', 'x.webp')), /usermedia/i);
+});

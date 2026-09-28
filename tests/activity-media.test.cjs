@@ -129,3 +129,26 @@ test('news events, labels and activity-media evidence agree', () => {
   assert.ok(profileHome.newsErrors([broken]).some((message) => /M012/.test(message)), 'evidence record must list the event');
   assert.ok(portfolioData.news.length >= 60, 'activity events were added');
 });
+
+test('document photos that show personal data stay out, and paths cannot escape the derivative folder', () => {
+  const json = JSON.parse(read('data/activity-media.json'));
+  for (const id of ['M022', 'M141', 'M153', 'M154']) assert.ok(!json.media[id], `${id} (certificate with personal data) is not published`);
+  for (const id of ['M022', 'M141', 'M153', 'M154']) assert.ok(!fs.existsSync(path.join(root, 'assets', 'local-review', `${id}.webp`)), `${id}.webp removed`);
+  const escaped = JSON.parse(JSON.stringify(json));
+  escaped.media.M012.path = 'assets/local-review/../img/x.webp';
+  assert.ok(profileHome.activityMediaErrors(escaped, portfolioData.news).some((message) => /M012/.test(message)));
+});
+
+test('activity events rest on dated evidence', () => {
+  const byId = Object.fromEntries(portfolioData.news.map((item) => [item.id, item]));
+  assert.ok(!byId['scholarship-2019'], 'scholarship event has no publishable evidence');
+  assert.ok(!byId['quadruped-build-start-2019']);
+  const build = byId['quadruped-build-start-2020'];
+  assert.equal(build.eventDate, '2020-04');
+  assert.equal(build.evidence.path, 'data/public-cv.json');
+  assert.match(byId['ism-launcher-paper-2019'].evidence.dateSource, /M183/);
+  const json = JSON.parse(read('data/activity-media.json'));
+  for (const record of Object.values(json.media)) assert.ok(record.eventIds.length, `${record.id} is linked to an event`);
+  const english = portfolioData.news.map((item) => item.translations.en.body).join(' ');
+  assert.doesNotMatch(english, /Kumoh Institute of Technology/, 'use the full English name of Kumoh');
+});

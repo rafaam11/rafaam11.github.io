@@ -31,6 +31,7 @@ const DERIVED_DIR = path.join(root, 'assets', 'local-review');
 const DATA_FILE = path.join(root, 'data', 'activity-media.json');
 const SCRATCH_DIR = path.join(root, '.superpowers');
 const CATALOG_FILE = path.join(SCRATCH_DIR, 'activity-media-catalog.json');
+const IDS_FILE = path.join(root, 'data', 'activity-media-ids.json');
 const PUBLIC_PREFIX = 'assets/local-review/';
 
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.heic', '.heif', '.webp']);
@@ -83,6 +84,28 @@ function listSources(dir = USERMEDIA_DIR) {
     ext: path.extname(file.relPath).toLowerCase(),
     kind: kindOf(file.relPath)
   }));
+}
+
+// Existing files keep the id frozen for their sha256; new files (or duplicate copies) get the next free id.
+function assignFrozenIds(list, frozen) {
+  const ids = { ...frozen };
+  let next = Math.max(0, ...Object.values(ids).map((id) => Number(String(id).slice(1)) || 0)) + 1;
+  const used = new Set();
+  const items = list.map((item) => {
+    let id = ids[item.sha256];
+    if (!id || used.has(id)) {
+      id = mediaId(next);
+      next += 1;
+      if (!ids[item.sha256]) ids[item.sha256] = id;
+    }
+    used.add(id);
+    return { ...item, id };
+  });
+  return { items, ids };
+}
+
+function readFrozenIds() {
+  return fs.existsSync(IDS_FILE) ? JSON.parse(fs.readFileSync(IDS_FILE, 'utf8')).ids : {};
 }
 
 function livePhotoPairs(list, durationOf) {
@@ -218,13 +241,15 @@ function sha256File(file) {
 // ---------------------------------------------------------------- write guard
 
 function within(target, dir) {
-  return target === dir || target.startsWith(dir + path.sep);
+  const norm = (value) => (process.platform === 'win32' ? path.resolve(value).toLowerCase() : path.resolve(value));
+  const t = norm(target), d = norm(dir);
+  return t === d || t.startsWith(d + path.sep);
 }
 
 function assertWritable(target) {
   const resolved = path.resolve(target);
   if (within(resolved, USERMEDIA_DIR)) throw new Error(`refusing to write inside usermedia: ${resolved}`);
-  if (resolved === DATA_FILE || within(resolved, DERIVED_DIR) || within(resolved, SCRATCH_DIR) || (extraOutputDir && within(resolved, extraOutputDir))) return resolved;
+  if (within(resolved, DATA_FILE) || within(resolved, IDS_FILE) || within(resolved, DERIVED_DIR) || within(resolved, SCRATCH_DIR) || (extraOutputDir && within(resolved, extraOutputDir))) return resolved;
   throw new Error(`not an allowed output path: ${resolved}`);
 }
 
@@ -371,8 +396,14 @@ function writeData(json) {
   fs.writeFileSync(DATA_FILE, JSON.stringify({ schema: 1, media }, null, 2) + '\n');
 }
 
-function buildCatalog({ withHashes = true } = {}) {
-  const list = listSources();
+function buildCatalog() {
+  const hashed = listSources().map((item) => ({ ...item, sha256: sha256File(item.absPath) }));
+  const frozen = assignFrozenIds(hashed, readFrozenIds());
+  if (Object.keys(frozen.ids).length !== Object.keys(readFrozenIds()).length) {
+    assertWritable(IDS_FILE);
+    fs.writeFileSync(IDS_FILE, JSON.stringify({ schema: 1, note: 'Frozen M-ids by source sha256. Never renumber; new files get the next free id.', ids: frozen.ids }, null, 2) + '\n');
+  }
+  const list = frozen.items;
   const durationCache = new Map();
   const durationOf = (item) => {
     if (!durationCache.has(item.relPath)) durationCache.set(item.relPath, probe(item.absPath).duration);
@@ -392,7 +423,7 @@ function buildCatalog({ withHashes = true } = {}) {
     }
     return {
       id: item.id, relPath: item.relPath, size: item.size, kind: item.kind, ext: item.ext,
-      sha256: withHashes ? sha256File(item.absPath) : null,
+      sha256: item.sha256,
       livePhotoMotion: pairs.has(item.relPath),
       takenAt, takenAtSource
     };
@@ -648,7 +679,7 @@ function main(argv) {
 
 module.exports = {
   USERMEDIA_DIR, DERIVED_DIR, DATA_FILE, CATALOG_FILE, LIMITS,
-  mediaId, kindOf, listSources, livePhotoPairs, jpegExifDate, dateFromName, webpSize, metadataLeaks, sha256, sha256File,
+  IDS_FILE, mediaId, kindOf, listSources, assignFrozenIds, readFrozenIds, livePhotoPairs, jpegExifDate, dateFromName, webpSize, metadataLeaks, sha256, sha256File,
   assertWritable, setExtraOutputDir, ffmpegArgsForImage, ffmpegArgsForVideo, ffmpegArgsForPoster, convertImage, convertVideo,
   buildCatalog, loadCatalog, parseIdSelection, checkRecords, readData, writeData, main
 };

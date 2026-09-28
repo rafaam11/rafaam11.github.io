@@ -212,27 +212,6 @@
         }
       }
     },
-    "M022": {
-      "id": "M022",
-      "type": "image",
-      "path": "assets/local-review/M022.webp",
-      "width": 960,
-      "height": 1280,
-      "eventIds": [
-        "scholarship-2019"
-      ],
-      "order": 1,
-      "translations": {
-        "ko": {
-          "caption": "장학증서.",
-          "alt": "액자에 든 장학증서"
-        },
-        "en": {
-          "caption": "Scholarship certificate.",
-          "alt": "A framed scholarship certificate"
-        }
-      }
-    },
     "M027": {
       "id": "M027",
       "type": "image",
@@ -240,7 +219,7 @@
       "width": 960,
       "height": 1280,
       "eventIds": [
-        "quadruped-build-start-2019"
+        "quadruped-build-start-2020"
       ],
       "order": 1,
       "translations": {
@@ -261,7 +240,7 @@
       "width": 1280,
       "height": 960,
       "eventIds": [
-        "quadruped-build-start-2019"
+        "quadruped-build-start-2020"
       ],
       "order": 3,
       "translations": {
@@ -303,7 +282,7 @@
       "width": 960,
       "height": 1280,
       "eventIds": [
-        "quadruped-build-start-2019"
+        "quadruped-build-start-2020"
       ],
       "order": 2,
       "translations": {
@@ -597,8 +576,10 @@
       "path": "assets/local-review/M077.webp",
       "width": 800,
       "height": 600,
-      "eventIds": [],
-      "order": 1,
+      "eventIds": [
+        "mandibular-research-start-2021"
+      ],
+      "order": 4,
       "translations": {
         "ko": {
           "caption": "치열궁 곡선과 단면 방향.",
@@ -1030,27 +1011,6 @@
         }
       }
     },
-    "M141": {
-      "id": "M141",
-      "type": "image",
-      "path": "assets/local-review/M141.webp",
-      "width": 1280,
-      "height": 1280,
-      "eventIds": [
-        "dgist-masters-degree-2023"
-      ],
-      "order": 3,
-      "translations": {
-        "ko": {
-          "caption": "학위증과 꽃다발.",
-          "alt": "꽃다발 옆에 놓인 학위증"
-        },
-        "en": {
-          "caption": "Diploma and flowers.",
-          "alt": "A diploma placed beside a bouquet"
-        }
-      }
-    },
     "M145": {
       "id": "M145",
       "type": "image",
@@ -1060,7 +1020,7 @@
       "eventIds": [
         "invention-sponsor-award-2019"
       ],
-      "order": 3,
+      "order": 2,
       "translations": {
         "ko": {
           "caption": "시상식에서 팀원들과.",
@@ -1144,7 +1104,7 @@
       "eventIds": [
         "triz-grand-prize-2019"
       ],
-      "order": 2,
+      "order": 1,
       "translations": {
         "ko": {
           "caption": "TRIZ 경진대회 시상 후.",
@@ -1153,48 +1113,6 @@
         "en": {
           "caption": "After the TRIZ award ceremony.",
           "alt": "Participants standing in a row with certificates"
-        }
-      }
-    },
-    "M153": {
-      "id": "M153",
-      "type": "image",
-      "path": "assets/local-review/M153.webp",
-      "width": 960,
-      "height": 1280,
-      "eventIds": [
-        "triz-grand-prize-2019"
-      ],
-      "order": 1,
-      "translations": {
-        "ko": {
-          "caption": "국제 TRIZ 경진대회 수상 인증서.",
-          "alt": "TRIZ 협회 인증서"
-        },
-        "en": {
-          "caption": "International TRIZ competition certificate.",
-          "alt": "A TRIZ Association certificate"
-        }
-      }
-    },
-    "M154": {
-      "id": "M154",
-      "type": "image",
-      "path": "assets/local-review/M154.webp",
-      "width": 960,
-      "height": 1280,
-      "eventIds": [
-        "invention-sponsor-award-2019"
-      ],
-      "order": 2,
-      "translations": {
-        "ko": {
-          "caption": "2019 대학창의발명대회 후원기관상 상장.",
-          "alt": "액자에 든 상장"
-        },
-        "en": {
-          "caption": "Sponsor’s Award certificate, 2019 University Creative Invention Contest.",
-          "alt": "A framed certificate"
         }
       }
     },

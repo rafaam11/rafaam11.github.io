@@ -35,8 +35,7 @@
     'tmu-summer-school-2019': ['activity', 'TMU Japanese Summer School', 'TMU Japanese Summer School'],
     'printing-contest-2019': ['activity', '3D 프린팅 경진대회 참가', '3D printing contest'],
     'invention-club-general-meeting-2019': ['activity', '발명동아리 부회장 선출', 'Elected club vice-president'],
-    'scholarship-2019': ['award', '장학증서 수여', 'Scholarship certificate'],
-    'quadruped-build-start-2019': ['research', '4족 보행 로봇 제작 시작', 'Quadruped robot build begins'],
+    'quadruped-build-start-2020': ['research', '4족 보행 로봇 제작 시작', 'Quadruped robot build begins'],
     'unist-internship-2020': ['research', 'UNIST 방학 연구 인턴', 'Summer research internship at UNIST'],
     'dgist-first-visit-2020': ['career', 'DGIST 캠퍼스 첫 방문', 'First visit to DGIST'],
     'motion-control-internship-2021': ['research', '겨울방학 연구인턴 수료 (DGIST)', 'Winter research internship at DGIST'],
@@ -65,7 +64,7 @@
     'mandibular-research-start-2021': ['research', '하악골 골절 정복 최적화 연구 시작', 'Mandibular fracture reduction research'],
     'ar-surgery-research-2021': ['research', '구강악안면 AR 수술 연구 참여', 'Joined oral and maxillofacial AR surgery research'],
     'dgist-masters-start-2021': ['career', 'DGIST 석사과정 시작', 'Started the M.S. programme at DGIST'],
-    'kumoh-bachelors-degree-2021': ['career', '금오공과대학교 기계시스템공학 학사 졸업', 'B.S. completed at Kumoh Institute of Technology'],
+    'kumoh-bachelors-degree-2021': ['career', '금오공과대학교 기계시스템공학 학사 졸업', 'B.S. completed at Kumoh National Institute of Technology'],
     'quadruped-patent-application-2021': ['patent', '4족 보행 로봇 특허 출원', 'Quadruped robot patent application'],
     'quadruped-engineering-award-2020': ['award', '4족 보행 로봇 프로젝트·엔지니어링 페어 장려상', 'Quadruped robot project and Engineering Fair prize'],
     'ros-training-award-2020': ['award', 'ROS 자율주행 교육 경진 동상', 'Bronze Prize in ROS autonomous-driving training'],
@@ -162,7 +161,7 @@
     var html = '<div class="lf-media">' + shown.map(function (item) { return figureHtml(item, event, options); }).join('') + '</div>';
     if (more.length) {
       var label = options.lang === 'en' ? more.length + ' more photo' + (more.length > 1 ? 's' : '') : '사진 ' + more.length + '장 더';
-      html += '<details class="lf-more"><summary>' + label + '</summary><div class="lf-media">' + more.map(function (item) { return figureHtml(item, event, options); }).join('') + '</div></details>';
+      html += '<details class="lf-more"><summary aria-label="' + esc((event.title ? event.title + ' — ' : '') + label) + '">' + label + '</summary><div class="lf-media">' + more.map(function (item) { return figureHtml(item, event, options); }).join('') + '</div></details>';
     }
     return html;
   }
