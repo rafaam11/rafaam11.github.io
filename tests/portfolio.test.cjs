@@ -3707,7 +3707,7 @@ test('Task 5 summary refresh is deterministic, exact, and preserves unrelated pa
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-summary-refresh-'));
   try {
-    for (const relativePath of ['data/public-cv.json', 'cv/index.html', 'en/cv/index.html', 'index.html', 'en/index.html', 'projects/index.html', 'en/projects/index.html', 'js/portfolio-data.js']) {
+    for (const relativePath of ['data/public-cv.json', 'cv/index.html', 'en/cv/index.html', 'index.html', 'en/index.html', 'projects/index.html', 'en/projects/index.html', 'js/portfolio-data.js', 'data/activity-media.json', 'js/local-media-data.js']) {
       const target = path.join(temporaryRoot, relativePath);
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.copyFileSync(path.join(root, relativePath), target);
