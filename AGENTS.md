@@ -24,6 +24,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 - AI는 정체성이 아니라 구현 증폭 수단으로 다룬다. 사람은 맥락, 요구사항, 아키텍처, 수용 기준, PR 리뷰를 소유한다.
 - 검증되지 않은 생산성·유지보수·임상·운영 효과를 확정적으로 표현하지 않는다.
 - 내부 원본은 Git 밖에 유지하고, 승인·비식별화·메타데이터 제거를 거친 파생본만 공개한다.
+- 활동 사진(소식 탭)에는 다른 사람이 나올 수 있다(소유자 결정 2026-09-28). 다른 사람의 이름은 캡션·alt·본문에 쓰지 않는다. 환자·임상 데이터는 금지한다. 파생본은 EXIF/GPS/오디오를 제거한다. 게시 중단 요청이 오면 해당 파생본을 블러 처리하거나 삭제한다.
 
 ## Public routes
 
@@ -54,6 +55,10 @@ assets/projects/<slug>/            # Approved derivatives or public-safe boundar
 assets/pdfs/                       # 18 public project PDFs
 assets/cv/                         # 2 tracked CV PDFs (the author's Word document, ko and en)
 scripts/export-portfolio-data.cjs  # Deterministic PDF input exporter
+scripts/activity-media.cjs         # Activity media pipeline: catalog, sheet, derive, check (ffmpeg)
+data/activity-media.json           # Activity media SSOT; js/local-media-data.js is generated from it
+assets/local-review/               # Public activity derivatives (WEBP/MP4, ≤16 MiB total)
+assets/usermedia/                  # Private originals, git-ignored; never commit
 scripts/generate-portfolio-pdfs.py # ReportLab PDF generator and artifact publisher
 scripts/validate-portfolio.cjs     # Privacy, route, link, dependency, evidence, and PDF validator
 tests/portfolio.test.cjs           # Content, rendering, artifact, and inventory contracts
@@ -95,7 +100,8 @@ Commit and push to `main` only when deployment is intended. GitHub Pages must re
 
 - Home selects digital-occlusion-workflow, mandibular-fracture, and surgical-navigation; Projects retains all nine cases.
 - News is maintained bilingually in `js/portfolio-data.js`; preserve event-date precision and public evidence. Home shows four items chosen by `homeNews()` in `scripts/profile-home.cjs`: the newest software release (evidence path `data/news-software-sources.json`) at most once, then the newest remaining items. News groups the full list by year.
-- News covers research, conferences, awards, career, patent applications, and meaningful personal-software releases or public repositories. Combine an award with its corresponding presentation. Filing dates are not grant dates. Selected release and repository timestamps are recorded in `data/news-software-sources.json` and `data/news-repository-sources.json`, displayed in Asia/Seoul time.
+- News covers research, conferences, awards, career, activities (clubs, camps, exhibitions, overseas programmes), patent applications, and meaningful personal-software releases or public repositories. Combine an award with its corresponding presentation. Filing dates are not grant dates. Selected release and repository timestamps are recorded in `data/news-software-sources.json` and `data/news-repository-sources.json`, displayed in Asia/Seoul time.
 - `node scripts/public-cv-summary.cjs --write` refreshes CV and generated Home/News content. Home publications/patents/awards derive from `data/public-cv.json`.
+- Adding an activity event: `node scripts/activity-media.cjs catalog` → `sheet <folder>` for owner review → `derive M###` → fill ko/en caption/alt, `eventIds`, `order` and `approval: approved-public` in `data/activity-media.json` → add the news record (photo-only facts cite `{ path: 'data/activity-media.json', locator: 'M###' }`) and its `labels` entry in `js/local-feed.js` → `node scripts/public-cv-summary.cjs --write` → `node --test tests/activity-media.test.cjs tests/activity-feed.test.cjs` and `node scripts/activity-media.cjs check`. M-ids are frozen by `sourceSha256`; never renumber. The News page groups events into career chapters (`chapters` in `js/local-feed.js`).
 - `sourcePdfs` pins each reviewed CV PDF SHA-256. A changed edition requires explicit content synchronization review; do not blindly update the hashes.
 - `python scripts/check-cv-pdf-sync.py` compares selected PDF terms, periods, publication titles, and patent states/dates; arbitrary prose equivalence is a manual review. The validator CLI runs it (PyMuPDF required, as for PDF generation).
