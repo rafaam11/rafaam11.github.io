@@ -16,8 +16,8 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (i18n) {
   var evidenceStates = ['verified', 'ongoing', 'prototype'];
   var lifecycleStates = ['ongoing', 'completed', 'expected', 'research'];
-  var capabilityKeys = ['registration', 'sensor-fusion', 'medical-navigation', 'xr-engineering', 'ai-product-engineering'];
-  var tierKeys = ['medical-core', 'platform', 'industrial-spotlight', 'ai-build-lab'];
+  var capabilityKeys = ['medical-navigation', 'registration', 'xr-engineering', 'sensor-fusion', 'ai-product-engineering'];
+  var tierKeys = ['surgical-robotics', 'spatial-computing', 'xr', 'robotics', 'ai-build-lab'];
   var projectSlugs = ['surgical-navigation', 'mandibular-fracture', 'digital-occlusion-workflow', 'life-careverse', 'rtms-navigation', 'respiratory-surface-guidance', 'skadi-tracking-software', 'unmanned-forklift', 'ai-build-lab'];
   var pdfDiagramKindsBySlug = {
     'surgical-navigation': 'system-flow',
@@ -765,7 +765,7 @@
     }
 
     if (!Array.isArray(data.tiers) || data.tiers.length !== tierKeys.length) {
-      errors.push('Portfolio data must contain exactly four tiers.');
+      errors.push('Portfolio data must contain exactly five tiers.');
     } else {
       if (JSON.stringify(data.tiers.map(function (tier) { return tier && tier.key; })) !== JSON.stringify(tierKeys)) {
         errors.push('Portfolio tiers must use the known ordered keys.');

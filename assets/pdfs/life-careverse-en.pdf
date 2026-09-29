@@ -764,7 +764,7 @@ endobj
 endobj
 30 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
   /Subject (Build an application where clinicians and a patient join the same VR consultation room and look at one shared 3D jaw model and surgical plan together.) /Title (OMFS VR - Multi-user surgical consultation) /Trapped /False
 >>
 endobj
@@ -775,7 +775,7 @@ endobj
 endobj
 32 0 obj
 <<
-/Length 3411
+/Length 3493
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -793,7 +793,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 5) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Medical Core \001 Multi-user VR) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (XR & Spatial Visualization \001 Multi-user VR) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 719.8898 Tm /F3+0 24 Tf 28.8 TL (OMFS VR - Multi-user surgical) Tj T* ET
 .101961 .101961 .101961 rg
@@ -805,7 +805,7 @@ BT 1 0 0 1 48 634.8898 Tm /F3+0 13 Tf 15.6 TL (consultation room and look at one
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 614.8898 Tm /F3+0 13 Tf 15.6 TL (together.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 584.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2023.07 - present   |   Evidence state Ongoing   |   Portfolio tier Medical Core) Tj T* ET
+BT 1 0 0 1 48 584.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2023.07 - present   |   Evidence state Ongoing   |   Portfolio tier XR & Spatial Visualization) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
 n 48 561.8898 m 547.2756 561.8898 l S
@@ -814,7 +814,7 @@ BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (Built a three-user VR consultation 
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (join order and all three viewpoints share the same state of a CT-derived 3D jaw model and its measurement) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (panel.) Tj T* ET
+BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (panel. Built on OpenXR to run on Meta Quest 3 and Galaxy XR.) Tj T* ET
 q
 499.2756 0 0 171.626 48 312.2638 cm
 /FormXob.2b8783cd76b4fe6284fcf65330b4e678 Do
@@ -1154,7 +1154,7 @@ BT 1 0 0 1 48 501.8898 Tm /F2+0 10 Tf 12 TL (Unity 6 \001 Photon PUN2 \001 Photo
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 476.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 456.8898 Tm /F2+0 10 Tf 12 TL (XR Application Engineering \001 Medical Navigation & Visualization) Tj T* ET
+BT 1 0 0 1 48 456.8898 Tm /F2+0 10 Tf 12 TL (XR & Spatial Computing \001 Surgical Navigation & Optical Tracking) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
 n 48 424.8898 m 547.2756 424.8898 l S
@@ -1210,16 +1210,16 @@ xref
 0002985928 00000 n 
 0002987294 00000 n 
 0002987364 00000 n 
-0002987870 00000 n 
-0002987957 00000 n 
-0002991420 00000 n 
-0002998876 00000 n 
-0003000266 00000 n 
-0003002450 00000 n 
+0002987892 00000 n 
+0002987979 00000 n 
+0002991524 00000 n 
+0002998980 00000 n 
+0003000370 00000 n 
+0003002554 00000 n 
 trailer
 <<
 /ID 
-[<2a05be4e4e3ea0daba2608dc82469f24><2a05be4e4e3ea0daba2608dc82469f24>]
+[<cc3f4025a02432293ca2e520a3b1a00b><cc3f4025a02432293ca2e520a3b1a00b>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 30 0 R
@@ -1227,5 +1227,5 @@ trailer
 /Size 37
 >>
 startxref
-3006031
+3006135
 %%EOF

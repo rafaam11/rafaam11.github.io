@@ -29,13 +29,13 @@ const slugs = [
   'ai-build-lab'
 ];
 const capabilityKeys = [
-  'registration',
-  'sensor-fusion',
   'medical-navigation',
+  'registration',
   'xr-engineering',
+  'sensor-fusion',
   'ai-product-engineering'
 ];
-const tierKeys = ['medical-core', 'platform', 'industrial-spotlight', 'ai-build-lab'];
+const tierKeys = ['surgical-robotics', 'spatial-computing', 'xr', 'robotics', 'ai-build-lab'];
 const validPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
 
 function fixtureCrc32(buffer) {
@@ -509,7 +509,7 @@ test('canonical records retain localized evidence, attribution, media, blocks, a
 test('digital occlusion case preserves approved role, validation, and roadmap boundaries', () => {
   const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
   assert.ok(project);
-  assert.equal(project.tier, 'medical-core');
+  assert.equal(project.tier, 'surgical-robotics');
   assert.equal(project.period, '2026.03 – present');
   assert.equal(project.translations.ko.periodLabel, '2026.03 – 현재');
   assert.equal(project.translations.en.periodLabel, '2026.03 – present');
@@ -535,7 +535,7 @@ test('digital occlusion routes and fallback order are canonical in both language
   ]) assert.ok(fs.existsSync(path.join(root, file)), file);
   for (const file of ['index.html', 'projects/index.html', 'en/index.html', 'en/projects/index.html']) {
     const html = read(file);
-    const order = file.includes('projects/') ? ['mandibular-fracture', 'digital-occlusion-workflow', 'life-careverse'] : ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'];
+    const order = file.includes('projects/') ? ['surgical-navigation', 'digital-occlusion-workflow', 'rtms-navigation', 'mandibular-fracture', 'skadi-tracking-software', 'life-careverse', 'unmanned-forklift'] : ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'];
     assertInOrder(html, order.map(slug => `data-project="${slug}"`), file);
   }
 });
@@ -1553,22 +1553,24 @@ test('Task 4 review requires one exact header and one exact adjacent six-cell se
   }
 });
 
-test('Task 3 review preserves literal tier and evidence-state mappings', () => {
+test('positioning tiers preserve literal labels and evidence-state mappings', () => {
   assert.deepEqual(data.tiers.map((tier) => [tier.key, tier.translations.ko.label, tier.translations.en.label]), [
-    ['medical-core', '의료 코어', 'Medical Core'],
-    ['platform', '플랫폼 소프트웨어', 'Platform Software'],
-    ['industrial-spotlight', '산업 스포트라이트', 'Industrial Spotlight'],
+    ['surgical-robotics', '수술 로보틱스·내비게이션', 'Surgical Robotics & Navigation'],
+    ['spatial-computing', '컴퓨터비전·3D 공간 컴퓨팅', 'Computer Vision & 3D Spatial Computing'],
+    ['xr', 'XR·공간 시각화', 'XR & Spatial Visualization'],
+    ['robotics', '로보틱스·자동화', 'Robotics & Automation'],
     ['ai-build-lab', 'AI 빌드 랩', 'AI Build Lab']
   ]);
+  assert.deepEqual(data.tiers[0].slugs, ['surgical-navigation', 'digital-occlusion-workflow', 'rtms-navigation', 'mandibular-fracture']);
   assert.deepEqual(data.projects.map((project) => [project.slug, project.tier, project.evidenceState]), [
-    ['surgical-navigation', 'medical-core', 'prototype'],
-    ['mandibular-fracture', 'medical-core', 'verified'],
-    ['digital-occlusion-workflow', 'medical-core', 'ongoing'],
-    ['life-careverse', 'medical-core', 'ongoing'],
-    ['rtms-navigation', 'medical-core', 'verified'],
-    ['respiratory-surface-guidance', 'medical-core', 'ongoing'],
-    ['skadi-tracking-software', 'platform', 'ongoing'],
-    ['unmanned-forklift', 'industrial-spotlight', 'ongoing'],
+    ['surgical-navigation', 'surgical-robotics', 'prototype'],
+    ['mandibular-fracture', 'surgical-robotics', 'verified'],
+    ['digital-occlusion-workflow', 'surgical-robotics', 'ongoing'],
+    ['life-careverse', 'xr', 'ongoing'],
+    ['rtms-navigation', 'surgical-robotics', 'verified'],
+    ['respiratory-surface-guidance', 'spatial-computing', 'ongoing'],
+    ['skadi-tracking-software', 'spatial-computing', 'ongoing'],
+    ['unmanned-forklift', 'robotics', 'ongoing'],
     ['ai-build-lab', 'ai-build-lab', 'ongoing']
   ]);
   assert.deepEqual(
@@ -3069,7 +3071,7 @@ test('PDF manifest expands to eighteen documents and thirty-six published artifa
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   assert.equal(manifest.documents.length, 18);
   assert.equal(manifest.artifacts.length, 36);
-  assert.equal(manifest.generatorVersion, '3.2');
+  assert.equal(manifest.generatorVersion, '3.3');
 });
 
 test('PDF system-flow DAG layout resolves every connector from and to its keyed node rectangle', (t) => {
@@ -3550,7 +3552,7 @@ test('Task 5 integrated review manifest binds artifacts to the current generator
   const manifest = JSON.parse(read('output/pdf/manifest.json'));
   const generatorPath = path.join(root, 'scripts', 'generate-portfolio-pdfs.py');
   assert.equal(manifest.schemaVersion, 3);
-  assert.equal(manifest.generatorVersion, '3.2');
+  assert.equal(manifest.generatorVersion, '3.3');
   assert.equal(manifest.generatorSha256, validator.normalizedTextSourceSha256(generatorPath));
 
   const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-pdf-generator-stale-'));

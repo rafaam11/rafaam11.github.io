@@ -39,7 +39,7 @@ EXPECTED_SLUGS = [
     "ai-build-lab",
 ]
 LEGACY_MIGRATION_SLUGS = set(EXPECTED_SLUGS) - {"digital-occlusion-workflow"}
-GENERATOR_VERSION = "3.2"
+GENERATOR_VERSION = "3.3"
 GENERATOR_PUBLIC_PATH = "scripts/generate-portfolio-pdfs.py"
 EXPECTED_DIAGRAM_KIND = {
     "surgical-navigation": "system-flow",
@@ -496,7 +496,7 @@ def validate_export_schema(payload: dict[str, Any]) -> None:
         capability_keys.add(key)
         validate_translation_record(capability, f"PDF input capability {index}", ["title"])
 
-    tiers = require_array(payload.get("tiers"), "PDF input tiers", 4)
+    tiers = require_array(payload.get("tiers"), "PDF input tiers", 5)
     tier_keys: set[str] = set()
     for index, value in enumerate(tiers, start=1):
         tier = require_object(value, f"PDF input tier {index}")
@@ -1015,7 +1015,7 @@ class TechnicalDocument:
         self.canvas.setAuthor("Jinmin Kim")
         self.canvas.setSubject(clean_text(subject))
         self.canvas.setCreator("Jinmin Kim Portfolio PDF Generator")
-        self.canvas.setKeywords("3D registration, robot software, public portfolio")
+        self.canvas.setKeywords("surgical navigation, 3D registration, computer vision, public portfolio")
         self.canvas._doc.info.producer = "Jinmin Kim Portfolio PDF Generator"
         # Scholar palette, shared with the website: white paper, near-black ink, one blue accent.
         self.colors = {

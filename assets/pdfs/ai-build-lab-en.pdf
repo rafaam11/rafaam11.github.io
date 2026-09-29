@@ -762,7 +762,7 @@ endobj
 endobj
 30 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
   /Subject (Personally experienced problems become requirements, architecture, acceptance criteria, tested products, releases, and operations; AI amplifies implementation but does not own context or acceptance.) /Title (AI Build Lab - Tools I Needed, Built and Shipped) /Trapped /False
 >>
 endobj
@@ -1185,16 +1185,16 @@ xref
 0000554342 00000 n 
 0000555708 00000 n 
 0000555778 00000 n 
-0000556338 00000 n 
-0000556425 00000 n 
-0000559315 00000 n 
-0000565978 00000 n 
-0000567159 00000 n 
-0000569983 00000 n 
+0000556360 00000 n 
+0000556447 00000 n 
+0000559337 00000 n 
+0000566000 00000 n 
+0000567181 00000 n 
+0000570005 00000 n 
 trailer
 <<
 /ID 
-[<75cefac8a6b545dbc84f3a955cfd41a3><75cefac8a6b545dbc84f3a955cfd41a3>]
+[<5fa2848e7fcfe25c5f1648b91f1dd4f0><5fa2848e7fcfe25c5f1648b91f1dd4f0>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 30 0 R
@@ -1202,5 +1202,5 @@ trailer
 /Size 37
 >>
 startxref
-572034
+572056
 %%EOF

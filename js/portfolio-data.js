@@ -5,19 +5,39 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   var capabilities = [
     {
+      key: 'medical-navigation',
+      methods: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking', 'Tool calibration'],
+      translations: {
+        ko: {
+          title: '수술 내비게이션·광학 추적',
+          summary: '광학 추적 장치, 의료영상, 수술 도구 자세, 정합 상태를 하나의 좌표계로 묶어 의료진이 읽을 수 있는 내비게이션 화면과 데이터 흐름으로 구성합니다.',
+          validation: '동작하는 프로토타입, 반복 가능한 장치 연결, 좌표계 표시, 명시적 한계로 검증합니다.',
+          cardSummary: '추적 장치와 영상의 좌표를 읽을 수 있는 수술 내비게이션으로 바꿉니다.',
+          cardValidation: '프로토타입, 장치 연결, 좌표 표시를 반복 점검합니다.'
+        },
+        en: {
+          title: 'Surgical Navigation & Optical Tracking',
+          summary: 'Bring optical trackers, medical images, surgical instrument poses, and registration state into one coordinate frame, then into a navigation interface and data flow clinicians can read.',
+          validation: 'Use working prototypes, repeatable device connections, visible coordinate frames, and explicit limitations.',
+          cardSummary: 'Turn tracker and image coordinates into surgical navigation users can read.',
+          cardValidation: 'Repeat prototype, device, and coordinate-display checks.'
+        }
+      }
+    },
+    {
       key: 'registration',
       methods: ['PCA', 'ICP', 'CLPSO', 'Open3D', 'OpenCV', 'SciPy'],
       translations: {
         ko: {
-          title: '3D 기하 및 정합',
-          summary: '특징점, 표면, 센서, 의료영상의 좌표 관계를 모델링하고 반복 가능한 정합과 최적화로 연결합니다.',
+          title: '3D 정합·컴퓨터비전',
+          summary: '특징점, 표면, 점군, 의료영상의 좌표 관계를 모델링하고 반복 가능한 정합과 최적화로 연결합니다.',
           validation: '대응점, 잔차, 변환 경로, 재현 가능한 실험을 함께 남겨 결과를 확인합니다.',
           cardSummary: '좌표계와 3D 데이터를 검증 가능한 정합 문제로 바꿉니다.',
           cardValidation: '변환 경로, 잔차, 반복 실험으로 확인합니다.'
         },
         en: {
-          title: '3D Geometry & Registration',
-          summary: 'Model coordinate relationships across features, surfaces, sensors, and medical images, then turn them into repeatable registration and optimization workflows.',
+          title: '3D Registration & Computer Vision',
+          summary: 'Model coordinate relationships across landmarks, surfaces, point clouds, and medical images, then turn them into repeatable registration and optimization workflows.',
           validation: 'Keep correspondences, residuals, transform paths, and reproducible experiments visible with the result.',
           cardSummary: 'Turn coordinate systems and 3D data into testable registration problems.',
           cardValidation: 'Check transform paths, residuals, and repeatable experiments.'
@@ -25,62 +45,42 @@
       }
     },
     {
-      key: 'sensor-fusion',
-      methods: ['ToF-RGB registration', 'SICK TiM LiDAR', 'NAV350', 'Robot localization', 'Zenoh'],
-      translations: {
-        ko: {
-          title: '센서 융합 및 위치추정',
-          summary: 'RGB, ToF, LiDAR, 위치추정 신호를 하나의 좌표 모델과 안전 판단 흐름으로 연결합니다.',
-          validation: '포인트클라우드, 센서 정렬, 로봇 위치, 정책 결과를 통합과 현장 검증에서 대조합니다.',
-          cardSummary: '다중 센서의 좌표와 신호를 위치추정과 안전 판단으로 이어 붙입니다.',
-          cardValidation: '정렬, 위치, 정책 결과를 통합과 현장에서 확인합니다.'
-        },
-        en: {
-          title: 'Sensor Fusion & Localization',
-          summary: 'Connect RGB, ToF, LiDAR, and localization signals through one coordinate model into a safety-decision flow.',
-          validation: 'Compare point clouds, sensor alignment, robot pose, and policy outputs during integration and field validation.',
-          cardSummary: 'Connect multi-sensor coordinates and signals to localization and safety decisions.',
-          cardValidation: 'Inspect alignment, pose, and policy outputs in integration and field tests.'
-        }
-      }
-    },
-    {
-      key: 'medical-navigation',
-      methods: ['3D Slicer', 'VTK', 'Qt', 'OpenIGTLink', 'Optical tracking'],
-      translations: {
-        ko: {
-          title: '의료 내비게이션 및 시각화',
-          summary: '추적 장치, 의료영상, 도구 자세, 정합 상태를 사용자가 이해할 수 있는 내비게이션 화면과 데이터 흐름으로 구성합니다.',
-          validation: '동작하는 프로토타입, 반복 가능한 장치 연결, 좌표계 표시, 명시적 한계로 검증합니다.',
-          cardSummary: '장치와 영상의 좌표 결과를 읽을 수 있는 내비게이션으로 바꿉니다.',
-          cardValidation: '프로토타입, 장치 연결, 좌표 표시를 반복 점검합니다.'
-        },
-        en: {
-          title: 'Medical Navigation & Visualization',
-          summary: 'Organize tracking devices, medical images, tool poses, and registration state into a navigation interface and data flow users can understand.',
-          validation: 'Use working prototypes, repeatable device connections, visible coordinate frames, and explicit limitations.',
-          cardSummary: 'Turn device and image coordinates into navigation users can read.',
-          cardValidation: 'Repeat prototype, device, and coordinate-display checks.'
-        }
-      }
-    },
-    {
       key: 'xr-engineering',
-      methods: ['Unity', 'MRTK', 'Meta Quest', 'Photon PUN2', 'Photon Voice'],
+      methods: ['Unity', 'OpenXR', 'MRTK', 'HoloLens 2', 'Meta Quest', 'Galaxy XR', 'Photon PUN2'],
       translations: {
         ko: {
-          title: 'XR 애플리케이션 엔지니어링',
-          summary: '스패셜 UI, 멀티유저 동기화, 음성, 시나리오, 장치 제약을 하나의 XR 애플리케이션으로 통합합니다.',
+          title: 'XR·공간 컴퓨팅',
+          summary: '헤드셋 위의 공간 UI, 멀티유저 동기화, 의료 3D 모델, 장치 제약을 하나의 XR 애플리케이션으로 통합합니다.',
           validation: '실제 헤드셋 프로토타입, 멀티유저 시연, 전문가 피드백, 시나리오 재생으로 확인합니다.',
-          cardSummary: '스패셜 UI와 네트워크 상호작용을 동작하는 XR 앱으로 통합합니다.',
+          cardSummary: '공간 UI와 의료 3D 모델을 동작하는 XR 앱으로 통합합니다.',
           cardValidation: '헤드셋 시연, 동기화, 시나리오 재생으로 확인합니다.'
         },
         en: {
-          title: 'XR Application Engineering',
-          summary: 'Integrate spatial UI, multi-user synchronization, voice, scenarios, and device constraints into one XR application.',
+          title: 'XR & Spatial Computing',
+          summary: 'Integrate spatial UI, multi-user synchronization, medical 3D models, and device constraints into one XR application.',
           validation: 'Use on-device prototypes, multi-user demonstrations, expert feedback, and scenario replay.',
-          cardSummary: 'Integrate spatial UI and networked interaction into a working XR application.',
+          cardSummary: 'Integrate spatial UI and medical 3D models into a working XR application.',
           cardValidation: 'Check on-device demos, synchronization, and scenario replay.'
+        }
+      }
+    },
+    {
+      key: 'sensor-fusion',
+      methods: ['ToF-RGB registration', 'SICK TiM LiDAR', 'NAV350', 'ROS 2', 'Zenoh'],
+      translations: {
+        ko: {
+          title: '로봇 비전·센서 통합',
+          summary: 'RGB·ToF·LiDAR 센서와 로봇 좌표계를 하나의 좌표 모델로 정렬하고, 인지 결과를 안전 판단과 로봇 시스템으로 연결합니다.',
+          validation: '포인트클라우드, 센서 정렬, 로봇 위치, 정책 결과를 통합과 현장 검증에서 대조합니다.',
+          cardSummary: '센서와 로봇의 좌표를 정렬해 인지 결과를 로봇 시스템에 연결합니다.',
+          cardValidation: '정렬, 위치, 정책 결과를 통합과 현장에서 확인합니다.'
+        },
+        en: {
+          title: 'Robot Vision & Sensor Integration',
+          summary: 'Align RGB, ToF, and LiDAR sensors with the robot frame in one coordinate model, and connect perception results to safety decisions and the robot system.',
+          validation: 'Compare point clouds, sensor alignment, robot pose, and policy outputs during integration and field validation.',
+          cardSummary: 'Align sensor and robot coordinates and connect perception to the robot system.',
+          cardValidation: 'Inspect alignment, pose, and policy outputs in integration and field tests.'
         }
       }
     },
@@ -107,10 +107,11 @@
   ];
 
   var tiers = [
-    { key: 'medical-core', translations: { ko: { label: '의료 코어' }, en: { label: 'Medical Core' } } },
-    { key: 'platform', translations: { ko: { label: '플랫폼 소프트웨어' }, en: { label: 'Platform Software' } } },
-    { key: 'industrial-spotlight', translations: { ko: { label: '산업 스포트라이트' }, en: { label: 'Industrial Spotlight' } } },
-    { key: 'ai-build-lab', translations: { ko: { label: 'AI 빌드 랩' }, en: { label: 'AI Build Lab' } } }
+    { key: 'surgical-robotics', slugs: ['surgical-navigation', 'digital-occlusion-workflow', 'rtms-navigation', 'mandibular-fracture'], translations: { ko: { label: '수술 로보틱스·내비게이션' }, en: { label: 'Surgical Robotics & Navigation' } } },
+    { key: 'spatial-computing', slugs: ['skadi-tracking-software', 'respiratory-surface-guidance'], translations: { ko: { label: '컴퓨터비전·3D 공간 컴퓨팅' }, en: { label: 'Computer Vision & 3D Spatial Computing' } } },
+    { key: 'xr', slugs: ['life-careverse'], translations: { ko: { label: 'XR·공간 시각화' }, en: { label: 'XR & Spatial Visualization' } } },
+    { key: 'robotics', slugs: ['unmanned-forklift'], translations: { ko: { label: '로보틱스·자동화' }, en: { label: 'Robotics & Automation' } } },
+    { key: 'ai-build-lab', slugs: ['ai-build-lab'], translations: { ko: { label: 'AI 빌드 랩' }, en: { label: 'AI Build Lab' } } }
   ];
 
   var impactMetrics = [];
@@ -364,7 +365,7 @@
   var projects = [
     project({
       slug: 'surgical-navigation',
-      tier: 'medical-core',
+      tier: 'surgical-robotics',
       period: '2023.07 – present',
       evidenceState: 'prototype',
       lifecycleState: 'ongoing',
@@ -432,8 +433,8 @@
         ko: {
           title: 'SMCNavi · HoloLens 수술내비게이션',
           shortTitle: 'SMCNavi · HoloLens',
-          eyebrow: '의료 코어 · 연구 프로토타입',
-          thesis: '추적·정합·캘리브레이션을 SMCNavi에 통합하고, 그 결과를 HoloLens 공간 인터페이스까지 연결했습니다.',
+          eyebrow: '수술 로보틱스·내비게이션 · 연구 프로토타입',
+          thesis: '영상-환자 정합, 수술 도구 추적, 캘리브레이션을 SMCNavi에 통합하고, 그 결과를 HoloLens XR 수술 시각화까지 연결했습니다.',
           summary: 'DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 맞춤형 3D Slicer 수술내비게이션 플랫폼과 별도 HoloLens 공간 인터페이스 확장입니다.',
           problem: '구강악안면 내비게이션은 의료영상, 환자와 기구 좌표, 수술별 도구, 공간 표시가 한 흐름으로 맞아야 하지만 기능이 분절되면 정합 상태와 데이터 흐름을 검토하기 어렵습니다.',
           roleLabel: '3D 의료영상·수술내비게이션 개발자',
@@ -457,8 +458,8 @@
         en: {
           title: 'SMCNavi · HoloLens Surgical Navigation',
           shortTitle: 'SMCNavi · HoloLens',
-          eyebrow: 'Medical Core · Research Prototype',
-          thesis: 'Integrated tracking, registration, and calibration in SMCNavi, then carried the result into a HoloLens spatial interface.',
+          eyebrow: 'Surgical Robotics & Navigation · Research Prototype',
+          thesis: 'Integrated image-to-patient registration, surgical instrument tracking, and calibration in SMCNavi, then carried the result into XR surgical visualization on HoloLens.',
           summary: 'A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a research collaboration, plus a separate HoloLens spatial-interface extension.',
           problem: 'Oral and maxillofacial navigation must align medical images, patient and instrument coordinates, procedure-specific tools, and spatial presentation in one flow; fragmented functions make registration state and data flow difficult to inspect.',
           roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
@@ -684,7 +685,7 @@
       links: []
     }),
     project({
-      slug: 'mandibular-fracture', tier: 'medical-core', period: '2021.12 – 2023.02', evidenceState: 'verified', lifecycleState: 'completed',
+      slug: 'mandibular-fracture', tier: 'surgical-robotics', period: '2021.12 – 2023.02', evidenceState: 'verified', lifecycleState: 'completed',
       capabilityKeys: ['registration', 'medical-navigation'], route: 'projects/mandibular-fracture/',
       tech: ['Python', 'Open3D', 'OpenCV', 'SciPy', 'PCA', 'ICP', 'CLPSO', '3D Slicer'],
       media: {
@@ -714,7 +715,7 @@
       links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '게재 논문' }, en: { label: 'Publication' } } }],
       translations: {
         ko: {
-          title: '하악골 골절 정복 최적화', shortTitle: '하악골 골절 정복', eyebrow: '의료 코어 · 검증된 연구',
+          title: '하악골 골절 정복 최적화', shortTitle: '하악골 골절 정복', eyebrow: '수술 로보틱스·내비게이션 · 검증된 연구',
           thesis: '모호한 임상 문제를 검증 가능한 3D 정합과 최적화 문제로 바꿉니다.',
           summary: '치아 특징점과 골절 단면을 이용해 하악골 골절편 위치를 최적화하는 수술계획 시뮬레이터와 실험 파이프라인을 구성했습니다.',
           problem: '기하학적으로 가능한 여러 정복 위치 중 교합 관계를 반영하는 재현 가능한 표적이 필요했습니다.',
@@ -727,7 +728,7 @@
           status: '검증됨 · 완료', cardProblem: '모호한 정복 위치를 검증 가능한 3D 최적화 문제로 정의했습니다.', cardOwnedRole: '문제 정의부터 실험·논문까지 공동 리드했습니다.', cardEvidence: '게재 논문 그림·학회 발표·Q1 SCIE 논문·정량 실험.', problemSummary: '교합 제약을 반영한 재현 가능한 정복 표적을 정의합니다.', ownedRole: '연구 파이프라인을 공동 리드한 공동 제1저자입니다.', verifiedEvidence: '학술대회 발표, 수상, Q1 SCIE 논문 그림, 정량 실험.', visualAlt: '하악골 정복 표면 거리 맵.', visualCaption: '표면 거리 맵(논문 그림 3 일부).'
         },
         en: {
-          title: 'Mandibular Fracture Reduction Optimization', shortTitle: 'Mandibular Fracture Optimization', eyebrow: 'Medical Core · Verified Research',
+          title: 'Mandibular Fracture Reduction Optimization', shortTitle: 'Mandibular Fracture Optimization', eyebrow: 'Surgical Robotics & Navigation · Verified Research',
           thesis: 'Convert an ambiguous clinical problem into a testable 3D registration and optimization problem.',
           summary: 'Built a surgical-planning simulator and experiment pipeline that optimizes mandibular fragment pose using dental features and fracture surfaces.',
           problem: 'Many geometrically plausible reductions existed; the planning target needed a reproducible constraint grounded in occlusion.',
@@ -749,7 +750,7 @@
     }),
     project({
       slug: 'digital-occlusion-workflow',
-      tier: 'medical-core',
+      tier: 'surgical-robotics',
       period: '2026.03 – present',
       evidenceState: 'ongoing',
       lifecycleState: 'research',
@@ -1019,9 +1020,9 @@
         ko: {
           title: '구강악안면 디지털 교합 워크플로우',
           shortTitle: '디지털 교합 워크플로우',
-          eyebrow: '의료 코어 · 임상 워크플로우 통합',
+          eyebrow: '수술 로보틱스·내비게이션 · 임상 워크플로우 통합',
           thesis: '분리된 특징점·교합·평가 기능을 연구진이 한 앱에서 직접 다룰 수 있는 사용자 친화적 end-to-end 워크플로우로 재설계했습니다.',
-          summary: '8개 3D 모델 준비, 치아·악안면 특징점, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
+          summary: '8개 3D 모델 준비, AI 해부학 특징점 검출 모델을 통합한 치아·악안면 특징점 단계, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
           problem: '이전 흐름은 특징점 앱이 분리되어 참고 이미지 대조와 확대·이동이 불편했고, 교합의 다중 시점, 저장·불러오기, 악안면 특징점, 평가 화면이 충분히 통합되지 않았습니다.',
           role: '기술 리드·메인 개발자로 C++/Qt 셸, Python 모듈, 공통 라이브러리의 전체 Custom App 아키텍처를 설계하고 end-to-end UI/UX, 알고리즘·엔진 통합, 평가·내보내기, CMake/SuperBuild·테스트·패키징을 주도했습니다.',
           teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. DIGITRACK 협업 팀은 특징점 알고리즘과 교합 엔진 구현·연구를 지원했습니다.',
@@ -1039,9 +1040,9 @@
         en: {
           title: 'Maxillofacial Digital Occlusion Workflow',
           shortTitle: 'Digital Occlusion Workflow',
-          eyebrow: 'Medical Core · Clinical Workflow Integration',
+          eyebrow: 'Surgical Robotics & Navigation · Clinical Workflow Integration',
           thesis: 'Redesigned separate landmarking, occlusion, and evaluation tools into a user-friendly end-to-end workflow that researchers can operate in one application.',
-          summary: 'Connected eight-model preparation, dental and maxillofacial landmarks, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.',
+          summary: 'Connected eight-model preparation, a dental and maxillofacial landmark step that integrates an AI anatomical-landmark detection model, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.',
           problem: 'The earlier flow separated landmarking into another application, made reference comparison and view navigation awkward, lacked multi-view occlusion, fragmented save/load, omitted maxillofacial landmarks, and had no sufficiently integrated result screen.',
           role: 'As technical lead and primary developer, designed the complete Custom App architecture across the C++/Qt shell, Python modules, and shared library, and led the end-to-end UI/UX, algorithm and engine integration, evaluation/export, CMake/SuperBuild, testing, and packaging.',
           teamResult: 'Samsung Medical Center researchers jointly define the clinical workflow, landmarks, and evaluation metrics and directly review development builds. The DIGITRACK team supports the landmark algorithms and occlusion-engine implementation and research.',
@@ -1059,7 +1060,7 @@
       }
     }),
     project({
-      slug: 'life-careverse', tier: 'medical-core', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
+      slug: 'life-careverse', tier: 'xr', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
       tech: ['Unity 6', 'Photon PUN2', 'Photon Voice', 'OpenXR / Android XR', 'Meta Quest 3 · Galaxy XR', 'DICOM 3D'],
       media: {
@@ -1087,9 +1088,9 @@
       },
       translations: {
         ko: {
-          title: 'OMFS VR — 멀티유저 수술상담', shortTitle: 'OMFS VR', eyebrow: '의료 코어 · 멀티유저 VR',
+          title: 'OMFS VR — 멀티유저 수술상담', shortTitle: 'OMFS VR', eyebrow: 'XR·공간 시각화 · 멀티유저 VR',
           thesis: '의료진과 환자가 같은 VR 상담실에 동시 접속해 하나의 3D 악골 모델과 수술계획을 함께 보는 애플리케이션을 구현합니다.',
-          summary: '접속 순서로 역할이 정해지는 3인 VR 상담 세션을 Unity와 Photon PUN2·Voice로 구현하고, 환자 CT에서 만든 3D 악골 모델과 계측 패널을 세 시점이 같은 상태로 공유하도록 만들었습니다.',
+          summary: '접속 순서로 역할이 정해지는 3인 VR 상담 세션을 Unity와 Photon PUN2·Voice로 구현하고, 환자 CT에서 만든 3D 악골 모델과 계측 패널을 세 시점이 같은 상태로 공유하도록 만들었습니다. OpenXR 기반으로 구성해 Meta Quest 3와 Galaxy XR에서 동작합니다.',
           problem: '턱교정 수술 상담은 2D 계측과 3D 골격 변화를 같이 설명해야 하는데, 모니터 한 대를 함께 보는 방식으로는 의료진과 환자가 같은 지점을 보고 있는지 확인할 방법이 없었습니다.',
           role: 'Unity 클라이언트 전체를 맡아 Photon 룸과 역할 배정, 모델 자세·분절·페이지 상태 동기화, 음성 채팅과 발화자 표시, DICOM 볼륨 로딩, 백엔드 연동을 구현했고, 특정 제조사 SDK 의존을 걷어내고 OpenXR·Android XR로 옮기는 이식까지 수행했습니다.',
           teamResult: '소프트웨어 저작권 등록과 환자 데모·설문조사, 외부 병원 실증 계획은 연구팀 공동 결과입니다. 데모와 설문조사는 진행 중이고 외부 실증은 아직 예정 단계이므로, 확정된 것과 계획인 것을 구분해 적습니다.',
@@ -1100,9 +1101,9 @@
           status: '진행 중', cardProblem: '의료진과 환자가 같은 3D 수술계획을 같은 상태로 봅니다.', cardOwnedRole: '3인 VR 상담 Unity 클라이언트 전체를 구현했습니다.', cardEvidence: '세 시점을 동시에 녹화한 상담 세션 클립이 근거입니다.', problemSummary: '3인이 같은 VR 공간에서 같은 수술계획을 보게 만듭니다.', ownedRole: 'Photon 동기화부터 DICOM 로딩, 플랫폼 이식까지 클라이언트를 구현했습니다.', verifiedEvidence: '세 시점이 같은 모델 자세와 계측값을 보여주는 상담 세션 클립이 근거입니다.', visualAlt: '3인 VR 상담 세션의 3분할 동시 시점.', visualCaption: '3인 VR 상담 세션 동시 시점 클립.'
         },
         en: {
-          title: 'OMFS VR — Multi-user surgical consultation', shortTitle: 'OMFS VR', eyebrow: 'Medical Core · Multi-user VR',
+          title: 'OMFS VR — Multi-user surgical consultation', shortTitle: 'OMFS VR', eyebrow: 'XR & Spatial Visualization · Multi-user VR',
           thesis: 'Build an application where clinicians and a patient join the same VR consultation room and look at one shared 3D jaw model and surgical plan together.',
-          summary: 'Built a three-user VR consultation session in Unity with Photon PUN2 and Voice, where roles are assigned by join order and all three viewpoints share the same state of a CT-derived 3D jaw model and its measurement panel.',
+          summary: 'Built a three-user VR consultation session in Unity with Photon PUN2 and Voice, where roles are assigned by join order and all three viewpoints share the same state of a CT-derived 3D jaw model and its measurement panel. Built on OpenXR to run on Meta Quest 3 and Galaxy XR.',
           problem: 'Orthognathic consultation has to explain 2D measurements and 3D skeletal change at once, and gathering around a single monitor gave no way to confirm that clinician and patient were looking at the same thing.',
           role: 'Owned the Unity client end to end: Photon rooms and role assignment, synchronization of model pose, segments, and page state, voice chat with speaker indication, DICOM volume loading, and backend integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR.',
           teamResult: 'Software copyright registration, the patient demonstration and survey, and the planned external-hospital validation are joint research-team results. The demonstration and survey are under way; the external validation is still only planned.',
@@ -1121,7 +1122,7 @@
       ]
     }),
     project({
-      slug: 'rtms-navigation', tier: 'medical-core', period: '2024.07 – present', evidenceState: 'verified', lifecycleState: 'ongoing',
+      slug: 'rtms-navigation', tier: 'surgical-robotics', period: '2024.07 – present', evidenceState: 'verified', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
       tech: ['3D Slicer', 'VTK', 'PyQt5', 'Python', 'PyTorch', 'Optical tracking', 'TCP/IP binary protocol', 'License gating'],
       media: {
@@ -1149,7 +1150,7 @@
       },
       translations: {
         ko: {
-          title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '의료 코어 · 검증됨',
+          title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '수술 로보틱스·내비게이션 · 검증됨',
           thesis: '광학 트래킹과 3D Slicer를 라이선스로 배포되는 코일 내비게이션 제품으로 완성해, 코일의 위치·각도와 타깃 오차를 표시합니다.',
           summary: '3D Slicer 위에 시술 준비부터 실시간 코일 내비게이션까지 이어지는 화면 흐름, 랜드마크·ICP 정합 엔진, 광학 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 설계해 고객사에 납품하고 계속 유지보수합니다.',
           problem: '서로 다른 좌표계에 있는 의료영상, 트래커, 태블릿, 로봇을 하나의 검증 가능한 흐름으로 묶어야 했습니다.',
@@ -1162,7 +1163,7 @@
           status: '검증됨 · 진행 중', cardProblem: '서로 다른 좌표계의 장치를 하나의 제품 흐름으로 묶습니다.', cardOwnedRole: '화면 흐름·정합 엔진·장치 연동·제품 구조를 리드했습니다.', cardEvidence: '라이선스 게이팅 배포 빌드와 회귀 테스트 스위트.', problemSummary: '트래커·태블릿·로봇을 하나의 내비게이션 제품으로 묶습니다.', ownedRole: '화면 흐름, 정합 엔진, 장치 연동, 제품 구조를 리드했습니다.', verifiedEvidence: '라이선스 게이팅 배포 빌드와 이슈별 회귀 테스트가 근거이며 임상 결과는 주장하지 않습니다.', visualAlt: '전시 부스의 TMS 코일 내비게이션 로봇 시스템.', visualCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다.'
         },
         en: {
-          title: 'rTMS Coil Navigation Software (NeuroPilot)', shortTitle: 'NeuroPilot Coil Navigation', eyebrow: 'Medical Core · Verified',
+          title: 'rTMS Coil Navigation Software (NeuroPilot)', shortTitle: 'NeuroPilot Coil Navigation', eyebrow: 'Surgical Robotics & Navigation · Verified',
           thesis: 'Turn optical tracking and 3D Slicer into a license-gated coil-navigation product that gives operators position and angle guidance they can rely on.',
           summary: 'Designed the 3D Slicer workflow from procedure setup to real-time coil navigation, the landmark-and-ICP registration engine, tracker, tablet, and robot integration, and a license-gated product structure.',
           problem: 'Medical images, a tracker, a tablet, and a robot each sit in their own coordinate frame and had to become one verifiable flow.',
@@ -1183,7 +1184,7 @@
       ]
     }),
     project({
-      slug: 'respiratory-surface-guidance', tier: 'medical-core', period: '2026.06 – present', evidenceState: 'ongoing', lifecycleState: 'research',
+      slug: 'respiratory-surface-guidance', tier: 'spatial-computing', period: '2026.06 – present', evidenceState: 'ongoing', lifecycleState: 'research',
       capabilityKeys: ['registration', 'sensor-fusion', 'medical-navigation'], route: 'projects/respiratory-surface-guidance/',
       tech: ['ToF camera', 'Structured light', 'Qt', 'VTK', 'OpenCV', 'Python', '4DCT'],
       media: {
@@ -1211,7 +1212,7 @@
       },
       translations: {
         ko: {
-          title: '표면유도 호흡추적 (SGRT)', shortTitle: '표면유도 호흡추적', eyebrow: '의료 코어 · 방사선치료 연구',
+          title: '표면유도 호흡추적 (SGRT)', shortTitle: '표면유도 호흡추적', eyebrow: '컴퓨터비전·3D 공간 컴퓨팅 · 방사선치료 연구',
           thesis: '환자 체표면을 광학 3D로 읽어 셋업 정합과 호흡 게이팅 신호를 만드는 표면유도 방사선치료(SGRT)의 광학 파트를 국산 센서 스택으로 구성합니다.',
           summary: 'K-LINAC 대과제(주관 한국전기연구원, 세부주관 ETRI)의 디지트랙 위탁 연구로, 원거리 표면 재구성과 근거리 실시간 호흡 추적을 상용 3D 센서로 구현하는 초기 단계 연구입니다. 상용 시스템은 센서·알고리즘 선택 근거를 공개하지 않아, 국산 스택은 그 근거부터 직접 만들어야 합니다.',
           problem: '치료 중 환자의 위치와 호흡을 추가 촬영이나 피부 마킹 없이 알아야 합니다. 어떤 센서가 어느 거리에서 얼마나 정확한지부터 직접 재야 했습니다.',
@@ -1224,7 +1225,7 @@
           status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측표; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '센서 정밀도 실측표.', visualCaption: '센서 5종 거리별 정밀도 실측표.'
         },
         en: {
-          title: 'Surface-guided Respiratory Tracking (SGRT)', shortTitle: 'Surface-guided Respiratory Tracking', eyebrow: 'Medical Core · Radiotherapy Research',
+          title: 'Surface-guided Respiratory Tracking (SGRT)', shortTitle: 'Surface-guided Respiratory Tracking', eyebrow: 'Computer Vision & 3D Spatial Computing · Radiotherapy Research',
           thesis: 'Build the optical part of surface-guided radiotherapy — patient-surface setup registration and respiratory gating — on a domestic 3D sensor stack.',
           summary: 'An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme (led by KERI, imaging sub-project led by ETRI): far-field surface reconstruction and near-field real-time breathing tracking with commercial 3D sensors. Commercial systems do not publish the reasoning behind their sensor and algorithm choices, so a domestic stack has to build that evidence itself.',
           problem: 'Patient position and breathing must be known during treatment without extra imaging or skin marks.',
@@ -1246,7 +1247,7 @@
       ]
     }),
     project({
-      slug: 'skadi-tracking-software', tier: 'platform', period: '2023.02 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
+      slug: 'skadi-tracking-software', tier: 'spatial-computing', period: '2023.02 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/skadi-tracking-software/', caseLayout: 'product-console',
       tech: ['SKADI', 'C++', 'Python API', '3D Slicer', 'Optical tracking'],
       media: {
@@ -1333,8 +1334,8 @@
       },
       translations: {
         ko: {
-          title: 'SKADI 데스크톱 앱·API', shortTitle: 'SKADI 데스크톱 앱·API', eyebrow: '플랫폼 소프트웨어 · 광학 위치추적',
-          thesis: '하나의 SKADI 데스크톱 앱에서 API를 거쳐 의료 통합과 산업 확장으로 이어지는 제품 구조를 설명합니다.',
+          title: 'SKADI 데스크톱 앱·API', shortTitle: 'SKADI 데스크톱 앱·API', eyebrow: '컴퓨터비전·3D 공간 컴퓨팅 · 광학 위치추적',
+          thesis: '광학 마커 추적과 좌표 변환을 맡는 SKADI 데스크톱 앱과 API가 수술 도구 추적과 로봇 추적 응용의 기반이 되는 구조를 설명합니다.',
           summary: '마커 정의·파일 작업과 실시간 6DoF 상태를 한 데스크톱 앱에서 다루고, DtSkadi.dll API를 의료 수술내비게이션과 로봇 추적 응용에 연결합니다.',
           problem: '광학 트래커를 응용에 연결하려면 마커 정의, 장치 상태, API 열기 실패와 추적 좌표 전달을 예측 가능한 제품 인터페이스로 다뤄야 합니다.',
           role: 'DtSkadi.dll을 응용에 통합하고 OpenEx()의 오류 분기를 정리해 열기 실패 뒤 잘못된 상태로 진행하며 발생하던 크래시를 방지했습니다. MarkerEditor 입력 검증을 구현하고, 데스크톱 앱과 API의 유지보수·배포, 공개 문서와 통합 지원을 맡았습니다.',
@@ -1346,8 +1347,8 @@
           status: '진행 중', cardProblem: '데스크톱 앱에서 API를 거쳐 의료·산업 응용까지 하나의 추적 제품 흐름으로 연결합니다.', cardOwnedRole: '데스크톱 앱·API 안정성, 공개 문서와 통합 지원을 담당합니다.', cardEvidence: '앱 2종, 의료 2종, 산업 1종의 승인된 실제 화면.', problemSummary: '데스크톱 앱과 API를 의료·산업 응용에 연결합니다.', ownedRole: '데스크톱 앱·API 유지보수와 통합 지원을 맡습니다.', verifiedEvidence: '승인된 실제 화면 다섯 종이 근거입니다.', visualAlt: 'SKADI 데스크톱 앱과 API의 제품 흐름.', visualCaption: '데스크톱 앱 → API → 의료 통합 → 산업 확장.'
         },
         en: {
-          title: 'SKADI Desktop App & API', shortTitle: 'SKADI Desktop App & API', eyebrow: 'Platform Software · Optical Tracking',
-          thesis: 'One SKADI desktop app leads through the API to medical integration and an industrial extension.',
+          title: 'SKADI Desktop App & API', shortTitle: 'SKADI Desktop App & API', eyebrow: 'Computer Vision & 3D Spatial Computing · Optical Tracking',
+          thesis: 'The SKADI desktop app and API handle optical marker tracking and coordinate transformation, and form the base layer for surgical instrument tracking and robot-tracking applications.',
           summary: 'The desktop app handles marker definition, file work, and real-time 6DoF status, while the DtSkadi.dll API connects to surgical-navigation and robot-tracking applications.',
           problem: 'Connecting an optical tracker to applications requires predictable product interfaces for marker definition, device state, API-open failures, and delivery of tracked transforms.',
           role: 'Integrated DtSkadi.dll into applications, separated OpenEx() error branches so an open failure no longer continued into an invalid state and crash, and implemented MarkerEditor input validation. I maintain and release the desktop app and API, public documentation, and integration support.',
@@ -1367,7 +1368,7 @@
       ]
     }),
     project({
-      slug: 'unmanned-forklift', tier: 'industrial-spotlight', period: '2025.11 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
+      slug: 'unmanned-forklift', tier: 'robotics', period: '2025.11 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['sensor-fusion', 'registration'], route: 'projects/unmanned-forklift/',
       tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'],
       media: {
@@ -1394,8 +1395,8 @@
       },
       translations: {
         ko: {
-          title: '무인지게차 다중 센서 정합', shortTitle: '무인지게차 센서 정합', eyebrow: '산업 스포트라이트 · 다중 센서',
-          thesis: '센서 간 좌표 정합을 적용하고 인지 결과를 안전 판단과 차량 시스템에 연결합니다.',
+          title: '무인지게차 다중 센서 정합', shortTitle: '무인지게차 센서 정합', eyebrow: '로보틱스·자동화 · 다중 센서',
+          thesis: '수술 내비게이션의 좌표 정합을 로봇 센서와 안전 판단에 적용합니다.',
           summary: 'ToF-RGB-SAM3 정합, SICK TiM LiDAR와 NAV350 3D PCD 처리, 로봇 위치추정, 센서 융합, 안전 정책, Zenoh 결과 발행을 하나의 통합 흐름으로 연결했습니다.',
           problem: '센서별 데이터가 서로 다른 좌표와 주기로 들어와 안전 판단에 쓰일 수 있는 공통 흐름이 필요했습니다.',
           role: 'ToF-RGB-SAM3 정합, SICK TiM LiDAR·NAV350 3D PCD 처리, 로봇 위치추정, 센서 융합·안전 정책 판단, Zenoh 결과 발행을 담당했습니다.',
@@ -1407,8 +1408,8 @@
           status: '진행 중', cardProblem: '다중 센서 좌표를 정합해 안전 판단과 차량 시스템에 연결합니다.', cardOwnedRole: 'ToF-RGB-SAM3, LiDAR·NAV350 PCD, 위치추정, 안전 정책, Zenoh를 담당했습니다.', cardEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진이 근거입니다.', problemSummary: '다중 센서 좌표를 안전 판단과 차량 시스템에 연결합니다.', ownedRole: '정합, PCD, 위치추정, 센서 융합·안전 정책, Zenoh를 담당했습니다.', verifiedEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진까지만 공개 결과로 제시합니다.', visualAlt: '무인지게차 비전 서보잉 테스트 녹화.', visualCaption: '비전 서보잉 테스트 화면 녹화 클립.'
         },
         en: {
-          title: 'Multi-sensor Registration for an Autonomous Forklift', shortTitle: 'Autonomous Forklift Registration', eyebrow: 'Industrial Spotlight · Multi-sensor System',
-          thesis: 'Apply coordinate registration across sensors and connect perception to safety decisions and the vehicle system.',
+          title: 'Multi-sensor Registration for an Autonomous Forklift', shortTitle: 'Autonomous Forklift Registration', eyebrow: 'Robotics & Automation · Multi-sensor System',
+          thesis: 'Apply the coordinate registration used in surgical navigation between the robot, cameras, and sensors, and connect perception to safety decisions and the vehicle system.',
           summary: 'Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and NAV350 3D PCD processing, robot localization, sensor fusion, safety policy, and Zenoh publication into one integration flow.',
           problem: 'Sensor streams arrived in different coordinates and cycles and needed a common flow usable by safety decisions.',
           role: 'Owned ToF-RGB-SAM3 registration; SICK TiM LiDAR and NAV350 3D PCD processing; robot localization; sensor fusion and safety-policy decisions; and publishing results through Zenoh.',
