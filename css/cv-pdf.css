@@ -160,6 +160,16 @@
   align-self: baseline;
 }
 
+.sc-cv__list .sc-cv__authors,
+.sc-cv__list .sc-cv__meta {
+  grid-column: 2;
+}
+
+.sc-cv__authors {
+  color: var(--sc-muted);
+  font-size: .95rem;
+}
+
 .sc-cv__skills {
   margin: 0;
 }

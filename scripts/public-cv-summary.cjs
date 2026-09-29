@@ -263,6 +263,7 @@ function renderPublicCvSummary(cvValue, locale) {
     statuses: { granted: '등록', filed: '출원' },
     groups: { work: '직무', undergraduate: '학부', academic: '학회' },
     filedSuffix: '출원',
+    caseLink: '관련 프로젝트',
     boundary: '공개 승인된 사실만 싣습니다. 타인 개인정보와 미검증 성과 주장은 포함하지 않습니다.'
   } : {
     education: 'Education',
@@ -278,6 +279,7 @@ function renderPublicCvSummary(cvValue, locale) {
     statuses: { granted: 'Granted', filed: 'Filed' },
     groups: { work: 'Employment', undergraduate: 'Undergraduate', academic: 'Academic society' },
     filedSuffix: 'filed',
+    caseLink: 'Related project',
     boundary: 'Only approved public facts appear here. Personal information about other people and unverified outcome claims are excluded.'
   };
 
@@ -330,7 +332,12 @@ ${areas}
     const titleHtml = record.href === undefined
       ? `<span class="sc-cv__title">${title}</span>`
       : `<a class="sc-cv__title" href="${htmlEscape(safePublicHref(record.href, `${label} href`))}" target="_blank" rel="noopener">${title}</a>`;
-    return `          <li><time>${htmlEscape(requireText(record.year, `${label} year`))}</time>${titleHtml}<span class="sc-cv__meta">${htmlEscape(entryCopy.venue)} · ${htmlEscape(entryCopy.role)}</span></li>`;
+    const authorsHtml = record.authors === undefined ? '' : `<span class="sc-cv__authors">${requireArray(record.authors, `${label} authors`).map((name, nameIndex) => {
+      const text = htmlEscape(requireText(name, `${label} author ${nameIndex + 1}`));
+      return name === 'Jinmin Kim' ? `<strong>${text}</strong>` : text;
+    }).join(', ')}</span>`;
+    const caseHtml = record.projectSlug === undefined ? '' : ` · <a class="sc-cv__case" href="../projects/${htmlEscape(requireText(record.projectSlug, `${label} projectSlug`))}/index.html">${copy.caseLink}</a>`;
+    return `          <li><time>${htmlEscape(requireText(record.year, `${label} year`))}</time>${titleHtml}${authorsHtml}<span class="sc-cv__meta">${htmlEscape(entryCopy.venue)} · ${htmlEscape(entryCopy.role)}${caseHtml}</span></li>`;
   }).join('\n');
 
   const patentHtml = patents.map((entry, index) => {

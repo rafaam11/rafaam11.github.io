@@ -19,6 +19,26 @@
       }
     }
   },
+  "interests": {
+    "ko": [
+      "수술 로보틱스",
+      "Physical AI",
+      "Surgical AI",
+      "3D 비전",
+      "로봇 인지",
+      "멀티모달 인지",
+      "공간 지능"
+    ],
+    "en": [
+      "Surgical Robotics",
+      "Physical AI",
+      "Surgical AI",
+      "3D Vision",
+      "Robot Perception",
+      "Multimodal Perception",
+      "Spatial Intelligence"
+    ]
+  },
   "contacts": [
     {
       "label": "Email",
@@ -198,11 +218,19 @@
           "venue": "2026 Spring Conference, Korean Society of Medical Metaverse",
           "role": "Poster presentation · Co-author"
         }
-      }
+      },
+      "projectSlug": "life-careverse"
     },
     {
       "year": "2024",
       "href": "https://link.springer.com/article/10.1007/s10278-024-01014-z",
+      "authors": [
+        "Jinmin Kim",
+        "Deokgi Jeung",
+        "Ranyeong Cho",
+        "Byoungeun Yang",
+        "Jaesung Hong"
+      ],
       "translations": {
         "ko": {
           "title": "A Proof of Concept: Optimized Jawbone-Reduction Model for Mandibular Fracture Surgery",
@@ -214,7 +242,8 @@
           "venue": "Journal of Imaging Informatics in Medicine (SCIE, Q1)",
           "role": "Journal article · Joint first author"
         }
-      }
+      },
+      "projectSlug": "mandibular-fracture"
     },
     {
       "year": "2024",
@@ -229,7 +258,8 @@
           "venue": "2024 Spring Conference, Korean Society of Medical Metaverse",
           "role": "Poster presentation · Co-author · Best Poster Award"
         }
-      }
+      },
+      "projectSlug": "digital-occlusion-workflow"
     },
     {
       "year": "2023",
@@ -244,7 +274,8 @@
           "venue": "14th Conference, Korean Society of Medical Robotics",
           "role": "Oral presentation · Co-author · Best Paper Award"
         }
-      }
+      },
+      "projectSlug": "mandibular-fracture"
     },
     {
       "year": "2022",
@@ -259,7 +290,8 @@
           "venue": "ACCAS 2022",
           "role": "International conference paper · First author"
         }
-      }
+      },
+      "projectSlug": "mandibular-fracture"
     },
     {
       "year": "2022",
@@ -274,7 +306,8 @@
           "venue": "13th Conference, Korean Society of Medical Robotics",
           "role": "Oral presentation · First author"
         }
-      }
+      },
+      "projectSlug": "mandibular-fracture"
     },
     {
       "year": "2019",

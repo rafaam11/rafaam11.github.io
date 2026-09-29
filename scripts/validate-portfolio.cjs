@@ -1168,7 +1168,14 @@ function publicCvDataErrors(candidate) {
     const match = serialized.match(pattern);
     if (match) errors.push(`Public CV data contains a prohibited private or unverified claim: ${match[0]}.`);
   }
-  requireKeys(candidate, ['version', 'identity', 'contacts', 'education', 'experience', 'publications', 'patents', 'awards', 'skills', 'languages', 'sourcePdfs'], 'Public CV data');
+  requireKeys(candidate, ['version', 'identity', 'contacts', 'education', 'experience', 'publications', 'patents', 'awards', 'skills', 'languages', 'sourcePdfs'], 'Public CV data', ['interests']);
+  // Research interests are a direction, not claimed expertise; both locales list the same seven terms.
+  if (candidate.interests !== undefined && requireKeys(candidate.interests, ['ko', 'en'], 'Public CV interests')) {
+    for (const locale of ['ko', 'en']) {
+      const list = candidate.interests[locale];
+      if (!Array.isArray(list) || list.length !== 7 || !list.every(isText)) errors.push(`Public CV interests ${locale} must list exactly 7 terms.`);
+    }
+  }
   if (/4D\s*CBCT/i.test(serialized)) errors.push('Public CV must use the PDF term 4D CT.');
   if (/\?{2,}|\ufffd/.test(serialized)) errors.push('Public CV contains damaged text encoding.');
   const reviewedPatentStates = {'10-2024-0186869':'granted','10-2024-0186864':'granted','10-2024-0127937':'filed','10-2021-0008332':'filed','10-2019-0100328':'granted','10-2019-0010185':'filed','10-2015-0122661':'filed'};
@@ -1251,10 +1258,17 @@ function publicCvDataErrors(candidate) {
   } else {
     for (const [index, entry] of candidate.publications.entries()) {
       const label = `Public CV publication ${index + 1}`;
-      if (!requireKeys(entry, ['year', 'translations'], label, ['href'])) continue;
+      if (!requireKeys(entry, ['year', 'translations'], label, ['href', 'authors', 'projectSlug'])) continue;
       if (!isText(entry.year)) errors.push(`${label} year must be a non-empty string.`);
       requireTranslations(entry.translations, ['title', 'venue', 'role'], label);
       if (entry.href !== undefined && !isSafeHttpsUrl(entry.href)) errors.push(`${label} has an invalid public link.`);
+      // Co-author names are an approved exception for the author's own JIIM 2024 citation only.
+      if (entry.authors !== undefined && (!/s10278-024-01014-z/.test(entry.href || '') || JSON.stringify(entry.authors) !== JSON.stringify(['Jinmin Kim', 'Deokgi Jeung', 'Ranyeong Cho', 'Byoungeun Yang', 'Jaesung Hong']))) {
+        errors.push(`${label} authors are approved only for the JIIM 2024 citation.`);
+      }
+      if (entry.projectSlug !== undefined && !(data.projects || []).some((project) => project.slug === entry.projectSlug)) {
+        errors.push(`${label} projectSlug must name a public case.`);
+      }
     }
   }
   if (!Array.isArray(candidate.patents) || candidate.patents.length !== 7) {
