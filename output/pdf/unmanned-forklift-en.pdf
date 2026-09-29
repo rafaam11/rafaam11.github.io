@@ -748,8 +748,8 @@ endobj
 endobj
 28 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
-  /Subject (Apply coordinate registration across sensors and connect perception to safety decisions and the vehicle system.) /Title (Multi-sensor Registration for an Autonomous Forklift) /Trapped /False
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+  /Subject (Apply the coordinate registration used in surgical navigation between the robot, cameras, and sensors, and connect perception to safety decisions and the vehicle system.) /Title (Multi-sensor Registration for an Autonomous Forklift) /Trapped /False
 >>
 endobj
 29 0 obj
@@ -759,7 +759,7 @@ endobj
 endobj
 30 0 obj
 <<
-/Length 2600
+/Length 2744
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -777,39 +777,41 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 5) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Industrial Spotlight \001 Multi-sensor System) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Robotics & Automation \001 Multi-sensor System) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 719.8898 Tm /F3+0 24 Tf 28.8 TL (Multi-sensor Registration for an) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 688.8898 Tm /F3+0 24 Tf 28.8 TL (Autonomous Forklift) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 654.8898 Tm /F3+0 13 Tf 15.6 TL (Apply coordinate registration across sensors and connect perception to safety) Tj T* ET
+BT 1 0 0 1 48 654.8898 Tm /F3+0 13 Tf 15.6 TL (Apply the coordinate registration used in surgical navigation between the) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 634.8898 Tm /F3+0 13 Tf 15.6 TL (decisions and the vehicle system.) Tj T* ET
+BT 1 0 0 1 48 634.8898 Tm /F3+0 13 Tf 15.6 TL (robot, cameras, and sensors, and connect perception to safety decisions and) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 614.8898 Tm /F3+0 13 Tf 15.6 TL (the vehicle system.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 604.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2025.11 - present   |   Evidence state Ongoing   |   Portfolio tier Industrial Spotlight) Tj T* ET
+BT 1 0 0 1 48 584.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2025.11 - present   |   Evidence state Ongoing   |   Portfolio tier Robotics & Automation) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
-n 48 581.8898 m 547.2756 581.8898 l S
+n 48 561.8898 m 547.2756 561.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and NAV350 3D PCD processing, robot localization,) Tj T* ET
+BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and NAV350 3D PCD processing, robot localization,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (sensor fusion, safety policy, and Zenoh publication into one integration flow.) Tj T* ET
+BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (sensor fusion, safety policy, and Zenoh publication into one integration flow.) Tj T* ET
 q
-499.2756 0 0 280.8425 48 239.0472 cm
+499.2756 0 0 280.8425 48 219.0472 cm
 /FormXob.19b063d99f272bd72d5eb47086b6b398 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 218.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Screen recording of the DOTORI vision-servoing test \(3D view, camera feed, signal plots\).) Tj T* ET
+BT 1 0 0 1 48 198.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Screen recording of the DOTORI vision-servoing test \(3D view, camera feed, signal plots\).) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 187.0472 m 547.2756 187.0472 l S
+n 48 167.0472 m 547.2756 167.0472 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 153.0472 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
+BT 1 0 0 1 48 133.0472 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 127.5472 Tm /F3+0 11.5 Tf 13.8 TL (Sensor streams arrived in different coordinates and cycles and needed a common flow) Tj T* ET
+BT 1 0 0 1 48 107.5472 Tm /F3+0 11.5 Tf 13.8 TL (Sensor streams arrived in different coordinates and cycles and needed a common flow) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 109.5472 Tm /F3+0 11.5 Tf 13.8 TL (usable by safety decisions.) Tj T* ET
+BT 1 0 0 1 48 89.54724 Tm /F3+0 11.5 Tf 13.8 TL (usable by safety decisions.) Tj T* ET
  
 endstream
 endobj
@@ -1016,7 +1018,7 @@ endstream
 endobj
 33 0 obj
 <<
-/Length 2867
+/Length 2879
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1072,7 +1074,7 @@ BT 1 0 0 1 48 99.04724 Tm /F2+0 10 Tf 12 TL (C++23 \001 ROS 2 \001 Zenoh \001 To
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 74.04724 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 54.04724 Tm /F2+0 10 Tf 12 TL (Sensor Fusion & Localization \001 3D Geometry & Registration) Tj T* ET
+BT 1 0 0 1 48 54.04724 Tm /F2+0 10 Tf 12 TL (Robot Vision & Sensor Integration \001 3D Registration & Computer Vision) Tj T* ET
  
 endstream
 endobj
@@ -1148,16 +1150,16 @@ xref
 0009157000 00000 n 
 0009158366 00000 n 
 0009158436 00000 n 
-0009158913 00000 n 
-0009159000 00000 n 
-0009161652 00000 n 
-0009167674 00000 n 
-0009168856 00000 n 
-0009171775 00000 n 
+0009158993 00000 n 
+0009159080 00000 n 
+0009161876 00000 n 
+0009167898 00000 n 
+0009169080 00000 n 
+0009172011 00000 n 
 trailer
 <<
 /ID 
-[<6f2554ee5bc33ea341255c6bb38699cc><6f2554ee5bc33ea341255c6bb38699cc>]
+[<39d96eb4d7626d48630bc719517c598a><39d96eb4d7626d48630bc719517c598a>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 28 0 R
@@ -1165,5 +1167,5 @@ trailer
 /Size 35
 >>
 startxref
-9173451
+9173687
 %%EOF

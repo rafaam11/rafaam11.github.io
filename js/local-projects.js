@@ -34,8 +34,8 @@
       const target=block('research-pipeline');
       const stages=[
         ['M076','점군과 단면','Point clouds and cross-sections','특징 설계의 입력을 설명할 장면입니다. 파란 점으로 표현된 단면의 모양을 살펴봅니다.','A candidate view of the input to feature design: inspect the shapes of cross-sections represented by blue points.'],
-        ['M077','치열궁과 방향','Dental arch and directions','치열궁의 곡선과 가로지르는 선분을 함께 보며 단면 방향을 설명할 후보입니다. 정확한 기호 의미는 확인 전입니다.','The arch curve and crossing segments provide a candidate illustration of section directions. The exact meaning of the symbols remains unconfirmed.'],
-        ['M084','치아 구조 구분','Distinguishing tooth structures','치아별로 다른 색의 점군을 통해 구조 구분을 설명할 후보입니다. 색상만으로 자동 분할 성능을 판단하지 않습니다.','Differently coloured tooth point clouds provide a candidate illustration of structural distinctions. Colours alone do not establish automatic segmentation performance.']
+        ['M077','치열궁과 방향','Dental arch and directions','치열궁 곡선과 이를 가로지르는 선분을 함께 그린 연구 자료입니다.','Research material drawing the dental arch curve with crossing segments.'],
+        ['M084','치아 구조 구분','Distinguishing tooth structures','치아마다 다른 색으로 표시한 점군으로 구조를 구분해 보여 줍니다. 색상은 시각화용이며 자동 분할 성능을 뜻하지 않습니다.','Tooth point clouds shown in different colours to distinguish structures. The colours are for visualisation and do not indicate automatic segmentation performance.']
       ];
       const firstExisting=target.querySelector('figure');
       stages.forEach(([id,ko,en,bodyKo,bodyEn])=>{const stage=node(`<section class="pf-context"><h4>${lang==='ko'?ko:en}</h4><p>${lang==='ko'?bodyKo:bodyEn}</p>${figure(id,lang,base,local.media)}</section>`);target.insertBefore(stage,firstExisting);});

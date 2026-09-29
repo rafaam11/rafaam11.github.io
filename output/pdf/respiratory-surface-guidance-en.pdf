@@ -170,14 +170,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 462.8898 141.5852 478.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 446.8898 141.5852 462.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 22 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 442.8898 128.2212 458.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 426.8898 128.2212 442.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 23 0 obj
@@ -793,7 +793,7 @@ endobj
 endobj
 33 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
   /Subject (Build the optical part of surface-guided radiotherapy - patient-surface setup registration and respiratory gating - on a domestic 3D sensor stack.) /Title (Surface-guided Respiratory Tracking \(SGRT\)) /Trapped /False
 >>
 endobj
@@ -804,7 +804,7 @@ endobj
 endobj
 35 0 obj
 <<
-/Length 3171
+/Length 3208
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -822,7 +822,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Medical Core \001 Radiotherapy Research) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Computer Vision & 3D Spatial Computing \001 Radiotherapy Research) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 719.8898 Tm /F3+0 24 Tf 28.8 TL (Surface-guided Respiratory Tracking) Tj T* ET
 .101961 .101961 .101961 rg
@@ -832,41 +832,41 @@ BT 1 0 0 1 48 654.8898 Tm /F3+0 13 Tf 15.6 TL (Build the optical part of surface
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 634.8898 Tm /F3+0 13 Tf 15.6 TL (registration and respiratory gating - on a domestic 3D sensor stack.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 604.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2026.06 - present   |   Evidence state Ongoing \001 Research   |   Portfolio tier Medical Core) Tj T* ET
+BT 1 0 0 1 48 604.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2026.06 - present   |   Evidence state Ongoing \001 Research   |   Portfolio tier Computer Vision & 3D Spatial) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 590.8898 Tm /F2+0 9 Tf 10.8 TL (Computing) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
-n 48 581.8898 m 547.2756 581.8898 l S
+n 48 567.8898 m 547.2756 567.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme \(led by KERI,) Tj T* ET
+BT 1 0 0 1 48 543.8898 Tm /F2+0 10 Tf 12 TL (An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme \(led by KERI,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (imaging sub-project led by ETRI\): far-field surface reconstruction and near-field real-time breathing tracking) Tj T* ET
+BT 1 0 0 1 48 527.8898 Tm /F2+0 10 Tf 12 TL (imaging sub-project led by ETRI\): far-field surface reconstruction and near-field real-time breathing tracking) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 525.8898 Tm /F2+0 10 Tf 12 TL (with commercial 3D sensors. Commercial systems do not publish the reasoning behind their sensor and) Tj T* ET
+BT 1 0 0 1 48 511.8898 Tm /F2+0 10 Tf 12 TL (with commercial 3D sensors. Commercial systems do not publish the reasoning behind their sensor and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 509.8898 Tm /F2+0 10 Tf 12 TL (algorithm choices, so a domestic stack has to build that evidence itself.) Tj T* ET
+BT 1 0 0 1 48 495.8898 Tm /F2+0 10 Tf 12 TL (algorithm choices, so a domestic stack has to build that evidence itself.) Tj T* ET
 q
-499.2756 0 0 280.8425 48 207.0472 cm
+499.2756 0 0 280.8425 48 193.0472 cm
 /FormXob.6e0c6d703478b2824a9cb10eb2360f52 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 186.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise \002 are) Tj T* ET
+BT 1 0 0 1 48 172.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise \002 are) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 174.5472 Tm /F2+0 8.5 Tf 10.2 TL (computed live from the ROI on the point cloud. Device serial and address are masked.) Tj T* ET
+BT 1 0 0 1 48 160.5472 Tm /F2+0 8.5 Tf 10.2 TL (computed live from the ROI on the point cloud. Device serial and address are masked.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 143.0472 m 547.2756 143.0472 l S
+n 48 129.0472 m 547.2756 129.0472 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 109.0472 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
+BT 1 0 0 1 48 95.04724 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 83.54724 Tm /F3+0 11.5 Tf 13.8 TL (Patient position and breathing must be known during treatment without extra imaging or) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 65.54724 Tm /F3+0 11.5 Tf 13.8 TL (skin marks.) Tj T* ET
+BT 1 0 0 1 48 69.54724 Tm /F3+0 11.5 Tf 13.8 TL (Patient position and breathing must be known during treatment without extra imaging or) Tj T* ET
  
 endstream
 endobj
 36 0 obj
 <<
-/Length 8233
+/Length 7957
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -883,191 +883,186 @@ BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (Surface-guided Respiratory Tracking \(SGR
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (2 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 752.3898 Tm /F3+0 11.5 Tf 13.8 TL (skin marks.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 749.8898 m 547.2756 749.8898 l S
+n 48 721.8898 m 547.2756 721.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 715.8898 Tm /F3+0 14 Tf 16.8 TL (Owned decisions and implementation) Tj T* ET
+BT 1 0 0 1 48 687.8898 Tm /F3+0 14 Tf 16.8 TL (Owned decisions and implementation) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 690.8898 Tm /F3+0 11 Tf 13.2 TL (My role) Tj T* ET
+BT 1 0 0 1 48 662.8898 Tm /F3+0 11 Tf 13.2 TL (My role) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 670.8898 Tm /F2+0 10 Tf 12 TL (Lead the sensor validation campaign, which first required building the in-house tool DtDepthScan \(Qt, VTK,) Tj T* ET
+BT 1 0 0 1 48 642.8898 Tm /F2+0 10 Tf 12 TL (Lead the sensor validation campaign, which first required building the in-house tool DtDepthScan \(Qt, VTK,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 654.8898 Tm /F2+0 10 Tf 12 TL (OpenCV\): raw continuous recording with acquisition timestamps, ROI depth time series, automatic \002,) Tj T* ET
+BT 1 0 0 1 48 626.8898 Tm /F2+0 10 Tf 12 TL (OpenCV\): raw continuous recording with acquisition timestamps, ROI depth time series, automatic \002,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 638.8898 Tm /F2+0 10 Tf 12 TL (delivered fps and fill rate, and PLY/CSV export for cross-checking elsewhere. Then design and implement the) Tj T* ET
+BT 1 0 0 1 48 610.8898 Tm /F2+0 10 Tf 12 TL (delivered fps and fill rate, and PLY/CSV export for cross-checking elsewhere. Then design and implement the) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 622.8898 Tm /F2+0 10 Tf 12 TL (breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal, define the sensor) Tj T* ET
+BT 1 0 0 1 48 594.8898 Tm /F2+0 10 Tf 12 TL (breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal, define the sensor) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 606.8898 Tm /F2+0 10 Tf 12 TL (interface and transport protocol, and run day-to-day project work.) Tj T* ET
+BT 1 0 0 1 48 578.8898 Tm /F2+0 10 Tf 12 TL (interface and transport protocol, and run day-to-day project work.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 577.8898 Tm /F3+0 11 Tf 13.2 TL (Two optical tracks) Tj T* ET
+BT 1 0 0 1 48 549.8898 Tm /F3+0 11 Tf 13.2 TL (Two optical tracks) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Far-field sensors merge point clouds into a surface and register it to the planning CT; near-field sensors turn) Tj T* ET
+BT 1 0 0 1 48 529.8898 Tm /F2+0 10 Tf 12 TL (Far-field sensors merge point clouds into a surface and register it to the planning CT; near-field sensors turn) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (chest and abdomen ROI depth into a respiratory waveform and gating signal.) Tj T* ET
+BT 1 0 0 1 48 513.8898 Tm /F2+0 10 Tf 12 TL (chest and abdomen ROI depth into a respiratory waveform and gating signal.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 512.8898 Tm /F3+0 11 Tf 13.2 TL (The tool came first) Tj T* ET
+BT 1 0 0 1 48 484.8898 Tm /F3+0 11 Tf 13.2 TL (The tool came first) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 492.8898 Tm /F2+0 10 Tf 12 TL (Abstracting the camera layer lets any sensor run the same procedure. Timestamped raw recording gives) Tj T* ET
+BT 1 0 0 1 48 464.8898 Tm /F2+0 10 Tf 12 TL (Abstracting the camera layer lets any sensor run the same procedure. Timestamped raw recording gives) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 476.8898 Tm /F2+0 10 Tf 12 TL (delivered fps, ROI depth time series yield \002 and fill rate automatically, and PLY and CSV export allow) Tj T* ET
+BT 1 0 0 1 48 448.8898 Tm /F2+0 10 Tf 12 TL (delivered fps, ROI depth time series yield \002 and fill rate automatically, and PLY and CSV export allow) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 460.8898 Tm /F2+0 10 Tf 12 TL (cross-checking elsewhere.) Tj T* ET
+BT 1 0 0 1 48 432.8898 Tm /F2+0 10 Tf 12 TL (cross-checking elsewhere.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 431.8898 Tm /F3+0 11 Tf 13.2 TL (One procedure, five sensors) Tj T* ET
+BT 1 0 0 1 48 403.8898 Tm /F3+0 11 Tf 13.2 TL (One procedure, five sensors) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 411.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 411.8898 Tm /F2+0 10 Tf 12 TL (Silicone body phantom, five distances 0.5-3.0 m) Tj T* ET
+BT 1 0 0 1 48 383.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 383.8898 Tm /F2+0 10 Tf 12 TL (Silicone body phantom, five distances 0.5-3.0 m) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 395.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 395.8898 Tm /F2+0 10 Tf 12 TL (Five sensors and condition sweeps, 55 runs) Tj T* ET
+BT 1 0 0 1 48 367.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 367.8898 Tm /F2+0 10 Tf 12 TL (Five sensors and condition sweeps, 55 runs) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 379.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 379.8898 Tm /F2+0 10 Tf 12 TL (500 frames per run) Tj T* ET
+BT 1 0 0 1 48 351.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 351.8898 Tm /F2+0 10 Tf 12 TL (500 frames per run) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 363.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 363.8898 Tm /F2+0 10 Tf 12 TL (Repeatability \0030.05 mm, \002 settles by 50 frames) Tj T* ET
+BT 1 0 0 1 48 335.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 335.8898 Tm /F2+0 10 Tf 12 TL (Repeatability \0030.05 mm, \002 settles by 50 frames) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 333.8898 Tm /F3+0 10.5 Tf 12.6 TL (Two optical tracks converging on one output) Tj T* ET
+BT 1 0 0 1 48 305.8898 Tm /F3+0 10.5 Tf 12.6 TL (Two optical tracks converging on one output) Tj T* ET
 .101961 .337255 .858824 RG
 1.2 w
-n 186 255.8898 m 223.6378 291.8898 l S
+n 186 227.8898 m 223.6378 263.8898 l S
 .101961 .337255 .858824 rg
 n
-225.8378 291.8898 m
-225.8378 293.1048 224.8528 294.0898 223.6378 294.0898 c
-222.4228 294.0898 221.4378 293.1048 221.4378 291.8898 c
-221.4378 290.6747 222.4228 289.6898 223.6378 289.6898 c
-224.8528 289.6898 225.8378 290.6747 225.8378 291.8898 c
+225.8378 263.8898 m
+225.8378 265.1048 224.8528 266.0898 223.6378 266.0898 c
+222.4228 266.0898 221.4378 265.1048 221.4378 263.8898 c
+221.4378 262.6747 222.4228 261.6898 223.6378 261.6898 c
+224.8528 261.6898 225.8378 262.6747 225.8378 263.8898 c
 f*
 .603922 .203922 .070588 RG
 1.2 w
-n 371.6378 291.8898 m 397.2756 255.8898 l S
+n 371.6378 263.8898 m 397.2756 227.8898 l S
 .603922 .203922 .070588 rg
 n
-399.4756 255.8898 m
-399.4756 257.1048 398.4906 258.0898 397.2756 258.0898 c
-396.0606 258.0898 395.0756 257.1048 395.0756 255.8898 c
-395.0756 254.6747 396.0606 253.6898 397.2756 253.6898 c
-398.4906 253.6898 399.4756 254.6747 399.4756 255.8898 c
+399.4756 227.8898 m
+399.4756 229.1048 398.4906 230.0898 397.2756 230.0898 c
+396.0606 230.0898 395.0756 229.1048 395.0756 227.8898 c
+395.0756 226.6747 396.0606 225.6898 397.2756 225.6898 c
+398.4906 225.6898 399.4756 226.6747 399.4756 227.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 186 255.8898 m 223.6378 219.8898 l S
+n 186 227.8898 m 223.6378 191.8898 l S
 .101961 .337255 .858824 rg
 n
-225.8378 219.8898 m
-225.8378 221.1048 224.8528 222.0898 223.6378 222.0898 c
-222.4228 222.0898 221.4378 221.1048 221.4378 219.8898 c
-221.4378 218.6747 222.4228 217.6898 223.6378 217.6898 c
-224.8528 217.6898 225.8378 218.6747 225.8378 219.8898 c
+225.8378 191.8898 m
+225.8378 193.1048 224.8528 194.0898 223.6378 194.0898 c
+222.4228 194.0898 221.4378 193.1048 221.4378 191.8898 c
+221.4378 190.6747 222.4228 189.6898 223.6378 189.6898 c
+224.8528 189.6898 225.8378 190.6747 225.8378 191.8898 c
 f*
 .603922 .203922 .070588 RG
 1.2 w
-n 371.6378 219.8898 m 397.2756 255.8898 l S
+n 371.6378 191.8898 m 397.2756 227.8898 l S
 .603922 .203922 .070588 rg
 n
-399.4756 255.8898 m
-399.4756 257.1048 398.4906 258.0898 397.2756 258.0898 c
-396.0606 258.0898 395.0756 257.1048 395.0756 255.8898 c
-395.0756 254.6747 396.0606 253.6898 397.2756 253.6898 c
-398.4906 253.6898 399.4756 254.6747 399.4756 255.8898 c
+399.4756 227.8898 m
+399.4756 229.1048 398.4906 230.0898 397.2756 230.0898 c
+396.0606 230.0898 395.0756 229.1048 395.0756 227.8898 c
+395.0756 226.6747 396.0606 225.6898 397.2756 225.6898 c
+398.4906 225.6898 399.4756 226.6747 399.4756 227.8898 c
 f*
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-69 230.8898 m
-183 230.8898 l
-184.6584 230.8898 186 232.2314 186 233.8898 c
-186 277.8898 l
-186 279.5482 184.6584 280.8898 183 280.8898 c
-69 280.8898 l
-67.3416 280.8898 66 279.5482 66 277.8898 c
-66 233.8898 l
-66 232.2314 67.3416 230.8898 69 230.8898 c
+69 202.8898 m
+183 202.8898 l
+184.6584 202.8898 186 204.2314 186 205.8898 c
+186 249.8898 l
+186 251.5482 184.6584 252.8898 183 252.8898 c
+69 252.8898 l
+67.3416 252.8898 66 251.5482 66 249.8898 c
+66 205.8898 l
+66 204.2314 67.3416 202.8898 69 202.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 75 264.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
+BT 1 0 0 1 75 236.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 75 247.8898 Tm /F3+0 7.4 Tf 8.88 TL (3D optical sensors) Tj T* ET
+BT 1 0 0 1 75 219.8898 Tm /F3+0 7.4 Tf 8.88 TL (3D optical sensors) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-226.6378 269.8898 m
-368.6378 269.8898 l
-370.2962 269.8898 371.6378 271.2314 371.6378 272.8898 c
-371.6378 310.8898 l
-371.6378 312.5482 370.2962 313.8898 368.6378 313.8898 c
-226.6378 313.8898 l
-224.9794 313.8898 223.6378 312.5482 223.6378 310.8898 c
-223.6378 272.8898 l
-223.6378 271.2314 224.9794 269.8898 226.6378 269.8898 c
+226.6378 241.8898 m
+368.6378 241.8898 l
+370.2962 241.8898 371.6378 243.2314 371.6378 244.8898 c
+371.6378 282.8898 l
+371.6378 284.5482 370.2962 285.8898 368.6378 285.8898 c
+226.6378 285.8898 l
+224.9794 285.8898 223.6378 284.5482 223.6378 282.8898 c
+223.6378 244.8898 l
+223.6378 243.2314 224.9794 241.8898 226.6378 241.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 232.6378 300.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
+BT 1 0 0 1 232.6378 272.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 232.6378 283.8898 Tm /F3+0 7.4 Tf 8.88 TL (Far field: surface reconstruction and) Tj T* ET
-BT 1 0 0 1 232.6378 273.8898 Tm /F3+0 7.4 Tf 8.88 TL (CT registration) Tj T* ET
+BT 1 0 0 1 232.6378 255.8898 Tm /F3+0 7.4 Tf 8.88 TL (Far field: surface reconstruction and) Tj T* ET
+BT 1 0 0 1 232.6378 245.8898 Tm /F3+0 7.4 Tf 8.88 TL (CT registration) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-226.6378 197.8898 m
-368.6378 197.8898 l
-370.2962 197.8898 371.6378 199.2314 371.6378 200.8898 c
-371.6378 238.8898 l
-371.6378 240.5482 370.2962 241.8898 368.6378 241.8898 c
-226.6378 241.8898 l
-224.9794 241.8898 223.6378 240.5482 223.6378 238.8898 c
-223.6378 200.8898 l
-223.6378 199.2314 224.9794 197.8898 226.6378 197.8898 c
+226.6378 169.8898 m
+368.6378 169.8898 l
+370.2962 169.8898 371.6378 171.2314 371.6378 172.8898 c
+371.6378 210.8898 l
+371.6378 212.5482 370.2962 213.8898 368.6378 213.8898 c
+226.6378 213.8898 l
+224.9794 213.8898 223.6378 212.5482 223.6378 210.8898 c
+223.6378 172.8898 l
+223.6378 171.2314 224.9794 169.8898 226.6378 169.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 232.6378 228.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
+BT 1 0 0 1 232.6378 200.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 232.6378 211.8898 Tm /F3+0 7.4 Tf 8.88 TL (Near field: ROI depth and) Tj T* ET
-BT 1 0 0 1 232.6378 201.8898 Tm /F3+0 7.4 Tf 8.88 TL (respiratory waveform) Tj T* ET
+BT 1 0 0 1 232.6378 183.8898 Tm /F3+0 7.4 Tf 8.88 TL (Near field: ROI depth and) Tj T* ET
+BT 1 0 0 1 232.6378 173.8898 Tm /F3+0 7.4 Tf 8.88 TL (respiratory waveform) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-400.2756 230.8898 m
-518.2756 230.8898 l
-519.934 230.8898 521.2756 232.2314 521.2756 233.8898 c
-521.2756 277.8898 l
-521.2756 279.5482 519.934 280.8898 518.2756 280.8898 c
-400.2756 280.8898 l
-398.6172 280.8898 397.2756 279.5482 397.2756 277.8898 c
-397.2756 233.8898 l
-397.2756 232.2314 398.6172 230.8898 400.2756 230.8898 c
+400.2756 202.8898 m
+518.2756 202.8898 l
+519.934 202.8898 521.2756 204.2314 521.2756 205.8898 c
+521.2756 249.8898 l
+521.2756 251.5482 519.934 252.8898 518.2756 252.8898 c
+400.2756 252.8898 l
+398.6172 252.8898 397.2756 251.5482 397.2756 249.8898 c
+397.2756 205.8898 l
+397.2756 204.2314 398.6172 202.8898 400.2756 202.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 406.2756 264.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
+BT 1 0 0 1 406.2756 236.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 406.2756 247.8898 Tm /F3+0 7.4 Tf 8.88 TL (Setup offset and gating) Tj T* ET
-BT 1 0 0 1 406.2756 237.8898 Tm /F3+0 7.4 Tf 8.88 TL (trigger) Tj T* ET
+BT 1 0 0 1 406.2756 219.8898 Tm /F3+0 7.4 Tf 8.88 TL (Setup offset and gating) Tj T* ET
+BT 1 0 0 1 406.2756 209.8898 Tm /F3+0 7.4 Tf 8.88 TL (trigger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 155.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
-.101961 .101961 .101961 RG
-.9 w
-n 48 123.8898 m 547.2756 123.8898 l S
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 89.88976 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 65.88976 Tm /F2+0 10 Tf 12 TL (A silicone body phantom measured at five distances from 0.5 to 3.0 m with five commercial 3D sensors, 55) Tj T* ET
+BT 1 0 0 1 48 127.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
  
 endstream
 endobj
 37 0 obj
 <<
-/Length 2284
+/Length 2659
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1084,32 +1079,39 @@ BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (Surface-guided Respiratory Tracking \(SGR
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 753.8898 Tm /F2+0 10 Tf 12 TL (runs of 500 frames each, gave precision \002, delivered fps, and fill rate; repeats agreed to within \0030.05 mm.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 737.8898 Tm /F2+0 10 Tf 12 TL (That table and the DtDepthScan captures are my own measurements.) Tj T* ET
+.101961 .101961 .101961 RG
+.9 w
+n 48 749.8898 m 547.2756 749.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 708.8898 Tm /F3+0 11 Tf 13.2 TL (The conditions outlived the numbers) Tj T* ET
+BT 1 0 0 1 48 715.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 688.8898 Tm /F2+0 10 Tf 12 TL (The operating conditions will outlast the \002 table. At 0.5 m the default exposure saturates the IR return and) Tj T* ET
+BT 1 0 0 1 48 691.8898 Tm /F2+0 10 Tf 12 TL (A silicone body phantom measured at five distances from 0.5 to 3.0 m with five commercial 3D sensors, 55) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 672.8898 Tm /F2+0 10 Tf 12 TL (no depth is produced, and from a cold start \002 is up to 1.7 times worse than at thermal steady state. Both) Tj T* ET
+BT 1 0 0 1 48 675.8898 Tm /F2+0 10 Tf 12 TL (runs of 500 frames each, gave precision \002, delivered fps, and fill rate; repeats agreed to within \0030.05 mm.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 656.8898 Tm /F2+0 10 Tf 12 TL (became design inputs for the real-time module.) Tj T* ET
+BT 1 0 0 1 48 659.8898 Tm /F2+0 10 Tf 12 TL (That table and the DtDepthScan captures are my own measurements.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 630.8898 Tm /F3+0 11 Tf 13.2 TL (The conditions outlived the numbers) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 610.8898 Tm /F2+0 10 Tf 12 TL (The operating conditions will outlast the \002 table. At 0.5 m the default exposure saturates the IR return and) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 594.8898 Tm /F2+0 10 Tf 12 TL (no depth is produced, and from a cold start \002 is up to 1.7 times worse than at thermal steady state. Both) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 578.8898 Tm /F2+0 10 Tf 12 TL (became design inputs for the real-time module.) Tj T* ET
 q
-499.2756 0 0 183.1717 48 455.718 cm
+499.2756 0 0 183.1717 48 377.718 cm
 /FormXob.1b8c440a5623bc2701205f8c8a0866cb Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 435.218 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Where surface guidance sits in a session: reference surface the day before, setup check on the day, live monitoring) Tj T* ET
+BT 1 0 0 1 48 357.218 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Where surface guidance sits in a session: reference surface the day before, setup check on the day, live monitoring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 423.218 Tm /F2+0 8.5 Tf 10.2 TL (during treatment) Tj T* ET
+BT 1 0 0 1 48 345.218 Tm /F2+0 8.5 Tf 10.2 TL (during treatment) Tj T* ET
 q
-400 0 0 300 97.6378 105.718 cm
+340.9574 0 0 255.718 127.1591 72 cm
 /FormXob.a7d5e52dfa5a341eb7cf12e13975a391 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 85.21803 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The five commercial 3D sensors put through validation: three ToF, one structured-light, one active-stereo) Tj T* ET
+BT 1 0 0 1 48 51.5 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The five commercial 3D sensors put through validation: three ToF, one structured-light, one active-stereo) Tj T* ET
  
 endstream
 endobj
@@ -1216,7 +1218,7 @@ endstream
 endobj
 40 0 obj
 <<
-/Length 2250
+/Length 2348
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1243,26 +1245,28 @@ BT 1 0 0 1 48 691.8898 Tm /F2+0 10 Tf 12 TL (ToF camera \001 Structured light \0
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 666.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 646.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Sensor Fusion & Localization \001 Medical Navigation & Visualization) Tj T* ET
+BT 1 0 0 1 48 646.8898 Tm /F2+0 10 Tf 12 TL (3D Registration & Computer Vision \001 Robot Vision & Sensor Integration \001 Surgical Navigation & Optical) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 630.8898 Tm /F2+0 10 Tf 12 TL (Tracking) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 614.8898 m 547.2756 614.8898 l S
+n 48 598.8898 m 547.2756 598.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 580.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 564.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 556.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 540.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 527.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 511.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 507.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 475.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 466.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 464.8898 m 141.5852 464.8898 l S
+BT 1 0 0 1 48 450.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 448.8898 m 141.5852 448.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 446.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 444.8898 m 128.2212 444.8898 l S
+BT 1 0 0 1 48 430.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 428.8898 m 128.2212 428.8898 l S
  
 endstream
 endobj
@@ -1302,17 +1306,17 @@ xref
 0003223880 00000 n 
 0003225246 00000 n 
 0003225316 00000 n 
-0003225820 00000 n 
-0003225914 00000 n 
-0003229137 00000 n 
-0003237422 00000 n 
-0003239758 00000 n 
-0003241113 00000 n 
-0003244352 00000 n 
+0003225842 00000 n 
+0003225936 00000 n 
+0003229196 00000 n 
+0003237205 00000 n 
+0003239916 00000 n 
+0003241271 00000 n 
+0003244510 00000 n 
 trailer
 <<
 /ID 
-[<b8ff432b5f1d5952194f1f296c6b3293><b8ff432b5f1d5952194f1f296c6b3293>]
+[<9dece915a79ac09c44b7994ddd5c0c6e><9dece915a79ac09c44b7994ddd5c0c6e>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 33 0 R
@@ -1320,5 +1324,5 @@ trailer
 /Size 41
 >>
 startxref
-3246654
+3246910
 %%EOF

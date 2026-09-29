@@ -771,7 +771,7 @@ endobj
 endobj
 31 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
   /Subject (Convert an ambiguous clinical problem into a testable 3D registration and optimization problem.) /Title (Mandibular Fracture Reduction Optimization) /Trapped /False
 >>
 endobj
@@ -782,7 +782,7 @@ endobj
 endobj
 33 0 obj
 <<
-/Length 2650
+/Length 2686
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -800,7 +800,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 5) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Medical Core \001 Verified Research) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Surgical Robotics & Navigation \001 Verified Research) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 719.8898 Tm /F3+0 24 Tf 28.8 TL (Mandibular Fracture Reduction) Tj T* ET
 .101961 .101961 .101961 rg
@@ -810,7 +810,7 @@ BT 1 0 0 1 48 654.8898 Tm /F3+0 13 Tf 15.6 TL (Convert an ambiguous clinical pro
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 634.8898 Tm /F3+0 13 Tf 15.6 TL (optimization problem.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 604.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2021.12 - 2023.02   |   Evidence state Verified \001 Completed   |   Portfolio tier Medical Core) Tj T* ET
+BT 1 0 0 1 48 604.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2021.12 - 2023.02   |   Evidence state Verified \001 Completed   |   Portfolio tier Surgical Robotics & Navigation) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
 n 48 581.8898 m 547.2756 581.8898 l S
@@ -1105,7 +1105,7 @@ endstream
 endobj
 37 0 obj
 <<
-/Length 3708
+/Length 3719
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1157,7 +1157,7 @@ BT 1 0 0 1 48 401.8898 Tm /F2+0 10 Tf 12 TL (Python \001 Open3D \001 OpenCV \001
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 376.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 356.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Medical Navigation & Visualization) Tj T* ET
+BT 1 0 0 1 48 356.8898 Tm /F2+0 10 Tf 12 TL (3D Registration & Computer Vision \001 Surgical Navigation & Optical Tracking) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
 n 48 324.8898 m 547.2756 324.8898 l S
@@ -1215,16 +1215,16 @@ xref
 0007686868 00000 n 
 0007688234 00000 n 
 0007688304 00000 n 
-0007688755 00000 n 
-0007688842 00000 n 
-0007691544 00000 n 
-0007698491 00000 n 
-0007700030 00000 n 
-0007701167 00000 n 
+0007688777 00000 n 
+0007688864 00000 n 
+0007691602 00000 n 
+0007698549 00000 n 
+0007700088 00000 n 
+0007701225 00000 n 
 trailer
 <<
 /ID 
-[<7497eb36a5e936253af23ef6f5686433><7497eb36a5e936253af23ef6f5686433>]
+[<a2ec95f69434bae63b998894616ab1a2><a2ec95f69434bae63b998894616ab1a2>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 31 0 R
@@ -1232,5 +1232,5 @@ trailer
 /Size 38
 >>
 startxref
-7704927
+7704996
 %%EOF

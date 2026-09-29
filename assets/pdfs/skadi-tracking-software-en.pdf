@@ -777,8 +777,8 @@ endobj
 endobj
 32 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
-  /Subject (One SKADI desktop app leads through the API to medical integration and an industrial extension.) /Title (SKADI Desktop App & API) /Trapped /False
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+  /Subject (The SKADI desktop app and API handle optical marker tracking and coordinate transformation, and form the base layer for surgical instrument tracking and robot-tracking applications.) /Title (SKADI Desktop App & API) /Trapped /False
 >>
 endobj
 33 0 obj
@@ -788,7 +788,7 @@ endobj
 endobj
 34 0 obj
 <<
-/Length 5869
+/Length 6081
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -806,119 +806,121 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 5) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Platform Software \001 Optical Tracking) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Computer Vision & 3D Spatial Computing \001 Optical Tracking) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 720.8898 Tm /F3+0 23 Tf 27.6 TL (SKADI Desktop App & API) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 690.3898 Tm /F3+0 12.5 Tf 15 TL (One SKADI desktop app leads through the API to medical integration and an) Tj T* ET
+BT 1 0 0 1 48 690.3898 Tm /F3+0 12.5 Tf 15 TL (The SKADI desktop app and API handle optical marker tracking and coordinate) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 671.3898 Tm /F3+0 12.5 Tf 15 TL (industrial extension.) Tj T* ET
+BT 1 0 0 1 48 671.3898 Tm /F3+0 12.5 Tf 15 TL (transformation, and form the base layer for surgical instrument tracking and) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 652.3898 Tm /F3+0 12.5 Tf 15 TL (robot-tracking applications.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 645.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2023.02 - present   |   Evidence state Ongoing   |   Portfolio tier Platform Software) Tj T* ET
+BT 1 0 0 1 48 626.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2023.02 - present   |   Evidence state Ongoing   |   Portfolio tier Computer Vision & 3D Spatial Computing) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
-n 48 626.8898 m 547.2756 626.8898 l S
+n 48 607.8898 m 547.2756 607.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 606.8898 Tm /F2+0 10 Tf 12 TL (The desktop app handles marker definition, file work, and real-time 6DoF status, while the DtSkadi.dll API) Tj T* ET
+BT 1 0 0 1 48 587.8898 Tm /F2+0 10 Tf 12 TL (The desktop app handles marker definition, file work, and real-time 6DoF status, while the DtSkadi.dll API) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 590.8898 Tm /F2+0 10 Tf 12 TL (connects to surgical-navigation and robot-tracking applications.) Tj T* ET
+BT 1 0 0 1 48 571.8898 Tm /F2+0 10 Tf 12 TL (connects to surgical-navigation and robot-tracking applications.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 560.8898 m 547.2756 560.8898 l S
+n 48 541.8898 m 547.2756 541.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 526.8898 Tm /F3+0 14 Tf 16.8 TL (Product naming note) Tj T* ET
+BT 1 0 0 1 48 507.8898 Tm /F3+0 14 Tf 16.8 TL (Product naming note) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 503.6898 Tm /F2+0 9.2 Tf 11.04 TL (In public material, Viewer is the former name of this product, and MarkerEditor is the marker-definition and file-work) Tj T* ET
+BT 1 0 0 1 48 484.6898 Tm /F2+0 9.2 Tf 11.04 TL (In public material, Viewer is the former name of this product, and MarkerEditor is the marker-definition and file-work) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 490.6898 Tm /F2+0 9.2 Tf 11.04 TL (surface within the same desktop app.) Tj T* ET
+BT 1 0 0 1 48 471.6898 Tm /F2+0 9.2 Tf 11.04 TL (surface within the same desktop app.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 466.8898 m 547.2756 466.8898 l S
+n 48 447.8898 m 547.2756 447.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 432.8898 Tm /F3+0 14 Tf 16.8 TL (Product problem) Tj T* ET
+BT 1 0 0 1 48 413.8898 Tm /F3+0 14 Tf 16.8 TL (Product problem) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 409.6898 Tm /F2+0 9.2 Tf 11.04 TL (Connecting an optical tracker to applications requires predictable product interfaces for marker definition, device) Tj T* ET
+BT 1 0 0 1 48 390.6898 Tm /F2+0 9.2 Tf 11.04 TL (Connecting an optical tracker to applications requires predictable product interfaces for marker definition, device) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 396.6898 Tm /F2+0 9.2 Tf 11.04 TL (state, API-open failures, and delivery of tracked transforms.) Tj T* ET
+BT 1 0 0 1 48 377.6898 Tm /F2+0 9.2 Tf 11.04 TL (state, API-open failures, and delivery of tracked transforms.) Tj T* ET
 .960784 .960784 .960784 rg
 .878431 .878431 .878431 RG
 n
-51 310.8898 m
-288.6378 310.8898 l
-290.2962 310.8898 291.6378 312.2314 291.6378 313.8898 c
-291.6378 385.8898 l
-291.6378 387.5482 290.2962 388.8898 288.6378 388.8898 c
-51 388.8898 l
-49.3416 388.8898 48 387.5482 48 385.8898 c
-48 313.8898 l
-48 312.2314 49.3416 310.8898 51 310.8898 c
+51 291.8898 m
+288.6378 291.8898 l
+290.2962 291.8898 291.6378 293.2314 291.6378 294.8898 c
+291.6378 366.8898 l
+291.6378 368.5482 290.2962 369.8898 288.6378 369.8898 c
+51 369.8898 l
+49.3416 369.8898 48 368.5482 48 366.8898 c
+48 294.8898 l
+48 293.2314 49.3416 291.8898 51 291.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 60 370.8898 Tm /F3+0 8 Tf 9.6 TL (SKADI desktop app) Tj T* ET
+BT 1 0 0 1 60 351.8898 Tm /F3+0 8 Tf 9.6 TL (SKADI desktop app) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 60 350.8898 Tm /F2+0 8.2 Tf 9.84 TL (One product flow covers marker definition and file work,) Tj T* ET
-BT 1 0 0 1 60 338.8898 Tm /F2+0 8.2 Tf 9.84 TL (tracker connection, and 6DoF status inspection.) Tj T* ET
+BT 1 0 0 1 60 331.8898 Tm /F2+0 8.2 Tf 9.84 TL (One product flow covers marker definition and file work,) Tj T* ET
+BT 1 0 0 1 60 319.8898 Tm /F2+0 8.2 Tf 9.84 TL (tracker connection, and 6DoF status inspection.) Tj T* ET
 .960784 .960784 .960784 rg
 .878431 .878431 .878431 RG
 n
-306.6378 310.8898 m
-544.2756 310.8898 l
-545.934 310.8898 547.2756 312.2314 547.2756 313.8898 c
-547.2756 385.8898 l
-547.2756 387.5482 545.934 388.8898 544.2756 388.8898 c
-306.6378 388.8898 l
-304.9794 388.8898 303.6378 387.5482 303.6378 385.8898 c
-303.6378 313.8898 l
-303.6378 312.2314 304.9794 310.8898 306.6378 310.8898 c
+306.6378 291.8898 m
+544.2756 291.8898 l
+545.934 291.8898 547.2756 293.2314 547.2756 294.8898 c
+547.2756 366.8898 l
+547.2756 368.5482 545.934 369.8898 544.2756 369.8898 c
+306.6378 369.8898 l
+304.9794 369.8898 303.6378 368.5482 303.6378 366.8898 c
+303.6378 294.8898 l
+303.6378 293.2314 304.9794 291.8898 306.6378 291.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 315.6378 370.8898 Tm /F3+0 8 Tf 9.6 TL (SKADI API) Tj T* ET
+BT 1 0 0 1 315.6378 351.8898 Tm /F3+0 8 Tf 9.6 TL (SKADI API) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 315.6378 350.8898 Tm /F2+0 8.2 Tf 9.84 TL (An application starts the connection through OpenEx\(\) in) Tj T* ET
-BT 1 0 0 1 315.6378 338.8898 Tm /F2+0 8.2 Tf 9.84 TL (DtSkadi.dll, then branches to either a ready state or a) Tj T* ET
-BT 1 0 0 1 315.6378 326.8898 Tm /F2+0 8.2 Tf 9.84 TL (handled error.) Tj T* ET
+BT 1 0 0 1 315.6378 331.8898 Tm /F2+0 8.2 Tf 9.84 TL (An application starts the connection through OpenEx\(\) in) Tj T* ET
+BT 1 0 0 1 315.6378 319.8898 Tm /F2+0 8.2 Tf 9.84 TL (DtSkadi.dll, then branches to either a ready state or a) Tj T* ET
+BT 1 0 0 1 315.6378 307.8898 Tm /F2+0 8.2 Tf 9.84 TL (handled error.) Tj T* ET
 .960784 .960784 .960784 rg
 .878431 .878431 .878431 RG
 n
-51 218.8898 m
-288.6378 218.8898 l
-290.2962 218.8898 291.6378 220.2314 291.6378 221.8898 c
-291.6378 293.8898 l
-291.6378 295.5482 290.2962 296.8898 288.6378 296.8898 c
-51 296.8898 l
-49.3416 296.8898 48 295.5482 48 293.8898 c
-48 221.8898 l
-48 220.2314 49.3416 218.8898 51 218.8898 c
+51 199.8898 m
+288.6378 199.8898 l
+290.2962 199.8898 291.6378 201.2314 291.6378 202.8898 c
+291.6378 274.8898 l
+291.6378 276.5482 290.2962 277.8898 288.6378 277.8898 c
+51 277.8898 l
+49.3416 277.8898 48 276.5482 48 274.8898 c
+48 202.8898 l
+48 201.2314 49.3416 199.8898 51 199.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 60 278.8898 Tm /F3+0 8 Tf 9.6 TL (Medical integration) Tj T* ET
+BT 1 0 0 1 60 259.8898 Tm /F3+0 8 Tf 9.6 TL (Medical integration) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 60 258.8898 Tm /F2+0 8.2 Tf 9.84 TL (The same desktop app and API connect to a de-identified) Tj T* ET
-BT 1 0 0 1 60 246.8898 Tm /F2+0 8.2 Tf 9.84 TL (tray and 3D Slicer CT workspace to check the) Tj T* ET
-BT 1 0 0 1 60 234.8898 Tm /F2+0 8.2 Tf 9.84 TL (surgical-navigation integration boundary.) Tj T* ET
+BT 1 0 0 1 60 239.8898 Tm /F2+0 8.2 Tf 9.84 TL (The same desktop app and API connect to a de-identified) Tj T* ET
+BT 1 0 0 1 60 227.8898 Tm /F2+0 8.2 Tf 9.84 TL (tray and 3D Slicer CT workspace to check the) Tj T* ET
+BT 1 0 0 1 60 215.8898 Tm /F2+0 8.2 Tf 9.84 TL (surgical-navigation integration boundary.) Tj T* ET
 .960784 .960784 .960784 rg
 .878431 .878431 .878431 RG
 n
-306.6378 218.8898 m
-544.2756 218.8898 l
-545.934 218.8898 547.2756 220.2314 547.2756 221.8898 c
-547.2756 293.8898 l
-547.2756 295.5482 545.934 296.8898 544.2756 296.8898 c
-306.6378 296.8898 l
-304.9794 296.8898 303.6378 295.5482 303.6378 293.8898 c
-303.6378 221.8898 l
-303.6378 220.2314 304.9794 218.8898 306.6378 218.8898 c
+306.6378 199.8898 m
+544.2756 199.8898 l
+545.934 199.8898 547.2756 201.2314 547.2756 202.8898 c
+547.2756 274.8898 l
+547.2756 276.5482 545.934 277.8898 544.2756 277.8898 c
+306.6378 277.8898 l
+304.9794 277.8898 303.6378 276.5482 303.6378 274.8898 c
+303.6378 202.8898 l
+303.6378 201.2314 304.9794 199.8898 306.6378 199.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 315.6378 278.8898 Tm /F3+0 8 Tf 9.6 TL (Industrial extension) Tj T* ET
+BT 1 0 0 1 315.6378 259.8898 Tm /F3+0 8 Tf 9.6 TL (Industrial extension) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 315.6378 258.8898 Tm /F2+0 8.2 Tf 9.84 TL (The same 6DoF tracking layer was applied to the) Tj T* ET
-BT 1 0 0 1 315.6378 246.8898 Tm /F2+0 8.2 Tf 9.84 TL (coordinate relationship between robot-end and target) Tj T* ET
-BT 1 0 0 1 315.6378 234.8898 Tm /F2+0 8.2 Tf 9.84 TL (markers to support precision-docking integration.) Tj T* ET
+BT 1 0 0 1 315.6378 239.8898 Tm /F2+0 8.2 Tf 9.84 TL (The same 6DoF tracking layer was applied to the) Tj T* ET
+BT 1 0 0 1 315.6378 227.8898 Tm /F2+0 8.2 Tf 9.84 TL (coordinate relationship between robot-end and target) Tj T* ET
+BT 1 0 0 1 315.6378 215.8898 Tm /F2+0 8.2 Tf 9.84 TL (markers to support precision-docking integration.) Tj T* ET
  
 endstream
 endobj
@@ -1483,16 +1485,16 @@ xref
 0002234382 00000 n 
 0002235748 00000 n 
 0002235818 00000 n 
-0002236250 00000 n 
-0002236337 00000 n 
-0002242258 00000 n 
-0002245562 00000 n 
-0002252313 00000 n 
-0002255478 00000 n 
+0002236358 00000 n 
+0002236445 00000 n 
+0002242578 00000 n 
+0002245882 00000 n 
+0002252633 00000 n 
+0002255798 00000 n 
 trailer
 <<
 /ID 
-[<5b0b46134b72ccfd6148496a48e9961f><5b0b46134b72ccfd6148496a48e9961f>]
+[<c61cac4990443dfc580e98e2fd0c361a><c61cac4990443dfc580e98e2fd0c361a>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 32 0 R
@@ -1500,5 +1502,5 @@ trailer
 /Size 39
 >>
 startxref
-2262420
+2262740
 %%EOF

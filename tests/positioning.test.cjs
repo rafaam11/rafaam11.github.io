@@ -27,3 +27,27 @@ test('tier slugs set the order of cases inside a group', () => {
   tier.slugs = members.slice(1);
   assert.match(render.validatePortfolioData(value).join('\n'), /slugs/);
 });
+
+test('capabilities name current expertise, not research direction', () => {
+  const titles = data.capabilities.map((capability) => [capability.translations.ko.title, capability.translations.en.title]);
+  assert.deepEqual(titles.slice(0, 4), [
+    ['수술 내비게이션·광학 추적', 'Surgical Navigation & Optical Tracking'],
+    ['3D 정합·컴퓨터비전', '3D Registration & Computer Vision'],
+    ['XR·공간 컴퓨팅', 'XR & Spatial Computing'],
+    ['로봇 비전·센서 통합', 'Robot Vision & Sensor Integration']
+  ]);
+  const xr = data.capabilities.find((capability) => capability.key === 'xr-engineering');
+  for (const method of ['OpenXR', 'Galaxy XR', 'HoloLens 2']) assert.ok(xr.methods.includes(method), method);
+  // Overclaims the owner ruled out: robot-assisted surgery development, SLAM, fusion-algorithm or Physical AI expertise.
+  assert.doesNotMatch(JSON.stringify({ capabilities: data.capabilities, tiers: data.tiers, projects: data.projects }),
+    /SLAM|sensor-fusion algorithm|Physical AI expert|robot-assisted surg|로봇 보조 수술/i);
+});
+
+test('case eyebrows carry the new group names', () => {
+  const tierLabel = Object.fromEntries(data.tiers.map((tier) => [tier.key, tier.translations]));
+  for (const project of data.projects) {
+    for (const locale of ['ko', 'en']) {
+      assert.ok(project.translations[locale].eyebrow.startsWith(tierLabel[project.tier][locale].label + ' · '), `${project.slug} ${locale}`);
+    }
+  }
+});

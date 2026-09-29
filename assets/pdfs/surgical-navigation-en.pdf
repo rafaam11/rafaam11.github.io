@@ -1021,8 +1021,8 @@ endobj
 endobj
 37 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
-  /Subject (Integrated tracking, registration, and calibration in SMCNavi, then carried the result into a HoloLens spatial interface.) /Title (SMCNavi \267 HoloLens Surgical Navigation) /Trapped /False
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+  /Subject (Integrated image-to-patient registration, surgical instrument tracking, and calibration in SMCNavi, then carried the result into XR surgical visualization on HoloLens.) /Title (SMCNavi \267 HoloLens Surgical Navigation) /Trapped /False
 >>
 endobj
 38 0 obj
@@ -1032,7 +1032,7 @@ endobj
 endobj
 39 0 obj
 <<
-/Length 2845
+/Length 3011
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1050,41 +1050,43 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Medical Core \001 Research Prototype) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Surgical Robotics & Navigation \001 Research Prototype) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 719.8898 Tm /F3+0 24 Tf 28.8 TL (SMCNavi \001 HoloLens Surgical Navigation) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 685.8898 Tm /F3+0 13 Tf 15.6 TL (Integrated tracking, registration, and calibration in SMCNavi, then carried the) Tj T* ET
+BT 1 0 0 1 48 685.8898 Tm /F3+0 13 Tf 15.6 TL (Integrated image-to-patient registration, surgical instrument tracking, and) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 665.8898 Tm /F3+0 13 Tf 15.6 TL (result into a HoloLens spatial interface.) Tj T* ET
+BT 1 0 0 1 48 665.8898 Tm /F3+0 13 Tf 15.6 TL (calibration in SMCNavi, then carried the result into XR surgical visualization on) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 645.8898 Tm /F3+0 13 Tf 15.6 TL (HoloLens.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 635.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2023.07 - present   |   Evidence state Prototype \001 Ongoing   |   Portfolio tier Medical Core) Tj T* ET
+BT 1 0 0 1 48 615.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2023.07 - present   |   Evidence state Prototype \001 Ongoing   |   Portfolio tier Surgical Robotics & Navigation) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
-n 48 612.8898 m 547.2756 612.8898 l S
+n 48 592.8898 m 547.2756 592.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 588.8898 Tm /F2+0 10 Tf 12 TL (A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a) Tj T* ET
+BT 1 0 0 1 48 568.8898 Tm /F2+0 10 Tf 12 TL (A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 572.8898 Tm /F2+0 10 Tf 12 TL (research collaboration, plus a separate HoloLens spatial-interface extension.) Tj T* ET
+BT 1 0 0 1 48 552.8898 Tm /F2+0 10 Tf 12 TL (research collaboration, plus a separate HoloLens spatial-interface extension.) Tj T* ET
 q
-499.2756 0 0 280.8425 48 270.0472 cm
+499.2756 0 0 280.8425 48 250.0472 cm
 /FormXob.7bc2cd895291c2e69fedfcd0335f0fd1 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 249.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and) Tj T* ET
+BT 1 0 0 1 48 229.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 237.5472 Tm /F2+0 8.5 Tf 10.2 TL (image presentation.) Tj T* ET
+BT 1 0 0 1 48 217.5472 Tm /F2+0 8.5 Tf 10.2 TL (image presentation.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 206.0472 m 547.2756 206.0472 l S
+n 48 186.0472 m 547.2756 186.0472 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 172.0472 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
+BT 1 0 0 1 48 152.0472 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 146.5472 Tm /F3+0 11.5 Tf 13.8 TL (Oral and maxillofacial navigation must align medical images, patient and instrument) Tj T* ET
+BT 1 0 0 1 48 126.5472 Tm /F3+0 11.5 Tf 13.8 TL (Oral and maxillofacial navigation must align medical images, patient and instrument) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 128.5472 Tm /F3+0 11.5 Tf 13.8 TL (coordinates, procedure-specific tools, and spatial presentation in one flow; fragmented) Tj T* ET
+BT 1 0 0 1 48 108.5472 Tm /F3+0 11.5 Tf 13.8 TL (coordinates, procedure-specific tools, and spatial presentation in one flow; fragmented) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 110.5472 Tm /F3+0 11.5 Tf 13.8 TL (functions make registration state and data flow difficult to inspect.) Tj T* ET
+BT 1 0 0 1 48 90.54724 Tm /F3+0 11.5 Tf 13.8 TL (functions make registration state and data flow difficult to inspect.) Tj T* ET
  
 endstream
 endobj
@@ -1543,7 +1545,7 @@ endstream
 endobj
 44 0 obj
 <<
-/Length 3258
+/Length 3265
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1584,7 +1586,7 @@ BT 1 0 0 1 48 545.8898 Tm /F2+0 10 Tf 12 TL (HoloLens 2 \001 Optical tracking \0
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 520.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 500.8898 Tm /F2+0 10 Tf 12 TL (3D Geometry & Registration \001 Medical Navigation & Visualization \001 XR Application Engineering) Tj T* ET
+BT 1 0 0 1 48 500.8898 Tm /F2+0 10 Tf 12 TL (3D Registration & Computer Vision \001 Surgical Navigation & Optical Tracking \001 XR & Spatial Computing) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
 n 48 468.8898 m 547.2756 468.8898 l S
@@ -1647,17 +1649,17 @@ xref
 0006491021 00000 n 
 0006491784 00000 n 
 0006491854 00000 n 
-0006492330 00000 n 
-0006492423 00000 n 
-0006495320 00000 n 
-0006501933 00000 n 
-0006510602 00000 n 
-0006512378 00000 n 
-0006514202 00000 n 
+0006492398 00000 n 
+0006492491 00000 n 
+0006495554 00000 n 
+0006502167 00000 n 
+0006510836 00000 n 
+0006512612 00000 n 
+0006514436 00000 n 
 trailer
 <<
 /ID 
-[<cdae0f636fb8764dfa6dd65118d5b304><cdae0f636fb8764dfa6dd65118d5b304>]
+[<d7e32c7a1bc6a1b3d2ca5fe5a44e745b><d7e32c7a1bc6a1b3d2ca5fe5a44e745b>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 37 0 R
@@ -1665,5 +1667,5 @@ trailer
 /Size 45
 >>
 startxref
-6517512
+6517753
 %%EOF

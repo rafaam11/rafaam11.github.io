@@ -995,7 +995,7 @@ endobj
 endobj
 34 0 obj
 <<
-/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (3D registration, robot software, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
+/Author (Jinmin Kim) /CreationDate (D:20000101000000+00'00') /Creator (Jinmin Kim Portfolio PDF Generator) /Keywords (surgical navigation, 3D registration, computer vision, public portfolio) /ModDate (D:20000101000000+00'00') /Producer (Jinmin Kim Portfolio PDF Generator) 
   /Subject (Redesigned separate landmarking, occlusion, and evaluation tools into a user-friendly end-to-end workflow that researchers can operate in one application.) /Title (Maxillofacial Digital Occlusion Workflow) /Trapped /False
 >>
 endobj
@@ -1006,7 +1006,7 @@ endobj
 endobj
 36 0 obj
 <<
-/Length 2995
+/Length 3260
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1024,7 +1024,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (1 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Medical Core \001 Clinical Workflow Integration) Tj T* ET
+BT 1 0 0 1 48 755.8898 Tm /F3+0 8 Tf 9.6 TL (Surgical Robotics & Navigation \001 Clinical Workflow Integration) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 719.8898 Tm /F3+0 24 Tf 28.8 TL (Maxillofacial Digital Occlusion Workflow) Tj T* ET
 .101961 .101961 .101961 rg
@@ -1034,33 +1034,37 @@ BT 1 0 0 1 48 665.8898 Tm /F3+0 13 Tf 15.6 TL (user-friendly end-to-end workflow
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 645.8898 Tm /F3+0 13 Tf 15.6 TL (application.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 615.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2026.03 - present   |   Evidence state Ongoing \001 Researcher Validation   |   Portfolio tier Medical Core) Tj T* ET
+BT 1 0 0 1 48 615.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2026.03 - present   |   Evidence state Ongoing \001 Researcher Validation   |   Portfolio tier Surgical Robotics &) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 601.8898 Tm /F2+0 9 Tf 10.8 TL (Navigation) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
-n 48 592.8898 m 547.2756 592.8898 l S
+n 48 578.8898 m 547.2756 578.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 568.8898 Tm /F2+0 10 Tf 12 TL (Connected eight-model preparation, dental and maxillofacial landmarks, anatomical frames, automatic) Tj T* ET
+BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (Connected eight-model preparation, a dental and maxillofacial landmark step that integrates an AI) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 552.8898 Tm /F2+0 10 Tf 12 TL (occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.) Tj T* ET
+BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (anatomical-landmark detection model, anatomical frames, automatic occlusion, 6-DOF adjustment, contact) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.) Tj T* ET
 q
-499.2756 0 0 239.2362 48 291.6535 cm
+499.2756 0 0 239.2362 48 261.6535 cm
 /FormXob.ed711ded2cd7bb7696da03e17dc3d2e1 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 271.1535 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Development-build demonstration of landmarking, multi-view occlusion, and evaluation using synthetic test data.) Tj T* ET
+BT 1 0 0 1 48 241.1535 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Development-build demonstration of landmarking, multi-view occlusion, and evaluation using synthetic test data.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 239.6535 m 547.2756 239.6535 l S
+n 48 209.6535 m 547.2756 209.6535 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 205.6535 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
+BT 1 0 0 1 48 175.6535 Tm /F3+0 14 Tf 16.8 TL (Problem and system boundary) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 180.1535 Tm /F3+0 11.5 Tf 13.8 TL (The earlier flow separated landmarking into another application, made reference) Tj T* ET
+BT 1 0 0 1 48 150.1535 Tm /F3+0 11.5 Tf 13.8 TL (The earlier flow separated landmarking into another application, made reference) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 162.1535 Tm /F3+0 11.5 Tf 13.8 TL (comparison and view navigation awkward, lacked multi-view occlusion, fragmented) Tj T* ET
+BT 1 0 0 1 48 132.1535 Tm /F3+0 11.5 Tf 13.8 TL (comparison and view navigation awkward, lacked multi-view occlusion, fragmented) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 144.1535 Tm /F3+0 11.5 Tf 13.8 TL (save/load, omitted maxillofacial landmarks, and had no sufficiently integrated result) Tj T* ET
+BT 1 0 0 1 48 114.1535 Tm /F3+0 11.5 Tf 13.8 TL (save/load, omitted maxillofacial landmarks, and had no sufficiently integrated result) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 126.1535 Tm /F3+0 11.5 Tf 13.8 TL (screen.) Tj T* ET
+BT 1 0 0 1 48 96.15354 Tm /F3+0 11.5 Tf 13.8 TL (screen.) Tj T* ET
  
 endstream
 endobj
@@ -1761,7 +1765,7 @@ endstream
 endobj
 41 0 obj
 <<
-/Length 2670
+/Length 2681
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1794,7 +1798,7 @@ BT 1 0 0 1 48 626.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 C++ \001 Qt \001 Pyt
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 601.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 581.8898 Tm /F2+0 10 Tf 12 TL (Medical Navigation & Visualization \001 3D Geometry & Registration) Tj T* ET
+BT 1 0 0 1 48 581.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
 n 48 549.8898 m 547.2756 549.8898 l S
@@ -1854,17 +1858,17 @@ xref
 0001339499 00000 n 
 0001340262 00000 n 
 0001340332 00000 n 
-0001340840 00000 n 
-0001340933 00000 n 
-0001343980 00000 n 
-0001350809 00000 n 
-0001359376 00000 n 
-0001367860 00000 n 
-0001371319 00000 n 
+0001340862 00000 n 
+0001340955 00000 n 
+0001344267 00000 n 
+0001351096 00000 n 
+0001359663 00000 n 
+0001368147 00000 n 
+0001371606 00000 n 
 trailer
 <<
 /ID 
-[<5f9b4d8366e6bb5976c75d3a9b95cd99><5f9b4d8366e6bb5976c75d3a9b95cd99>]
+[<f1b62ada6ab63687d14bda34ca6fb21b><f1b62ada6ab63687d14bda34ca6fb21b>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 34 0 R
@@ -1872,5 +1876,5 @@ trailer
 /Size 42
 >>
 startxref
-1374041
+1374339
 %%EOF
