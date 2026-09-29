@@ -52,3 +52,29 @@ test('PDF comparison binds a publication year to its own bibliography entry', ()
     assert.match(result.stdout, /publication 2 title\/year differs/);
   } finally { fs.rmSync(temp, {recursive: true, force: true}); }
 });
+test('CV positioning fields: interests, JIIM authors, and case links', () => {
+  const value = cv();
+  assert.deepEqual(publicCvDataErrors(value), []);
+  assert.deepEqual(value.interests.en, ['Surgical Robotics', 'Physical AI', 'Surgical AI', '3D Vision', 'Robot Perception', 'Multimodal Perception', 'Spatial Intelligence']);
+  assert.equal(value.interests.ko.length, 7);
+  const jiim = value.publications.find((entry) => /s10278-024-01014-z/.test(entry.href || ''));
+  assert.deepEqual(jiim.authors, ['Jinmin Kim', 'Deokgi Jeung', 'Ranyeong Cho', 'Byoungeun Yang', 'Jaesung Hong']);
+  assert.equal(value.publications.filter((entry) => entry.authors).length, 1);
+  const slugs = Object.fromEntries(value.publications.map((entry) => [entry.translations.en.title.slice(0, 24), entry.projectSlug]));
+  assert.equal(Object.values(slugs).filter(Boolean).length, 6);
+  for (const locale of ['ko', 'en']) {
+    const html = require('../scripts/public-cv-summary.cjs').renderPublicCvSummary(value, locale).html;
+    assert.equal((html.match(/class="sc-cv__authors"/g) || []).length, 1);
+    assert.match(html, /<strong>Jinmin Kim<\/strong>, Deokgi Jeung/);
+    assert.equal((html.match(/class="sc-cv__case" href="\.\.\/projects\/(?:mandibular-fracture|life-careverse|digital-occlusion-workflow)\/index\.html"/g) || []).length, 6);
+  }
+  const stray = cv();
+  stray.publications[0].authors = ['Someone Else'];
+  assert.match(publicCvDataErrors(stray).join('\n'), /authors/);
+  const badSlug = cv();
+  badSlug.publications[0].projectSlug = 'not-a-case';
+  assert.match(publicCvDataErrors(badSlug).join('\n'), /projectSlug/);
+  const badInterests = cv();
+  badInterests.interests.ko = [];
+  assert.match(publicCvDataErrors(badInterests).join('\n'), /interests/);
+});
