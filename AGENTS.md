@@ -7,11 +7,11 @@ This file provides guidance to coding agents working in this repository.
 Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaScript 기반이며 빌드 과정이 없습니다.
 
 - **URL:** https://rafaam11.github.io
-- **Positioning:** 3D registration · medical imaging · robot systems — research to field
-- **Audience:** 연구 협력자(의료영상·3D 정합)와 일반 방문자(리크루터·지인)
+- **Positioning:** 수술 로보틱스·컴퓨터비전 R&D 엔지니어 / Robotics & Computer Vision R&D Engineer — 3D 정합 → 광학 추적 → 수술 내비게이션 → XR → 로봇·비전 통합 (see `docs/superpowers/specs/2026-09-29-positioning-design.md`)
+- **Audience:** 수술 로보틱스·의료 AI·로봇 분야 연구자와 연구 협력자, 일반 방문자(리크루터·지인)
 - **Structure:** Home / News / Projects / CV / Contact
 - **Canonical cases:** 9 projects, paired in Korean and English
-- **Capabilities:** 5 implementation-backed stacks on Home between the intro and selected research, without per-stack project lists; no standalone route
+- **Capabilities:** 5 implementation-backed stacks titled "현재 전문성 / Current expertise" on Home between the intro and selected research, without per-stack project lists; no standalone route
 - **Deploy:** `main` push 후 GitHub Pages가 root를 직접 서빙
 - **Preview:** `python -m http.server 8000` or direct `file://` open
 
@@ -21,6 +21,8 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 - 기여율 퍼센트 대신 소유한 문제, 결정, 구현, 검증 근거를 쓴다.
 - 기관·제품 실명은 승인 목록(2026-08-21 사용자 승인)만 쓴다: 디지트랙/DIGITRACK, SKADI, SMCNavi, NeuroPilot, DOTORI, 삼성서울병원, 서울성모병원, AT&C, KERI, ETRI, KAIST, A4LAB, 정부과제명. 타인의 이름(교수·임원·동료), 연구비, 문서·특허 번호, 과제 목표치·타 기관 지표는 쓰지 않는다. 본인이 직접 측정한 수치만 인용한다.
 - `Verified`, `Ongoing`, `Prototype`, `Expected`, `Research`, `Completed` 상태를 구분한다.
+- **현재 전문성과 연구 방향을 분리한다.** 현재 전문성(수술 내비게이션·3D 정합·광학 추적·컴퓨터비전·XR/공간 컴퓨팅·로봇/비전/센서 통합)만 역량·티어·`knowsAbout`에 쓴다. 연구 방향(수술 로보틱스·Physical AI·Surgical AI·3D 비전·로봇 인지·멀티모달 인지·공간 지능)은 `data/public-cv.json` `interests`에서 나와 홈 연구 방향 줄·CV 요약·JSON-LD description에만 쓴다. 로봇 보조 수술 시스템 개발, SLAM, 센서퓨전 알고리즘 전문성, 임상시험 책임, "Physical AI 전문가"는 주장하지 않고 과거 프로젝트를 Physical AI로 소급하지 않는다.
+- 공저자 이름은 예외적으로 본인 논문 JIIM 2024의 서지 정보(`publications[].authors`)에만 허용한다. 홈·사례·소식 본문에는 교수님 성함을 쓰지 않는다(CV의 지도교수 표기는 2026-08-22 승인 사항).
 - AI는 정체성이 아니라 구현 증폭 수단으로 다룬다. 사람은 맥락, 요구사항, 아키텍처, 수용 기준, PR 리뷰를 소유한다.
 - 검증되지 않은 생산성·유지보수·임상·운영 효과를 확정적으로 표현하지 않는다.
 - 내부 원본은 Git 밖에 유지하고, 승인·비식별화·메타데이터 제거를 거친 파생본만 공개한다.
@@ -37,8 +39,8 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 ## File structure
 
 ```text
-index.html                         # Home: intro (name, lede, affiliation, contacts, photo), capability list, selected research (3), publications + patents/awards line, News (4, curated), selected activities (local-feed overlay), contact line
-projects/index.html                # Projects groups: Medical Core (6), Platform Software (1), Industrial Spotlight (1), AI Build Lab (1)
+index.html                         # Home: intro (name, role, keywords, lede, statement, affiliation, contacts, research direction, photo; Person JSON-LD in head), current-expertise list, selected research (3), publications + patents/awards line, News (4, curated), selected activities (local-feed overlay), contact line
+projects/index.html                # Projects groups: Surgical Robotics & Navigation (4), Computer Vision & 3D Spatial Computing (2), XR & Spatial Visualization (1), Robotics & Automation (1), AI Build Lab (1); tier `slugs` set the order
 projects/<slug>/index.html         # 9 shared-renderer case summaries
 en/                               # English counterparts for all 13 Korean routes
 cv/index.html                      # Full public CV in semantic HTML plus PDF and raster fallbacks
@@ -101,7 +103,7 @@ Commit and push to `main` only when deployment is intended. GitHub Pages must re
 - Home selects digital-occlusion-workflow, mandibular-fracture, and surgical-navigation; Projects retains all nine cases.
 - News is maintained bilingually in `js/portfolio-data.js`; preserve event-date precision and public evidence. Home shows four items chosen by `homeNews()` in `scripts/profile-home.cjs`: the newest software release (evidence path `data/news-software-sources.json`) at most once, then the newest remaining items. News groups the full list by year.
 - News covers research, conferences, awards, career, activities (clubs, camps, exhibitions, overseas programmes), patent applications, and the first public release of each personal app (not every version) or public repositories. Combine an award with its corresponding presentation. Filing dates are not grant dates. Selected release and repository timestamps are recorded in `data/news-software-sources.json` and `data/news-repository-sources.json`, displayed in Asia/Seoul time.
-- `node scripts/public-cv-summary.cjs --write` refreshes CV and generated Home/News content. Home publications/patents/awards derive from `data/public-cv.json`.
+- `node scripts/public-cv-summary.cjs --write` refreshes CV and generated Home/News content, including the Home Person JSON-LD block between the `PERSON JSON-LD` markers. Home publications/patents/awards derive from `data/public-cv.json`.
 - Adding an activity event: `node scripts/activity-media.cjs catalog` → `sheet <folder>` for owner review → `derive M###` → fill ko/en caption/alt, `eventIds`, `order` and `approval: approved-public` in `data/activity-media.json` → add the news record (photo-only facts cite `{ path: 'data/activity-media.json', locator: 'M###' }`) and its `labels` entry in `js/local-feed.js` → `node scripts/public-cv-summary.cjs --write` → `node --test tests/activity-media.test.cjs tests/activity-feed.test.cjs` and `node scripts/activity-media.cjs check`. M-ids are frozen by `sourceSha256`; never renumber. The News page is one chronological list.
 - `sourcePdfs` pins each reviewed CV PDF SHA-256. A changed edition requires explicit content synchronization review; do not blindly update the hashes.
 - `python scripts/check-cv-pdf-sync.py` compares selected PDF terms, periods, publication titles, and patent states/dates; arbitrary prose equivalence is a manual review. The validator CLI runs it (PyMuPDF required, as for PDF generation).
