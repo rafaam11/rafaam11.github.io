@@ -64,8 +64,8 @@
   function footerHtml(locale) {
     var normalized = i18n.normalizeLocale(locale);
     var tagline = normalized === 'en'
-      ? 'Registration, medical imaging, and robot systems — from research to the field.'
-      : '3D 정합 · 의료영상 · 로봇 시스템 — 연구에서 현장까지.';
+      ? 'Surgical navigation, 3D registration, optical tracking and XR — toward intelligent surgery.'
+      : '수술 내비게이션 · 3D 정합 · 광학 추적 · XR — 지능형 수술을 향해.';
     return '<div class="td-site-footer__inner">' +
       '<div><strong>Jinmin Kim</strong><p>' + escapeHtml(tagline) + '</p></div>' +
       '<div class="td-site-footer__links"><a href="mailto:uiop3847@naver.com">Email</a><a href="https://github.com/rafaam11" target="_blank" rel="noopener">GitHub</a></div>' +
