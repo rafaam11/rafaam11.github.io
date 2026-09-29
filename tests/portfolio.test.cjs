@@ -1738,8 +1738,8 @@ test('Scholar highlights render three numbered groups and a linked publication',
 
 test('Scholar Home shells carry introduction, news and selected research without JavaScript', () => {
   const pages = [
-    ['index.html', '의료영상', 'assets/'],
-    ['en/index.html', 'medical images', '../assets/']
+    ['index.html', '해부학 구조', 'assets/'],
+    ['en/index.html', 'anatomy, surgical instruments', '../assets/']
   ];
   for (const [file, identity, assetBase] of pages) {
     const html = read(file);
@@ -5452,9 +5452,9 @@ test('Scholar CV refresh names the approved partners and products within the PDF
   assert.deepEqual(validator.publicCvDataErrors(cv), []);
 });
 
-test('Home positions medical imaging and dental occlusion research in both languages', () => {
-  assert.match(read('index.html'), /의료영상과 3D 형상/);
-  assert.match(read('en/index.html'), /medical images and 3D geometry/i);
+test('Home positions the engineer who connects anatomy, instruments, sensors, XR devices, and robots', () => {
+  assert.match(read('index.html'), /해부학 구조, 수술 도구, 센서, 카메라, XR 기기, 로봇/);
+  assert.match(read('en/index.html'), /anatomy, surgical instruments, sensors, cameras, XR devices, and robots/i);
 });
 
 test('public CV records the ongoing digital occlusion technical-lead scope without deployment claims', () => {
