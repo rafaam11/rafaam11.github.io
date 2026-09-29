@@ -293,7 +293,7 @@
         };
       }),
       tiers: (source.tiers || []).map(function (tier) {
-        return { key: tier.key, label: translatedField(tier, 'label', normalized) };
+        return { key: tier.key, label: translatedField(tier, 'label', normalized), slugs: Array.isArray(tier.slugs) ? tier.slugs.slice() : null };
       }),
       projects: (source.projects || []).map(function (project) {
         var copy = translation(project, normalized);
@@ -772,6 +772,13 @@
       }
       data.tiers.forEach(function (tier) {
         errors = errors.concat(translationErrors(tier, ['label'], tier && tier.key ? tier.key : 'unknown-tier'));
+        // Optional explicit order: it must list exactly the cases that belong to the tier.
+        if (tier && tier.slugs !== undefined) {
+          var members = (Array.isArray(data.projects) ? data.projects : []).filter(function (project) { return project && project.tier === tier.key; }).map(function (project) { return project.slug; });
+          if (!Array.isArray(tier.slugs) || JSON.stringify(tier.slugs.slice().sort()) !== JSON.stringify(members.slice().sort())) {
+            errors.push(tier.key + ': tier slugs must list exactly the cases in the tier.');
+          }
+        }
       });
     }
 
@@ -1296,6 +1303,7 @@
         '<' + tag + ' class="sc-project__title"><a href="' + escapeHtml(href) + '">' + escapeHtml(project.title) + '</a></' + tag + '>' +
         '<p class="sc-project__meta">' + escapeHtml(project.period) + ' · ' + escapeHtml(projectStateLabel(project, normalized)) + '</p>' +
         '<p class="sc-project__summary">' + escapeHtml(project.summary) + '</p>' + facts +
+        (settings.tech ? '<p class="sc-project__tech">' + project.tech.map(escapeHtml).join(', ') + '</p>' : '') +
         '<p class="sc-project__links"><a href="' + escapeHtml(href) + '">' + escapeHtml(copy.details) + '</a> · <a href="' + escapeHtml(assetHref(base, project.pdf[normalized])) + '">' + escapeHtml(copy.pdf) + '</a>' + projectLinksInline(project, normalized) + '</p>' +
       '</div></li>';
   }
@@ -1306,6 +1314,9 @@
     var projects = validProjects(data, normalized);
     return localized.tiers.map(function (tier) {
       var tierProjects = projects.filter(function (project) { return project.tier === tier.key; });
+      if (tier.slugs) {
+        tierProjects.sort(function (left, right) { return tier.slugs.indexOf(left.slug) - tier.slugs.indexOf(right.slug); });
+      }
       if (!tierProjects.length) return '';
       return '<section class="sc-group" data-tier="' + escapeHtml(tier.key) + '">' +
         '<' + settings.groupHeadingTag + ' class="sc-group__title">' + escapeHtml(tier.label) + '</' + settings.groupHeadingTag + '>' +
@@ -1327,7 +1338,7 @@
   }
 
   function projectGroupsHtml(data, base, isFile, locale) {
-    return projectListHtml(data, base, isFile, locale, { detailed: false, groupHeadingTag: 'h2', headingTag: 'h3' });
+    return projectListHtml(data, base, isFile, locale, { detailed: false, tech: true, groupHeadingTag: 'h2', headingTag: 'h3' });
   }
 
   function highlightsHtml(data, locale) {

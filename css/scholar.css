@@ -56,6 +56,7 @@
 .sc-project__title a:hover { text-decoration: underline; }
 .sc-project__meta { margin-top: .15rem; color: var(--sc-faint); font-size: var(--sc-meta); }
 .sc-project__summary { margin-top: .4rem; max-width: 60ch; }
+.sc-project__tech { margin-top: .35rem; color: var(--sc-muted); font-size: var(--sc-meta); }
 .sc-project__facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1rem; margin: .75rem 0 0; }
 .sc-project__facts div { display: contents; }
 .sc-project__facts dt { color: var(--sc-muted); font-weight: 500; }
