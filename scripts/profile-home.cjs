@@ -164,15 +164,16 @@ function personJsonLd(locale, cv) {
     url: ko ? 'https://rafaam11.github.io/' : 'https://rafaam11.github.io/en/',
     image: 'https://rafaam11.github.io/assets/img/profile_square.webp',
     jobTitle: ko ? '수술 로보틱스·컴퓨터비전 R&D 엔지니어' : 'Robotics & Computer Vision R&D Engineer',
-    description: ko
-      ? `수술 내비게이션, 3D 정합, 광학 추적, XR, 로봇 통합을 개발하는 R&D 엔지니어. 연구 방향: ${cv.interests.ko.join(', ')}.`
-      : `R&D engineer developing surgical navigation, 3D registration, optical tracking, XR and robot integration. Research interests: ${cv.interests.en.join(', ')}.`,
+    description: (ko
+      ? '수술 내비게이션, 3D 정합, 광학 추적, XR, 로봇 통합을 개발하는 R&D 엔지니어.'
+      : 'R&D engineer developing surgical navigation, 3D registration, optical tracking, XR and robot integration.')
+      + (cv.interests ? (ko ? ` 연구 방향: ${cv.interests.ko.join(', ')}.` : ` Research interests: ${cv.interests.en.join(', ')}.`) : ''),
     worksFor: { '@type': 'Organization', name: 'DIGITRACK Inc.' },
     alumniOf: [
       { '@type': 'CollegeOrUniversity', name: 'DGIST' },
       { '@type': 'CollegeOrUniversity', name: 'Kumoh National Institute of Technology' }
     ],
-    knowsAbout: ['Surgical Navigation', '3D Registration', 'Image Registration', 'Optical Tracking', 'Computer Vision', '3D Vision', 'Extended Reality', 'Spatial Computing', '3D Slicer', 'ROS 2', 'Robotics'],
+    knowsAbout: ['Surgical Navigation', '3D Registration', 'Image Registration', 'Optical Tracking', 'Computer Vision', 'Point Cloud Processing', 'Extended Reality', 'Spatial Computing', '3D Slicer', 'ROS 2', 'Robotics'],
     sameAs: cv.contacts.filter(c => c.label !== 'Email').map(c => c.href)
   };
   const json = JSON.stringify(person).replace(/</g, '\\u003c');

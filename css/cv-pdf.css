@@ -232,6 +232,11 @@
     grid-row: auto;
   }
 
+  .sc-cv__list .sc-cv__authors,
+  .sc-cv__list .sc-cv__meta {
+    grid-column: auto;
+  }
+
   .sc-cv-doc__object {
     height: 70vh;
   }
