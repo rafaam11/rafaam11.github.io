@@ -113,7 +113,9 @@ test('news events, labels and activity-media evidence agree', () => {
       assert.ok(knownCategories.has(feed.labels[item.id][0]), `${item.id}: known category`);
       for (const extra of feed.labels[item.id][3] || []) assert.ok(knownCategories.has(extra), `${item.id}: known extra category`);
     }
-    for (const locale of ['ko', 'en']) assert.doesNotMatch(item.translations[locale].body, /박사|진학|이직|PhD|admission/i, `${item.id} ${locale}: career wording`);
+    for (const locale of ['ko', 'en']) {
+      for (const field of ['body', 'post']) assert.doesNotMatch(item.translations[locale][field] || '', /박사|진학|이직|PhD|admission/i, `${item.id} ${locale} ${field}: career wording`);
+    }
     if (item.evidence.path === 'data/activity-media.json') {
       const record = json.media[item.evidence.locator];
       assert.ok(record && record.approval === 'approved-public', `${item.id}: evidence record ${item.evidence.locator} is approved`);
@@ -149,8 +151,21 @@ test('activity events rest on dated evidence', () => {
   assert.match(byId['ism-launcher-paper-2019'].evidence.dateSource, /M183/);
   const json = JSON.parse(read('data/activity-media.json'));
   for (const record of Object.values(json.media)) assert.ok(record.eventIds.length, `${record.id} is linked to an event`);
-  const english = portfolioData.news.map((item) => item.translations.en.body).join(' ');
+  const english = portfolioData.news.map((item) => item.translations.en.body + ' ' + (item.translations.en.post || '')).join(' ');
   assert.doesNotMatch(english, /Kumoh Institute of Technology/, 'use the full English name of Kumoh');
+});
+
+test('News posts name no private people, carry no review wording and claim no grants', () => {
+  for (const item of portfolioData.news) {
+    for (const locale of ['ko', 'en']) {
+      const post = item.translations[locale].post || '';
+      assert.doesNotMatch(post, privatePeoplePattern, `${item.id} ${locale}: private person`);
+      assert.doesNotMatch(post, honorificPattern, `${item.id} ${locale}: named third person`);
+      assert.doesNotMatch(post, reviewWordingPattern, `${item.id} ${locale}: review wording`);
+      assert.doesNotMatch(post, /\d+\s?%|Physical AI|등록되었|was granted/i, `${item.id} ${locale}: percentage, retroactive label or grant claim`);
+      assert.ok(post.split(/\n\s*\n/).length <= 2, `${item.id} ${locale}: at most two paragraphs`);
+    }
+  }
 });
 
 test('News keeps only the first public release of each personal app', () => {
