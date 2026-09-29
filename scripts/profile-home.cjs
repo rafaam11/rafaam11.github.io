@@ -79,6 +79,8 @@ function newsErrors(entries = data.news) {
     }
     for (const locale of ['ko','en']) {
       if (!item.translations?.[locale]?.body) errors.push(`News requires ${locale}: ${item.id}`);
+      // The longer News-page post is optional, but a post in one language needs its pair.
+      if (item.translations?.[locale] && ['ko','en'].some(other => item.translations?.[other]?.post) && !item.translations[locale].post) errors.push(`News post requires ${locale}: ${item.id}`);
       for (const link of item.links || []) {
         if (!link.translations?.[locale]?.label || !(link.route ? i18n.routeDescriptors.some(r => r.route === link.route) : /^https:\/\//.test(link.href || ''))) errors.push(`Invalid News link: ${item.id}`);
       }

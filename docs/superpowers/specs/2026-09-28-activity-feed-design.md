@@ -21,7 +21,10 @@ Use the owner's private activity media (`assets/usermedia/`, 592 MB, git-ignored
 | Evidence | CV facts cite `data/public-cv.json`; photo-only events cite `{ path: 'data/activity-media.json', locator: 'M###' }` and the record must list the event |
 | Category | New `activity` (대외활동 / Activities); extra categories live in `labels[id][3]` |
 | Order | One chronological list, newest first (career chapters were tried and dropped at the owner's request, 2026-09-29). Software releases: only the first public release of each app |
-| Media per event | Three photos and one video visible; further photos fold into `<details>`; images carry width/height |
+| Media per event | Feed grid (2026-09-30): up to four tiles, the fourth with a "+N" count; every photo and video opens in a lightbox (arrows, swipe, Esc); images carry width/height |
+| Post cards | 2026-09-30, owner request: LinkedIn/Facebook-style cards with avatar, date and type, an optional longer ko/en `post` folded after five lines, links at the foot |
+| Link preview | Events without activity media show the approved lead image (or video poster) of the case they link to; the case link is not repeated below |
+| Media toggle | "Only posts with photos or videos" filters to events with activity media |
 | Home | Selected activities: quadruped robot (2020), ISM 2019, ACCAS 2022 |
 
 ## Pipeline
