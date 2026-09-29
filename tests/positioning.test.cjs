@@ -77,3 +77,57 @@ test('Home hero separates the current role from the research direction', () => {
     assert.match(html.match(/<section aria-labelledby="publications-title">[\s\S]*?<\/section>/)[0], /projects\/mandibular-fracture\//);
   }
 });
+
+test('Home carries one Person JSON-LD block limited to current expertise', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const root = path.resolve(__dirname, '..');
+  const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
+  for (const [file, locale] of [['index.html', 'ko'], ['en/index.html', 'en']]) {
+    const html = read(file);
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    assert.equal(blocks.length, 1, file);
+    assert.ok(html.indexOf(blocks[0][0]) < html.indexOf('</head>'), `${file}: JSON-LD in head`);
+    const person = JSON.parse(blocks[0][1]);
+    assert.equal(person['@type'], 'Person');
+    assert.equal(person.name, 'Jinmin Kim');
+    assert.equal(person.alternateName, '김진민');
+    assert.equal(person.url, locale === 'ko' ? 'https://rafaam11.github.io/' : 'https://rafaam11.github.io/en/');
+    assert.deepEqual(person.sameAs, ['https://github.com/rafaam11', 'https://www.linkedin.com/in/rlawlsals']);
+    assert.equal(person.worksFor.name, 'DIGITRACK Inc.');
+    assert.ok(person.knowsAbout.includes('Surgical Navigation') && person.knowsAbout.includes('Optical Tracking'));
+    assert.doesNotMatch(person.knowsAbout.join(' '), /Physical AI|Surgical AI|Robot Perception|Surgical Robotics/);
+    assert.doesNotMatch(blocks[0][1], /@naver|mailto|Samsung|삼성|https?:\/\/(?!rafaam11\.github\.io|github\.com|www\.linkedin\.com|schema\.org)/);
+  }
+  for (const file of ['projects/index.html', 'cv/index.html', 'news/index.html', 'contact/index.html', 'en/cv/index.html']) {
+    assert.doesNotMatch(read(file), /application\/ld\+json/, file);
+  }
+});
+
+test('page titles, descriptions and footer carry the positioning', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const root = path.resolve(__dirname, '..');
+  const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
+  const expected = {
+    'index.html': ['김진민 · 수술 로보틱스·컴퓨터비전 R&amp;D', '수술 내비게이션, 3D 정합, 광학 추적, XR, 로봇 통합을 개발하는 R&amp;D 엔지니어 김진민의 연구와 프로젝트.'],
+    'en/index.html': ['Jinmin Kim · Robotics &amp; Computer Vision R&amp;D', 'Jinmin Kim is an R&amp;D engineer in surgical navigation, 3D registration, optical tracking, XR and robot integration, growing toward surgical robotics.'],
+    'projects/index.html': [null, '수술 로보틱스·내비게이션, 컴퓨터비전·3D 공간 컴퓨팅, XR, 로보틱스, AI 빌드 랩으로 묶은 프로젝트입니다.'],
+    'en/projects/index.html': [null, 'Projects in surgical navigation, computer vision and 3D spatial computing, XR, robotics, and an AI build lab, each with role and public evidence.'],
+    'cv/index.html': [null, '수술 로보틱스·컴퓨터비전 R&amp;D 엔지니어 김진민의 학력, 경력, 연구 실적, 특허, 수상.'],
+    'en/cv/index.html': [null, 'Public CV of Jinmin Kim, robotics and computer vision R&amp;D engineer: education, experience, publications, patents, and awards.'],
+    'contact/index.html': [null, '수술 내비게이션·3D 비전 공동연구와 연구 협력 문의 방법입니다.'],
+    'en/contact/index.html': [null, 'How to reach Jinmin Kim about joint research in surgical navigation and 3D vision.']
+  };
+  for (const [file, [title, description]] of Object.entries(expected)) {
+    const html = read(file);
+    if (title) assert.ok(html.includes(`<title>${title}</title>`), `${file} title`);
+    assert.ok(html.includes(`<meta name="description" content="${description}">`), `${file} description`);
+  }
+  const i18n = require('../js/site-i18n.js');
+  assert.equal(i18n.ui.ko.footer, '수술 로보틱스·컴퓨터비전 R&D 엔지니어 · 대한민국 대구');
+  assert.equal(i18n.ui.en.footer, 'Robotics & Computer Vision R&D Engineer · Daegu, Korea');
+  const nav = read('js/nav.js');
+  assert.match(nav, /수술 내비게이션 · 3D 정합 · 광학 추적 · XR — 지능형 수술을 향해\./);
+  assert.match(nav, /Surgical navigation, 3D registration, optical tracking and XR — toward intelligent surgery\./);
+});

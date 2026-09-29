@@ -65,7 +65,7 @@
         },
         renderError: '포트폴리오 데이터를 표시할 수 없습니다.'
       },
-      footer: '로봇SW 엔지니어 · 대한민국 대구'
+      footer: '수술 로보틱스·컴퓨터비전 R&D 엔지니어 · 대한민국 대구'
     },
     en: {
       nav: {
@@ -104,7 +104,7 @@
         },
         renderError: 'Portfolio data could not be rendered.'
       },
-      footer: 'Robot Software Engineer · Daegu, Korea'
+      footer: 'Robotics & Computer Vision R&D Engineer · Daegu, Korea'
     }
   };
 
