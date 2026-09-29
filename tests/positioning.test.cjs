@@ -68,7 +68,7 @@ test('Home hero separates the current role from the research direction', () => {
     for (const term of cv.interests[locale]) assert.ok(direction.includes(term), `${locale} direction ${term}`);
     // Research-direction terms stay out of the current-expertise list.
     const expertise = html.match(/<dl class="sc-capabilities">[\s\S]*?<\/dl>/)[0];
-    assert.doesNotMatch(expertise, /Physical AI|Surgical AI|Robot Perception|로봇 인지/);
+    for (const term of cv.interests[locale]) assert.ok(!expertise.includes(term), `${locale} expertise lists research direction ${term}`);
     assert.match(html, locale === 'ko' ? /<h2 id="implementation-title">현재 전문성<\/h2>/ : /<h2 id="implementation-title">Current expertise<\/h2>/);
     assert.match(html, locale === 'ko' ? /㈜디지트랙 연구원 · 소프트웨어 R&amp;D/ : /Research Engineer · Software R&amp;D, DIGITRACK Inc\./);
     assert.doesNotMatch(html, /hero-kicker/);
@@ -96,7 +96,8 @@ test('Home carries one Person JSON-LD block limited to current expertise', () =>
     assert.deepEqual(person.sameAs, ['https://github.com/rafaam11', 'https://www.linkedin.com/in/rlawlsals']);
     assert.equal(person.worksFor.name, 'DIGITRACK Inc.');
     assert.ok(person.knowsAbout.includes('Surgical Navigation') && person.knowsAbout.includes('Optical Tracking'));
-    assert.doesNotMatch(person.knowsAbout.join(' '), /Physical AI|Surgical AI|Robot Perception|Surgical Robotics/);
+    const interests = JSON.parse(read('data/public-cv.json')).interests.en;
+    for (const term of interests) assert.ok(!person.knowsAbout.includes(term), `knowsAbout must not list research direction ${term}`);
     assert.doesNotMatch(blocks[0][1], /@naver|mailto|Samsung|삼성|https?:\/\/(?!rafaam11\.github\.io|github\.com|www\.linkedin\.com|schema\.org)/);
   }
   for (const file of ['projects/index.html', 'cv/index.html', 'news/index.html', 'contact/index.html', 'en/cv/index.html']) {

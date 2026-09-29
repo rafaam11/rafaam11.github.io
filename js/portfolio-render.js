@@ -1303,7 +1303,7 @@
         '<' + tag + ' class="sc-project__title"><a href="' + escapeHtml(href) + '">' + escapeHtml(project.title) + '</a></' + tag + '>' +
         '<p class="sc-project__meta">' + escapeHtml(project.period) + ' · ' + escapeHtml(projectStateLabel(project, normalized)) + '</p>' +
         '<p class="sc-project__summary">' + escapeHtml(project.summary) + '</p>' + facts +
-        (settings.tech ? '<p class="sc-project__tech">' + project.tech.map(escapeHtml).join(', ') + '</p>' : '') +
+        (settings.tech && project.tech.length ? '<p class="sc-project__tech">' + project.tech.map(escapeHtml).join(', ') + '</p>' : '') +
         '<p class="sc-project__links"><a href="' + escapeHtml(href) + '">' + escapeHtml(copy.details) + '</a> · <a href="' + escapeHtml(assetHref(base, project.pdf[normalized])) + '">' + escapeHtml(copy.pdf) + '</a>' + projectLinksInline(project, normalized) + '</p>' +
       '</div></li>';
   }
