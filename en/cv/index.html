@@ -26,7 +26,7 @@
     </header>
 
     <!-- PUBLIC CV SUMMARY:START -->
-    <section class="sc-cv" data-cv-summary data-cv-source-digest="58ced123e005f65fdfd0f4e90885d932aa8651655bef2a4986000defcdd477ef" data-cv-summary-digest="1d04381a0982c82b9809f03168b94241e59e534d386ca645a0ef06166d1be99f" aria-labelledby="cv-summary-title">
+    <section class="sc-cv" data-cv-summary data-cv-source-digest="2d7a740f9a6b01244bcffd6a8eff62e4c36ee0fffd628b6f4eb0808b78687df8" data-cv-summary-digest="415a20d3f011d72c37107021a0f30d49031b0cd4e7bda00727152dd112fef0d6" aria-labelledby="cv-summary-title">
       <header class="sc-cv__intro">
         <h2 id="cv-summary-title">Jinmin Kim<small lang="ko">김진민</small></h2>
         <p class="sc-cv__headline">Robotics &amp; Computer Vision R&amp;D Engineer — Surgical Navigation, 3D Registration, Optical Tracking, XR, Robotics Integration</p>
@@ -91,17 +91,21 @@
                 </ul>
               </div>
               <div class="sc-cv__area">
-                <h4>Robotics &amp; Vision — Autonomous Forklift (2025.11 - )</h4>
+                <h4>Robotics &amp; Vision — Logistics Robots and Autonomous Forklift (2024.12 - )</h4>
                 <ul>
                 <li>Extending optical tracking and coordinate registration experience to robot–camera coordinate integration, robot vision and sensor integration.</li>
-                <li>Designed and implemented the safety-policy manager for the in-house autonomous-forklift solution (DOTORI) and integrated LiDAR and ToF sensors over the Zenoh and ROS 2 network.</li>
-                <li>Own vision R&amp;D — truck-loading vision with ToF and RGB fusion, a SAM-family segmentation proof of concept, and behaviour-tree integration.</li>
+                <li>Since 2025.11, designed and initially implemented the safety manager of the in-house autonomous-forklift solution (DOTORI) — three-zone virtual bumper and E-STOP latching policy — and integrated LiDAR and ToF sensors into the Zenoh-based in-house middleware with a sensor-integration service.</li>
+                <li>DOTORI vision R&amp;D — production vision on Jetson (two-stage ToF↔RGB calibration, SAM3 segmentation, quality gates, continuous truck-load tracking) and the earlier Windows prototype; measured ToF↔RGB synchronisation at p95 16.6 ms.</li>
+                <li>Integrated vision servoing (wheel-pair detection → fork alignment, approach and insertion) and loading/unloading actions into the team&#39;s behaviour trees; contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.</li>
+                <li>Before DOTORI — built the map editor of a Unity-based fleet management system for logistics robots (2024.12–2025.01) and a drone marker-tracking prototype linking a mobile drone-SDK app with PC-side marker tracking (2025.08–09).</li>
                 </ul>
               </div>
               <div class="sc-cv__area">
-                <h4>Personal — building with AI (2026 - )</h4>
+                <h4>AI-assisted Product Engineering — In-house Tools and Personal (2026 - )</h4>
                 <ul>
                 <li>LLM Wiki — built and operate a personal knowledge system driven by AI agents; I own the framing, architecture, and verification while delegating much of the implementation.</li>
+                <li>In-house tools (2026) — a desktop workbench app with a pilot-to-stable update channel, an HWP document editor with its own installer and update server, an intranet research tool, and an internal coding-agent plugin marketplace.</li>
+                <li>For these in-house tools I own requirements, architecture, acceptance, and releases, while the implementation relies heavily on AI coding agents; no productivity effect is claimed.</li>
                 </ul>
               </div>
             </li>
@@ -150,7 +154,7 @@
         <dl class="sc-cv__skills">
               <div><dt>Surgical navigation &amp; medical imaging</dt><dd>3D Slicer, DICOM, optical tracking, coordinate transformation, calibration, image/point-cloud registration, OpenIGTLink</dd></div>
               <div><dt>Computer vision &amp; 3D</dt><dd>Point clouds, rigid/ICP registration, segmentation (SAM family), 3D visualisation, PyTorch</dd></div>
-              <div><dt>Robotics</dt><dd>ROS 2, Zenoh, Isaac Sim, behaviour trees, vision and sensor integration</dd></div>
+              <div><dt>Robotics</dt><dd>Zenoh, behaviour trees (BehaviorTree.CPP), Isaac Sim, Jetson, vision and sensor integration</dd></div>
               <div><dt>XR &amp; spatial computing</dt><dd>Unity, OpenXR, MRTK, HoloLens 2, Meta Quest, Galaxy XR</dd></div>
               <div><dt>Programming</dt><dd>Python, C++, C#</dd></div>
               <div><dt>Languages</dt><dd>English - Intermediate (paper writing and reading) · Japanese - JLPT N2 (2021)</dd></div>

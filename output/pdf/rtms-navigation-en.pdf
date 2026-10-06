@@ -135,14 +135,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 172.8898 141.5852 188.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 140.8898 141.5852 156.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 18 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 152.8898 128.2212 168.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 120.8898 128.2212 136.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
@@ -825,7 +825,7 @@ endstream
 endobj
 32 0 obj
 <<
-/Length 7118
+/Length 7756
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -854,156 +854,164 @@ BT 1 0 0 1 48 670.8898 Tm /F2+0 10 Tf 12 TL (Led the 3D Slicer procedure-setup a
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 654.8898 Tm /F2+0 10 Tf 12 TL (and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 638.8898 Tm /F2+0 10 Tf 12 TL (robot integration, and the product structure covering license verification and optional-feature gating.) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 609.8898 Tm /F3+0 11 Tf 13.2 TL (Navigation UI workflow) Tj T* ET
+BT 1 0 0 1 48 638.8898 Tm /F2+0 10 Tf 12 TL (robot integration, and the product structure covering license verification and optional-feature gating. For a) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 589.8898 Tm /F2+0 10 Tf 12 TL (Six Home-screen menus gate the run from DICOM load through reconstruction, registration, and targets to) Tj T* ET
+BT 1 0 0 1 48 622.8898 Tm /F2+0 10 Tf 12 TL (health-technology R&D programme, also owned the registration workflow, result panel and matrix export,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 573.8898 Tm /F2+0 10 Tf 12 TL (the live session, with crosshair aiming.) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 544.8898 Tm /F3+0 11 Tf 13.2 TL (Coordinate and registration engine) Tj T* ET
+BT 1 0 0 1 48 606.8898 Tm /F2+0 10 Tf 12 TL (and tracker-SDK integration improvements of a depth-camera \(LiDAR/ToF\) registration program \(C++, Qt,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 524.8898 Tm /F2+0 10 Tf 12 TL (Image, patient, tracker, and coil transforms stay explicit; ICP offers three modes.) Tj T* ET
+BT 1 0 0 1 48 590.8898 Tm /F2+0 10 Tf 12 TL (VTK\).) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 494.8898 Tm /F3+0 10.5 Tf 12.6 TL (Coordinate loop from input to aiming guidance) Tj T* ET
+BT 1 0 0 1 48 561.8898 Tm /F3+0 11 Tf 13.2 TL (Navigation UI workflow) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (Six Home-screen menus gate the run from DICOM load through reconstruction, registration, and targets to) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 525.8898 Tm /F2+0 10 Tf 12 TL (the live session, with crosshair aiming.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 496.8898 Tm /F3+0 11 Tf 13.2 TL (Coordinate and registration engine) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 476.8898 Tm /F2+0 10 Tf 12 TL (Image, patient, tracker, and coil transforms stay explicit; ICP offers three modes.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 446.8898 Tm /F3+0 10.5 Tf 12.6 TL (Coordinate loop from input to aiming guidance) Tj T* ET
 .101961 .337255 .858824 RG
 1.2 w
-n 147.6378 457.8898 m 297.6378 457.8898 l S
+n 147.6378 409.8898 m 297.6378 409.8898 l S
 .101961 .337255 .858824 rg
 n
-299.8378 457.8898 m
-299.8378 459.1048 298.8528 460.0898 297.6378 460.0898 c
-296.4228 460.0898 295.4378 459.1048 295.4378 457.8898 c
-295.4378 456.6747 296.4228 455.6898 297.6378 455.6898 c
-298.8528 455.6898 299.8378 456.6747 299.8378 457.8898 c
+299.8378 409.8898 m
+299.8378 411.1048 298.8528 412.0898 297.6378 412.0898 c
+296.4228 412.0898 295.4378 411.1048 295.4378 409.8898 c
+295.4378 408.6747 296.4228 407.6898 297.6378 407.6898 c
+298.8528 407.6898 299.8378 408.6747 299.8378 409.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 297.6378 457.8898 m 447.6378 457.8898 l S
+n 297.6378 409.8898 m 447.6378 409.8898 l S
 .101961 .337255 .858824 rg
 n
-449.8378 457.8898 m
-449.8378 459.1048 448.8528 460.0898 447.6378 460.0898 c
-446.4228 460.0898 445.4378 459.1048 445.4378 457.8898 c
-445.4378 456.6747 446.4228 455.6898 447.6378 455.6898 c
-448.8528 455.6898 449.8378 456.6747 449.8378 457.8898 c
+449.8378 409.8898 m
+449.8378 411.1048 448.8528 412.0898 447.6378 412.0898 c
+446.4228 412.0898 445.4378 411.1048 445.4378 409.8898 c
+445.4378 408.6747 446.4228 407.6898 447.6378 407.6898 c
+448.8528 407.6898 449.8378 408.6747 449.8378 409.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 447.6378 457.8898 m 297.6378 374.8898 l S
+n 447.6378 409.8898 m 297.6378 326.8898 l S
 .101961 .337255 .858824 rg
 n
-299.8378 374.8898 m
-299.8378 376.1048 298.8528 377.0898 297.6378 377.0898 c
-296.4228 377.0898 295.4378 376.1048 295.4378 374.8898 c
-295.4378 373.6747 296.4228 372.6898 297.6378 372.6898 c
-298.8528 372.6898 299.8378 373.6747 299.8378 374.8898 c
+299.8378 326.8898 m
+299.8378 328.1048 298.8528 329.0898 297.6378 329.0898 c
+296.4228 329.0898 295.4378 328.1048 295.4378 326.8898 c
+295.4378 325.6747 296.4228 324.6898 297.6378 324.6898 c
+298.8528 324.6898 299.8378 325.6747 299.8378 326.8898 c
 f*
 .603922 .203922 .070588 RG
 1.2 w
-n 297.6378 374.8898 m 147.6378 457.8898 l S
+n 297.6378 326.8898 m 147.6378 409.8898 l S
 .603922 .203922 .070588 rg
 n
-149.8378 457.8898 m
-149.8378 459.1048 148.8528 460.0898 147.6378 460.0898 c
-146.4228 460.0898 145.4378 459.1048 145.4378 457.8898 c
-145.4378 456.6747 146.4228 455.6898 147.6378 455.6898 c
-148.8528 455.6898 149.8378 456.6747 149.8378 457.8898 c
+149.8378 409.8898 m
+149.8378 411.1048 148.8528 412.0898 147.6378 412.0898 c
+146.4228 412.0898 145.4378 411.1048 145.4378 409.8898 c
+145.4378 408.6747 146.4228 407.6898 147.6378 407.6898 c
+148.8528 407.6898 149.8378 408.6747 149.8378 409.8898 c
 f*
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-88.6378 433.8898 m
-206.6378 433.8898 l
-208.2962 433.8898 209.6378 435.2314 209.6378 436.8898 c
-209.6378 478.8898 l
-209.6378 480.5482 208.2962 481.8898 206.6378 481.8898 c
-88.6378 481.8898 l
-86.9794 481.8898 85.6378 480.5482 85.6378 478.8898 c
-85.6378 436.8898 l
-85.6378 435.2314 86.9794 433.8898 88.6378 433.8898 c
+88.6378 385.8898 m
+206.6378 385.8898 l
+208.2962 385.8898 209.6378 387.2314 209.6378 388.8898 c
+209.6378 430.8898 l
+209.6378 432.5482 208.2962 433.8898 206.6378 433.8898 c
+88.6378 433.8898 l
+86.9794 433.8898 85.6378 432.5482 85.6378 430.8898 c
+85.6378 388.8898 l
+85.6378 387.2314 86.9794 385.8898 88.6378 385.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 94.6378 466.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
+BT 1 0 0 1 94.6378 418.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 94.6378 449.8898 Tm /F3+0 7.4 Tf 8.88 TL (Tracker + tablet input) Tj T* ET
+BT 1 0 0 1 94.6378 401.8898 Tm /F3+0 7.4 Tf 8.88 TL (Tracker + tablet input) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-238.6378 433.8898 m
-356.6378 433.8898 l
-358.2962 433.8898 359.6378 435.2314 359.6378 436.8898 c
-359.6378 478.8898 l
-359.6378 480.5482 358.2962 481.8898 356.6378 481.8898 c
-238.6378 481.8898 l
-236.9794 481.8898 235.6378 480.5482 235.6378 478.8898 c
-235.6378 436.8898 l
-235.6378 435.2314 236.9794 433.8898 238.6378 433.8898 c
+238.6378 385.8898 m
+356.6378 385.8898 l
+358.2962 385.8898 359.6378 387.2314 359.6378 388.8898 c
+359.6378 430.8898 l
+359.6378 432.5482 358.2962 433.8898 356.6378 433.8898 c
+238.6378 433.8898 l
+236.9794 433.8898 235.6378 432.5482 235.6378 430.8898 c
+235.6378 388.8898 l
+235.6378 387.2314 236.9794 385.8898 238.6378 385.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 244.6378 466.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
+BT 1 0 0 1 244.6378 418.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 244.6378 449.8898 Tm /F3+0 7.4 Tf 8.88 TL (Landmark + ICP registration) Tj T* ET
+BT 1 0 0 1 244.6378 401.8898 Tm /F3+0 7.4 Tf 8.88 TL (Landmark + ICP registration) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-388.6378 433.8898 m
-506.6378 433.8898 l
-508.2962 433.8898 509.6378 435.2314 509.6378 436.8898 c
-509.6378 478.8898 l
-509.6378 480.5482 508.2962 481.8898 506.6378 481.8898 c
-388.6378 481.8898 l
-386.9794 481.8898 385.6378 480.5482 385.6378 478.8898 c
-385.6378 436.8898 l
-385.6378 435.2314 386.9794 433.8898 388.6378 433.8898 c
+388.6378 385.8898 m
+506.6378 385.8898 l
+508.2962 385.8898 509.6378 387.2314 509.6378 388.8898 c
+509.6378 430.8898 l
+509.6378 432.5482 508.2962 433.8898 506.6378 433.8898 c
+388.6378 433.8898 l
+386.9794 433.8898 385.6378 432.5482 385.6378 430.8898 c
+385.6378 388.8898 l
+385.6378 387.2314 386.9794 385.8898 388.6378 385.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 394.6378 466.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
+BT 1 0 0 1 394.6378 418.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 394.6378 449.8898 Tm /F3+0 7.4 Tf 8.88 TL (Patient-coil transform chain) Tj T* ET
+BT 1 0 0 1 394.6378 401.8898 Tm /F3+0 7.4 Tf 8.88 TL (Patient-coil transform chain) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-238.6378 350.8898 m
-356.6378 350.8898 l
-358.2962 350.8898 359.6378 352.2314 359.6378 353.8898 c
-359.6378 395.8898 l
-359.6378 397.5482 358.2962 398.8898 356.6378 398.8898 c
-238.6378 398.8898 l
-236.9794 398.8898 235.6378 397.5482 235.6378 395.8898 c
-235.6378 353.8898 l
-235.6378 352.2314 236.9794 350.8898 238.6378 350.8898 c
+238.6378 302.8898 m
+356.6378 302.8898 l
+358.2962 302.8898 359.6378 304.2314 359.6378 305.8898 c
+359.6378 347.8898 l
+359.6378 349.5482 358.2962 350.8898 356.6378 350.8898 c
+238.6378 350.8898 l
+236.9794 350.8898 235.6378 349.5482 235.6378 347.8898 c
+235.6378 305.8898 l
+235.6378 304.2314 236.9794 302.8898 238.6378 302.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 244.6378 383.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
+BT 1 0 0 1 244.6378 335.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 244.6378 366.8898 Tm /F3+0 7.4 Tf 8.88 TL (Slicer navigation UI) Tj T* ET
+BT 1 0 0 1 244.6378 318.8898 Tm /F3+0 7.4 Tf 8.88 TL (Slicer navigation UI) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 316.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 268.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 284.8898 m 547.2756 284.8898 l S
+n 48 236.8898 m 547.2756 236.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 250.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
+BT 1 0 0 1 48 202.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 226.8898 Tm /F2+0 10 Tf 12 TL (The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and) Tj T* ET
+BT 1 0 0 1 48 178.8898 Tm /F2+0 10 Tf 12 TL (The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 210.8898 Tm /F2+0 10 Tf 12 TL (coordinate-transform and registration logs.) Tj T* ET
+BT 1 0 0 1 48 162.8898 Tm /F2+0 10 Tf 12 TL (coordinate-transform and registration logs.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 181.8898 Tm /F3+0 11 Tf 13.2 TL (Device and system integration) Tj T* ET
+BT 1 0 0 1 48 133.8898 Tm /F3+0 11 Tf 13.2 TL (Device and system integration) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 161.8898 Tm /F2+0 10 Tf 12 TL (A major optical-tracker SDK migration, an in-house TCP binary protocol for the tablet, single tracker) Tj T* ET
+BT 1 0 0 1 48 113.8898 Tm /F2+0 10 Tf 12 TL (A major optical-tracker SDK migration, an in-house TCP binary protocol for the tablet, single tracker) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 145.8898 Tm /F2+0 10 Tf 12 TL (ownership, and contact-stop robot descent.) Tj T* ET
+BT 1 0 0 1 48 97.88976 Tm /F2+0 10 Tf 12 TL (ownership, contact-stop robot descent, and a depth-camera \(LiDAR/ToF\) registration program for a) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 81.88976 Tm /F2+0 10 Tf 12 TL (health-technology R&D programme.) Tj T* ET
  
 endstream
 endobj
@@ -1081,7 +1089,7 @@ endstream
 endobj
 35 0 obj
 <<
-/Length 3855
+/Length 4164
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1120,39 +1128,43 @@ BT 1 0 0 1 48 556.8898 Tm /F2+0 10 Tf 12 TL (No clinical efficacy, quantitative 
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 527.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 507.8898 Tm /F2+0 10 Tf 12 TL (The segmentation and landmark models were supplied externally and integrated behind an adapter) Tj T* ET
+BT 1 0 0 1 48 507.8898 Tm /F2+0 10 Tf 12 TL (The deep-learning models for brain segmentation, landmarks, and treatment-position extraction were) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (boundary. I own that boundary, the post-processing, the license gating, and the UI integration.) Tj T* ET
+BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (provided by the partner; I did not develop them. I own their integration behind an adapter boundary, the) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 475.8898 Tm /F2+0 10 Tf 12 TL (boundary design, post-processing, the quantitative evaluation screen, license gating, and UI integration.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 459.8898 m 547.2756 459.8898 l S
+n 48 443.8898 m 547.2756 443.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 425.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 409.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 401.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 VTK \001 PyQt5 \001 Python \001 PyTorch \001 Optical tracking \001 TCP/IP binary protocol \001 License gating) Tj T* ET
+BT 1 0 0 1 48 385.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 VTK \001 PyQt5 \001 Python \001 PyTorch \(inference integration\) \001 Optical tracking \001 TCP/IP binary protocol \001) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 369.8898 Tm /F2+0 10 Tf 12 TL (License gating) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 376.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 344.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 356.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
+BT 1 0 0 1 48 324.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 324.8898 m 547.2756 324.8898 l S
+n 48 292.8898 m 547.2756 292.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 290.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 258.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 266.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 234.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 237.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 205.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 217.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 185.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 201.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 169.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 176.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 174.8898 m 141.5852 174.8898 l S
+BT 1 0 0 1 48 144.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 142.8898 m 141.5852 142.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 156.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 154.8898 m 128.2212 154.8898 l S
+BT 1 0 0 1 48 124.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 122.8898 m 128.2212 122.8898 l S
  
 endstream
 endobj
@@ -1191,9 +1203,9 @@ xref
 0009069921 00000 n 
 0009070008 00000 n 
 0009072880 00000 n 
-0009080050 00000 n 
-0009081386 00000 n 
-0009082753 00000 n 
+0009080688 00000 n 
+0009082024 00000 n 
+0009083391 00000 n 
 trailer
 <<
 /ID 
@@ -1205,5 +1217,5 @@ trailer
 /Size 36
 >>
 startxref
-9086660
+9087607
 %%EOF

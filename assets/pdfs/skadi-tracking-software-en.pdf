@@ -926,7 +926,7 @@ endstream
 endobj
 35 0 obj
 <<
-/Length 3252
+/Length 3381
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -981,7 +981,8 @@ BT 1 0 0 1 60 256.8898 Tm /F3+0 8 Tf 9.6 TL (My role) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 60 236.8898 Tm /F2+0 8.2 Tf 9.84 TL (I implemented MarkerEditor marker-coordinate input) Tj T* ET
 BT 1 0 0 1 60 224.8898 Tm /F2+0 8.2 Tf 9.84 TL (validation and own desktop-app maintenance, releases,) Tj T* ET
-BT 1 0 0 1 60 212.8898 Tm /F2+0 8.2 Tf 9.84 TL (and user documentation.) Tj T* ET
+BT 1 0 0 1 60 212.8898 Tm /F2+0 8.2 Tf 9.84 TL (and user documentation. I also improved the marker) Tj T* ET
+BT 1 0 0 1 60 200.8898 Tm /F2+0 8.2 Tf 9.84 TL (builder and calibration screens and added a) Tj T* ET
 .960784 .960784 .960784 rg
 .878431 .878431 .878431 RG
 n
@@ -1010,7 +1011,7 @@ endstream
 endobj
 36 0 obj
 <<
-/Length 6699
+/Length 6814
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1166,7 +1167,8 @@ BT 1 0 0 1 60 469.8898 Tm /F3+0 8 Tf 9.6 TL (My role) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 60 449.8898 Tm /F2+0 8.2 Tf 9.84 TL (I structured the DtSkadi.dll integration and OpenEx\(\) error) Tj T* ET
 BT 1 0 0 1 60 437.8898 Tm /F2+0 8.2 Tf 9.84 TL (branch so failure stops before an invalid state, and I own) Tj T* ET
-BT 1 0 0 1 60 425.8898 Tm /F2+0 8.2 Tf 9.84 TL (public API documentation and integration support.) Tj T* ET
+BT 1 0 0 1 60 425.8898 Tm /F2+0 8.2 Tf 9.84 TL (public API documentation and integration support. I also) Tj T* ET
+BT 1 0 0 1 60 413.8898 Tm /F2+0 8.2 Tf 9.84 TL (updated the Python SDK binding bundle for new SDK) Tj T* ET
 .960784 .960784 .960784 rg
 .878431 .878431 .878431 RG
 n
@@ -1488,9 +1490,9 @@ xref
 0002236358 00000 n 
 0002236445 00000 n 
 0002242578 00000 n 
-0002245882 00000 n 
-0002252633 00000 n 
-0002255798 00000 n 
+0002246011 00000 n 
+0002252877 00000 n 
+0002256042 00000 n 
 trailer
 <<
 /ID 
@@ -1502,5 +1504,5 @@ trailer
 /Size 39
 >>
 startxref
-2262740
+2262984
 %%EOF

@@ -1092,7 +1092,7 @@ endstream
 endobj
 40 0 obj
 <<
-/Length 6561
+/Length 6665
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1127,84 +1127,83 @@ BT 1 0 0 1 48 618.8898 Tm /F2+0 10 Tf 12 TL (image/patient/marker/instrument tra
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 602.8898 Tm /F2+0 10 Tf 12 TL (marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens-PC communication) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 586.8898 Tm /F2+0 10 Tf 12 TL (and interaction, and phantom integration tests and verification tooling.) Tj T* ET
+BT 1 0 0 1 48 586.8898 Tm /F2+0 10 Tf 12 TL (and interaction, and phantom integration tests and verification tooling. I was effectively the sole developer,) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 570.8898 Tm /F2+0 10 Tf 12 TL (and in 2026 continued its stabilisation with a shared tracking service, migration to tracker SDK v7.1.2,) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (mirror-plane registration, and the design and instrumentation of a navigation-latency measurement harness.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 557.8898 Tm /F3+0 11 Tf 13.2 TL (SMCNavi platform overview) Tj T* ET
+BT 1 0 0 1 48 525.8898 Tm /F3+0 11 Tf 13.2 TL (SMCNavi platform overview) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (SMCNavi integrates DICOM and 3D-model loading, MPR and 3D visualisation, optical tracking, patient) Tj T* ET
+BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (SMCNavi integrates DICOM and 3D-model loading, MPR and 3D visualisation, optical tracking, patient) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (registration, instrument calibration, and procedure-specific UI in one custom 3D Slicer desktop platform. The) Tj T* ET
+BT 1 0 0 1 48 489.8898 Tm /F2+0 10 Tf 12 TL (registration, instrument calibration, and procedure-specific UI in one custom 3D Slicer desktop platform. The) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (HoloLens work is a separate PC-side extension connected to SMCNavi.) Tj T* ET
+BT 1 0 0 1 48 473.8898 Tm /F2+0 10 Tf 12 TL (HoloLens work is a separate PC-side extension connected to SMCNavi.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 482.8898 Tm /F3+0 11 Tf 13.2 TL (Six oral and maxillofacial workflows) Tj T* ET
+BT 1 0 0 1 48 450.8898 Tm /F3+0 11 Tf 13.2 TL (Six oral and maxillofacial workflows) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 462.8898 Tm /F2+0 10 Tf 12 TL (The following are implemented and demonstrated software workflows; they are not evidence of clinical) Tj T* ET
+BT 1 0 0 1 48 430.8898 Tm /F2+0 10 Tf 12 TL (The following are implemented and demonstrated software workflows; they are not evidence of clinical) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 446.8898 Tm /F2+0 10 Tf 12 TL (efficacy.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 424.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 424.8898 Tm /F2+0 10 Tf 12 TL (Maxillary tumour-removal navigation) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 408.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 408.8898 Tm /F2+0 10 Tf 12 TL (Mandibular tumour-removal navigation) Tj T* ET
+BT 1 0 0 1 48 414.8898 Tm /F2+0 10 Tf 12 TL (efficacy.) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 392.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 392.8898 Tm /F2+0 10 Tf 12 TL (Bimaxillary-surgery navigation) Tj T* ET
+BT 1 0 0 1 64 392.8898 Tm /F2+0 10 Tf 12 TL (Maxillary tumour-removal navigation) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 376.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 376.8898 Tm /F2+0 10 Tf 12 TL (Mandibular-motion tracking) Tj T* ET
+BT 1 0 0 1 64 376.8898 Tm /F2+0 10 Tf 12 TL (Mandibular tumour-removal navigation) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 360.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 360.8898 Tm /F2+0 10 Tf 12 TL (Bone-graft placement) Tj T* ET
+BT 1 0 0 1 64 360.8898 Tm /F2+0 10 Tf 12 TL (Bimaxillary-surgery navigation) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 344.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 344.8898 Tm /F2+0 10 Tf 12 TL (Zygomatic-orbital fracture mirroring) Tj T* ET
+BT 1 0 0 1 64 344.8898 Tm /F2+0 10 Tf 12 TL (Mandibular-motion tracking) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 328.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 328.8898 Tm /F2+0 10 Tf 12 TL (Bone-graft placement) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 312.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 312.8898 Tm /F2+0 10 Tf 12 TL (Zygomatic-orbital fracture mirroring) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 315.8898 Tm /F3+0 11 Tf 13.2 TL (Tracking, registration, and calibration) Tj T* ET
+BT 1 0 0 1 48 283.8898 Tm /F3+0 11 Tf 13.2 TL (Tracking, registration, and calibration) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 295.8898 Tm /F2+0 10 Tf 12 TL (Built explicit transform paths between the patient, instruments, and image models so the inputs and) Tj T* ET
+BT 1 0 0 1 48 263.8898 Tm /F2+0 10 Tf 12 TL (Built explicit transform paths between the patient, instruments, and image models so the inputs and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 279.8898 Tm /F2+0 10 Tf 12 TL (feedback at each stage could be inspected.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 257.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 257.8898 Tm /F2+0 10 Tf 12 TL (Optical-tracker SDK integration and the live tool/marker data pipeline) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 241.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 241.8898 Tm /F2+0 10 Tf 12 TL (Transform chain across image, patient, marker, and instrument frames) Tj T* ET
+BT 1 0 0 1 48 247.8898 Tm /F2+0 10 Tf 12 TL (feedback at each stage could be inspected.) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 225.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 225.8898 Tm /F2+0 10 Tf 12 TL (Patient registration and registration-state feedback) Tj T* ET
+BT 1 0 0 1 64 225.8898 Tm /F2+0 10 Tf 12 TL (Optical-tracker SDK integration and the live tool/marker data pipeline) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 209.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 209.8898 Tm /F2+0 10 Tf 12 TL (Patient and instrument marker calibration) Tj T* ET
+BT 1 0 0 1 64 209.8898 Tm /F2+0 10 Tf 12 TL (Transform chain across image, patient, marker, and instrument frames) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 193.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 193.8898 Tm /F2+0 10 Tf 12 TL (Non-standard and long-instrument calibration) Tj T* ET
+BT 1 0 0 1 64 193.8898 Tm /F2+0 10 Tf 12 TL (Patient registration and registration-state feedback) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 177.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 177.8898 Tm /F2+0 10 Tf 12 TL (Patient and instrument marker calibration) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 161.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 161.8898 Tm /F2+0 10 Tf 12 TL (Non-standard and long-instrument calibration) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 145.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 145.8898 Tm /F2+0 10 Tf 12 TL (Mirror-plane registration with pivot-point setting) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 129.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 129.8898 Tm /F2+0 10 Tf 12 TL (2026 stabilisation: a shared tracking service used across screens, and migration to tracker SDK v7.1.2) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 113.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 113.8898 Tm /F2+0 10 Tf 12 TL (2026 stabilisation: design and instrumentation of a stage-by-stage navigation-latency measurement) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 64 97.88976 Tm /F2+0 10 Tf 12 TL (harness \(no latency results claimed\)) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 164.8898 Tm /F3+0 11 Tf 13.2 TL (HoloLens spatial interface) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 144.8898 Tm /F2+0 10 Tf 12 TL (Rendered SMCNavi-owned registration and workflow state in a separate PC extension and connected it to) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 128.8898 Tm /F2+0 10 Tf 12 TL (HoloLens 2 spatial presentation and interaction.) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 106.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 106.8898 Tm /F2+0 10 Tf 12 TL (Transform and approved image/model exchange through OpenIGTLink) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 90.88976 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 90.88976 Tm /F2+0 10 Tf 12 TL (PC rendering and spatial placement with Unity and MRTK) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 74.88976 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 74.88976 Tm /F2+0 10 Tf 12 TL (HoloLens 2 presentation through Holographic Remoting) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 58.88976 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 58.88976 Tm /F2+0 10 Tf 12 TL (Return of HoloLens interaction input to the PC extension) Tj T* ET
+BT 1 0 0 1 48 68.88976 Tm /F3+0 11 Tf 13.2 TL (HoloLens spatial interface) Tj T* ET
  
 endstream
 endobj
 41 0 obj
 <<
-/Length 8617
+/Length 9717
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1222,231 +1221,247 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 753.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
-BT 1 0 0 1 64 753.8898 Tm /F2+0 10 Tf 12 TL (Phantom integration tests across optical tracking, SMCNavi, and HoloLens) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 725.8898 Tm /F3+0 10.5 Tf 12.6 TL (From tracking observations to HoloLens interaction) Tj T* ET
+BT 1 0 0 1 48 753.8898 Tm /F2+0 10 Tf 12 TL (Rendered SMCNavi-owned registration and workflow state in a separate PC extension and connected it to) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 710.8898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system-relationship diagram; it is not photographic, experimental, or clinical-outcome evidence.) Tj T* ET
+BT 1 0 0 1 48 737.8898 Tm /F2+0 10 Tf 12 TL (HoloLens 2 spatial presentation and interaction.) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 715.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 715.8898 Tm /F2+0 10 Tf 12 TL (Transform and approved image/model exchange through OpenIGTLink) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 699.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 699.8898 Tm /F2+0 10 Tf 12 TL (PC rendering and spatial placement with Unity and MRTK) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 683.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 683.8898 Tm /F2+0 10 Tf 12 TL (HoloLens 2 presentation through Holographic Remoting) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 667.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 667.8898 Tm /F2+0 10 Tf 12 TL (Return of HoloLens interaction input to the PC extension) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 651.8898 Tm /F2+0 10 Tf 12 TL (-) Tj T* ET
+BT 1 0 0 1 64 651.8898 Tm /F2+0 10 Tf 12 TL (Phantom integration tests across optical tracking, SMCNavi, and HoloLens) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 623.8898 Tm /F3+0 10.5 Tf 12.6 TL (From tracking observations to HoloLens interaction) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 608.8898 Tm /F2+0 8 Tf 9.6 TL (Explanatory system-relationship diagram; it is not photographic, experimental, or clinical-outcome evidence.) Tj T* ET
 .101961 .337255 .858824 RG
 .8 w
-n 80 679.8898 m 56 679.8898 l S
-n 56 679.8898 m 56 623.8898 l S
-n 56 623.8898 m 80 623.8898 l S
+n 80 577.8898 m 56 577.8898 l S
+n 56 577.8898 m 56 521.8898 l S
+n 56 521.8898 m 80 521.8898 l S
 1 1 1 rg
 n
-82.2 623.8898 m
-82.2 625.1048 81.21503 626.0898 80 626.0898 c
-78.78497 626.0898 77.8 625.1048 77.8 623.8898 c
-77.8 622.6747 78.78497 621.6898 80 621.6898 c
-81.21503 621.6898 82.2 622.6747 82.2 623.8898 c
+82.2 521.8898 m
+82.2 523.1048 81.21503 524.0898 80 524.0898 c
+78.78497 524.0898 77.8 523.1048 77.8 521.8898 c
+77.8 520.6747 78.78497 519.6898 80 519.6898 c
+81.21503 519.6898 82.2 520.6747 82.2 521.8898 c
 f*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 74 620.8898 Tm /F4+0 8 Tf 9.6 TL (\001) Tj T* ET
+BT 1 0 0 1 74 518.8898 Tm /F4+0 8 Tf 9.6 TL (\001) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 88 650.8898 Tm /F2+0 7.8 Tf 9.36 TL (Tool and marker observations) Tj T* ET
-n 80 623.8898 m 56 623.8898 l S
-n 56 623.8898 m 56 567.8898 l S
-n 56 567.8898 m 80 567.8898 l S
+BT 1 0 0 1 88 548.8898 Tm /F2+0 7.8 Tf 9.36 TL (Tool and marker observations) Tj T* ET
+n 80 521.8898 m 56 521.8898 l S
+n 56 521.8898 m 56 465.8898 l S
+n 56 465.8898 m 80 465.8898 l S
 1 1 1 rg
 n
-82.2 567.8898 m
-82.2 569.1048 81.21503 570.0898 80 570.0898 c
-78.78497 570.0898 77.8 569.1048 77.8 567.8898 c
-77.8 566.6747 78.78497 565.6898 80 565.6898 c
-81.21503 565.6898 82.2 566.6747 82.2 567.8898 c
+82.2 465.8898 m
+82.2 467.1048 81.21503 468.0898 80 468.0898 c
+78.78497 468.0898 77.8 467.1048 77.8 465.8898 c
+77.8 464.6747 78.78497 463.6898 80 463.6898 c
+81.21503 463.6898 82.2 464.6747 82.2 465.8898 c
 f*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 74 564.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
+BT 1 0 0 1 74 462.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 88 591.8898 Tm /F2+0 7.8 Tf 9.36 TL (Transforms, images, models) Tj T* ET
-n 80 567.8898 m 56 567.8898 l S
-n 56 567.8898 m 56 514.8898 l S
-n 56 514.8898 m 80 514.8898 l S
+BT 1 0 0 1 88 489.8898 Tm /F2+0 7.8 Tf 9.36 TL (Transforms, images, models) Tj T* ET
+n 80 465.8898 m 56 465.8898 l S
+n 56 465.8898 m 56 412.8898 l S
+n 56 412.8898 m 80 412.8898 l S
 1 1 1 rg
 n
-82.2 514.8898 m
-82.2 516.1048 81.21503 517.0898 80 517.0898 c
-78.78497 517.0898 77.8 516.1048 77.8 514.8898 c
-77.8 513.6747 78.78497 512.6898 80 512.6898 c
-81.21503 512.6898 82.2 513.6747 82.2 514.8898 c
+82.2 412.8898 m
+82.2 414.1048 81.21503 415.0898 80 415.0898 c
+78.78497 415.0898 77.8 414.1048 77.8 412.8898 c
+77.8 411.6747 78.78497 410.6898 80 410.6898 c
+81.21503 410.6898 82.2 411.6747 82.2 412.8898 c
 f*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 74 511.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
+BT 1 0 0 1 74 409.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 88 538.8898 Tm /F2+0 7.8 Tf 9.36 TL (Connected data) Tj T* ET
-n 80 514.8898 m 56 514.8898 l S
-n 56 514.8898 m 56 461.8898 l S
-n 56 461.8898 m 80 461.8898 l S
+BT 1 0 0 1 88 436.8898 Tm /F2+0 7.8 Tf 9.36 TL (Connected data) Tj T* ET
+n 80 412.8898 m 56 412.8898 l S
+n 56 412.8898 m 56 359.8898 l S
+n 56 359.8898 m 80 359.8898 l S
 1 1 1 rg
 n
-82.2 461.8898 m
-82.2 463.1048 81.21503 464.0898 80 464.0898 c
-78.78497 464.0898 77.8 463.1048 77.8 461.8898 c
-77.8 460.6747 78.78497 459.6898 80 459.6898 c
-81.21503 459.6898 82.2 460.6747 82.2 461.8898 c
+82.2 359.8898 m
+82.2 361.1048 81.21503 362.0898 80 362.0898 c
+78.78497 362.0898 77.8 361.1048 77.8 359.8898 c
+77.8 358.6747 78.78497 357.6898 80 357.6898 c
+81.21503 357.6898 82.2 358.6747 82.2 359.8898 c
 f*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 74 458.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
+BT 1 0 0 1 74 356.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 88 485.8898 Tm /F2+0 7.8 Tf 9.36 TL (Rendering and input) Tj T* ET
-n 80 461.8898 m 56 461.8898 l S
-n 56 461.8898 m 56 408.8898 l S
-n 56 408.8898 m 80 408.8898 l S
+BT 1 0 0 1 88 383.8898 Tm /F2+0 7.8 Tf 9.36 TL (Rendering and input) Tj T* ET
+n 80 359.8898 m 56 359.8898 l S
+n 56 359.8898 m 56 306.8898 l S
+n 56 306.8898 m 80 306.8898 l S
 1 1 1 rg
 n
-82.2 408.8898 m
-82.2 410.1048 81.21503 411.0898 80 411.0898 c
-78.78497 411.0898 77.8 410.1048 77.8 408.8898 c
-77.8 407.6747 78.78497 406.6898 80 406.6898 c
-81.21503 406.6898 82.2 407.6747 82.2 408.8898 c
+82.2 306.8898 m
+82.2 308.1048 81.21503 309.0898 80 309.0898 c
+78.78497 309.0898 77.8 308.1048 77.8 306.8898 c
+77.8 305.6747 78.78497 304.6898 80 304.6898 c
+81.21503 304.6898 82.2 305.6747 82.2 306.8898 c
 f*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 74 405.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
+BT 1 0 0 1 74 303.8898 Tm /F4+0 8 Tf 9.6 TL (\002) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 88 432.8898 Tm /F2+0 7.8 Tf 9.36 TL (Holograms and interaction) Tj T* ET
+BT 1 0 0 1 88 330.8898 Tm /F2+0 7.8 Tf 9.36 TL (Holograms and interaction) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-83 663.8898 m
-544.2756 663.8898 l
-545.934 663.8898 547.2756 665.2314 547.2756 666.8898 c
-547.2756 692.8898 l
-547.2756 694.5482 545.934 695.8898 544.2756 695.8898 c
-83 695.8898 l
-81.3416 695.8898 80 694.5482 80 692.8898 c
-80 666.8898 l
-80 665.2314 81.3416 663.8898 83 663.8898 c
+83 561.8898 m
+544.2756 561.8898 l
+545.934 561.8898 547.2756 563.2314 547.2756 564.8898 c
+547.2756 590.8898 l
+547.2756 592.5482 545.934 593.8898 544.2756 593.8898 c
+83 593.8898 l
+81.3416 593.8898 80 592.5482 80 590.8898 c
+80 564.8898 l
+80 563.2314 81.3416 561.8898 83 561.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 90 682.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
+BT 1 0 0 1 90 580.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 118 683.8898 Tm /F3+0 8.5 Tf 10.2 TL (Optical tracker) Tj T* ET
+BT 1 0 0 1 118 581.8898 Tm /F3+0 8.5 Tf 10.2 TL (Optical tracker) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 296 683.8898 Tm /F2+0 7.8 Tf 9.36 TL (Tool and marker observations) Tj T* ET
+BT 1 0 0 1 296 581.8898 Tm /F2+0 7.8 Tf 9.36 TL (Tool and marker observations) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-83 604.8898 m
-544.2756 604.8898 l
-545.934 604.8898 547.2756 606.2314 547.2756 607.8898 c
-547.2756 639.8898 l
-547.2756 641.5482 545.934 642.8898 544.2756 642.8898 c
-83 642.8898 l
-81.3416 642.8898 80 641.5482 80 639.8898 c
-80 607.8898 l
-80 606.2314 81.3416 604.8898 83 604.8898 c
+83 502.8898 m
+544.2756 502.8898 l
+545.934 502.8898 547.2756 504.2314 547.2756 505.8898 c
+547.2756 537.8898 l
+547.2756 539.5482 545.934 540.8898 544.2756 540.8898 c
+83 540.8898 l
+81.3416 540.8898 80 539.5482 80 537.8898 c
+80 505.8898 l
+80 504.2314 81.3416 502.8898 83 502.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 90 629.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
+BT 1 0 0 1 90 527.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 118 630.8898 Tm /F3+0 8.5 Tf 10.2 TL (SMCNavi) Tj T* ET
+BT 1 0 0 1 118 528.8898 Tm /F3+0 8.5 Tf 10.2 TL (SMCNavi) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 296 630.8898 Tm /F2+0 7.8 Tf 9.36 TL (3D Slicer \001 images and models \001 transforms, registration, calibration \001) Tj T* ET
-BT 1 0 0 1 296 619.8898 Tm /F2+0 7.8 Tf 9.36 TL (six workflows) Tj T* ET
+BT 1 0 0 1 296 528.8898 Tm /F2+0 7.8 Tf 9.36 TL (3D Slicer \001 images and models \001 transforms, registration, calibration \001) Tj T* ET
+BT 1 0 0 1 296 517.8898 Tm /F2+0 7.8 Tf 9.36 TL (six workflows) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-83 551.8898 m
-544.2756 551.8898 l
-545.934 551.8898 547.2756 553.2314 547.2756 554.8898 c
-547.2756 580.8898 l
-547.2756 582.5482 545.934 583.8898 544.2756 583.8898 c
-83 583.8898 l
-81.3416 583.8898 80 582.5482 80 580.8898 c
-80 554.8898 l
-80 553.2314 81.3416 551.8898 83 551.8898 c
+83 449.8898 m
+544.2756 449.8898 l
+545.934 449.8898 547.2756 451.2314 547.2756 452.8898 c
+547.2756 478.8898 l
+547.2756 480.5482 545.934 481.8898 544.2756 481.8898 c
+83 481.8898 l
+81.3416 481.8898 80 480.5482 80 478.8898 c
+80 452.8898 l
+80 451.2314 81.3416 449.8898 83 449.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 90 570.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
+BT 1 0 0 1 90 468.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 118 571.8898 Tm /F3+0 8.5 Tf 10.2 TL (OpenIGTLink) Tj T* ET
+BT 1 0 0 1 118 469.8898 Tm /F3+0 8.5 Tf 10.2 TL (OpenIGTLink) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 296 571.8898 Tm /F2+0 7.8 Tf 9.36 TL (Transforms and approved image/model data) Tj T* ET
+BT 1 0 0 1 296 469.8898 Tm /F2+0 7.8 Tf 9.36 TL (Transforms and approved image/model data) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-83 498.8898 m
-544.2756 498.8898 l
-545.934 498.8898 547.2756 500.2314 547.2756 501.8898 c
-547.2756 527.8898 l
-547.2756 529.5482 545.934 530.8898 544.2756 530.8898 c
-83 530.8898 l
-81.3416 530.8898 80 529.5482 80 527.8898 c
-80 501.8898 l
-80 500.2314 81.3416 498.8898 83 498.8898 c
+83 396.8898 m
+544.2756 396.8898 l
+545.934 396.8898 547.2756 398.2314 547.2756 399.8898 c
+547.2756 425.8898 l
+547.2756 427.5482 545.934 428.8898 544.2756 428.8898 c
+83 428.8898 l
+81.3416 428.8898 80 427.5482 80 425.8898 c
+80 399.8898 l
+80 398.2314 81.3416 396.8898 83 396.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 90 517.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
+BT 1 0 0 1 90 415.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 118 518.8898 Tm /F3+0 8.5 Tf 10.2 TL (HoloLens PC extension) Tj T* ET
+BT 1 0 0 1 118 416.8898 Tm /F3+0 8.5 Tf 10.2 TL (HoloLens PC extension) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 296 518.8898 Tm /F2+0 7.8 Tf 9.36 TL (Unity \001 MRTK \001 rendering) Tj T* ET
+BT 1 0 0 1 296 416.8898 Tm /F2+0 7.8 Tf 9.36 TL (Unity \001 MRTK \001 rendering) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-83 445.8898 m
-544.2756 445.8898 l
-545.934 445.8898 547.2756 447.2314 547.2756 448.8898 c
-547.2756 474.8898 l
-547.2756 476.5482 545.934 477.8898 544.2756 477.8898 c
-83 477.8898 l
-81.3416 477.8898 80 476.5482 80 474.8898 c
-80 448.8898 l
-80 447.2314 81.3416 445.8898 83 445.8898 c
+83 343.8898 m
+544.2756 343.8898 l
+545.934 343.8898 547.2756 345.2314 547.2756 346.8898 c
+547.2756 372.8898 l
+547.2756 374.5482 545.934 375.8898 544.2756 375.8898 c
+83 375.8898 l
+81.3416 375.8898 80 374.5482 80 372.8898 c
+80 346.8898 l
+80 345.2314 81.3416 343.8898 83 343.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 90 464.8898 Tm /F3+0 8 Tf 9.6 TL (05) Tj T* ET
+BT 1 0 0 1 90 362.8898 Tm /F3+0 8 Tf 9.6 TL (05) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 118 465.8898 Tm /F3+0 8.5 Tf 10.2 TL (Holographic Remoting) Tj T* ET
+BT 1 0 0 1 118 363.8898 Tm /F3+0 8.5 Tf 10.2 TL (Holographic Remoting) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 296 465.8898 Tm /F2+0 7.8 Tf 9.36 TL (PC render stream \001 input return) Tj T* ET
+BT 1 0 0 1 296 363.8898 Tm /F2+0 7.8 Tf 9.36 TL (PC render stream \001 input return) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-83 392.8898 m
-544.2756 392.8898 l
-545.934 392.8898 547.2756 394.2314 547.2756 395.8898 c
-547.2756 421.8898 l
-547.2756 423.5482 545.934 424.8898 544.2756 424.8898 c
-83 424.8898 l
-81.3416 424.8898 80 423.5482 80 421.8898 c
-80 395.8898 l
-80 394.2314 81.3416 392.8898 83 392.8898 c
+83 290.8898 m
+544.2756 290.8898 l
+545.934 290.8898 547.2756 292.2314 547.2756 293.8898 c
+547.2756 319.8898 l
+547.2756 321.5482 545.934 322.8898 544.2756 322.8898 c
+83 322.8898 l
+81.3416 322.8898 80 321.5482 80 319.8898 c
+80 293.8898 l
+80 292.2314 81.3416 290.8898 83 290.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 90 411.8898 Tm /F3+0 8 Tf 9.6 TL (06) Tj T* ET
+BT 1 0 0 1 90 309.8898 Tm /F3+0 8 Tf 9.6 TL (06) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 118 412.8898 Tm /F3+0 8.5 Tf 10.2 TL (HoloLens 2) Tj T* ET
+BT 1 0 0 1 118 310.8898 Tm /F3+0 8.5 Tf 10.2 TL (HoloLens 2) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 296 412.8898 Tm /F2+0 7.8 Tf 9.36 TL (Spatial presentation \001 interaction) Tj T* ET
+BT 1 0 0 1 296 310.8898 Tm /F2+0 7.8 Tf 9.36 TL (Spatial presentation \001 interaction) Tj T* ET
 .603922 .203922 .070588 rg
-BT 1 0 0 1 48 376.8898 Tm /F3+0 8.5 Tf 10.2 TL (SMCNavi-HoloLens path \001 Research prototype) Tj T* ET
+BT 1 0 0 1 48 274.8898 Tm /F3+0 8.5 Tf 10.2 TL (SMCNavi-HoloLens path \001 Research prototype) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 338.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 236.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 306.8898 m 547.2756 306.8898 l S
+n 48 204.8898 m 547.2756 204.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 272.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
+BT 1 0 0 1 48 170.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 248.8898 Tm /F2+0 10 Tf 12 TL (Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working) Tj T* ET
+BT 1 0 0 1 48 146.8898 Tm /F2+0 10 Tf 12 TL (Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 232.8898 Tm /F2+0 10 Tf 12 TL (research prototype carrying position, model, image, and interaction data from SMCNavi through the) Tj T* ET
+BT 1 0 0 1 48 130.8898 Tm /F2+0 10 Tf 12 TL (research prototype carrying position, model, image, and interaction data from SMCNavi through the) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 216.8898 Tm /F2+0 10 Tf 12 TL (HoloLens path.) Tj T* ET
+BT 1 0 0 1 48 114.8898 Tm /F2+0 10 Tf 12 TL (HoloLens path.) Tj T* ET
  
 endstream
 endobj
@@ -1652,10 +1667,10 @@ xref
 0006492398 00000 n 
 0006492491 00000 n 
 0006495554 00000 n 
-0006502167 00000 n 
-0006510836 00000 n 
-0006512612 00000 n 
-0006514436 00000 n 
+0006502271 00000 n 
+0006512040 00000 n 
+0006513816 00000 n 
+0006515640 00000 n 
 trailer
 <<
 /ID 
@@ -1667,5 +1682,5 @@ trailer
 /Size 45
 >>
 startxref
-6517753
+6518957
 %%EOF

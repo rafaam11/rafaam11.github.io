@@ -66,21 +66,21 @@
     },
     {
       key: 'sensor-fusion',
-      methods: ['ToF-RGB registration', 'SICK TiM LiDAR', 'NAV350', 'ROS 2', 'Zenoh'],
+      methods: ['ToF-RGB calibration', 'SAM3 segmentation', 'SICK TiM LiDAR', 'Zenoh', 'Behaviour-tree actions'],
       translations: {
         ko: {
           title: '로봇 비전·센서 통합',
           summary: 'RGB·ToF·LiDAR 센서와 로봇 좌표계를 하나의 좌표 모델로 정렬하고, 인지 결과를 안전 판단과 로봇 시스템으로 연결합니다.',
-          validation: '포인트클라우드, 센서 정렬, 로봇 위치, 정책 결과를 통합과 현장 검증에서 대조합니다.',
+          validation: '포인트클라우드, 센서 정렬, 비전 결과, 안전 정책 출력을 통합과 현장 검증에서 대조합니다.',
           cardSummary: '센서와 로봇의 좌표를 정렬해 인지 결과를 로봇 시스템에 연결합니다.',
-          cardValidation: '정렬, 위치, 정책 결과를 통합과 현장에서 확인합니다.'
+          cardValidation: '정렬, 비전, 정책 결과를 통합과 현장에서 확인합니다.'
         },
         en: {
           title: 'Robot Vision & Sensor Integration',
           summary: 'Align RGB, ToF, and LiDAR sensors with the robot frame in one coordinate model, and connect perception results to safety decisions and the robot system.',
-          validation: 'Compare point clouds, sensor alignment, robot pose, and policy outputs during integration and field validation.',
+          validation: 'Compare point clouds, sensor alignment, vision outputs, and safety-policy outputs during integration and field validation.',
           cardSummary: 'Align sensor and robot coordinates and connect perception to the robot system.',
-          cardValidation: 'Inspect alignment, pose, and policy outputs in integration and field tests.'
+          cardValidation: 'Inspect alignment, vision, and policy outputs in integration and field tests.'
         }
       }
     },
@@ -438,7 +438,7 @@
           summary: 'DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 맞춤형 3D Slicer 수술내비게이션 플랫폼과 별도 HoloLens 공간 인터페이스 확장입니다.',
           problem: '구강악안면 내비게이션은 의료영상, 환자와 기구 좌표, 수술별 도구, 공간 표시가 한 흐름으로 맞아야 하지만 기능이 분절되면 정합 상태와 데이터 흐름을 검토하기 어렵습니다.',
           roleLabel: '3D 의료영상·수술내비게이션 개발자',
-          role: '전체 소프트웨어 아키텍처를 설계하고 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적 SDK와 데이터 파이프라인, 영상·환자·마커·기구 좌표 변환, 환자 정합과 피드백, 마커·비표준·장기구 캘리브레이션, 6개 워크플로와 미러링, HoloLens–PC 통신·공간 표시·상호작용, 팬텀 통합 시험과 검증 도구의 주 구현을 맡았습니다.',
+          role: '전체 소프트웨어 아키텍처를 설계하고 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적 SDK와 데이터 파이프라인, 영상·환자·마커·기구 좌표 변환, 환자 정합과 피드백, 마커·비표준·장기구 캘리브레이션, 6개 워크플로와 미러링, HoloLens–PC 통신·공간 표시·상호작용, 팬텀 통합 시험과 검증 도구의 주 구현을 맡았습니다. 개발은 사실상 단독으로 진행했으며, 2026년에는 공용 추적 서비스, 광학 추적 SDK v7.1.2 이전, 미러 평면 정합, 내비게이션 지연 측정 하네스 설계·계측으로 안정화를 이어갔습니다.',
           teamResult: 'DIGITRACK과 삼성서울병원 연구팀은 임상 워크플로와 요구사항 맥락, 수용 검토 기준, 통합 시연을 공동으로 검토했습니다.',
           evidence: '두 전체 길이 영상과 화면·좌표계·기구·팬텀 그림은 위치, 모델, 영상, 상호작용 데이터가 SMCNavi에서 HoloLens 경로까지 연결된 연구 프로토타입을 보여줍니다.',
           limitation: '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.',
@@ -463,7 +463,7 @@
           summary: 'A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a research collaboration, plus a separate HoloLens spatial-interface extension.',
           problem: 'Oral and maxillofacial navigation must align medical images, patient and instrument coordinates, procedure-specific tools, and spatial presentation in one flow; fragmented functions make registration state and data flow difficult to inspect.',
           roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
-          role: 'Designed the overall software architecture and served as the primary implementer for DICOM and 3D-model loading, MPR and 3D visualisation, the optical-tracker SDK and data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens–PC communication and interaction, and phantom integration tests and verification tooling.',
+          role: 'Designed the overall software architecture and served as the primary implementer for DICOM and 3D-model loading, MPR and 3D visualisation, the optical-tracker SDK and data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens–PC communication and interaction, and phantom integration tests and verification tooling. I was effectively the sole developer, and in 2026 continued its stabilisation with a shared tracking service, migration to tracker SDK v7.1.2, mirror-plane registration, and the design and instrumentation of a navigation-latency measurement harness.',
           teamResult: 'The DIGITRACK and Samsung Medical Center research team jointly reviewed the clinical-workflow and requirements context, acceptance criteria, and integration demonstrations.',
           evidence: 'Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working research prototype carrying position, model, image, and interaction data from SMCNavi through the HoloLens path.',
           limitation: 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.',
@@ -601,12 +601,12 @@
             ko: {
               heading: '추적·정합·캘리브레이션',
               body: '환자·기구와 영상 모델 사이의 변환 경로를 명시적으로 구성하고 각 단계의 입력과 피드백을 검토할 수 있게 했습니다.',
-              items: ['광학 추적 SDK 연결과 실시간 도구·마커 데이터 파이프라인', '영상·환자·마커·기구 좌표계 사이의 변환 체인', '환자 정합과 정합 상태 피드백', '환자·기구 마커 캘리브레이션', '비표준 기구와 장기구 캘리브레이션']
+              items: ['광학 추적 SDK 연결과 실시간 도구·마커 데이터 파이프라인', '영상·환자·마커·기구 좌표계 사이의 변환 체인', '환자 정합과 정합 상태 피드백', '환자·기구 마커 캘리브레이션', '비표준 기구와 장기구 캘리브레이션', '미러 평면 정합과 피봇점 설정', '2026 안정화: 화면들이 함께 쓰는 공용 추적 서비스와 트래커 SDK v7.1.2 이전', '2026 안정화: 내비게이션 지연을 단계별로 재는 측정 하네스 설계·계측(결과 수치는 주장하지 않음)']
             },
             en: {
               heading: 'Tracking, registration, and calibration',
               body: 'Built explicit transform paths between the patient, instruments, and image models so the inputs and feedback at each stage could be inspected.',
-              items: ['Optical-tracker SDK integration and the live tool/marker data pipeline', 'Transform chain across image, patient, marker, and instrument frames', 'Patient registration and registration-state feedback', 'Patient and instrument marker calibration', 'Non-standard and long-instrument calibration']
+              items: ['Optical-tracker SDK integration and the live tool/marker data pipeline', 'Transform chain across image, patient, marker, and instrument frames', 'Patient registration and registration-state feedback', 'Patient and instrument marker calibration', 'Non-standard and long-instrument calibration', 'Mirror-plane registration with pivot-point setting', '2026 stabilisation: a shared tracking service used across screens, and migration to tracker SDK v7.1.2', '2026 stabilisation: design and instrumentation of a stage-by-stage navigation-latency measurement harness (no latency results claimed)']
             }
           },
           media: [
@@ -818,11 +818,11 @@
           translations: {
             ko: {
               heading: '왜 다시 설계했는가',
-              body: '2023.04–2023.12 유지보수·검증을 담당했던 이전 애플리케이션에서는 특징점 추출이 별도 도구로 분리되어 모델 확대·축소와 이동, 참고 사진 대조가 불편했습니다. 교합은 필요한 여러 시점을 함께 보기 어려웠고 저장·불러오기가 작업 흐름과 분리되어 있었습니다. 악안면 특징점을 활용하지 못했고 결과를 읽는 평가 화면도 충분히 설계되지 않았습니다. 임상 지식과 일부 협업 알고리즘은 이어받되, 2026.03부터 애플리케이션 구조와 워크플로우를 다시 설계했습니다. 키보드 단축키의 불편은 재설계 배경이지만 현재 버전에서 개선했다고 주장하지 않습니다.'
+              body: '2023.04–2023.12 유지보수·검증을 담당했던 이전 애플리케이션에서는 특징점 추출이 별도 도구로 분리되어 모델 확대·축소와 이동, 참고 사진 대조가 불편했습니다. 교합은 필요한 여러 시점을 함께 보기 어려웠고 저장·불러오기가 작업 흐름과 분리되어 있었습니다. 악안면 특징점을 활용하지 못했고 결과를 읽는 평가 화면도 충분히 설계되지 않았습니다. 임상 지식과 일부 협업 알고리즘은 이어받되, 2026.03부터 애플리케이션 구조와 워크플로우를 다시 설계했습니다. 그 사이 2025.09–10에는 이전 v1 교합 시뮬레이터를 저장소와 배포 묶음으로 정리하며 빌드·오류 수정, 6-DOF 변환 도구와 평가 유틸리티를 맡았고, 이 경험이 재구축의 출발점이 되었습니다. 2026.04에는 구강 스캔 특징점 주석 PoC 도구(PySide6·VTK)를 만들어 이 워크플로우에 들어가는 특징점 데이터 작성을 지원했습니다. 키보드 단축키의 불편은 재설계 배경이지만 현재 버전에서 개선했다고 주장하지 않습니다.'
             },
             en: {
               heading: 'Why the workflow was redesigned',
-              body: 'In the earlier application that I maintained and validated from 2023.04 to 2023.12, landmark extraction was separated into another tool, making zoom, pan, and reference-image comparison awkward. Occlusion lacked the views needed for simultaneous comparison, while save/load sat outside the working flow. Maxillofacial landmarks were not used and the evaluation screen was under-designed. Clinical knowledge and some collaborative algorithms carry forward, but the application structure and workflow have been redesigned since 2026.03. Awkward keyboard shortcuts remain background context; this case does not claim that shortcut design was improved.'
+              body: 'In the earlier application that I maintained and validated from 2023.04 to 2023.12, landmark extraction was separated into another tool, making zoom, pan, and reference-image comparison awkward. Occlusion lacked the views needed for simultaneous comparison, while save/load sat outside the working flow. Maxillofacial landmarks were not used and the evaluation screen was under-designed. Clinical knowledge and some collaborative algorithms carry forward, but the application structure and workflow have been redesigned since 2026.03. In between, during 2025.09–10, I organised the earlier v1 occlusion simulator into a repository and release bundle, handling build and crash fixes, a 6-DOF transform tool, and an evaluation utility; that work became the starting point for the rebuild. In 2026.04 I built a proof-of-concept oral-scan landmark annotation tool (PySide6 and VTK) that supports preparing the landmark data fed into this workflow. Awkward keyboard shortcuts remain background context; this case does not claim that shortcut design was improved.'
             }
           }
         },
@@ -1024,7 +1024,7 @@
           thesis: '분리된 특징점·교합·평가 기능을 연구진이 한 앱에서 직접 다룰 수 있는 사용자 친화적 end-to-end 워크플로우로 재설계했습니다.',
           summary: '8개 3D 모델 준비, AI 해부학 특징점 검출 모델을 통합한 치아·악안면 특징점 단계, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
           problem: '이전 흐름은 특징점 앱이 분리되어 참고 이미지 대조와 확대·이동이 불편했고, 교합의 다중 시점, 저장·불러오기, 악안면 특징점, 평가 화면이 충분히 통합되지 않았습니다.',
-          role: '기술 리드·메인 개발자로 C++/Qt 셸, Python 모듈, 공통 라이브러리의 전체 Custom App 아키텍처를 설계하고 end-to-end UI/UX, 알고리즘·엔진 통합, 평가·내보내기, CMake/SuperBuild·테스트·패키징을 주도했습니다.',
+          role: '기술 리드·메인 개발자로 C++/Qt 셸, Python 모듈, 공통 라이브러리의 전체 Custom App 아키텍처를 설계하고 end-to-end UI/UX, 알고리즘·엔진 통합, 평가·내보내기, CMake/SuperBuild·테스트·패키징을 주도했습니다. 워크플로우에 들어가는 특징점 데이터를 위해 구강 스캔 특징점 주석 PoC 도구(PySide6·VTK)도 만들었습니다.',
           teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. DIGITRACK 협업 팀은 특징점 알고리즘과 교합 엔진 구현·연구를 지원했습니다.',
           evidence: '특징점 입력, 다중 시점 교합, 접촉 가시화, RMSE·Gap·FRE 평가와 내보내기가 동작하는 개발 빌드 영상·화면과 연구진 직접 사용 피드백이 근거입니다.',
           limitation: '현재는 개발·시연 빌드의 연구진 검증 단계입니다. 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성을 주장하지 않으며 화면 값도 성능 결과로 인용하지 않습니다.',
@@ -1044,7 +1044,7 @@
           thesis: 'Redesigned separate landmarking, occlusion, and evaluation tools into a user-friendly end-to-end workflow that researchers can operate in one application.',
           summary: 'Connected eight-model preparation, a dental and maxillofacial landmark step that integrates an AI anatomical-landmark detection model, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.',
           problem: 'The earlier flow separated landmarking into another application, made reference comparison and view navigation awkward, lacked multi-view occlusion, fragmented save/load, omitted maxillofacial landmarks, and had no sufficiently integrated result screen.',
-          role: 'As technical lead and primary developer, designed the complete Custom App architecture across the C++/Qt shell, Python modules, and shared library, and led the end-to-end UI/UX, algorithm and engine integration, evaluation/export, CMake/SuperBuild, testing, and packaging.',
+          role: 'As technical lead and primary developer, designed the complete Custom App architecture across the C++/Qt shell, Python modules, and shared library, and led the end-to-end UI/UX, algorithm and engine integration, evaluation/export, CMake/SuperBuild, testing, and packaging. Also built a proof-of-concept oral-scan landmark annotation tool (PySide6 and VTK) for the landmark data that feeds the workflow.',
           teamResult: 'Samsung Medical Center researchers jointly define the clinical workflow, landmarks, and evaluation metrics and directly review development builds. The DIGITRACK team supports the landmark algorithms and occlusion-engine implementation and research.',
           evidence: 'A working development build demonstrates landmarking, multi-view occlusion, contact visualization, RMSE/Gap/FRE evaluation, and export, with direct researcher use and feedback.',
           limitation: 'The software is under researcher validation as a development and demonstration build. This case does not claim hospital installation, use in real surgery, medical-device status, or clinical efficacy, accuracy, or safety; displayed values are not performance outcomes.',
@@ -1062,7 +1062,7 @@
     project({
       slug: 'life-careverse', tier: 'xr', period: '2023.07 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['xr-engineering', 'medical-navigation'], route: 'projects/life-careverse/',
-      tech: ['Unity 6', 'Photon PUN2', 'Photon Voice', 'OpenXR / Android XR', 'Meta Quest 3 · Galaxy XR', 'DICOM 3D'],
+      tech: ['Unity 6', 'Photon PUN2', 'Photon Voice', 'OpenXR / Android XR', 'Meta Quest 3 · Galaxy XR', 'DICOM 3D', 'FastAPI'],
       media: {
         lead: { id: 'life-careverse-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-clip-01.mp4' },
         video: { id: 'life-careverse-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/life-careverse/life-careverse-clip-01.mp4' },
@@ -1092,7 +1092,7 @@
           thesis: '의료진과 환자가 같은 VR 상담실에 동시 접속해 하나의 3D 악골 모델과 수술계획을 함께 보는 애플리케이션을 구현합니다.',
           summary: '접속 순서로 역할이 정해지는 3인 VR 상담 세션을 Unity와 Photon PUN2·Voice로 구현하고, 환자 CT에서 만든 3D 악골 모델과 계측 패널을 세 시점이 같은 상태로 공유하도록 만들었습니다. OpenXR 기반으로 구성해 Meta Quest 3와 Galaxy XR에서 동작합니다.',
           problem: '턱교정 수술 상담은 2D 계측과 3D 골격 변화를 같이 설명해야 하는데, 모니터 한 대를 함께 보는 방식으로는 의료진과 환자가 같은 지점을 보고 있는지 확인할 방법이 없었습니다.',
-          role: 'Unity 클라이언트 전체를 맡아 Photon 룸과 역할 배정, 모델 자세·분절·페이지 상태 동기화, 음성 채팅과 발화자 표시, DICOM 볼륨 로딩, 백엔드 연동을 구현했고, 특정 제조사 SDK 의존을 걷어내고 OpenXR·Android XR로 옮기는 이식까지 수행했습니다.',
+          role: 'Unity 클라이언트 전체를 맡아 Photon 룸과 역할 배정, 모델 자세·분절·페이지 상태 동기화, 음성 채팅과 발화자 표시, DICOM 볼륨 로딩, 백엔드 연동을 구현했고, 특정 제조사 SDK 의존을 걷어내고 OpenXR·Android XR로 옮기는 이식까지 수행했습니다. 서버 쪽에서는 2024년 클라이언트용 FastAPI 파일 서버를 만들었고, 2025.12–2026.07에는 데이터 서버와 전처리 파이프라인(STL 메시 경량화, 상담 슬라이드의 이미지 변환)을 구축했습니다.',
           teamResult: '소프트웨어 저작권 등록과 환자 데모·설문조사, 외부 병원 실증 계획은 연구팀 공동 결과입니다. 데모와 설문조사는 진행 중이고 외부 실증은 아직 예정 단계이므로, 확정된 것과 계획인 것을 구분해 적습니다.',
           evidence: '세 참가자 시점을 동시에 녹화한 상담 세션 클립이 근거입니다. 왼쪽 의사1(Master), 가운데 환자, 오른쪽 의사2 화면이 한 프레임에 들어 있어, 한 사람의 조작이 나머지 두 화면에 같은 자세와 같은 계측값으로 나타나는지를 그대로 대조할 수 있습니다.',
           limitation: '클립은 동기화와 공간 배치가 동작함을 보여줄 뿐, 상담 품질이나 치료 결과가 나아졌다고 주장하지 않습니다.',
@@ -1105,7 +1105,7 @@
           thesis: 'Build an application where clinicians and a patient join the same VR consultation room and look at one shared 3D jaw model and surgical plan together.',
           summary: 'Built a three-user VR consultation session in Unity with Photon PUN2 and Voice, where roles are assigned by join order and all three viewpoints share the same state of a CT-derived 3D jaw model and its measurement panel. Built on OpenXR to run on Meta Quest 3 and Galaxy XR.',
           problem: 'Orthognathic consultation has to explain 2D measurements and 3D skeletal change at once, and gathering around a single monitor gave no way to confirm that clinician and patient were looking at the same thing.',
-          role: 'Owned the Unity client end to end: Photon rooms and role assignment, synchronization of model pose, segments, and page state, voice chat with speaker indication, DICOM volume loading, and backend integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR.',
+          role: 'Owned the Unity client end to end: Photon rooms and role assignment, synchronization of model pose, segments, and page state, voice chat with speaker indication, DICOM volume loading, and backend integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR. On the server side, built a FastAPI file server for the client in 2024, and from 2025.12 to 2026.07 a data server with a preprocessing pipeline (STL mesh decimation and conversion of consultation slides to images).',
           teamResult: 'Software copyright registration, the patient demonstration and survey, and the planned external-hospital validation are joint research-team results. The demonstration and survey are under way; the external validation is still only planned.',
           evidence: 'A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence. Clinician 1 (master), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one person moving the model leaves the other two views showing the same pose and the same measurements.',
           limitation: 'The clip shows that synchronization and spatial layout work; it claims no improvement in consultation quality or treatment outcome.',
@@ -1124,7 +1124,7 @@
     project({
       slug: 'rtms-navigation', tier: 'surgical-robotics', period: '2024.07 – present', evidenceState: 'verified', lifecycleState: 'ongoing',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
-      tech: ['3D Slicer', 'VTK', 'PyQt5', 'Python', 'PyTorch', 'Optical tracking', 'TCP/IP binary protocol', 'License gating'],
+      tech: ['3D Slicer', 'VTK', 'PyQt5', 'Python', 'PyTorch (inference integration)', 'Optical tracking', 'TCP/IP binary protocol', 'License gating'],
       media: {
         lead: { id: 'rtms-navigation-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/rtms-navigation/rtms-navigation-clip-01.mp4' },
         video: { id: 'rtms-navigation-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/rtms-navigation/rtms-navigation-clip-01.mp4' },
@@ -1154,11 +1154,11 @@
           thesis: '광학 트래킹과 3D Slicer를 라이선스로 배포되는 코일 내비게이션 제품으로 완성해, 코일의 위치·각도와 타깃 오차를 표시합니다.',
           summary: '3D Slicer 위에 시술 준비부터 실시간 코일 내비게이션까지 이어지는 화면 흐름, 랜드마크·ICP 정합 엔진, 광학 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 설계해 고객사에 납품하고 계속 유지보수합니다.',
           problem: '서로 다른 좌표계에 있는 의료영상, 트래커, 태블릿, 로봇을 하나의 검증 가능한 흐름으로 묶어야 했습니다.',
-          role: '3D Slicer 기반 시술 준비·내비게이션 화면 흐름, 랜드마크와 ICP를 함께 쓰는 정합 엔진과 좌표 변환 체인, 광학 트래커 SDK 마이그레이션·태블릿 프로토콜·로봇 연동, 라이선스 검증과 옵션 기능 게이팅을 포함한 제품 구조를 리드했습니다.',
+          role: '3D Slicer 기반 시술 준비·내비게이션 화면 흐름, 랜드마크와 ICP를 함께 쓰는 정합 엔진과 좌표 변환 체인, 광학 트래커 SDK 마이그레이션·태블릿 프로토콜·로봇 연동, 라이선스 검증과 옵션 기능 게이팅을 포함한 제품 구조를 리드했습니다. 보건의료 R&D 과제용 깊이 카메라(LiDAR/ToF) 기반 정합 프로그램(C++·Qt·VTK)에서는 정합 워크플로우, 결과 패널·행렬 내보내기, 트래커 SDK 연동 개선을 맡았습니다.',
           teamResult: 'AT&C가 라이선스 운영과 도입을 판단합니다. 정합·좌표 변환·내비게이션 UI 구조는 직접 설계했고 일부 화면 모듈은 동료 한 명과 함께했습니다.',
           evidence: '라이선스로 기능이 게이팅되는 실제 배포 빌드, 이슈 단위로 쌓아 온 회귀 테스트 스위트, 좌표 변환·정합 동작 로그가 근거입니다.',
           limitation: '임상적 유효성, 정량 정확도, 인허가 상태는 주장하지 않고 환자 데이터도 포함하지 않습니다.',
-          collaboration: '분할·랜드마크 검출 모델은 외부에서 받아 어댑터 경계 뒤에 통합했고, 그 경계 설계와 후처리·라이선스 게이팅·UI 연동이 제 몫입니다.',
+          collaboration: '뇌 분할·랜드마크·치료 위치 추출 딥러닝 모델은 협력사 측이 제공했고 저는 모델을 개발하지 않았습니다. 이 모델들을 어댑터 경계 뒤에 탑재하는 통합, 경계 설계, 후처리, 정량 평가 화면, 라이선스 게이팅·UI 연동이 제 몫입니다.',
           mediaAlt: '로봇 암과 치료 의자, 코일, 내비게이션 화면이 배치된 전시 부스에서 TMS 로봇 시스템이 동작하는 장면.', mediaCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다 — 로봇 암, 치료 의자, 코일, 내비게이션 화면이 한자리에 놓인 구성.',
           status: '검증됨 · 진행 중', cardProblem: '서로 다른 좌표계의 장치를 하나의 제품 흐름으로 묶습니다.', cardOwnedRole: '화면 흐름·정합 엔진·장치 연동·제품 구조를 리드했습니다.', cardEvidence: '라이선스 게이팅 배포 빌드와 회귀 테스트 스위트.', problemSummary: '트래커·태블릿·로봇을 하나의 내비게이션 제품으로 묶습니다.', ownedRole: '화면 흐름, 정합 엔진, 장치 연동, 제품 구조를 리드했습니다.', verifiedEvidence: '라이선스 게이팅 배포 빌드와 이슈별 회귀 테스트가 근거이며 임상 결과는 주장하지 않습니다.', visualAlt: '전시 부스의 TMS 코일 내비게이션 로봇 시스템.', visualCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다.'
         },
@@ -1167,11 +1167,11 @@
           thesis: 'Turn optical tracking and 3D Slicer into a license-gated coil-navigation product that gives operators position and angle guidance they can rely on.',
           summary: 'Designed the 3D Slicer workflow from procedure setup to real-time coil navigation, the landmark-and-ICP registration engine, tracker, tablet, and robot integration, and a license-gated product structure.',
           problem: 'Medical images, a tracker, a tablet, and a robot each sit in their own coordinate frame and had to become one verifiable flow.',
-          role: 'Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining landmarks and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and robot integration, and the product structure covering license verification and optional-feature gating.',
+          role: 'Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining landmarks and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and robot integration, and the product structure covering license verification and optional-feature gating. For a health-technology R&D programme, also owned the registration workflow, result panel and matrix export, and tracker-SDK integration improvements of a depth-camera (LiDAR/ToF) registration program (C++, Qt, VTK).',
           teamResult: 'AT&C owns license operations and adoption. I designed the core structure; a colleague built specific screens.',
           evidence: 'The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and coordinate-transform and registration logs.',
           limitation: 'No clinical efficacy, quantitative accuracy, or regulatory status is claimed, and patient data stays out of this case.',
-          collaboration: 'The segmentation and landmark models were supplied externally and integrated behind an adapter boundary. I own that boundary, the post-processing, the license gating, and the UI integration.',
+          collaboration: 'The deep-learning models for brain segmentation, landmarks, and treatment-position extraction were provided by the partner; I did not develop them. I own their integration behind an adapter boundary, the boundary design, post-processing, the quantitative evaluation screen, license gating, and UI integration.',
           mediaAlt: 'TMS robot system running on an exhibition stand with a robot arm, treatment chair, coil, and navigation displays.', mediaCaption: 'Demonstration of the TMS coil-navigation robot system on an exhibition stand: robot arm, treatment chair, coil, and navigation displays in one setup.',
           status: 'Verified · Ongoing', cardProblem: 'Tie devices in different coordinate frames into one product flow.', cardOwnedRole: 'Led the workflow, registration engine, device integration, and product structure.', cardEvidence: 'A license-gated build and a regression-test suite.', problemSummary: 'Tie the tracker, tablet, and robot into one navigation product.', ownedRole: 'Led the workflow, registration engine, device integration, and product structure.', verifiedEvidence: 'The license-gated deployment build and issue-tracked regression tests are the evidence; no clinical outcome is claimed.', visualAlt: 'TMS coil-navigation robot system on an exhibition stand.', visualCaption: 'TMS coil-navigation robot system demonstrated on an exhibition stand.'
         }
@@ -1179,7 +1179,7 @@
       blocks: [
         { key: 'navigation-ui-workflow', type: 'system', translations: { ko: { heading: '내비게이션 UI 워크플로', body: '홈 화면 여섯 메뉴가 DICOM 적재부터 재구성·정합·표적 설정·실시간 세션까지 단계를 게이팅하고, 조준은 과녁 뷰와 거리·기울기 안내로 합니다.' }, en: { heading: 'Navigation UI workflow', body: 'Six Home-screen menus gate the run from DICOM load through reconstruction, registration, and targets to the live session, with crosshair aiming.' } } },
         { key: 'coordinate-registration-chain', type: 'text', translations: { ko: { heading: '좌표 변환·정합 엔진', body: '영상·환자·트래커·코일 변환 체인을 명시하고, ICP 정합을 세 가지 모드로 나눴습니다.' }, en: { heading: 'Coordinate and registration engine', body: 'Image, patient, tracker, and coil transforms stay explicit; ICP offers three modes.' } } },
-        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '트래커 SDK 메이저 버전 마이그레이션, 자체 TCP 바이너리 프로토콜, 트래커 단일 소유권, 로봇 접촉 정지 연동.' }, en: { heading: 'Device and system integration', body: 'A major optical-tracker SDK migration, an in-house TCP binary protocol for the tablet, single tracker ownership, and contact-stop robot descent.' } } },
+        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '트래커 SDK 메이저 버전 마이그레이션, 자체 TCP 바이너리 프로토콜, 트래커 단일 소유권, 로봇 접촉 정지 연동, 보건의료 R&D 과제용 깊이 카메라(LiDAR/ToF) 정합 프로그램.' }, en: { heading: 'Device and system integration', body: 'A major optical-tracker SDK migration, an in-house TCP binary protocol for the tablet, single tracker ownership, contact-stop robot descent, and a depth-camera (LiDAR/ToF) registration program for a health-technology R&D programme.' } } },
         { key: 'clinical-product-boundary', type: 'limitation', translations: { ko: { heading: '임상·제품 경계', body: '임상적 유효성, 정량 정확도, 인허가 상태는 주장하지 않습니다.' }, en: { heading: 'Clinical and product boundary', body: 'No clinical efficacy, quantitative accuracy, or regulatory status is claimed.' } } }
       ]
     }),
@@ -1275,15 +1275,15 @@
         {
           key: 'desktop-app', evidenceIds: ['skadi-desktop-marker-files-01', 'skadi-desktop-tracker-6dof-01'],
           translations: {
-            ko: { title: 'SKADI 데스크톱 앱', summary: '마커 정의·파일 작업과 트래커 연결·6DoF 상태 확인을 하나의 제품 흐름에서 다룹니다.', ownedRole: 'MarkerEditor의 마커 좌표 입력 검증을 구현하고 데스크톱 앱의 유지보수·배포와 사용 문서를 맡았습니다.', teamBoundary: '광학 추적 장치와 마커·기구 하드웨어 설계는 팀의 결과입니다.' },
-            en: { title: 'SKADI desktop app', summary: 'One product flow covers marker definition and file work, tracker connection, and 6DoF status inspection.', ownedRole: 'I implemented MarkerEditor marker-coordinate input validation and own desktop-app maintenance, releases, and user documentation.', teamBoundary: 'The optical tracker and marker or instrument hardware are team results.' }
+            ko: { title: 'SKADI 데스크톱 앱', summary: '마커 정의·파일 작업과 트래커 연결·6DoF 상태 확인을 하나의 제품 흐름에서 다룹니다.', ownedRole: 'MarkerEditor의 마커 좌표 입력 검증을 구현하고 데스크톱 앱의 유지보수·배포와 사용 문서를 맡았습니다. 마커 빌더·캘리브레이션 화면 개선, 마커 간 거리·각도 체커, 피봇 캘리브레이션, 트래커 FPS 측정 도구, SDK 7.1.2 대응도 구현했습니다.', teamBoundary: '광학 추적 장치와 마커·기구 하드웨어 설계는 팀의 결과입니다.' },
+            en: { title: 'SKADI desktop app', summary: 'One product flow covers marker definition and file work, tracker connection, and 6DoF status inspection.', ownedRole: 'I implemented MarkerEditor marker-coordinate input validation and own desktop-app maintenance, releases, and user documentation. I also improved the marker builder and calibration screens and added a marker-to-marker distance and angle checker, pivot calibration, a tracker FPS measurement tool, and SDK 7.1.2 support.', teamBoundary: 'The optical tracker and marker or instrument hardware are team results.' }
           }
         },
         {
           key: 'api', evidenceIds: ['skadi-desktop-tracker-6dof-01'],
           translations: {
-            ko: { title: 'SKADI API', summary: '응용은 DtSkadi.dll의 OpenEx()로 연결을 시작하고, 성공과 오류 결과를 분리해 준비 상태 또는 처리된 오류로 전이합니다.', ownedRole: 'DtSkadi.dll 통합과 OpenEx() 오류 분기를 정리해 실패 뒤 잘못된 상태로 진행하지 않도록 했고, 공개 API 문서와 통합 지원을 맡았습니다.', teamBoundary: 'API를 사용하는 최종 의료·산업 응용과 제품 성능은 팀·협력자의 결과입니다.' },
-            en: { title: 'SKADI API', summary: 'An application starts the connection through OpenEx() in DtSkadi.dll, then branches to either a ready state or a handled error.', ownedRole: 'I structured the DtSkadi.dll integration and OpenEx() error branch so failure stops before an invalid state, and I own public API documentation and integration support.', teamBoundary: 'Final medical or industrial applications and product performance belong to the team and partners.' }
+            ko: { title: 'SKADI API', summary: '응용은 DtSkadi.dll의 OpenEx()로 연결을 시작하고, 성공과 오류 결과를 분리해 준비 상태 또는 처리된 오류로 전이합니다.', ownedRole: 'DtSkadi.dll 통합과 OpenEx() 오류 분기를 정리해 실패 뒤 잘못된 상태로 진행하지 않도록 했고, 공개 API 문서와 통합 지원을 맡았습니다. Python SDK 바인딩 번들도 새 SDK 버전에 맞춰 갱신했습니다.', teamBoundary: 'API를 사용하는 최종 의료·산업 응용과 제품 성능은 팀·협력자의 결과입니다.' },
+            en: { title: 'SKADI API', summary: 'An application starts the connection through OpenEx() in DtSkadi.dll, then branches to either a ready state or a handled error.', ownedRole: 'I structured the DtSkadi.dll integration and OpenEx() error branch so failure stops before an invalid state, and I own public API documentation and integration support. I also updated the Python SDK binding bundle for new SDK versions.', teamBoundary: 'Final medical or industrial applications and product performance belong to the team and partners.' }
           }
         }
       ],
@@ -1338,7 +1338,7 @@
           thesis: '광학 마커 추적과 좌표 변환을 맡는 SKADI 데스크톱 앱과 API가 수술 도구 추적과 로봇 추적 응용의 기반이 되는 구조를 설명합니다.',
           summary: '마커 정의·파일 작업과 실시간 6DoF 상태를 한 데스크톱 앱에서 다루고, DtSkadi.dll API를 의료 수술내비게이션과 로봇 추적 응용에 연결합니다.',
           problem: '광학 트래커를 응용에 연결하려면 마커 정의, 장치 상태, API 열기 실패와 추적 좌표 전달을 예측 가능한 제품 인터페이스로 다뤄야 합니다.',
-          role: 'DtSkadi.dll을 응용에 통합하고 OpenEx()의 오류 분기를 정리해 열기 실패 뒤 잘못된 상태로 진행하며 발생하던 크래시를 방지했습니다. MarkerEditor 입력 검증을 구현하고, 데스크톱 앱과 API의 유지보수·배포, 공개 문서와 통합 지원을 맡았습니다.',
+          role: 'DtSkadi.dll을 응용에 통합하고 OpenEx()의 오류 분기를 정리해 열기 실패 뒤 잘못된 상태로 진행하며 발생하던 크래시를 방지했습니다. MarkerEditor 입력 검증과 마커 빌더·캘리브레이션·체커·피봇 캘리브레이션·FPS 측정 기능을 구현하고, 데스크톱 앱과 API의 유지보수·배포, Python SDK 바인딩 번들 갱신, 공개 문서와 통합 지원을 맡았습니다.',
           teamResult: '장치 하드웨어와 광학·기구 설계, 의료·산업 최종 응용, 로봇 제어, 영업과 고객 성과는 팀·협력자의 결과입니다. 제품 성능·임상 효과·판매 성과를 개인 성과로 주장하지 않습니다.',
           evidence: '마커 정의·파일 작업, 트래커 상태·6DoF, 비식별 의료 트레이, CT 작업 화면, 로봇 추적 현장까지 실제 화면 다섯 종이 근거입니다.',
           limitation: '공개 자료는 제품 인터페이스와 통합 경계만 다룹니다. 얼굴, 장치 ID, 좌표값, 로고, 버전, 라이선스 경로와 성능 평가는 제외했습니다.',
@@ -1351,7 +1351,7 @@
           thesis: 'The SKADI desktop app and API handle optical marker tracking and coordinate transformation, and form the base layer for surgical instrument tracking and robot-tracking applications.',
           summary: 'The desktop app handles marker definition, file work, and real-time 6DoF status, while the DtSkadi.dll API connects to surgical-navigation and robot-tracking applications.',
           problem: 'Connecting an optical tracker to applications requires predictable product interfaces for marker definition, device state, API-open failures, and delivery of tracked transforms.',
-          role: 'Integrated DtSkadi.dll into applications, separated OpenEx() error branches so an open failure no longer continued into an invalid state and crash, and implemented MarkerEditor input validation. I maintain and release the desktop app and API, public documentation, and integration support.',
+          role: 'Integrated DtSkadi.dll into applications, separated OpenEx() error branches so an open failure no longer continued into an invalid state and crash, and implemented MarkerEditor input validation plus marker builder, calibration, checker, pivot-calibration, and FPS-measurement features. I maintain and release the desktop app and API, update the Python SDK binding bundle, and own public documentation and integration support.',
           teamResult: 'Device hardware, optical and mechanical design, final medical and industrial applications, robot control, sales, and customer outcomes belong to the team and partners. Product performance, clinical effects, and sales outcomes are not claimed as my results.',
           evidence: 'Five approved real screens cover marker definition and file work, tracker status and 6DoF, a de-identified medical tray, the CT workspace, and the robot-tracking field setup.',
           limitation: 'The public material covers only product interfaces and integration boundaries. Faces, device IDs, coordinate values, logos, versions, licence paths, and performance assessments are excluded.',
@@ -1370,7 +1370,7 @@
     project({
       slug: 'unmanned-forklift', tier: 'robotics', period: '2025.11 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['sensor-fusion', 'registration'], route: 'projects/unmanned-forklift/',
-      tech: ['C++23', 'ROS 2', 'Zenoh', 'ToF', 'RGB', 'SAM3', 'SICK TiM LiDAR', 'NAV350'],
+      tech: ['C++', 'Zenoh', 'BehaviorTree.CPP', 'ToF', 'RGB', 'SAM3', 'Jetson AGX Orin', 'SICK TiM LiDAR'],
       media: {
         lead: { id: 'unmanned-forklift-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-clip-01.mp4' },
         video: { id: 'unmanned-forklift-clip-01', type: 'video', status: 'approved', publicPath: 'assets/projects/unmanned-forklift/unmanned-forklift-clip-01.mp4' },
@@ -1388,8 +1388,8 @@
         diagram: {
           kind: 'sensor-convergence',
           translations: {
-            ko: { title: '다중 센서에서 안전 정책으로의 수렴', nodes: ['RGB·ToF·SAM3', 'LiDAR·NAV350 PCD', '로봇 위치·융합', '안전 정책·Zenoh'] },
-            en: { title: 'Multi-sensor convergence to safety policy', nodes: ['RGB, ToF, and SAM3', 'LiDAR and NAV350 PCD', 'Robot pose and fusion', 'Safety policy and Zenoh'] }
+            ko: { title: '다중 센서에서 안전 정책으로의 수렴', nodes: ['ToF·RGB 보정·SAM3', 'LiDAR 센서 통합', '비전 서보잉·BT 액션', '안전 정책·Zenoh'] },
+            en: { title: 'Multi-sensor convergence to safety policy', nodes: ['ToF-RGB calibration and SAM3', 'LiDAR sensor integration', 'Vision servoing and BT actions', 'Safety policy and Zenoh'] }
           }
         }
       },
@@ -1397,34 +1397,34 @@
         ko: {
           title: '무인지게차 다중 센서 정합', shortTitle: '무인지게차 센서 정합', eyebrow: '로보틱스·자동화 · 다중 센서',
           thesis: '수술 내비게이션의 좌표 정합을 로봇 센서와 안전 판단에 적용합니다.',
-          summary: 'ToF-RGB-SAM3 정합, SICK TiM LiDAR와 NAV350 3D PCD 처리, 로봇 위치추정, 센서 융합, 안전 정책, Zenoh 결과 발행을 하나의 통합 흐름으로 연결했습니다.',
+          summary: 'Jetson 기반 ToF–RGB 비전(2단계 캘리브레이션·SAM3 분할·품질 게이트·트럭 적재 연속 추적), 비전 서보잉 액션, LiDAR 센서 통합 서비스, 안전 관리자 초기 설계를 Zenoh 기반 사내 미들웨어 위에서 하나의 통합 흐름으로 연결했습니다.',
           problem: '센서별 데이터가 서로 다른 좌표와 주기로 들어와 안전 판단에 쓰일 수 있는 공통 흐름이 필요했습니다.',
-          role: 'ToF-RGB-SAM3 정합, SICK TiM LiDAR·NAV350 3D PCD 처리, 로봇 위치추정, 센서 융합·안전 정책 판단, Zenoh 결과 발행을 담당했습니다.',
-          teamResult: '팀은 시스템 통합과 현장 검증을 수행했습니다. 생산 운영, 배포 성공, 고객 성과로 확대하지 않습니다.',
-          evidence: '좌표 정합 결과, 3D 포인트클라우드, 로봇 위치, 안전 판단, Zenoh 메시지를 통합과 현장 검증에서 확인했습니다.',
-          limitation: '공개 클립과 사진은 시험장 테스트이며 생산 운영 성과나 고객 성과를 주장하지 않습니다.',
-          collaboration: '차량 제어, 센서, 안전, 현장 검증 담당자와 공동 통합합니다.',
+          role: 'Jetson 기반 생산 비전(ToF↔RGB 2단계 캘리브레이션, SAM3 분할 사이드카, 품질 게이트, 트럭 적재 연속 추적)과 그 이전의 Windows 프로토타입을 설계·구현했습니다. 대차 바퀴쌍 인식에서 포크 정렬·접근·삽입으로 이어지는 비전 서보잉과 로딩·언로딩 액션을 구현해 팀의 행동트리 프레임워크에 통합했습니다. 여러 센서를 하나의 3D 점유 출력으로 묶는 센서 통합 서비스, 마스트 LiDAR 표면 검출과 시각화, 비전 결과의 Zenoh 발행 서비스를 만들었고, 안전 관리자(safety_manager)의 설계와 초기 구현(3단 가상 범퍼 구역·E-STOP 래칭 정책)을 맡았습니다. 웹 기반 운영·모니터링 앱 UI와 Isaac Sim 시뮬레이션 개선에도 참여했습니다.',
+          teamResult: '측위(NAV350 포함), 차량 제어·하드웨어 추상화, 미션 관리, 행동트리 프레임워크, 포인트클라우드 발행기, 안전 관리자의 후속 정책 확장은 팀원이 맡았고, 팀은 시스템 통합과 현장 검증을 수행했습니다. 생산 운영, 배포 성공, 고객 성과로 확대하지 않습니다.',
+          evidence: '직접 측정한 ToF↔RGB 프레임 동기 p95 16.6 ms와, 기구 모델 대비 x·y 1 mm 이내로 맞춘 캘리브레이션 외부 파라미터 병진값이 비전 쪽 근거입니다. 센서 정렬, 3D 포인트클라우드, 비전 결과, 안전 정책 출력, Zenoh 메시지는 통합과 현장 검증에서 확인했습니다.',
+          limitation: '공개 클립과 사진은 시험장 테스트입니다. 측정값은 개발 중 내부 측정이며, 생산 운영 성과나 고객 성과를 주장하지 않습니다.',
+          collaboration: '차량 제어, 측위, 미션, 안전, 현장 검증 담당자와 공동 통합합니다. 미들웨어는 ROS 2 방식의 패턴을 따르는 Zenoh 기반 사내 구현입니다.',
           mediaAlt: '3D 뷰·카메라 영상·신호 플롯이 함께 표시된 무인지게차 비전 서보잉 테스트 녹화 화면.', mediaCaption: '무인지게차 DOTORI의 비전 서보잉 테스트 화면 녹화입니다(3D 뷰·카메라 영상·신호 플롯).',
-          status: '진행 중', cardProblem: '다중 센서 좌표를 정합해 안전 판단과 차량 시스템에 연결합니다.', cardOwnedRole: 'ToF-RGB-SAM3, LiDAR·NAV350 PCD, 위치추정, 안전 정책, Zenoh를 담당했습니다.', cardEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진이 근거입니다.', problemSummary: '다중 센서 좌표를 안전 판단과 차량 시스템에 연결합니다.', ownedRole: '정합, PCD, 위치추정, 센서 융합·안전 정책, Zenoh를 담당했습니다.', verifiedEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진까지만 공개 결과로 제시합니다.', visualAlt: '무인지게차 비전 서보잉 테스트 녹화.', visualCaption: '비전 서보잉 테스트 화면 녹화 클립.'
+          status: '진행 중', cardProblem: '다중 센서 좌표를 정합해 안전 판단과 차량 시스템에 연결합니다.', cardOwnedRole: 'ToF–RGB 비전, 비전 서보잉·로딩 액션, LiDAR 센서 통합, 안전 관리자 초기 설계를 맡았습니다.', cardEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진이 근거입니다.', problemSummary: '다중 센서 좌표를 안전 판단과 차량 시스템에 연결합니다.', ownedRole: '비전·캘리브레이션, 비전 서보잉 액션, 센서 통합, 안전 관리자 초기 설계를 담당했습니다.', verifiedEvidence: '비전 서보잉 화면 녹화와 시험장 주행·적재 테스트 사진까지만 공개 결과로 제시합니다.', visualAlt: '무인지게차 비전 서보잉 테스트 녹화.', visualCaption: '비전 서보잉 테스트 화면 녹화 클립.'
         },
         en: {
           title: 'Multi-sensor Registration for an Autonomous Forklift', shortTitle: 'Autonomous Forklift Registration', eyebrow: 'Robotics & Automation · Multi-sensor System',
           thesis: 'Apply the coordinate registration used in surgical navigation between the robot, cameras, and sensors, and connect perception to safety decisions and the vehicle system.',
-          summary: 'Connected ToF-RGB-SAM3 registration, SICK TiM LiDAR and NAV350 3D PCD processing, robot localization, sensor fusion, safety policy, and Zenoh publication into one integration flow.',
+          summary: 'Connected Jetson-based ToF–RGB vision (two-stage calibration, SAM3 segmentation, quality gates, continuous truck-load tracking), vision-servoing actions, a LiDAR sensor-integration service, and the initial safety-manager design into one integration flow on Zenoh-based in-house middleware.',
           problem: 'Sensor streams arrived in different coordinates and cycles and needed a common flow usable by safety decisions.',
-          role: 'Owned ToF-RGB-SAM3 registration; SICK TiM LiDAR and NAV350 3D PCD processing; robot localization; sensor fusion and safety-policy decisions; and publishing results through Zenoh.',
-          teamResult: 'The team performed system integration and field validation. This is not presented as production operation, deployment success, or customer outcomes.',
-          evidence: 'Registration outputs, 3D point clouds, robot pose, safety decisions, and Zenoh messages were checked through integration and field validation.',
-          limitation: 'The public clip and photos are test-site runs; they do not claim production or customer outcomes.',
-          collaboration: 'Vehicle control, sensing, safety, and field-validation owners integrate the system jointly.',
+          role: 'Designed and implemented the production vision on Jetson (two-stage ToF↔RGB calibration, a SAM3 segmentation sidecar, quality gates, continuous truck-load tracking) and the earlier Windows prototype. Implemented vision servoing, from wheel-pair detection to fork alignment, approach, and insertion, plus loading and unloading actions, and integrated them into the team\'s behaviour-tree framework. Built a sensor-integration service with a fused 3D occupancy output, mast-LiDAR surface detection and visualisation, and the service that publishes vision results over Zenoh; designed and initially implemented the safety manager (three-zone virtual bumper and E-STOP latching policy). Also contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.',
+          teamResult: 'Localisation (including NAV350), vehicle control and hardware abstraction, mission management, the behaviour-tree framework, the point-cloud publisher, and later safety-manager policy extensions were owned by team members; the team performed system integration and field validation. This is not presented as production operation, deployment success, or customer outcomes.',
+          evidence: 'On the vision side, I measured ToF↔RGB frame synchronisation at p95 16.6 ms and brought the calibrated extrinsic translation within 1 mm (x, y) of the mechanical model. Sensor alignment, 3D point clouds, vision outputs, safety-policy outputs, and Zenoh messages were checked through integration and field validation.',
+          limitation: 'The public clip and photos are test-site runs. The measurements are internal development measurements; no production or customer outcomes are claimed.',
+          collaboration: 'Vehicle-control, localisation, mission, safety, and field-validation owners integrate the system jointly. The middleware is an in-house Zenoh-based implementation that follows ROS 2-style patterns.',
           mediaAlt: 'Vision-servoing test recording of the autonomous forklift with 3D view, camera feed, and signal plots.', mediaCaption: 'Screen recording of the DOTORI vision-servoing test (3D view, camera feed, signal plots).',
-          status: 'Ongoing', cardProblem: 'Register multi-sensor coordinates and connect them to safety decisions and the vehicle system.', cardOwnedRole: 'Owned ToF-RGB-SAM3, LiDAR and NAV350 PCD, localization, safety policy, and Zenoh output.', cardEvidence: 'Vision-servoing screen recording and test-site driving and loading photos are the evidence.', problemSummary: 'Connect registered multi-sensor data to safety decisions and the vehicle system.', ownedRole: 'Owned registration, PCD, localization, sensor fusion and safety policy, and Zenoh output.', verifiedEvidence: 'Public result is limited to the vision-servoing recording and test-site driving and loading photos.', visualAlt: 'Autonomous-forklift vision-servoing test recording.', visualCaption: 'Vision-servoing test screen recording clip.'
+          status: 'Ongoing', cardProblem: 'Register multi-sensor coordinates and connect them to safety decisions and the vehicle system.', cardOwnedRole: 'Owned ToF–RGB vision, vision-servoing and loading actions, LiDAR sensor integration, and the initial safety-manager design.', cardEvidence: 'Vision-servoing screen recording and test-site driving and loading photos are the evidence.', problemSummary: 'Connect registered multi-sensor data to safety decisions and the vehicle system.', ownedRole: 'Owned vision and calibration, vision-servoing actions, sensor integration, and the initial safety-manager design.', verifiedEvidence: 'Public result is limited to the vision-servoing recording and test-site driving and loading photos.', visualAlt: 'Autonomous-forklift vision-servoing test recording.', visualCaption: 'Vision-servoing test screen recording clip.'
         }
       },
       blocks: [
-        { key: 'sensor-coordinate-chain', type: 'system', translations: { ko: { heading: '센서 좌표 체인', body: 'RGB·ToF·LiDAR·NAV350을 차량 좌표와 로봇 위치에 연결했습니다.' }, en: { heading: 'Sensor coordinate chain', body: 'Connected RGB, ToF, LiDAR, and NAV350 to vehicle coordinates and robot pose.' } } },
-        { key: 'perception-to-policy', type: 'system', translations: { ko: { heading: '인지에서 정책까지', body: '정합과 위치 결과를 안전 정책 판단과 Zenoh 메시지로 이었습니다.' }, en: { heading: 'Perception to policy', body: 'Connected registration and pose outputs to safety-policy decisions and Zenoh messages.' } } },
-        { key: 'integration-evidence', type: 'evidence', translations: { ko: { heading: '통합 근거', body: '센서 정합, 포인트클라우드, 위치, 정책 결과를 통합과 현장에서 대조했습니다.' }, en: { heading: 'Integration evidence', body: 'Compared sensor alignment, point clouds, pose, and policy output in integration and field tests.' } } },
+        { key: 'sensor-coordinate-chain', type: 'system', translations: { ko: { heading: '센서 좌표 체인', body: 'ToF↔RGB 2단계 캘리브레이션과 마스트 LiDAR를 차량 좌표에 연결하고, 센서 통합 서비스로 하나의 3D 점유 출력을 만들었습니다.' }, en: { heading: 'Sensor coordinate chain', body: 'Connected two-stage ToF↔RGB calibration and the mast LiDAR to vehicle coordinates, and produced one 3D occupancy output through the sensor-integration service.' } } },
+        { key: 'perception-to-policy', type: 'system', translations: { ko: { heading: '인지에서 정책까지', body: '비전 결과를 Zenoh로 발행하고 비전 서보잉·로딩 액션을 팀의 행동트리에 통합했으며, 안전 관리자의 3단 가상 범퍼·E-STOP 래칭 정책을 처음 설계했습니다.' }, en: { heading: 'Perception to policy', body: 'Published vision results over Zenoh, integrated vision-servoing and loading actions into the team\'s behaviour trees, and drew up the safety manager\'s initial three-zone virtual-bumper and E-STOP latching policy.' } } },
+        { key: 'integration-evidence', type: 'evidence', translations: { ko: { heading: '통합 근거', body: '센서 정렬, 포인트클라우드, 비전 결과, 정책 출력을 통합과 현장에서 대조했습니다. 본인 측정으로 ToF↔RGB 동기 p95는 16.6 ms, 외부 파라미터 병진값은 기구 모델 대비 x·y 1 mm 이내입니다.' }, en: { heading: 'Integration evidence', body: 'Compared sensor alignment, point clouds, vision outputs, and policy output in integration and field tests. My own measurements put ToF↔RGB synchronisation at p95 16.6 ms and the extrinsic translation within 1 mm (x, y) of the mechanical model.' } } },
         { key: 'field-boundary', type: 'limitation', translations: { ko: { heading: '현장 경계', body: '현장 검증을 생산 운영이나 고객 성과로 확대하지 않습니다.' }, en: { heading: 'Field boundary', body: 'Field validation is not production operation, deployment success, or a customer outcome.' } } }
       ]
     }),
@@ -1469,7 +1469,7 @@
           role: '문제 맥락, 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영 판단을 소유하고 AI를 구현 보조·증폭 수단으로 사용했습니다.',
           teamResult: '공개 저장소와 릴리스 아티팩트는 확인 가능한 제품 결과이지만 사용자 수, 생산성, 유지보수 효과를 주장하지 않습니다.',
           evidence: 'multi-cli-work 릴리스 빌드의 실제 화면과 두 앱의 공개 저장소·테스트·릴리스를 근거로 삼고, 로컬 지식 시스템의 비공개 데이터는 배제합니다.',
-          limitation: '로컬 지식 시스템의 원문·개인 데이터를 공개하지 않고 검증되지 않은 사용자·생산성 지표를 주장하지 않습니다.',
+          limitation: '로컬 지식 시스템의 원문·개인 데이터를 공개하지 않고 검증되지 않은 사용자·생산성 지표를 주장하지 않습니다. 회사 안에서 만든 사내 도구는 비공개 저장소라 이 사례의 근거에 넣지 않고 이력서에만 적습니다.',
           collaboration: 'AI는 구현 증폭 수단이며 맥락, 아키텍처, 수용 기준, 리뷰와 릴리스 결정은 사람이 소유합니다.',
           mediaAlt: 'multi-cli-work 프로젝트 시작 화면 — PowerShell·Claude Code·Codex·에이전트 세션 시작 버튼과 git 상태·워크트리 카드.', mediaCaption: 'multi-cli-work v1.24 — 프로젝트 하나에서 CLI·에이전트 세션을 열고 git 상태와 워크트리를 함께 봅니다. 로컬 경로는 블러 처리했습니다.',
           status: '진행 중', cardProblem: '직접 겪은 마찰을 테스트·릴리스·운영되는 도구로 바꿉니다.', cardOwnedRole: '맥락·아키텍처·수용 기준을 소유하고 AI로 구현을 증폭합니다.', cardEvidence: '공개 저장소, 테스트, 릴리스; 비공개 데이터와 지표는 배제합니다.', problemSummary: '직접 겪은 문제를 반복 사용 가능한 제품으로 바꿉니다.', ownedRole: '맥락, 아키텍처, 수용 기준, 릴리스 판단을 소유합니다.', verifiedEvidence: '공개 저장소, 테스트, 릴리스 아티팩트.', visualAlt: 'AI Build Lab 공개 제품 근거.', visualCaption: '비공개 데이터와 지표는 포함하지 않습니다.'
@@ -1482,7 +1482,7 @@
           role: 'Owned problem context, requirements, architecture, acceptance criteria, tests, releases, and operating decisions while using AI to amplify implementation.',
           teamResult: 'Public repositories and release artifacts are observable product results; no user-count, productivity, or maintainability metrics are claimed.',
           evidence: 'Screens from a released multi-cli-work build, together with the public repositories, tests, and releases of both applications, provide public-safe evidence; private knowledge data is excluded.',
-          limitation: 'Never expose private knowledge-system source data or claim unverified user or productivity metrics.',
+          limitation: 'Never expose private knowledge-system source data or claim unverified user or productivity metrics. In-house company tools live in private repositories, so they are listed in the CV only and are not used as evidence here.',
           collaboration: 'AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release decisions.',
           mediaAlt: 'multi-cli-work project start screen with PowerShell, Claude Code, Codex, and agent session buttons beside git status and worktree cards.', mediaCaption: 'multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees. Local paths are blurred.',
           status: 'Ongoing', cardProblem: 'Turn lived friction into tested, released, and operated tools.', cardOwnedRole: 'Own context, architecture, and acceptance while AI amplifies implementation.', cardEvidence: 'Public repositories, tests, and releases; no private data or unverified metrics.', problemSummary: 'Turn personally experienced problems into reusable products.', ownedRole: 'Own context, architecture, acceptance criteria, tests, and releases.', verifiedEvidence: 'Public repositories, tests, and release artifacts.', visualAlt: 'AI Build Lab public product evidence.', visualCaption: 'Private data and unverified metrics are excluded.'
@@ -1591,7 +1591,7 @@
     { id: 'dotori-development-start-2025', eventDate: '2025-11', datePrecision: 'month',
       evidence: { path: 'js/portfolio-data.js', locator: 'projects: unmanned-forklift.period, 2025.11 - present' },
       links: [{ route: 'projects/unmanned-forklift/', translations: { ko: { label: 'DOTORI 무인지게차' }, en: { label: 'DOTORI autonomous forklift' } } }],
-      translations: { ko: { body: 'DOTORI 무인지게차의 다중 센서 정합과 안전 정책 소프트웨어 개발을 시작했습니다. ToF·RGB·LiDAR·NAV350 처리, 로봇 위치추정, 센서 융합과 Zenoh 연동을 담당합니다.', post: 'DOTORI 무인지게차의 다중 센서 정합과 안전 정책 소프트웨어 개발을 시작했습니다. ToF·RGB·LiDAR·NAV350 처리와 로봇 위치추정, 센서 융합, 안전 정책 판단, Zenoh 연동을 담당합니다.\n\n수술 내비게이션에서 다뤄 온 좌표 정합을 로봇 센서와 안전 판단으로 넓히는 일입니다. 시스템 통합과 현장 검증은 팀과 함께 수행합니다.' }, en: { body: 'Began developing multi-sensor registration and safety-policy software for the DOTORI autonomous forklift, owning ToF, RGB, LiDAR, and NAV350 processing, robot localisation, sensor fusion, and Zenoh integration.', post: 'I began developing multi-sensor registration and safety-policy software for the DOTORI autonomous forklift, owning ToF, RGB, LiDAR and NAV350 processing, robot localisation, sensor fusion, safety-policy decisions and Zenoh integration.\n\nIt extends the coordinate registration I had worked on in surgical navigation to robot sensors and safety decisions. System integration and field validation are carried out with the team.' } } },
+      translations: { ko: { body: 'DOTORI 무인지게차의 비전·센서 통합과 안전 정책 소프트웨어 개발을 시작했습니다. ToF–RGB 비전, 비전 서보잉 액션, LiDAR 센서 통합, 안전 관리자 초기 설계와 Zenoh 연동을 담당합니다.', post: 'DOTORI 무인지게차의 비전·센서 통합과 안전 정책 소프트웨어 개발을 시작했습니다. Jetson 기반 ToF–RGB 비전(2단계 캘리브레이션, SAM3 분할, 트럭 적재 추적)과 비전 서보잉·로딩 액션, LiDAR 센서 통합 서비스, 안전 관리자의 설계와 초기 구현, Zenoh 기반 사내 미들웨어 연동을 담당합니다.\n\n수술 내비게이션에서 다뤄 온 좌표 정합을 로봇 센서와 안전 판단으로 넓히는 일입니다. 측위와 차량 제어는 팀원이 맡고, 시스템 통합과 현장 검증은 팀과 함께 수행합니다.' }, en: { body: 'Began developing vision, sensor-integration, and safety-policy software for the DOTORI autonomous forklift, owning ToF–RGB vision, vision-servoing actions, LiDAR sensor integration, the initial safety-manager design, and Zenoh integration.', post: 'I began developing vision, sensor-integration, and safety-policy software for the DOTORI autonomous forklift: Jetson-based ToF–RGB vision (two-stage calibration, SAM3 segmentation, truck-load tracking), vision-servoing and loading actions, a LiDAR sensor-integration service, the design and initial implementation of the safety manager, and integration with the Zenoh-based in-house middleware.\n\nIt extends the coordinate registration I had worked on in surgical navigation to robot sensors and safety decisions. Localisation and vehicle control are owned by team members, and system integration and field validation are carried out with the team.' } } },
     { id: 'server-client-study-public-2025', eventDate: '2025-04-26', datePrecision: 'day',
       evidence: { path: 'data/news-repository-sources.json', locator: 'rafaam11/server-client-study', dateSource: 'https://github.com/rafaam11/server-client-study' },
       links: [{ href: 'https://github.com/rafaam11/server-client-study', translations: { ko: { label: '공개 저장소' }, en: { label: 'Public repository' } } }, { route: 'projects/ai-build-lab/', translations: { ko: { label: 'AI Build Lab' }, en: { label: 'AI Build Lab' } } }],

@@ -143,14 +143,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 272.8898 141.5852 288.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 256.8898 141.5852 272.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 252.8898 128.2212 268.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 236.8898 128.2212 252.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 20 0 obj
@@ -844,7 +844,7 @@ endstream
 endobj
 33 0 obj
 <<
-/Length 7404
+/Length 7785
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -868,155 +868,159 @@ BT 1 0 0 1 48 732.8898 Tm /F2+0 10 Tf 12 TL (Owned the Unity client end to end: 
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 716.8898 Tm /F2+0 10 Tf 12 TL (segments, and page state, voice chat with speaker indication, DICOM volume loading, and backend) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 700.8898 Tm /F2+0 10 Tf 12 TL (integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR.) Tj T* ET
+BT 1 0 0 1 48 700.8898 Tm /F2+0 10 Tf 12 TL (integration, then carried out the port off a vendor-specific SDK onto OpenXR and Android XR. On the server) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 684.8898 Tm /F2+0 10 Tf 12 TL (side, built a FastAPI file server for the client in 2024, and from 2025.12 to 2026.07 a data server with a) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 668.8898 Tm /F2+0 10 Tf 12 TL (preprocessing pipeline \(STL mesh decimation and conversion of consultation slides to images\).) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 671.8898 Tm /F3+0 11 Tf 13.2 TL (Shared state) Tj T* ET
+BT 1 0 0 1 48 639.8898 Tm /F3+0 11 Tf 13.2 TL (Shared state) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 651.8898 Tm /F2+0 10 Tf 12 TL (Assigned the clinician, patient, and clinician roles by join order, and reflected model pose, segment state,) Tj T* ET
+BT 1 0 0 1 48 619.8898 Tm /F2+0 10 Tf 12 TL (Assigned the clinician, patient, and clinician roles by join order, and reflected model pose, segment state,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 635.8898 Tm /F2+0 10 Tf 12 TL (page number, and speaker indication to all three participants together.) Tj T* ET
+BT 1 0 0 1 48 603.8898 Tm /F2+0 10 Tf 12 TL (page number, and speaker indication to all three participants together.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 606.8898 Tm /F3+0 11 Tf 13.2 TL (Consultation space and client scope) Tj T* ET
+BT 1 0 0 1 48 574.8898 Tm /F3+0 11 Tf 13.2 TL (Consultation space and client scope) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 586.8898 Tm /F2+0 10 Tf 12 TL (Laid out the room around the consultation itself: three seats for clinician 1 \(master\), the patient, and clinician) Tj T* ET
+BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (Laid out the room around the consultation itself: three seats for clinician 1 \(master\), the patient, and clinician) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 570.8898 Tm /F2+0 10 Tf 12 TL (2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so) Tj T* ET
+BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (that selecting a patient case served by the backend loads that CT volume as both a 3D model and) Tj T* ET
+BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (that selecting a patient case served by the backend loads that CT volume as both a 3D model and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android) Tj T* ET
+BT 1 0 0 1 48 506.8898 Tm /F2+0 10 Tf 12 TL (cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (XR standards so one build runs on more than one headset.) Tj T* ET
+BT 1 0 0 1 48 490.8898 Tm /F2+0 10 Tf 12 TL (XR standards so one build runs on more than one headset.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 492.8898 Tm /F3+0 10.5 Tf 12.6 TL (Three-user shared state) Tj T* ET
+BT 1 0 0 1 48 460.8898 Tm /F3+0 10.5 Tf 12.6 TL (Three-user shared state) Tj T* ET
 .101961 .337255 .858824 RG
 1.2 w
-n 140 477.8898 m 297.6378 425.8898 l S
+n 140 445.8898 m 297.6378 393.8898 l S
 .101961 .337255 .858824 rg
 n
-299.8378 425.8898 m
-299.8378 427.1048 298.8528 428.0898 297.6378 428.0898 c
-296.4228 428.0898 295.4378 427.1048 295.4378 425.8898 c
-295.4378 424.6747 296.4228 423.6898 297.6378 423.6898 c
-298.8528 423.6898 299.8378 424.6747 299.8378 425.8898 c
+299.8378 393.8898 m
+299.8378 395.1048 298.8528 396.0898 297.6378 396.0898 c
+296.4228 396.0898 295.4378 395.1048 295.4378 393.8898 c
+295.4378 392.6747 296.4228 391.6898 297.6378 391.6898 c
+298.8528 391.6898 299.8378 392.6747 299.8378 393.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 455.2756 477.8898 m 297.6378 425.8898 l S
+n 455.2756 445.8898 m 297.6378 393.8898 l S
 .101961 .337255 .858824 rg
 n
-299.8378 425.8898 m
-299.8378 427.1048 298.8528 428.0898 297.6378 428.0898 c
-296.4228 428.0898 295.4378 427.1048 295.4378 425.8898 c
-295.4378 424.6747 296.4228 423.6898 297.6378 423.6898 c
-298.8528 423.6898 299.8378 424.6747 299.8378 425.8898 c
+299.8378 393.8898 m
+299.8378 395.1048 298.8528 396.0898 297.6378 396.0898 c
+296.4228 396.0898 295.4378 395.1048 295.4378 393.8898 c
+295.4378 392.6747 296.4228 391.6898 297.6378 391.6898 c
+298.8528 391.6898 299.8378 392.6747 299.8378 393.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 297.6378 373.8898 m 297.6378 425.8898 l S
+n 297.6378 341.8898 m 297.6378 393.8898 l S
 .101961 .337255 .858824 rg
 n
-299.8378 425.8898 m
-299.8378 427.1048 298.8528 428.0898 297.6378 428.0898 c
-296.4228 428.0898 295.4378 427.1048 295.4378 425.8898 c
-295.4378 424.6747 296.4228 423.6898 297.6378 423.6898 c
-298.8528 423.6898 299.8378 424.6747 299.8378 425.8898 c
+299.8378 393.8898 m
+299.8378 395.1048 298.8528 396.0898 297.6378 396.0898 c
+296.4228 396.0898 295.4378 395.1048 295.4378 393.8898 c
+295.4378 392.6747 296.4228 391.6898 297.6378 391.6898 c
+298.8528 391.6898 299.8378 392.6747 299.8378 393.8898 c
 f*
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-227.6378 402.8898 m
-367.6378 402.8898 l
-369.2962 402.8898 370.6378 404.2314 370.6378 405.8898 c
-370.6378 445.8898 l
-370.6378 447.5482 369.2962 448.8898 367.6378 448.8898 c
-227.6378 448.8898 l
-225.9794 448.8898 224.6378 447.5482 224.6378 445.8898 c
-224.6378 405.8898 l
-224.6378 404.2314 225.9794 402.8898 227.6378 402.8898 c
+227.6378 370.8898 m
+367.6378 370.8898 l
+369.2962 370.8898 370.6378 372.2314 370.6378 373.8898 c
+370.6378 413.8898 l
+370.6378 415.5482 369.2962 416.8898 367.6378 416.8898 c
+227.6378 416.8898 l
+225.9794 416.8898 224.6378 415.5482 224.6378 413.8898 c
+224.6378 373.8898 l
+224.6378 372.2314 225.9794 370.8898 227.6378 370.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 233.6378 434.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
+BT 1 0 0 1 233.6378 402.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 233.6378 417.8898 Tm /F3+0 7.4 Tf 8.88 TL (PUN2 shared state) Tj T* ET
+BT 1 0 0 1 233.6378 385.8898 Tm /F3+0 7.4 Tf 8.88 TL (PUN2 shared state) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-80 454.8898 m
-200 454.8898 l
-201.6584 454.8898 203 456.2314 203 457.8898 c
-203 497.8898 l
-203 499.5482 201.6584 500.8898 200 500.8898 c
-80 500.8898 l
-78.3416 500.8898 77 499.5482 77 497.8898 c
-77 457.8898 l
-77 456.2314 78.3416 454.8898 80 454.8898 c
+80 422.8898 m
+200 422.8898 l
+201.6584 422.8898 203 424.2314 203 425.8898 c
+203 465.8898 l
+203 467.5482 201.6584 468.8898 200 468.8898 c
+80 468.8898 l
+78.3416 468.8898 77 467.5482 77 465.8898 c
+77 425.8898 l
+77 424.2314 78.3416 422.8898 80 422.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 86 486.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
+BT 1 0 0 1 86 454.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 86 469.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 1 \(Master\)) Tj T* ET
+BT 1 0 0 1 86 437.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 1 \(Master\)) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-395.2756 454.8898 m
-515.2756 454.8898 l
-516.934 454.8898 518.2756 456.2314 518.2756 457.8898 c
-518.2756 497.8898 l
-518.2756 499.5482 516.934 500.8898 515.2756 500.8898 c
-395.2756 500.8898 l
-393.6172 500.8898 392.2756 499.5482 392.2756 497.8898 c
-392.2756 457.8898 l
-392.2756 456.2314 393.6172 454.8898 395.2756 454.8898 c
+395.2756 422.8898 m
+515.2756 422.8898 l
+516.934 422.8898 518.2756 424.2314 518.2756 425.8898 c
+518.2756 465.8898 l
+518.2756 467.5482 516.934 468.8898 515.2756 468.8898 c
+395.2756 468.8898 l
+393.6172 468.8898 392.2756 467.5482 392.2756 465.8898 c
+392.2756 425.8898 l
+392.2756 424.2314 393.6172 422.8898 395.2756 422.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 401.2756 486.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
+BT 1 0 0 1 401.2756 454.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 401.2756 469.8898 Tm /F3+0 7.4 Tf 8.88 TL (Patient) Tj T* ET
+BT 1 0 0 1 401.2756 437.8898 Tm /F3+0 7.4 Tf 8.88 TL (Patient) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-237.6378 350.8898 m
-357.6378 350.8898 l
-359.2962 350.8898 360.6378 352.2314 360.6378 353.8898 c
-360.6378 393.8898 l
-360.6378 395.5482 359.2962 396.8898 357.6378 396.8898 c
-237.6378 396.8898 l
-235.9794 396.8898 234.6378 395.5482 234.6378 393.8898 c
-234.6378 353.8898 l
-234.6378 352.2314 235.9794 350.8898 237.6378 350.8898 c
+237.6378 318.8898 m
+357.6378 318.8898 l
+359.2962 318.8898 360.6378 320.2314 360.6378 321.8898 c
+360.6378 361.8898 l
+360.6378 363.5482 359.2962 364.8898 357.6378 364.8898 c
+237.6378 364.8898 l
+235.9794 364.8898 234.6378 363.5482 234.6378 361.8898 c
+234.6378 321.8898 l
+234.6378 320.2314 235.9794 318.8898 237.6378 318.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 243.6378 382.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
+BT 1 0 0 1 243.6378 350.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 243.6378 365.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 2) Tj T* ET
+BT 1 0 0 1 243.6378 333.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 2) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 314.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 282.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 282.8898 m 547.2756 282.8898 l S
+n 48 250.8898 m 547.2756 250.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 248.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
+BT 1 0 0 1 48 216.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 224.8898 Tm /F2+0 10 Tf 12 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence.) Tj T* ET
+BT 1 0 0 1 48 192.8898 Tm /F2+0 10 Tf 12 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 208.8898 Tm /F2+0 10 Tf 12 TL (Clinician 1 \(master\), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one) Tj T* ET
+BT 1 0 0 1 48 176.8898 Tm /F2+0 10 Tf 12 TL (Clinician 1 \(master\), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 192.8898 Tm /F2+0 10 Tf 12 TL (person moving the model leaves the other two views showing the same pose and the same measurements.) Tj T* ET
+BT 1 0 0 1 48 160.8898 Tm /F2+0 10 Tf 12 TL (person moving the model leaves the other two views showing the same pose and the same measurements.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 163.8898 Tm /F3+0 11 Tf 13.2 TL (Multi-user demonstration) Tj T* ET
+BT 1 0 0 1 48 131.8898 Tm /F3+0 11 Tf 13.2 TL (Multi-user demonstration) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 143.8898 Tm /F2+0 10 Tf 12 TL (Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the) Tj T* ET
+BT 1 0 0 1 48 111.8898 Tm /F2+0 10 Tf 12 TL (Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 127.8898 Tm /F2+0 10 Tf 12 TL (other two views show the same state.) Tj T* ET
+BT 1 0 0 1 48 95.88976 Tm /F2+0 10 Tf 12 TL (other two views show the same state.) Tj T* ET
  
 endstream
 endobj
@@ -1109,7 +1113,7 @@ endstream
 endobj
 36 0 obj
 <<
-/Length 3529
+/Length 3624
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1150,30 +1154,32 @@ n 48 559.8898 m 547.2756 559.8898 l S
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 525.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 501.8898 Tm /F2+0 10 Tf 12 TL (Unity 6 \001 Photon PUN2 \001 Photon Voice \001 OpenXR / Android XR \001 Meta Quest 3 \001 Galaxy XR \001 DICOM 3D) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 476.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 501.8898 Tm /F2+0 10 Tf 12 TL (Unity 6 \001 Photon PUN2 \001 Photon Voice \001 OpenXR / Android XR \001 Meta Quest 3 \001 Galaxy XR \001 DICOM 3D \001) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 456.8898 Tm /F2+0 10 Tf 12 TL (XR & Spatial Computing \001 Surgical Navigation & Optical Tracking) Tj T* ET
+BT 1 0 0 1 48 485.8898 Tm /F2+0 10 Tf 12 TL (FastAPI) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 460.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 440.8898 Tm /F2+0 10 Tf 12 TL (XR & Spatial Computing \001 Surgical Navigation & Optical Tracking) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 424.8898 m 547.2756 424.8898 l S
+n 48 408.8898 m 547.2756 408.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 390.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 374.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 366.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 350.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 337.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 321.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 317.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 301.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 301.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 285.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 276.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 274.8898 m 141.5852 274.8898 l S
+BT 1 0 0 1 48 260.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 258.8898 m 141.5852 258.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 256.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 254.8898 m 128.2212 254.8898 l S
+BT 1 0 0 1 48 240.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 238.8898 m 128.2212 238.8898 l S
  
 endstream
 endobj
@@ -1213,9 +1219,9 @@ xref
 0002987892 00000 n 
 0002987979 00000 n 
 0002991524 00000 n 
-0002998980 00000 n 
-0003000370 00000 n 
-0003002554 00000 n 
+0002999361 00000 n 
+0003000751 00000 n 
+0003002935 00000 n 
 trailer
 <<
 /ID 
@@ -1227,5 +1233,5 @@ trailer
 /Size 37
 >>
 startxref
-3006135
+3006611
 %%EOF

@@ -175,7 +175,7 @@ function personJsonLd(locale, cv) {
       { '@type': 'CollegeOrUniversity', name: 'DGIST' },
       { '@type': 'CollegeOrUniversity', name: 'Kumoh National Institute of Technology' }
     ],
-    knowsAbout: ['Surgical Navigation', '3D Registration', 'Image Registration', 'Optical Tracking', 'Computer Vision', 'Point Cloud Processing', 'Extended Reality', 'Spatial Computing', '3D Slicer', 'ROS 2', 'Robotics'],
+    knowsAbout: ['Surgical Navigation', '3D Registration', 'Image Registration', 'Optical Tracking', 'Computer Vision', 'Point Cloud Processing', 'Extended Reality', 'Spatial Computing', '3D Slicer', 'Sensor Integration', 'Robotics'],
     sameAs: cv.contacts.filter(c => c.label !== 'Email').map(c => c.href)
   };
   const json = JSON.stringify(person).replace(/</g, '\\u003c');
