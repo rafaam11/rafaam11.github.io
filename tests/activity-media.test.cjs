@@ -127,7 +127,7 @@ test('news events, labels and activity-media evidence agree', () => {
     for (const eventId of record.eventIds) assert.ok(portfolioData.news.some((item) => item.id === eventId), `${record.id}: eventId ${eventId} exists`);
   }
   assert.ok(Object.keys(feed.labels).length >= portfolioData.news.filter((item) => !release(item)).length, 'labels cover the non-release news');
-  assert.deepEqual(profileHome.homeNews().map((item) => item.id), ['bus-info-v0-6-0', 'surface-guidance-research-2026', 'omfs-vr-poster-2026', 'digital-occlusion-redesign-2026'], 'Home picks are unchanged');
+  assert.deepEqual(profileHome.homeNews().map((item) => item.id), ['bus-info-v0-6-0', 'neuropilot-evaluation-review-2026', 'surface-guidance-research-2026', 'omfs-vr-poster-2026'], 'Home shows the newest release and dated research events');
   const broken = { ...portfolioData.news[0], id: 'broken-event', evidence: { path: 'data/activity-media.json', locator: 'M012' } };
   assert.ok(profileHome.newsErrors([broken]).some((message) => /M012/.test(message)), 'evidence record must list the event');
   assert.ok(Object.values(feed.labels).filter((label) => label[0] === 'activity').length >= 8, 'activity events were added');

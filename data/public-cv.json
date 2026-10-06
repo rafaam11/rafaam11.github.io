@@ -10,12 +10,12 @@
       "ko": {
         "displayName": "김진민",
         "headline": "수술 로보틱스·컴퓨터비전 R&D 엔지니어 — 수술 내비게이션 · 3D 정합 · 광학 추적 · XR · 로봇 통합",
-        "summary": "광학식 3차원 위치추적·좌표계 변환·3D 정합·수술 내비게이션·XR·로봇 시스템 통합을 개발해 온 로보틱스·컴퓨터비전 R&D 엔지니어입니다. DGIST에서 컴퓨터 보조 수술과 정합을 연구했고, 삼성서울병원 구강악안면외과와 3년 이상 공동 R&D로 디지털 수술계획·XR 상담·영상유도 수술 내비게이션을 개발했습니다. 연구 방향은 수술 로보틱스, Physical AI, Surgical AI, 3D Vision, 로봇 인지, 멀티모달 인지, 공간 지능입니다."
+        "summary": "의료영상·3D 정합·광학 추적을 연구용 소프트웨어와 로봇 비전 시스템으로 구현해 온 로보틱스·컴퓨터비전 R&D 엔지니어입니다. DGIST에서 컴퓨터 보조 수술과 정합을 연구했고, 삼성서울병원과 3년 이상 공동 R&D로 디지털 수술계획·XR·수술 내비게이션을 개발했습니다. 요구사항 협의, 평가 기준·데이터 품질 검토와 현장 통합까지 맡아 왔습니다. 연구 방향은 수술 로보틱스, Physical AI, Surgical AI, 3D Vision, 로봇 인지, 멀티모달 인지, 공간 지능입니다."
       },
       "en": {
         "displayName": "Jinmin Kim",
         "headline": "Robotics & Computer Vision R&D Engineer — Surgical Navigation, 3D Registration, Optical Tracking, XR, Robotics Integration",
-        "summary": "Robotics and computer vision R&D engineer developing optical 3D tracking, coordinate transformation, 3D registration, surgical navigation, XR and robotic system integration. Researched computer-assisted surgery and registration at DGIST, and 3+ years of collaborative R&D with Samsung Medical Center oral and maxillofacial surgery on digital surgical planning, XR consultation and image-guided navigation. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence."
+        "summary": "Robotics and computer vision R&D engineer translating medical imaging, 3D registration, and optical tracking into research software and robot vision systems. I researched computer-assisted surgery and registration at DGIST and have collaborated with Samsung Medical Center for over three years on digital surgical planning, XR, and surgical navigation. My responsibilities also cover requirements discussions, evaluation criteria and data-quality review, and field integration. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence."
       }
     }
   },
@@ -122,13 +122,15 @@
             "ko": {
               "title": "광학식 3차원 위치추적 소프트웨어",
               "items": [
-                "자체 광학식 3차원 위치추적장치 SKADI의 API·Viewer 소프트웨어 개발·유지보수 — 광학 마커 추적·캘리브레이션·좌표계 변환·3D 시각화·수술도구 추적, 국내 수술내비게이션 기업·연구기관 납품 제품군의 SW 계층을 담당합니다."
+                "자체 광학식 3차원 위치추적장치 SKADI의 API·Viewer 소프트웨어 개발·유지보수 — 광학 마커 추적·캘리브레이션·좌표계 변환·3D 시각화·수술도구 추적, 국내 수술내비게이션 기업·연구기관 납품 제품군의 SW 계층을 담당합니다.",
+                "트래커 설치·사용 안내·원격 기술지원과 API 빌드·배포를 맡고, 재현 경로·조치·잔여 이슈를 문서화했습니다."
               ]
             },
             "en": {
               "title": "Optical 3D Tracking Software",
               "items": [
-                "Develop and maintain the API and Viewer of the in-house optical 3D tracker SKADI — optical marker tracking, calibration, coordinate transformation, 3D visualisation and surgical tool tracking; the software layer of a product line supplied to Korean surgical-navigation companies and research institutes."
+                "Develop and maintain the API and Viewer of the in-house optical 3D tracker SKADI — optical marker tracking, calibration, coordinate transformation, 3D visualisation and surgical tool tracking; the software layer of a product line supplied to Korean surgical-navigation companies and research institutes.",
+                "Provided tracker installation guidance, remote technical support, and API builds and releases; documented reproduction steps, actions taken, and unresolved issues."
               ]
             }
           }
@@ -146,7 +148,9 @@
                 "rTMS 코일 내비게이션 시스템(NeuroPilot) 주도 개발 — 코일 위치 디지털트윈 가시화 (보건의료 정부과제).",
                 "저선량 C-Arm 3차원 내비게이션 — C-Arm 영상과 3차원 내비게이션 워크플로를 연결하고 담당 기능 범위를 구현했습니다.",
                 "방사선치료용 3차원 표면유도 호흡추적과 4DCT 정합 담당 (한국전기연구원 대형과제, 2026.06 - ).",
-                "한국전기연구원·한국기계연구원 등 연구기관 개발용역 다수 수행."
+                "한국전기연구원·한국기계연구원 등 연구기관 개발용역 다수 수행.",
+                "연구진·협력사와 요구사항, 데이터 형식·좌표계, 통신·정합 책임을 협의하고 시험절차·성적서 초안·연차 및 결과보고 자료를 준비했습니다.",
+                "NeuroPilot의 거리·RMSE·CSV 비교 기능을 구현한 뒤 기준 좌표의 정의·품질을 검토해 재측정을 요청했습니다. 평가 도구 구현과 최종 정확도 검증은 구분합니다."
               ]
             },
             "en": {
@@ -160,7 +164,9 @@
                 "Led development of the rTMS coil-navigation system (NeuroPilot) — digital-twin visualisation of coil pose (health-technology government programme).",
                 "Low-dose C-arm 3D navigation — connected C-arm imaging to the 3D navigation workflow and implemented the owned feature scope.",
                 "Own surface-guided respiratory tracking and 4D CT registration for radiotherapy (large KERI programme, 2026.06 - ).",
-                "Delivered several development contracts for research institutes including KERI and KIMM."
+                "Delivered several development contracts for research institutes including KERI and KIMM.",
+                "Agreed requirements, data formats and coordinate frames, and communication/registration responsibilities with researchers and partners; prepared test procedures, draft report reviews, and programme documentation.",
+                "After implementing distance, RMSE, and CSV comparison in NeuroPilot, reviewed reference-coordinate definitions and quality and requested remeasurement. Tool implementation is separate from final accuracy validation."
               ]
             }
           }
@@ -171,20 +177,22 @@
               "title": "로보틱스·비전 — 물류 로봇·무인지게차 (2024.12 - )",
               "items": [
                 "광학 추적·좌표계 정합 경험을 로봇–카메라 좌표 통합과 로봇 비전·센서 통합으로 확장하고 있습니다.",
-                "2025.11– 자체 무인지게차 솔루션(DOTORI)의 안전 관리자(safety_manager) 설계와 초기 구현(3단 가상 범퍼 구역·E-STOP 래칭 정책), 라이다·ToF 센서의 Zenoh 기반 사내 미들웨어 통합과 센서 통합 서비스 구현.",
-                "DOTORI 비전 R&D — Jetson 기반 생산 비전(ToF↔RGB 2단계 캘리브레이션, SAM3 분할, 품질 게이트, 트럭 적재 연속 추적)과 이전 Windows 프로토타입. 본인 측정 ToF↔RGB 동기 p95 16.6 ms.",
+                "자체 DOTORI 참여는 2025.11부터이며, 2026년 저장소 구현 기록에는 안전 관리자 초기 설계·구현(3단 가상 범퍼·E-STOP 래칭), Zenoh 기반 사내 미들웨어의 LiDAR·ToF 센서 통합과 센서 통합 서비스가 남아 있습니다.",
+                "DOTORI 비전 R&D — Jetson 비전 서비스와 선행 Windows 프로토타입, ToF–RGB 보정·SAM3 분할·품질 게이트·적재 추적을 구현했습니다. 특정 191프레임 캡처의 동기 시각차 p95 16.6 ms는 전체 시스템 지연이나 장기 성능 보장을 뜻하지 않습니다.",
                 "비전 서보잉(대차 바퀴쌍 인식→포크 정렬·접근·삽입)과 로딩·언로딩 액션을 팀의 행동트리에 통합했고, 웹 기반 운영·모니터링 앱 UI와 Isaac Sim 시뮬레이션 개선에 참여했습니다.",
-                "DOTORI 이전 — Unity 기반 물류 로봇 관제 시스템(FMS)의 맵 에디터 개발(2024.12–2025.01), 드론 SDK 모바일 앱과 PC 마커 추적을 잇는 드론 마커 추적 프로토타입(2025.08–09)."
+                "DOTORI 이전 — Unity 기반 물류 로봇 관제 시스템(FMS)의 맵 에디터 개발(2024.12–2025.01), 드론 SDK 모바일 앱과 PC 마커 추적을 잇는 드론 마커 추적 프로토타입(2025.08–09).",
+                "2025년 선행 지게차 현장에서 운영지원·오류 관찰·인수인계를 수행했습니다. 당시 현장 참여와 이후 DOTORI 코드 구현의 기간·역할은 구분합니다."
               ]
             },
             "en": {
               "title": "Robotics & Vision — Logistics Robots and Autonomous Forklift (2024.12 - )",
               "items": [
                 "Extending optical tracking and coordinate registration experience to robot–camera coordinate integration, robot vision and sensor integration.",
-                "Since 2025.11, designed and initially implemented the safety manager of the in-house autonomous-forklift solution (DOTORI) — three-zone virtual bumper and E-STOP latching policy — and integrated LiDAR and ToF sensors into the Zenoh-based in-house middleware with a sensor-integration service.",
-                "DOTORI vision R&D — production vision on Jetson (two-stage ToF↔RGB calibration, SAM3 segmentation, quality gates, continuous truck-load tracking) and the earlier Windows prototype; measured ToF↔RGB synchronisation at p95 16.6 ms.",
+                "Participation in the in-house DOTORI project began in November 2025; repository records from 2026 cover the initial safety-manager design and implementation (three-zone virtual bumper and E-STOP latching) and LiDAR/ToF integration on Zenoh-based in-house middleware.",
+                "DOTORI vision R&D — implemented a Jetson vision service and earlier Windows prototype, ToF–RGB calibration, SAM3 segmentation, quality gates, and load tracking. The p95 timestamp difference of 16.6 ms in one 191-frame capture is not end-to-end latency or a long-term performance guarantee.",
                 "Integrated vision servoing (wheel-pair detection → fork alignment, approach and insertion) and loading/unloading actions into the team's behaviour trees; contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.",
-                "Before DOTORI — built the map editor of a Unity-based fleet management system for logistics robots (2024.12–2025.01) and a drone marker-tracking prototype linking a mobile drone-SDK app with PC-side marker tracking (2025.08–09)."
+                "Before DOTORI — built the map editor of a Unity-based fleet management system for logistics robots (2024.12–2025.01) and a drone marker-tracking prototype linking a mobile drone-SDK app with PC-side marker tracking (2025.08–09).",
+                "Supported earlier forklift field operation, issue observation, and handovers in 2025. That field participation is distinct from the timing and scope of later DOTORI implementation."
               ]
             }
           }
@@ -192,19 +200,19 @@
         {
           "translations": {
             "ko": {
-              "title": "AI 활용 제품 엔지니어링 — 사내 도구·개인 (2026 - )",
+              "title": "AI 활용 제품 엔지니어링 — 사내 도구 (2026 - )",
               "items": [
-                "LLM Wiki — AI 에이전트 기반 개인 지식관리 시스템 구축·운영. 기획·아키텍처·검증은 직접 소유하고 구현의 상당 부분을 AI 에이전트에 위임하며, 실데이터 마이그레이션·일일 자동화 루틴을 운영합니다.",
                 "사내 도구(2026) — 파일럿→안정 업데이트 채널을 갖춘 데스크톱 업무 작업대, 자체 설치·업데이트 서버를 둔 HWP 문서 편집기, 사내망 연구 도구, 사내 코딩 에이전트 플러그인 마켓플레이스.",
-                "사내 도구의 요구사항·아키텍처·인수 기준·릴리스는 직접 소유하고 구현은 AI 코딩 에이전트에 크게 의존했습니다. 생산성 효과는 주장하지 않습니다."
+                "사내 도구의 요구사항·아키텍처·인수 기준·릴리스는 직접 소유하고 구현은 AI 코딩 에이전트에 크게 의존했습니다. 생산성 효과는 주장하지 않습니다.",
+                "프로젝트·문서 관리구조 제안, 사용 가이드와 코딩 스터디 자료 작성, 개발 도구 비교와 업무체계 정리에 기여했습니다."
               ]
             },
             "en": {
-              "title": "AI-assisted Product Engineering — In-house Tools and Personal (2026 - )",
+              "title": "AI-assisted Product Engineering — In-house Tools (2026 - )",
               "items": [
-                "LLM Wiki — built and operate a personal knowledge system driven by AI agents; I own the framing, architecture, and verification while delegating much of the implementation.",
                 "In-house tools (2026) — a desktop workbench app with a pilot-to-stable update channel, an HWP document editor with its own installer and update server, an intranet research tool, and an internal coding-agent plugin marketplace.",
-                "For these in-house tools I own requirements, architecture, acceptance, and releases, while the implementation relies heavily on AI coding agents; no productivity effect is claimed."
+                "For these in-house tools I own requirements, architecture, acceptance, and releases, while the implementation relies heavily on AI coding agents; no productivity effect is claimed.",
+                "Contributed project and document-management proposals, user guides, coding-study materials, development-tool comparisons, and work-practice documentation."
               ]
             }
           }

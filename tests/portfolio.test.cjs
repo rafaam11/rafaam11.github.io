@@ -3121,7 +3121,7 @@ test('digital occlusion architecture PDF keeps a visible gutter between wrapped 
   if (!fs.existsSync(python)) return t.skip('Task 5 ignored PDF virtual environment is unavailable.');
   const auditCode = [
     'import json, sys',
-    'import fitz',
+    'import pymupdf as fitz',
     'result = {}',
     'for locale, title, label, detail in [',
     '    ("ko", "Custom App 통합 구조", "평가·가시화·내보내기", "지표 공동 정의 · 개인 계산·구현"),',

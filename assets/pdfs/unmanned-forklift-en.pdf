@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 22 0 R /F3+0 26 0 R
@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 30 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 29 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.19b063d99f272bd72d5eb47086b6b398 4 0 R
+/FormXob.bade4d2133ac19229e092dd00643ff4a 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 29 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.2d5a90ab03289793665632a1815d064d 10 0 R /FormXob.7cb97161b753edc599e63b9ece43c4da 9 0 R
+/FormXob.78ed60893ce230e5c1df09501a1ea25b 9 0 R /FormXob.8c6b5efffd6dda9ff56a91139d37d3ef 10 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -108,7 +108,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 29 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.cdbefebdc27bbdbbb1d38253beb50e3f 13 0 R
+/FormXob.42b82d007aebcd9b9f56b40ce3189b09 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -805,7 +805,7 @@ BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (continuous truck-load tracking\), v
 BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (safety-manager design into one integration flow on Zenoh-based in-house middleware.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 203.0472 cm
-/FormXob.19b063d99f272bd72d5eb47086b6b398 Do
+/FormXob.bade4d2133ac19229e092dd00643ff4a Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 182.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Screen recording of the DOTORI vision-servoing test \(3D view, camera feed, signal plots\).) Tj T* ET
@@ -823,7 +823,7 @@ endstream
 endobj
 31 0 obj
 <<
-/Length 7528
+/Length 7422
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -848,7 +848,7 @@ BT 1 0 0 1 48 715.8898 Tm /F3+0 14 Tf 16.8 TL (Owned decisions and implementatio
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 690.8898 Tm /F3+0 11 Tf 13.2 TL (My role) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 670.8898 Tm /F2+0 10 Tf 12 TL (Designed and implemented the production vision on Jetson \(two-stage ToF\001RGB calibration, a SAM3) Tj T* ET
+BT 1 0 0 1 48 670.8898 Tm /F2+0 10 Tf 12 TL (Designed and implemented the vision service on Jetson \(two-stage ToF\001RGB calibration, a SAM3) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 654.8898 Tm /F2+0 10 Tf 12 TL (segmentation sidecar, quality gates, continuous truck-load tracking\) and the earlier Windows prototype.) Tj T* ET
 .333333 .333333 .333333 rg
@@ -996,17 +996,17 @@ n 48 172.8898 m 547.2756 172.8898 l S
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 138.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 114.8898 Tm /F2+0 10 Tf 12 TL (On the vision side, I measured ToF\001RGB frame synchronisation at p95 16.6 ms and brought the calibrated) Tj T* ET
+BT 1 0 0 1 48 114.8898 Tm /F2+0 10 Tf 12 TL (Test-site recordings, photographs, and capture-specific sensor comparisons provide the evidence. The) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 98.88976 Tm /F2+0 10 Tf 12 TL (extrinsic translation within 1 mm \(x, y\) of the mechanical model. Sensor alignment, 3D point clouds, vision) Tj T* ET
+BT 1 0 0 1 48 98.88976 Tm /F2+0 10 Tf 12 TL (integration-evidence section below states the timestamp and extrinsic-measurement conditions and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 82.88976 Tm /F2+0 10 Tf 12 TL (outputs, safety-policy outputs, and Zenoh messages were checked through integration and field validation.) Tj T* ET
+BT 1 0 0 1 48 82.88976 Tm /F2+0 10 Tf 12 TL (differences by axis.) Tj T* ET
  
 endstream
 endobj
 32 0 obj
 <<
-/Length 1730
+/Length 1926
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1026,29 +1026,31 @@ BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 752.8898 Tm /F3+0 11 Tf 13.2 TL (Integration evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 732.8898 Tm /F2+0 10 Tf 12 TL (Compared sensor alignment, point clouds, vision outputs, and policy output in integration and field tests.) Tj T* ET
+BT 1 0 0 1 48 732.8898 Tm /F2+0 10 Tf 12 TL (In a 191-frame, 9.7399-second capture on 29 July 2026, the ToF\001RGB timestamp difference had a p95 of) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 716.8898 Tm /F2+0 10 Tf 12 TL (My own measurements put ToF\001RGB synchronisation at p95 16.6 ms and the extrinsic translation within 1) Tj T* ET
+BT 1 0 0 1 48 716.8898 Tm /F2+0 10 Tf 12 TL (16.592 ms \(16.6 ms rounded\). This is not end-to-end system latency. A single-frame extrinsic-translation) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 700.8898 Tm /F2+0 10 Tf 12 TL (mm \(x, y\) of the mechanical model.) Tj T* ET
+BT 1 0 0 1 48 700.8898 Tm /F2+0 10 Tf 12 TL (comparison on 11 September was within 1 mm of the mechanical model in x and y, but differed by about) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 684.8898 Tm /F2+0 10 Tf 12 TL (29 mm in z; it does not establish overall 3D accuracy.) Tj T* ET
 q
-499.2756 0 0 280.8425 48 402.0472 cm
-/FormXob.7cb97161b753edc599e63b9ece43c4da Do
+499.2756 0 0 280.8425 48 386.0472 cm
+/FormXob.78ed60893ce230e5c1df09501a1ea25b Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 381.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Fork alignment just before pallet entry during the full-scenario test) Tj T* ET
+BT 1 0 0 1 48 365.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Fork alignment just before pallet entry during the full-scenario test) Tj T* ET
 q
-499.2756 0 0 280.8425 48 83.20472 cm
-/FormXob.2d5a90ab03289793665632a1815d064d Do
+490.7507 0 0 276.0472 52.26247 72 cm
+/FormXob.8c6b5efffd6dda9ff56a91139d37d3ef Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 62.70472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. Trajectory-following drive test, wide view of the test site) Tj T* ET
+BT 1 0 0 1 48 51.5 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. Trajectory-following drive test, wide view of the test site) Tj T* ET
  
 endstream
 endobj
 33 0 obj
 <<
-/Length 2981
+/Length 3535
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1067,7 +1069,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 280.8425 48 483.0472 cm
-/FormXob.cdbefebdc27bbdbbb1d38253beb50e3f Do
+/FormXob.42b82d007aebcd9b9f56b40ce3189b09 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 462.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Fork-lift test lifting a cart) Tj T* ET
@@ -1095,13 +1097,19 @@ BT 1 0 0 1 48 239.0472 Tm /F2+0 10 Tf 12 TL (no production or customer outcomes 
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 210.0472 Tm /F3+0 11 Tf 13.2 TL (Field boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 190.0472 Tm /F2+0 10 Tf 12 TL (Field validation is not production operation, deployment success, or a customer outcome.) Tj T* ET
+BT 1 0 0 1 48 190.0472 Tm /F2+0 10 Tf 12 TL (In earlier forklift field work during 2025, I supported operation, issue observation, and handovers. The public) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 174.0472 Tm /F2+0 10 Tf 12 TL (record of participation in the in-house DOTORI project begins in November 2025, followed by) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 158.0472 Tm /F2+0 10 Tf 12 TL (implementation records in the current repositories during 2026. Field support and later vision/sensor) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 142.0472 Tm /F2+0 10 Tf 12 TL (implementation are distinct; test-site validation is not a production or customer outcome.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 161.0472 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 113.0472 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 141.0472 Tm /F2+0 10 Tf 12 TL (Vehicle-control, localisation, mission, safety, and field-validation owners integrate the system jointly. The) Tj T* ET
+BT 1 0 0 1 48 93.04724 Tm /F2+0 10 Tf 12 TL (Vehicle-control, localisation, mission, safety, and field-validation owners integrate the system jointly. The) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 125.0472 Tm /F2+0 10 Tf 12 TL (middleware is an in-house Zenoh-based implementation that follows ROS 2-style patterns.) Tj T* ET
+BT 1 0 0 1 48 77.04724 Tm /F2+0 10 Tf 12 TL (middleware is an in-house Zenoh-based implementation that follows ROS 2-style patterns.) Tj T* ET
  
 endstream
 endobj
@@ -1160,50 +1168,50 @@ endobj
 xref
 0 35
 0000000000 65535 f 
-0000000073 00000 n 
-0000000130 00000 n 
-0000000237 00000 n 
-0000000402 00000 n 
-0001487267 00000 n 
-0001487553 00000 n 
-0001487718 00000 n 
-0001487941 00000 n 
-0001488106 00000 n 
-0004679187 00000 n 
-0006155280 00000 n 
-0006155616 00000 n 
-0006155782 00000 n 
-0009105565 00000 n 
-0009105854 00000 n 
-0009106020 00000 n 
-0009106192 00000 n 
-0009106365 00000 n 
-0009106604 00000 n 
-0009108544 00000 n 
-0009130936 00000 n 
-0009131196 00000 n 
-0009132550 00000 n 
-0009134502 00000 n 
-0009156958 00000 n 
-0009157228 00000 n 
-0009158594 00000 n 
-0009158664 00000 n 
-0009159221 00000 n 
-0009159308 00000 n 
-0009162297 00000 n 
-0009169877 00000 n 
-0009171659 00000 n 
-0009174692 00000 n 
+0000000061 00000 n 
+0000000118 00000 n 
+0000000225 00000 n 
+0000000390 00000 n 
+0001487255 00000 n 
+0001487541 00000 n 
+0001487706 00000 n 
+0001487929 00000 n 
+0001488094 00000 n 
+0004679175 00000 n 
+0006155268 00000 n 
+0006155604 00000 n 
+0006155770 00000 n 
+0009105553 00000 n 
+0009105842 00000 n 
+0009106008 00000 n 
+0009106180 00000 n 
+0009106353 00000 n 
+0009106592 00000 n 
+0009108532 00000 n 
+0009130924 00000 n 
+0009131184 00000 n 
+0009132538 00000 n 
+0009134490 00000 n 
+0009156946 00000 n 
+0009157216 00000 n 
+0009158582 00000 n 
+0009158652 00000 n 
+0009159209 00000 n 
+0009159296 00000 n 
+0009162285 00000 n 
+0009169759 00000 n 
+0009171737 00000 n 
+0009175324 00000 n 
 trailer
 <<
 /ID 
 [<39d96eb4d7626d48630bc719517c598a><39d96eb4d7626d48630bc719517c598a>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 28 0 R
 /Root 27 0 R
 /Size 35
 >>
 startxref
-9176996
+9177628
 %%EOF

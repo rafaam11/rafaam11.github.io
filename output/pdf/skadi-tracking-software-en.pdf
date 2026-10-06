@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 26 0 R /F3+0 30 0 R
@@ -54,7 +54,7 @@ endobj
 <<
 /Annots [ 5 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 33 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.68b53b22245c21c450f543b24294431d 7 0 R /FormXob.d25d77f4bd248408dc60a216205ccbed 6 0 R
+/FormXob.0a869dd02b391ac75e44dbb5f0b52047 6 0 R /FormXob.fbeb5b35533d1af11507699f42bf493e 7 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -73,7 +73,7 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://digitrack.notion.site/Ver-7-1-2026-02-20-3071183735e080219c11ed0d51ea5b4f?pvs=25)
->> /Border [ 0 0 0 ] /Rect [ 48 292.8898 148.8123 308.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 267.8898 148.8123 283.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 11 0 obj
@@ -113,7 +113,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 37 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 33 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.473a1aa133cc4f514e60838a0b0a66fc 13 0 R /FormXob.c34782a468c7d4a79ce735929f810863 14 0 R
+/FormXob.6d406b419b9b6fe39b4796b150440a57 14 0 R /FormXob.ca8ad14c89a1e36232550b69e5ff798d 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -168,7 +168,7 @@ endobj
 <<
 /Annots [ 16 0 R 18 0 R 19 0 R 20 0 R 21 0 R ] /Contents 38 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 33 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.89b5ad9354d1312003c089590707d870 17 0 R
+/FormXob.94d626fe9227d3f98c55fab417e70f47 17 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -952,13 +952,13 @@ BT 1 0 0 1 48 715.8898 Tm /F3+0 14 Tf 16.8 TL (SKADI desktop app) Tj T* ET
 BT 1 0 0 1 48 692.3898 Tm /F2+0 9.5 Tf 11.4 TL (One product flow covers marker definition and file work, tracker connection, and 6DoF status inspection.) Tj T* ET
 q
 395.7778 0 0 130 99.74891 549.8898 cm
-/FormXob.d25d77f4bd248408dc60a216205ccbed Do
+/FormXob.0a869dd02b391ac75e44dbb5f0b52047 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 540.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 1. Marker definition and file work in the desktop app) Tj T* ET
 q
 382.0408 0 0 195 106.6174 314.8898 cm
-/FormXob.68b53b22245c21c450f543b24294431d Do
+/FormXob.fbeb5b35533d1af11507699f42bf493e Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 305.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. Tracker status and real-time 6DoF view) Tj T* ET
@@ -1011,7 +1011,7 @@ endstream
 endobj
 36 0 obj
 <<
-/Length 6814
+/Length 7273
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1193,12 +1193,16 @@ BT 1 0 0 1 48 362.8898 Tm /F3+0 11 Tf 13.2 TL (OpenEx\(\) stability) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 344.1898 Tm /F2+0 8.7 Tf 10.44 TL (In the DtSkadi.dll integration, OpenEx\(\) success and error results are separated so failure stops before an invalid state and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 331.6898 Tm /F2+0 8.7 Tf 10.44 TL (crash.) Tj T* ET
+BT 1 0 0 1 48 331.6898 Tm /F2+0 8.7 Tf 10.44 TL (crash. Aligned SDK versions, builds, and tracked-transform delivery between optical and hardware designers and application) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 313.4898 Tm /F2+0 8.4 Tf 10.08 TL (The single entry point makes the success and error outcomes explicit.) Tj T* ET
+BT 1 0 0 1 48 319.1898 Tm /F2+0 8.7 Tf 10.44 TL (developers, and provided installation guidance and remote support. Recurring shutdown issues were documented with) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 306.6898 Tm /F2+0 8.7 Tf 10.44 TL (reproduction steps, actions taken, and unresolved items.) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 288.4898 Tm /F2+0 8.4 Tf 10.08 TL (The single entry point makes the success and error outcomes explicit.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 296.8898 Tm /F2+0 9.5 Tf 11.4 TL (Public API change note) Tj T* ET
-n 48 294.8898 m 148.8123 294.8898 l S
+BT 1 0 0 1 48 271.8898 Tm /F2+0 9.5 Tf 11.4 TL (Public API change note) Tj T* ET
+n 48 269.8898 m 148.8123 269.8898 l S
  
 endstream
 endobj
@@ -1232,13 +1236,13 @@ BT 1 0 0 1 48 692.3898 Tm /F2+0 9.5 Tf 11.4 TL (The same desktop app and API con
 BT 1 0 0 1 48 678.3898 Tm /F2+0 9.5 Tf 11.4 TL (surgical-navigation integration boundary.) Tj T* ET
 q
 242.6378 0 0 176.9234 48 467.4281 cm
-/FormXob.473a1aa133cc4f514e60838a0b0a66fc Do
+/FormXob.ca8ad14c89a1e36232550b69e5ff798d Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 436.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. De-identified tray used in the medical integration) Tj T* ET
 q
 242.6378 0 0 144.1185 304.6378 483.8305 cm
-/FormXob.c34782a468c7d4a79ce735929f810863 Do
+/FormXob.6d406b419b9b6fe39b4796b150440a57 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 436.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 4. De-identified CT workspace in the medical integration) Tj T* ET
@@ -1286,7 +1290,7 @@ endstream
 endobj
 38 0 obj
 <<
-/Length 6890
+/Length 7173
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1311,7 +1315,7 @@ BT 1 0 0 1 48 734.1898 Tm /F2+0 8.7 Tf 10.44 TL (The same 6DoF tracking layer wa
 BT 1 0 0 1 48 721.6898 Tm /F2+0 8.7 Tf 10.44 TL (precision-docking integration.) Tj T* ET
 q
 105.8201 0 0 125 244.7277 587.8898 cm
-/FormXob.89b5ad9354d1312003c089590707d870 Do
+/FormXob.94d626fe9227d3f98c55fab417e70f47 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 578.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 5. Robot-tracking field setup for the industrial extension) Tj T* ET
@@ -1444,65 +1448,67 @@ BT 1 0 0 1 48 299.8898 Tm /F3+0 11 Tf 13.2 TL (Limits and team result) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 281.8898 Tm /F2+0 8 Tf 9.6 TL (The public material covers only product interfaces and integration boundaries. Faces, device IDs, coordinate values, logos, versions,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 270.8898 Tm /F2+0 8 Tf 9.6 TL (licence paths, and performance assessments are excluded.) Tj T* ET
+BT 1 0 0 1 48 270.8898 Tm /F2+0 8 Tf 9.6 TL (licence paths, and performance assessments are excluded. Fixing a particular error branch does not establish that every long-running) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 255.8898 Tm /F2+0 8 Tf 9.6 TL (Device hardware, optical and mechanical design, final medical and industrial applications, robot control, sales, and customer outcomes) Tj T* ET
+BT 1 0 0 1 48 259.8898 Tm /F2+0 8 Tf 9.6 TL (shutdown issue is resolved. API maintenance and application integration are distinct from authorship of the entire core API.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 244.8898 Tm /F2+0 8 Tf 9.6 TL (belong to the team and partners. Product performance, clinical effects, and sales outcomes are not claimed as my results.) Tj T* ET
+BT 1 0 0 1 48 244.8898 Tm /F2+0 8 Tf 9.6 TL (Device hardware, optical and mechanical design, final medical and industrial applications, robot control, sales, and customer outcomes) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 233.8898 Tm /F2+0 8 Tf 9.6 TL (belong to the team and partners. Product performance, clinical effects, and sales outcomes are not claimed as my results.) Tj T* ET
  
 endstream
 endobj
 xref
 0 39
 0000000000 65535 f 
-0000000073 00000 n 
-0000000130 00000 n 
-0000000237 00000 n 
-0000000402 00000 n 
-0000000625 00000 n 
-0000000790 00000 n 
-0000022000 00000 n 
-0000205400 00000 n 
-0000205734 00000 n 
-0000205899 00000 n 
-0000206134 00000 n 
-0000206365 00000 n 
-0000206531 00000 n 
-0000672036 00000 n 
-0001195796 00000 n 
-0001196134 00000 n 
-0001196300 00000 n 
-0002182798 00000 n 
-0002183020 00000 n 
-0002183235 00000 n 
-0002183454 00000 n 
-0002183669 00000 n 
-0002183986 00000 n 
-0002185926 00000 n 
-0002208090 00000 n 
-0002208350 00000 n 
-0002209704 00000 n 
-0002211656 00000 n 
-0002234112 00000 n 
-0002234382 00000 n 
-0002235748 00000 n 
-0002235818 00000 n 
-0002236358 00000 n 
-0002236445 00000 n 
-0002242578 00000 n 
-0002246011 00000 n 
-0002252877 00000 n 
-0002256042 00000 n 
+0000000061 00000 n 
+0000000118 00000 n 
+0000000225 00000 n 
+0000000390 00000 n 
+0000000613 00000 n 
+0000000778 00000 n 
+0000021988 00000 n 
+0000205388 00000 n 
+0000205722 00000 n 
+0000205887 00000 n 
+0000206122 00000 n 
+0000206353 00000 n 
+0000206519 00000 n 
+0000672024 00000 n 
+0001195784 00000 n 
+0001196122 00000 n 
+0001196288 00000 n 
+0002182786 00000 n 
+0002183008 00000 n 
+0002183223 00000 n 
+0002183442 00000 n 
+0002183657 00000 n 
+0002183974 00000 n 
+0002185914 00000 n 
+0002208078 00000 n 
+0002208338 00000 n 
+0002209692 00000 n 
+0002211644 00000 n 
+0002234100 00000 n 
+0002234370 00000 n 
+0002235736 00000 n 
+0002235806 00000 n 
+0002236346 00000 n 
+0002236433 00000 n 
+0002242566 00000 n 
+0002245999 00000 n 
+0002253324 00000 n 
+0002256489 00000 n 
 trailer
 <<
 /ID 
 [<c61cac4990443dfc580e98e2fd0c361a><c61cac4990443dfc580e98e2fd0c361a>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 32 0 R
 /Root 31 0 R
 /Size 39
 >>
 startxref
-2262984
+2263714
 %%EOF

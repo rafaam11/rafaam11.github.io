@@ -442,7 +442,7 @@
           teamResult: 'DIGITRACK과 삼성서울병원 연구팀은 임상 워크플로와 요구사항 맥락, 수용 검토 기준, 통합 시연을 공동으로 검토했습니다.',
           evidence: '두 전체 길이 영상과 화면·좌표계·기구·팬텀 그림은 위치, 모델, 영상, 상호작용 데이터가 SMCNavi에서 HoloLens 경로까지 연결된 연구 프로토타입을 보여줍니다.',
           limitation: '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.',
-          collaboration: '의료진의 워크플로·수용 기준과 개발팀의 추적·영상·XR 통합 검토를 분리해 기록합니다.',
+          collaboration: '연구진과 수술별 조작·표시 요구, 설치·사용 피드백과 평가 준비를 협의했습니다. 임상 시나리오와 연구 평가의 책임은 연구진에, 담당 소프트웨어의 구현·통합은 제 역할에 둡니다.',
           mediaAlt: 'HoloLens 2를 착용한 사용자의 시점과 팬텀 위 홀로그램, 추적 기구, MPR 화면이 이어지는 디지털 트윈 시연 영상.',
           mediaCaption: 'HoloLens 2 디지털 트윈과 추적 기구·영상 표시를 연결한 전체 길이 연구 프로토타입 시연입니다.',
           status: '프로토타입 · 진행 중',
@@ -467,7 +467,7 @@
           teamResult: 'The DIGITRACK and Samsung Medical Center research team jointly reviewed the clinical-workflow and requirements context, acceptance criteria, and integration demonstrations.',
           evidence: 'Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working research prototype carrying position, model, image, and interaction data from SMCNavi through the HoloLens path.',
           limitation: 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.',
-          collaboration: 'Clinical workflow and acceptance criteria remain distinct from the development team\'s tracking, imaging, and XR integration review.',
+          collaboration: 'I worked with researchers on procedure-specific controls and displays, installation feedback, and evaluation preparation. Researchers own the clinical scenarios and research evaluation; I own the assigned software implementation and integration.',
           mediaAlt: 'Digital-twin demonstration moving between a HoloLens 2 viewpoint, a hologram over a phantom, a tracked instrument, and MPR displays.',
           mediaCaption: 'Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and image presentation.',
           status: 'Prototype · Ongoing',
@@ -486,8 +486,8 @@
           key: 'smcnavi-overview',
           layout: 'wide',
           translations: {
-            ko: { heading: 'SMCNavi 플랫폼 개요', body: 'SMCNavi는 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적, 환자 정합, 기구 캘리브레이션, 수술별 UI를 하나의 맞춤형 3D Slicer 데스크톱 플랫폼에 통합합니다. HoloLens 기능은 SMCNavi와 연결되는 별도 PC 확장으로 구현했습니다.' },
-            en: { heading: 'SMCNavi platform overview', body: 'SMCNavi integrates DICOM and 3D-model loading, MPR and 3D visualisation, optical tracking, patient registration, instrument calibration, and procedure-specific UI in one custom 3D Slicer desktop platform. The HoloLens work is a separate PC-side extension connected to SMCNavi.' }
+            ko: { heading: 'SMCNavi 플랫폼 개요', body: 'SMCNavi는 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적, 환자 정합, 기구 캘리브레이션, 수술별 UI를 하나의 맞춤형 3D Slicer 데스크톱 플랫폼에 통합합니다. HoloLens 기능은 SMCNavi와 연결되는 별도 PC 확장으로 구현했습니다. 선행 내비게이션 참여는 2023년부터이며, SMCNavi 저장소의 본격 구현 기록은 2025년부터입니다. 연구진과 수술별 요구를 협의하고 모듈·설치 패키지·사용 안내로 연결했습니다.' },
+            en: { heading: 'SMCNavi platform overview', body: 'SMCNavi integrates DICOM and 3D-model loading, MPR and 3D visualisation, optical tracking, patient registration, instrument calibration, and procedure-specific UI in one custom 3D Slicer desktop platform. The HoloLens work is a separate PC-side extension connected to SMCNavi. Participation in earlier navigation work dates to 2023, while the main SMCNavi repository implementation is recorded from 2025. I worked with researchers on procedure-specific requirements and carried them into modules, installation packages, and user guidance.' }
           },
           media: []
         },
@@ -818,11 +818,11 @@
           translations: {
             ko: {
               heading: '왜 다시 설계했는가',
-              body: '2023.04–2023.12 유지보수·검증을 담당했던 이전 애플리케이션에서는 특징점 추출이 별도 도구로 분리되어 모델 확대·축소와 이동, 참고 사진 대조가 불편했습니다. 교합은 필요한 여러 시점을 함께 보기 어려웠고 저장·불러오기가 작업 흐름과 분리되어 있었습니다. 악안면 특징점을 활용하지 못했고 결과를 읽는 평가 화면도 충분히 설계되지 않았습니다. 임상 지식과 일부 협업 알고리즘은 이어받되, 2026.03부터 애플리케이션 구조와 워크플로우를 다시 설계했습니다. 그 사이 2025.09–10에는 이전 v1 교합 시뮬레이터를 저장소와 배포 묶음으로 정리하며 빌드·오류 수정, 6-DOF 변환 도구와 평가 유틸리티를 맡았고, 이 경험이 재구축의 출발점이 되었습니다. 2026.04에는 구강 스캔 특징점 주석 PoC 도구(PySide6·VTK)를 만들어 이 워크플로우에 들어가는 특징점 데이터 작성을 지원했습니다. 키보드 단축키의 불편은 재설계 배경이지만 현재 버전에서 개선했다고 주장하지 않습니다.'
+              body: '2023.04–2023.12 유지보수·검증을 담당했던 이전 애플리케이션에서는 특징점 추출이 별도 도구로 분리되어 모델 확대·축소와 이동, 참고 사진 대조가 불편했습니다. 교합은 필요한 여러 시점을 함께 보기 어려웠고 저장·불러오기가 작업 흐름과 분리되어 있었습니다. 악안면 특징점을 활용하지 못했고 결과를 읽는 평가 화면도 충분히 설계되지 않았습니다. 임상 지식과 일부 협업 알고리즘은 이어받되, 2026.03부터 애플리케이션 구조와 워크플로우를 다시 설계했습니다. 그 사이 2025.09–10에는 이전 v1 교합 시뮬레이터를 저장소와 배포 묶음으로 정리하며 빌드·오류 수정, 6-DOF 변환 도구와 평가 유틸리티를 맡았고, 이 경험이 재구축의 출발점이 되었습니다. 2026.04에는 구강 스캔 특징점 주석 PoC 도구(PySide6·VTK)를 만들어 이 워크플로우에 들어가는 특징점 데이터 작성을 지원했습니다. 키보드 단축키의 불편은 재설계 배경이지만 현재 버전에서 개선했다고 주장하지 않습니다. 2026년 협의에서는 병원이 정의한 특징점을 원본 STL 좌표로 주고받는 형식과 주석·모델 학습·앱 통합의 책임을 구분했습니다. 재설계 시작은 3월, 새 저장소의 최초 커밋은 4월로 서로 다른 시점입니다.'
             },
             en: {
               heading: 'Why the workflow was redesigned',
-              body: 'In the earlier application that I maintained and validated from 2023.04 to 2023.12, landmark extraction was separated into another tool, making zoom, pan, and reference-image comparison awkward. Occlusion lacked the views needed for simultaneous comparison, while save/load sat outside the working flow. Maxillofacial landmarks were not used and the evaluation screen was under-designed. Clinical knowledge and some collaborative algorithms carry forward, but the application structure and workflow have been redesigned since 2026.03. In between, during 2025.09–10, I organised the earlier v1 occlusion simulator into a repository and release bundle, handling build and crash fixes, a 6-DOF transform tool, and an evaluation utility; that work became the starting point for the rebuild. In 2026.04 I built a proof-of-concept oral-scan landmark annotation tool (PySide6 and VTK) that supports preparing the landmark data fed into this workflow. Awkward keyboard shortcuts remain background context; this case does not claim that shortcut design was improved.'
+              body: 'In the earlier application that I maintained and validated from 2023.04 to 2023.12, landmark extraction was separated into another tool, making zoom, pan, and reference-image comparison awkward. Occlusion lacked the views needed for simultaneous comparison, while save/load sat outside the working flow. Maxillofacial landmarks were not used and the evaluation screen was under-designed. Clinical knowledge and some collaborative algorithms carry forward, but the application structure and workflow have been redesigned since 2026.03. In between, during 2025.09–10, I organised the earlier v1 occlusion simulator into a repository and release bundle, handling build and crash fixes, a 6-DOF transform tool, and an evaluation utility; that work became the starting point for the rebuild. In 2026.04 I built a proof-of-concept oral-scan landmark annotation tool (PySide6 and VTK) that supports preparing the landmark data fed into this workflow. Awkward keyboard shortcuts remain background context; this case does not claim that shortcut design was improved. The 2026 discussions distinguished hospital-defined landmarks in the original STL coordinate frame and the responsibilities for annotation, model training, and application integration. Redesign began in March; the new repository starts in April.'
             }
           }
         },
@@ -1028,7 +1028,7 @@
           teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. DIGITRACK 협업 팀은 특징점 알고리즘과 교합 엔진 구현·연구를 지원했습니다.',
           evidence: '특징점 입력, 다중 시점 교합, 접촉 가시화, RMSE·Gap·FRE 평가와 내보내기가 동작하는 개발 빌드 영상·화면과 연구진 직접 사용 피드백이 근거입니다.',
           limitation: '현재는 개발·시연 빌드의 연구진 검증 단계입니다. 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성을 주장하지 않으며 화면 값도 성능 결과로 인용하지 않습니다.',
-          collaboration: '삼성서울병원과 DIGITRACK의 장기 R&D로 디지털 교합에서 정상 교합 기반 하악 운동과 전체 구강악안면 수술계획으로 확장하는 방향을 검토하고 있습니다.',
+          collaboration: '삼성서울병원과 DIGITRACK의 장기 R&D로 디지털 교합에서 정상 교합 기반 하악 운동과 전체 구강악안면 수술계획으로 확장하는 방향을 검토하고 있습니다. 2026년 협의에서는 병원 정의 특징점을 원본 STL 좌표로 전달하고, 주석·모델 학습·앱 통합의 책임을 구분했습니다. 재설계는 3월에 시작했고 새 저장소의 최초 커밋은 4월입니다.',
           mediaAlt: '합성 테스트 데이터에서 특징점 입력, 다중 시점 교합, 평가 화면이 이어지는 개발 빌드 시연.',
           mediaCaption: '합성 테스트 데이터로 특징점 입력, 다중 시점 교합, 평가 흐름을 시연한 개발 빌드입니다.',
           periodLabel: '2026.03 – 현재',
@@ -1048,7 +1048,7 @@
           teamResult: 'Samsung Medical Center researchers jointly define the clinical workflow, landmarks, and evaluation metrics and directly review development builds. The DIGITRACK team supports the landmark algorithms and occlusion-engine implementation and research.',
           evidence: 'A working development build demonstrates landmarking, multi-view occlusion, contact visualization, RMSE/Gap/FRE evaluation, and export, with direct researcher use and feedback.',
           limitation: 'The software is under researcher validation as a development and demonstration build. This case does not claim hospital installation, use in real surgery, medical-device status, or clinical efficacy, accuracy, or safety; displayed values are not performance outcomes.',
-          collaboration: 'The long-term Samsung Medical Center and DIGITRACK R&D direction expands from digital occlusion toward normal-occlusion-based mandibular motion and complete oral and maxillofacial surgical planning.',
+          collaboration: 'The long-term Samsung Medical Center and DIGITRACK R&D direction expands from digital occlusion toward normal-occlusion-based mandibular motion and complete oral and maxillofacial surgical planning. The 2026 discussions specified hospital-defined landmarks in the original STL coordinate frame and distinguished annotation, model training, and application integration responsibilities. Redesign began in March; the first commit in the new repository dates to April.',
           mediaAlt: 'Development-build demonstration moving from landmarking through multi-view occlusion to evaluation on synthetic test data.',
           mediaCaption: 'Development-build demonstration of landmarking, multi-view occlusion, and evaluation using synthetic test data.',
           periodLabel: '2026.03 – present',
@@ -1096,7 +1096,7 @@
           teamResult: '소프트웨어 저작권 등록과 환자 데모·설문조사, 외부 병원 실증 계획은 연구팀 공동 결과입니다. 데모와 설문조사는 진행 중이고 외부 실증은 아직 예정 단계이므로, 확정된 것과 계획인 것을 구분해 적습니다.',
           evidence: '세 참가자 시점을 동시에 녹화한 상담 세션 클립이 근거입니다. 왼쪽 의사1(Master), 가운데 환자, 오른쪽 의사2 화면이 한 프레임에 들어 있어, 한 사람의 조작이 나머지 두 화면에 같은 자세와 같은 계측값으로 나타나는지를 그대로 대조할 수 있습니다.',
           limitation: '클립은 동기화와 공간 배치가 동작함을 보여줄 뿐, 상담 품질이나 치료 결과가 나아졌다고 주장하지 않습니다.',
-          collaboration: '구강악안면외과 의료진이 상담 시나리오와 화면 구성을 검토했고, 연구팀과 함께 착용 세션을 진행했습니다.',
+          collaboration: '연구진과 다인 상담의 자료 준비·모델 조작·공유 상태를 협의하고, 전처리 도구와 사용 안내를 연결했습니다. 클라이언트·데이터 경로의 구현과 연구팀의 설문·외부 실증은 구분합니다.',
           mediaAlt: '왼쪽부터 의사1(Master)·환자·의사2 시점을 나란히 놓은 3분할 화면. 세 화면 모두 같은 3D 두개골·악골 모델을 같은 자세로 표시한다.', mediaCaption: '3인 VR 상담 세션을 참가자별 시점으로 동시에 녹화한 24초 클립입니다. 왼쪽이 의사1(Master), 가운데가 환자, 오른쪽이 의사2 시점이며, 한 사람이 모델을 움직이면 세 화면에 같이 반영됩니다.',
           status: '진행 중', cardProblem: '의료진과 환자가 같은 3D 수술계획을 같은 상태로 봅니다.', cardOwnedRole: '3인 VR 상담 Unity 클라이언트 전체를 구현했습니다.', cardEvidence: '세 시점을 동시에 녹화한 상담 세션 클립이 근거입니다.', problemSummary: '3인이 같은 VR 공간에서 같은 수술계획을 보게 만듭니다.', ownedRole: 'Photon 동기화부터 DICOM 로딩, 플랫폼 이식까지 클라이언트를 구현했습니다.', verifiedEvidence: '세 시점이 같은 모델 자세와 계측값을 보여주는 상담 세션 클립이 근거입니다.', visualAlt: '3인 VR 상담 세션의 3분할 동시 시점.', visualCaption: '3인 VR 상담 세션 동시 시점 클립.'
         },
@@ -1109,14 +1109,14 @@
           teamResult: 'Software copyright registration, the patient demonstration and survey, and the planned external-hospital validation are joint research-team results. The demonstration and survey are under way; the external validation is still only planned.',
           evidence: 'A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence. Clinician 1 (master), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one person moving the model leaves the other two views showing the same pose and the same measurements.',
           limitation: 'The clip shows that synchronization and spatial layout work; it claims no improvement in consultation quality or treatment outcome.',
-          collaboration: 'Oral and maxillofacial surgeons reviewed the consultation scenario and screen layout, and ran the headset sessions with the research team.',
+          collaboration: 'Worked with researchers on data preparation, model interaction, and shared state for multi-user consultation, connecting preprocessing tools with user guidance. Client and data-path implementation are separate from the research team’s surveys and external validation.',
           mediaAlt: 'A three-panel view showing, left to right, the viewpoints of clinician 1 (master), the patient, and clinician 2, each displaying the same 3D skull and jaw model in the same pose.', mediaCaption: 'A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at once: clinician 1 (master) on the left, the patient in the middle, clinician 2 on the right; moving the model in one view updates all three.',
           status: 'Ongoing', cardProblem: 'Let clinicians and a patient see the same 3D surgical plan in the same state.', cardOwnedRole: 'Implemented the whole Unity client for the three-user VR consultation.', cardEvidence: 'A consultation-session clip recorded from three viewpoints at once is the evidence.', problemSummary: 'Put three people in one VR space looking at the same surgical plan.', ownedRole: 'Implemented the client from Photon synchronization to DICOM loading and the platform port.', verifiedEvidence: 'A consultation clip in which all three viewpoints show the same model pose and measurements is the evidence.', visualAlt: 'Three simultaneous viewpoints of a three-user VR consultation session.', visualCaption: 'Simultaneous three-viewpoint clip of a VR consultation session.'
         }
       },
       blocks: [
         { key: 'shared-state', type: 'system', translations: { ko: { heading: '공유 상태', body: '접속 순서로 의사·환자·의사 세 역할을 배정하고, 모델 자세와 분절 상태, 페이지 번호, 발화자 표시를 세 참가자에게 같이 반영했습니다.' }, en: { heading: 'Shared state', body: 'Assigned the clinician, patient, and clinician roles by join order, and reflected model pose, segment state, page number, and speaker indication to all three participants together.' } } },
-        { key: 'xr-application', type: 'text', translations: { ko: { heading: '상담 공간과 클라이언트 범위', body: '의사1(Master)·환자·의사2가 앉는 세 자리와 2D 계측 패널, 3D 모델 영역의 위치를 상담 동선에 맞춰 배치 설계했습니다. 로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다.' }, en: { heading: 'Consultation space and client scope', body: 'Laid out the room around the consultation itself: three seats for clinician 1 (master), the patient, and clinician 2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset.' } } },
+        { key: 'xr-application', type: 'text', translations: { ko: { heading: '상담 공간과 클라이언트 범위', body: '의사1(Master)·환자·의사2가 앉는 세 자리와 2D 계측 패널, 3D 모델 영역의 위치를 상담 동선에 맞춰 배치 설계했습니다. 로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다. 클라이언트 구현과 함께 서버 연동, 모델 경량화·슬라이드 변환 전처리, 사용 가이드를 정리해 연구팀의 자료 준비와 시연을 지원했습니다.' }, en: { heading: 'Consultation space and client scope', body: 'Laid out the room around the consultation itself: three seats for clinician 1 (master), the patient, and clinician 2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset. Alongside the client, I contributed server integration, model simplification and slide conversion, and user guidance to support research-team data preparation and demonstrations.' } } },
         { key: 'multiuser-demo', type: 'evidence', translations: { ko: { heading: '멀티유저 시연', body: '세 참가자의 시점을 동시에 녹화해, 한쪽의 조작이 나머지 두 화면에 같은 상태로 나타나는지를 근거로 삼습니다.' }, en: { heading: 'Multi-user demonstration', body: 'Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the other two views show the same state.' } } },
         { key: 'adoption-boundary', type: 'limitation', translations: { ko: { heading: '채택 경계', body: '환자 데모와 설문조사는 진행 중이고 외부 병원 실증은 예정 단계입니다. 연구팀의 등록·데모·실증 계획을 개인 성과나 임상 효과로 확대하지 않습니다.' }, en: { heading: 'Adoption boundary', body: 'The patient demonstration and survey are under way and the external-hospital validation is still planned. Do not turn the research team registration, demonstrations, or validation plans into individual or clinical-outcome claims.' } } }
       ]
@@ -1158,7 +1158,7 @@
           teamResult: 'AT&C가 라이선스 운영과 도입을 판단합니다. 정합·좌표 변환·내비게이션 UI 구조는 직접 설계했고 일부 화면 모듈은 동료 한 명과 함께했습니다.',
           evidence: '라이선스로 기능이 게이팅되는 실제 배포 빌드, 이슈 단위로 쌓아 온 회귀 테스트 스위트, 좌표 변환·정합 동작 로그가 근거입니다.',
           limitation: '임상적 유효성, 정량 정확도, 인허가 상태는 주장하지 않고 환자 데이터도 포함하지 않습니다.',
-          collaboration: '뇌 분할·랜드마크·치료 위치 추출 딥러닝 모델은 협력사 측이 제공했고 저는 모델을 개발하지 않았습니다. 이 모델들을 어댑터 경계 뒤에 탑재하는 통합, 경계 설계, 후처리, 정량 평가 화면, 라이선스 게이팅·UI 연동이 제 몫입니다.',
+          collaboration: '고객이 제공한 AI 모델을 앱에 통합하고, 정합·타겟·통신의 책임과 평가 데이터의 정의를 협의했습니다. 기준 좌표의 품질 문제는 재측정 요청으로 남겼으며 모델 자체의 학습·개발과 구분합니다.',
           mediaAlt: '로봇 암과 치료 의자, 코일, 내비게이션 화면이 배치된 전시 부스에서 TMS 로봇 시스템이 동작하는 장면.', mediaCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다 — 로봇 암, 치료 의자, 코일, 내비게이션 화면이 한자리에 놓인 구성.',
           status: '검증됨 · 진행 중', cardProblem: '서로 다른 좌표계의 장치를 하나의 제품 흐름으로 묶습니다.', cardOwnedRole: '화면 흐름·정합 엔진·장치 연동·제품 구조를 리드했습니다.', cardEvidence: '라이선스 게이팅 배포 빌드와 회귀 테스트 스위트.', problemSummary: '트래커·태블릿·로봇을 하나의 내비게이션 제품으로 묶습니다.', ownedRole: '화면 흐름, 정합 엔진, 장치 연동, 제품 구조를 리드했습니다.', verifiedEvidence: '라이선스 게이팅 배포 빌드와 이슈별 회귀 테스트가 근거이며 임상 결과는 주장하지 않습니다.', visualAlt: '전시 부스의 TMS 코일 내비게이션 로봇 시스템.', visualCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다.'
         },
@@ -1171,7 +1171,7 @@
           teamResult: 'AT&C owns license operations and adoption. I designed the core structure; a colleague built specific screens.',
           evidence: 'The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and coordinate-transform and registration logs.',
           limitation: 'No clinical efficacy, quantitative accuracy, or regulatory status is claimed, and patient data stays out of this case.',
-          collaboration: 'The deep-learning models for brain segmentation, landmarks, and treatment-position extraction were provided by the partner; I did not develop them. I own their integration behind an adapter boundary, the boundary design, post-processing, the quantitative evaluation screen, license gating, and UI integration.',
+          collaboration: 'Integrated customer-provided AI models into the application and agreed on registration, target, and communication responsibilities and evaluation-data definitions. Reference-coordinate quality issues led to a remeasurement request; model training and development remain separate responsibilities.',
           mediaAlt: 'TMS robot system running on an exhibition stand with a robot arm, treatment chair, coil, and navigation displays.', mediaCaption: 'Demonstration of the TMS coil-navigation robot system on an exhibition stand: robot arm, treatment chair, coil, and navigation displays in one setup.',
           status: 'Verified · Ongoing', cardProblem: 'Tie devices in different coordinate frames into one product flow.', cardOwnedRole: 'Led the workflow, registration engine, device integration, and product structure.', cardEvidence: 'A license-gated build and a regression-test suite.', problemSummary: 'Tie the tracker, tablet, and robot into one navigation product.', ownedRole: 'Led the workflow, registration engine, device integration, and product structure.', verifiedEvidence: 'The license-gated deployment build and issue-tracked regression tests are the evidence; no clinical outcome is claimed.', visualAlt: 'TMS coil-navigation robot system on an exhibition stand.', visualCaption: 'TMS coil-navigation robot system demonstrated on an exhibition stand.'
         }
@@ -1179,8 +1179,8 @@
       blocks: [
         { key: 'navigation-ui-workflow', type: 'system', translations: { ko: { heading: '내비게이션 UI 워크플로', body: '홈 화면 여섯 메뉴가 DICOM 적재부터 재구성·정합·표적 설정·실시간 세션까지 단계를 게이팅하고, 조준은 과녁 뷰와 거리·기울기 안내로 합니다.' }, en: { heading: 'Navigation UI workflow', body: 'Six Home-screen menus gate the run from DICOM load through reconstruction, registration, and targets to the live session, with crosshair aiming.' } } },
         { key: 'coordinate-registration-chain', type: 'text', translations: { ko: { heading: '좌표 변환·정합 엔진', body: '영상·환자·트래커·코일 변환 체인을 명시하고, ICP 정합을 세 가지 모드로 나눴습니다.' }, en: { heading: 'Coordinate and registration engine', body: 'Image, patient, tracker, and coil transforms stay explicit; ICP offers three modes.' } } },
-        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '트래커 SDK 메이저 버전 마이그레이션, 자체 TCP 바이너리 프로토콜, 트래커 단일 소유권, 로봇 접촉 정지 연동, 보건의료 R&D 과제용 깊이 카메라(LiDAR/ToF) 정합 프로그램.' }, en: { heading: 'Device and system integration', body: 'A major optical-tracker SDK migration, an in-house TCP binary protocol for the tablet, single tracker ownership, contact-stop robot descent, and a depth-camera (LiDAR/ToF) registration program for a health-technology R&D programme.' } } },
-        { key: 'clinical-product-boundary', type: 'limitation', translations: { ko: { heading: '임상·제품 경계', body: '임상적 유효성, 정량 정확도, 인허가 상태는 주장하지 않습니다.' }, en: { heading: 'Clinical and product boundary', body: 'No clinical efficacy, quantitative accuracy, or regulatory status is claimed.' } } }
+        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '트래커 SDK 이전, 태블릿 TCP 프로토콜과 로봇 연동을 구현했습니다. 2026년 통합 협의에서는 정합을 NeuroPilot로 일원화하고 타겟 파일·자세 정보·동기화 요구를 나눴습니다. 과제 참여는 2024.07부터, NeuroPilot 저장소의 주 구현 기록은 2025.07부터입니다.' }, en: { heading: 'Device and system integration', body: 'Implemented the tracker SDK migration, tablet TCP protocol, and robot interfaces. Integration discussions in 2026 consolidated registration in NeuroPilot and separated target-file, pose-data, and synchronization requirements. Programme participation began in July 2024; the main NeuroPilot repository implementation is recorded from July 2025.' } } },
+        { key: 'clinical-product-boundary', type: 'limitation', translations: { ko: { heading: '임상·제품 경계', body: '2026-06-01에는 기준 좌표 로딩·3D 마커 표시, 표적별 거리·RMSE 계산과 CSV 내보내기를 구현했습니다. 샘플 검토에서 해부학 영역 매핑과 기준 좌표 품질 문제를 확인해, 타겟 정의 문서와 프로토콜에 따른 재측정을 요청했습니다. 비교 기능 구현과 최종 평가의 성립은 별개이며, 임상적 유효성·정량 정확도·인허가 상태는 주장하지 않습니다.' }, en: { heading: 'Clinical and product boundary', body: 'By 1 June 2026 I had implemented reference-coordinate loading, 3D markers, per-target distance and RMSE calculation, and CSV export. Sample review exposed anatomical-region mapping and reference-coordinate quality issues, so I requested target definitions and remeasurement under a protocol still to be agreed. Implementing the comparison tool does not establish a valid final evaluation; no clinical efficacy, quantitative accuracy, or regulatory status is claimed.' } } }
       ]
     }),
     project({
@@ -1220,7 +1220,7 @@
           teamResult: '컨소시엄이 4DCT 재구성, 영상유도 체계, 임상 자문을 나눠 맡습니다. 과제 전체 성과를 개인 성과로 쓰지 않습니다.',
           evidence: '실리콘 인체 팬텀을 0.5~3.0 m 다섯 구간에서 상용 3D 센서 5종으로 총 55회, 회당 500프레임 측정해 정밀도 σ·실측 fps·유효 픽셀 비율을 냈습니다. 반복 재현성은 ±0.05 mm였고 σ는 약 50프레임에서 수렴했습니다. 이 실측표와 DtDepthScan 화면이 본인 측정 근거입니다.',
           limitation: '1차년도 센서 검증 결과이며 임상 성능이나 과제 목표 달성을 주장하지 않고 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
-          collaboration: '임상 기관은 서울성모병원 방사선종양학과이고, 4DCT 재구성·영상유도 체계·통합 제어 담당 기관과 인터페이스를 맞춥니다.',
+          collaboration: '연구기관과 센서·표면·호흡 추적 인터페이스와 평가 준비를 협의합니다. 측정 결과, 문헌값, 추정치와 미측정 항목을 구분하고 센서 확보·실험 조건을 후속 검증의 선행 조건으로 남겼습니다.',
           mediaAlt: 'DtDepthScan 측정 화면 — 팬텀 점군 위에 지정한 ROI 상자와 시간 노이즈 σ 판독값.', mediaCaption: '자체 검증 도구 DtDepthScan으로 실리콘 인체 팬텀을 재는 화면입니다. 점군 위 ROI에서 평균 깊이와 시간 노이즈 σ를 실시간으로 산출합니다. 장비 시리얼과 주소는 가렸습니다.',
           status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측표; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '센서 정밀도 실측표.', visualCaption: '센서 5종 거리별 정밀도 실측표.'
         },
@@ -1233,7 +1233,7 @@
           teamResult: 'Consortium partners own 4DCT reconstruction, the image-guidance framework, and clinical advice. Programme-level results are not attributed to me.',
           evidence: 'A silicone body phantom measured at five distances from 0.5 to 3.0 m with five commercial 3D sensors, 55 runs of 500 frames each, gave precision σ, delivered fps, and fill rate; repeats agreed to within ±0.05 mm. That table and the DtDepthScan captures are my own measurements.',
           limitation: 'First-year sensor validation only; no clinical performance or programme-target achievement is claimed, and programme targets, budgets, and metrics of other institutions are not published here.',
-          collaboration: 'The clinical partner is the radiation oncology department of Seoul St. Mary\'s Hospital; interfaces are agreed with 4DCT reconstruction, image guidance, and integrated-control partners.',
+          collaboration: 'Coordinate sensor, surface, and respiratory-tracking interfaces and evaluation preparation with research partners. Measured results, literature values, estimates, and unmeasured items are distinguished, with equipment availability and experimental conditions recorded as prerequisites for follow-up validation.',
           mediaAlt: 'DtDepthScan measurement screen with an ROI box on the phantom point cloud and the temporal-noise σ readout.', mediaCaption: 'The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise σ are computed live from the ROI on the point cloud. Device serial and address are masked.',
           status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision table by distance; no clinical claim.', problemSummary: 'Surface-based setup registration and gating signals on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate table.', visualAlt: 'Sensor precision measurement table.', visualCaption: 'Five-sensor precision table by distance.'
         }
@@ -1243,7 +1243,7 @@
         { key: 'dtdepthscan', type: 'text', translations: { ko: { heading: '검증 도구를 먼저 만들었다', body: '카메라 계층을 추상화해 어떤 센서든 같은 절차를 돌립니다. 취득 시각을 남긴 Raw 연속 녹화로 실측 fps를 재고, ROI 깊이 시계열에서 σ와 유효 픽셀 비율을 자동 산출하며, PLY·CSV로 내보내 교차 검증합니다.' }, en: { heading: 'The tool came first', body: 'Abstracting the camera layer lets any sensor run the same procedure. Timestamped raw recording gives delivered fps, ROI depth time series yield σ and fill rate automatically, and PLY and CSV export allow cross-checking elsewhere.' } } },
         { key: 'validation-protocol', type: 'list', translations: { ko: { heading: '다섯 대를 같은 절차로 재다', items: ['실리콘 인체 팬텀 고정, 0.5~3.0 m 다섯 거리', '센서 5종·조건 스윕 포함 총 55회', '회당 500프레임 연속 취득', '재현성 ±0.05 mm, σ 50프레임 수렴'] }, en: { heading: 'One procedure, five sensors', items: ['Silicone body phantom, five distances 0.5-3.0 m', 'Five sensors and condition sweeps, 55 runs', '500 frames per run', 'Repeatability ±0.05 mm, σ settles by 50 frames'] } } },
         { key: 'measured-findings', type: 'evidence', translations: { ko: { heading: '숫자보다 조건이 남았다', body: '더 오래 쓸 결과는 운용 조건이었습니다. 0.5 m에서 기본 노출은 IR 포화로 측정이 안 되고, 콜드스타트 σ는 열평형 대비 최대 1.7배 나빠집니다. 둘 다 실시간 모듈의 설계 입력이 됐습니다.' }, en: { heading: 'The conditions outlived the numbers', body: 'The operating conditions will outlast the σ table. At 0.5 m the default exposure saturates the IR return and no depth is produced, and from a cold start σ is up to 1.7 times worse than at thermal steady state. Both became design inputs for the real-time module.' } } },
-        { key: 'research-boundary', type: 'limitation', translations: { ko: { heading: '연구 경계', body: '1차년도 센서·알고리즘 기초 설계 단계이며 임상 성능이나 과제 목표 달성을 주장하지 않습니다.' }, en: { heading: 'Research boundary', body: 'First-year sensor and algorithm groundwork; no clinical performance or programme-target achievement is claimed.' } } }
+        { key: 'research-boundary', type: 'limitation', translations: { ko: { heading: '연구 경계', body: '1차년도 센서·알고리즘 기초 설계 단계입니다. 후속 검토에서는 필터 지연 추정과 전체 시스템 지연 실측을 구분했습니다. 센서 확보와 새 측정이 필요한 전체 체인 지연·보정판 검출 단차는 미확인 항목으로 남겼으며, 임상 성능이나 과제 목표 달성을 주장하지 않습니다.' }, en: { heading: 'Research boundary', body: 'This is first-year sensor and algorithm groundwork. Follow-up work distinguishes estimated filter delay from measured end-to-end system latency. Full-chain latency and calibration-target depth-step detection still require equipment and new measurements; no clinical performance or programme-target achievement is claimed.' } } }
       ]
     }),
     project({
@@ -1341,8 +1341,8 @@
           role: 'DtSkadi.dll을 응용에 통합하고 OpenEx()의 오류 분기를 정리해 열기 실패 뒤 잘못된 상태로 진행하며 발생하던 크래시를 방지했습니다. MarkerEditor 입력 검증과 마커 빌더·캘리브레이션·체커·피봇 캘리브레이션·FPS 측정 기능을 구현하고, 데스크톱 앱과 API의 유지보수·배포, Python SDK 바인딩 번들 갱신, 공개 문서와 통합 지원을 맡았습니다.',
           teamResult: '장치 하드웨어와 광학·기구 설계, 의료·산업 최종 응용, 로봇 제어, 영업과 고객 성과는 팀·협력자의 결과입니다. 제품 성능·임상 효과·판매 성과를 개인 성과로 주장하지 않습니다.',
           evidence: '마커 정의·파일 작업, 트래커 상태·6DoF, 비식별 의료 트레이, CT 작업 화면, 로봇 추적 현장까지 실제 화면 다섯 종이 근거입니다.',
-          limitation: '공개 자료는 제품 인터페이스와 통합 경계만 다룹니다. 얼굴, 장치 ID, 좌표값, 로고, 버전, 라이선스 경로와 성능 평가는 제외했습니다.',
-          collaboration: '광학·하드웨어 설계자, 수술내비게이션 개발자, 연구기관 사용자와 로봇 응용 팀의 인터페이스를 맞춥니다.',
+          limitation: '공개 자료는 제품 인터페이스와 통합 경계만 다룹니다. 얼굴, 장치 ID, 좌표값, 로고, 버전, 라이선스 경로와 성능 평가는 제외했습니다. 특정 오류 분기 개선은 모든 장시간 종료 문제의 해소를 뜻하지 않으며, API 유지보수·응용 통합과 원천 API 전체의 개발 소유권을 구분합니다.',
+          collaboration: '광학·하드웨어 설계자와 응용 개발자 사이에서 SDK 버전·빌드·추적 좌표 전달을 맞추고 설치·사용 안내와 원격 지원을 맡았습니다. 반복 종료 문제는 재현 경로·조치·잔여 이슈를 구분해 기록했습니다.',
           mediaAlt: '마커 형상을 정의하고 파일을 불러오거나 저장하는 SKADI 데스크톱 앱 화면.', mediaCaption: '데스크톱 앱의 마커 정의와 파일 작업 화면입니다.',
           status: '진행 중', cardProblem: '데스크톱 앱에서 API를 거쳐 의료·산업 응용까지 하나의 추적 제품 흐름으로 연결합니다.', cardOwnedRole: '데스크톱 앱·API 안정성, 공개 문서와 통합 지원을 담당합니다.', cardEvidence: '앱 2종, 의료 2종, 산업 1종의 승인된 실제 화면.', problemSummary: '데스크톱 앱과 API를 의료·산업 응용에 연결합니다.', ownedRole: '데스크톱 앱·API 유지보수와 통합 지원을 맡습니다.', verifiedEvidence: '승인된 실제 화면 다섯 종이 근거입니다.', visualAlt: 'SKADI 데스크톱 앱과 API의 제품 흐름.', visualCaption: '데스크톱 앱 → API → 의료 통합 → 산업 확장.'
         },
@@ -1354,15 +1354,15 @@
           role: 'Integrated DtSkadi.dll into applications, separated OpenEx() error branches so an open failure no longer continued into an invalid state and crash, and implemented MarkerEditor input validation plus marker builder, calibration, checker, pivot-calibration, and FPS-measurement features. I maintain and release the desktop app and API, update the Python SDK binding bundle, and own public documentation and integration support.',
           teamResult: 'Device hardware, optical and mechanical design, final medical and industrial applications, robot control, sales, and customer outcomes belong to the team and partners. Product performance, clinical effects, and sales outcomes are not claimed as my results.',
           evidence: 'Five approved real screens cover marker definition and file work, tracker status and 6DoF, a de-identified medical tray, the CT workspace, and the robot-tracking field setup.',
-          limitation: 'The public material covers only product interfaces and integration boundaries. Faces, device IDs, coordinate values, logos, versions, licence paths, and performance assessments are excluded.',
-          collaboration: 'Interfaces are agreed with optical and hardware designers, surgical-navigation developers, research users, and robot-application teams.',
+          limitation: 'The public material covers only product interfaces and integration boundaries. Faces, device IDs, coordinate values, logos, versions, licence paths, and performance assessments are excluded. Fixing a particular error branch does not establish that every long-running shutdown issue is resolved. API maintenance and application integration are distinct from authorship of the entire core API.',
+          collaboration: 'Aligned SDK versions, builds, and tracked-transform delivery between optical and hardware designers and application developers, and provided installation guidance and remote support. Recurring shutdown issues were documented with reproduction steps, actions taken, and unresolved items.',
           mediaAlt: 'SKADI desktop-app screen for defining marker geometry and opening or saving files.', mediaCaption: 'Marker definition and file work in the desktop app.',
           status: 'Ongoing', cardProblem: 'Connect the desktop app through the API to medical and industrial tracking applications.', cardOwnedRole: 'Own desktop-app and API stability, public documentation, and integration support.', cardEvidence: 'Two app, two medical, and one industrial approved real screens.', problemSummary: 'Connect the desktop app and API to medical and industrial applications.', ownedRole: 'Own desktop-app and API maintenance and integration support.', verifiedEvidence: 'Five approved real screens.', visualAlt: 'SKADI desktop-app and API product flow.', visualCaption: 'Desktop app → API → medical integration → industrial extension.'
         }
       },
       blocks: [
         { key: 'desktop-app', type: 'system', translations: { ko: { heading: '데스크톱 앱', body: '마커 정의·파일 작업과 트래커 연결·6DoF 상태 확인을 한 제품 안에서 다룹니다.' }, en: { heading: 'Desktop app', body: 'One product handles marker definition and file work, tracker connection, and 6DoF status inspection.' } } },
-        { key: 'api-stability', type: 'evidence', translations: { ko: { heading: 'OpenEx() 안정성', body: 'DtSkadi.dll 통합에서 OpenEx() 성공·오류 결과를 분리하고 실패 뒤 잘못된 상태로 진행하지 않게 해 크래시를 방지했습니다.' }, en: { heading: 'OpenEx() stability', body: 'In the DtSkadi.dll integration, OpenEx() success and error results are separated so failure stops before an invalid state and crash.' } } },
+        { key: 'api-stability', type: 'evidence', translations: { ko: { heading: 'OpenEx() 안정성', body: 'DtSkadi.dll 통합에서 OpenEx() 성공·오류 결과를 분리하고 실패 뒤 잘못된 상태로 진행하지 않게 해 크래시를 방지했습니다. 광학·하드웨어 설계자와 응용 개발자 사이에서 SDK 버전·빌드·추적 좌표 전달을 맞추고 설치·사용 안내와 원격 지원을 맡았습니다. 반복 종료 문제는 재현 경로·조치·잔여 이슈를 구분해 기록했습니다.' }, en: { heading: 'OpenEx() stability', body: 'In the DtSkadi.dll integration, OpenEx() success and error results are separated so failure stops before an invalid state and crash. Aligned SDK versions, builds, and tracked-transform delivery between optical and hardware designers and application developers, and provided installation guidance and remote support. Recurring shutdown issues were documented with reproduction steps, actions taken, and unresolved items.' } } },
         { key: 'medical-integration', type: 'text', translations: { ko: { heading: '의료 통합', body: '비식별 트레이와 CT 작업 화면까지 추적 소프트웨어의 통합 경계를 확인했습니다.' }, en: { heading: 'Medical integration', body: 'The tracking-software integration boundary was checked through the de-identified tray and CT workspace.' } } },
         { key: 'industrial-extension', type: 'limitation', translations: { ko: { heading: '산업 확장 경계', body: '추적 API와 좌표 통합 지원은 내 역할이고, 로봇 제어와 최종 도킹 동작은 팀·고객의 응용 결과입니다.' }, en: { heading: 'Industrial-extension boundary', body: 'I own tracking-API and coordinate-integration support; robot control and final docking behavior are team and customer application results.' } } }
       ]
@@ -1399,9 +1399,9 @@
           thesis: '수술 내비게이션의 좌표 정합을 로봇 센서와 안전 판단에 적용합니다.',
           summary: 'Jetson 기반 ToF–RGB 비전(2단계 캘리브레이션·SAM3 분할·품질 게이트·트럭 적재 연속 추적), 비전 서보잉 액션, LiDAR 센서 통합 서비스, 안전 관리자 초기 설계를 Zenoh 기반 사내 미들웨어 위에서 하나의 통합 흐름으로 연결했습니다.',
           problem: '센서별 데이터가 서로 다른 좌표와 주기로 들어와 안전 판단에 쓰일 수 있는 공통 흐름이 필요했습니다.',
-          role: 'Jetson 기반 생산 비전(ToF↔RGB 2단계 캘리브레이션, SAM3 분할 사이드카, 품질 게이트, 트럭 적재 연속 추적)과 그 이전의 Windows 프로토타입을 설계·구현했습니다. 대차 바퀴쌍 인식에서 포크 정렬·접근·삽입으로 이어지는 비전 서보잉과 로딩·언로딩 액션을 구현해 팀의 행동트리 프레임워크에 통합했습니다. 여러 센서를 하나의 3D 점유 출력으로 묶는 센서 통합 서비스, 마스트 LiDAR 표면 검출과 시각화, 비전 결과의 Zenoh 발행 서비스를 만들었고, 안전 관리자(safety_manager)의 설계와 초기 구현(3단 가상 범퍼 구역·E-STOP 래칭 정책)을 맡았습니다. 웹 기반 운영·모니터링 앱 UI와 Isaac Sim 시뮬레이션 개선에도 참여했습니다.',
+          role: 'Jetson 기반 비전 서비스(ToF↔RGB 2단계 캘리브레이션, SAM3 분할 사이드카, 품질 게이트, 트럭 적재 연속 추적)과 그 이전의 Windows 프로토타입을 설계·구현했습니다. 대차 바퀴쌍 인식에서 포크 정렬·접근·삽입으로 이어지는 비전 서보잉과 로딩·언로딩 액션을 구현해 팀의 행동트리 프레임워크에 통합했습니다. 여러 센서를 하나의 3D 점유 출력으로 묶는 센서 통합 서비스, 마스트 LiDAR 표면 검출과 시각화, 비전 결과의 Zenoh 발행 서비스를 만들었고, 안전 관리자(safety_manager)의 설계와 초기 구현(3단 가상 범퍼 구역·E-STOP 래칭 정책)을 맡았습니다. 웹 기반 운영·모니터링 앱 UI와 Isaac Sim 시뮬레이션 개선에도 참여했습니다.',
           teamResult: '측위(NAV350 포함), 차량 제어·하드웨어 추상화, 미션 관리, 행동트리 프레임워크, 포인트클라우드 발행기, 안전 관리자의 후속 정책 확장은 팀원이 맡았고, 팀은 시스템 통합과 현장 검증을 수행했습니다. 생산 운영, 배포 성공, 고객 성과로 확대하지 않습니다.',
-          evidence: '직접 측정한 ToF↔RGB 프레임 동기 p95 16.6 ms와, 기구 모델 대비 x·y 1 mm 이내로 맞춘 캘리브레이션 외부 파라미터 병진값이 비전 쪽 근거입니다. 센서 정렬, 3D 포인트클라우드, 비전 결과, 안전 정책 출력, Zenoh 메시지는 통합과 현장 검증에서 확인했습니다.',
+          evidence: '시험장 영상·사진과 캡처별 센서 비교 기록이 근거입니다. 아래 통합 근거에서 시각차와 외부 파라미터 측정의 조건·축별 차이를 함께 설명합니다.',
           limitation: '공개 클립과 사진은 시험장 테스트입니다. 측정값은 개발 중 내부 측정이며, 생산 운영 성과나 고객 성과를 주장하지 않습니다.',
           collaboration: '차량 제어, 측위, 미션, 안전, 현장 검증 담당자와 공동 통합합니다. 미들웨어는 ROS 2 방식의 패턴을 따르는 Zenoh 기반 사내 구현입니다.',
           mediaAlt: '3D 뷰·카메라 영상·신호 플롯이 함께 표시된 무인지게차 비전 서보잉 테스트 녹화 화면.', mediaCaption: '무인지게차 DOTORI의 비전 서보잉 테스트 화면 녹화입니다(3D 뷰·카메라 영상·신호 플롯).',
@@ -1412,9 +1412,9 @@
           thesis: 'Apply the coordinate registration used in surgical navigation between the robot, cameras, and sensors, and connect perception to safety decisions and the vehicle system.',
           summary: 'Connected Jetson-based ToF–RGB vision (two-stage calibration, SAM3 segmentation, quality gates, continuous truck-load tracking), vision-servoing actions, a LiDAR sensor-integration service, and the initial safety-manager design into one integration flow on Zenoh-based in-house middleware.',
           problem: 'Sensor streams arrived in different coordinates and cycles and needed a common flow usable by safety decisions.',
-          role: 'Designed and implemented the production vision on Jetson (two-stage ToF↔RGB calibration, a SAM3 segmentation sidecar, quality gates, continuous truck-load tracking) and the earlier Windows prototype. Implemented vision servoing, from wheel-pair detection to fork alignment, approach, and insertion, plus loading and unloading actions, and integrated them into the team\'s behaviour-tree framework. Built a sensor-integration service with a fused 3D occupancy output, mast-LiDAR surface detection and visualisation, and the service that publishes vision results over Zenoh; designed and initially implemented the safety manager (three-zone virtual bumper and E-STOP latching policy). Also contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.',
+          role: 'Designed and implemented the vision service on Jetson (two-stage ToF↔RGB calibration, a SAM3 segmentation sidecar, quality gates, continuous truck-load tracking) and the earlier Windows prototype. Implemented vision servoing, from wheel-pair detection to fork alignment, approach, and insertion, plus loading and unloading actions, and integrated them into the team\'s behaviour-tree framework. Built a sensor-integration service with a fused 3D occupancy output, mast-LiDAR surface detection and visualisation, and the service that publishes vision results over Zenoh; designed and initially implemented the safety manager (three-zone virtual bumper and E-STOP latching policy). Also contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.',
           teamResult: 'Localisation (including NAV350), vehicle control and hardware abstraction, mission management, the behaviour-tree framework, the point-cloud publisher, and later safety-manager policy extensions were owned by team members; the team performed system integration and field validation. This is not presented as production operation, deployment success, or customer outcomes.',
-          evidence: 'On the vision side, I measured ToF↔RGB frame synchronisation at p95 16.6 ms and brought the calibrated extrinsic translation within 1 mm (x, y) of the mechanical model. Sensor alignment, 3D point clouds, vision outputs, safety-policy outputs, and Zenoh messages were checked through integration and field validation.',
+          evidence: 'Test-site recordings, photographs, and capture-specific sensor comparisons provide the evidence. The integration-evidence section below states the timestamp and extrinsic-measurement conditions and differences by axis.',
           limitation: 'The public clip and photos are test-site runs. The measurements are internal development measurements; no production or customer outcomes are claimed.',
           collaboration: 'Vehicle-control, localisation, mission, safety, and field-validation owners integrate the system jointly. The middleware is an in-house Zenoh-based implementation that follows ROS 2-style patterns.',
           mediaAlt: 'Vision-servoing test recording of the autonomous forklift with 3D view, camera feed, and signal plots.', mediaCaption: 'Screen recording of the DOTORI vision-servoing test (3D view, camera feed, signal plots).',
@@ -1424,8 +1424,8 @@
       blocks: [
         { key: 'sensor-coordinate-chain', type: 'system', translations: { ko: { heading: '센서 좌표 체인', body: 'ToF↔RGB 2단계 캘리브레이션과 마스트 LiDAR를 차량 좌표에 연결하고, 센서 통합 서비스로 하나의 3D 점유 출력을 만들었습니다.' }, en: { heading: 'Sensor coordinate chain', body: 'Connected two-stage ToF↔RGB calibration and the mast LiDAR to vehicle coordinates, and produced one 3D occupancy output through the sensor-integration service.' } } },
         { key: 'perception-to-policy', type: 'system', translations: { ko: { heading: '인지에서 정책까지', body: '비전 결과를 Zenoh로 발행하고 비전 서보잉·로딩 액션을 팀의 행동트리에 통합했으며, 안전 관리자의 3단 가상 범퍼·E-STOP 래칭 정책을 처음 설계했습니다.' }, en: { heading: 'Perception to policy', body: 'Published vision results over Zenoh, integrated vision-servoing and loading actions into the team\'s behaviour trees, and drew up the safety manager\'s initial three-zone virtual-bumper and E-STOP latching policy.' } } },
-        { key: 'integration-evidence', type: 'evidence', translations: { ko: { heading: '통합 근거', body: '센서 정렬, 포인트클라우드, 비전 결과, 정책 출력을 통합과 현장에서 대조했습니다. 본인 측정으로 ToF↔RGB 동기 p95는 16.6 ms, 외부 파라미터 병진값은 기구 모델 대비 x·y 1 mm 이내입니다.' }, en: { heading: 'Integration evidence', body: 'Compared sensor alignment, point clouds, vision outputs, and policy output in integration and field tests. My own measurements put ToF↔RGB synchronisation at p95 16.6 ms and the extrinsic translation within 1 mm (x, y) of the mechanical model.' } } },
-        { key: 'field-boundary', type: 'limitation', translations: { ko: { heading: '현장 경계', body: '현장 검증을 생산 운영이나 고객 성과로 확대하지 않습니다.' }, en: { heading: 'Field boundary', body: 'Field validation is not production operation, deployment success, or a customer outcome.' } } }
+        { key: 'integration-evidence', type: 'evidence', translations: { ko: { heading: '통합 근거', body: '2026-07-29의 191프레임·9.7399초 캡처에서 ToF↔RGB 시각차 p95는 16.592 ms(반올림 16.6 ms)였습니다. 이는 전체 시스템 지연이 아닙니다. 2026-09-11 한 프레임의 외부 파라미터 병진 비교는 기구 모델 대비 x·y 차이 1 mm 이내였지만 z 차이는 약 29 mm여서 전체 3D 정확도로 해석하지 않습니다.' }, en: { heading: 'Integration evidence', body: 'In a 191-frame, 9.7399-second capture on 29 July 2026, the ToF↔RGB timestamp difference had a p95 of 16.592 ms (16.6 ms rounded). This is not end-to-end system latency. A single-frame extrinsic-translation comparison on 11 September was within 1 mm of the mechanical model in x and y, but differed by about 29 mm in z; it does not establish overall 3D accuracy.' } } },
+        { key: 'field-boundary', type: 'limitation', translations: { ko: { heading: '현장 경계', body: '2025년 선행 지게차 현장에서는 오류 관찰·운영지원·인수인계를 맡았고, 자체 DOTORI 참여의 공개 이력은 2025.11부터입니다. 현재 저장소의 구현 기록은 2026년에 이어집니다. 현장 지원과 이후 비전·센서 구현을 구분하며, 시험장 검증을 생산 운영·고객 성과로 확대하지 않습니다.' }, en: { heading: 'Field boundary', body: 'In earlier forklift field work during 2025, I supported operation, issue observation, and handovers. The public record of participation in the in-house DOTORI project begins in November 2025, followed by implementation records in the current repositories during 2026. Field support and later vision/sensor implementation are distinct; test-site validation is not a production or customer outcome.' } } }
       ]
     }),
     project({
@@ -1504,6 +1504,38 @@
 
   // Event dates retain the precision supported by the public record.
   var news = [
+    {
+  "id": "neuropilot-evaluation-review-2026",
+  "eventDate": "2026-06-01",
+  "datePrecision": "day",
+  "evidence": {
+    "path": "js/portfolio-data.js",
+    "locator": "projects: rtms-navigation.blocks.clinical-product-boundary, 2026-06-01"
+  },
+  "links": [
+    {
+      "route": "projects/rtms-navigation/",
+      "translations": {
+        "ko": {
+          "label": "NeuroPilot 사례"
+        },
+        "en": {
+          "label": "NeuroPilot project"
+        }
+      }
+    }
+  ],
+  "translations": {
+    "ko": {
+      "body": "NeuroPilot의 표적 비교·RMSE·CSV 평가 기능을 구현하고, 샘플 검토에서 확인한 기준 데이터 문제에 대해 정의 명확화와 재측정을 요청했습니다.",
+      "post": "기준 좌표 로딩과 3D 마커 표시, 표적별 거리·전체 RMSE 계산, CSV 내보내기를 NeuroPilot에 구현했습니다.\n\n샘플을 검토하면서 해부학 영역 매핑과 기준 좌표 품질 문제를 확인했습니다. 타겟 정의와 프로토콜에 따른 재측정을 요청했으며, 평가 도구 구현을 최종 정확도 달성으로 해석하지 않습니다."
+    },
+    "en": {
+      "body": "Implemented target comparison, RMSE, and CSV evaluation in NeuroPilot, then requested clearer definitions and remeasurement after reviewing reference-data issues.",
+      "post": "Implemented reference-coordinate loading, 3D markers, per-target distances, overall RMSE, and CSV export in NeuroPilot.\n\nSample review exposed anatomical-region mapping and reference-coordinate quality issues. I requested target definitions and remeasurement under a protocol; completing the evaluation tool does not establish final accuracy."
+    }
+  }
+},
     { id: 'shanghai-field-trip-2018', eventDate: '2018-07-04', datePrecision: 'day',
       evidence: { path: 'data/activity-media.json', locator: 'M216' },
       links: [],
@@ -1615,7 +1647,7 @@
     { id: 'rtms-navigation-development-2024', eventDate: '2024-07', datePrecision: 'month',
       evidence: { path: 'js/portfolio-data.js', locator: 'projects: rtms-navigation.period, 2024.07' },
       links: [{ route: 'projects/rtms-navigation/', translations: { ko: { label: 'NeuroPilot 사례' }, en: { label: 'NeuroPilot project' } } }],
-      translations: { ko: { body: '광학 트래킹과 의료영상을 연결하는 rTMS 코일 내비게이션 소프트웨어 개발을 시작했습니다. 코일 위치와 자세를 시각화하는 소프트웨어를 담당합니다.', post: '광학 트래킹과 의료영상을 연결하는 rTMS 코일 내비게이션 소프트웨어 NeuroPilot 개발을 시작했습니다. 코일의 위치와 자세를 시각화하는 소프트웨어를 맡아, 3D Slicer 기반 화면 흐름과 랜드마크·ICP 정합 엔진, 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 리드했습니다.\n\n일부 화면 모듈은 동료와 함께 만들었고, 라이선스 운영과 도입은 AT&C가 판단합니다.' }, en: { body: 'Began developing rTMS coil-navigation software connecting optical tracking and medical images, with responsibility for software that visualises coil position and pose.', post: 'I began developing NeuroPilot, rTMS coil-navigation software connecting optical tracking and medical images. Responsible for the software that visualises coil position and pose, I led the 3D Slicer-based screen flow, a landmark and ICP registration engine, tracker, tablet and robot integration, and a licence-based product structure.\n\nSome screen modules were built together with a colleague, and AT&C decides on licence operation and adoption.' } } },
+      translations: { ko: { body: 'rTMS 내비게이션 과제에 참여해 인수인계·평가 준비를 맡았고, 이후 NeuroPilot의 코일 위치·자세 가시화와 시스템 통합 개발로 이어졌습니다.', post: '2024년 7월 rTMS 내비게이션 과제에 참여해 인수인계, 보고서와 시험평가 준비를 맡았습니다. 이 참여 시점과 NeuroPilot 저장소의 본격 구현 기록이 시작되는 2025년 7월은 구분합니다.\n\n이후 3D Slicer 화면 흐름, 랜드마크·ICP 정합, 트래커·태블릿·로봇 연동과 라이선스 구조의 주 개발을 맡았습니다. 고객 제공 AI 모델은 통합했으며 모델 자체의 학습·개발은 제 역할과 구분합니다.' }, en: { body: 'Joined the rTMS navigation programme, handling handover and evaluation preparation before later developing coil-pose visualization and system integration in NeuroPilot.', post: 'I joined the rTMS navigation programme in July 2024, handling handover, reporting, and evaluation preparation. This participation date is distinct from July 2025, when the main implementation record in the NeuroPilot repository begins.\n\nI later led the 3D Slicer workflow, landmark and ICP registration, tracker/tablet/robot interfaces, and licensing structure. I integrated customer-provided AI models; training and developing those models were separate responsibilities.' } } },
     { id: 'mandibular-paper-2024', eventDate: '2024-02-08', datePrecision: 'day',
       evidence: { path: 'data/public-cv.json', locator: 'publications: A Proof of Concept', dateSource: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC11574221/', dateSourceNote: 'Journal record: 2024 Feb 8;37(3):1151–1159.' },
       links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '논문' }, en: { label: 'Paper' } } }, { route: 'projects/mandibular-fracture/', translations: { ko: { label: '연구 사례' }, en: { label: 'Research project' } } }],

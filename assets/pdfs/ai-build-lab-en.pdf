@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 24 0 R /F3+0 28 0 R
@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.7ada26aa6ceee50d0905497a2acb0f66 4 0 R
+/FormXob.6e3a8ed778ba43225866ae8382d0007b 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.804136391111cc1718f7866cb799fe3c 9 0 R /FormXob.e19fe1578db628ad831d28108955cd73 10 0 R
+/FormXob.64e4722e5d851530515a75937bdaa8c5 10 0 R /FormXob.a26aba3ffb26680d69cf94c63a0c0969 9 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -108,7 +108,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.8ac5307c27e0594a6fe5d9e4e53d3726 13 0 R
+/FormXob.6f2d99b1499521eb8b480ccb042077a5 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -813,7 +813,7 @@ BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (One combined case connects a local-
 BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (bus-information application through the same problem-to-product loop.) Tj T* ET
 q
 467.8363 0 0 300 63.71967 199.8898 cm
-/FormXob.7ada26aa6ceee50d0905497a2acb0f66 Do
+/FormXob.6e3a8ed778ba43225866ae8382d0007b Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 179.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees. Local paths are) Tj T* ET
@@ -1030,13 +1030,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 468.2927 0 0 300 63.49145 463.8898 cm
-/FormXob.804136391111cc1718f7866cb799fe3c Do
+/FormXob.a26aba3ffb26680d69cf94c63a0c0969 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Four panes in one project: pull-request review, a document, and two terminals) Tj T* ET
 q
 468.2927 0 0 300 63.49145 125.8898 cm
-/FormXob.e19fe1578db628ad831d28108955cd73 Do
+/FormXob.64e4722e5d851530515a75937bdaa8c5 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 105.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. One prompt sent to several selected sessions at once) Tj T* ET
@@ -1064,7 +1064,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 468.2927 0 0 300 63.49145 463.8898 cm
-/FormXob.8ac5307c27e0594a6fe5d9e4e53d3726 Do
+/FormXob.6f2d99b1499521eb8b480ccb042077a5 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Changed files and diffs are read in the app, then handed to an agent review) Tj T* ET
@@ -1159,52 +1159,52 @@ endobj
 xref
 0 37
 0000000000 65535 f 
-0000000073 00000 n 
-0000000130 00000 n 
-0000000237 00000 n 
-0000000402 00000 n 
-0000202452 00000 n 
-0000202738 00000 n 
-0000202903 00000 n 
-0000203126 00000 n 
-0000203291 00000 n 
-0000339120 00000 n 
-0000421172 00000 n 
-0000421508 00000 n 
-0000421674 00000 n 
-0000502503 00000 n 
-0000502792 00000 n 
-0000502958 00000 n 
-0000503147 00000 n 
-0000503348 00000 n 
-0000503520 00000 n 
-0000503693 00000 n 
-0000503946 00000 n 
-0000505886 00000 n 
-0000528050 00000 n 
-0000528310 00000 n 
-0000529664 00000 n 
-0000531616 00000 n 
-0000554072 00000 n 
-0000554342 00000 n 
-0000555708 00000 n 
-0000555778 00000 n 
-0000556360 00000 n 
-0000556447 00000 n 
-0000559337 00000 n 
-0000566000 00000 n 
-0000567181 00000 n 
-0000569932 00000 n 
+0000000061 00000 n 
+0000000118 00000 n 
+0000000225 00000 n 
+0000000390 00000 n 
+0000202440 00000 n 
+0000202726 00000 n 
+0000202891 00000 n 
+0000203114 00000 n 
+0000203279 00000 n 
+0000339108 00000 n 
+0000421160 00000 n 
+0000421496 00000 n 
+0000421662 00000 n 
+0000502491 00000 n 
+0000502780 00000 n 
+0000502946 00000 n 
+0000503135 00000 n 
+0000503336 00000 n 
+0000503508 00000 n 
+0000503681 00000 n 
+0000503934 00000 n 
+0000505874 00000 n 
+0000528038 00000 n 
+0000528298 00000 n 
+0000529652 00000 n 
+0000531604 00000 n 
+0000554060 00000 n 
+0000554330 00000 n 
+0000555696 00000 n 
+0000555766 00000 n 
+0000556348 00000 n 
+0000556435 00000 n 
+0000559325 00000 n 
+0000565988 00000 n 
+0000567169 00000 n 
+0000569920 00000 n 
 trailer
 <<
 /ID 
 [<5fa2848e7fcfe25c5f1648b91f1dd4f0><5fa2848e7fcfe25c5f1648b91f1dd4f0>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 30 0 R
 /Root 29 0 R
 /Size 37
 >>
 startxref
-572342
+572330
 %%EOF

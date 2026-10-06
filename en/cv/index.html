@@ -21,16 +21,16 @@
   <main id="main-content" tabindex="-1">
     <header class="sc-page-header">
       <h1>Curriculum vitae</h1>
-      <p>A record of carrying 3D registration and robot software into working systems. Everything below is an approved public fact, and the same content is available as a PDF.</p>
+      <p>A record of carrying 3D registration and robot software into working systems. Core facts are aligned with the authored CV PDF; the web version adds context about project roles, collaboration, and validation.</p>
       <p class="sc-cv-actions"><a href="../../assets/cv/jinmin-kim-cv-en.pdf" target="_blank" rel="noopener">Open PDF</a> · <a href="../../assets/cv/jinmin-kim-cv-en.pdf" download>Download PDF</a></p>
     </header>
 
     <!-- PUBLIC CV SUMMARY:START -->
-    <section class="sc-cv" data-cv-summary data-cv-source-digest="2d7a740f9a6b01244bcffd6a8eff62e4c36ee0fffd628b6f4eb0808b78687df8" data-cv-summary-digest="415a20d3f011d72c37107021a0f30d49031b0cd4e7bda00727152dd112fef0d6" aria-labelledby="cv-summary-title">
+    <section class="sc-cv" data-cv-summary data-cv-source-digest="5496fbf189e6ba4aa24df1e45e4a8ce6318495cde93e7382b0d73ac27c677341" data-cv-summary-digest="fb47341a7db7870cf5bf93c61a054d56bf8b48e2b0841eaf4fe37fcb976ef2da" aria-labelledby="cv-summary-title">
       <header class="sc-cv__intro">
         <h2 id="cv-summary-title">Jinmin Kim<small lang="ko">김진민</small></h2>
         <p class="sc-cv__headline">Robotics &amp; Computer Vision R&amp;D Engineer — Surgical Navigation, 3D Registration, Optical Tracking, XR, Robotics Integration</p>
-        <p class="sc-cv__summary">Robotics and computer vision R&amp;D engineer developing optical 3D tracking, coordinate transformation, 3D registration, surgical navigation, XR and robotic system integration. Researched computer-assisted surgery and registration at DGIST, and 3+ years of collaborative R&amp;D with Samsung Medical Center oral and maxillofacial surgery on digital surgical planning, XR consultation and image-guided navigation. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence.</p>
+        <p class="sc-cv__summary">Robotics and computer vision R&amp;D engineer translating medical imaging, 3D registration, and optical tracking into research software and robot vision systems. I researched computer-assisted surgery and registration at DGIST and have collaborated with Samsung Medical Center for over three years on digital surgical planning, XR, and surgical navigation. My responsibilities also cover requirements discussions, evaluation criteria and data-quality review, and field integration. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence.</p>
         <address class="sc-cv__contacts" aria-label="Public contacts">
           <ul>
             <li>Daegu, Republic of Korea</li>
@@ -74,6 +74,7 @@
                 <h4>Optical 3D Tracking Software</h4>
                 <ul>
                 <li>Develop and maintain the API and Viewer of the in-house optical 3D tracker SKADI — optical marker tracking, calibration, coordinate transformation, 3D visualisation and surgical tool tracking; the software layer of a product line supplied to Korean surgical-navigation companies and research institutes.</li>
+                <li>Provided tracker installation guidance, remote technical support, and API builds and releases; documented reproduction steps, actions taken, and unresolved issues.</li>
                 </ul>
               </div>
               <div class="sc-cv__area">
@@ -88,24 +89,27 @@
                 <li>Low-dose C-arm 3D navigation — connected C-arm imaging to the 3D navigation workflow and implemented the owned feature scope.</li>
                 <li>Own surface-guided respiratory tracking and 4D CT registration for radiotherapy (large KERI programme, 2026.06 - ).</li>
                 <li>Delivered several development contracts for research institutes including KERI and KIMM.</li>
+                <li>Agreed requirements, data formats and coordinate frames, and communication/registration responsibilities with researchers and partners; prepared test procedures, draft report reviews, and programme documentation.</li>
+                <li>After implementing distance, RMSE, and CSV comparison in NeuroPilot, reviewed reference-coordinate definitions and quality and requested remeasurement. Tool implementation is separate from final accuracy validation.</li>
                 </ul>
               </div>
               <div class="sc-cv__area">
                 <h4>Robotics &amp; Vision — Logistics Robots and Autonomous Forklift (2024.12 - )</h4>
                 <ul>
                 <li>Extending optical tracking and coordinate registration experience to robot–camera coordinate integration, robot vision and sensor integration.</li>
-                <li>Since 2025.11, designed and initially implemented the safety manager of the in-house autonomous-forklift solution (DOTORI) — three-zone virtual bumper and E-STOP latching policy — and integrated LiDAR and ToF sensors into the Zenoh-based in-house middleware with a sensor-integration service.</li>
-                <li>DOTORI vision R&amp;D — production vision on Jetson (two-stage ToF↔RGB calibration, SAM3 segmentation, quality gates, continuous truck-load tracking) and the earlier Windows prototype; measured ToF↔RGB synchronisation at p95 16.6 ms.</li>
+                <li>Participation in the in-house DOTORI project began in November 2025; repository records from 2026 cover the initial safety-manager design and implementation (three-zone virtual bumper and E-STOP latching) and LiDAR/ToF integration on Zenoh-based in-house middleware.</li>
+                <li>DOTORI vision R&amp;D — implemented a Jetson vision service and earlier Windows prototype, ToF–RGB calibration, SAM3 segmentation, quality gates, and load tracking. The p95 timestamp difference of 16.6 ms in one 191-frame capture is not end-to-end latency or a long-term performance guarantee.</li>
                 <li>Integrated vision servoing (wheel-pair detection → fork alignment, approach and insertion) and loading/unloading actions into the team&#39;s behaviour trees; contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.</li>
                 <li>Before DOTORI — built the map editor of a Unity-based fleet management system for logistics robots (2024.12–2025.01) and a drone marker-tracking prototype linking a mobile drone-SDK app with PC-side marker tracking (2025.08–09).</li>
+                <li>Supported earlier forklift field operation, issue observation, and handovers in 2025. That field participation is distinct from the timing and scope of later DOTORI implementation.</li>
                 </ul>
               </div>
               <div class="sc-cv__area">
-                <h4>AI-assisted Product Engineering — In-house Tools and Personal (2026 - )</h4>
+                <h4>AI-assisted Product Engineering — In-house Tools (2026 - )</h4>
                 <ul>
-                <li>LLM Wiki — built and operate a personal knowledge system driven by AI agents; I own the framing, architecture, and verification while delegating much of the implementation.</li>
                 <li>In-house tools (2026) — a desktop workbench app with a pilot-to-stable update channel, an HWP document editor with its own installer and update server, an intranet research tool, and an internal coding-agent plugin marketplace.</li>
                 <li>For these in-house tools I own requirements, architecture, acceptance, and releases, while the implementation relies heavily on AI coding agents; no productivity effect is claimed.</li>
+                <li>Contributed project and document-management proposals, user guides, coding-study materials, development-tool comparisons, and work-practice documentation.</li>
                 </ul>
               </div>
             </li>

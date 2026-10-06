@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 23 0 R /F3+0 27 0 R
@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 31 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 30 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.a23d27c9972ffc873a553691856dcdc5 4 0 R
+/FormXob.da3c905626e020a0b7f9246217ea3ece 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 30 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.35cfbfc57179eee317c32c9c41af0ec8 9 0 R /FormXob.95aa835f3b4117f48510001e3c38744e 10 0 R
+/FormXob.275ac8a14875ffe6d26f1549f2d18b57 10 0 R /FormXob.34d83ca2a763dd04ea0fc71bf20addf9 9 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -116,7 +116,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 30 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.21ce1fc2a943bff822c8ca0bbc4587bb 14 0 R /FormXob.c42562732fb1773fc5e95f247ef6749f 13 0 R
+/FormXob.0ea806733fe23b04b676e40e8aba7d7f 14 0 R /FormXob.6b8c0fb98841adb9043694d049a6cad8 13 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -135,14 +135,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 140.8898 141.5852 156.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 76.88976 141.5852 92.38976 ] /Subtype /Link /Type /Annot
 >>
 endobj
 18 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 120.8898 128.2212 136.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 56.88976 128.2212 72.38976 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
@@ -805,7 +805,7 @@ BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Designed the 3D Slicer workflow fro
 BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (registration engine, tracker, tablet, and robot integration, and a license-gated product structure.) Tj T* ET
 q
 225 0 0 300 185.1378 219.8898 cm
-/FormXob.a23d27c9972ffc873a553691856dcdc5 Do
+/FormXob.da3c905626e020a0b7f9246217ea3ece Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 199.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Demonstration of the TMS coil-navigation robot system on an exhibition stand: robot arm, treatment chair, coil, and) Tj T* ET
@@ -825,7 +825,7 @@ endstream
 endobj
 32 0 obj
 <<
-/Length 7756
+/Length 7948
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1007,11 +1007,13 @@ BT 1 0 0 1 48 162.8898 Tm /F2+0 10 Tf 12 TL (coordinate-transform and registrati
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 133.8898 Tm /F3+0 11 Tf 13.2 TL (Device and system integration) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 113.8898 Tm /F2+0 10 Tf 12 TL (A major optical-tracker SDK migration, an in-house TCP binary protocol for the tablet, single tracker) Tj T* ET
+BT 1 0 0 1 48 113.8898 Tm /F2+0 10 Tf 12 TL (Implemented the tracker SDK migration, tablet TCP protocol, and robot interfaces. Integration discussions in) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 97.88976 Tm /F2+0 10 Tf 12 TL (ownership, contact-stop robot descent, and a depth-camera \(LiDAR/ToF\) registration program for a) Tj T* ET
+BT 1 0 0 1 48 97.88976 Tm /F2+0 10 Tf 12 TL (2026 consolidated registration in NeuroPilot and separated target-file, pose-data, and synchronization) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 81.88976 Tm /F2+0 10 Tf 12 TL (health-technology R&D programme.) Tj T* ET
+BT 1 0 0 1 48 81.88976 Tm /F2+0 10 Tf 12 TL (requirements. Programme participation began in July 2024; the main NeuroPilot repository implementation) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 65.88976 Tm /F2+0 10 Tf 12 TL (is recorded from July 2025.) Tj T* ET
  
 endstream
 endobj
@@ -1036,7 +1038,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 254.2199 48 509.6699 cm
-/FormXob.35cfbfc57179eee317c32c9c41af0ec8 Do
+/FormXob.34d83ca2a763dd04ea0fc71bf20addf9 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 489.1699 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. NeuroPilot navigation module: tracker, patient-marker and coil-marker status with distance and tilt guidance to the) Tj T* ET
@@ -1044,7 +1046,7 @@ BT 1 0 0 1 48 489.1699 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. NeuroPilot navigation 
 BT 1 0 0 1 48 477.1699 Tm /F2+0 8.5 Tf 10.2 TL (target) Tj T* ET
 q
 369.5221 0 0 300 112.8767 159.6699 cm
-/FormXob.95aa835f3b4117f48510001e3c38744e Do
+/FormXob.275ac8a14875ffe6d26f1549f2d18b57 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 139.1699 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. NeuroPilot target view: stimulation targets labelled on the cortical surface model) Tj T* ET
@@ -1072,7 +1074,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 458.9674 0 0 300 68.1541 463.8898 cm
-/FormXob.c42562732fb1773fc5e95f247ef6749f Do
+/FormXob.6b8c0fb98841adb9043694d049a6cad8 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. AI brain segmentation: a skull-stripped 3D brain model with tissue segmentation on the axial, coronal, and sagittal) Tj T* ET
@@ -1080,7 +1082,7 @@ BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. AI brain segmentation:
 BT 1 0 0 1 48 431.3898 Tm /F2+0 8.5 Tf 10.2 TL (slices) Tj T* ET
 q
 497.9534 0 0 300 48.66108 113.8898 cm
-/FormXob.21ce1fc2a943bff822c8ca0bbc4587bb Do
+/FormXob.0ea806733fe23b04b676e40e8aba7d7f Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 93.38976 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Cortical parcellation: region-coded segmentation overlaid on the slice views, with the reconstructed head surface) Tj T* ET
@@ -1089,7 +1091,7 @@ endstream
 endobj
 35 0 obj
 <<
-/Length 4164
+/Length 4868
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1124,98 +1126,106 @@ BT 1 0 0 1 48 605.8898 Tm /F2+0 10 Tf 12 TL (case.) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 576.8898 Tm /F3+0 11 Tf 13.2 TL (Clinical and product boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 556.8898 Tm /F2+0 10 Tf 12 TL (No clinical efficacy, quantitative accuracy, or regulatory status is claimed.) Tj T* ET
+BT 1 0 0 1 48 556.8898 Tm /F2+0 10 Tf 12 TL (By 1 June 2026 I had implemented reference-coordinate loading, 3D markers, per-target distance and RMSE) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 540.8898 Tm /F2+0 10 Tf 12 TL (calculation, and CSV export. Sample review exposed anatomical-region mapping and reference-coordinate) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 524.8898 Tm /F2+0 10 Tf 12 TL (quality issues, so I requested target definitions and remeasurement under a protocol still to be agreed.) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 508.8898 Tm /F2+0 10 Tf 12 TL (Implementing the comparison tool does not establish a valid final evaluation; no clinical efficacy, quantitative) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 492.8898 Tm /F2+0 10 Tf 12 TL (accuracy, or regulatory status is claimed.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 527.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 463.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 507.8898 Tm /F2+0 10 Tf 12 TL (The deep-learning models for brain segmentation, landmarks, and treatment-position extraction were) Tj T* ET
+BT 1 0 0 1 48 443.8898 Tm /F2+0 10 Tf 12 TL (Integrated customer-provided AI models into the application and agreed on registration, target, and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (provided by the partner; I did not develop them. I own their integration behind an adapter boundary, the) Tj T* ET
+BT 1 0 0 1 48 427.8898 Tm /F2+0 10 Tf 12 TL (communication responsibilities and evaluation-data definitions. Reference-coordinate quality issues led to a) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 475.8898 Tm /F2+0 10 Tf 12 TL (boundary design, post-processing, the quantitative evaluation screen, license gating, and UI integration.) Tj T* ET
+BT 1 0 0 1 48 411.8898 Tm /F2+0 10 Tf 12 TL (remeasurement request; model training and development remain separate responsibilities.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 443.8898 m 547.2756 443.8898 l S
+n 48 379.8898 m 547.2756 379.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 409.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 345.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 385.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 VTK \001 PyQt5 \001 Python \001 PyTorch \(inference integration\) \001 Optical tracking \001 TCP/IP binary protocol \001) Tj T* ET
+BT 1 0 0 1 48 321.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 VTK \001 PyQt5 \001 Python \001 PyTorch \(inference integration\) \001 Optical tracking \001 TCP/IP binary protocol \001) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 369.8898 Tm /F2+0 10 Tf 12 TL (License gating) Tj T* ET
+BT 1 0 0 1 48 305.8898 Tm /F2+0 10 Tf 12 TL (License gating) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 344.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 280.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 324.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
+BT 1 0 0 1 48 260.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 292.8898 m 547.2756 292.8898 l S
+n 48 228.8898 m 547.2756 228.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 258.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 194.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 234.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 170.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 205.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 141.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 185.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 121.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 169.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 105.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 144.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 142.8898 m 141.5852 142.8898 l S
+BT 1 0 0 1 48 80.88976 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 78.88976 m 141.5852 78.88976 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 124.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 122.8898 m 128.2212 122.8898 l S
+BT 1 0 0 1 48 60.88976 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 58.88976 m 128.2212 58.88976 l S
  
 endstream
 endobj
 xref
 0 36
 0000000000 65535 f 
-0000000073 00000 n 
-0000000130 00000 n 
-0000000237 00000 n 
-0000000402 00000 n 
-0005622949 00000 n 
-0005623235 00000 n 
-0005623400 00000 n 
-0005623623 00000 n 
-0005623788 00000 n 
-0006410064 00000 n 
-0007032651 00000 n 
-0007032987 00000 n 
-0007033153 00000 n 
-0007663914 00000 n 
-0009016474 00000 n 
-0009016812 00000 n 
-0009016978 00000 n 
-0009017150 00000 n 
-0009017323 00000 n 
-0009017562 00000 n 
-0009019502 00000 n 
-0009041666 00000 n 
-0009041926 00000 n 
-0009043280 00000 n 
-0009045232 00000 n 
-0009067688 00000 n 
-0009067958 00000 n 
-0009069324 00000 n 
-0009069394 00000 n 
-0009069921 00000 n 
-0009070008 00000 n 
-0009072880 00000 n 
-0009080688 00000 n 
-0009082024 00000 n 
-0009083391 00000 n 
+0000000061 00000 n 
+0000000118 00000 n 
+0000000225 00000 n 
+0000000390 00000 n 
+0005622937 00000 n 
+0005623223 00000 n 
+0005623388 00000 n 
+0005623611 00000 n 
+0005623776 00000 n 
+0006410052 00000 n 
+0007032639 00000 n 
+0007032975 00000 n 
+0007033141 00000 n 
+0007663902 00000 n 
+0009016462 00000 n 
+0009016800 00000 n 
+0009016966 00000 n 
+0009017138 00000 n 
+0009017311 00000 n 
+0009017550 00000 n 
+0009019490 00000 n 
+0009041654 00000 n 
+0009041914 00000 n 
+0009043268 00000 n 
+0009045220 00000 n 
+0009067676 00000 n 
+0009067946 00000 n 
+0009069312 00000 n 
+0009069382 00000 n 
+0009069909 00000 n 
+0009069996 00000 n 
+0009072868 00000 n 
+0009080868 00000 n 
+0009082204 00000 n 
+0009083571 00000 n 
 trailer
 <<
 /ID 
 [<bff1c036eaa598cfc598a628c8089ff0><bff1c036eaa598cfc598a628c8089ff0>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 29 0 R
 /Root 28 0 R
 /Size 36
 >>
 startxref
-9087607
+9088491
 %%EOF

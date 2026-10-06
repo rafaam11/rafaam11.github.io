@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 24 0 R /F3+0 28 0 R /F4+0 32 0 R
@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 36 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.ed711ded2cd7bb7696da03e17dc3d2e1 4 0 R
+/FormXob.c34c5dd2fcc9d5b90c64cb55030498b4 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -123,7 +123,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 40 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 35 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.065bf8bf84337ecc5b3ee6aa0a736974 15 0 R /FormXob.ba028070e07cd20cad9bf237cc3f27e5 14 0 R /FormXob.d301ebc0be86d43c4504a7552481061a 13 0 R
+/FormXob.01e0027082e51ace1885f6692f1472a7 13 0 R /FormXob.834e3632445897ee5bb5153886aa7ce8 15 0 R /FormXob.ff46428cda2d6444a724e7f0989ebe29 14 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -142,14 +142,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 397.8898 141.5852 413.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 349.8898 141.5852 365.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 377.8898 128.2212 393.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 329.8898 128.2212 345.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 20 0 obj
@@ -1048,7 +1048,7 @@ BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (anatomical-landmark detection model
 BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.) Tj T* ET
 q
 499.2756 0 0 239.2362 48 261.6535 cm
-/FormXob.ed711ded2cd7bb7696da03e17dc3d2e1 Do
+/FormXob.c34c5dd2fcc9d5b90c64cb55030498b4 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 241.1535 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Development-build demonstration of landmarking, multi-view occlusion, and evaluation using synthetic test data.) Tj T* ET
@@ -1715,7 +1715,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (5 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 242.6378 0 0 116.2639 48 628.2578 cm
-/FormXob.d301ebc0be86d43c4504a7552481061a Do
+/FormXob.01e0027082e51ace1885f6692f1472a7 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 599.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. Researchers enter landmarks while viewing a reference) Tj T* ET
@@ -1725,7 +1725,7 @@ BT 1 0 0 1 48 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (image beside a zoomable 3D view.
 BT 1 0 0 1 48 579.8898 Tm /F2+0 7.7 Tf 9.24 TL (data.) Tj T* ET
 q
 242.6378 0 0 116.2639 304.6378 628.2578 cm
-/FormXob.ba028070e07cd20cad9bf237cc3f27e5 Do
+/FormXob.ff46428cda2d6444a724e7f0989ebe29 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 599.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. The occlusion workspace compares the occlusal state and) Tj T* ET
@@ -1735,7 +1735,7 @@ BT 1 0 0 1 304.6378 589.8898 Tm /F2+0 7.7 Tf 9.24 TL (contact-distance map acros
 BT 1 0 0 1 304.6378 579.8898 Tm /F2+0 7.7 Tf 9.24 TL (test data.) Tj T* ET
 q
 499.2756 0 0 239.2362 48 309.6535 cm
-/FormXob.065bf8bf84337ecc5b3ee6aa0a736974 Do
+/FormXob.834e3632445897ee5bb5153886aa7ce8 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 289.1535 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. The evaluation screen combines RMSE, Gap, and FRE calculation with result export. Displayed values illustrate the UI,) Tj T* ET
@@ -1767,7 +1767,7 @@ endstream
 endobj
 41 0 obj
 <<
-/Length 2681
+/Length 3194
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1790,93 +1790,99 @@ BT 1 0 0 1 48 752.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 BT 1 0 0 1 48 732.8898 Tm /F2+0 10 Tf 12 TL (The long-term Samsung Medical Center and DIGITRACK R&D direction expands from digital occlusion) Tj T* ET
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 716.8898 Tm /F2+0 10 Tf 12 TL (toward normal-occlusion-based mandibular motion and complete oral and maxillofacial surgical planning.) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 700.8898 Tm /F2+0 10 Tf 12 TL (The 2026 discussions specified hospital-defined landmarks in the original STL coordinate frame and) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 684.8898 Tm /F2+0 10 Tf 12 TL (distinguished annotation, model training, and application integration responsibilities. Redesign began in) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 668.8898 Tm /F2+0 10 Tf 12 TL (March; the first commit in the new repository dates to April.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 684.8898 m 547.2756 684.8898 l S
+n 48 636.8898 m 547.2756 636.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 650.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 602.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 626.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 C++ \001 Qt \001 Python \001 VTK \001 PyBullet \001 SOFA) Tj T* ET
+BT 1 0 0 1 48 578.8898 Tm /F2+0 10 Tf 12 TL (3D Slicer \001 C++ \001 Qt \001 Python \001 VTK \001 PyBullet \001 SOFA) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 601.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 553.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 581.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
+BT 1 0 0 1 48 533.8898 Tm /F2+0 10 Tf 12 TL (Surgical Navigation & Optical Tracking \001 3D Registration & Computer Vision) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 549.8898 m 547.2756 549.8898 l S
+n 48 501.8898 m 547.2756 501.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 515.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 467.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 443.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 462.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 414.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 442.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 394.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 426.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 378.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 401.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 399.8898 m 141.5852 399.8898 l S
+BT 1 0 0 1 48 353.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 351.8898 m 141.5852 351.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 381.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 379.8898 m 128.2212 379.8898 l S
+BT 1 0 0 1 48 333.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 331.8898 m 128.2212 331.8898 l S
  
 endstream
 endobj
 xref
 0 42
 0000000000 65535 f 
-0000000073 00000 n 
-0000000143 00000 n 
-0000000250 00000 n 
-0000000415 00000 n 
-0000387532 00000 n 
-0000387818 00000 n 
-0000387983 00000 n 
-0000388206 00000 n 
-0000388371 00000 n 
-0000388594 00000 n 
-0000388760 00000 n 
-0000388985 00000 n 
-0000389151 00000 n 
-0000557360 00000 n 
-0000943141 00000 n 
-0001271679 00000 n 
-0001272066 00000 n 
-0001272232 00000 n 
-0001272404 00000 n 
-0001272577 00000 n 
-0001272816 00000 n 
-0001274756 00000 n 
-0001296920 00000 n 
-0001297180 00000 n 
-0001298534 00000 n 
-0001300486 00000 n 
-0001322942 00000 n 
-0001323212 00000 n 
-0001324578 00000 n 
-0001326527 00000 n 
-0001339271 00000 n 
-0001339499 00000 n 
-0001340262 00000 n 
-0001340332 00000 n 
-0001340862 00000 n 
-0001340955 00000 n 
-0001344267 00000 n 
-0001351162 00000 n 
-0001359877 00000 n 
-0001368361 00000 n 
-0001371820 00000 n 
+0000000061 00000 n 
+0000000131 00000 n 
+0000000238 00000 n 
+0000000403 00000 n 
+0000387520 00000 n 
+0000387806 00000 n 
+0000387971 00000 n 
+0000388194 00000 n 
+0000388359 00000 n 
+0000388582 00000 n 
+0000388748 00000 n 
+0000388973 00000 n 
+0000389139 00000 n 
+0000557348 00000 n 
+0000943129 00000 n 
+0001271667 00000 n 
+0001272054 00000 n 
+0001272220 00000 n 
+0001272392 00000 n 
+0001272565 00000 n 
+0001272804 00000 n 
+0001274744 00000 n 
+0001296908 00000 n 
+0001297168 00000 n 
+0001298522 00000 n 
+0001300474 00000 n 
+0001322930 00000 n 
+0001323200 00000 n 
+0001324566 00000 n 
+0001326515 00000 n 
+0001339259 00000 n 
+0001339487 00000 n 
+0001340250 00000 n 
+0001340320 00000 n 
+0001340850 00000 n 
+0001340943 00000 n 
+0001344255 00000 n 
+0001351150 00000 n 
+0001359865 00000 n 
+0001368349 00000 n 
+0001371808 00000 n 
 trailer
 <<
 /ID 
 [<f1b62ada6ab63687d14bda34ca6fb21b><f1b62ada6ab63687d14bda34ca6fb21b>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 34 0 R
 /Root 33 0 R
 /Size 42
 >>
 startxref
-1374553
+1375054
 %%EOF

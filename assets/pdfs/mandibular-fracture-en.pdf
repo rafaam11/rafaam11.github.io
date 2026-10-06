@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 25 0 R /F3+0 29 0 R
@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 32 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.c40cf1b968d2e94888f0b4bd13556615 4 0 R
+/FormXob.67f9f292680ff1eca0abb5dddaefa441 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -89,7 +89,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 32 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.031af0ddf39c3b41a2c7609df8c585b5 11 0 R /FormXob.8365f4949ea8e0cc5256e5adc7650b17 10 0 R /FormXob.a183f6acdcc359b215871b9a05dead2a 9 0 R
+/FormXob.5bf2e3b78ef72357c47f65170e769ac6 10 0 R /FormXob.8e09b60aa43a86eb81201e313b14ff91 9 0 R /FormXob.afc99a387c689597e737c9369b27f7ac 11 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -124,7 +124,7 @@ endobj
 <<
 /Annots [ 13 0 R ] /Contents 36 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 32 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.68a3a935778a27bc6498420fe7b156ad 14 0 R /FormXob.7d5d68d78b0b0b2cf4bc6a37867a6eb7 15 0 R
+/FormXob.132f8d331d50dbbc01336e7eada51c49 14 0 R /FormXob.eedcb20c663400f15df6bbb8543e651e 15 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -820,7 +820,7 @@ BT 1 0 0 1 48 557.8898 Tm /F2+0 10 Tf 12 TL (Built a surgical-planning simulator
 BT 1 0 0 1 48 541.8898 Tm /F2+0 10 Tf 12 TL (dental features and fracture surfaces.) Tj T* ET
 q
 400 0 0 300 97.6378 219.8898 cm
-/FormXob.c40cf1b968d2e94888f0b4bd13556615 Do
+/FormXob.67f9f292680ff1eca0abb5dddaefa441 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 199.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. Surface-distance maps between the pre-fracture mandible and the reduction model \(part of Fig. 3 in the published) Tj T* ET
@@ -1050,19 +1050,19 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 201.1733 48 562.7164 cm
-/FormXob.a183f6acdcc359b215871b9a05dead2a Do
+/FormXob.8e09b60aa43a86eb81201e313b14ff91 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 542.2164 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Dental landmark extraction: maxilla alignment, arch-line fit, slicing, central groove, and lingual cusp) Tj T* ET
 q
 499.2756 0 0 237.3845 48 287.3319 cm
-/FormXob.8365f4949ea8e0cc5256e5adc7650b17 Do
+/FormXob.5bf2e3b78ef72357c47f65170e769ac6 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 266.8319 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. General positioning of fracture segments: arch alignment, fracture-surface features, and overlap error) Tj T* ET
 q
 499.2756 0 0 142.2935 48 107.0384 cm
-/FormXob.031af0ddf39c3b41a2c7609df8c585b5 Do
+/FormXob.afc99a387c689597e737c9369b27f7ac Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 86.53839 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Surface-distance maps for different fracture and tooth conditions: 10-4 split, 11-3 split, two missing teeth) Tj T* ET
@@ -1090,13 +1090,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 295.6385 48 468.2513 cm
-/FormXob.68a3a935778a27bc6498420fe7b156ad Do
+/FormXob.132f8d331d50dbbc01336e7eada51c49 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 447.7513 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Arch-line-based alignment of mandibular segments \(ACCAS 2022\)) Tj T* ET
 q
 400 0 0 300 97.6378 130.2513 cm
-/FormXob.7d5d68d78b0b0b2cf4bc6a37867a6eb7 Do
+/FormXob.eedcb20c663400f15df6bbb8543e651e Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 109.7513 Tm /F2+0 8.5 Tf 10.2 TL (Figure 6. Presenting at ACCAS 2022, Khon Kaen) Tj T* ET
@@ -1184,53 +1184,53 @@ endobj
 xref
 0 38
 0000000000 65535 f 
-0000000073 00000 n 
-0000000130 00000 n 
-0000000237 00000 n 
-0000000402 00000 n 
-0000793841 00000 n 
-0000794127 00000 n 
-0000794292 00000 n 
-0000794515 00000 n 
-0000794680 00000 n 
-0001507510 00000 n 
-0002388010 00000 n 
-0003253664 00000 n 
-0003254049 00000 n 
-0003254215 00000 n 
-0003977916 00000 n 
-0007635170 00000 n 
-0007635508 00000 n 
-0007635674 00000 n 
-0007635881 00000 n 
-0007636053 00000 n 
-0007636226 00000 n 
-0007636472 00000 n 
-0007638412 00000 n 
-0007660576 00000 n 
-0007660836 00000 n 
-0007662190 00000 n 
-0007664142 00000 n 
-0007686598 00000 n 
-0007686868 00000 n 
-0007688234 00000 n 
-0007688304 00000 n 
-0007688777 00000 n 
-0007688864 00000 n 
-0007691602 00000 n 
-0007698549 00000 n 
-0007700088 00000 n 
-0007701225 00000 n 
+0000000061 00000 n 
+0000000118 00000 n 
+0000000225 00000 n 
+0000000390 00000 n 
+0000793829 00000 n 
+0000794115 00000 n 
+0000794280 00000 n 
+0000794503 00000 n 
+0000794668 00000 n 
+0001507498 00000 n 
+0002387998 00000 n 
+0003253652 00000 n 
+0003254037 00000 n 
+0003254203 00000 n 
+0003977904 00000 n 
+0007635158 00000 n 
+0007635496 00000 n 
+0007635662 00000 n 
+0007635869 00000 n 
+0007636041 00000 n 
+0007636214 00000 n 
+0007636460 00000 n 
+0007638400 00000 n 
+0007660564 00000 n 
+0007660824 00000 n 
+0007662178 00000 n 
+0007664130 00000 n 
+0007686586 00000 n 
+0007686856 00000 n 
+0007688222 00000 n 
+0007688292 00000 n 
+0007688765 00000 n 
+0007688852 00000 n 
+0007691590 00000 n 
+0007698537 00000 n 
+0007700076 00000 n 
+0007701213 00000 n 
 trailer
 <<
 /ID 
 [<a2ec95f69434bae63b998894616ab1a2><a2ec95f69434bae63b998894616ab1a2>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 31 0 R
 /Root 30 0 R
 /Size 38
 >>
 startxref
-7704996
+7704984
 %%EOF

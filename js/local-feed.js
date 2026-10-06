@@ -26,6 +26,7 @@
   }
   // Editorial labels only. Event dates, prose, links and evidence stay canonical.
   var labels = {
+    'neuropilot-evaluation-review-2026': ['research', 'NeuroPilot 평가 도구와 기준 데이터 검토', 'NeuroPilot evaluation and reference-data review'],
     'shanghai-field-trip-2018': ['activity', '상하이 로봇전시회·글로벌 기업 탐방', 'Shanghai robot show and company tour'],
     'club-mt-2018': ['activity', '발명동아리 봄 MT', 'Invention club spring trip'],
     'invention-club-camp-2018': ['activity', '2018 하계 발명·창의 캠프 운영', '2018 summer invention camp'],

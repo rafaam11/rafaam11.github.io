@@ -1,5 +1,5 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
 /F1 2 0 R /F2+0 27 0 R /F3+0 31 0 R
@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.6e0c6d703478b2824a9cb10eb2360f52 4 0 R
+/FormXob.81bf87b57f62e2080a0c95ec5dcb6775 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -81,7 +81,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 37 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.1b8c440a5623bc2701205f8c8a0866cb 9 0 R /FormXob.a7d5e52dfa5a341eb7cf12e13975a391 10 0 R
+/FormXob.3c61198161e3ec5f7e8131643aacd3e9 9 0 R /FormXob.c64e3f8f0cb3389cb94a72dba8044eac 10 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -116,7 +116,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 38 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.7984deddcbf69a264ab4ac24149ab399 13 0 R /FormXob.940c240ccad1375f451d8123df09242f 14 0 R
+/FormXob.450e5d7d33e48d76f7e86dc801193612 13 0 R /FormXob.567e2fb5dad1743414cd66c7ce75d086 14 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -151,7 +151,7 @@ endobj
 <<
 /Annots [ 16 0 R ] /Contents 39 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 34 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.7c52391f250d4237c580e29d5ddc1952 17 0 R /FormXob.7da1d5a6e5d4b8726d1d30768714c2a3 18 0 R
+/FormXob.398b5745547e991671d0ae450a156887 17 0 R /FormXob.cd72a651fe5e8053671e539546aa0254 18 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -170,14 +170,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 446.8898 141.5852 462.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 402.8898 141.5852 418.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 22 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 426.8898 128.2212 442.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 382.8898 128.2212 398.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 23 0 obj
@@ -848,7 +848,7 @@ BT 1 0 0 1 48 511.8898 Tm /F2+0 10 Tf 12 TL (with commercial 3D sensors. Commerc
 BT 1 0 0 1 48 495.8898 Tm /F2+0 10 Tf 12 TL (algorithm choices, so a domestic stack has to build that evidence itself.) Tj T* ET
 q
 499.2756 0 0 280.8425 48 193.0472 cm
-/FormXob.6e0c6d703478b2824a9cb10eb2360f52 Do
+/FormXob.81bf87b57f62e2080a0c95ec5dcb6775 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 172.5472 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise \002 are) Tj T* ET
@@ -1100,7 +1100,7 @@ BT 1 0 0 1 48 594.8898 Tm /F2+0 10 Tf 12 TL (no depth is produced, and from a co
 BT 1 0 0 1 48 578.8898 Tm /F2+0 10 Tf 12 TL (became design inputs for the real-time module.) Tj T* ET
 q
 499.2756 0 0 183.1717 48 377.718 cm
-/FormXob.1b8c440a5623bc2701205f8c8a0866cb Do
+/FormXob.3c61198161e3ec5f7e8131643aacd3e9 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 357.218 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Where surface guidance sits in a session: reference surface the day before, setup check on the day, live monitoring) Tj T* ET
@@ -1108,7 +1108,7 @@ BT 1 0 0 1 48 357.218 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. Where surface guidance 
 BT 1 0 0 1 48 345.218 Tm /F2+0 8.5 Tf 10.2 TL (during treatment) Tj T* ET
 q
 340.9574 0 0 255.718 127.1591 72 cm
-/FormXob.a7d5e52dfa5a341eb7cf12e13975a391 Do
+/FormXob.c64e3f8f0cb3389cb94a72dba8044eac Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 51.5 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The five commercial 3D sensors put through validation: three ToF, one structured-light, one active-stereo) Tj T* ET
@@ -1136,13 +1136,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 400 0 0 300 97.6378 463.8898 cm
-/FormXob.7984deddcbf69a264ab4ac24149ab399 Do
+/FormXob.450e5d7d33e48d76f7e86dc801193612 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. Measured precision \002, delivered fps, and fill rate for the five sensors by distance \(author-measured\)) Tj T* ET
 q
 499.2756 0 0 222.1776 48 203.7121 cm
-/FormXob.940c240ccad1375f451d8123df09242f Do
+/FormXob.567e2fb5dad1743414cd66c7ce75d086 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 183.2121 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. Four operating conditions the measurements produced: near-field exposure, warm-up, repeatability, mismatched) Tj T* ET
@@ -1153,7 +1153,7 @@ endstream
 endobj
 39 0 obj
 <<
-/Length 3187
+/Length 3399
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1172,13 +1172,13 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (5 / 6) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 149.7827 48 614.1071 cm
-/FormXob.7c52391f250d4237c580e29d5ddc1952 Do
+/FormXob.398b5745547e991671d0ae450a156887 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 593.6071 Tm /F2+0 8.5 Tf 10.2 TL (Figure 6. Far-field track: merge point clouds from several viewpoints, reconstruct the surface, register it to the planning CT) Tj T* ET
 q
 499.2756 0 0 153.2152 48 422.8919 cm
-/FormXob.7da1d5a6e5d4b8726d1d30768714c2a3 Do
+/FormXob.cd72a651fe5e8053671e539546aa0254 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 402.3919 Tm /F2+0 8.5 Tf 10.2 TL (Figure 7. Near-field track: chest and abdomen ROI depth becomes a respiratory waveform, and the gating window is judged on) Tj T* ET
@@ -1204,21 +1204,23 @@ BT 1 0 0 1 48 198.8919 Tm /F2+0 10 Tf 12 TL (programme targets, budgets, and met
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 169.8919 Tm /F3+0 11 Tf 13.2 TL (Research boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 149.8919 Tm /F2+0 10 Tf 12 TL (First-year sensor and algorithm groundwork; no clinical performance or programme-target achievement is) Tj T* ET
+BT 1 0 0 1 48 149.8919 Tm /F2+0 10 Tf 12 TL (This is first-year sensor and algorithm groundwork. Follow-up work distinguishes estimated filter delay from) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 133.8919 Tm /F2+0 10 Tf 12 TL (claimed.) Tj T* ET
+BT 1 0 0 1 48 133.8919 Tm /F2+0 10 Tf 12 TL (measured end-to-end system latency. Full-chain latency and calibration-target depth-step detection still) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 117.8919 Tm /F2+0 10 Tf 12 TL (require equipment and new measurements; no clinical performance or programme-target achievement is) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 101.8919 Tm /F2+0 10 Tf 12 TL (claimed.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 104.8919 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 72.89189 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 84.89189 Tm /F2+0 10 Tf 12 TL (The clinical partner is the radiation oncology department of Seoul St. Mary's Hospital; interfaces are agreed) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 68.89189 Tm /F2+0 10 Tf 12 TL (with 4DCT reconstruction, image guidance, and integrated-control partners.) Tj T* ET
+BT 1 0 0 1 48 52.89189 Tm /F2+0 10 Tf 12 TL (Coordinate sensor, surface, and respiratory-tracking interfaces and evaluation preparation with research) Tj T* ET
  
 endstream
 endobj
 40 0 obj
 <<
-/Length 2348
+/Length 2718
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1235,94 +1237,98 @@ BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (Surface-guided Respiratory Tracking \(SGR
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (6 / 6) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 753.8898 Tm /F2+0 10 Tf 12 TL (partners. Measured results, literature values, estimates, and unmeasured items are distinguished, with) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 737.8898 Tm /F2+0 10 Tf 12 TL (equipment availability and experimental conditions recorded as prerequisites for follow-up validation.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 749.8898 m 547.2756 749.8898 l S
+n 48 705.8898 m 547.2756 705.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 715.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 671.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 691.8898 Tm /F2+0 10 Tf 12 TL (ToF camera \001 Structured light \001 Qt \001 VTK \001 OpenCV \001 Python \001 4DCT) Tj T* ET
+BT 1 0 0 1 48 647.8898 Tm /F2+0 10 Tf 12 TL (ToF camera \001 Structured light \001 Qt \001 VTK \001 OpenCV \001 Python \001 4DCT) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 666.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 622.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 646.8898 Tm /F2+0 10 Tf 12 TL (3D Registration & Computer Vision \001 Robot Vision & Sensor Integration \001 Surgical Navigation & Optical) Tj T* ET
+BT 1 0 0 1 48 602.8898 Tm /F2+0 10 Tf 12 TL (3D Registration & Computer Vision \001 Robot Vision & Sensor Integration \001 Surgical Navigation & Optical) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 630.8898 Tm /F2+0 10 Tf 12 TL (Tracking) Tj T* ET
+BT 1 0 0 1 48 586.8898 Tm /F2+0 10 Tf 12 TL (Tracking) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 598.8898 m 547.2756 598.8898 l S
+n 48 554.8898 m 547.2756 554.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 564.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 520.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 540.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 496.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 511.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 467.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 491.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 447.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 475.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 431.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 450.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 448.8898 m 141.5852 448.8898 l S
+BT 1 0 0 1 48 406.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 404.8898 m 141.5852 404.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 430.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 428.8898 m 128.2212 428.8898 l S
+BT 1 0 0 1 48 386.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 384.8898 m 128.2212 384.8898 l S
  
 endstream
 endobj
 xref
 0 41
 0000000000 65535 f 
-0000000073 00000 n 
-0000000130 00000 n 
-0000000237 00000 n 
-0000000402 00000 n 
-0000421331 00000 n 
-0000421617 00000 n 
-0000421782 00000 n 
-0000422005 00000 n 
-0000422170 00000 n 
-0000568428 00000 n 
-0002624374 00000 n 
-0002624710 00000 n 
-0002624876 00000 n 
-0002750313 00000 n 
-0002959449 00000 n 
-0002959787 00000 n 
-0002959953 00000 n 
-0003080748 00000 n 
-0003172140 00000 n 
-0003172478 00000 n 
-0003172644 00000 n 
-0003172816 00000 n 
-0003172989 00000 n 
-0003173228 00000 n 
-0003175168 00000 n 
-0003197588 00000 n 
-0003197848 00000 n 
-0003199202 00000 n 
-0003201154 00000 n 
-0003223610 00000 n 
-0003223880 00000 n 
-0003225246 00000 n 
-0003225316 00000 n 
-0003225842 00000 n 
-0003225936 00000 n 
-0003229196 00000 n 
-0003237205 00000 n 
-0003239916 00000 n 
-0003241271 00000 n 
-0003244510 00000 n 
+0000000061 00000 n 
+0000000118 00000 n 
+0000000225 00000 n 
+0000000390 00000 n 
+0000421319 00000 n 
+0000421605 00000 n 
+0000421770 00000 n 
+0000421993 00000 n 
+0000422158 00000 n 
+0000568416 00000 n 
+0002624362 00000 n 
+0002624698 00000 n 
+0002624864 00000 n 
+0002750301 00000 n 
+0002959437 00000 n 
+0002959775 00000 n 
+0002959941 00000 n 
+0003080736 00000 n 
+0003172128 00000 n 
+0003172466 00000 n 
+0003172632 00000 n 
+0003172804 00000 n 
+0003172977 00000 n 
+0003173216 00000 n 
+0003175156 00000 n 
+0003197576 00000 n 
+0003197836 00000 n 
+0003199190 00000 n 
+0003201142 00000 n 
+0003223598 00000 n 
+0003223868 00000 n 
+0003225234 00000 n 
+0003225304 00000 n 
+0003225830 00000 n 
+0003225924 00000 n 
+0003229184 00000 n 
+0003237193 00000 n 
+0003239904 00000 n 
+0003241259 00000 n 
+0003244710 00000 n 
 trailer
 <<
 /ID 
 [<9dece915a79ac09c44b7994ddd5c0c6e><9dece915a79ac09c44b7994ddd5c0c6e>]
-% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+% ReportLab generated PDF document -- digest (opensource)
 
 /Info 33 0 R
 /Root 32 0 R
 /Size 41
 >>
 startxref
-3246910
+3247480
 %%EOF
