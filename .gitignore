@@ -6,10 +6,63 @@ __pycache__/
 *.public-cv-summary-*.tmp
 *.public-cv-summary-*.bak
 
-# 개인정보가 포함된 지원 서류(이력서/경력기술서)는 공개 사이트에 게시하지 않음
-docs/(한화시스템) 이력서_무인디지털트윈_김진민.md
-docs/(한화시스템) 경력기술서_무인디지털트윈_김진민.md
 CLAUDE.local.md
 
 # 활동 사진·영상 원본(약 592 MB)은 커밋 금지. 공개 파생본만 assets/local-review/ 에 둔다.
 assets/usermedia/
+
+# Local tools, secrets and private working material
+.claude/
+.codex/
+.agents/
+.vscode/
+.idea/
+.worktrees/
+worktrees/
+node_modules/
+.env
+.env.*
+.mcp.json
+mcp.json
+credentials*
+secret.*
+secrets.*
+*.pem
+*.key
+*.pfx
+*.p12
+private/
+originals/
+raw/
+review/
+backups/
+.hugo_build.lock
+~$*
+*.tmp
+*.bak
+*.[dD][oO][cC]
+*.[dD][oO][cC][xXmM]
+*.[xX][lL][sS]
+*.[xX][lL][sS][xXmM]
+*.[pP][pP][tT]
+*.[pP][pP][tT][xXmM]
+*.[hH][wW][pP]
+*.[hH][wW][pP][xX]
+*.odt
+*.ods
+*.odp
+*.pages
+*.rtf
+/data/activity-media-ids.json
+
+# Only current public specifications and used profile assets belong in these trees.
+/docs/*
+!/docs/superpowers/
+/docs/superpowers/*
+!/docs/superpowers/specs/
+/docs/superpowers/specs/*
+!/docs/superpowers/specs/2026-09-28-scholar-readability-design.md
+!/docs/superpowers/specs/2026-09-29-positioning-design.md
+/assets/img/*
+!/assets/img/favicon.ico
+!/assets/img/profile_square.webp

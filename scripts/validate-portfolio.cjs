@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
 const crypto = require('node:crypto');
+const { publicScopeErrors, privateValidationErrors } = require('./public-scope.cjs');
 
 const data = require('../js/portfolio-data.js');
 const render = require('../js/portfolio-render.js');
@@ -2420,7 +2421,7 @@ function validatePortfolio(rootDir) {
     const cv = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/public-cv.json'), 'utf8'));
     errors.push(...profile.newsErrors(), ...profile.activityMediaErrors(profile.readActivityMedia(rootDir)), ...profile.freshnessErrors(cv, rootDir));
   } catch (error) { errors.push(`Profile generation validation failed: ${error.message}`); }
-  errors.push(...forbiddenSourceDocumentErrors(rootDir));
+  errors.push(...forbiddenSourceDocumentErrors(rootDir), ...publicScopeErrors(rootDir));
   errors.push(...portfolioHtmlInventoryErrors(rootDir));
   errors.push(...evidenceRegistryErrors(data, rootDir));
   errors.push(...evidenceDirectoryErrors(rootDir));
@@ -2468,6 +2469,7 @@ function validatePortfolio(rootDir) {
 if (require.main === module) {
   const rootDir = path.join(__dirname, '..');
   const errors = validatePortfolio(rootDir);
+  if (process.argv.includes('--private')) errors.push(...privateValidationErrors(rootDir));
   const sync = require('node:child_process').spawnSync('python', [path.join(__dirname, 'check-cv-pdf-sync.py'), '--root', rootDir], { encoding: 'utf8' });
   if (sync.status !== 0) errors.push(`CV PDF fact comparison failed: ${sync.error?.message || sync.stderr || sync.stdout}`);
   if (errors.length) {
@@ -2479,6 +2481,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  publicScopeErrors, privateValidationErrors,
   portfolioRoutes,
   publicPortfolioFiles,
   publicPortfolioVisualFiles,

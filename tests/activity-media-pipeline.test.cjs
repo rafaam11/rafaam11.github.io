@@ -7,7 +7,10 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
+const privateTemp = fs.mkdtempSync(path.join(os.tmpdir(), 'am-private-'));
+process.env.PORTFOLIO_PRIVATE_ROOT = privateTemp;
 const pipeline = require('../scripts/activity-media.cjs');
+test.after(() => fs.rmSync(privateTemp, { recursive: true, force: true }));
 
 function hasFfmpeg() {
   try { execFileSync('ffmpeg', ['-version'], { stdio: 'ignore' }); return true; } catch (error) { return false; }
@@ -31,13 +34,7 @@ test('listSources numbers files by code-point order of their relative paths', ()
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
-test('listSources reproduces the frozen M-ids of the existing records', { skip: !fs.existsSync(path.join(root, 'assets', 'usermedia')) }, () => {
-  const byId = Object.fromEntries(pipeline.listSources(pipeline.USERMEDIA_DIR).map((item) => [item.id, item.relPath]));
-  const records = JSON.parse(fs.readFileSync(path.join(root, 'data/activity-media.json'), 'utf8')).media;
-  for (const record of Object.values(records)) {
-    assert.equal(byId[record.sourceId], record.sourcePath, `${record.id}: catalog path`);
-  }
-});
+
 
 function tiffApp1(littleEndian, dateText, orientation) {
   const le = littleEndian;
@@ -124,7 +121,7 @@ test('assertWritable refuses the originals folder and anything outside the allow
   assert.throws(() => pipeline.assertWritable(path.join(root, 'index.html')), /not an allowed output/);
   assert.doesNotThrow(() => pipeline.assertWritable(path.join(pipeline.DERIVED_DIR, 'M999.webp')));
   assert.doesNotThrow(() => pipeline.assertWritable(pipeline.DATA_FILE));
-  assert.doesNotThrow(() => pipeline.assertWritable(path.join(root, '.superpowers', 'thumbs', 'x.png')));
+  assert.doesNotThrow(() => pipeline.assertWritable(path.join(pipeline.SCRATCH_DIR, 'thumbs', 'x.png')));
 });
 
 test('ffmpeg argument builders strip metadata, cap size and honour orientation', () => {
@@ -173,22 +170,12 @@ test('frozen ids keep existing files stable and give new files the next free id'
   assert.equal(ids['sha-gone'], 'M217', 'ids of removed files are never reused');
 });
 
-test('the committed id map covers every published record', () => {
-  const map = JSON.parse(fs.readFileSync(path.join(root, 'data/activity-media-ids.json'), 'utf8'));
-  assert.equal(map.schema, 1);
-  assert.ok(Object.keys(map.ids).length >= 217);
-  const records = JSON.parse(fs.readFileSync(path.join(root, 'data/activity-media.json'), 'utf8')).media;
-  for (const record of Object.values(records)) assert.equal(map.ids[record.sourceSha256], record.id, `${record.id} is frozen`);
-  assert.equal(new Set(Object.values(map.ids)).size, Object.keys(map.ids).length, 'no id is assigned twice');
-});
 
-test('write guard ignores letter case on Windows and rejects traversal', { skip: process.platform !== 'win32' }, () => {
-  assert.throws(() => pipeline.assertWritable(path.join(root, 'assets', 'UserMedia', 'x.png')), /usermedia/i);
-  pipeline.setExtraOutputDir(path.join(root, 'assets'));
-  try {
-    assert.throws(() => pipeline.assertWritable(path.join(root, 'assets', 'USERMEDIA', 'review', 'x.png')), /usermedia/i);
-  } finally {
-    pipeline.setExtraOutputDir(null);
-  }
-  assert.throws(() => pipeline.assertWritable(path.join(pipeline.DERIVED_DIR, '..', 'usermedia', 'x.webp')), /usermedia/i);
+
+test('write guard rejects case variants, traversal and public review output', () => {
+  assert.throws(() => pipeline.assertWritable(path.join(pipeline.USERMEDIA_DIR, 'x.png')), /usermedia/i);
+  if (process.platform === 'win32') assert.throws(() => pipeline.assertWritable(path.join(privateTemp, 'ORIGINALS', 'x.png')), /usermedia/i);
+  assert.throws(() => pipeline.setExtraOutputDir(path.join(root, 'assets')), /private storage/);
+  assert.throws(() => pipeline.assertWritable(path.join(pipeline.DERIVED_DIR, '..', 'originals', 'x.webp')), /usermedia/i);
+  assert.throws(() => pipeline.assertWritable(pipeline.PUBLIC_DATA_FILE), /not an allowed output/i);
 });

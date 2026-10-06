@@ -1,21 +1,10 @@
 #!/usr/bin/env node
 /*
- * scripts/activity-media.cjs — activity-feed media pipeline (Node + ffmpeg/ffprobe, no npm dependencies).
- *
- *   node scripts/activity-media.cjs catalog                         # index assets/usermedia → .superpowers/activity-media-catalog.json
- *   node scripts/activity-media.cjs sheet <folder|M010-M040|all> [--out DIR]
- *                                                                   # 240px thumbnails + 6x6 contact sheets + index.html for owner review
- *   node scripts/activity-media.cjs derive M012,M146 [--start S --duration D] [--crop x:y:w:h] [--audio] [--force]
- *                                                                   # WEBP (long edge 1280, metadata stripped) or H.264 720p clip (≤30 s, no audio)
- *   node scripts/activity-media.cjs check                           # re-verify every record: file, sha256, size caps, metadata leaks, orphans
- *
- * Rules
- *   - assets/usermedia/ (originals, git-ignored) is read-only. Writes go to assets/local-review/, data/activity-media.json,
- *     .superpowers/ or the --out directory only (assertWritable enforces this).
- *   - M-ids are frozen: an id is the 1-based position of the file in the code-point-sorted list of usermedia paths at the
- *     time the catalog was first built. derive refuses to run when a record's sourceSha256 no longer matches its id.
- *   - New records start as approval:"draft" with TODO captions; scripts/profile-home.cjs only publishes approved records.
- *   - Live Photo motion clips (a ≤4 s .mp4 next to a same-named .heic) are never derived; the HEIC still is the photo.
+ * Private production: PORTFOLIO_PRIVATE_ROOT holds originals/, derived/, scratch/,
+ * activity-media.private.json and activity-media-ids.json. Never writes originals.
+ * catalog, sheet, derive only write there; promote M### alone publishes approved
+ * bytes and schema 2 records. check works without sources; check --sources requires them.
+ * No command commits or pushes. Requires ffmpeg/ffprobe for media production/checks.
  */
 'use strict';
 
@@ -26,12 +15,33 @@ const crypto = require('node:crypto');
 const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const USERMEDIA_DIR = path.join(root, 'assets', 'usermedia');
-const DERIVED_DIR = path.join(root, 'assets', 'local-review');
-const DATA_FILE = path.join(root, 'data', 'activity-media.json');
-const SCRATCH_DIR = path.join(root, '.superpowers');
-const CATALOG_FILE = path.join(SCRATCH_DIR, 'activity-media-catalog.json');
-const IDS_FILE = path.join(root, 'data', 'activity-media-ids.json');
+const { within, privateRoot, privateFixture } = require('./private-paths.cjs');
+const { publicRecord, publicSchemaErrors } = require('./activity-media-schema.cjs');
+// Resolve configuration lazily: source-free validation must never require private files.
+const configured = process.env.PORTFOLIO_PRIVATE_ROOT;
+const PRIVATE_ROOT = configured ? path.resolve(configured) : null;
+const privatePath = name => PRIVATE_ROOT ? path.join(PRIVATE_ROOT, name) : null;
+const USERMEDIA_DIR = privatePath('originals');
+const DERIVED_DIR = privatePath('derived');
+const DATA_FILE = privatePath('activity-media.private.json');
+const SCRATCH_DIR = privatePath('scratch');
+const CATALOG_FILE = privatePath('scratch/activity-media-catalog.json');
+const IDS_FILE = privatePath('activity-media-ids.json');
+const PUBLIC_DATA_FILE = path.join(root, 'data/activity-media.json');
+const PUBLIC_DERIVED_DIR = path.join(root, 'assets/local-review');
+function requirePrivate() { return privateRoot(root); }
+function sourceFile(relative) {
+  requirePrivate();
+  if (typeof relative !== 'string' || path.isAbsolute(relative)) throw new Error('invalid private source path');
+  const file = path.resolve(USERMEDIA_DIR, relative);
+  if (!within(file, USERMEDIA_DIR)) throw new Error('source path escapes private originals');
+  return file;
+}
+function derivativeFile(relative) {
+  requirePrivate();
+  if (!/^assets\/local-review\/M\d{3,}(?:-poster)?\.(?:webp|jpg|mp4)$/.test(relative || '')) throw new Error('invalid derivative path');
+  return assertWritable(path.join(DERIVED_DIR, path.basename(relative)));
+}
 const PUBLIC_PREFIX = 'assets/local-review/';
 
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.heic', '.heif', '.webp']);
@@ -67,6 +77,7 @@ function walk(dir, base, out) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const abs = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(abs, base, out);
+    else if (entry.isSymbolicLink()) throw new Error('source symlinks are not allowed');
     else out.push({ absPath: abs, relPath: path.relative(base, abs).split(path.sep).join('/') });
   }
 }
@@ -74,6 +85,7 @@ function walk(dir, base, out) {
 // Code-unit order equals code-point order for the BMP characters used in these paths; it matches the frozen ids.
 function listSources(dir = USERMEDIA_DIR) {
   const files = [];
+  if (!dir || !fs.existsSync(dir)) throw new Error('private source directory is required');
   walk(dir, dir, files);
   files.sort((a, b) => (a.relPath < b.relPath ? -1 : a.relPath > b.relPath ? 1 : 0));
   return files.map((file, index) => ({
@@ -240,21 +252,20 @@ function sha256File(file) {
 
 // ---------------------------------------------------------------- write guard
 
-function within(target, dir) {
-  const norm = (value) => (process.platform === 'win32' ? path.resolve(value).toLowerCase() : path.resolve(value));
-  const t = norm(target), d = norm(dir);
-  return t === d || t.startsWith(d + path.sep);
-}
-
 function assertWritable(target) {
+  requirePrivate();
   const resolved = path.resolve(target);
-  if (within(resolved, USERMEDIA_DIR)) throw new Error(`refusing to write inside usermedia: ${resolved}`);
-  if (within(resolved, DATA_FILE) || within(resolved, IDS_FILE) || within(resolved, DERIVED_DIR) || within(resolved, SCRATCH_DIR) || (extraOutputDir && within(resolved, extraOutputDir))) return resolved;
-  throw new Error(`not an allowed output path: ${resolved}`);
+  if (within(resolved, USERMEDIA_DIR)) throw new Error('refusing to write inside private originals/usermedia');
+  if (within(resolved, root)) throw new Error('not an allowed output: public repository');
+  if (!within(resolved, PRIVATE_ROOT)) throw new Error('output escapes private storage');
+  if ([DATA_FILE, IDS_FILE].includes(resolved) || within(resolved, DERIVED_DIR) || within(resolved, SCRATCH_DIR) || (extraOutputDir && within(resolved, extraOutputDir))) return resolved;
+  throw new Error('not an allowed output path');
 }
-
 function setExtraOutputDir(dir) {
-  extraOutputDir = dir ? path.resolve(dir) : null;
+  requirePrivate();
+  const resolved = dir ? path.resolve(dir) : null;
+  if (resolved && (!within(resolved, PRIVATE_ROOT) || within(resolved, root) || within(resolved, USERMEDIA_DIR))) throw new Error('review output must stay in private storage outside originals and the public repository');
+  extraOutputDir = resolved;
 }
 
 // ---------------------------------------------------------------- ffmpeg
@@ -336,7 +347,10 @@ function isHeif(file) {
 // Tiled iPhone HEIC is assembled by an implicit complex filtergraph, which cannot be combined with -vf.
 // Decode it to a temporary PNG first (default mapping = full grid, orientation applied), then filter that.
 function decodeHeifToPng(src) {
-  const tmp = path.join(os.tmpdir(), `activity-media-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.png`);
+  requirePrivate();
+  assertWritable(SCRATCH_DIR);
+  fs.mkdirSync(SCRATCH_DIR, { recursive: true });
+  const tmp = assertWritable(path.join(SCRATCH_DIR, `activity-media-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.png`));
   run('ffmpeg', ['-v', 'error', '-y', '-i', src, '-frames:v', '1', '-map_metadata', '-1', tmp]);
   return tmp;
 }
@@ -385,8 +399,10 @@ function convertVideo({ src, out, poster, start = 0, duration, audio = false, al
 
 // ---------------------------------------------------------------- catalog / data helpers
 
-function readData() {
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+function readData() { return JSON.parse(fs.readFileSync(PUBLIC_DATA_FILE, 'utf8')); }
+function readPrivateData() {
+  requirePrivate();
+  return fs.existsSync(DATA_FILE) ? JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')) : { schema: 1, media: {} };
 }
 
 function writeData(json) {
@@ -397,6 +413,7 @@ function writeData(json) {
 }
 
 function buildCatalog() {
+  requirePrivate();
   const hashed = listSources().map((item) => ({ ...item, sha256: sha256File(item.absPath) }));
   const frozen = assignFrozenIds(hashed, readFrozenIds());
   if (Object.keys(frozen.ids).length !== Object.keys(readFrozenIds()).length) {
@@ -432,6 +449,7 @@ function buildCatalog() {
 }
 
 function loadCatalog({ rebuild = false } = {}) {
+  requirePrivate();
   if (!rebuild && fs.existsSync(CATALOG_FILE)) return JSON.parse(fs.readFileSync(CATALOG_FILE, 'utf8'));
   const catalog = buildCatalog();
   assertWritable(CATALOG_FILE);
@@ -485,7 +503,7 @@ function commandSheet(args) {
   let font = null;
   for (const candidate of ['C:/Windows/Fonts/arial.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf']) {
     if (fs.existsSync(candidate)) {
-      fs.copyFileSync(candidate, path.join(thumbsDir, 'label.ttf'));
+      fs.copyFileSync(candidate, assertWritable(path.join(thumbsDir, 'label.ttf')));
       font = path.relative(root, path.join(thumbsDir, 'label.ttf')).split(path.sep).join('/');
       break;
     }
@@ -494,8 +512,8 @@ function commandSheet(args) {
   for (const id of ids) {
     const item = byId.get(id);
     if (!item || item.kind === 'other' || item.livePhotoMotion) continue;
-    const src = path.join(USERMEDIA_DIR, item.relPath);
-    const thumb = path.join(thumbsDir, `${id}.png`);
+    const src = sourceFile(item.relPath);
+    const thumb = assertWritable(path.join(thumbsDir, `${id}.png`));
     if (!fs.existsSync(thumb)) {
       const label = font ? `,drawtext=fontfile=${font}:text='${escapeDrawtext(id)}':x=6:y=h-th-6:fontsize=22:fontcolor=white:box=1:boxcolor=black@0.6:boxborderw=4` : '';
       const vf = `scale=240:240:force_original_aspect_ratio=decrease,pad=240:240:(ow-iw)/2:(oh-ih)/2:color=white${label}`;
@@ -518,13 +536,13 @@ function commandSheet(args) {
   const sheets = [];
   for (let offset = 0; offset < usable.length; offset += 36) {
     const batch = usable.slice(offset, offset + 36);
-    const seqDir = path.join(thumbsDir, `seq-${sheets.length + 1}`);
+    const seqDir = assertWritable(path.join(thumbsDir, `seq-${sheets.length + 1}`));
     fs.rmSync(seqDir, { recursive: true, force: true });
     fs.mkdirSync(seqDir, { recursive: true });
     batch.forEach((item, i) => fs.copyFileSync(path.join(thumbsDir, `${item.id}.png`), path.join(seqDir, `${String(i + 1).padStart(3, '0')}.png`)));
     const columns = Math.min(6, batch.length);
     const rows = Math.ceil(batch.length / columns);
-    const sheet = path.join(outDir, `sheet-${String(sheets.length + 1).padStart(2, '0')}.png`);
+    const sheet = assertWritable(path.join(outDir, `sheet-${String(sheets.length + 1).padStart(2, '0')}.png`));
     run('ffmpeg', ['-v', 'error', '-y', '-framerate', '1', '-i', path.join(seqDir, '%03d.png'), '-vf', `tile=${columns}x${rows}:padding=6:margin=6:color=white`, '-frames:v', '1', sheet]);
     fs.rmSync(seqDir, { recursive: true, force: true });
     sheets.push({ file: path.basename(sheet), items: batch });
@@ -539,7 +557,7 @@ function commandSheet(args) {
     html.push('</table>');
   });
   html.push('</body></html>');
-  const index = path.join(outDir, 'index.html');
+  const index = assertWritable(path.join(outDir, 'index.html'));
   fs.writeFileSync(index, html.join('\n'));
   console.log(`${usable.length} thumbnails, ${sheets.length} sheet(s) → ${index}`);
 }
@@ -550,17 +568,19 @@ function parseFlag(args, name, fallback = null) {
 }
 
 function commandDerive(args) {
+  requirePrivate();
   const selection = args.filter((a) => !a.startsWith('--') && !/^\d+(\.\d+)?$/.test(a) && !/^\d+:\d+:\d+:\d+$/.test(a)).join(',');
   if (!selection) throw new Error('derive needs at least one M-id');
   const start = Number(parseFlag(args, '--start', 0));
   const durationFlag = parseFlag(args, '--duration', null);
   const duration = durationFlag != null ? Number(durationFlag) : null;
   const crop = parseFlag(args, '--crop', null);
-  const audio = args.includes('--audio');
+  if (args.includes('--audio')) throw new Error('public activity derivatives must not contain audio');
+  const audio = false;
   const force = args.includes('--force');
   const catalog = loadCatalog();
   const byId = new Map(catalog.items.map((item) => [item.id, item]));
-  const data = readData();
+  const data = readPrivateData();
   const ids = parseIdSelection(selection, catalog);
   const summary = [];
   for (const id of ids) {
@@ -568,14 +588,15 @@ function commandDerive(args) {
     if (!item) throw new Error(`${id}: not in the catalog (run catalog first)`);
     if (item.kind === 'other') throw new Error(`${id}: unsupported file type ${item.relPath}`);
     if (item.livePhotoMotion) throw new Error(`${id}: ${item.relPath} is a Live Photo motion clip; derive its HEIC still instead`);
-    const src = path.join(USERMEDIA_DIR, item.relPath);
-    const sourceSha = item.sha256 || sha256File(src);
+    const src = sourceFile(item.relPath);
+    const sourceSha = sha256File(src);
+    if (sourceSha !== item.sha256 || readFrozenIds()[sourceSha] !== id) throw new Error(`${id}: source hash or frozen M-id drift`);
     const existing = data.media[id];
     if (existing && existing.sourceSha256 !== sourceSha) {
       throw new Error(`${id}: M-id drift — record sourceSha256 does not match ${item.relPath}; do not renumber, investigate usermedia changes`);
     }
-    if (existing && !force && fs.existsSync(path.join(root, existing.path))) {
-      const currentSha = sha256File(path.join(root, existing.path));
+    if (existing && !force && fs.existsSync(derivativeFile(existing.path))) {
+      const currentSha = sha256File(derivativeFile(existing.path));
       if (currentSha === existing.derivativeSha256) { summary.push(`${id}: unchanged (use --force to rebuild)`); continue; }
     }
     const record = existing || {
@@ -585,21 +606,22 @@ function commandDerive(args) {
       translations: { ko: { caption: 'TODO: 캡션', alt: 'TODO: 대체 텍스트' }, en: { caption: 'TODO: caption', alt: 'TODO: alt text' } }
     };
     record.sourceSha256 = sourceSha;
+    record.approval = 'draft';
     if (item.kind === 'image') {
-      const result = convertImage({ src, out: path.join(root, record.path), crop });
+      const result = convertImage({ src, out: derivativeFile(record.path), crop });
       if (result.leaks.length) throw new Error(`${id}: metadata leak ${result.leaks.join(', ')}`);
       if (isHeif(src) && Math.max(result.width, result.height) < LIMITS.minDecodedEdge) throw new Error(`${id}: decoded HEIC is only ${result.width}x${result.height}; check the grid/stream selection`);
       if (result.bytes > LIMITS.maxImageBytes) throw new Error(`${id}: ${result.bytes} bytes exceeds the ${LIMITS.maxImageBytes}-byte image cap`);
-      Object.assign(record, { width: result.width, height: result.height, derivativeSha256: result.sha256 });
+      Object.assign(record, { width: result.width, height: result.height, derivativeSha256: result.sha256, bytes: result.bytes });
       if (crop) record.crop = crop; else delete record.crop;
       summary.push(`${id}: ${record.path} ${result.width}x${result.height} ${(result.bytes / 1024).toFixed(0)} KB`);
     } else {
       record.poster = `${PUBLIC_PREFIX}${id}-poster.jpg`;
-      const result = convertVideo({ src, out: path.join(root, record.path), poster: path.join(root, record.poster), start, duration, audio });
+      const result = convertVideo({ src, out: derivativeFile(record.path), poster: derivativeFile(record.poster), start, duration, audio });
       if (result.leaks.length) throw new Error(`${id}: metadata leak ${result.leaks.join(', ')}`);
       if (result.bytes > LIMITS.maxVideoBytes) throw new Error(`${id}: ${result.bytes} bytes exceeds the ${LIMITS.maxVideoBytes}-byte video cap; shorten --duration`);
       if (result.posterBytes > LIMITS.maxPosterBytes) throw new Error(`${id}: poster ${result.posterBytes} bytes exceeds the cap`);
-      Object.assign(record, { width: result.width, height: result.height, derivativeSha256: result.sha256, clip: { start, duration: result.duration } });
+      Object.assign(record, { width: result.width, height: result.height, derivativeSha256: result.sha256, bytes: result.bytes, duration: result.duration, posterBytes: result.posterBytes, posterSha256: sha256File(derivativeFile(record.poster)), clip: { start, duration: result.duration } });
       if (audio) record.audio = true; else delete record.audio;
       summary.push(`${id}: ${record.path} ${result.width}x${result.height} ${result.duration}s ${(result.bytes / 1024 / 1024).toFixed(2)} MB`);
     }
@@ -607,81 +629,134 @@ function commandDerive(args) {
   }
   writeData(data);
   summary.forEach((line) => console.log(line));
-  console.log('\nRecords written. Fill captions/alt (ko/en), set eventIds/order, then approval:"approved-public" and run node scripts/public-cv-summary.cjs --write');
+  console.log('\nPrivate records written. Review captions/alt (ko/en), eventIds/order/date and approval:"approved-public", then run promote M### and public-cv-summary.cjs --write.');
 }
 
-function checkRecords(data = readData(), { verifySources = false } = {}) {
+function sourceErrors(publicData) {
   const errors = [];
+  try {
+    requirePrivate();
+    if (!fs.existsSync(DATA_FILE) || !fs.existsSync(IDS_FILE)) throw new Error('private source ledger and frozen M-ID map are required');
+    const privateData = readPrivateData(), frozen = readFrozenIds();
+    if (!Object.keys(frozen).length || new Set(Object.values(frozen)).size !== Object.keys(frozen).length) throw new Error('private M-ID ledger is empty or ambiguous');
+    const found = new Set();
+    for (const item of listSources()) {
+      const hash = sha256File(sourceFile(item.relPath));
+      if (!frozen[hash]) errors.push('private original is not in the frozen source ledger');
+      found.add(hash);
+    }
+    for (const hash of Object.keys(frozen)) if (!found.has(hash)) errors.push(`private source missing or changed for ${frozen[hash]}`);
+    for (const id of Object.keys(publicData.media)) {
+      const record = privateData.media[id];
+      if (!record || frozen[record.sourceSha256] !== id) { errors.push(`${id}: private source mapping missing or mismatched`); continue; }
+      if (sha256File(sourceFile(record.sourcePath)) !== record.sourceSha256) errors.push(`${id}: private source hash mismatch`);
+    }
+  } catch (error) { errors.push(`private source verification failed: ${error.message}`); }
+  return errors;
+}
+
+function checkRecords(data = readData(), { verifySources = false, overrides = new Map() } = {}) {
+  const errors = publicSchemaErrors(data);
+  if (errors.length) return { errors, totalBytes: 0, count: Object.keys(data?.media || {}).length };
   let total = 0;
   const referenced = new Set();
+  const publicFile = relative => {
+    const target = overrides.get(relative) || path.join(root, relative);
+    if (!overrides.has(relative) && !within(target, PUBLIC_DERIVED_DIR)) throw new Error('public media path escapes derivative directory');
+    return target;
+  };
   for (const [id, record] of Object.entries(data.media)) {
-    const label = `${id}`;
-    const derived = path.join(root, record.path);
-    if (!fs.existsSync(derived)) { errors.push(`${label}: missing ${record.path}`); continue; }
-    const buf = fs.readFileSync(derived);
-    total += buf.length;
-    referenced.add(path.basename(record.path));
-    if (sha256(buf) !== record.derivativeSha256) errors.push(`${label}: derivativeSha256 mismatch`);
-    if (record.type === 'image') {
-      const size = webpSize(buf);
-      if (!size) errors.push(`${label}: not a readable WEBP`);
-      else {
-        if (size.width !== record.width || size.height !== record.height) errors.push(`${label}: recorded ${record.width}x${record.height}, file is ${size.width}x${size.height}`);
-        if (Math.max(size.width, size.height) > 1600) errors.push(`${label}: long edge ${Math.max(size.width, size.height)} exceeds 1600`);
+    try {
+      const file = publicFile(record.path), buf = fs.readFileSync(file);
+      total += buf.length; referenced.add(path.basename(record.path));
+      if (sha256(buf) !== record.derivativeSha256 || buf.length !== record.bytes) errors.push(`${id}: derivative hash/bytes mismatch`);
+      if (record.type === 'image') {
+        const size = webpSize(buf);
+        if (!size || size.width !== record.width || size.height !== record.height || Math.max(size.width, size.height) > 1600) errors.push(`${id}: invalid WEBP dimensions`);
+        if (buf.length > LIMITS.maxImageBytes) errors.push(`${id}: image exceeds cap`);
+        errors.push(...metadataLeaks(buf, 'webp').map(leak => `${id}: ${leak}`));
+      } else {
+        if (buf.length > LIMITS.maxVideoBytes) errors.push(`${id}: video exceeds cap`);
+        errors.push(...metadataLeaks(buf, 'mp4').map(leak => `${id}: ${leak}`));
+        const info = JSON.parse(run('ffprobe', ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', file]));
+        const video = info.streams.find(stream => stream.codec_type === 'video');
+        if (!video || video.codec_name !== 'h264' || video.width !== record.width || video.height !== record.height || info.streams.some(stream => stream.codec_type === 'audio')) errors.push(`${id}: invalid video codec/dimensions or audio present`);
+        if (Math.abs(Number(info.format.duration) - record.duration) > 0.1) errors.push(`${id}: video duration mismatch`);
+        const poster = fs.readFileSync(publicFile(record.poster));
+        total += poster.length; referenced.add(path.basename(record.poster));
+        if (poster.length !== record.posterBytes || sha256(poster) !== record.posterSha256) errors.push(`${id}: poster hash/bytes mismatch`);
+        if (poster.length > LIMITS.maxPosterBytes || poster[0] !== 0xff || poster[1] !== 0xd8) errors.push(`${id}: invalid poster`);
+        errors.push(...metadataLeaks(poster, 'jpeg').map(leak => `${id}: poster ${leak}`));
       }
-      if (buf.length > LIMITS.maxImageBytes) errors.push(`${label}: ${buf.length} bytes exceeds the image cap`);
-      const leaks = metadataLeaks(buf, 'webp');
-      if (leaks.length) errors.push(`${label}: ${leaks.join(', ')}`);
-    } else {
-      if (buf.length > LIMITS.maxVideoBytes) errors.push(`${label}: ${buf.length} bytes exceeds the video cap`);
-      const leaks = metadataLeaks(buf, 'mp4');
-      if (leaks.length) errors.push(`${label}: ${leaks.join(', ')}`);
-      if (!record.poster) errors.push(`${label}: video without poster`);
-      else {
-        const posterFile = path.join(root, record.poster);
-        if (!fs.existsSync(posterFile)) errors.push(`${label}: missing poster ${record.poster}`);
-        else {
-          const poster = fs.readFileSync(posterFile);
-          total += poster.length;
-          referenced.add(path.basename(record.poster));
-          if (poster.length > LIMITS.maxPosterBytes) errors.push(`${label}: poster ${poster.length} bytes exceeds the cap`);
-          const posterLeaks = metadataLeaks(poster, 'jpeg');
-          if (posterLeaks.length) errors.push(`${label}: poster ${posterLeaks.join(', ')}`);
-        }
-      }
-    }
-    if (verifySources) {
-      const src = path.join(USERMEDIA_DIR, record.sourcePath);
-      if (!fs.existsSync(src)) errors.push(`${label}: source ${record.sourcePath} not found`);
-      else if (sha256File(src) !== record.sourceSha256) errors.push(`${label}: sourceSha256 mismatch for ${record.sourcePath}`);
-    }
+    } catch (error) { errors.push(`${id}: media verification failed: ${error.message}`); }
   }
-  for (const name of fs.readdirSync(DERIVED_DIR)) if (!referenced.has(name)) errors.push(`orphan derivative ${name}`);
-  if (total > LIMITS.maxTotalBytes) errors.push(`assets/local-review totals ${total} bytes, over the ${LIMITS.maxTotalBytes}-byte budget`);
+  if (fs.existsSync(PUBLIC_DERIVED_DIR)) for (const name of fs.readdirSync(PUBLIC_DERIVED_DIR)) if (!referenced.has(name)) errors.push(`orphan derivative ${name}`);
+  if (total > LIMITS.maxTotalBytes) errors.push('public activity media exceeds total byte budget');
+  if (verifySources) errors.push(...sourceErrors(data));
   return { errors, totalBytes: total, count: Object.keys(data.media).length };
 }
 
-function commandCheck(args) {
-  const result = checkRecords(readData(), { verifySources: args.includes('--sources') || fs.existsSync(USERMEDIA_DIR) });
-  console.log(`${result.count} records, ${(result.totalBytes / 1024 / 1024).toFixed(2)} MiB in assets/local-review`);
-  if (result.errors.length) { result.errors.forEach((e) => console.error(' - ' + e)); process.exitCode = 1; } else console.log('activity media check passed');
+function commandPromote(args) {
+  requirePrivate();
+  if (args.length !== 1 || !/^M\d{3,}(?:,M\d{3,})*$/.test(args[0])) throw new Error('promote requires explicit M-ids');
+  const fixture = privateFixture(root);
+  const privateData = readPrivateData(), proposed = readData();
+  const overrides = new Map();
+  for (const id of new Set(args[0].split(','))) {
+    const record = privateData.media[id];
+    if (!record || record.approval !== 'approved-public') throw new Error(`${id}: private record must be approved-public`);
+    const sourceHash = sha256File(sourceFile(record.sourcePath));
+    if (sourceHash !== record.sourceSha256 || readFrozenIds()[sourceHash] !== id) throw new Error(`${id}: private source hash or M-ID drift`);
+    const publicCopy = publicRecord(record);
+    const copy = JSON.stringify(publicCopy.translations).normalize('NFKC');
+    if (fixture.forbiddenPeople.some(name => copy.includes(name.normalize('NFKC'))) || /[가-힣]{2,4}\s?(?:님|씨|교수)(?![가-힣])/.test(copy)) throw new Error(`${id}: private person in public copy`);
+    proposed.media[id] = publicCopy;
+    for (const field of ['path', 'poster']) if (publicCopy[field]) overrides.set(publicCopy[field], derivativeFile(publicCopy[field]));
+  }
+  const profileErrors = require('./profile-home.cjs').activityMediaErrors(proposed);
+  const result = checkRecords(proposed, { overrides });
+  if (profileErrors.length || result.errors.length) throw new Error([...profileErrors, ...result.errors].join('\n'));
+  const updates = new Map([...overrides].map(([relative, file]) => [path.join(root, relative), fs.readFileSync(file)]));
+  updates.set(PUBLIC_DATA_FILE, Buffer.from(JSON.stringify({ schema: 2, media: Object.fromEntries(Object.entries(proposed.media).sort(([a], [b]) => a.localeCompare(b))) }, null, 2) + '\n'));
+  const backups = new Map(), temporaries = [];
+  try {
+    for (const [file, bytes] of updates) {
+      if (!within(file, root)) throw new Error('promotion target escapes repository');
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      backups.set(file, fs.existsSync(file) ? fs.readFileSync(file) : null);
+      const temp = file + `.promote-${process.pid}.tmp`;
+      fs.writeFileSync(temp, bytes, { flag: 'wx' }); temporaries.push(temp);
+    }
+    for (const file of updates.keys()) fs.renameSync(file + `.promote-${process.pid}.tmp`, file);
+  } catch (error) {
+    for (const [file, old] of backups) { if (old) fs.writeFileSync(file, old); else fs.rmSync(file, { force: true }); }
+    throw error;
+  } finally { for (const temp of temporaries) fs.rmSync(temp, { force: true }); }
+  console.log(`Promoted ${args[0]}. Run public-cv-summary.cjs --write and validation before committing.`);
 }
 
+function commandCheck(args) {
+  const result = checkRecords(readData(), { verifySources: args.includes('--sources') });
+  console.log(`${result.count} records, ${(result.totalBytes / 1024 / 1024).toFixed(2)} MiB in assets/local-review`);
+  if (result.errors.length) { result.errors.forEach(error => console.error(' - ' + error)); process.exitCode = 1; }
+  else console.log('activity media check passed');
+}
 function main(argv) {
   const [command, ...args] = argv;
   if (command === 'catalog') return commandCatalog(args);
   if (command === 'sheet') return commandSheet(args);
   if (command === 'derive') return commandDerive(args);
+  if (command === 'promote') return commandPromote(args);
   if (command === 'check') return commandCheck(args);
-  console.error('usage: node scripts/activity-media.cjs <catalog|sheet|derive|check> [...]');
+  console.error('usage: node scripts/activity-media.cjs <catalog|sheet|derive|promote|check> [...]');
   process.exitCode = 2;
 }
 
 module.exports = {
-  USERMEDIA_DIR, DERIVED_DIR, DATA_FILE, CATALOG_FILE, LIMITS,
+  USERMEDIA_DIR, DERIVED_DIR, DATA_FILE, CATALOG_FILE, SCRATCH_DIR, PUBLIC_DATA_FILE, LIMITS,
   IDS_FILE, mediaId, kindOf, listSources, assignFrozenIds, readFrozenIds, livePhotoPairs, jpegExifDate, dateFromName, webpSize, metadataLeaks, sha256, sha256File,
   assertWritable, setExtraOutputDir, ffmpegArgsForImage, ffmpegArgsForVideo, ffmpegArgsForPoster, convertImage, convertVideo,
-  buildCatalog, loadCatalog, parseIdSelection, checkRecords, readData, writeData, main
+  buildCatalog, loadCatalog, parseIdSelection, checkRecords, readData, readPrivateData, writeData, main
 };
 
 if (require.main === module) {

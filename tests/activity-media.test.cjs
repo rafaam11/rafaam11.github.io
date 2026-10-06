@@ -49,7 +49,7 @@ const portfolioData = require('../js/portfolio-data.js');
 
 test('activity media SSOT lives in data/activity-media.json and the public bundle carries only public fields', () => {
   const json = JSON.parse(read('data/activity-media.json'));
-  assert.equal(json.schema, 1);
+  assert.equal(json.schema, 2);
   const records = Object.values(json.media);
   assert.ok(records.length >= 12, 'records migrated');
   for (const record of records) {
@@ -60,8 +60,9 @@ test('activity media SSOT lives in data/activity-media.json and the public bundl
     assert.ok(Number.isInteger(record.order), `${record.id}: order`);
     assert.match(record.takenAt || '', /^\d{4}(-\d{2}){0,2}$/, `${record.id}: takenAt`);
     assert.ok(['approved-public', 'draft'].includes(record.approval), `${record.id}: approval`);
-    assert.match(record.sourceSha256, /^[0-9a-f]{64}$/, `${record.id}: source sha`);
-    if (record.type === 'video') assert.ok(record.poster && record.clip && Number.isFinite(record.clip.start) && Number.isFinite(record.clip.duration), `${record.id}: video poster and clip`);
+    assert.ok(!('sourceSha256' in record) && !('sourcePath' in record), `${record.id}: no source metadata`);
+    assert.match(record.derivativeSha256, /^[0-9a-f]{64}$/, `${record.id}: public derivative hash`);
+    if (record.type === 'video') assert.ok(record.poster && Number.isFinite(record.duration), `${record.id}: video poster and duration`);
   }
   assert.deepEqual(profileHome.activityMediaErrors(json, portfolioData.news), []);
   const broken = JSON.parse(JSON.stringify(json));

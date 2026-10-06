@@ -22,8 +22,8 @@ function localMediaSource(mediaJson) {
     '(function(r){const d=' + JSON.stringify({localOnly: false, media}, null, 2) + '; if(typeof module!=="undefined")module.exports=d;r.LocalMediaData=d;})(typeof globalThis!=="undefined"?globalThis:this);\n';
 }
 function activityMediaErrors(mediaJson = readActivityMedia(), news = data.news) {
-  const errors = [], newsIds = new Set(news.map(item => item.id));
-  if (!mediaJson || mediaJson.schema !== 1 || !mediaJson.media) return ['activity media: schema 1 with a media map is required'];
+  const errors = require('./activity-media-schema.cjs').publicSchemaErrors(mediaJson), newsIds = new Set(news.map(item => item.id));
+  if (!mediaJson || mediaJson.schema !== 2 || !mediaJson.media) return ['activity media: schema 2 with a media map is required'];
   for (const [key, record] of Object.entries(mediaJson.media)) {
     const label = 'activity media ' + key;
     if (record.id !== key) errors.push(label + ': id must match its key');
@@ -34,7 +34,7 @@ function activityMediaErrors(mediaJson = readActivityMedia(), news = data.news) 
     else for (const eventId of record.eventIds) if (!newsIds.has(eventId)) errors.push(label + ': unknown eventId ' + eventId);
     if (!Number.isInteger(record.order)) errors.push(label + ': order must be an integer');
     if (!Number.isInteger(record.width) || !Number.isInteger(record.height)) errors.push(label + ': width and height are required');
-    if (record.type === 'video' && (!record.poster || !record.clip)) errors.push(label + ': video needs poster and clip');
+    if (record.type === 'video' && (!record.poster || !record.duration)) errors.push(label + ': video needs poster and duration');
     for (const locale of ['ko', 'en']) for (const field of ['caption', 'alt']) {
       const text = record.translations?.[locale]?.[field];
       if (typeof text !== 'string' || !text.trim()) errors.push(label + ': ' + locale + ' ' + field + ' is required');

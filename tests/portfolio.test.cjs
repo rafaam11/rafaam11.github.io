@@ -5420,7 +5420,7 @@ test('Scholar highlights data mirrors the approved public CV signals', () => {
   assert.equal(data.highlights.patents.items.filter(item => item.status === 'registered').length, 3);
   assert.equal(data.highlights.patents.items.find(item => item.translations.ko.title === '일회용 종이컵 수거함').status, 'filed');
   assert.equal(data.highlights.awards.length, 9);
-  assert.doesNotMatch(JSON.stringify(data.highlights), /\b10-\d{4}-\d+\b|홍재성|Private Person 1|Private Person 2|Private Person 3/);
+  assert.doesNotMatch(JSON.stringify(data.highlights), /\b10-\d{4}-\d+\b|Example Private Person|Sample Colleague/);
 });
 
 test('Scholar CV refresh names the approved partners and products within the PDF line caps', () => {
