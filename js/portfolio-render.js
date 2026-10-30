@@ -52,6 +52,12 @@
   // Web-only 3D figure: { name, poster: 'assets/3d/<name>.webp', translations: { ko: { caption, alt }, en } }.
   var scene3dKeys = ['name', 'poster', 'translations'];
   var scene3dNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  // Web-only dense case copy (`web`): noun phrases within a per-line budget; PDFs keep the long fields.
+  var webCopyKeys = ['thesis', 'tags', 'brief', 'points', 'sections', 'sceneCaption'];
+  var webBriefKeys = ['problem', 'did', 'result', 'team'];
+  var webLineBudget = { ko: 38, en: 70 };
+  var webHeadlineBudget = { ko: 50, en: 90 };
+  var webSentenceEndingPattern = /(?:습니다|입니다|합니다|했다|한다|이다)\.?$/;
   var projectTranslationFields = [
     'title', 'shortTitle', 'eyebrow', 'thesis', 'summary', 'problem', 'role', 'teamResult',
     'evidence', 'limitation', 'collaboration', 'mediaAlt', 'mediaCaption'
@@ -73,7 +79,7 @@
       components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
       productHistory: '제품 명칭 안내', apiFlow: 'API 연결 흐름',
       publicResources: '공개 문서와 제품 정보', ownedRole: '내 역할', teamBoundary: '팀·협력자 경계', evidenceRefs: '연결 근거',
-      relatedProjects: '관련 프로젝트',
+      relatedProjects: '관련 프로젝트', brief: '요약', briefProblem: '문제', briefDid: '한 일', briefResult: '결과', team: '팀',
       contact: '연락처', publications: '논문', patents: '특허', awards: '수상',
       patentSummary: function (filed, registered) { return '출원 ' + filed + '건 · 등록 ' + registered + '건'; }
     },
@@ -83,7 +89,7 @@
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
       productHistory: 'Product naming note', apiFlow: 'API connection flow',
       publicResources: 'Public documentation and product information', ownedRole: 'My role', teamBoundary: 'Team and partner boundary', evidenceRefs: 'Linked evidence',
-      relatedProjects: 'Related projects',
+      relatedProjects: 'Related projects', brief: 'Summary', briefProblem: 'Problem', briefDid: 'What I did', briefResult: 'Result', team: 'Team',
       contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
       patentSummary: function (filed, registered) { return filed + ' filed · ' + registered + ' registered'; }
     }
@@ -149,6 +155,7 @@
     (project && project.applicationTracks || []).forEach(function (track) { surfaces.push(track && track.translations); });
     (project && project.publicResources || []).forEach(function (resource) { surfaces.push(resource && resource.translations); });
     if (project && project.scene3d) surfaces.push(project.scene3d.translations);
+    if (project && project.web) surfaces.push(project.web);
     (project && Array.isArray(project.storySections) ? project.storySections : []).forEach(function (section) {
       surfaces.push(section && section.translations, section && section.diagram && section.diagram.translations);
       (section && Array.isArray(section.media) ? section.media : []).forEach(function (item) {
@@ -763,6 +770,63 @@
     return errors.concat(translationErrors(scene, ['caption', 'alt'], label + ' scene3d'));
   }
 
+  function webErrors(project, slug) {
+    var web = project.web;
+    var label = slug + ' web';
+    if (!web || typeof web !== 'object' || Array.isArray(web)) return [label + ': must be an object.'];
+    var errors = [];
+    if (JSON.stringify(Object.keys(web).sort()) !== JSON.stringify(['en', 'ko'])) errors.push(label + ': must contain exactly ko and en.');
+    var storyKeys = (Array.isArray(project.storySections) ? project.storySections : []).map(function (section) { return section && section.key; });
+    ['ko', 'en'].forEach(function (locale) {
+      var copy = web[locale];
+      var where = label + ' ' + locale;
+      if (!copy || typeof copy !== 'object' || Array.isArray(copy)) { errors.push(where + ': must be an object.'); return; }
+      if (Object.keys(copy).some(function (key) { return webCopyKeys.indexOf(key) === -1; })) errors.push(where + ': allows only ' + webCopyKeys.join(', ') + '.');
+      function line(value, name, budget) {
+        if (typeof value !== 'string' || !value.trim()) { errors.push(where + ' ' + name + ': lines must be non-empty strings.'); return; }
+        if (Array.from(value).length > budget) errors.push(where + ' ' + name + ': "' + value + '" exceeds ' + budget + ' characters.');
+        if (/\.$/.test(value.trim()) || (locale === 'ko' && webSentenceEndingPattern.test(value.trim()))) {
+          errors.push(where + ' ' + name + ': "' + value + '" must be a noun phrase, not a sentence.');
+        }
+      }
+      function lines(value, name, min, max) {
+        if (!Array.isArray(value) || value.length < min || value.length > max) { errors.push(where + ' ' + name + ': needs ' + min + '–' + max + ' lines.'); return; }
+        value.forEach(function (item) { line(item, name, webLineBudget[locale]); });
+      }
+      if (copy.thesis !== undefined) line(copy.thesis, 'thesis', webHeadlineBudget[locale]);
+      if (copy.sceneCaption !== undefined) line(copy.sceneCaption, 'sceneCaption', webHeadlineBudget[locale]);
+      lines(copy.tags, 'tags', 3, 6);
+      var brief = copy.brief;
+      if (!brief || typeof brief !== 'object' || Array.isArray(brief)) {
+        errors.push(where + ' brief: must be an object.');
+      } else {
+        if (Object.keys(brief).some(function (key) { return webBriefKeys.indexOf(key) === -1; })) errors.push(where + ' brief: allows only ' + webBriefKeys.join(', ') + '.');
+        ['problem', 'did', 'result'].forEach(function (key) { lines(brief[key], 'brief.' + key, 1, 3); });
+        if (brief.team !== undefined) lines(brief.team, 'brief.team', 0, 3);
+      }
+      if (copy.points !== undefined) lines(copy.points, 'points', 3, 6);
+      if (copy.sections !== undefined) {
+        if (!copy.sections || typeof copy.sections !== 'object' || Array.isArray(copy.sections)) {
+          errors.push(where + ' sections: must be an object.');
+        } else {
+          Object.keys(copy.sections).forEach(function (key) {
+            if (storyKeys.indexOf(key) === -1) errors.push(where + ' sections: unknown story section ' + key + '.');
+            var section = copy.sections[key];
+            if (!section || typeof section !== 'object' || Array.isArray(section) || JSON.stringify(Object.keys(section)) !== JSON.stringify(['items'])) {
+              errors.push(where + ' sections.' + key + ': must contain only items.');
+            } else {
+              lines(section.items, 'sections.' + key, 1, 8);
+            }
+          });
+        }
+      }
+    });
+    var text = decodedPublicCopy(collectStrings(web, []).join('\n'));
+    if (policy.contributionPercentagePattern.test(text)) errors.push(label + ': contains a contribution percentage.');
+    if (policy.prohibitedPartnerPattern.test(text)) errors.push(label + ': contains a nonpublic partner name.');
+    return errors;
+  }
+
   function validatePortfolioData(data) {
     var errors = [];
     if (!data || typeof data !== 'object') return ['Portfolio data must be an object.'];
@@ -1011,6 +1075,7 @@
             seenSceneNames.push(project.scene3d.name);
           }
         }
+        if (project.web !== undefined) errors = errors.concat(webErrors(project, slug));
         if (slug === 'ai-build-lab') {
           if (!Array.isArray(project.subcases) || project.subcases.length !== aiBuildLabSubcaseKeys.length) {
             errors.push(slug + ': must contain exactly ' + aiBuildLabSubcaseKeys.length + ' subcases.');
@@ -1103,7 +1168,7 @@
   }
 
   // Numbered 3D figure: the captured poster stays until js/scene3d.js mounts WebGL into .view3d.
-  function scene3dFigureHtml(scene, locale, base, figureNumber) {
+  function scene3dFigureHtml(scene, locale, base, figureNumber, captionOverride) {
     if (!scene || typeof scene !== 'object' || typeof scene.name !== 'string' || !scene3dNamePattern.test(scene.name) ||
         scene.poster !== 'assets/3d/' + scene.name + '.webp' || !isSafePublicPath(scene.poster)) return '';
     var normalized = localeOf(locale);
@@ -1111,7 +1176,7 @@
     if (!sceneCopy.caption || !sceneCopy.alt) return '';
     var visual = '<div class="view3d" data-scene="' + escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) +
       '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000" loading="lazy" decoding="async"></div>';
-    return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
+    return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', captionOverride || sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
   }
 
   // Home intro 3D figure: unnumbered, in the intro's side column. Its portrait poster (640×800) is above the
@@ -1244,11 +1309,38 @@
       escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
   }
 
+  function pointsHtml(items) {
+    return Array.isArray(items) && items.length
+      ? '<ul class="sc-points">' + items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>'
+      : '';
+  }
+
+  function webTagsHtml(tags) {
+    return Array.isArray(tags) && tags.length
+      ? '<ul class="sc-tags">' + tags.map(function (tag) { return '<li class="sc-tag">' + escapeHtml(tag) + '</li>'; }).join('') + '</ul>'
+      : '';
+  }
+
+  // Problem / What I did / Result grid; team lines close the result cell behind a small Team tag.
+  function webBriefHtml(webCopy, locale) {
+    var copy = pageCopy[localeOf(locale)];
+    var brief = webCopy.brief || {};
+    function cell(label, items, team) {
+      var rows = (items || []).map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).concat((team || []).map(function (item) {
+        return '<li><span class="sc-tag sc-tag--team">' + escapeHtml(copy.team) + '</span> ' + escapeHtml(item) + '</li>';
+      }));
+      return '<div class="sc-brief__cell"><p class="sc-brief__label">' + escapeHtml(label) + '</p><ul>' + rows.join('') + '</ul></div>';
+    }
+    return '<section class="sc-brief" aria-label="' + escapeHtml(copy.brief) + '">' + cell(copy.briefProblem, brief.problem) +
+      cell(copy.briefDid, brief.did) + cell(copy.briefResult, brief.result, brief.team) + '</section>';
+  }
+
   function storyPlacement(section) {
     return section && section.placement ? section.placement : 'before-standard';
   }
 
-  function storySectionsHtml(project, locale, base, firstFigureNumber, placement) {
+  // webSections (dense case pages): drop each section body and use its web one-line items when provided.
+  function storySectionsHtml(project, locale, base, firstFigureNumber, placement, webSections) {
     var normalized = localeOf(locale);
     var figureNumber = firstFigureNumber;
     var requestedPlacement = storyPlacements.includes(placement) ? placement : 'before-standard';
@@ -1259,8 +1351,13 @@
     var sections = matchingSections.map(function (section) {
       var sectionCopy = translation(section, normalized);
       var copyHtml = '<div class="sc-story__copy"><h2>' + escapeHtml(sectionCopy.heading) + '</h2>';
-      if (typeof sectionCopy.body === 'string' && sectionCopy.body) copyHtml += '<p>' + escapeHtml(sectionCopy.body) + '</p>';
-      if (Array.isArray(sectionCopy.items) && sectionCopy.items.length) {
+      var webItems = webSections && webSections[section.key] && webSections[section.key].items;
+      if (webItems) {
+        copyHtml += pointsHtml(webItems);
+      } else if (!webSections && typeof sectionCopy.body === 'string' && sectionCopy.body) {
+        copyHtml += '<p>' + escapeHtml(sectionCopy.body) + '</p>';
+      }
+      if (!webItems && Array.isArray(sectionCopy.items) && sectionCopy.items.length) {
         copyHtml += '<ul class="sc-story__list">' + sectionCopy.items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>';
       }
       copyHtml += '</div>';
@@ -1558,12 +1655,33 @@
     // Product-console cases have no lead: the 3D figure is Figure 1 after the product history and the media figures
     // (and their "Figure N" evidence links) shift by one.
     var isConsole = Boolean(sourceProject && sourceProject.caseLayout === 'product-console');
-    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole ? 1 : (lead ? 2 : 1)) : '';
+    // Dense layout: cases with web-only condensed copy (`web`) replace the long prose sections; product-console stays as is.
+    var webCopy = !isConsole && sourceProject && sourceProject.web ? sourceProject.web[normalized] : null;
+    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption) : '';
     var afterSceneFigure = (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
       '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
       '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
     var hasStory = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
+    var links = '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
+      ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>';
+    if (webCopy) {
+      var denseHeader = '<header class="sc-case__header"><h1>' + title + '</h1>' +
+        '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span></p>' +
+        webTagsHtml(webCopy.tags) + '<p class="sc-case__thesis">' + escapeHtml(webCopy.thesis || project.thesis) + '</p></header>';
+      var denseOpen = '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + denseHeader + webBriefHtml(webCopy, normalized) + lead;
+      var denseClose = relatedProjectsHtml(data, sourceProject, normalized, base, isFile) + links + '</article>';
+      if (hasStory) {
+        var webSections = webCopy.sections || {};
+        var overview = sceneFigure ? '<section class="sc-case__section"><h2>' + escapeHtml(copy.projectOverview) + '</h2>' + sceneFigure + '</section>' : '';
+        return denseOpen + overview +
+          storySectionsHtml(sourceProject, normalized, base, afterSceneFigure, 'before-standard', webSections) +
+          storySectionsHtml(sourceProject, normalized, base, afterSceneFigure + storyFigureCount(sourceProject, 'before-standard'), 'after-standard', webSections) +
+          denseClose;
+      }
+      return denseOpen + '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2>' + sceneFigure + pointsHtml(webCopy.points) + '</section>' +
+        caseGalleryHtml(project, normalized, base, afterSceneFigure) + subcasesHtml(project, normalized) + denseClose;
+    }
     var redundantLimitBlockKeys = {
       'mandibular-fracture': 'research-boundary',
       'rtms-navigation': 'clinical-product-boundary',
@@ -1606,8 +1724,6 @@
     var roleSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.personalRole) + '</h2>' + roleLabel + '<p>' + escapeHtml(project.role) + '</p></section>';
     var evidenceSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.results) + '</h2><p>' + escapeHtml(project.evidence) + '</p>' + blocksOfType(['evidence']) + '</section>';
     var limitSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.limits) + '</h2><p>' + escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p>' + blocksOfType(['limitation']) + '</section>';
-    var links = '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
-      ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>';
     if (hasStory) {
       var firstStoryFigure = afterSceneFigure;
       var projectOverviewSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.projectOverview) + '</h2><p>' +

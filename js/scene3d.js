@@ -212,7 +212,7 @@
         for (let i = 0; i < 8; i++) P.push(new THREE.Vector3(i & 1 ? B.max.x : B.min.x, i & 2 ? B.max.y : B.min.y, i & 4 ? B.max.z : B.min.z));
         fillK = fillK || (opts.fit && opts.fit.fill) || 0.9;
         const pad = (opts.fit && opts.fit.pad) || [0, 0, 0, 0];   // extra px reserved [top, right, bottom, left]
-        // narrow figures also keep the top row free for the reset button (captures hide it)
+        // narrow figures also keep the top row free for the drag hint and reset button (captures hide them)
         const bot = (readout ? 34 : 8) + pad[2], top = 8 + pad[0] + (W < 520 && !capture ? 24 : 0);
         const AX0 = (-1 + 2 * (8 + pad[3]) / W) * fillK, AX1 = (1 - 2 * (8 + pad[1]) / W) * fillK;
         const AY0 = (-1 + 2 * bot / H) * fillK, AY1 = (1 - 2 * top / H) * fillK;
@@ -355,6 +355,14 @@
       reset.textContent = t({ ko: '원위치', en: 'Reset view' });
       on(reset, 'click', goHome);
       box.appendChild(reset); generated.push(reset);
+      // one quiet drag hint per figure (captions no longer repeat it); captures leave it out
+      let hint = null;
+      if (!capture) {
+        hint = doc.createElement('span');
+        hint.className = 'view3d__hint'; hint.setAttribute('aria-hidden', 'true');
+        hint.textContent = t({ ko: '드래그로 회전', en: 'Drag to rotate' });
+        box.appendChild(hint); generated.push(hint);
+      }
 
       // ---- labels: .lb[data-at="x,y,z"] pins to a scene point; .lb[data-obj] follows api.anchors[name]
       // (+ optional data-off). DOM order = priority. data-ph="0 2" = shown only while box.dataset.ph is 0 or 2.
@@ -388,7 +396,7 @@
           cand.push({ ax: (v.x + 1) / 2 * W, ay: (1 - v.y) / 2 * H, w: l.el.offsetWidth, h: l.el.offsetHeight, prev: l.slot });
           vis.push(l);
         });
-        const obs = [obstacle(readout), obstacle(reset), obstacle(box.querySelector('.cap3')), obstacle(box.querySelector('.inset3d'))].filter(Boolean);
+        const obs = [obstacle(readout), obstacle(reset), obstacle(hint), obstacle(box.querySelector('.cap3')), obstacle(box.querySelector('.inset3d'))].filter(Boolean);
         Layout.labels(cand, W, H, obs).forEach((p, i) => {
           const l = vis[i], el = l.el, a = cand[i];
           l.slot = p.slot;

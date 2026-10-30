@@ -1055,6 +1055,7 @@ function projectPublicText(project) {
   }
   surfaces.push(project?.pdfSequence?.diagram?.translations);
   surfaces.push(project?.scene3d?.translations);
+  surfaces.push(project?.web);
   let text = collectPublicStrings(surfaces).join('\n');
   for (let index = 0; index < 6; index += 1) {
     const next = decodeHtmlReferenceEntities(text);
@@ -1101,6 +1102,17 @@ function portfolioDataErrors(candidate) {
   const errors = render.validatePortfolioData(candidate).slice();
   errors.push(...portfolioPublicTextErrors(candidate));
   for (const project of candidate?.projects || []) {
+    // Web-only dense copy gets the same contribution and partner scans as the rendered pages.
+    if (project?.web) {
+      let webText = collectPublicStrings([project.web]).join('\n');
+      for (let index = 0; index < 6; index += 1) {
+        const next = decodeHtmlReferenceEntities(webText);
+        if (next === webText) break;
+        webText = next;
+      }
+      if (contributionPattern.test(webText)) errors.push(`${project.slug || 'unknown-project'} web: contains a contribution percentage.`);
+      if (privatePartnerPattern.test(webText)) errors.push(`${project.slug || 'unknown-project'} web: contains a nonpublic partner or company-project name.`);
+    }
     for (const [index, link] of (Array.isArray(project?.links) ? project.links : []).entries()) {
       if (!link || typeof link.href !== 'string') continue;
       for (const error of publicEvidenceUrlErrors(link.href)) {

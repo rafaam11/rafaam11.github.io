@@ -1967,7 +1967,8 @@ test('SMCNavi canonical case carries the approved title, workflows, ownership, t
   assert.doesNotMatch(publicCaseCopy, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|digitrack-inc|특허출원|patent application/i);
 });
 
-test('SMCNavi bilingual long-form renders approved workflows, organisations, media, and ten figures', () => {
+test('SMCNavi bilingual dense page renders approved workflows, organisations, media, and eleven figures', () => {
+  // Dense page: the workflow list comes from the web-only one-line items; the role label stays in the PDF.
   const expectations = {
     ko: {
       base: '../../',
@@ -1988,12 +1989,12 @@ test('SMCNavi bilingual long-form renders approved workflows, organisations, med
     en: {
       base: '../../../',
       workflows: [
-        'Maxillary tumour-removal navigation',
-        'Mandibular tumour-removal navigation',
-        'Bimaxillary-surgery navigation',
-        'Mandibular-motion tracking',
-        'Bone-graft placement',
-        'Zygomatic-orbital fracture mirroring'
+        'Maxillary tumour resection navigation',
+        'Mandibular tumour resection navigation',
+        'Orthognathic surgery navigation',
+        'Mandibular motion tracking',
+        'Bone-graft positioning',
+        'Zygomatic and orbital fracture mirroring'
       ],
       organisations: ['DIGITRACK', 'Samsung Medical Center'],
       roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
@@ -2005,9 +2006,9 @@ test('SMCNavi bilingual long-form renders approved workflows, organisations, med
 
   for (const [locale, expected] of Object.entries(expectations)) {
     const html = render.caseStudyHtml(data, 'surgical-navigation', expected.base, false, locale);
-    for (const workflow of expected.workflows) assert.match(html, new RegExp(workflow));
+    for (const workflow of expected.workflows) assert.ok(html.includes(`<li>${workflow}</li>`), `${locale}: ${workflow}`);
     for (const organisation of expected.organisations) assert.match(html, new RegExp(organisation));
-    assert.match(html, new RegExp(expected.roleLabel));
+    assert.doesNotMatch(html, new RegExp(expected.roleLabel), `${locale}: the role label is PDF-only on the dense page`);
     assert.match(html, new RegExp(expected.prototype));
     assert.match(html, /surgical-navigation-hololens-demo-01\.mp4/);
     assert.match(html, /surgical-navigation-smcnavi-features-01\.mp4/);
@@ -2019,33 +2020,24 @@ test('SMCNavi bilingual long-form renders approved workflows, organisations, med
   }
 });
 
-test('SMCNavi story case renders the localized canonical summary in Project overview before story and My role', () => {
+test('SMCNavi dense story case opens with the brief and a figure-only Project overview before the story', () => {
   const expectations = {
-    ko: {
-      base: '../../',
-      overview: '<h2>프로젝트 개요</h2><p>DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 맞춤형 3D Slicer 수술내비게이션 플랫폼과 별도 HoloLens 공간 인터페이스 확장입니다.</p>',
-      role: '<h2>내 역할</h2>'
-    },
-    en: {
-      base: '../../../',
-      overview: '<h2>Project overview</h2><p>A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a research collaboration, plus a separate HoloLens spatial-interface extension.</p>',
-      role: '<h2>My role</h2>'
-    }
+    ko: { base: '../../', overview: '<h2>프로젝트 개요</h2><figure class="sc-figure sc-figure3d"', role: '<h2>내 역할</h2>' },
+    en: { base: '../../../', overview: '<h2>Project overview</h2><figure class="sc-figure sc-figure3d"', role: '<h2>My role</h2>' }
   };
+  const project = data.projects.find((item) => item.slug === 'surgical-navigation');
 
   for (const [locale, expected] of Object.entries(expectations)) {
     const html = render.caseStudyHtml(data, 'surgical-navigation', expected.base, false, locale);
-    assert.equal(
-      html.split(expected.overview).length - 1,
-      1,
-      `${locale}: canonical project summary is rendered exactly once`
-    );
+    assert.equal(html.split(expected.overview).length - 1, 1, `${locale}: overview holds only the 3D figure`);
+    assert.ok(!html.includes(project.translations[locale].summary), `${locale}: no summary paragraph`);
     assertInOrder(html, [
+      'class="sc-brief"',
       expected.overview,
       'data-story-section="smcnavi-overview"',
-      'data-story-section="smcnavi-workflows"',
-      expected.role
-    ], `${locale}: canonical project summary precedes the story and role`);
+      'data-story-section="smcnavi-workflows"'
+    ], `${locale}: brief, overview, then the story`);
+    assert.ok(!html.includes(expected.role), `${locale}: no role section`);
   }
 });
 
@@ -2168,6 +2160,7 @@ test('SMCNavi story video defaults to preload none', () => {
 test('SMCNavi story renderer distributes approved media, numbers figures, and keeps video user-controlled', () => {
   const candidate = clone(data);
   const project = candidate.projects[0];
+  delete project.web;   // synthetic story sections exercise the legacy (non-dense) story path
   project.translations.ko.roleLabel = '3D 의료영상·수술내비게이션 개발자';
   project.translations.en.roleLabel = '3D Medical Imaging · Surgical Navigation Developer';
   project.storySections = [storySectionFixture(), {
@@ -2270,7 +2263,9 @@ test('story figure counting includes before-standard diagrams so after-standard 
 });
 
 test('non-story cases retain the legacy case sequence and omit story markup', () => {
-  const html = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'en');
+  const legacy = clone(data);
+  delete legacy.projects.find((item) => item.slug === 'mandibular-fracture').web;   // without web copy the legacy sections render
+  const html = render.caseStudyHtml(legacy, 'mandibular-fracture', '../../', false, 'en');
   assertInOrder(html, ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>', 'sc-gallery', 'sc-case__links']);
   assert.doesNotMatch(html, /class="sc-story"|data-story-section=/);
 });
@@ -2330,7 +2325,9 @@ test('story renderer places sections around standard evidence and renders locali
   const html = render.caseStudyHtml(candidate, project.slug, '../../', false, 'ko');
   assert.match(html, /2023\.07 – 현재/);
   assert.match(html, /진행 중 · 연구진 검증/);
-  assertInOrder(html, ['통합 워크플로우', '내 역할', '결과와 근거', '한계와 팀 성과', '장기 방향', '관련 프로젝트'], 'story order');
+  // Dense story page: role, evidence, and limits sections are PDF-only; a section without web items keeps its heading only.
+  assertInOrder(html, ['통합 워크플로우', '장기 방향', '관련 프로젝트'], 'story order');
+  assert.doesNotMatch(html, /<h2>(?:내 역할|결과와 근거|한계와 팀 성과)<\/h2>|전체 수술계획으로 확장합니다/);
   assert.match(html, /href="\.\.\/\.\.\/projects\/mandibular-fracture\/"[^>]*>하악골 골절 정복 최적화<\/a>/);
   assert.match(html, /class="sc-flow__track sc-flow__levels"/);
 });
@@ -2413,6 +2410,7 @@ test('story PDF sequence accepts one legacy diagram or an ordered diagram array,
 
 test('Scholar case article orders header, figure, five sections, gallery, and links', () => {
   const project = clone(data.projects[1]);
+  delete project.web;   // legacy (non-dense) case sequence
   project.blocks = [
     { key: 'text', type: 'text', translations: { ko: { heading: '텍스트', body: '본문' }, en: { heading: 'Text block', body: 'Text body' } } },
     { key: 'list', type: 'list', translations: { ko: { heading: '목록', items: ['하나', '둘'] }, en: { heading: 'List block', items: ['One', 'Two'] } } },
@@ -2490,7 +2488,7 @@ test('SKADI product-console renderer follows the approved app-to-API-to-applicat
   const standard = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'en');
   assert.match(standard, /<article class="sc-case" data-case="mandibular-fracture">/);
   assert.doesNotMatch(standard, /product-console|data-api-node=|sc-resource-card|data-track=/);
-  assertInOrder(standard, ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>', 'sc-gallery'], 'standard case remains unchanged');
+  assertInOrder(standard, ['class="sc-brief"', '<h2>Approach</h2>', 'class="sc-points"', 'sc-gallery'], 'standard dense case keeps its own layout');
 });
 
 test('Task 3 all eighteen case shells share one fetch-free, localized renderer contract', () => {
@@ -2511,6 +2509,11 @@ test('Task 3 all eighteen case shells share one fetch-free, localized renderer c
           : 'Redesigned landmarking, occlusion, and evaluation as an end-to-end workflow that researchers can operate in one application.')
         : copy.summary;
       assert.match(html, new RegExp(fallbackSummary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+      // The no-JS fallback keeps title, one summary paragraph, poster, and PDF link; limitation and collaboration prose is PDF-only.
+      const fallback = /<article class="td-case-fallback">[\s\S]*?<\/article>/.exec(html)[0];
+      assert.equal(count(fallback, '<p>'), 1, `${file}: one fallback paragraph`);
+      for (const field of ['collaboration', 'limitation']) assert.ok(!html.includes(copy[field]), `${file}: no ${field} paragraph`);
+      assert.match(html, locale === 'ko' ? /<meta name="description" content="[^"]+의 문제, 한 일, 결과를 정리합니다\.">/ : /<meta name="description" content="[^"]+: problem, what I did, and results\.">/, `${file}: description`);
       assert.match(html, new RegExp(`${project.slug}-${locale}\\.pdf`));
       assertInOrder(html, ['site-i18n.js', 'portfolio-data.js', 'portfolio-render.js', 'nav.js'], `${file}: script order`);
       assert.doesNotMatch(html, /fetch\s*\(|fontawesome|bootstrap(?:\.bundle)?\.min\.js|spatial-signal\.js|carousel/i);
@@ -2628,7 +2631,7 @@ test('Scholar CSS keeps the quiet researcher palette and no decorative devices',
   assert.ok(cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*700px\)/i).some((body) => /\.sc-project[\s\S]*grid-template-columns:\s*1fr/.test(body)));
   assert.ok(cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*760px\)/i).some((body) => /\.sc-gallery__grid[\s\S]*grid-template-columns:\s*1fr/.test(body)));
   assert.ok(siteCss.split(/\r?\n/).length <= 160, 'site.css stays a small shared shell');
-  assert.ok(scholarCss.split(/\r?\n/).length <= 300, 'scholar.css stays compact');
+  assert.ok(scholarCss.split(/\r?\n/).length <= 420, 'scholar.css stays compact (raised for the 2026-10-31 dense pages)');
   const ssClasses = [...new Set([...css.matchAll(/\.((?:ss)-[a-z0-9_-]+)/gi)].map((match) => match[1]))].sort();
   assert.deepEqual(ssClasses, ['ss-skip-link']);
 });
@@ -5484,4 +5487,110 @@ test('public CV records the ongoing digital occlusion technical-lead scope witho
   assert.match(ko, /2026\.03–현재.*기술 리드·메인 개발자.*연구진 검증/);
   assert.match(en, /Since 2026\.03.*technical lead and primary developer.*researcher validation is ongoing/i);
   assert.doesNotMatch(ko + en, /병원 설치|실제 수술|clinical efficacy|medical-device status/i);
+});
+
+// Dense case pages (docs/superpowers/specs/2026-10-31-dense-pages-design.md): web-only condensed copy.
+test('web copy contract enforces locales, budgets, noun-phrase endings, and story section keys', () => {
+  assert.deepEqual(render.dataErrors(data), []);
+  const mandibularIndex = data.projects.findIndex((item) => item.slug === 'mandibular-fracture');
+  const surgicalIndex = data.projects.findIndex((item) => item.slug === 'surgical-navigation');
+  const cases = [
+    [mandibularIndex, (web) => { delete web.en; }, /exactly ko and en/],
+    [mandibularIndex, (web) => { web.ko.extra = 'x'; }, /allows only/],
+    [mandibularIndex, (web) => { web.ko.tags = ['A', 'B']; }, /ko tags: needs 3–6 lines/],
+    [mandibularIndex, (web) => { web.en.tags.push('G', 'H'); }, /en tags: needs 3–6 lines/],
+    [mandibularIndex, (web) => { web.ko.brief.problem = []; }, /brief\.problem: needs 1–3 lines/],
+    [mandibularIndex, (web) => { web.ko.brief.team = ['a', 'b', 'c', 'd']; }, /brief\.team: needs 0–3 lines/],
+    [mandibularIndex, (web) => { web.ko.brief.owner = ['a']; }, /brief: allows only/],
+    [mandibularIndex, (web) => { web.ko.points = ['a', 'b']; }, /points: needs 3–6 lines/],
+    [mandibularIndex, (web) => { web.ko.points[0] = ' '; }, /non-empty/],
+    [mandibularIndex, (web) => { web.ko.points[0] = '가'.repeat(39); }, /exceeds 38 characters/],
+    [mandibularIndex, (web) => { web.en.points[0] = 'a'.repeat(71); }, /exceeds 70 characters/],
+    [mandibularIndex, (web) => { web.ko.thesis = '가'.repeat(51); }, /thesis.*exceeds 50 characters/],
+    [mandibularIndex, (web) => { web.en.sceneCaption = 'a'.repeat(91); }, /sceneCaption.*exceeds 90 characters/],
+    [mandibularIndex, (web) => { web.ko.points[0] = '교합 기반 표적을 정의했습니다'; }, /noun phrase/],
+    [mandibularIndex, (web) => { web.ko.points[0] = '교합 기반 표적을 정의한다'; }, /noun phrase/],
+    [mandibularIndex, (web) => { web.en.points[0] = 'Defined the target.'; }, /noun phrase/],
+    [mandibularIndex, (web) => { web.en.points[0] = 'Owned 80% of the role'; }, /contribution percentage/],
+    [mandibularIndex, (web) => { web.en.tags[0] = 'KAERI'; }, /nonpublic partner/],
+    [surgicalIndex, (web) => { web.ko.sections.missing = { items: ['a'] }; }, /unknown story section missing/],
+    [surgicalIndex, (web) => { web.en.sections['smcnavi-overview'] = { items: ['a'], body: 'b' }; }, /must contain only items/]
+  ];
+  for (const [index, mutate, expected] of cases) {
+    const candidate = clone(data);
+    mutate(candidate.projects[index].web);
+    assert.match(render.dataErrors(candidate).join('\n'), expected, String(mutate));
+  }
+  const partner = clone(data);
+  partner.projects[mandibularIndex].web.en.points[0] = 'With &#75;AERI';
+  assert.match(validator.portfolioDataErrors(partner).join('\n'), /mandibular-fracture web: contains a nonpublic partner/);
+});
+
+test('dense default case renders header tags, brief, Figure 1, Approach with the 3D figure and points, then gallery and links', () => {
+  const project = data.projects.find((item) => item.slug === 'mandibular-fracture');
+  for (const [locale, base] of [['ko', '../../'], ['en', '../../../']]) {
+    const html = render.caseStudyHtml(data, project.slug, base, false, locale);
+    const web = project.web[locale];
+    const ko = locale === 'ko';
+    assertInOrder(html, [
+      'sc-case__header', 'sc-case__meta', 'class="sc-tags"', 'class="sc-case__thesis"', 'class="sc-brief"',
+      ko ? '>문제<' : '>Problem<', ko ? '>한 일<' : '>What I did<', ko ? '>결과<' : '>Result<',
+      ko ? '그림 1.' : 'Figure 1.', ko ? '<h2>접근</h2>' : '<h2>Approach</h2>', 'sc-figure3d', ko ? '그림 2.' : 'Figure 2.',
+      'class="sc-points"', 'sc-gallery', 'sc-related-projects', 'sc-case__links'
+    ], `${locale}: dense sequence`);
+    const meta = /<p class="sc-case__meta">([\s\S]*?)<\/p>/.exec(html)[1];
+    assert.equal(count(meta, '<span>'), 2, `${locale}: meta is period and state only`);
+    for (const tech of project.tech) assert.ok(!meta.includes(tech), `${locale}: tech moved to tags`);
+    assert.equal(count(html, 'class="sc-tag"'), web.tags.length);
+    for (const line of [...web.brief.problem, ...web.brief.did, ...web.brief.result, ...web.points]) assert.ok(html.includes(`<li>${line}</li>`), `${locale}: ${line}`);
+    const team = ko ? '팀' : 'Team';
+    for (const line of web.brief.team) assert.ok(html.includes(`<li><span class="sc-tag sc-tag--team">${team}</span> ${line}</li>`), `${locale}: team ${line}`);
+    assert.ok(html.indexOf('sc-tag--team') > html.indexOf(ko ? '>결과<' : '>Result<'), `${locale}: team lines close the result cell`);
+    assert.ok(html.includes(`${ko ? '그림 2.' : 'Figure 2.'}</span> ${web.sceneCaption}</figcaption>`), `${locale}: short 3D caption`);
+    const labels = [...html.matchAll(/sc-figure__label">[^<]*?(\d+)\./g)].map((match) => Number(match[1]));
+    assert.deepEqual(labels, labels.map((_, i) => i + 1), `${locale}: consecutive figure numbers`);
+    assert.doesNotMatch(html, ko ? /<h2>(?:문제|내 역할|결과와 근거|한계와 팀 성과)<\/h2>/ : /<h2>(?:Problem|My role|Results and evidence|Limits and team result)<\/h2>/);
+    assert.doesNotMatch(html, /class="sc-block"|sc-case__role-label/);
+    const copy = project.translations[locale];
+    for (const field of ['limitation', 'teamResult', 'role', 'evidence', 'problem', 'summary', 'collaboration']) {
+      assert.ok(!html.includes(copy[field]), `${locale}: no ${field} prose`);
+    }
+  }
+  const legacy = clone(data);
+  delete legacy.projects.find((item) => item.slug === 'mandibular-fracture').web;
+  assertInOrder(render.caseStudyHtml(legacy, 'mandibular-fracture', '../../', false, 'en'), ['<h2>Problem</h2>', '<h2>Approach</h2>', '<h2>My role</h2>', '<h2>Results and evidence</h2>', '<h2>Limits and team result</h2>'], 'without web the legacy sections remain');
+});
+
+test('dense story case keeps all eleven figures, replaces section prose with one-line items, and drops role, evidence, and limits', () => {
+  const project = data.projects.find((item) => item.slug === 'surgical-navigation');
+  const escape = (value) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  for (const [locale, figure] of [['ko', '그림'], ['en', 'Figure']]) {
+    const html = render.caseStudyHtml(data, project.slug, '../../', false, locale);
+    assert.equal(count(html, '<figure'), 11, `${locale}: lead, 3D, eight media figures, and one diagram`);
+    assertInOrder(html, Array.from({ length: 11 }, (_, index) => `${figure} ${index + 1}.`), `${locale}: consecutive labels`);
+    assertInOrder(html, ['class="sc-tags"', 'class="sc-brief"', `${figure} 1.`, locale === 'ko' ? '<h2>프로젝트 개요</h2>' : '<h2>Project overview</h2>', 'sc-figure3d', 'class="sc-story"', 'sc-case__links'], `${locale}: dense story order`);
+    const overview = html.slice(html.indexOf(locale === 'ko' ? '<h2>프로젝트 개요</h2>' : '<h2>Project overview</h2>'));
+    assert.match(overview, /^<h2>[^<]+<\/h2><figure class="sc-figure sc-figure3d"/, `${locale}: no overview summary paragraph`);
+    for (const section of project.storySections) {
+      const items = project.web[locale].sections[section.key]?.items;
+      const body = section.translations[locale].body;
+      if (body) assert.ok(!html.includes(`<p>${escape(body)}</p>`), `${locale} ${section.key}: body dropped`);
+      for (const item of items || []) assert.ok(html.includes(`<li>${escape(item)}</li>`), `${locale} ${section.key}: ${item}`);
+    }
+    assert.doesNotMatch(html, /<h2>(?:내 역할|결과와 근거|한계와 팀 성과|My role|Results and evidence|Limits and team result)<\/h2>/);
+    for (const field of ['limitation', 'teamResult', 'role', 'summary']) assert.ok(!html.includes(escape(project.translations[locale][field])), `${locale}: no ${field} prose`);
+  }
+});
+
+test('web copy stays out of the PDF source digest', () => {
+  const evidence = [{ id: 'e', project: 'p', type: 'image', state: 'approved', source: 's', note: 'n' }];
+  const cv = { version: 'fixture' };
+  const withWeb = pdfSource.pdfSourceDigest(pdfSource.canonicalPdfSource(data, evidence, cv));
+  const without = clone(data);
+  for (const project of without.projects) delete project.web;
+  assert.ok(data.projects.some((project) => project.web), 'fixture has web copy');
+  assert.equal(pdfSource.pdfSourceDigest(pdfSource.canonicalPdfSource(without, evidence, cv)), withWeb);
+  const changed = clone(data);
+  changed.projects.find((project) => project.web).web.en.tags[0] = 'Changed';
+  assert.equal(pdfSource.pdfSourceDigest(pdfSource.canonicalPdfSource(changed, evidence, cv)), withWeb);
 });

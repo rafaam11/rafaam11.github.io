@@ -4,7 +4,7 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { publicSchemaErrors } = require('./activity-media-schema.cjs');
 const { privateFixture } = require('./private-paths.cjs');
-const publicDocs = new Set(['docs/superpowers/specs/2026-09-28-scholar-readability-design.md', 'docs/superpowers/specs/2026-09-29-positioning-design.md', 'docs/superpowers/specs/2026-10-30-3d-figures-design.md']);
+const publicDocs = new Set(['docs/superpowers/specs/2026-09-28-scholar-readability-design.md', 'docs/superpowers/specs/2026-09-29-positioning-design.md', 'docs/superpowers/specs/2026-10-30-3d-figures-design.md', 'docs/superpowers/specs/2026-10-31-dense-pages-design.md']);
 const publicImages = new Set(['assets/img/favicon.ico', 'assets/img/profile_square.webp']);
 const mediaPattern = /\.(?:png|jpe?g|webp|gif|svg|ico|mp4|mov|m4v|heic|heif|pdf|mp3|wav|webm)$/i;
 

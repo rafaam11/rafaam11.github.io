@@ -1,6 +1,6 @@
 # Scholar Readability Design (v2)
 
-> 2026-09-28 · supersedes only the **Home** information architecture and the **type-scale** values of `2026-08-21-scholar-portfolio-design.md`. The palette, forbidden devices (no chips, eyebrows, icons, gradients, shadows, uppercase), media rules, and privacy rules of that spec remain in force.
+> 2026-09-28 · supersedes only the **Home** information architecture and the **type-scale** values of `2026-08-21-scholar-portfolio-design.md`. The palette, forbidden devices (no chips, eyebrows, icons, gradients, shadows, uppercase), media rules, and privacy rules of that spec remain in force. Exception (2026-10-31): 1px-border keyword tags (`.sc-tag`, no fill, shadow or uppercase) are allowed on dense case pages per `2026-10-31-dense-pages-design.md`.
 
 ## Problem
 

@@ -47,7 +47,7 @@ const STAGE_HTML = `<!doctype html>
   body { font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; }
   .stage { position: relative; overflow: hidden; background: #fff; }
   .stage.no-labels .lb, .stage.no-labels .lead3d, .stage.no-labels .readout { visibility: hidden !important; }
-  .stage .view3d__reset { display: none !important; }
+  .stage .view3d__reset, .stage .view3d__hint { display: none !important; }
   .stage > img { display: none; }
 </style>
 <script>

@@ -429,13 +429,52 @@
           'surgical-navigation-gallery-05'
         ]
       },
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '정합·추적·캘리브레이션을 3D Slicer에 통합하고 HoloLens까지 연결',
+          tags: ['3D Slicer', '광학 추적', 'OpenIGTLink', 'Unity · MRTK', 'HoloLens 2'],
+          brief: {
+            problem: ['영상·환자·도구·공간 표시가 분절', '정합 상태와 데이터 흐름 검토 어려움'],
+            did: ['아키텍처 설계·사실상 단독 개발', '추적·정합·캘리브레이션 통합', 'HoloLens PC 확장·공간 표시'],
+            result: ['6개 구강악안면 워크플로 구현·시연', 'SMCNavi→HoloLens 팬텀 통합 시험'],
+            team: ['DIGITRACK·삼성서울병원 연구 협력', '요구사항·수용 기준 공동 검토']
+          },
+          sections: {
+            'smcnavi-overview': { items: ['맞춤형 3D Slicer 데스크톱 플랫폼', 'DICOM·3D 모델 로딩, MPR·3D 시각화', 'HoloLens 기능은 별도 PC 확장', '2023 내비 참여 → 2025 SMCNavi 본격 구현', '연구진 요구 → 모듈·설치 패키지·사용 안내'] },
+            'smcnavi-workflows': { items: ['상악종양 제거술 내비게이션', '하악종양 제거술 내비게이션', '양악수술 내비게이션', '하악운동 트래킹', '골이식 위치설정', '광대·안와 골절 미러링'] },
+            'system-architecture': { items: ['광학 추적 → SMCNavi 변환·정합·워크플로', 'OpenIGTLink → PC 확장(변환·영상·모델)', 'Holographic Remoting ↔ HoloLens 2'] },
+            'registration-calibration': { items: ['광학 추적 SDK·실시간 마커 파이프라인', '영상·환자·마커·기구 좌표 변환 체인', '환자 정합·정합 상태 피드백', '마커·비표준·장기구 캘리브레이션', '미러 평면 정합·피봇점 설정', '2026 공용 추적 서비스·SDK v7.1.2 이전', '2026 지연 측정 하네스 설계·계측'] },
+            'hololens-interface': { items: ['OpenIGTLink 변환·영상·모델 교환', 'Unity·MRTK PC 렌더링·공간 배치', 'Holographic Remoting으로 HoloLens 2 표시', '상호작용 입력을 PC 확장으로 반환', '광학 추적·SMCNavi·HoloLens 팬텀 시험'] }
+          },
+          sceneCaption: '좌표 정합 체인 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'Registration, tracking, and calibration in 3D Slicer, carried to HoloLens',
+          tags: ['3D Slicer', 'Optical tracking', 'OpenIGTLink', 'Unity · MRTK', 'HoloLens 2'],
+          brief: {
+            problem: ['Images, patient, tools, and display were fragmented', 'Registration state and data flow hard to inspect'],
+            did: ['Architecture and near-solo development', 'Tracking, registration, calibration in one app', 'HoloLens PC extension and spatial display'],
+            result: ['Six oral and maxillofacial workflows built and demonstrated', 'SMCNavi-to-HoloLens phantom integration tests'],
+            team: ['DIGITRACK and Samsung Medical Center research collaboration', 'Joint review of requirements and acceptance criteria']
+          },
+          sections: {
+            'smcnavi-overview': { items: ['Custom 3D Slicer desktop platform', 'DICOM and 3D model loading, MPR and 3D views', 'HoloLens features as a separate PC extension', 'Navigation work from 2023, SMCNavi build from 2025', 'Researcher needs → modules, installer, user guide'] },
+            'smcnavi-workflows': { items: ['Maxillary tumour resection navigation', 'Mandibular tumour resection navigation', 'Orthognathic surgery navigation', 'Mandibular motion tracking', 'Bone-graft positioning', 'Zygomatic and orbital fracture mirroring'] },
+            'system-architecture': { items: ['Optical tracking → SMCNavi transforms, registration, workflows', 'OpenIGTLink → PC extension (transforms, images, models)', 'Holographic Remoting ↔ HoloLens 2'] },
+            'registration-calibration': { items: ['Optical-tracking SDK and live marker pipeline', 'Image, patient, marker, and tool transform chain', 'Patient registration with state feedback', 'Marker, non-standard, and long-tool calibration', 'Mirror-plane registration and pivot setup', '2026: shared tracking service, SDK v7.1.2 migration', '2026: latency measurement harness design'] },
+            'hololens-interface': { items: ['OpenIGTLink exchange of transforms, images, models', 'Unity and MRTK rendering and placement on the PC', 'HoloLens 2 display via Holographic Remoting', 'Interaction input returned to the PC extension', 'Tracker, SMCNavi, and HoloLens phantom tests'] }
+          },
+          sceneCaption: 'Transform-chain concept (synthetic geometry)'
+        }
+      },
       // Web-only 3D figure (js/scenes/smcnavi.js); excluded from the PDF source digest.
       scene3d: {
         name: 'smcnavi',
         poster: 'assets/3d/smcnavi.webp',
         translations: {
-          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다. 드래그해 돌려 볼 수 있습니다.', alt: '합성 두개골 주위의 트래커, 환자 레퍼런스 마커, CT 볼륨, 추적 포인터, 하악 마커를 점선 좌표 체인으로 잇는 3D 개념도' },
-          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker. Drag to rotate.', alt: '3D concept linking a tracker, a patient reference marker, a CT volume, a tracked pointer and a mandible marker around a synthetic skull with dashed transform lines' }
+          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다.', alt: '합성 두개골 주위의 트래커, 환자 레퍼런스 마커, CT 볼륨, 추적 포인터, 하악 마커를 점선 좌표 체인으로 잇는 3D 개념도' },
+          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker.', alt: '3D concept linking a tracker, a patient reference marker, a CT volume, a tracked pointer and a mandible marker around a synthetic skull with dashed transform lines' }
         }
       },
       translations: {
@@ -722,13 +761,38 @@
       },
       relatedProjectSlugs: ['digital-occlusion-workflow'],
       links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '게재 논문' }, en: { label: 'Publication' } } }],
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          tags: ['Python', 'Open3D', 'PCA', 'ICP', 'CLPSO', '3D Slicer'],
+          brief: {
+            problem: ['정복 위치 후보가 여럿', '교합을 반영한 재현 가능한 표적 부재'],
+            did: ['교합 기반 정복 표적 정의', '특징점·최적화·시뮬레이터 설계', '실험·분석·논문 공동 리드'],
+            result: ['JIIM 2024 (SCIE Q1) 공동 제1저자'],
+            team: ['ACCAS 2022·국내 학회 발표', '2023 우수논문상']
+          },
+          points: ['치아 랜드마크·골절 단면 특징점 추출', '상악 치열궁 기준 골절편 초기 정렬', 'CLPSO로 골절편 위치 최적화', '표면 거리 맵으로 정복 결과 비교'],
+          sceneCaption: '골절편 정복 최적화 개념도(합성 형상)'
+        },
+        en: {
+          tags: ['Python', 'Open3D', 'PCA', 'ICP', 'CLPSO', '3D Slicer'],
+          brief: {
+            problem: ['Many plausible reductions', 'No reproducible occlusion-based target'],
+            did: ['Defined occlusion as the reduction target', 'Designed features, optimizer, and simulator', 'Co-led experiments, analysis, and paper'],
+            result: ['JIIM 2024 (SCIE Q1), joint first author'],
+            team: ['ACCAS 2022 and domestic talks', '2023 best-paper award']
+          },
+          points: ['Tooth landmarks and fracture-surface features', 'Initial alignment to the maxillary arch', 'Fragment pose optimization with CLPSO', 'Surface-distance maps to compare reductions'],
+          sceneCaption: 'Fragment reduction optimization concept (synthetic geometry)'
+        }
+      },
       // Web-only 3D figure (js/scenes/ms-frac.js); excluded from the PDF source digest.
       scene3d: {
         name: 'ms-frac',
         poster: 'assets/3d/ms-frac.webp',
         translations: {
-          ko: { caption: '골절편 정복 최적화 개념도(합성 형상): 치아·골절 단면 특징점, 골절편 위치 최적화, 교합 기준 정복, 표면 거리 비교 순서입니다. 드래그해 돌려 볼 수 있습니다.', alt: '합성 하악골 모델에서 초록색 골절편이 상악 치열을 기준으로 제자리에 맞춰지는 3D 개념도' },
-          en: { caption: 'Concept of fragment reduction optimization (synthetic geometry): tooth and fracture-surface features, fragment pose optimization, occlusion-based reduction, then a surface-distance check. Drag to rotate.', alt: '3D concept in which the green fracture fragment of a synthetic mandible is moved into place against the upper dentition' }
+          ko: { caption: '골절편 정복 최적화 개념도(합성 형상): 치아·골절 단면 특징점, 골절편 위치 최적화, 교합 기준 정복, 표면 거리 비교 순서입니다.', alt: '합성 하악골 모델에서 초록색 골절편이 상악 치열을 기준으로 제자리에 맞춰지는 3D 개념도' },
+          en: { caption: 'Concept of fragment reduction optimization (synthetic geometry): tooth and fracture-surface features, fragment pose optimization, occlusion-based reduction, then a surface-distance check.', alt: '3D concept in which the green fracture fragment of a synthetic mandible is moved into place against the upper dentition' }
         }
       },
       translations: {
@@ -1039,8 +1103,8 @@
         name: 'foaa',
         poster: 'assets/3d/foaa.webp',
         translations: {
-          ko: { caption: '디지털 교합 워크플로우 개념도(합성 형상): 상악 15개·하악 15개 치아 랜드마크, 자동 교합과 6-DOF 조정으로 하악 치열을 맞추는 교합 정렬, 접촉 상태와 거리를 보는 교합 평가 순서입니다. 드래그해 돌려 볼 수 있습니다.', alt: '합성 두개골과 확대한 치열에서 치아 랜드마크, 하악 치열의 교합 정렬, 접촉·거리 색 표시가 이어지는 3D 개념도' },
-          en: { caption: 'Concept of the digital occlusion workflow (synthetic geometry): 15 upper and 15 lower tooth landmarks, occlusal alignment of the lower dentition by automatic occlusion and 6-DOF adjustment, then occlusion evaluation of contact state and distance. Drag to rotate.', alt: '3D concept of a synthetic skull and an enlarged dentition showing tooth landmarks, occlusal alignment of the lower dentition and a contact and distance colour map' }
+          ko: { caption: '디지털 교합 워크플로우 개념도(합성 형상): 상악 15개·하악 15개 치아 랜드마크, 자동 교합과 6-DOF 조정으로 하악 치열을 맞추는 교합 정렬, 접촉 상태와 거리를 보는 교합 평가 순서입니다.', alt: '합성 두개골과 확대한 치열에서 치아 랜드마크, 하악 치열의 교합 정렬, 접촉·거리 색 표시가 이어지는 3D 개념도' },
+          en: { caption: 'Concept of the digital occlusion workflow (synthetic geometry): 15 upper and 15 lower tooth landmarks, occlusal alignment of the lower dentition by automatic occlusion and 6-DOF adjustment, then occlusion evaluation of contact state and distance.', alt: '3D concept of a synthetic skull and an enlarged dentition showing tooth landmarks, occlusal alignment of the lower dentition and a contact and distance colour map' }
         }
       },
       translations: {
@@ -1118,8 +1182,8 @@
         name: 'omfsvr',
         poster: 'assets/3d/omfsvr.webp',
         translations: {
-          ko: { caption: '3인 VR 상담 개념도(일반 아바타): 의사1(Master)·환자·의사2가 CT 기반 3D 악골 모델과 2D 계측 패널을 함께 보고, 모델 자세와 페이지 번호가 세 참가자에게 동기화됩니다. 드래그해 돌려 볼 수 있습니다.', alt: '헤드셋을 쓴 세 참가자가 타원형 책상 위의 분절 색 3D 악골 모델과 벽의 계측 패널을 함께 보는 VR 상담실 3D 개념도' },
-          en: { caption: 'Concept of the three-user VR consultation (generic avatars): clinician 1 (master), the patient and clinician 2 view a CT-derived 3D jaw model and a 2D measurement panel, with model pose and page number synchronized to all three. Drag to rotate.', alt: '3D concept of a VR consultation room where three headset users share a segmented 3D jaw model above an oval desk and a measurement panel on the wall' }
+          ko: { caption: '3인 VR 상담 개념도(일반 아바타): 의사1(Master)·환자·의사2가 CT 기반 3D 악골 모델과 2D 계측 패널을 함께 보고, 모델 자세와 페이지 번호가 세 참가자에게 동기화됩니다.', alt: '헤드셋을 쓴 세 참가자가 타원형 책상 위의 분절 색 3D 악골 모델과 벽의 계측 패널을 함께 보는 VR 상담실 3D 개념도' },
+          en: { caption: 'Concept of the three-user VR consultation (generic avatars): clinician 1 (master), the patient and clinician 2 view a CT-derived 3D jaw model and a 2D measurement panel, with model pose and page number synchronized to all three.', alt: '3D concept of a VR consultation room where three headset users share a segmented 3D jaw model above an oval desk and a measurement panel on the wall' }
         }
       },
       translations: {
@@ -1189,8 +1253,8 @@
         name: 'neuro',
         poster: 'assets/3d/neuro.webp',
         translations: {
-          ko: { caption: '코일 내비게이션 개념도(일반 형상, 수치 없음): 추적 포인터로 얼굴과 이마에서 찍은 표면점을 랜드마크로 대략 맞춘 뒤 ICP 반복으로 머리 모델에 정합하고, 로봇 연동으로 TMS 코일을 두피 표적에 정렬합니다. 드래그해 돌려 볼 수 있습니다.', alt: '추적 포인터로 찍은 얼굴 표면점이 앉은 사람의 머리 모델에 정합되고 로봇 팔 끝의 TMS 코일이 두피 표적에 닿는 3D 개념도' },
-          en: { caption: 'Concept of coil navigation (generic geometry, no values): surface points digitized on the face and forehead with the tracked pointer are coarsely aligned by landmarks and registered to the head model by ICP iterations; through robot integration, the TMS coil is then aligned to scalp targets. Drag to rotate.', alt: '3D concept in which face surface points digitized with a tracked pointer are registered to the head model of a seated person and a TMS coil on a robot arm reaches a scalp target' }
+          ko: { caption: '코일 내비게이션 개념도(일반 형상, 수치 없음): 추적 포인터로 얼굴과 이마에서 찍은 표면점을 랜드마크로 대략 맞춘 뒤 ICP 반복으로 머리 모델에 정합하고, 로봇 연동으로 TMS 코일을 두피 표적에 정렬합니다.', alt: '추적 포인터로 찍은 얼굴 표면점이 앉은 사람의 머리 모델에 정합되고 로봇 팔 끝의 TMS 코일이 두피 표적에 닿는 3D 개념도' },
+          en: { caption: 'Concept of coil navigation (generic geometry, no values): surface points digitized on the face and forehead with the tracked pointer are coarsely aligned by landmarks and registered to the head model by ICP iterations; through robot integration, the TMS coil is then aligned to scalp targets.', alt: '3D concept in which face surface points digitized with a tracked pointer are registered to the head model of a seated person and a TMS coil on a robot arm reaches a scalp target' }
         }
       },
       translations: {
@@ -1260,8 +1324,8 @@
         name: 'sgrt-poc',
         poster: 'assets/3d/sgrt-poc.webp',
         translations: {
-          ko: { caption: '호흡 추적 PoC 개념도(1차년도 센서 검증 단계, 파형은 예시): 3D 깊이 센서가 흉부 ROI 깊이를 읽어 호흡 파형으로 바꾸고, 그 파형에서 게이트 신호 예시를 만듭니다. 치료 장비는 그리지 않았습니다. 드래그해 돌려 볼 수 있습니다.', alt: '삼각대 위 3D 깊이 센서가 앉은 사람의 흉부 ROI를 보고, 옆 화면에 호흡 파형과 게이트 신호 예시가 그려지는 3D 개념도' },
-          en: { caption: 'Concept of the breathing-tracking proof of concept (first-year sensor groundwork; illustrative waveform): a 3D depth sensor reads chest-ROI depth, which becomes a respiratory waveform and an example gating signal. No treatment equipment is shown. Drag to rotate.', alt: '3D concept of a tripod-mounted depth sensor viewing the chest ROI of a seated person, with a respiratory waveform and an example gating signal on a nearby display' }
+          ko: { caption: '호흡 추적 PoC 개념도(1차년도 센서 검증 단계, 파형은 예시): 3D 깊이 센서가 흉부 ROI 깊이를 읽어 호흡 파형으로 바꾸고, 그 파형에서 게이트 신호 예시를 만듭니다. 치료 장비는 그리지 않았습니다.', alt: '삼각대 위 3D 깊이 센서가 앉은 사람의 흉부 ROI를 보고, 옆 화면에 호흡 파형과 게이트 신호 예시가 그려지는 3D 개념도' },
+          en: { caption: 'Concept of the breathing-tracking proof of concept (first-year sensor groundwork; illustrative waveform): a 3D depth sensor reads chest-ROI depth, which becomes a respiratory waveform and an example gating signal. No treatment equipment is shown.', alt: '3D concept of a tripod-mounted depth sensor viewing the chest ROI of a seated person, with a respiratory waveform and an example gating signal on a nearby display' }
         }
       },
       translations: {
@@ -1391,8 +1455,8 @@
         name: 'skadi',
         poster: 'assets/3d/skadi.webp',
         translations: {
-          ko: { caption: '광학 추적 원리 개념도: SKADI의 카메라 2대와 IR LED가 도구의 반사 마커 4개를 보고 도구의 위치·회전(6DoF)을 계산합니다. 드래그해 돌려 볼 수 있습니다.', alt: '두 렌즈와 IR LED 고리가 있는 추적기에서 도구의 반사 마커 4개로 광선이 이어지는 3D 개념도' },
-          en: { caption: 'Concept of the optical-tracking principle: the two cameras and IR LEDs of SKADI see four reflective markers on a tool and compute its position and orientation (6DoF). Drag to rotate.', alt: '3D concept of a tracker with two lenses and IR LED rings, with rays to four reflective markers on a tool' }
+          ko: { caption: '광학 추적 원리 개념도: SKADI의 카메라 2대와 IR LED가 도구의 반사 마커 4개를 보고 도구의 위치·회전(6DoF)을 계산합니다.', alt: '두 렌즈와 IR LED 고리가 있는 추적기에서 도구의 반사 마커 4개로 광선이 이어지는 3D 개념도' },
+          en: { caption: 'Concept of the optical-tracking principle: the two cameras and IR LEDs of SKADI see four reflective markers on a tool and compute its position and orientation (6DoF).', alt: '3D concept of a tracker with two lenses and IR LED rings, with rays to four reflective markers on a tool' }
         }
       },
       translations: {
@@ -1461,8 +1525,8 @@
         name: 'fk-safety',
         poster: 'assets/3d/fk-safety.webp',
         translations: {
-          ko: { caption: '안전 관리자 초기 정책 개념도(기본 도형): 3단 가상 범퍼에서 경고 구역은 감속, 정지 구역은 정지, 가장 안쪽 구역은 E-STOP 래칭이며, 사람이 떠난 뒤에도 리셋 입력 전까지 래칭이 유지됩니다. 드래그해 돌려 볼 수 있습니다.', alt: '지게차 주위의 세 겹 구역 가운데 가장 안쪽 구역에 사람이 들어와 E-STOP이 래칭되는 3D 개념도' },
-          en: { caption: 'Concept of the initial safety-manager policy (primitive shapes): in the three-zone virtual bumper, the warning zone slows the vehicle, the stop zone stops it, and the innermost zone latches E-STOP, which holds after the person leaves until a reset input. Drag to rotate.', alt: '3D concept of a forklift surrounded by three nested zones, with E-STOP latched as a person enters the innermost zone' }
+          ko: { caption: '안전 관리자 초기 정책 개념도(기본 도형): 3단 가상 범퍼에서 경고 구역은 감속, 정지 구역은 정지, 가장 안쪽 구역은 E-STOP 래칭이며, 사람이 떠난 뒤에도 리셋 입력 전까지 래칭이 유지됩니다.', alt: '지게차 주위의 세 겹 구역 가운데 가장 안쪽 구역에 사람이 들어와 E-STOP이 래칭되는 3D 개념도' },
+          en: { caption: 'Concept of the initial safety-manager policy (primitive shapes): in the three-zone virtual bumper, the warning zone slows the vehicle, the stop zone stops it, and the innermost zone latches E-STOP, which holds after the person leaves until a reset input.', alt: '3D concept of a forklift surrounded by three nested zones, with E-STOP latched as a person enters the innermost zone' }
         }
       },
       translations: {
@@ -1849,8 +1913,8 @@
       name: 'home-tracking',
       poster: 'assets/3d/home-tracking.webp',
       translations: {
-        ko: { caption: '광학 추적·환자 정합·HoloLens 오버레이 개념도(합성 형상). 드래그해 돌려 볼 수 있습니다.', alt: '천장의 광학 추적기가 환자 머리의 레퍼런스 마커와 내비게이션 포인터의 마커를 보고, HoloLens 형태의 헤드셋 시야 안에서 합성 두개골 홀로그램이 환자 머리에 겹쳐 있는 3D 개념도' },
-        en: { caption: 'Optical tracking, patient registration and HoloLens overlay (synthetic geometry). Drag to rotate.', alt: '3D concept in which a ceiling-mounted optical tracker sees the patient reference marker and the marker of a navigation pointer, while a synthetic skull hologram is overlaid on the patient\'s head inside the view of a HoloLens-style headset' }
+        ko: { caption: '광학 추적·환자 정합·HoloLens 오버레이 개념도(합성 형상).', alt: '천장의 광학 추적기가 환자 머리의 레퍼런스 마커와 내비게이션 포인터의 마커를 보고, HoloLens 형태의 헤드셋 시야 안에서 합성 두개골 홀로그램이 환자 머리에 겹쳐 있는 3D 개념도' },
+        en: { caption: 'Optical tracking, patient registration and HoloLens overlay (synthetic geometry).', alt: '3D concept in which a ceiling-mounted optical tracker sees the patient reference marker and the marker of a navigation pointer, while a synthetic skull hologram is overlaid on the patient\'s head inside the view of a HoloLens-style headset' }
       }
     },
     news: news,

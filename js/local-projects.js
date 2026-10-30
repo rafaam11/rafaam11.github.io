@@ -10,10 +10,10 @@
     'ai-build-lab': {'gallery-01':'problem-to-product','gallery-02':'problem-to-product','gallery-03':'human-ai-boundary','gallery-04':'public-product-proof','gallery-05':'public-product-proof'}
   };
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function figure(mid,lang,base,media) {
+  function figure(mid,lang,base,media,caption) {
     const m=media[mid], t=m.translations[lang];
     const visual=m.type==='video'?`<video controls muted playsinline preload="none" poster="${esc(base+m.poster)}" aria-label="${esc(t.alt)}"><source src="${esc(base+m.path)}" type="video/mp4"><a href="${esc(base+m.path)}">${lang==='ko'?'영상 파일 열기':'Open video file'}</a></video>`:`<img src="${esc(base+m.path)}" alt="${esc(t.alt)}" loading="lazy" decoding="async">`;
-    return `<figure class="pf-candidate" data-source-id="${mid}" data-media-status="approved-public">${visual}<figcaption><p>${esc(t.caption)}</p></figcaption></figure>`;
+    return `<figure class="pf-candidate" data-source-id="${mid}" data-media-status="approved-public">${visual}<figcaption><p>${esc(caption||t.caption)}</p></figcaption></figure>`;
   }
   function mount(doc,data,local) {
     const lang=doc.body.dataset.lang==='en'?'en':'ko', base=doc.body.dataset.base||'';
@@ -31,15 +31,24 @@
     if(slug==='surgical-navigation'&&lead)article.querySelector('[data-story-section="hololens-interface"] .sc-story__media')?.prepend(lead);
     if(slug==='mandibular-fracture') {
       ['gallery-01','gallery-04','gallery-05'].forEach(s=>article.querySelector(`img[src$="/${slug}-${s}.png"]`)?.closest('figure').remove());
-      const target=block('research-pipeline');
       const stages=[
         ['M076','점군과 단면','Point clouds and cross-sections','특징 설계의 입력을 설명할 장면입니다. 파란 점으로 표현된 단면의 모양을 살펴봅니다.','A candidate view of the input to feature design: inspect the shapes of cross-sections represented by blue points.'],
         ['M077','치열궁과 방향','Dental arch and directions','치열궁 곡선과 이를 가로지르는 선분을 함께 그린 연구 자료입니다.','Research material drawing the dental arch curve with crossing segments.'],
         ['M084','치아 구조 구분','Distinguishing tooth structures','치아마다 다른 색으로 표시한 점군으로 구조를 구분해 보여 줍니다. 색상은 시각화용이며 자동 분할 성능을 뜻하지 않습니다.','Tooth point clouds shown in different colours to distinguish structures. The colours are for visualisation and do not indicate automatic segmentation performance.']
       ];
-      const firstExisting=target.querySelector('figure');
-      stages.forEach(([id,ko,en,bodyKo,bodyEn])=>{const stage=node(`<section class="pf-context"><h4>${lang==='ko'?ko:en}</h4><p>${lang==='ko'?bodyKo:bodyEn}</p>${figure(id,lang,base,local.media)}</section>`);target.insertBefore(stage,firstExisting);});
-      block('published-evidence').insertAdjacentHTML('beforeend',figure('M012',lang,base,local.media)+`<p><a href="${base+(lang==='en'?'en/':'')}news/index.html#news-accas-occlusion-paper-2022">${lang==='ko'?'ACCAS 2022 활동 기록':'ACCAS 2022 activity record'}</a></p>`);
+      const target=block('research-pipeline'), evidence=block('published-evidence');
+      if(target) {
+        const firstExisting=target.querySelector('figure');
+        stages.forEach(([id,ko,en,bodyKo,bodyEn])=>{const stage=node(`<section class="pf-context"><h4>${lang==='ko'?ko:en}</h4><p>${lang==='ko'?bodyKo:bodyEn}</p>${figure(id,lang,base,local.media)}</section>`);target.insertBefore(stage,firstExisting);});
+      } else {
+        // Dense case pages have no blocks: the stage figures join the gallery with their short stage titles as captions.
+        let grid=article.querySelector('.sc-gallery__grid');
+        if(!grid){const gallery=node(`<section class="sc-gallery" aria-label="${lang==='ko'?'그림 모음':'Figures'}"><div class="sc-gallery__grid"></div></section>`);const anchor=article.querySelector('.sc-related-projects, .sc-case__links');article.insertBefore(gallery,anchor||null);grid=gallery.firstElementChild;}
+        const add=html=>{const f=node(html);f.classList.add('sc-figure','sc-figure--gallery');grid.append(f);};
+        stages.forEach(([id,ko,en])=>add(figure(id,lang,base,local.media,lang==='ko'?ko:en)));
+        add(figure('M012',lang,base,local.media));
+      }
+      if(evidence) evidence.insertAdjacentHTML('beforeend',figure('M012',lang,base,local.media)+`<p><a href="${base+(lang==='en'?'en/':'')}news/index.html#news-accas-occlusion-paper-2022">${lang==='ko'?'ACCAS 2022 활동 기록':'ACCAS 2022 activity record'}</a></p>`);
     }
     article.querySelectorAll('.sc-gallery').forEach(g=>{if(!g.querySelector('figure'))g.remove();});
     article.querySelectorAll('video').forEach(v=>{v.muted=true;v.setAttribute('muted','');v.setAttribute('playsinline','');v.removeAttribute('autoplay');v.preload='none';});

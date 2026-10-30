@@ -61,10 +61,24 @@ test('scene3d records are valid, unique, and every case except AI Build Lab decl
     assert.equal(project.scene3d.poster, `assets/3d/${project.scene3d.name}.webp`);
     for (const locale of ['ko', 'en']) {
       const copy = project.scene3d.translations[locale];
-      assert.match(copy.caption, locale === 'ko' ? /드래그해 돌려 볼 수 있습니다\.$/ : /Drag to rotate\.$/, `${project.slug} ${locale}: drag hint`);
+      // the drag hint lives once in the figure UI (js/scene3d.js), not at the end of every caption
+      assert.doesNotMatch(copy.caption, /드래그|Drag to rotate/i, `${project.slug} ${locale}: no caption drag hint`);
       assert.ok(copy.alt.trim(), `${project.slug} ${locale}: alt`);
     }
   }
+  for (const locale of ['ko', 'en']) assert.doesNotMatch(data.homeScene3d.translations[locale].caption, /드래그|Drag to rotate/i, `home ${locale}: no caption drag hint`);
+});
+
+test('engine shows one quiet drag hint while live, kept out of captures and away from labels', () => {
+  const engine = read('js/scene3d.js');
+  assert.match(engine, /hint\.className = 'view3d__hint'/);
+  assert.match(engine, /t\(\{ ko: '드래그로 회전', en: 'Drag to rotate' \}\)/);
+  assert.match(engine, /if \(!capture\) \{[\s\S]*?view3d__hint/, 'captures leave the hint out');
+  assert.match(engine, /obstacle\(hint\)/, 'labels avoid the hint');
+  const css = read('css/scholar.css');
+  assert.match(css, /\.view3d:not\(\.live\) :is\([^)]*\.view3d__hint\) \{ display: none; \}/, 'hint only while live');
+  assert.match(css, /\.view3d__hint \{[^}]*position: absolute; top: \.3rem;[^}]*color: var\(--sc-faint\)/);
+  assert.match(css, /@media print \{[^\n]*\.view3d__hint/);
 });
 
 test('scene3d data validation rejects malformed records', () => {

@@ -17,7 +17,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 
 ## Content principles
 
-- 팀 전체 결과를 개인 성과로 쓰지 않는다. `My Role`과 `Team Result`를 분리한다.
+- 팀 전체 결과를 개인 성과로 쓰지 않는다. `My Role`과 `Team Result`를 분리한다(고밀도 사례 웹은 결과 칸의 `팀` 표기로 분리, PDF는 기존 단락).
 - 기여율 퍼센트 대신 소유한 문제, 결정, 구현, 검증 근거를 쓴다.
 - 기관·제품 실명은 승인 목록(2026-08-21 사용자 승인)만 쓴다: 디지트랙/DIGITRACK, SKADI, SMCNavi, NeuroPilot, DOTORI, 삼성서울병원, 서울성모병원, AT&C, KERI, ETRI, KAIST, A4LAB, 정부과제명. 타인의 이름(교수·임원·동료), 연구비, 문서·특허 번호, 과제 목표치·타 기관 지표는 쓰지 않는다. 본인이 직접 측정한 수치만 인용한다.
 - `Verified`, `Ongoing`, `Prototype`, `Expected`, `Research`, `Completed` 상태를 구분한다.
@@ -82,12 +82,20 @@ public/                            # Generated blog output; never edit for portf
 - Do not restore the removed Research/Capabilities route, excluded project routes, decorative SVG fallbacks, Bootstrap/StartBootstrap, or the old sidebar layout.
 - Home uses generated introduction, capability list, selected research, achievements and curated News; home-projects can also render at runtime. The home-highlights block closes the publications section, is generated from CV data and is not replaced by JavaScript. `js/local-feed.js` inserts the selected-activities block after the Home News section. Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
 
+## Dense case pages
+
+Spec: `docs/superpowers/specs/2026-10-31-dense-pages-design.md`.
+
+- A case with a `web` record in `js/portfolio-data.js` renders the dense layout: meta line (period · state), 1px-border keyword tags, thesis, a 문제/한 일/결과 brief grid whose team lines carry a small `팀`/`Team` tag, then one-line points (default layout) or one-line items per story section (story layout). Cases without `web` keep the legacy sections; product-console (SKADI) is unchanged for now.
+- `web` is web-only and excluded from the PDF source digest, like `scene3d`. Limitation, team-result and research-boundary prose stays in the data for the PDFs and is not rendered on dense pages.
+- Web copy only compresses facts already in the case fields (role, evidence, story sections): no new claims or numbers, noun phrases rather than sentences, ko ≤38 and en ≤70 characters per line (`validatePortfolioData` enforces budgets, endings and section keys).
+
 ## 3D figures
 
 Spec: `docs/superpowers/specs/2026-10-30-3d-figures-design.md`.
 
 - Home has one 3D figure (`home-tracking`); each case except `ai-build-lab` has one, declared as `scene3d` in `js/portfolio-data.js`. Projects cards keep their approved real images.
-- `js/scene3d.js` is the shared engine (three.js r128, ported from the 2026-10 presentation decks). It injects `js/vendor/three-r128.min.js` on demand when a figure nears the viewport, keeps at most two live WebGL contexts, disables wheel zoom, lets one-finger touch scroll the page and honours `prefers-reduced-motion`.
+- `js/scene3d.js` is the shared engine (three.js r128, ported from the 2026-10 presentation decks). It injects `js/vendor/three-r128.min.js` on demand when a figure nears the viewport, keeps at most two live WebGL contexts, disables wheel zoom, lets one-finger touch scroll the page and honours `prefers-reduced-motion`. While live it shows one quiet "드래그로 회전 / Drag to rotate" hint; captions do not repeat it.
 - Scenes live in `js/scenes/<name>.js`, are procedural only (no GLB, textures or network loads) and carry ko/en labels. Every visible element and label must match a sentence in the case's public role, summary or evidence; do not depict robot-assisted surgery, design-stage features as finished, customer hardware CAD, partner names or internal document sources.
 - Each figure shows a captured WebP poster (`assets/3d/<name>.webp`) until WebGL mounts; the poster is also the no-JS, no-WebGL and print image. These real scene captures are not the forbidden decorative SVG fallbacks.
 - `scene3d` is web-only and excluded from the PDF source digest. Capture posters and README images with `scripts/capture-3d.mjs` (it writes its own temporary stage page; set `SCENE3D_PUPPETEER_DIR` to a node_modules folder containing puppeteer-core).

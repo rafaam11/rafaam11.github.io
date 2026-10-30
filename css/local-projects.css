@@ -5,5 +5,8 @@
 .pf-candidate {margin:1rem 0;min-width:0;}
 .pf-candidate img,.pf-candidate video {display:block;width:100%;max-height:580px;object-fit:contain;background:#f7f8fa;}
 .pf-candidate figcaption {font-size:.9rem;line-height:1.6;}
+.sc-figure--gallery.pf-candidate {margin:0;}
+.sc-figure--gallery.pf-candidate figcaption {font-size:var(--sc-meta);line-height:1.5;}
+.sc-figure--gallery.pf-candidate figcaption p {margin:0;}
 .sc-block > .sc-figure {margin:1.2rem 0;}
 @media(max-width:600px){.pf-context-media{grid-template-columns:1fr}.pf-local-banner{margin:1rem 1.25rem}.pf-candidate img,.pf-candidate video{max-height:420px}}

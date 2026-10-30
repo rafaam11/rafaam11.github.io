@@ -13,7 +13,7 @@ const PDF_SOURCE_SITE = Object.freeze({
 });
 
 // Web-only fields never reach the PDFs, so they stay out of the source digest.
-const WEB_ONLY_PROJECT_FIELDS = Object.freeze(['scene3d']);
+const WEB_ONLY_PROJECT_FIELDS = Object.freeze(['scene3d', 'web']);
 
 function pdfProject(project) {
   if (!project || typeof project !== 'object') return project;
