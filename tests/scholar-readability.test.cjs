@@ -66,8 +66,10 @@ test('Scholar v2 aligns the local feed and CV sheets with the shared tokens', ()
   const feed = read('css/local-feed.css');
   assert.doesNotMatch(feed, /#536679|#52606d/, 'local-feed uses --sc-faint instead of private greys');
   assert.equal(ruleBodies(feed, '.td-shell .lf-links').length, 0, 'lf-links sizing comes from scholar.css');
-  assert.ok(ruleBodies(feed, '.td-shell .lf-event-content h2').some((body) => /font-size:\s*1\.2rem/.test(body)));
-  assert.ok(ruleBodies(feed, '.td-shell .lf-activity .lf-media img').some((body) => /height:\s*220px/.test(body)));
+  assert.ok(ruleBodies(feed, '.td-shell .lf-title').some((body) => /font-size:\s*1rem/.test(body)), 'timeline row titles are compact');
+  assert.ok(ruleBodies(feed, '.lf-thumb').some((body) => /width:\s*56px/.test(body) && /height:\s*56px/.test(body)), 'row thumbnails are 56px squares');
+  assert.ok(ruleBodies(feed, '.td-shell .lf-activity-thumb img').some((body) => /height:\s*120px/.test(body)), 'selected-activity thumbnails are 120px tall');
+  assert.doesNotMatch(feed, /box-shadow|gradient|text-transform\s*:\s*uppercase|monospace/i, 'local feed follows the quiet Scholar devices');
   const cv = read('css/cv-pdf.css');
   assert.ok(ruleBodies(cv, '.sc-cv__meta').some((body) => /var\(--sc-faint\)/.test(body)), 'CV meta uses --sc-faint');
   assert.ok(ruleBodies(cv, '.sc-cv__intro h2').some((body) => /margin(?:-top)?:\s*0\b/.test(body)), 'CV intro heading ignores the global 4rem');
@@ -76,11 +78,9 @@ test('Scholar v2 aligns the local feed and CV sheets with the shared tokens', ()
 test('Local feed renders no review notes and mounts activities after Home News', () => {
   const feed = require('../js/local-feed.js');
   const event = { id: 'x', eventDate: '2022-01-01', links: [], media: [{ id: 'M1', type: 'image', path: 'assets/x.png', translations: { ko: { alt: 'a', caption: 'c', note: 'review note' }, en: { alt: 'a', caption: 'c', note: 'review note' } } }] };
-  for (const compact of [true, false]) {
-    const html = feed.mediaHtml(event, { lang: 'ko', base: '', compact });
-    assert.ok(html.includes('<figcaption>c</figcaption>'), 'caption only');
-    assert.ok(!html.includes('lf-review-note') && !html.includes('review note'), 'no review note');
-  }
+  const html = feed.mediaHtml(event, { lang: 'ko', base: '' });
+  assert.ok(html.includes('<figcaption>c</figcaption>'), 'caption only');
+  assert.ok(!html.includes('lf-review-note') && !html.includes('review note'), 'no review note');
   const source = read('js/local-feed.js');
   assert.ok(source.includes('[aria-labelledby="news-title"]'), 'home anchor is the News section');
   assert.ok(!source.includes('highlights-title'), 'no stale anchor');

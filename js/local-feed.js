@@ -81,9 +81,10 @@
     'invention-excellence-award-2015': ['award', '대학창의발명대회 우수상', 'University Creative Invention Contest Excellence Award']
   };
   var copy = {
-    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '로봇 제작, 해외 심포지엄, 학회 발표의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', detail: '소식에서 보기', author: '김진민', mediaOnly: '사진·영상 있는 소식만', more: '더 보기', less: '접기', photos: '사진', close: '닫기', prev: '이전', next: '다음', play: '영상', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' } },
-    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of building robots, an overseas symposium and a conference presentation.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', detail: 'View in News', author: 'Jinmin Kim', mediaOnly: 'Only posts with photos or videos', more: 'See more', less: 'See less', photos: 'Photos', close: 'Close', prev: 'Previous', next: 'Next', play: 'Video', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' } }
+    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '로봇 제작, 해외 심포지엄, 학회 발표의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', mediaOnly: '사진·영상 있는 소식만', photos: '사진', close: '닫기', prev: '이전', next: '다음', play: '영상', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' }, tags: { research: '연구', conference: '학회', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허', software: '소프트웨어' } },
+    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of building robots, an overseas symposium and a conference presentation.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', mediaOnly: 'Only posts with photos or videos', photos: 'Photos', close: 'Close', prev: 'Previous', next: 'Next', play: 'Video', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' }, tags: { research: 'Research', conference: 'Conference', award: 'Award', career: 'Career', activity: 'Activity', patent: 'Patent', software: 'Software' } }
   };
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
   function locale(lang) { return lang === 'en' ? 'en' : 'ko'; }
   function routeHref(base, lang, route) { return (base || '') + (locale(lang) === 'en' ? 'en/' : '') + route + 'index.html'; }
@@ -93,33 +94,16 @@
     if (release) return (release[1] !== 'bus-info' ? release[1] : lang === 'en' ? 'Daegu bus app' : '대구 버스 정보 앱') + ' v' + release.slice(2).join('.') + (lang === 'en' ? ' release' : ' 공개');
     return event.translations[lang].body.split(/\.\s/)[0];
   }
-  // Events without activity media borrow the approved cover of the case they link to, as a link preview.
-  function previewFor(event, lang, projects) {
-    var links = event.links || [];
-    for (var i = 0; i < links.length; i += 1) {
-      var match = links[i].route && links[i].route.match(/^projects\/([^/]+)\/$/);
-      var project = match && (projects || []).find(function (item) { return item.slug === match[1]; });
-      var media = project && project.media || {};
-      var lead = media.lead, poster = media.poster;
-      var image = lead && lead.status === 'approved' && lead.type === 'image' ? lead.publicPath : lead && lead.type === 'video' && poster && poster.status === 'approved' ? poster.publicPath : '';
-      if (!image || !project.translations || !project.translations[lang]) continue;
-      var copyFor = project.translations[lang];
-      return { route: links[i].route, image: image, video: lead.type === 'video', title: copyFor.title, summary: copyFor.summary || copyFor.thesis || '' };
-    }
-    return null;
-  }
   function paragraphs(text) { return String(text || '').split(/\n\s*\n/).map(function (part) { return part.trim(); }).filter(Boolean); }
-  function buildModel(news, lang, mediaData, projects) {
+  function buildModel(news, lang, mediaData) {
     lang = locale(lang);
     var mediaByEvent = mediaIndex(mediaData);
     var seen = new Set();
     return (news || []).filter(function (event) { if (seen.has(event.id)) return false; seen.add(event.id); return true; }).map(function (event, index) {
       var category = labels[event.id] ? labels[event.id][0] : 'software';
-      var media = (mediaByEvent[event.id] || []).slice();
       return { id: event.id, eventDate: event.eventDate, datePrecision: event.datePrecision, year: event.eventDate.slice(0, 4), title: titleFor(event, lang), category: category,
         categories: labels[event.id] && labels[event.id][3] ? [category].concat(labels[event.id][3]) : [category],
-        body: event.translations[lang].body, post: event.translations[lang].post || '', links: event.links || [], evidence: event.evidence, media: media,
-        preview: media.length ? null : previewFor(event, lang, projects), originalIndex: index };
+        body: event.translations[lang].body, post: event.translations[lang].post || '', links: event.links || [], evidence: event.evidence, media: (mediaByEvent[event.id] || []).slice(), originalIndex: index };
     }).sort(function (a, b) { return b.eventDate.localeCompare(a.eventDate) || a.originalIndex - b.originalIndex; });
   }
   function filterEvents(events, filters) {
@@ -128,23 +112,27 @@
   }
   function selectActivities(events) { return selectedIds.map(function (id) { return events.find(function (event) { return event.id === id; }); }).filter(Boolean); }
   function eventHref(event, options) { return routeHref(options.base, options.lang, 'news/') + '#news-' + event.id; }
-  function linksHtml(event, options, skipRoute) {
-    return event.links.filter(function (link) { return !skipRoute || link.route !== skipRoute; }).map(function (link) { var href = link.route ? routeHref(options.base, options.lang, link.route) : link.href; return '<a href="' + esc(href) + '">' + esc(link.translations[options.lang].label) + '</a>'; }).join('<span aria-hidden="true"> · </span>');
+  function linksHtml(event, options) {
+    return event.links.map(function (link) { var href = link.route ? routeHref(options.base, options.lang, link.route) : link.href; return '<a href="' + esc(href) + '">' + esc(link.translations[options.lang].label) + '</a>'; }).join('<span aria-hidden="true"> · </span>');
   }
-  function figureHtml(item, event, options) {
-    var translation = item.translations[options.lang];
-    var src = (options.base || '') + item.path;
-    var size = item.width && item.height ? ' width="' + item.width + '" height="' + item.height + '"' : '';
-    var visual = item.type === 'video' ? '<video controls muted playsinline preload="none"' + size + (item.poster ? ' poster="' + esc((options.base || '') + item.poster) + '"' : '') + ' aria-label="' + esc(translation.alt) + '"><source src="' + esc(src) + '" type="video/mp4"><a href="' + esc(src) + '">' + esc(translation.alt) + '</a></video>' : '<a href="' + esc(options.compact ? eventHref(event, options) : src) + '"><img src="' + esc(src) + '" alt="' + esc(translation.alt) + '"' + size + ' loading="lazy" decoding="async"></a>';
-    return '<figure data-media-id="' + esc(item.id) + '">' + visual + '<figcaption>' + esc(translation.caption) + '</figcaption></figure>';
+  // Rows sit under a year heading, so they show MM.DD, the month, or the year alone, as the record's precision allows.
+  function dateLabel(event, lang) {
+    var parts = String(event.eventDate).split('-');
+    if (parts.length < 2) return parts[0];
+    var month = Number(parts[1]);
+    if (locale(lang) === 'en') return months[month - 1] + (parts.length > 2 ? ' ' + Number(parts[2]) : '');
+    return parts.length > 2 ? parts[1] + '.' + parts[2] : month + '월';
   }
+  // The first photo (or a video poster) of the event, as a small square beside the row.
+  function thumbItem(event) {
+    var media = event.media || [];
+    return media.filter(function (item) { return item.type !== 'video'; })[0] || media.filter(function (item) { return item.type === 'video' && item.poster; })[0] || null;
+  }
+  function thumbSrc(item, options) { return (options.base || '') + (item.type === 'video' ? item.poster : item.path); }
   function mediaHtml(event, options) {
     var images = event.media.filter(function (item) { return item.type !== 'video'; });
     var video = event.media.filter(function (item) { return item.type === 'video'; }).slice(0, 1);
-    if (options.compact) {
-      return images.length ? '<div class="lf-media">' + figureHtml(images[0], event, options) + '</div>' : '';
-    }
-    // Feed grid: up to four tiles; the fourth carries a "+N" count and the rest stay reachable in the lightbox.
+    // Grid: up to four tiles; the fourth carries a "+N" count and the rest stay reachable in the lightbox.
     var all = images.concat(video);
     if (!all.length) return '';
     var visible = Math.min(all.length, 4), extra = all.length - visible;
@@ -160,42 +148,25 @@
       return '<figure class="lf-tile' + (index >= visible ? ' lf-tile--extra' : '') + '" data-media-id="' + esc(item.id) + '" data-index="' + index + '" data-type="' + (isVideo ? 'video' : 'image') + '" data-src="' + esc(src) + '"' + (isVideo && item.poster ? ' data-poster="' + esc((options.base || '') + item.poster) + '"' : '') + (index >= visible ? ' hidden' : '') + '><a href="' + esc(src) + '" data-lightbox="' + index + '"' + (isVideo ? ' aria-label="' + esc(c.play + ': ' + translation.alt) + '"' : '') + '>' + still + badge + overlay + '</a><figcaption' + (all.length > 1 ? ' class="lf-sr"' : '') + '>' + esc(translation.caption) + '</figcaption></figure>';
     }).join('') + '</div>';
   }
-  function previewHtml(event, options) {
-    var preview = event.preview;
-    if (!preview) return '';
-    var href = routeHref(options.base, options.lang, preview.route);
-    return '<a class="lf-preview" href="' + esc(href) + '"><span class="lf-preview-media"><img src="' + esc((options.base || '') + preview.image) + '" alt="" loading="lazy" decoding="async">' + (preview.video ? '<span class="lf-play" aria-hidden="true"></span>' : '') + '</span><span class="lf-preview-text"><span class="lf-preview-site">rafaam11.github.io/' + esc((options.lang === 'en' ? 'en/' : '') + preview.route) + '</span><strong>' + esc(preview.title) + '</strong><span class="lf-preview-summary">' + esc(preview.summary) + '</span></span></a>';
-  }
-  function postHtml(event, options) {
-    var parts = paragraphs(event.post || event.body);
-    return '<div class="lf-post" id="post-' + esc(event.id) + '">' + parts.map(function (part) { return '<p>' + esc(part) + '</p>'; }).join('') + '</div><button type="button" class="lf-post-toggle" aria-expanded="false" aria-controls="post-' + esc(event.id) + '" hidden>' + copy[options.lang].more + '</button>';
-  }
-  function eventHtml(event, options) {
+  // One timeline row: date | tags | title and one-line body | links | thumbnail.
+  // Rows with a post or media are native <details>; the summary is the row and the body holds the post and the media grid.
+  function rowHtml(event, options) {
     var c = copy[options.lang];
-    var links = linksHtml(event, options, event.preview && event.preview.route);
-    return '<li class="lf-event" id="news-' + esc(event.id) + '" data-news-id="' + esc(event.id) + '"><header class="lf-post-head"><img class="lf-avatar" src="' + esc((options.base || '') + 'assets/img/profile_square.webp') + '" alt="" width="44" height="44" loading="lazy" decoding="async"><div class="lf-event-date"><span class="lf-author">' + c.author + '</span><span class="lf-meta"><time datetime="' + esc(event.eventDate) + '">' + esc(event.eventDate.replace(/-/g, '.')) + '</time><span aria-hidden="true"> · </span><span class="lf-category">' + esc(event.categories.map(function (category) { return c.types[category]; }).join(' · ')) + '</span></span></div></header><article class="lf-event-content" aria-labelledby="title-' + esc(event.id) + '"><h2 id="title-' + esc(event.id) + '">' + esc(event.title) + '</h2>' + postHtml(event, options) + mediaHtml(event, options) + previewHtml(event, options) + (links ? '<p class="lf-links">' + links + '</p>' : '') + '</article></li>';
+    var parts = paragraphs(event.post);
+    var expandable = parts.length > 0 || event.media.length > 0;
+    var tag = expandable ? 'summary' : 'div';
+    var head = '<' + tag + ' class="lf-sum"><time class="lf-date" datetime="' + esc(event.eventDate) + '">' + esc(dateLabel(event, options.lang)) + '</time><span class="lf-tags">' + event.categories.map(function (category) { return '<span class="sc-tag">' + esc(c.tags[category] || c.types[category] || category) + '</span>'; }).join('') + '</span><span class="lf-main"><h3 class="lf-title">' + esc(event.title) + '</h3><span class="lf-body">' + esc(event.body) + '</span></span></' + tag + '>';
+    var detail = expandable
+      ? '<details class="lf-detail">' + head + '<div class="lf-more">' + (parts.length ? '<div class="lf-post">' + parts.map(function (part) { return '<p>' + esc(part) + '</p>'; }).join('') + '</div>' : '') + mediaHtml(event, options) + '</div></details>'
+      : '<div class="lf-detail">' + head + '</div>';
+    var links = linksHtml(event, options);
+    var thumb = thumbItem(event);
+    return '<li class="lf-row" id="news-' + esc(event.id) + '" data-news-id="' + esc(event.id) + '">' + detail + (links ? '<p class="lf-links">' + links + '</p>' : '') +
+      (thumb ? '<span class="lf-thumb"><img src="' + esc(thumbSrc(thumb, options)) + '" alt="' + esc(thumb.translations[options.lang].alt) + '" width="56" height="56" loading="lazy" decoding="async"></span>' : '') + '</li>';
   }
   function lightboxHtml(lang) {
     var c = copy[lang];
     return '<dialog class="lf-lightbox" aria-label="' + c.photos + '"><div class="lf-lightbox-stage"></div><p class="lf-lightbox-caption"></p><p class="lf-lightbox-count" aria-live="polite"></p><button type="button" class="lf-lightbox-prev" aria-label="' + c.prev + '">‹</button><button type="button" class="lf-lightbox-next" aria-label="' + c.next + '">›</button><button type="button" class="lf-lightbox-close" aria-label="' + c.close + '">×</button></dialog>';
-  }
-  // Collapse long posts after layout; posts that fit keep no toggle.
-  function clampPosts(container) {
-    Array.prototype.forEach.call(container.querySelectorAll('.lf-post'), function (post) {
-      post.classList.add('is-clamped');
-      if (post.scrollHeight <= post.clientHeight + 2) post.classList.remove('is-clamped');
-      else post.nextElementSibling.hidden = false;
-    });
-  }
-  function bindPostToggles(container, lang) {
-    container.addEventListener('click', function (event) {
-      var toggle = event.target.closest('.lf-post-toggle');
-      if (!toggle) return;
-      var post = toggle.previousElementSibling, open = toggle.getAttribute('aria-expanded') !== 'true';
-      post.classList.toggle('is-clamped', !open);
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.textContent = copy[lang][open ? 'less' : 'more'];
-    });
   }
   function setupLightbox(doc, container, dialog) {
     if (!dialog || typeof dialog.showModal !== 'function') return;
@@ -237,15 +208,37 @@
     });
     dialog.addEventListener('close', function () { stage.innerHTML = ''; if (opener) opener.focus(); });
   }
+  // One chronological timeline, grouped by year (newest first).
   function feedHtml(events, options) {
     options = Object.assign({ lang: 'ko', base: '' }, options || {}); options.lang = locale(options.lang);
-    return events.length ? '<ol class="lf-feed">' + events.map(function (event) { return eventHtml(event, options); }).join('') + '</ol>' : '<div class="lf-empty"><p>' + copy[options.lang].empty + '</p><button type="button" data-feed-reset>' + copy[options.lang].reset + '</button></div>';
+    if (!events.length) return '<div class="lf-empty"><p>' + copy[options.lang].empty + '</p><button type="button" data-feed-reset>' + copy[options.lang].reset + '</button></div>';
+    var years = [], byYear = {};
+    events.forEach(function (event) { if (!byYear[event.year]) { byYear[event.year] = []; years.push(event.year); } byYear[event.year].push(event); });
+    return '<div class="lf-feed">' + years.map(function (year) {
+      return '<section class="lf-year" aria-labelledby="news-' + esc(year) + '"><h2 id="news-' + esc(year) + '">' + esc(year) + '</h2><ol class="lf-list">' + byYear[year].map(function (event) { return rowHtml(event, options); }).join('') + '</ol></section>';
+    }).join('') + '</div>';
+  }
+  // '#news-<id>' (or any fragment) → element id; percent-encoded fragments are decoded.
+  function hashTargetId(hash) {
+    if (!hash || hash.charAt(0) !== '#' || hash.length < 2) return '';
+    try { return decodeURIComponent(hash.slice(1)); } catch (error) { return hash.slice(1); }
+  }
+  // Opens the timeline row a URL fragment points at and returns the element to scroll to.
+  function openFromHash(doc, hash) {
+    var id = hashTargetId(hash);
+    var target = id ? doc.getElementById(id) : null;
+    if (!target) return null;
+    var details = target.getAttribute && target.getAttribute('data-news-id') !== null && target.querySelector('details');
+    if (details) details.open = true;
+    return target;
   }
   function selectedActivitiesHtml(events, options) {
-    options = Object.assign({ lang: 'ko', base: '', compact: true }, options || {}); options.lang = locale(options.lang); options.compact = true;
+    options = Object.assign({ lang: 'ko', base: '' }, options || {}); options.lang = locale(options.lang);
     var c = copy[options.lang];
     return '<section class="lf-selected" aria-labelledby="selected-activities-title"><h2 id="selected-activities-title">' + c.selected + '</h2><p class="lf-selected-intro">' + c.selectedIntro + '</p><div class="lf-activity-grid">' + selectActivities(events).map(function (event) {
-      return '<article class="lf-activity" data-activity-id="' + esc(event.id) + '"><time datetime="' + esc(event.eventDate) + '">' + esc(event.eventDate.replace(/-/g, '.')) + '</time><h3><a href="' + esc(eventHref(event, options)) + '">' + esc(event.title) + '</a></h3>' + mediaHtml(event, options) + '<p class="lf-links">' + linksHtml(event, options) + '</p><p class="lf-links"><a href="' + esc(eventHref(event, options)) + '">' + c.detail + '</a></p></article>';
+      var href = esc(eventHref(event, options));
+      var thumb = thumbItem(event);
+      return '<article class="lf-activity" data-activity-id="' + esc(event.id) + '">' + (thumb ? '<a class="lf-activity-thumb" href="' + href + '"><img src="' + esc(thumbSrc(thumb, options)) + '" alt="' + esc(thumb.translations[options.lang].alt) + '"' + (thumb.width && thumb.height ? ' width="' + thumb.width + '" height="' + thumb.height + '"' : '') + ' loading="lazy" decoding="async"></a>' : '') + '<time datetime="' + esc(event.eventDate) + '">' + esc(event.eventDate.replace(/-/g, '.')) + '</time><h3><a href="' + href + '">' + esc(event.title) + '</a></h3></article>';
     }).join('') + '</div></section>';
   }
   function countText(shown, total, lang) { return lang === 'en' ? shown + ' of ' + total + ' entries' : '전체 ' + total + '건 중 ' + shown + '건'; }
@@ -261,7 +254,7 @@
     var main = doc.getElementById('main-content');
     if (!main || main.dataset.localFeedMounted) return;
     var options = { lang: locale(body.dataset.lang), base: body.dataset.base || '' };
-    var events = buildModel(portfolio.news, options.lang, mediaData, portfolio.projects);
+    var events = buildModel(portfolio.news, options.lang, mediaData);
     if (page === 'home') {
       var news = main.querySelector('[aria-labelledby="news-title"]');
       if (news) news.insertAdjacentHTML('afterend', selectedActivitiesHtml(events, options));
@@ -273,14 +266,26 @@
       var headerHtml = header ? header.outerHTML : '<header class="sc-page-header"><h1>' + copy[options.lang].title + '</h1><p>' + copy[options.lang].intro + '</p></header>';
       main.innerHTML = headerHtml + '<p class="lf-local-note">' + copy[options.lang].local + '</p>' + controlsHtml(events, options.lang) + '<div id="feed-results">' + feedHtml(events, options) + '</div>' + back + lightboxHtml(options.lang);
       var year = doc.getElementById('feed-year'), type = doc.getElementById('feed-type'), mediaOnly = doc.getElementById('feed-media'), results = doc.getElementById('feed-results'), count = doc.getElementById('feed-count');
-      function render() { var filtered = filterEvents(events, { year: year.value, type: type.value, mediaOnly: mediaOnly.checked }); results.innerHTML = feedHtml(filtered, options); count.textContent = countText(filtered.length, events.length, options.lang); clampPosts(results); }
+      function render() { var filtered = filterEvents(events, { year: year.value, type: type.value, mediaOnly: mediaOnly.checked }); results.innerHTML = feedHtml(filtered, options); count.textContent = countText(filtered.length, events.length, options.lang); }
+      function resetFilters() { year.value = 'all'; type.value = 'all'; mediaOnly.checked = false; render(); }
       year.addEventListener('change', render); type.addEventListener('change', render); mediaOnly.addEventListener('change', render);
-      results.addEventListener('click', function (event) { if (event.target.closest('[data-feed-reset]')) { year.value = 'all'; type.value = 'all'; mediaOnly.checked = false; render(); year.focus(); } });
-      clampPosts(results); bindPostToggles(results, options.lang); setupLightbox(doc, results, main.querySelector('.lf-lightbox'));
+      results.addEventListener('click', function (event) {
+        if (event.target.closest('[data-feed-reset]')) { resetFilters(); year.focus(); return; }
+        // The thumbnail sits outside the summary (links stay out of it too); clicking it toggles the row.
+        var thumb = event.target.closest('.lf-thumb');
+        var details = thumb && thumb.parentNode.querySelector('details');
+        if (details) details.open = !details.open;
+      });
+      setupLightbox(doc, results, main.querySelector('.lf-lightbox'));
       var view = doc.defaultView;
-      if (view && view.location.hash) { var target = doc.getElementById(view.location.hash.slice(1)); if (target) view.requestAnimationFrame(function () { target.scrollIntoView(); }); }
+      var reveal = function () {
+        var hash = view.location.hash, target = openFromHash(doc, hash);
+        if (!target && /^news-/.test(hashTargetId(hash)) && (year.value !== 'all' || type.value !== 'all' || mediaOnly.checked)) { resetFilters(); target = openFromHash(doc, hash); }
+        if (target) view.requestAnimationFrame(function () { target.scrollIntoView(); });
+      };
+      if (view) { reveal(); view.addEventListener('hashchange', reveal); }
     }
     main.dataset.localFeedMounted = 'true';
   }
-  return { selectedIds: selectedIds, mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, previewFor: previewFor, lightboxHtml: lightboxHtml, routeHref: routeHref, mount: mount };
+  return { selectedIds: selectedIds, mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, dateLabel: dateLabel, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, lightboxHtml: lightboxHtml, hashTargetId: hashTargetId, openFromHash: openFromHash, routeHref: routeHref, mount: mount };
 });

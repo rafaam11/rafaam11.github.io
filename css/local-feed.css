@@ -8,56 +8,55 @@
 .td-shell .lf-filters #feed-count { margin: 0 0 .5rem auto; color: var(--sc-faint); font-size: var(--sc-meta); }
 .lf-filters select:focus-visible, .lf-toggle input:focus-visible, .lf-empty button:focus-visible { outline: 2px solid #315d80; outline-offset: 3px; }
 
-/* News feed: one post card per event, newest first. */
-.lf-feed { display: grid; gap: 1rem; max-width: 680px; list-style: none; margin: 1.2rem 0 0; padding: 0; }
-.lf-event { padding: 1.1rem 1.25rem 1rem; border: 1px solid var(--sc-rule); border-radius: 10px; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .05); scroll-margin-top: 2rem; }
-.lf-event:target { border-color: #8ca2b3; box-shadow: 0 0 0 3px #e3edf5; }
-.lf-post-head { display: flex; gap: .75rem; align-items: center; margin-bottom: .8rem; }
-.lf-avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #f3f5f7; }
-.lf-event-date { display: grid; gap: .1rem; min-width: 0; color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; }
-.lf-author { color: var(--sc-ink); font-weight: 600; }
-.lf-meta { font-size: .83rem; }
-.td-shell .lf-event-content h2 { margin: 0; border: 0; padding: 0; font-size: 1.2rem; line-height: 1.45; }
-.lf-event-content { min-width: 0; }
-.lf-post { margin-top: .45rem; }
-.td-shell .lf-post p { margin: 0 0 .7rem; line-height: 1.75; }
+/* News timeline: one row per event, grouped by year, newest first.
+   Row: date | tags | title and one-line body | links | thumbnail. Rows with a post or media are <details>. */
+.lf-feed { margin: .4rem 0 0; }
+.td-shell .lf-year h2 { margin: 1.7rem 0 0; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.lf-list { list-style: none; margin: .45rem 0 0; padding: 0; }
+.lf-row { display: grid; grid-template-columns: minmax(0, 1fr) 10rem 56px; column-gap: 1rem; align-items: start; padding: .6rem 0; border-top: 1px solid var(--sc-rule); scroll-margin-top: 1rem; }
+.lf-row:target { background: #f6f8fa; }
+.lf-detail { grid-column: 1; grid-row: 1; min-width: 0; }
+.lf-sum { display: grid; grid-template-columns: 3.4rem 5.4rem minmax(0, 1fr); column-gap: .9rem; align-items: start; }
+summary.lf-sum { list-style: none; cursor: pointer; }
+summary.lf-sum::-webkit-details-marker { display: none; }
+summary.lf-sum:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 3px; }
+.lf-date { color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; line-height: 1.6; white-space: nowrap; }
+.lf-tags { display: flex; flex-wrap: wrap; gap: .25rem; padding-top: .1rem; }
+.lf-tags .sc-tag { padding: 0 .35rem; font-size: .78rem; white-space: nowrap; }
+.lf-main { display: block; min-width: 0; }
+.td-shell .lf-title { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.5; letter-spacing: 0; }
+summary.lf-sum .lf-title::after { content: ""; display: inline-block; width: .36em; height: .36em; margin: 0 0 .2em .5em; border-right: 1.5px solid var(--sc-faint); border-bottom: 1.5px solid var(--sc-faint); transform: rotate(45deg); vertical-align: middle; }
+details[open] > summary.lf-sum .lf-title::after { margin-bottom: 0; transform: rotate(-135deg); }
+summary.lf-sum:hover .lf-title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.lf-body { display: -webkit-box; overflow: hidden; color: var(--sc-muted); font-size: var(--sc-meta); line-height: 1.55; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+details[open] .lf-body, div.lf-sum .lf-body { display: block; overflow: visible; }
+.lf-row > .lf-links { grid-column: 2; grid-row: 1; margin: 0; line-height: 1.55; }
+.lf-row > .lf-links a { display: inline-block; }
+.lf-thumb { grid-column: 3; grid-row: 1; display: block; width: 56px; height: 56px; overflow: hidden; border-radius: 3px; background: var(--sc-rule); cursor: pointer; }
+.td-shell .lf-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lf-more { max-width: 600px; margin: .55rem 0 .35rem calc(3.4rem + 5.4rem + 1.8rem); }
+.td-shell .lf-post p { margin: 0 0 .55rem; font-size: .97rem; line-height: 1.7; }
 .td-shell .lf-post p:last-child { margin-bottom: 0; }
-.lf-post.is-clamped { max-height: calc(1.75em * 5); overflow: hidden; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
-.lf-post-toggle { margin-top: .2rem; padding: .35rem 0; min-height: 36px; border: 0; background: none; color: var(--sc-muted); font: inherit; font-size: var(--sc-meta); font-weight: 600; cursor: pointer; }
-.lf-post-toggle:hover { color: var(--sc-ink); text-decoration: underline; }
-.lf-post-toggle:focus-visible, .lf-grid a:focus-visible, .lf-preview:focus-visible { outline: 2px solid #315d80; outline-offset: 2px; }
-.td-shell .lf-event .lf-links { margin: .9rem 0 0; padding-top: .7rem; border-top: 1px solid var(--sc-rule); }
 .lf-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
-/* Feed media grid: 1 full width, 2 side by side, 3 = one large + two, 4+ = 2x2 with a +N count. */
-.lf-grid { display: grid; gap: 3px; margin: .9rem -1.25rem 0; overflow: hidden; background: #fff; }
+/* Media grid inside an opened row: 1 full width, 2 side by side, 3 = one large + two, 4+ = 2x2 with a +N count. */
+.lf-grid { display: grid; gap: 3px; margin: .7rem 0 0; overflow: hidden; border-radius: 3px; }
 .lf-grid--2, .lf-grid--4 { grid-template-columns: 1fr 1fr; }
 .lf-grid--3 { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; aspect-ratio: 3 / 2; }
 .lf-grid--3 .lf-tile:first-child { grid-row: 1 / 3; }
 .lf-tile { position: relative; min-width: 0; min-height: 0; margin: 0; }
 .lf-tile[hidden] { display: none; }
 .lf-tile > a { position: relative; display: block; height: 100%; background: #eef1f4; }
+.lf-tile > a:focus-visible { outline: 2px solid #315d80; outline-offset: 2px; }
 .td-shell .lf-tile img, .td-shell .lf-tile video { display: block; width: 100%; height: 100%; object-fit: cover; }
-.td-shell .lf-grid--1 .lf-tile img, .td-shell .lf-grid--1 .lf-tile video { height: auto; max-height: 520px; object-fit: contain; }
+.td-shell .lf-grid--1 .lf-tile img, .td-shell .lf-grid--1 .lf-tile video { height: auto; max-height: 420px; object-fit: contain; }
 .lf-grid--2 .lf-tile > a, .lf-grid--4 .lf-tile > a { aspect-ratio: 1 / 1; }
-.lf-grid--1 figcaption { margin: .45rem 1.25rem 0; color: var(--sc-faint); font-size: .83rem; line-height: 1.6; }
+.lf-grid--1 figcaption { margin: .4rem 0 0; color: var(--sc-faint); font-size: .83rem; line-height: 1.6; }
 .lf-tile-more { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; background: rgba(15, 23, 42, .5); font-size: 1.9rem; font-weight: 600; }
 .lf-play { position: absolute; top: 50%; left: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; background: rgba(15, 23, 42, .6); }
 .lf-play::after { content: ""; position: absolute; top: 17px; left: 21px; border-style: solid; border-width: 10px 0 10px 16px; border-color: transparent transparent transparent #fff; }
 
-/* Link preview for events whose media live on a case page. */
-.lf-preview { display: block; margin: .9rem 0 0; overflow: hidden; border: 1px solid var(--sc-rule); border-radius: 8px; color: inherit; background: #f7f8fa; text-decoration: none; }
-.td-shell .lf-preview, .td-shell .lf-preview:hover, .lf-preview-text > * { text-decoration: none; }
-.lf-preview:hover { background: #f0f3f6; }
-.lf-preview:hover strong { text-decoration: underline; }
-.lf-preview-media { position: relative; display: block; aspect-ratio: 1.91 / 1; background: #eef1f4; }
-.td-shell .lf-preview-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.lf-preview-text { display: grid; gap: .2rem; padding: .7rem .9rem .8rem; }
-.lf-preview-site { color: var(--sc-faint); font-size: .78rem; overflow-wrap: anywhere; }
-.lf-preview strong { color: var(--sc-ink); font-size: 1rem; line-height: 1.45; }
-.lf-preview-summary { display: -webkit-box; overflow: hidden; color: var(--sc-muted); font-size: .88rem; line-height: 1.55; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-
-/* Lightbox: swipe or arrow through one post's photos and videos. */
+/* Lightbox: swipe or arrow through one event's photos and videos. */
 .lf-lightbox { width: min(96vw, 1100px); max-width: none; max-height: 94vh; padding: 3rem 3.5rem 1rem; border: 0; border-radius: 8px; color: #e5e7eb; background: #111; }
 .lf-lightbox::backdrop { background: rgba(0, 0, 0, .8); }
 .lf-lightbox-stage img, .lf-lightbox-stage video { display: block; width: 100%; max-height: 74vh; object-fit: contain; margin: 0 auto; }
@@ -71,32 +70,42 @@
 .lf-lightbox-close { top: .5rem; right: .5rem; }
 .lf-lightbox.is-single .lf-lightbox-prev, .lf-lightbox.is-single .lf-lightbox-next { display: none; }
 
-/* Compact media (Home selected activities). */
-.lf-media { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 1rem; margin-top: 1rem; }
-.lf-media figure { min-width: 0; margin: 0; }
-.lf-media figure > a { display: block; background: #f3f5f7; }
-.td-shell .lf-media img, .td-shell .lf-media video { display: block; width: 100%; height: 290px; object-fit: contain; background: #f3f5f7; border-radius: 2px; }
-.lf-media figcaption { margin-top: .45rem; color: var(--sc-faint); font-size: .83rem; line-height: 1.6; }
 .lf-empty { padding: 2rem 0 3rem; }
 .lf-empty button { margin-top: 1rem; min-height: 44px; padding: .5rem 1rem; border: 1px solid #8ca2b3; border-radius: 3px; color: #244b6a; background: #f5f8fa; font: inherit; cursor: pointer; }
-.lf-activity-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 1.2rem; }
+
+/* Selected activities (Home): three small cards, thumbnail, date and title. */
+.lf-activity-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: .9rem; }
 .lf-activity { min-width: 0; }
-.lf-activity > time { color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; }
-.td-shell .lf-activity h3 { margin: .25rem 0 0; font-size: 1.1rem; line-height: 1.5; }
+.lf-activity-thumb { display: block; height: 120px; overflow: hidden; border-radius: 3px; background: var(--sc-rule); }
+.td-shell .lf-activity-thumb img { display: block; width: 100%; height: 120px; object-fit: cover; }
+.lf-activity > time { display: block; margin-top: .45rem; color: var(--sc-faint); font-size: var(--sc-meta); font-variant-numeric: tabular-nums; }
+.td-shell .lf-activity h3 { margin: .1rem 0 0; font-size: 1rem; line-height: 1.45; }
 .td-shell .lf-activity h3 a { color: var(--sc-ink); }
-.lf-activity .lf-media { display: block; margin-top: .7rem; }
-.td-shell .lf-activity .lf-media img { height: 220px; }
-.lf-activity .lf-media figcaption { font-size: .8rem; }
+
+/* Narrower desktops: links drop under the row text, the thumbnail stays right. */
+@media (max-width: 820px) {
+  .lf-row { grid-template-columns: minmax(0, 1fr) 56px; }
+  .lf-row > .lf-links { grid-column: 1; grid-row: 2; margin-top: .15rem; padding-left: calc(3.4rem + 5.4rem + 1.8rem); }
+  .lf-thumb { grid-column: 2; }
+}
+@media (max-width: 600px) {
+  .lf-row { grid-template-columns: minmax(0, 1fr) 48px; column-gap: .75rem; }
+  .lf-sum { grid-template-columns: auto minmax(0, 1fr); column-gap: .6rem; row-gap: .15rem; }
+  .lf-main { grid-column: 1 / -1; }
+  .lf-row > .lf-links { padding-left: 0; }
+  .lf-thumb { width: 48px; height: 48px; }
+  .lf-row:has(> details[open]) > .lf-detail { grid-column: 1 / -1; }
+  .lf-row:has(> details[open]) > .lf-thumb { display: none; }
+  .lf-more { margin-left: 0; }
+  .lf-activity-grid { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
+  .lf-activity { display: grid; grid-template-columns: 96px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: .8rem; }
+  .lf-activity-thumb { grid-row: 1 / 3; height: 72px; }
+  .td-shell .lf-activity-thumb img { height: 72px; }
+  .lf-activity > time { margin-top: 0; }
+}
 @media (max-width: 650px) {
-  .lf-event { padding: 1rem 1rem .9rem; border-radius: 8px; }
-  .lf-grid { margin-inline: -1rem; }
-  .lf-grid--1 figcaption { margin-inline: 1rem; }
   .lf-lightbox { width: 100vw; max-height: 100vh; padding: 3.2rem .5rem 4rem; border-radius: 0; }
   .lf-lightbox-prev, .lf-lightbox-next { top: auto; bottom: .6rem; transform: none; }
-  .lf-activity-grid { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
-  .lf-activity { padding-bottom: 1rem; border-bottom: 1px solid var(--sc-rule); }
-  .td-shell .lf-activity .lf-media img { height: 260px; }
-  .td-shell .lf-media img, .td-shell .lf-media video { height: 245px; }
   .lf-filters { gap: .8rem; }
   .lf-filters label { flex: 1; min-width: 0; }
   .lf-filters .lf-toggle { flex-basis: 100%; }
