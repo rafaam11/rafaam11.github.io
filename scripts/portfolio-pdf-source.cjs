@@ -22,6 +22,38 @@ function pdfProject(project) {
   return copy;
 }
 
+// Web-only CV fields: the identity `brief` and each experience area's `rows`/`keywords`
+// render only on the CV web page. The CV PDFs are the author's own documents.
+const WEB_ONLY_CV_IDENTITY_FIELDS = Object.freeze(['brief']);
+const WEB_ONLY_CV_AREA_FIELDS = Object.freeze(['rows', 'keywords']);
+
+function withoutFields(record, fields) {
+  if (!record || typeof record !== 'object' || Array.isArray(record)) return record;
+  const copy = { ...record };
+  for (const field of fields) delete copy[field];
+  return copy;
+}
+
+function withLocalizedCopies(record, fields) {
+  if (!record || typeof record !== 'object' || Array.isArray(record)) return record;
+  const translations = record.translations;
+  if (!translations || typeof translations !== 'object' || Array.isArray(translations)) return record;
+  return { ...record, translations: Object.fromEntries(Object.entries(translations).map(([locale, copy]) => [locale, withoutFields(copy, fields)])) };
+}
+
+function pdfCv(cv) {
+  if (!cv || typeof cv !== 'object' || Array.isArray(cv)) return cv;
+  const copy = { ...cv };
+  if (copy.identity !== undefined) copy.identity = withLocalizedCopies(copy.identity, WEB_ONLY_CV_IDENTITY_FIELDS);
+  if (Array.isArray(copy.experience)) {
+    copy.experience = copy.experience.map((entry) => {
+      if (!entry || typeof entry !== 'object' || !Array.isArray(entry.areas)) return entry;
+      return { ...entry, areas: entry.areas.map((area) => withLocalizedCopies(area, WEB_ONLY_CV_AREA_FIELDS)) };
+    });
+  }
+  return copy;
+}
+
 function canonicalPdfSource(portfolio, evidence, cv) {
   return {
     schemaVersion: PDF_SOURCE_SCHEMA_VERSION,
@@ -31,7 +63,7 @@ function canonicalPdfSource(portfolio, evidence, cv) {
     tiers: portfolio.tiers,
     projects: Array.isArray(portfolio.projects) ? portfolio.projects.map(pdfProject) : portfolio.projects,
     evidence,
-    cv
+    cv: pdfCv(cv)
   };
 }
 
@@ -48,6 +80,7 @@ module.exports = {
   PDF_SOURCE_LOCALES,
   PDF_SOURCE_SITE,
   canonicalPdfSource,
+  pdfCv,
   pdfSourceDigest,
   withPdfSourceDigest
 };

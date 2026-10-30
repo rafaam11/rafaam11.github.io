@@ -264,6 +264,8 @@ function renderPublicCvSummary(cvValue, locale) {
     groups: { work: '직무', undergraduate: '학부', academic: '학회' },
     filedSuffix: '출원',
     caseLink: '관련 프로젝트',
+    table: ['프로젝트', '기간', '한 일', '결과'],
+    direction: '연구 방향',
     boundary: '공개 승인된 사실만 싣습니다. 타인 개인정보와 미검증 성과 주장은 포함하지 않습니다.'
   } : {
     education: 'Education',
@@ -280,9 +282,33 @@ function renderPublicCvSummary(cvValue, locale) {
     groups: { work: 'Employment', undergraduate: 'Undergraduate', academic: 'Academic society' },
     filedSuffix: 'filed',
     caseLink: 'Related project',
+    table: ['Project', 'Period', 'What I did', 'Result'],
+    direction: 'Research direction',
     boundary: 'Only approved public facts appear here. Personal information about other people and unverified outcome claims are excluded.'
   };
 
+  const caseHref = (slug, label) => `../projects/${htmlEscape(requireText(slug, label))}/index.html`;
+  // Skills and languages render as 1px-border tags; commas inside parentheses stay in one tag.
+  const splitTags = (text, separator) => {
+    const parts = [];
+    let depth = 0;
+    let current = '';
+    for (let index = 0; index < text.length; index += 1) {
+      const character = text[index];
+      if (character === '(') depth += 1;
+      if (character === ')') depth = Math.max(0, depth - 1);
+      if (depth === 0 && text.startsWith(separator, index)) {
+        parts.push(current);
+        current = '';
+        index += separator.length - 1;
+        continue;
+      }
+      current += character;
+    }
+    parts.push(current);
+    return parts.map((part) => part.trim()).filter(Boolean);
+  };
+  const tagList = (values) => `<ul class="sc-tags">${values.map((value) => `<li class="sc-tag">${htmlEscape(value)}</li>`).join('')}</ul>`;
   const entryHead = (organization, period) => `<p class="sc-cv__head"><strong>${htmlEscape(locale === 'ko' ? ({'DGIST': '대구경북과학기술원 (DGIST)', 'Kumoh National Institute of Technology': '금오공과대학교', 'DIGITRACK Inc.': '㈜디지트랙'}[organization] || organization) : organization)}</strong><time>${htmlEscape(locale === 'ko' ? period.replace(/Present/gi, '현재') : period)}</time></p>`;
   const listItems = (items, label) => items.map((item, index) => `            <li>${htmlEscape(requireText(item, `${label} item ${index + 1}`))}</li>`).join('\n');
 
@@ -294,7 +320,7 @@ function renderPublicCvSummary(cvValue, locale) {
     return `        <li>
           ${entryHead(requireText(record.organization, `${label} organization`), requireText(record.period, `${label} period`))}
           <p class="sc-cv__role">${htmlEscape(entryCopy.degree)}</p>
-          <ul>
+          <ul class="sc-cv__notes">
 ${listItems(notes, `${label} note`)}
           </ul>
         </li>`;
@@ -308,7 +334,36 @@ ${listItems(notes, `${label} note`)}
       const areaLabel = `Public CV experience area ${areaIndex + 1}`;
       const areaRecord = requireRecord(area, areaLabel);
       const areaCopy = localized(areaRecord, locale, ['title'], areaLabel);
-      const items = requireArray(requireRecord(areaRecord.translations, `${areaLabel} translations`)[locale].items, `${areaLabel} items`);
+      const areaTranslation = requireRecord(areaRecord.translations, `${areaLabel} translations`)[locale];
+      if (areaTranslation.rows !== undefined) {
+        // Web-only project table; `items` stay in the data for the PDF synchronization review.
+        const rows = requireArray(areaTranslation.rows, `${areaLabel} rows`);
+        if (!rows.length) throw new TypeError(`${areaLabel} rows must not be empty.`);
+        const keywords = areaTranslation.keywords === undefined ? [] : requireArray(areaTranslation.keywords, `${areaLabel} keywords`)
+          .map((keyword, keywordIndex) => requireText(keyword, `${areaLabel} keyword ${keywordIndex + 1}`));
+        const rowHtml = rows.map((row, rowIndex) => {
+          const rowLabel = `${areaLabel} row ${rowIndex + 1}`;
+          const rowRecord = requireRecord(row, rowLabel);
+          const project = htmlEscape(requireText(rowRecord.project, `${rowLabel} project`));
+          const projectHtml = rowRecord.slug === undefined ? project : `<a href="${caseHref(rowRecord.slug, `${rowLabel} slug`)}">${project}</a>`;
+          if (typeof rowRecord.period !== 'string') throw new TypeError(`${rowLabel} period must be a string.`);
+          const did = requireArray(rowRecord.did, `${rowLabel} did`).map((line, lineIndex) => htmlEscape(requireText(line, `${rowLabel} did ${lineIndex + 1}`)));
+          if (!did.length) throw new TypeError(`${rowLabel} did must not be empty.`);
+          return `                <tr><th scope="row">${projectHtml}</th><td class="sc-cv__period" data-label="${copy.table[1]}">${htmlEscape(rowRecord.period.trim() || '—')}</td><td data-label="${copy.table[2]}">${did.join(' · ')}</td><td data-label="${copy.table[3]}">${htmlEscape(requireText(rowRecord.result, `${rowLabel} result`))}</td></tr>`;
+        }).join('\n');
+        return `          <div class="sc-cv__area">
+            <h4>${htmlEscape(areaCopy.title)}</h4>${keywords.length ? `\n            ${tagList(keywords)}` : ''}
+            <table class="sc-cv__projects">
+              <thead>
+                <tr>${copy.table.map((heading) => `<th scope="col">${heading}</th>`).join('')}</tr>
+              </thead>
+              <tbody>
+${rowHtml}
+              </tbody>
+            </table>
+          </div>`;
+      }
+      const items = requireArray(areaTranslation.items, `${areaLabel} items`);
       return `          <div class="sc-cv__area">
             <h4>${htmlEscape(areaCopy.title)}</h4>
             <ul>
@@ -361,14 +416,14 @@ ${areas}
   const skillHtml = skills.map((entry, index) => {
     const label = `Public CV skill ${index + 1}`;
     const entryCopy = localized(requireRecord(entry, label), locale, ['category', 'items'], label);
-    return `          <div><dt>${htmlEscape(entryCopy.category)}</dt><dd>${htmlEscape(entryCopy.items)}</dd></div>`;
+    return `          <div><dt>${htmlEscape(entryCopy.category)}</dt><dd>${tagList(splitTags(entryCopy.items, ', '))}</dd></div>`;
   }).join('\n');
 
-  const languageHtml = languages.map((entry, index) => {
+  const languageTags = languages.map((entry, index) => {
     const record = requireRecord(entry, `Public CV language ${index + 1}`);
     const translations = requireRecord(record.translations, `Public CV language ${index + 1} translations`);
-    return htmlEscape(requireText(translations[locale], `Public CV language ${index + 1} ${locale}`));
-  }).join(' · ');
+    return requireText(translations[locale], `Public CV language ${index + 1} ${locale}`);
+  });
 
   const contactHtml = contacts.map((entry, index) => {
     const record = requireRecord(entry, `Public CV contact ${index + 1}`);
@@ -377,10 +432,25 @@ ${areas}
     return `      <li><a href="${htmlEscape(href)}">${htmlEscape(label)}: ${htmlEscape(requireText(record.value, `Public CV contact ${index + 1} value`))}</a></li>`;
   }).join('\n');
 
+  // Web-only brief (at most two lines) replaces the summary prose; research direction stays its own line.
+  const identityTranslation = requireRecord(identity.translations, 'Public CV identity translations')[locale];
+  let introHtml = `    <p class="sc-cv__summary">${htmlEscape(identityCopy.summary)}</p>`;
+  if (identityTranslation.brief !== undefined) {
+    const brief = requireArray(identityTranslation.brief, 'Public CV identity brief')
+      .map((line, lineIndex) => htmlEscape(requireText(line, `Public CV identity brief line ${lineIndex + 1}`)));
+    if (brief.length < 1 || brief.length > 2) throw new TypeError('Public CV identity brief must have one or two lines.');
+    introHtml = `    <p class="sc-cv__summary sc-cv__brief">${brief.join('<br>')}</p>`;
+    if (cv.interests !== undefined) {
+      const interests = requireArray(requireRecord(cv.interests, 'Public CV interests')[locale], 'Public CV interests')
+        .map((term, termIndex) => htmlEscape(requireText(term, `Public CV interest ${termIndex + 1}`)));
+      introHtml += `
+    <p class="sc-cv__direction"><strong>${copy.direction}</strong> ${interests.join(' · ')}</p>`;
+    }
+  }
   const body = `  <header class="sc-cv__intro">
     <h2 id="cv-summary-title">${htmlEscape(identityCopy.displayName)}<small lang="${locale === 'ko' ? 'en' : 'ko'}">${htmlEscape(locale === 'ko' ? requireText(identity.name, 'Public CV identity name') : requireText(requireRecord(identity.translations, 'Public CV identity translations').ko.displayName, 'Public CV identity ko displayName'))}</small></h2>
     <p class="sc-cv__headline">${htmlEscape(identityCopy.headline)}</p>
-    <p class="sc-cv__summary">${htmlEscape(identityCopy.summary)}</p>
+${introHtml}
     <address class="sc-cv__contacts" aria-label="${htmlEscape(copy.contacts)}">
       <ul>
         <li>${htmlEscape(requireText(location[locale], 'Public CV identity location'))}</li>
@@ -422,7 +492,7 @@ ${awardHtml}
     <h3 id="cv-skills-title">${copy.skills}</h3>
     <dl class="sc-cv__skills">
 ${skillHtml}
-          <div><dt>${copy.languages}</dt><dd>${languageHtml}</dd></div>
+          <div><dt>${copy.languages}</dt><dd>${tagList(languageTags)}</dd></div>
     </dl>
     <p class="sc-cv__note"><a href="../projects/index.html">${locale === 'ko' ? '연구와 구현의 상세 내용은 프로젝트에서 확인할 수 있습니다.' : 'Explore the projects for research and implementation details.'}</a></p>
   </section>`;

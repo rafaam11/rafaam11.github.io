@@ -35,6 +35,18 @@
   color: var(--sc-muted);
 }
 
+.sc-cv__direction {
+  margin: .4rem 0 0;
+  color: var(--sc-muted);
+  font-size: var(--sc-meta);
+}
+
+.sc-cv__direction strong {
+  margin-right: .4rem;
+  color: var(--sc-ink);
+  font-weight: 600;
+}
+
 .sc-cv__contacts {
   margin-top: 1rem;
   font-style: normal;
@@ -122,8 +134,19 @@
   margin-top: .35rem;
 }
 
+.sc-cv__entries .sc-cv__notes {
+  margin-top: .4rem;
+  color: var(--sc-muted);
+  font-size: var(--sc-meta);
+  line-height: 1.55;
+}
+
+.sc-cv__entries .sc-cv__notes li {
+  margin-top: .1rem;
+}
+
 .sc-cv__area {
-  margin-top: 1.25rem;
+  margin-top: 1.5rem;
 }
 
 .sc-cv__area h4 {
@@ -131,11 +154,87 @@
   font-size: 1rem;
 }
 
+/* Dense CV (2026-10-31): 1px-border tags and a project table per experience area. */
+.sc-cv .sc-tags {
+  margin: .45rem 0 0;
+  padding: 0;
+}
+
+.sc-cv .sc-tags > li {
+  margin: 0;
+}
+
+.sc-cv__skills dd .sc-tags {
+  margin: 0;
+}
+
+.sc-cv__projects {
+  width: 100%;
+  margin-top: .6rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--sc-meta);
+  line-height: 1.5;
+}
+
+.sc-cv__projects th,
+.sc-cv__projects td {
+  padding: .45rem .9rem .45rem 0;
+  border-top: 1px solid var(--sc-rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.sc-cv__projects th:last-child,
+.sc-cv__projects td:last-child {
+  padding-right: 0;
+}
+
+.sc-cv__projects thead th {
+  padding-top: 0;
+  padding-bottom: .3rem;
+  border-top: 0;
+  color: var(--sc-faint);
+  font-size: .8rem;
+  font-weight: 400;
+}
+
+/* Fixed column widths keep the four area tables aligned with one another. */
+.sc-cv__projects thead th:nth-child(1) {
+  width: 23%;
+}
+
+.sc-cv__projects thead th:nth-child(2) {
+  width: 8.25rem;
+}
+
+.sc-cv__projects thead th:nth-child(4) {
+  width: 20%;
+}
+
+.sc-cv__projects tbody th {
+  font-weight: 600;
+}
+
+.sc-cv__projects tbody th a {
+  color: var(--sc-ink);
+}
+
+.sc-cv__projects .sc-cv__period {
+  color: var(--sc-faint);
+  white-space: nowrap;
+}
+
+.sc-cv__projects td:last-child {
+  color: var(--sc-muted);
+}
+
 .sc-cv__list > li {
   display: grid;
   grid-template-columns: 4.5rem 1fr;
-  gap: .15rem .9rem;
-  padding: .8rem 0;
+  gap: .05rem .9rem;
+  padding: .55rem 0;
+  line-height: 1.55;
   border-top: 1px solid var(--sc-rule);
 }
 
@@ -218,6 +317,50 @@
   height: min(80vh, 900px);
   border: 1px solid var(--sc-rule);
   border-radius: 3px;
+}
+
+@media (max-width: 760px) {
+  .sc-cv__projects,
+  .sc-cv__projects tbody,
+  .sc-cv__projects th,
+  .sc-cv__projects td {
+    display: block;
+    width: auto;
+  }
+
+  .sc-cv__projects thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .sc-cv__projects tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .1rem .75rem;
+    padding: .55rem 0;
+    border-top: 1px solid var(--sc-rule);
+  }
+
+  .sc-cv__projects tbody th,
+  .sc-cv__projects td {
+    padding: 0;
+    border-top: 0;
+  }
+
+  .sc-cv__projects td:not(.sc-cv__period) {
+    grid-column: 1 / -1;
+  }
+
+  .sc-cv__projects td:not(.sc-cv__period)::before {
+    content: attr(data-label);
+    margin-right: .45rem;
+    color: var(--sc-faint);
+    font-size: .8rem;
+  }
 }
 
 @media (max-width: 700px) {

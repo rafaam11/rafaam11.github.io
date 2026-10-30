@@ -26,11 +26,12 @@
     </header>
 
     <!-- PUBLIC CV SUMMARY:START -->
-    <section class="sc-cv" data-cv-summary data-cv-source-digest="5496fbf189e6ba4aa24df1e45e4a8ce6318495cde93e7382b0d73ac27c677341" data-cv-summary-digest="fb47341a7db7870cf5bf93c61a054d56bf8b48e2b0841eaf4fe37fcb976ef2da" aria-labelledby="cv-summary-title">
+    <section class="sc-cv" data-cv-summary data-cv-source-digest="1bfdab6d4f9022a8891b4643b61813ace9d37d3c11034ce783f0321ab0ff71d0" data-cv-summary-digest="16ca0ee67997e7be4eab3488c25c383d0a4f49553e3aaacf9ea5601af17ce6f3" aria-labelledby="cv-summary-title">
       <header class="sc-cv__intro">
         <h2 id="cv-summary-title">Jinmin Kim<small lang="ko">김진민</small></h2>
         <p class="sc-cv__headline">Robotics &amp; Computer Vision R&amp;D Engineer — Surgical Navigation, 3D Registration, Optical Tracking, XR, Robotics Integration</p>
-        <p class="sc-cv__summary">Robotics and computer vision R&amp;D engineer translating medical imaging, 3D registration, and optical tracking into research software and robot vision systems. I researched computer-assisted surgery and registration at DGIST and have collaborated with Samsung Medical Center for over three years on digital surgical planning, XR, and surgical navigation. My responsibilities also cover requirements discussions, evaluation criteria and data-quality review, and field integration. Research interests: Surgical Robotics, Physical AI, Surgical AI, 3D Vision, Robot Perception, Multimodal Perception and Spatial Intelligence.</p>
+        <p class="sc-cv__summary sc-cv__brief">Medical imaging, 3D registration and optical tracking built into research software and robot vision systems<br>3+ years of joint R&amp;D with Samsung Medical Center (digital surgical planning, XR, surgical navigation) · requirements, evaluation criteria, field integration</p>
+        <p class="sc-cv__direction"><strong>Research direction</strong> Surgical Robotics · Physical AI · Surgical AI · 3D Vision · Robot Perception · Multimodal Perception · Spatial Intelligence</p>
         <address class="sc-cv__contacts" aria-label="Public contacts">
           <ul>
             <li>Daegu, Republic of Korea</li>
@@ -46,7 +47,7 @@
             <li>
               <p class="sc-cv__head"><strong>DGIST</strong><time>2021.03 - 2023.02</time></p>
               <p class="sc-cv__role">M.S. in Robotics and Mechatronics Engineering</p>
-              <ul>
+              <ul class="sc-cv__notes">
                 <li>Surgical Robotics and Augmented Reality Laboratory (advisor: Jaesung Hong) — surgical navigation team</li>
                 <li>Thesis: Virtual Jawbone Reduction Planning based on Dental Occlusion for Mandibular Fracture Surgery</li>
                 <li>Multi-centre oral and maxillofacial AR surgery programme (2021.06 - 2023.05) — early and supporting development of the Unity-based AR navigation</li>
@@ -55,7 +56,7 @@
             <li>
               <p class="sc-cv__head"><strong>Kumoh National Institute of Technology</strong><time>2015.03 - 2021.02</time></p>
               <p class="sc-cv__role">B.S. in Mechanical System Engineering</p>
-              <ul>
+              <ul class="sc-cv__notes">
                 <li>Undergraduate researcher, System &amp; Vision Lab. (2019 - 2020); completed the DGIST and UNIST summer undergraduate research programmes</li>
                 <li>Designed and built a five-bar-linkage quadruped robot (2020.04 - 2021.01) — mechanism design, kinematic modelling, and control, leading to a patent application and an engineering-fair award</li>
                 <li>Vice president of the invention club (2019) — several patent applications and invention-contest awards; the club was designated an outstanding education-donation club by the Ministry of Education</li>
@@ -72,45 +73,55 @@
               <p class="sc-cv__note">DGIST spin-off developing high-accuracy optical 3D tracking systems, surgical navigation software, and robotic/automation solutions, Daegu</p>
               <div class="sc-cv__area">
                 <h4>Optical 3D Tracking Software</h4>
-                <ul>
-                <li>Develop and maintain the API and Viewer of the in-house optical 3D tracker SKADI — optical marker tracking, calibration, coordinate transformation, 3D visualisation and surgical tool tracking; the software layer of a product line supplied to Korean surgical-navigation companies and research institutes.</li>
-                <li>Provided tracker installation guidance, remote technical support, and API builds and releases; documented reproduction steps, actions taken, and unresolved issues.</li>
-                </ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">Project</th><th scope="col">Period</th><th scope="col">What I did</th><th scope="col">Result</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/skadi-tracking-software/index.html">SKADI app and API</a></th><td class="sc-cv__period" data-label="Period">2023.02–</td><td data-label="What I did">API and Viewer development · Calibration and transforms · Builds, releases, support</td><td data-label="Result">Software layer of a shipped product line</td></tr>
+                  </tbody>
+                </table>
               </div>
               <div class="sc-cv__area">
                 <h4>Surgical Navigation &amp; Medical R&amp;D — long-term collaboration with Samsung Medical Center</h4>
-                <ul>
-                <li>Over three years of collaboration with the oral and maxillofacial surgery department of Samsung Medical Center — biweekly clinical meetings since 2023, with two government programmes and one development contract carried as the main engineer.</li>
-                <li>Connected an oral and maxillofacial digital surgical workflow — surgical planning → AI-assisted planning → XR consultation → surgical navigation — as stage-by-stage software.</li>
-                <li>Since 2026.03, co-developing a maxillofacial digital-occlusion workflow with Samsung Medical Center researchers. As technical lead and primary developer, owning the Custom App architecture, end-to-end UI/UX, landmark and occlusion-engine integration, and the evaluation/export pipeline while researcher validation is ongoing.</li>
-                <li>Integrated an AI-based 3D anatomical landmark detection model into the digital occlusion workflow, linking it to surgical planning and registration.</li>
-                <li>Sole developer of the 3D Slicer-based integrated surgical-navigation software used at the hospital (CT–patient–tracker–instrument registration and calibration, six maxillofacial surgical workflows, HoloLens 2 and Meta Quest integration).</li>
-                <li>Led development of the rTMS coil-navigation system (NeuroPilot) — digital-twin visualisation of coil pose (health-technology government programme).</li>
-                <li>Low-dose C-arm 3D navigation — connected C-arm imaging to the 3D navigation workflow and implemented the owned feature scope.</li>
-                <li>Own surface-guided respiratory tracking and 4D CT registration for radiotherapy (large KERI programme, 2026.06 - ).</li>
-                <li>Delivered several development contracts for research institutes including KERI and KIMM.</li>
-                <li>Agreed requirements, data formats and coordinate frames, and communication/registration responsibilities with researchers and partners; prepared test procedures, draft report reviews, and programme documentation.</li>
-                <li>After implementing distance, RMSE, and CSV comparison in NeuroPilot, reviewed reference-coordinate definitions and quality and requested remeasurement. Tool implementation is separate from final accuracy validation.</li>
-                </ul>
+                <ul class="sc-tags"><li class="sc-tag">3+ years with Samsung Medical Center OMFS</li><li class="sc-tag">Biweekly clinical meetings</li><li class="sc-tag">Main engineer on 2 government programmes and 1 contract</li><li class="sc-tag">Several research-institute contracts</li><li class="sc-tag">Requirements, frames, test procedures, reports</li></ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">Project</th><th scope="col">Period</th><th scope="col">What I did</th><th scope="col">Result</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/surgical-navigation/index.html">SMCNavi surgical navigation</a></th><td class="sc-cv__period" data-label="Period">2023.07–</td><td data-label="What I did">Dedicated developer of the 3D Slicer suite · Registration and calibration · Six workflows, HoloLens 2, Meta Quest</td><td data-label="Result">In use at the hospital</td></tr>
+                    <tr><th scope="row"><a href="../projects/digital-occlusion-workflow/index.html">Digital occlusion workflow</a></th><td class="sc-cv__period" data-label="Period">2026.03–</td><td data-label="What I did">Technical lead and main developer · Custom App, end-to-end UI/UX · AI landmark model integration</td><td data-label="Result">Researcher validation in progress</td></tr>
+                    <tr><th scope="row"><a href="../projects/rtms-navigation/index.html">NeuroPilot rTMS navigation</a></th><td class="sc-cv__period" data-label="Period">2024.07–</td><td data-label="What I did">Led development · Coil-position digital twin view · Distance, RMSE, CSV comparison</td><td data-label="Result">Government health R&amp;D programme</td></tr>
+                    <tr><th scope="row">Low-dose C-arm 3D navigation</th><td class="sc-cv__period" data-label="Period">—</td><td data-label="What I did">C-arm images linked to the 3D navigation workflow</td><td data-label="Result">Assigned features implemented</td></tr>
+                    <tr><th scope="row"><a href="../projects/respiratory-surface-guidance/index.html">Surface-guided breathing tracking (SGRT)</a></th><td class="sc-cv__period" data-label="Period">2026.06–</td><td data-label="What I did">3D surface breathing tracking · 4DCT registration</td><td data-label="Result">KERI large-scale programme</td></tr>
+                  </tbody>
+                </table>
               </div>
               <div class="sc-cv__area">
                 <h4>Robotics &amp; Vision — Logistics Robots and Autonomous Forklift (2024.12 - )</h4>
-                <ul>
-                <li>Extending optical tracking and coordinate registration experience to robot–camera coordinate integration, robot vision and sensor integration.</li>
-                <li>Participation in the in-house DOTORI project began in November 2025; repository records from 2026 cover the initial safety-manager design and implementation (three-zone virtual bumper and E-STOP latching) and LiDAR/ToF integration on Zenoh-based in-house middleware.</li>
-                <li>DOTORI vision R&amp;D — implemented a Jetson vision service and earlier Windows prototype, ToF–RGB calibration, SAM3 segmentation, quality gates, and load tracking. The p95 timestamp difference of 16.6 ms in one 191-frame capture is not end-to-end latency or a long-term performance guarantee.</li>
-                <li>Integrated vision servoing (wheel-pair detection → fork alignment, approach and insertion) and loading/unloading actions into the team&#39;s behaviour trees; contributed to the web-based operator and monitoring app UI and to Isaac Sim simulation work.</li>
-                <li>Before DOTORI — built the map editor of a Unity-based fleet management system for logistics robots (2024.12–2025.01) and a drone marker-tracking prototype linking a mobile drone-SDK app with PC-side marker tracking (2025.08–09).</li>
-                <li>Supported earlier forklift field operation, issue observation, and handovers in 2025. That field participation is distinct from the timing and scope of later DOTORI implementation.</li>
-                </ul>
+                <ul class="sc-tags"><li class="sc-tag">Optical tracking and registration → robot–camera frames</li><li class="sc-tag">2025 field support on an earlier forklift site</li></ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">Project</th><th scope="col">Period</th><th scope="col">What I did</th><th scope="col">Result</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/unmanned-forklift/index.html">DOTORI autonomous forklift</a></th><td class="sc-cv__period" data-label="Period">2025.11–</td><td data-label="What I did">Jetson vision, ToF–RGB calibration, SAM3 · Visual servoing and loading actions · Initial safety manager, sensor integration</td><td data-label="Result">Integrated into the team behaviour tree</td></tr>
+                    <tr><th scope="row">Logistics FMS and drone marker tracking</th><td class="sc-cv__period" data-label="Period">2024.12–2025.09</td><td data-label="What I did">Unity FMS map editor · Drone marker-tracking prototype</td><td data-label="Result">Prototypes</td></tr>
+                  </tbody>
+                </table>
               </div>
               <div class="sc-cv__area">
                 <h4>AI-assisted Product Engineering — In-house Tools (2026 - )</h4>
-                <ul>
-                <li>In-house tools (2026) — a desktop workbench app with a pilot-to-stable update channel, an HWP document editor with its own installer and update server, an intranet research tool, and an internal coding-agent plugin marketplace.</li>
-                <li>For these in-house tools I own requirements, architecture, acceptance, and releases, while the implementation relies heavily on AI coding agents; no productivity effect is claimed.</li>
-                <li>Contributed project and document-management proposals, user guides, coding-study materials, development-tool comparisons, and work-practice documentation.</li>
-                </ul>
+                <ul class="sc-tags"><li class="sc-tag">Proposed project and document structure</li><li class="sc-tag">User guides and coding study material</li></ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">Project</th><th scope="col">Period</th><th scope="col">What I did</th><th scope="col">Result</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/ai-build-lab/index.html">In-house tools</a></th><td class="sc-cv__period" data-label="Period">2026–</td><td data-label="What I did">Desktop workbench, HWP editor · Intranet research tool, plugin marketplace · Owned requirements, acceptance, releases</td><td data-label="Result">Pilot → stable update channel</td></tr>
+                  </tbody>
+                </table>
               </div>
             </li>
         </ol>
@@ -156,12 +167,12 @@
       <section data-cv-section="skills" aria-labelledby="cv-skills-title">
         <h3 id="cv-skills-title">Skills and languages</h3>
         <dl class="sc-cv__skills">
-              <div><dt>Surgical navigation &amp; medical imaging</dt><dd>3D Slicer, DICOM, optical tracking, coordinate transformation, calibration, image/point-cloud registration, OpenIGTLink</dd></div>
-              <div><dt>Computer vision &amp; 3D</dt><dd>Point clouds, rigid/ICP registration, segmentation (SAM family), 3D visualisation, PyTorch</dd></div>
-              <div><dt>Robotics</dt><dd>Zenoh, behaviour trees (BehaviorTree.CPP), Isaac Sim, Jetson, vision and sensor integration</dd></div>
-              <div><dt>XR &amp; spatial computing</dt><dd>Unity, OpenXR, MRTK, HoloLens 2, Meta Quest, Galaxy XR</dd></div>
-              <div><dt>Programming</dt><dd>Python, C++, C#</dd></div>
-              <div><dt>Languages</dt><dd>English - Intermediate (paper writing and reading) · Japanese - JLPT N2 (2021)</dd></div>
+              <div><dt>Surgical navigation &amp; medical imaging</dt><dd><ul class="sc-tags"><li class="sc-tag">3D Slicer</li><li class="sc-tag">DICOM</li><li class="sc-tag">optical tracking</li><li class="sc-tag">coordinate transformation</li><li class="sc-tag">calibration</li><li class="sc-tag">image/point-cloud registration</li><li class="sc-tag">OpenIGTLink</li></ul></dd></div>
+              <div><dt>Computer vision &amp; 3D</dt><dd><ul class="sc-tags"><li class="sc-tag">Point clouds</li><li class="sc-tag">rigid/ICP registration</li><li class="sc-tag">segmentation (SAM family)</li><li class="sc-tag">3D visualisation</li><li class="sc-tag">PyTorch</li></ul></dd></div>
+              <div><dt>Robotics</dt><dd><ul class="sc-tags"><li class="sc-tag">Zenoh</li><li class="sc-tag">behaviour trees (BehaviorTree.CPP)</li><li class="sc-tag">Isaac Sim</li><li class="sc-tag">Jetson</li><li class="sc-tag">vision and sensor integration</li></ul></dd></div>
+              <div><dt>XR &amp; spatial computing</dt><dd><ul class="sc-tags"><li class="sc-tag">Unity</li><li class="sc-tag">OpenXR</li><li class="sc-tag">MRTK</li><li class="sc-tag">HoloLens 2</li><li class="sc-tag">Meta Quest</li><li class="sc-tag">Galaxy XR</li></ul></dd></div>
+              <div><dt>Programming</dt><dd><ul class="sc-tags"><li class="sc-tag">Python</li><li class="sc-tag">C++</li><li class="sc-tag">C#</li></ul></dd></div>
+              <div><dt>Languages</dt><dd><ul class="sc-tags"><li class="sc-tag">English - Intermediate (paper writing and reading)</li><li class="sc-tag">Japanese - JLPT N2 (2021)</li></ul></dd></div>
         </dl>
         <p class="sc-cv__note"><a href="../projects/index.html">Explore the projects for research and implementation details.</a></p>
       </section>

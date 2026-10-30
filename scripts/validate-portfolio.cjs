@@ -1205,7 +1205,20 @@ function publicCvDataErrors(candidate) {
   if (requireKeys(candidate.identity, ['name', 'location', 'translations'], 'Public CV identity')) {
     if (candidate.identity.name !== 'Jinmin Kim') errors.push('Public CV identity must be Jinmin Kim.');
     requireLocalizedStrings(candidate.identity.location, 'Public CV identity location');
-    requireTranslations(candidate.identity.translations, ['displayName', 'headline', 'summary'], 'Public CV identity');
+    requireTranslations(candidate.identity.translations, ['displayName', 'headline', 'summary'], 'Public CV identity', ['brief']);
+    // Web-only brief: one or two noun-phrase lines that compress the summary (ko ≤70, en ≤160 characters).
+    for (const locale of ['ko', 'en']) {
+      const brief = candidate.identity.translations?.[locale]?.brief;
+      if (brief === undefined) continue;
+      if (!Array.isArray(brief) || brief.length < 1 || brief.length > 2 || !brief.every(isText)) {
+        errors.push(`Public CV identity ${locale} brief must list one or two lines.`);
+        continue;
+      }
+      for (const line of brief) {
+        if (line.length > (locale === 'ko' ? 70 : 160)) errors.push(`Public CV identity ${locale} brief line exceeds the web budget: ${line}`);
+        if (/[.。]$|(?:습니다|입니다)$/.test(line)) errors.push(`Public CV identity ${locale} brief line must be a noun phrase: ${line}`);
+      }
+    }
   }
   if (!Array.isArray(candidate.contacts) || candidate.contacts.length !== 3) {
     errors.push('Public CV must declare exactly three public contact links.');
@@ -1253,6 +1266,44 @@ function publicCvDataErrors(candidate) {
       requireLocalizedList(entry.translations, 'notes', `Public CV education entry ${index + 1}`);
     }
   }
+  // Web-only project rows and keywords (CV page only; `items` stay for the PDF review).
+  // Lines follow the dense-page budget: ko ≤38, en ≤70 characters, noun phrases.
+  const cvAreaWebErrors = (copy, label) => {
+    if (!isRecord(copy)) return;
+    const lineBudget = label.endsWith(' ko') ? 38 : 70;
+    const checkLine = (value, field) => {
+      if (!isText(value)) {
+        errors.push(`${label} ${field} must be a non-empty string.`);
+        return;
+      }
+      if (value.length > lineBudget) errors.push(`${label} ${field} exceeds the ${lineBudget}-character web budget: ${value}`);
+      if (/[.。]$|(?:습니다|입니다)$/.test(value)) errors.push(`${label} ${field} must be a noun phrase: ${value}`);
+      if (contributionPattern.test(value)) errors.push(`${label} ${field} contains a contribution percentage.`);
+      if (privatePartnerPattern.test(value)) errors.push(`${label} ${field} contains a nonpublic partner or company-project name.`);
+    };
+    if (copy.keywords !== undefined) {
+      if (!Array.isArray(copy.keywords) || copy.keywords.length < 1 || copy.keywords.length > 6) errors.push(`${label} keywords must list one to six entries.`);
+      else copy.keywords.forEach((keyword, index) => checkLine(keyword, `keyword ${index + 1}`));
+    }
+    if (copy.rows === undefined) {
+      if (copy.keywords !== undefined) errors.push(`${label} keywords require project rows.`);
+      return;
+    }
+    if (!Array.isArray(copy.rows) || copy.rows.length < 1 || copy.rows.length > 8) {
+      errors.push(`${label} rows must list one to eight projects.`);
+      return;
+    }
+    for (const [index, row] of copy.rows.entries()) {
+      const rowLabel = `row ${index + 1}`;
+      if (!requireKeys(row, ['project', 'period', 'did', 'result'], `${label} ${rowLabel}`, ['slug'])) continue;
+      checkLine(row.project, `${rowLabel} project`);
+      checkLine(row.result, `${rowLabel} result`);
+      if (typeof row.period !== 'string' || !/^(?:|\d{4}(?:\.\d{2})?–(?:\d{4}(?:\.\d{2})?)?)$/.test(row.period)) errors.push(`${label} ${rowLabel} period must be empty or YYYY[.MM]–[YYYY[.MM]].`);
+      if (!Array.isArray(row.did) || row.did.length < 1 || row.did.length > 4) errors.push(`${label} ${rowLabel} did must list one to four lines.`);
+      else row.did.forEach((line, lineIndex) => checkLine(line, `${rowLabel} did ${lineIndex + 1}`));
+      if (row.slug !== undefined && !(data.projects || []).some((project) => project.slug === row.slug)) errors.push(`${label} ${rowLabel} slug must name a public case.`);
+    }
+  };
   if (!Array.isArray(candidate.experience) || candidate.experience.length !== 1) {
     errors.push('Public CV experience must contain exactly 1 entry.');
   } else {
@@ -1267,8 +1318,9 @@ function publicCvDataErrors(candidate) {
       for (const [areaIndex, area] of entry.areas.entries()) {
         const label = `Public CV experience area ${areaIndex + 1}`;
         if (!requireKeys(area, ['translations'], label)) continue;
-        requireTranslations(area.translations, ['title'], label, ['items']);
+        requireTranslations(area.translations, ['title'], label, ['items', 'rows', 'keywords']);
         requireLocalizedList(area.translations, 'items', label);
+        for (const locale of ['ko', 'en']) cvAreaWebErrors(area.translations?.[locale], `${label} ${locale}`);
       }
     }
   }

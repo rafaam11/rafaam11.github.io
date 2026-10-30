@@ -26,11 +26,12 @@
     </header>
 
     <!-- PUBLIC CV SUMMARY:START -->
-    <section class="sc-cv" data-cv-summary data-cv-source-digest="5496fbf189e6ba4aa24df1e45e4a8ce6318495cde93e7382b0d73ac27c677341" data-cv-summary-digest="a19b7ae47f74542f03816736c3f1ee78c466662c35a55090b0f3fd06923b6226" aria-labelledby="cv-summary-title">
+    <section class="sc-cv" data-cv-summary data-cv-source-digest="1bfdab6d4f9022a8891b4643b61813ace9d37d3c11034ce783f0321ab0ff71d0" data-cv-summary-digest="7521cc75fed5fcc6c7028a9456e055aa7a0a42d3f4457e099655c9fbbedc59f3" aria-labelledby="cv-summary-title">
       <header class="sc-cv__intro">
         <h2 id="cv-summary-title">김진민<small lang="en">Jinmin Kim</small></h2>
         <p class="sc-cv__headline">수술 로보틱스·컴퓨터비전 R&amp;D 엔지니어 — 수술 내비게이션 · 3D 정합 · 광학 추적 · XR · 로봇 통합</p>
-        <p class="sc-cv__summary">의료영상·3D 정합·광학 추적을 연구용 소프트웨어와 로봇 비전 시스템으로 구현해 온 로보틱스·컴퓨터비전 R&amp;D 엔지니어입니다. DGIST에서 컴퓨터 보조 수술과 정합을 연구했고, 삼성서울병원과 3년 이상 공동 R&amp;D로 디지털 수술계획·XR·수술 내비게이션을 개발했습니다. 요구사항 협의, 평가 기준·데이터 품질 검토와 현장 통합까지 맡아 왔습니다. 연구 방향은 수술 로보틱스, Physical AI, Surgical AI, 3D Vision, 로봇 인지, 멀티모달 인지, 공간 지능입니다.</p>
+        <p class="sc-cv__summary sc-cv__brief">의료영상·3D 정합·광학 추적을 연구용 소프트웨어와 로봇 비전 시스템으로 구현<br>삼성서울병원 3년+ 공동 R&amp;D(디지털 수술계획·XR·수술 내비게이션) · 요구사항 협의·평가 기준·현장 통합</p>
+        <p class="sc-cv__direction"><strong>연구 방향</strong> 수술 로보틱스 · Physical AI · Surgical AI · 3D 비전 · 로봇 인지 · 멀티모달 인지 · 공간 지능</p>
         <address class="sc-cv__contacts" aria-label="공개 연락처">
           <ul>
             <li>대구, 대한민국</li>
@@ -46,7 +47,7 @@
             <li>
               <p class="sc-cv__head"><strong>대구경북과학기술원 (DGIST)</strong><time>2021.03 - 2023.02</time></p>
               <p class="sc-cv__role">공학석사, 로봇및기계전자공학</p>
-              <ul>
+              <ul class="sc-cv__notes">
                 <li>수술로봇및증강현실연구실 (지도교수 홍재성) — 수술내비게이션팀</li>
                 <li>학위논문: 치아 교합 기반 하악골 골절 정복 계획 최적화 (Virtual Jawbone Reduction Planning based on Dental Occlusion for Mandibular Fracture Surgery)</li>
                 <li>구강악안면 AR 수술 다기관 과제 참여 (2021.06 - 2023.05) — Unity 기반 AR 내비게이션 초기·지원 개발</li>
@@ -55,7 +56,7 @@
             <li>
               <p class="sc-cv__head"><strong>금오공과대학교</strong><time>2015.03 - 2021.02</time></p>
               <p class="sc-cv__role">공학사, 기계시스템공학</p>
-              <ul>
+              <ul class="sc-cv__notes">
                 <li>System &amp; Vision Lab. 학부연구생 (2019 - 2020) · DGIST·UNIST 방학 학부연구프로그램 수료</li>
                 <li>5절 링크 기반 4족 보행 로봇 설계·제작 (2020.04 - 2021.01) — 기구 설계, 기구학 모델링, 제어 구현. 특허 출원과 엔지니어링 페어 수상으로 이어졌습니다.</li>
                 <li>발명동아리 부회장 (2019) — 특허 출원과 발명대회 수상 다수, 교육부 교육기부 우수동아리 지정</li>
@@ -72,45 +73,55 @@
               <p class="sc-cv__note">DGIST 연구실 기술 기반 창업 — 고정밀 광학식 3차원 위치추적·수술내비게이션·로봇 R&amp;D 기업, 대구</p>
               <div class="sc-cv__area">
                 <h4>광학식 3차원 위치추적 소프트웨어</h4>
-                <ul>
-                <li>자체 광학식 3차원 위치추적장치 SKADI의 API·Viewer 소프트웨어 개발·유지보수 — 광학 마커 추적·캘리브레이션·좌표계 변환·3D 시각화·수술도구 추적, 국내 수술내비게이션 기업·연구기관 납품 제품군의 SW 계층을 담당합니다.</li>
-                <li>트래커 설치·사용 안내·원격 기술지원과 API 빌드·배포를 맡고, 재현 경로·조치·잔여 이슈를 문서화했습니다.</li>
-                </ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">프로젝트</th><th scope="col">기간</th><th scope="col">한 일</th><th scope="col">결과</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/skadi-tracking-software/index.html">SKADI 앱·API</a></th><td class="sc-cv__period" data-label="기간">2023.02–</td><td data-label="한 일">API·Viewer 개발·유지보수 · 캘리브레이션·좌표 변환 · 빌드·배포·기술지원</td><td data-label="결과">납품 제품군의 SW 계층</td></tr>
+                  </tbody>
+                </table>
               </div>
               <div class="sc-cv__area">
                 <h4>수술내비게이션 · 의료 R&amp;D — 삼성서울병원 장기 공동연구</h4>
-                <ul>
-                <li>삼성서울병원 구강악안면외과와 3년 이상 협업 — 2023년부터 격주 임상 미팅을 이어오며 정부과제 2건과 개발용역 1건을 메인 실무로 수행했습니다.</li>
-                <li>수술계획 → AI 보조 계획 → XR 상담 → 수술내비게이션으로 이어지는 구강악안면 디지털 수술 워크플로우를 단계별 소프트웨어로 연결했습니다.</li>
-                <li>2026.03–현재 삼성서울병원 연구진과 구강악안면 디지털 교합 워크플로우를 공동 개발. 기술 리드·메인 개발자로 Custom App 아키텍처, end-to-end UI/UX, 특징점·교합 엔진 통합, 평가·내보내기 파이프라인을 담당하며 연구진 검증을 진행 중.</li>
-                <li>디지털 교합 워크플로우에 AI 기반 3D 해부학적 특징점 검출 모델을 통합해 수술계획·정합 단계와 연결했습니다.</li>
-                <li>병원에서 사용 중인 3D Slicer 기반 수술내비게이션 통합 소프트웨어를 전담 개발했습니다 (CT·환자·트래커·수술도구 좌표 정합·캘리브레이션, 6종 악안면 수술 워크플로, HoloLens 2·Meta Quest 통합).</li>
-                <li>rTMS 코일 내비게이션 시스템(NeuroPilot) 주도 개발 — 코일 위치 디지털트윈 가시화 (보건의료 정부과제).</li>
-                <li>저선량 C-Arm 3차원 내비게이션 — C-Arm 영상과 3차원 내비게이션 워크플로를 연결하고 담당 기능 범위를 구현했습니다.</li>
-                <li>방사선치료용 3차원 표면유도 호흡추적과 4DCT 정합 담당 (한국전기연구원 대형과제, 2026.06 - ).</li>
-                <li>한국전기연구원·한국기계연구원 등 연구기관 개발용역 다수 수행.</li>
-                <li>연구진·협력사와 요구사항, 데이터 형식·좌표계, 통신·정합 책임을 협의하고 시험절차·성적서 초안·연차 및 결과보고 자료를 준비했습니다.</li>
-                <li>NeuroPilot의 거리·RMSE·CSV 비교 기능을 구현한 뒤 기준 좌표의 정의·품질을 검토해 재측정을 요청했습니다. 평가 도구 구현과 최종 정확도 검증은 구분합니다.</li>
-                </ul>
+                <ul class="sc-tags"><li class="sc-tag">삼성서울병원 구강악안면외과 3년+ 협업</li><li class="sc-tag">격주 임상 미팅</li><li class="sc-tag">정부과제 2·개발용역 1 메인 실무</li><li class="sc-tag">연구기관 개발용역 다수</li><li class="sc-tag">요구사항·좌표계·시험절차·보고 자료</li></ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">프로젝트</th><th scope="col">기간</th><th scope="col">한 일</th><th scope="col">결과</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/surgical-navigation/index.html">SMCNavi 수술내비게이션</a></th><td class="sc-cv__period" data-label="기간">2023.07–</td><td data-label="한 일">3D Slicer 통합 SW 전담 개발 · 좌표 정합·캘리브레이션 · 6종 워크플로·HoloLens 2·Meta Quest</td><td data-label="결과">병원에서 사용 중</td></tr>
+                    <tr><th scope="row"><a href="../projects/digital-occlusion-workflow/index.html">디지털 교합 워크플로우</a></th><td class="sc-cv__period" data-label="기간">2026.03–</td><td data-label="한 일">기술 리드·메인 개발 · Custom App·end-to-end UI/UX · AI 특징점 모델 통합</td><td data-label="결과">연구진 검증 진행 중</td></tr>
+                    <tr><th scope="row"><a href="../projects/rtms-navigation/index.html">NeuroPilot rTMS 내비게이션</a></th><td class="sc-cv__period" data-label="기간">2024.07–</td><td data-label="한 일">주도 개발 · 코일 위치 디지털트윈 가시화 · 거리·RMSE·CSV 비교 기능</td><td data-label="결과">보건의료 정부과제</td></tr>
+                    <tr><th scope="row">저선량 C-Arm 3D 내비게이션</th><td class="sc-cv__period" data-label="기간">—</td><td data-label="한 일">C-Arm 영상 ↔ 3D 내비 워크플로 연결</td><td data-label="결과">담당 기능 구현</td></tr>
+                    <tr><th scope="row"><a href="../projects/respiratory-surface-guidance/index.html">표면유도 호흡추적(SGRT)</a></th><td class="sc-cv__period" data-label="기간">2026.06–</td><td data-label="한 일">3D 표면 호흡추적 · 4DCT 정합</td><td data-label="결과">한국전기연구원 대형과제</td></tr>
+                  </tbody>
+                </table>
               </div>
               <div class="sc-cv__area">
                 <h4>로보틱스·비전 — 물류 로봇·무인지게차 (2024.12 - )</h4>
-                <ul>
-                <li>광학 추적·좌표계 정합 경험을 로봇–카메라 좌표 통합과 로봇 비전·센서 통합으로 확장하고 있습니다.</li>
-                <li>자체 DOTORI 참여는 2025.11부터이며, 2026년 저장소 구현 기록에는 안전 관리자 초기 설계·구현(3단 가상 범퍼·E-STOP 래칭), Zenoh 기반 사내 미들웨어의 LiDAR·ToF 센서 통합과 센서 통합 서비스가 남아 있습니다.</li>
-                <li>DOTORI 비전 R&amp;D — Jetson 비전 서비스와 선행 Windows 프로토타입, ToF–RGB 보정·SAM3 분할·품질 게이트·적재 추적을 구현했습니다. 특정 191프레임 캡처의 동기 시각차 p95 16.6 ms는 전체 시스템 지연이나 장기 성능 보장을 뜻하지 않습니다.</li>
-                <li>비전 서보잉(대차 바퀴쌍 인식→포크 정렬·접근·삽입)과 로딩·언로딩 액션을 팀의 행동트리에 통합했고, 웹 기반 운영·모니터링 앱 UI와 Isaac Sim 시뮬레이션 개선에 참여했습니다.</li>
-                <li>DOTORI 이전 — Unity 기반 물류 로봇 관제 시스템(FMS)의 맵 에디터 개발(2024.12–2025.01), 드론 SDK 모바일 앱과 PC 마커 추적을 잇는 드론 마커 추적 프로토타입(2025.08–09).</li>
-                <li>2025년 선행 지게차 현장에서 운영지원·오류 관찰·인수인계를 수행했습니다. 당시 현장 참여와 이후 DOTORI 코드 구현의 기간·역할은 구분합니다.</li>
-                </ul>
+                <ul class="sc-tags"><li class="sc-tag">광학 추적·정합 → 로봇–카메라 좌표 통합</li><li class="sc-tag">2025 선행 지게차 현장 운영지원</li></ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">프로젝트</th><th scope="col">기간</th><th scope="col">한 일</th><th scope="col">결과</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/unmanned-forklift/index.html">DOTORI 무인지게차</a></th><td class="sc-cv__period" data-label="기간">2025.11–</td><td data-label="한 일">Jetson 비전·ToF–RGB 보정·SAM3 · 비전 서보잉·로딩 액션 · 안전 관리자 초기 설계·센서 통합</td><td data-label="결과">팀 행동트리에 통합</td></tr>
+                    <tr><th scope="row">물류 로봇 FMS·드론 마커 추적</th><td class="sc-cv__period" data-label="기간">2024.12–2025.09</td><td data-label="한 일">Unity FMS 맵 에디터 · 드론 마커 추적 프로토타입</td><td data-label="결과">프로토타입</td></tr>
+                  </tbody>
+                </table>
               </div>
               <div class="sc-cv__area">
                 <h4>AI 활용 제품 엔지니어링 — 사내 도구 (2026 - )</h4>
-                <ul>
-                <li>사내 도구(2026) — 파일럿→안정 업데이트 채널을 갖춘 데스크톱 업무 작업대, 자체 설치·업데이트 서버를 둔 HWP 문서 편집기, 사내망 연구 도구, 사내 코딩 에이전트 플러그인 마켓플레이스.</li>
-                <li>사내 도구의 요구사항·아키텍처·인수 기준·릴리스는 직접 소유하고 구현은 AI 코딩 에이전트에 크게 의존했습니다. 생산성 효과는 주장하지 않습니다.</li>
-                <li>프로젝트·문서 관리구조 제안, 사용 가이드와 코딩 스터디 자료 작성, 개발 도구 비교와 업무체계 정리에 기여했습니다.</li>
-                </ul>
+                <ul class="sc-tags"><li class="sc-tag">문서·프로젝트 관리구조 제안</li><li class="sc-tag">사용 가이드·코딩 스터디 자료</li></ul>
+                <table class="sc-cv__projects">
+                  <thead>
+                    <tr><th scope="col">프로젝트</th><th scope="col">기간</th><th scope="col">한 일</th><th scope="col">결과</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row"><a href="../projects/ai-build-lab/index.html">사내 도구</a></th><td class="sc-cv__period" data-label="기간">2026–</td><td data-label="한 일">업무 작업대·HWP 편집기 · 사내망 연구 도구·플러그인 마켓 · 요구사항·인수 기준·릴리스 소유</td><td data-label="결과">파일럿→안정 업데이트 채널</td></tr>
+                  </tbody>
+                </table>
               </div>
             </li>
         </ol>
@@ -156,12 +167,12 @@
       <section data-cv-section="skills" aria-labelledby="cv-skills-title">
         <h3 id="cv-skills-title">기술 및 어학</h3>
         <dl class="sc-cv__skills">
-              <div><dt>수술 내비게이션·의료영상</dt><dd>3D Slicer, DICOM, 광학 추적, 좌표계 변환, 캘리브레이션, 영상·점군 정합, OpenIGTLink</dd></div>
-              <div><dt>컴퓨터비전·3D</dt><dd>점군 처리, Rigid·ICP 정합, 세그멘테이션(SAM 계열), 3D 시각화, PyTorch</dd></div>
-              <div><dt>로봇</dt><dd>Zenoh, 행동트리(BehaviorTree.CPP), Isaac Sim, Jetson, 비전·센서 통합</dd></div>
-              <div><dt>XR·공간 컴퓨팅</dt><dd>Unity, OpenXR, MRTK, HoloLens 2, Meta Quest, Galaxy XR</dd></div>
-              <div><dt>프로그래밍</dt><dd>Python, C++, C#</dd></div>
-              <div><dt>어학</dt><dd>영어 - 중급 (논문 작성·독해) · 일본어 - JLPT N2 (2021)</dd></div>
+              <div><dt>수술 내비게이션·의료영상</dt><dd><ul class="sc-tags"><li class="sc-tag">3D Slicer</li><li class="sc-tag">DICOM</li><li class="sc-tag">광학 추적</li><li class="sc-tag">좌표계 변환</li><li class="sc-tag">캘리브레이션</li><li class="sc-tag">영상·점군 정합</li><li class="sc-tag">OpenIGTLink</li></ul></dd></div>
+              <div><dt>컴퓨터비전·3D</dt><dd><ul class="sc-tags"><li class="sc-tag">점군 처리</li><li class="sc-tag">Rigid·ICP 정합</li><li class="sc-tag">세그멘테이션(SAM 계열)</li><li class="sc-tag">3D 시각화</li><li class="sc-tag">PyTorch</li></ul></dd></div>
+              <div><dt>로봇</dt><dd><ul class="sc-tags"><li class="sc-tag">Zenoh</li><li class="sc-tag">행동트리(BehaviorTree.CPP)</li><li class="sc-tag">Isaac Sim</li><li class="sc-tag">Jetson</li><li class="sc-tag">비전·센서 통합</li></ul></dd></div>
+              <div><dt>XR·공간 컴퓨팅</dt><dd><ul class="sc-tags"><li class="sc-tag">Unity</li><li class="sc-tag">OpenXR</li><li class="sc-tag">MRTK</li><li class="sc-tag">HoloLens 2</li><li class="sc-tag">Meta Quest</li><li class="sc-tag">Galaxy XR</li></ul></dd></div>
+              <div><dt>프로그래밍</dt><dd><ul class="sc-tags"><li class="sc-tag">Python</li><li class="sc-tag">C++</li><li class="sc-tag">C#</li></ul></dd></div>
+              <div><dt>어학</dt><dd><ul class="sc-tags"><li class="sc-tag">영어 - 중급 (논문 작성·독해)</li><li class="sc-tag">일본어 - JLPT N2 (2021)</li></ul></dd></div>
         </dl>
         <p class="sc-cv__note"><a href="../projects/index.html">연구와 구현의 상세 내용은 프로젝트에서 확인할 수 있습니다.</a></p>
       </section>
