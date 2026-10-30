@@ -82,6 +82,16 @@ public/                            # Generated blog output; never edit for portf
 - Do not restore the removed Research/Capabilities route, excluded project routes, decorative SVG fallbacks, Bootstrap/StartBootstrap, or the old sidebar layout.
 - Home uses generated introduction, capability list, selected research, achievements and curated News; home-projects can also render at runtime. The home-highlights block closes the publications section, is generated from CV data and is not replaced by JavaScript. `js/local-feed.js` inserts the selected-activities block after the Home News section. Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
 
+## 3D figures
+
+Spec: `docs/superpowers/specs/2026-10-30-3d-figures-design.md`.
+
+- Home has one 3D figure (`home-tracking`); each case except `ai-build-lab` has one, declared as `scene3d` in `js/portfolio-data.js`. Projects cards keep their approved real images.
+- `js/scene3d.js` is the shared engine (three.js r128, ported from the 2026-10 presentation decks). It injects `js/vendor/three-r128.min.js` on demand when a figure nears the viewport, keeps at most two live WebGL contexts, disables wheel zoom, lets one-finger touch scroll the page and honours `prefers-reduced-motion`.
+- Scenes live in `js/scenes/<name>.js`, are procedural only (no GLB, textures or network loads) and carry ko/en labels. Every visible element and label must match a sentence in the case's public role, summary or evidence; do not depict robot-assisted surgery, design-stage features as finished, customer hardware CAD, partner names or internal document sources.
+- Each figure shows a captured WebP poster (`assets/3d/<name>.webp`) until WebGL mounts; the poster is also the no-JS, no-WebGL and print image. These real scene captures are not the forbidden decorative SVG fallbacks.
+- `scene3d` is web-only and excluded from the PDF source digest. Capture posters and README images with `scripts/capture-3d.mjs` (it writes its own temporary stage page; set `SCENE3D_PUPPETEER_DIR` to a node_modules folder containing puppeteer-core).
+
 ## Required verification
 
 Run all three commands after portfolio changes:

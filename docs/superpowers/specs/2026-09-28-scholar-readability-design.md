@@ -56,6 +56,7 @@ Still visible, and outside this change: some media captions and the mandibular s
 - No rewriting of project summaries, case copy, CV text or data records.
 - No theme change: white background, ink/muted/faint text, underlined links, Pretendard, 880px column.
 - No new routes; 28 localized pages remain.
+- 3D figure exception (2026-10-30): interactive WebGL scenes enter only as numbered figures (`.sc-figure3d`) with a captured poster and quiet labels, no shadows, gradients or chips. See `2026-10-30-3d-figures-design.md`.
 
 ## Verification
 

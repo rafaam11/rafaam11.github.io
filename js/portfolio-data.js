@@ -713,6 +713,15 @@
       },
       relatedProjectSlugs: ['digital-occlusion-workflow'],
       links: [{ href: 'https://link.springer.com/article/10.1007/s10278-024-01014-z', translations: { ko: { label: '게재 논문' }, en: { label: 'Publication' } } }],
+      // Web-only 3D figure (js/scenes/ms-frac.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'ms-frac',
+        poster: 'assets/3d/ms-frac.webp',
+        translations: {
+          ko: { caption: '골절편 정복 최적화 개념도(합성 형상): 치아·골절 단면 특징점, 골절편 위치 최적화, 교합 기준 정복, 표면 거리 비교 순서입니다. 드래그해 돌려 볼 수 있습니다.', alt: '합성 하악골 모델에서 초록색 골절편이 상악 치열을 기준으로 제자리에 맞춰지는 3D 개념도' },
+          en: { caption: 'Concept of fragment reduction optimization (synthetic geometry): tooth and fracture-surface features, fragment pose optimization, occlusion-based reduction, then a surface-distance check. Drag to rotate.', alt: '3D concept in which the green fracture fragment of a synthetic mandible is moved into place against the upper dentition' }
+        }
+      },
       translations: {
         ko: {
           title: '하악골 골절 정복 최적화', shortTitle: '하악골 골절 정복', eyebrow: '수술 로보틱스·내비게이션 · 검증된 연구',

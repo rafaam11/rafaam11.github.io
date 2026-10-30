@@ -4,7 +4,7 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { publicSchemaErrors } = require('./activity-media-schema.cjs');
 const { privateFixture } = require('./private-paths.cjs');
-const publicDocs = new Set(['docs/superpowers/specs/2026-09-28-scholar-readability-design.md', 'docs/superpowers/specs/2026-09-29-positioning-design.md']);
+const publicDocs = new Set(['docs/superpowers/specs/2026-09-28-scholar-readability-design.md', 'docs/superpowers/specs/2026-09-29-positioning-design.md', 'docs/superpowers/specs/2026-10-30-3d-figures-design.md']);
 const publicImages = new Set(['assets/img/favicon.ico', 'assets/img/profile_square.webp']);
 const mediaPattern = /\.(?:png|jpe?g|webp|gif|svg|ico|mp4|mov|m4v|heic|heif|pdf|mp3|wav|webm)$/i;
 
@@ -46,6 +46,8 @@ function registeredMedia(read) {
       }
     }
   }
+  // 3D figure posters are declared as scene3d records and verified by the portfolio validator.
+  for (const match of (read('js/portfolio-data.js') || '').matchAll(/assets\/3d\/[a-z0-9-]+\.webp/g)) allowed.add(match[0]);
   // Authored CV PDF raster fallbacks are also referenced and verified by the CV validator.
   for (const file of ['cv/index.html', 'en/cv/index.html']) for (const match of (read(file) || '').matchAll(/(?:assets|output)\/[a-zA-Z0-9_./-]+\.(?:png|jpg|webp|pdf)/g)) allowed.add(match[0]);
   return allowed;

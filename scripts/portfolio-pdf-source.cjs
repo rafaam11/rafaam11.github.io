@@ -12,6 +12,16 @@ const PDF_SOURCE_SITE = Object.freeze({
   linkedin: 'https://www.linkedin.com/in/rlawlsals'
 });
 
+// Web-only fields never reach the PDFs, so they stay out of the source digest.
+const WEB_ONLY_PROJECT_FIELDS = Object.freeze(['scene3d']);
+
+function pdfProject(project) {
+  if (!project || typeof project !== 'object') return project;
+  const copy = { ...project };
+  for (const field of WEB_ONLY_PROJECT_FIELDS) delete copy[field];
+  return copy;
+}
+
 function canonicalPdfSource(portfolio, evidence, cv) {
   return {
     schemaVersion: PDF_SOURCE_SCHEMA_VERSION,
@@ -19,7 +29,7 @@ function canonicalPdfSource(portfolio, evidence, cv) {
     site: { ...PDF_SOURCE_SITE },
     capabilities: portfolio.capabilities,
     tiers: portfolio.tiers,
-    projects: portfolio.projects,
+    projects: Array.isArray(portfolio.projects) ? portfolio.projects.map(pdfProject) : portfolio.projects,
     evidence,
     cv
   };

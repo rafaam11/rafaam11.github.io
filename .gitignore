@@ -63,6 +63,7 @@ backups/
 /docs/superpowers/specs/*
 !/docs/superpowers/specs/2026-09-28-scholar-readability-design.md
 !/docs/superpowers/specs/2026-09-29-positioning-design.md
+!/docs/superpowers/specs/2026-10-30-3d-figures-design.md
 /assets/img/*
 !/assets/img/favicon.ico
 !/assets/img/profile_square.webp

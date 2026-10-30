@@ -136,6 +136,24 @@
 .sc-gallery__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1.25rem; }
 .sc-figure--gallery { margin: 0; }
 .sc-figure--gallery img { height: auto; } /* figures keep their own aspect; no cropping of diagrams */
+/* 3D figures: a captured WebP poster until WebGL mounts (.live). See docs/superpowers/specs/2026-10-30-3d-figures-design.md. */
+.view3d { position: relative; overflow: hidden; background: var(--sc-bg); }
+.sc-figure3d .view3d { aspect-ratio: 16 / 10; border: 1px solid var(--sc-rule); border-radius: 3px; }
+.td-shell .sc-figure3d .view3d > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border-radius: 0; background: var(--sc-bg); }
+.view3d canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; cursor: grab; touch-action: pan-y; }
+.view3d canvas:active { cursor: grabbing; }
+.view3d.live > img, .view3d:not(.live) :is(.lb, .lead3d, .readout, .view3d__reset) { display: none; }
+.view3d .lb { position: absolute; z-index: 2; pointer-events: none; white-space: nowrap; padding: 0 .35rem; border: 1px solid var(--sc-rule); border-radius: 2px; background: var(--sc-bg); color: var(--sc-ink); font-size: .78rem; line-height: 1.5; transition: opacity .3s; }
+.view3d .lb small { display: block; color: var(--sc-faint); font-size: .72rem; }
+.view3d .lb.off { opacity: 0; }
+.view3d .lead3d { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.view3d .lead3d .ld { fill: var(--sc-bg); stroke: #9aa1a9; stroke-width: 1; }
+.view3d .readout { position: absolute; left: .6rem; bottom: .4rem; z-index: 2; pointer-events: none; color: var(--sc-muted); font-size: .8rem; }
+.view3d .readout:empty { display: none; }
+.view3d__reset { position: absolute; top: .3rem; right: .4rem; z-index: 3; padding: .15rem .3rem; border: 0; background: none; color: var(--sc-muted); font: inherit; font-size: .8rem; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
+.view3d__reset:hover { color: var(--sc-link); }
+.view3d__reset:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 2px; }
+@media print { .view3d canvas, .view3d .lb, .view3d .lead3d, .view3d .readout, .view3d__reset { display: none !important; } .view3d > img { display: block !important; } }
 
 /* Product-console cases: one dark desktop surface, then a light API-to-application narrative. */
 .sc-case--product-console {

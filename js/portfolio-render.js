@@ -49,6 +49,9 @@
   var applicationTrackKinds = ['primary', 'extension'];
   var publicResourceTypes = ['documentation', 'product'];
   var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
+  // Web-only 3D figure: { name, poster: 'assets/3d/<name>.webp', translations: { ko: { caption, alt }, en } }.
+  var scene3dKeys = ['name', 'poster', 'translations'];
+  var scene3dNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   var projectTranslationFields = [
     'title', 'shortTitle', 'eyebrow', 'thesis', 'summary', 'problem', 'role', 'teamResult',
     'evidence', 'limitation', 'collaboration', 'mediaAlt', 'mediaCaption'
@@ -145,6 +148,7 @@
     surfaces.push(project && project.apiFlow && project.apiFlow.translations);
     (project && project.applicationTracks || []).forEach(function (track) { surfaces.push(track && track.translations); });
     (project && project.publicResources || []).forEach(function (resource) { surfaces.push(resource && resource.translations); });
+    if (project && project.scene3d) surfaces.push(project.scene3d.translations);
     (project && Array.isArray(project.storySections) ? project.storySections : []).forEach(function (section) {
       surfaces.push(section && section.translations, section && section.diagram && section.diagram.translations);
       (section && Array.isArray(section.media) ? section.media : []).forEach(function (item) {
@@ -745,6 +749,20 @@
     return contract || null;
   }
 
+  function scene3dErrors(scene, label) {
+    if (!scene || typeof scene !== 'object' || Array.isArray(scene)) return [label + ': scene3d must be an object.'];
+    var errors = [];
+    if (Object.keys(scene).some(function (key) { return scene3dKeys.indexOf(key) === -1; })) {
+      errors.push(label + ': scene3d allows only name, poster, and translations.');
+    }
+    if (typeof scene.name !== 'string' || !scene3dNamePattern.test(scene.name)) {
+      errors.push(label + ': scene3d name must be a lowercase slug.');
+    } else if (scene.poster !== 'assets/3d/' + scene.name + '.webp' || !isSafePublicPath(scene.poster)) {
+      errors.push(label + ': scene3d poster must be assets/3d/' + scene.name + '.webp.');
+    }
+    return errors.concat(translationErrors(scene, ['caption', 'alt'], label + ' scene3d'));
+  }
+
   function validatePortfolioData(data) {
     var errors = [];
     if (!data || typeof data !== 'object') return ['Portfolio data must be an object.'];
@@ -790,6 +808,7 @@
       }
       var seenSlugs = [];
       var seenPdfDiagramKinds = [];
+      var seenSceneNames = [];
       data.projects.forEach(function (project) {
         var slug = project && project.slug ? project.slug : 'unknown-project';
         if (!project || typeof project !== 'object') {
@@ -985,6 +1004,13 @@
             errors = errors.concat(translationErrors(link, ['label'], label));
           });
         }
+        if (project.scene3d !== undefined) {
+          errors = errors.concat(scene3dErrors(project.scene3d, slug));
+          if (project.scene3d && typeof project.scene3d.name === 'string') {
+            if (seenSceneNames.includes(project.scene3d.name)) errors.push(slug + ': duplicate scene3d name.');
+            seenSceneNames.push(project.scene3d.name);
+          }
+        }
         if (slug === 'ai-build-lab') {
           if (!Array.isArray(project.subcases) || project.subcases.length !== aiBuildLabSubcaseKeys.length) {
             errors.push(slug + ': must contain exactly three subcases.');
@@ -1019,6 +1045,8 @@
       });
     }
 
+    // Home enables its 3D figure through data (homeScene3d), like the cases.
+    if (data.homeScene3d !== undefined) errors = errors.concat(scene3dErrors(data.homeScene3d, 'home'));
     errors = errors.concat(highlightsErrors(data.highlights));
     errors = errors.concat(publicCopySafetyErrors(data));
     var serialized = JSON.stringify(data);
@@ -1072,6 +1100,18 @@
   function figureHtml(visual, label, caption, extraClass, extraAttributes) {
     return '<figure class="sc-figure' + (extraClass ? ' ' + extraClass : '') + '" data-media-status="approved"' + (extraAttributes || '') + '>' + visual +
       '<figcaption><span class="sc-figure__label">' + escapeHtml(label) + '</span> ' + escapeHtml(caption) + '</figcaption></figure>';
+  }
+
+  // Numbered 3D figure: the captured poster stays until js/scene3d.js mounts WebGL into .view3d.
+  function scene3dFigureHtml(scene, locale, base, figureNumber) {
+    if (!scene || typeof scene !== 'object' || typeof scene.name !== 'string' || !scene3dNamePattern.test(scene.name) ||
+        scene.poster !== 'assets/3d/' + scene.name + '.webp' || !isSafePublicPath(scene.poster)) return '';
+    var normalized = localeOf(locale);
+    var sceneCopy = translation(scene, normalized);
+    if (!sceneCopy.caption || !sceneCopy.alt) return '';
+    var visual = '<div class="view3d" data-scene="' + escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) +
+      '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000" loading="lazy" decoding="async"></div>';
+    return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
   }
 
   function mediaPreload(item) {
@@ -1501,6 +1541,12 @@
     var pdfHref = assetHref(base, project.pdf[normalized]);
     var contactHref = i18n.routeHref(base, normalized, 'contact/', Boolean(isFile));
     var lead = evidenceMediaHtml(sourceProject, normalized, base, isFile);
+    // The 3D figure follows the lead (Figure 1) inside a section, so js/local-projects.js never mistakes it for the lead.
+    // Product-console cases number figures by media index and do not place it yet.
+    var sceneFigure = sourceProject && sourceProject.caseLayout !== 'product-console'
+      ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, lead ? 2 : 1)
+      : '';
+    var afterSceneFigure = (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
       '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
       '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
@@ -1537,7 +1583,7 @@
           ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
     }
     var approach = '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' +
-      escapeHtml(project.summary) + '</p>' + blocksOfType(['system', 'text', 'list']) + '</section>';
+      escapeHtml(project.summary) + '</p>' + sceneFigure + blocksOfType(['system', 'text', 'list']) + '</section>';
     var roleLabel = project.roleLabel
       ? '<p class="sc-case__role-label">' + escapeHtml(project.roleLabel) + '</p>'
       : '';
@@ -1548,9 +1594,9 @@
     var links = '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
       ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>';
     if (hasStory) {
-      var firstStoryFigure = lead ? 2 : 1;
+      var firstStoryFigure = afterSceneFigure;
       var projectOverviewSection = '<section class="sc-case__section"><h2>' + escapeHtml(copy.projectOverview) + '</h2><p>' +
-        escapeHtml(project.summary) + '</p></section>';
+        escapeHtml(project.summary) + '</p>' + sceneFigure + '</section>';
       return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header + lead + problemSection +
         projectOverviewSection + storySectionsHtml(sourceProject, normalized, base, firstStoryFigure, 'before-standard') +
         roleSection + evidenceSection + limitSection +
@@ -1560,7 +1606,7 @@
     }
     return '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + header + lead + problemSection + approach +
       roleSection + evidenceSection + limitSection +
-      caseGalleryHtml(project, normalized, base, lead ? 2 : 1) +
+      caseGalleryHtml(project, normalized, base, afterSceneFigure) +
       subcasesHtml(project, normalized) +
       relatedProjectsHtml(data, sourceProject, normalized, base, isFile) + links + '</article>';
   }
@@ -1610,6 +1656,7 @@
     storyFigureCount: storyFigureCount,
     relatedProjectsHtml: relatedProjectsHtml,
     caseStudyHtml: caseStudyHtml,
+    scene3dFigureHtml: scene3dFigureHtml,
     mountAll: mountAll
   };
 });

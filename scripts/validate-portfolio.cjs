@@ -64,6 +64,11 @@ const maxVideoBytes = 20 * 1024 * 1024;
 const prohibitedPngMetadataChunks = new Set(['tEXt', 'zTXt', 'iTXt', 'eXIf', 'tIME']);
 const prohibitedMp4MetadataBoxes = new Set(['udta', 'meta', 'ilst', 'uuid']);
 const mp4ContainerBoxes = new Set(['moov', 'trak', 'mdia', 'minf', 'stbl', 'dinf', 'edts', 'mvex', 'moof', 'traf', 'mfra']);
+// 3D figures (docs/superpowers/specs/2026-10-30-3d-figures-design.md): engine, scenes, vendor three.js, posters.
+const scene3dEngineRelativePath = 'js/scene3d.js';
+const scene3dVendorFiles = ['three-r128.min.js'];
+const maxScene3dScriptBytes = 400 * 1024;
+const maxScene3dPosterBytes = 3 * 1024 * 1024;
 const proseLocalPathPatterns = [
   /[a-z]:[\\/][^\s|]*/i,
   /\\\\[^\\/\s|]+[\\/][^\s|]*/i,
@@ -1049,6 +1054,7 @@ function projectPublicText(project) {
     for (const edge of (Array.isArray(section?.diagram?.edges) ? section.diagram.edges : [])) surfaces.push(edge?.translations);
   }
   surfaces.push(project?.pdfSequence?.diagram?.translations);
+  surfaces.push(project?.scene3d?.translations);
   let text = collectPublicStrings(surfaces).join('\n');
   for (let index = 0; index < 6; index += 1) {
     const next = decodeHtmlReferenceEntities(text);
@@ -1059,7 +1065,7 @@ function projectPublicText(project) {
 }
 
 function portfolioPublicText(candidate) {
-  const surfaces = [];
+  const surfaces = [candidate?.homeScene3d?.translations];
   for (const capability of candidate?.capabilities || []) surfaces.push(capability?.methods, capability?.translations);
   for (const tier of candidate?.tiers || []) surfaces.push(tier?.translations);
   for (const project of candidate?.projects || []) surfaces.push(projectPublicText(project));
@@ -2117,6 +2123,90 @@ function localReferenceErrors(file, html, rootDir) {
   return errors;
 }
 
+// Declared 3D figures: [{ owner: 'home' | <case slug>, name, poster }].
+function scene3dDeclarations(candidate = data) {
+  const declarations = [];
+  if (candidate?.homeScene3d) declarations.push({ owner: 'home', ...candidate.homeScene3d });
+  for (const project of candidate?.projects || []) {
+    if (project?.scene3d) declarations.push({ owner: project.slug, ...project.scene3d });
+  }
+  return declarations;
+}
+
+// The scene a page must load: Home uses homeScene3d, a case page its project's scene3d.
+function pageScene3dName(file, candidate = data) {
+  if (file.page === 'home') return candidate?.homeScene3d?.name || '';
+  const match = /^projects\/([a-z0-9-]+)\/$/.exec(file.route || '');
+  if (!match) return '';
+  const project = (candidate?.projects || []).find((item) => item?.slug === match[1]);
+  return project?.scene3d?.name || '';
+}
+
+function scene3dAssetErrors(rootDir, candidate = data) {
+  const errors = [];
+  const declarations = scene3dDeclarations(candidate);
+  const jsDir = path.join(rootDir, 'js');
+  const scenesDir = path.join(jsDir, 'scenes');
+  const vendorDir = path.join(jsDir, 'vendor');
+  const postersDir = path.join(rootDir, 'assets', '3d');
+  const listFiles = (directory) => (fs.existsSync(directory)
+    ? fs.readdirSync(directory, { withFileTypes: true }).filter((entry) => !entry.isDirectory()).map((entry) => entry.name)
+    : []);
+  const vendorFiles = listFiles(vendorDir);
+  if (declarations.length || fs.existsSync(vendorDir)) {
+    for (const name of scene3dVendorFiles) {
+      if (!vendorFiles.includes(name)) errors.push(`js/vendor/${name}: missing vendored three.js for 3D figures.`);
+    }
+    for (const name of vendorFiles.filter((item) => !scene3dVendorFiles.includes(item))) {
+      errors.push(`js/vendor/${name}: unexpected vendor file; only ${scene3dVendorFiles.join(', ')} is allowed.`);
+    }
+  }
+  const engineExists = fs.existsSync(path.join(rootDir, ...scene3dEngineRelativePath.split('/')));
+  if (declarations.length && !engineExists) errors.push(`${scene3dEngineRelativePath}: missing 3D figure engine.`);
+
+  const declaredNames = new Set(declarations.map((item) => item.name));
+  const sceneFiles = listFiles(scenesDir);
+  for (const name of sceneFiles) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*\.js$/.test(name)) errors.push(`js/scenes/${name}: scene files must be <lowercase-name>.js.`);
+    else if (!declaredNames.has(name.slice(0, -3))) errors.push(`js/scenes/${name}: scene is not declared by any scene3d record.`);
+  }
+  const { webpSize, metadataLeaks } = require('./activity-media.cjs');
+  const posterFiles = listFiles(postersDir);
+  let posterBytes = 0;
+  for (const declaration of declarations) {
+    const label = `${declaration.owner} scene3d ${declaration.name}`;
+    if (!sceneFiles.includes(`${declaration.name}.js`)) errors.push(`${label}: missing js/scenes/${declaration.name}.js.`);
+    const posterName = `${declaration.name}.webp`;
+    if (declaration.poster !== `assets/3d/${posterName}`) continue;   // shape errors come from the data validator
+    if (!posterFiles.includes(posterName)) {
+      errors.push(`${label}: missing poster ${declaration.poster}.`);
+      continue;
+    }
+    const buffer = fs.readFileSync(path.join(postersDir, posterName));
+    if (!webpSize(buffer)) errors.push(`${declaration.poster}: poster must be a decodable WebP image.`);
+    for (const leak of metadataLeaks(buffer, 'webp')) errors.push(`${declaration.poster}: poster must be metadata-stripped (${leak}).`);
+  }
+  for (const name of posterFiles) {
+    posterBytes += fs.statSync(path.join(postersDir, name)).size;
+    if (!declarations.some((item) => item.poster === `assets/3d/${name}`)) errors.push(`assets/3d/${name}: undeclared 3D poster.`);
+  }
+  if (posterBytes > maxScene3dPosterBytes) errors.push(`assets/3d: posters total ${posterBytes} bytes; the budget is ${maxScene3dPosterBytes}.`);
+
+  const scripts = (engineExists ? [scene3dEngineRelativePath] : []).concat(sceneFiles.map((name) => `js/scenes/${name}`));
+  let scriptBytes = 0;
+  for (const relativePath of scripts) {
+    const text = fs.readFileSync(path.join(rootDir, ...relativePath.split('/')), 'utf8');
+    scriptBytes += Buffer.byteLength(text);
+    if (contributionPattern.test(text)) errors.push(`${relativePath}: contains a contribution percentage.`);
+    if (privatePartnerPattern.test(text)) errors.push(`${relativePath}: contains a nonpublic partner or company-project name.`);
+    if (/\b(?:GLTFLoader|TextureLoader|XMLHttpRequest)\b|\bfetch\s*\(|\.glb\b/.test(text)) {
+      errors.push(`${relativePath}: 3D scenes must be procedural (no model, texture or network loads).`);
+    }
+  }
+  if (scriptBytes > maxScene3dScriptBytes) errors.push(`3D scene scripts total ${scriptBytes} bytes; the budget is ${maxScene3dScriptBytes} (vendor excluded).`);
+  return errors;
+}
+
 function pageDependencyErrors(file, html, parsedTags) {
   const errors = [];
   const relativePath = toPosix(file.relativePath);
@@ -2129,6 +2219,9 @@ function pageDependencyErrors(file, html, parsedTags) {
   const requiredScripts = [`${base}js/site-i18n.js`, `${base}js/nav.js`];
   if (file.page === 'home' || file.page === 'projects') {
     requiredScripts.splice(1, 0, `${base}js/portfolio-data.js`, `${base}js/portfolio-render.js`);
+    // A page with a declared 3D figure loads the engine and its scene right after the renderer; others must not.
+    const sceneName = pageScene3dName(file);
+    if (sceneName) requiredScripts.splice(3, 0, `${base}js/scene3d.js`, `${base}js/scenes/${sceneName}.js`);
   }
   if (hasActivityOverlay) {
     if (!requiredScripts.includes(`${base}js/portfolio-data.js`)) requiredScripts.push(`${base}js/portfolio-data.js`);
@@ -2426,6 +2519,7 @@ function validatePortfolio(rootDir) {
   errors.push(...evidenceRegistryErrors(data, rootDir));
   errors.push(...evidenceDirectoryErrors(rootDir));
   errors.push(...pdfArtifactErrors(rootDir));
+  errors.push(...scene3dAssetErrors(rootDir));
 
   for (const file of publicPortfolioFiles(rootDir)) {
     if (!fs.existsSync(file.absolutePath)) {
@@ -2492,6 +2586,9 @@ module.exports = {
   htmlReferences,
   localReferenceErrors,
   pageDependencyErrors,
+  pageScene3dName,
+  scene3dDeclarations,
+  scene3dAssetErrors,
   parseEvidenceRegister,
   readEvidenceRegister,
   evidenceRegistryErrors,

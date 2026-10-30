@@ -290,7 +290,10 @@ function copyTask6Surface(targetRoot) {
     'assets/pdfs',
     'assets/cv',
     'output/pdf',
-    'assets/local-review'
+    'assets/local-review',
+    'assets/3d',
+    'js/scenes',
+    'js/vendor'
   ]) {
     fs.cpSync(path.join(root, relativePath), path.join(targetRoot, relativePath), { recursive: true });
   }
@@ -308,6 +311,7 @@ function copyTask6Surface(targetRoot) {
     'js/site-i18n.js',
     'js/portfolio-data.js',
     'js/portfolio-render.js',
+    'js/scene3d.js',
     'js/nav.js',
     'js/local-media-data.js',
     'js/local-feed.js',
@@ -2420,9 +2424,10 @@ test('Scholar case article orders header, figure, five sections, gallery, and li
   const candidate = clone(data);
   candidate.projects[1] = project;
   const html = render.caseStudyHtml(candidate, project.slug, '../../../', true, 'en');
-  assertInOrder(html, ['sc-case__header', 'sc-case__meta', 'sc-case__thesis', 'Figure 1.', '<h2>Problem</h2>', '<h2>Approach</h2>', 'data-block-type="system"', 'data-block-type="text"', 'data-block-type="list"', '<h2>My role</h2>', '<h2>Results and evidence</h2>', 'data-block-type="evidence"', '<h2>Limits and team result</h2>', 'data-block-type="limitation"', 'sc-gallery', 'Figure 2.', 'First gallery figure', 'Figure 3.', 'Third gallery figure', 'sc-case__links'], 'case sequence');
+  // The 3D figure sits inside Approach as Figure 2, so the gallery continues from Figure 3.
+  assertInOrder(html, ['sc-case__header', 'sc-case__meta', 'sc-case__thesis', 'Figure 1.', '<h2>Problem</h2>', '<h2>Approach</h2>', 'sc-figure3d', 'Figure 2.', 'data-block-type="system"', 'data-block-type="text"', 'data-block-type="list"', '<h2>My role</h2>', '<h2>Results and evidence</h2>', 'data-block-type="evidence"', '<h2>Limits and team result</h2>', 'data-block-type="limitation"', 'sc-gallery', 'Figure 3.', 'First gallery figure', 'Figure 4.', 'Third gallery figure', 'sc-case__links'], 'case sequence');
   assert.match(html, /<ul>[\s\S]*<li>One<\/li>[\s\S]*<li>Two<\/li>/);
-  assert.doesNotMatch(html, /mandibular-gallery-2|Figure 4\./);
+  assert.doesNotMatch(html, /mandibular-gallery-2|Figure 5\./);
   assert.match(html, /src="\.\.\/\.\.\/\.\.\/assets\/projects\/mandibular-fracture\/g1\.png" alt="First gallery alt"/);
   assert.match(html, /href="\.\.\/\.\.\/\.\.\/assets\/pdfs\/mandibular-fracture-en\.pdf"/);
   assert.match(html, /href="\.\.\/\.\.\/\.\.\/en\/contact\/index\.html"/);
