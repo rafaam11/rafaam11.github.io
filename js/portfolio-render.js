@@ -1429,14 +1429,15 @@
     return items.concat(sourceProject.media && Array.isArray(sourceProject.media.gallery) ? sourceProject.media.gallery : []);
   }
 
-  function productConsoleFigureHtml(sourceProject, identifier, locale, base, modifier) {
+  // figureOffset: figures placed before the media figures (the 3D figure) shift every media number.
+  function productConsoleFigureHtml(sourceProject, identifier, locale, base, modifier, figureOffset) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
     var items = productConsoleMediaItems(sourceProject);
     var item = items.find(function (candidate) { return candidate.id === identifier; });
     if (!isApprovedImage(item)) return '';
     var itemCopy = translation(item, normalized);
-    var number = items.findIndex(function (candidate) { return candidate.id === identifier; }) + 1;
+    var number = items.findIndex(function (candidate) { return candidate.id === identifier; }) + 1 + (figureOffset || 0);
     return '<figure class="sc-product-figure sc-product-figure--' + escapeHtml(modifier || 'default') + '" id="evidence-' +
       escapeHtml(item.id) + '" data-media-status="approved" data-evidence-id="' + escapeHtml(item.id) + '">' +
       '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || '') + '" loading="lazy" decoding="async">' +
@@ -1452,14 +1453,14 @@
       '</dd></div><div><dt>' + escapeHtml(copy.teamBoundary) + '</dt><dd>' + escapeHtml(recordCopy.teamBoundary || '') + '</dd></div></dl>';
   }
 
-  function productConsoleEvidenceLinksHtml(sourceProject, evidenceIds, locale) {
+  function productConsoleEvidenceLinksHtml(sourceProject, evidenceIds, locale, figureOffset) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
     var items = productConsoleMediaItems(sourceProject);
     var links = (evidenceIds || []).map(function (id) {
       var index = items.findIndex(function (item) { return item.id === id; });
       if (index < 0) return '';
-      return '<a href="#evidence-' + escapeHtml(id) + '">' + escapeHtml(copy.figure + ' ' + (index + 1)) + '</a>';
+      return '<a href="#evidence-' + escapeHtml(id) + '">' + escapeHtml(copy.figure + ' ' + (index + 1 + (figureOffset || 0))) + '</a>';
     }).filter(Boolean).join(', ');
     return links ? '<p class="sc-product-evidence"><span>' + escapeHtml(copy.evidenceRefs) + ':</span> ' + links + '</p>' : '';
   }
@@ -1472,10 +1473,10 @@
       '</h2><p>' + escapeHtml(historyCopy.body || '') + '</p></section>';
   }
 
-  function productConsoleDesktopHtml(sourceProject, module, locale, base) {
+  function productConsoleDesktopHtml(sourceProject, module, locale, base, figureOffset) {
     var moduleCopy = translation(module, locale);
     var figures = (module.evidenceIds || []).map(function (id) {
-      return productConsoleFigureHtml(sourceProject, id, locale, base, 'console');
+      return productConsoleFigureHtml(sourceProject, id, locale, base, 'console', figureOffset);
     }).join('');
     return '<section class="sc-product-console" data-product-console-section="desktop-app"><div class="sc-product-console__heading">' +
       '<span class="sc-product-console__signal" aria-hidden="true"></span><div><p class="sc-product-console__kicker">Desktop product / live state</p>' +
@@ -1483,7 +1484,7 @@
       '<div class="sc-product-console__screens">' + figures + '</div>' + productConsoleBoundaryHtml(module, locale) + '</section>';
   }
 
-  function productConsoleApiHtml(sourceProject, module, locale) {
+  function productConsoleApiHtml(sourceProject, module, locale, figureOffset) {
     var normalized = localeOf(locale);
     var moduleCopy = translation(module, normalized);
     var flow = sourceProject.apiFlow;
@@ -1503,13 +1504,13 @@
       escapeHtml(flowCopy.summary || '') + '</p></div><ol class="sc-api-flow__nodes">' + nodes + '</ol><div class="sc-api-flow__outcomes"><span aria-hidden="true">↳</span>' +
       '<ul>' + outcomes + '</ul></div><p class="sc-change-note"><a href="' + escapeHtml(flow.changeNoteHref) + '" target="_blank" rel="noopener">' +
       escapeHtml(flowCopy.changeNoteLabel || '') + '</a></p></div>' + productConsoleBoundaryHtml(module, normalized) +
-      productConsoleEvidenceLinksHtml(sourceProject, module.evidenceIds, normalized) + '</section>';
+      productConsoleEvidenceLinksHtml(sourceProject, module.evidenceIds, normalized, figureOffset) + '</section>';
   }
 
-  function productConsoleTrackHtml(sourceProject, track, locale, base) {
+  function productConsoleTrackHtml(sourceProject, track, locale, base, figureOffset) {
     var trackCopy = translation(track, locale);
     var figures = (track.evidenceIds || []).map(function (id) {
-      return productConsoleFigureHtml(sourceProject, id, locale, base, track.key);
+      return productConsoleFigureHtml(sourceProject, id, locale, base, track.key, figureOffset);
     }).join('');
     return '<section class="sc-case__section sc-product-application" data-product-console-section="' + escapeHtml(track.key) + '" data-track="' +
       escapeHtml(track.key) + '" data-track-kind="' + escapeHtml(track.kind) + '"><p class="sc-product-application__kind">' +
@@ -1542,10 +1543,10 @@
     var contactHref = i18n.routeHref(base, normalized, 'contact/', Boolean(isFile));
     var lead = evidenceMediaHtml(sourceProject, normalized, base, isFile);
     // The 3D figure follows the lead (Figure 1) inside a section, so js/local-projects.js never mistakes it for the lead.
-    // Product-console cases number figures by media index and do not place it yet.
-    var sceneFigure = sourceProject && sourceProject.caseLayout !== 'product-console'
-      ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, lead ? 2 : 1)
-      : '';
+    // Product-console cases have no lead: the 3D figure is Figure 1 after the product history and the media figures
+    // (and their "Figure N" evidence links) shift by one.
+    var isConsole = Boolean(sourceProject && sourceProject.caseLayout === 'product-console');
+    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole ? 1 : (lead ? 2 : 1)) : '';
     var afterSceneFigure = (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
       '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
@@ -1569,13 +1570,15 @@
     }
     if (sourceProject && sourceProject.caseLayout === 'product-console') {
       var modules = sourceProject.consoleModules || [];
+      var mediaOffset = sceneFigure ? 1 : 0;
       var tracks = (sourceProject.applicationTracks || []).map(function (track) {
-        return productConsoleTrackHtml(sourceProject, track, normalized, base);
+        return productConsoleTrackHtml(sourceProject, track, normalized, base, mediaOffset);
       }).join('');
+      var consoleScene = sceneFigure ? '<section class="sc-product-figure3d" data-product-console-section="figure3d">' + sceneFigure + '</section>' : '';
       return '<article class="sc-case sc-case--product-console" data-case="' + escapeHtml(project.slug) + '" data-case-layout="product-console">' +
-        header + productConsoleHistoryHtml(sourceProject, normalized) +
-        productConsoleDesktopHtml(sourceProject, modules[0], normalized, base) +
-        productConsoleApiHtml(sourceProject, modules[1], normalized) + tracks +
+        header + productConsoleHistoryHtml(sourceProject, normalized) + consoleScene +
+        productConsoleDesktopHtml(sourceProject, modules[0], normalized, base, mediaOffset) +
+        productConsoleApiHtml(sourceProject, modules[1], normalized, mediaOffset) + tracks +
         productConsoleResourcesHtml(sourceProject, normalized) +
         '<section class="sc-case__section sc-product-limits" data-product-console-section="limits"><h2>' + escapeHtml(copy.limits) + '</h2><p>' +
           escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p></section>' +

@@ -429,6 +429,15 @@
           'surgical-navigation-gallery-05'
         ]
       },
+      // Web-only 3D figure (js/scenes/smcnavi.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'smcnavi',
+        poster: 'assets/3d/smcnavi.webp',
+        translations: {
+          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다. 드래그해 돌려 볼 수 있습니다.', alt: '합성 두개골 주위의 트래커, 환자 레퍼런스 마커, CT 볼륨, 추적 포인터, 하악 마커를 점선 좌표 체인으로 잇는 3D 개념도' },
+          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker. Drag to rotate.', alt: '3D concept linking a tracker, a patient reference marker, a CT volume, a tracked pointer and a mandible marker around a synthetic skull with dashed transform lines' }
+        }
+      },
       translations: {
         ko: {
           title: 'SMCNavi · HoloLens 수술내비게이션',
@@ -1025,6 +1034,15 @@
       ],
       blocks: [],
       links: [],
+      // Web-only 3D figure (js/scenes/foaa.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'foaa',
+        poster: 'assets/3d/foaa.webp',
+        translations: {
+          ko: { caption: '디지털 교합 워크플로우 개념도(합성 형상): 상악 15개·하악 15개 치아 랜드마크, 자동 교합과 6-DOF 조정으로 하악 치열을 맞추는 교합 정렬, 접촉 상태와 거리를 보는 교합 평가 순서입니다. 드래그해 돌려 볼 수 있습니다.', alt: '합성 두개골과 확대한 치열에서 치아 랜드마크, 하악 치열의 교합 정렬, 접촉·거리 색 표시가 이어지는 3D 개념도' },
+          en: { caption: 'Concept of the digital occlusion workflow (synthetic geometry): 15 upper and 15 lower tooth landmarks, occlusal alignment of the lower dentition by automatic occlusion and 6-DOF adjustment, then occlusion evaluation of contact state and distance. Drag to rotate.', alt: '3D concept of a synthetic skull and an enlarged dentition showing tooth landmarks, occlusal alignment of the lower dentition and a contact and distance colour map' }
+        }
+      },
       translations: {
         ko: {
           title: '구강악안면 디지털 교합 워크플로우',
@@ -1095,6 +1113,15 @@
           }
         }
       },
+      // Web-only 3D figure (js/scenes/omfsvr.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'omfsvr',
+        poster: 'assets/3d/omfsvr.webp',
+        translations: {
+          ko: { caption: '3인 VR 상담 개념도(일반 아바타): 의사1(Master)·환자·의사2가 CT 기반 3D 악골 모델과 2D 계측 패널을 함께 보고, 모델 자세와 페이지 번호가 세 참가자에게 동기화됩니다. 드래그해 돌려 볼 수 있습니다.', alt: '헤드셋을 쓴 세 참가자가 타원형 책상 위의 분절 색 3D 악골 모델과 벽의 계측 패널을 함께 보는 VR 상담실 3D 개념도' },
+          en: { caption: 'Concept of the three-user VR consultation (generic avatars): clinician 1 (master), the patient and clinician 2 view a CT-derived 3D jaw model and a 2D measurement panel, with model pose and page number synchronized to all three. Drag to rotate.', alt: '3D concept of a VR consultation room where three headset users share a segmented 3D jaw model above an oval desk and a measurement panel on the wall' }
+        }
+      },
       translations: {
         ko: {
           title: 'OMFS VR — 멀티유저 수술상담', shortTitle: 'OMFS VR', eyebrow: 'XR·공간 시각화 · 멀티유저 VR',
@@ -1157,6 +1184,15 @@
           }
         }
       },
+      // Web-only 3D figure (js/scenes/neuro.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'neuro',
+        poster: 'assets/3d/neuro.webp',
+        translations: {
+          ko: { caption: '코일 내비게이션 개념도(일반 형상, 수치 없음): 추적 포인터로 얼굴과 이마에서 찍은 표면점을 랜드마크로 대략 맞춘 뒤 ICP 반복으로 머리 모델에 정합하고, 로봇 연동으로 TMS 코일을 두피 표적에 정렬합니다. 드래그해 돌려 볼 수 있습니다.', alt: '추적 포인터로 찍은 얼굴 표면점이 앉은 사람의 머리 모델에 정합되고 로봇 팔 끝의 TMS 코일이 두피 표적에 닿는 3D 개념도' },
+          en: { caption: 'Concept of coil navigation (generic geometry, no values): surface points digitized on the face and forehead with the tracked pointer are coarsely aligned by landmarks and registered to the head model by ICP iterations; through robot integration, the TMS coil is then aligned to scalp targets. Drag to rotate.', alt: '3D concept in which face surface points digitized with a tracked pointer are registered to the head model of a seated person and a TMS coil on a robot arm reaches a scalp target' }
+        }
+      },
       translations: {
         ko: {
           title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '수술 로보틱스·내비게이션 · 검증됨',
@@ -1217,6 +1253,15 @@
             ko: { title: '두 광학 트랙이 하나의 출력으로 모인다', nodes: ['3D 광학 센서', '원거리 — 표면 재구성·CT 정합', '근거리 — ROI 깊이·호흡 파형', '셋업 오차·게이팅 트리거'] },
             en: { title: 'Two optical tracks converging on one output', nodes: ['3D optical sensors', 'Far field: surface reconstruction and CT registration', 'Near field: ROI depth and respiratory waveform', 'Setup offset and gating trigger'] }
           }
+        }
+      },
+      // Web-only 3D figure (js/scenes/sgrt-poc.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'sgrt-poc',
+        poster: 'assets/3d/sgrt-poc.webp',
+        translations: {
+          ko: { caption: '호흡 추적 PoC 개념도(1차년도 센서 검증 단계, 파형은 예시): 3D 깊이 센서가 흉부 ROI 깊이를 읽어 호흡 파형으로 바꾸고, 그 파형에서 게이트 신호 예시를 만듭니다. 치료 장비는 그리지 않았습니다. 드래그해 돌려 볼 수 있습니다.', alt: '삼각대 위 3D 깊이 센서가 앉은 사람의 흉부 ROI를 보고, 옆 화면에 호흡 파형과 게이트 신호 예시가 그려지는 3D 개념도' },
+          en: { caption: 'Concept of the breathing-tracking proof of concept (first-year sensor groundwork; illustrative waveform): a 3D depth sensor reads chest-ROI depth, which becomes a respiratory waveform and an example gating signal. No treatment equipment is shown. Drag to rotate.', alt: '3D concept of a tripod-mounted depth sensor viewing the chest ROI of a seated person, with a respiratory waveform and an example gating signal on a nearby display' }
         }
       },
       translations: {
@@ -1341,6 +1386,15 @@
           }
         }
       },
+      // Web-only 3D figure (js/scenes/skadi.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'skadi',
+        poster: 'assets/3d/skadi.webp',
+        translations: {
+          ko: { caption: '광학 추적 원리 개념도: SKADI의 카메라 2대와 IR LED가 도구의 반사 마커 4개를 보고 도구의 위치·회전(6DoF)을 계산합니다. 드래그해 돌려 볼 수 있습니다.', alt: '두 렌즈와 IR LED 고리가 있는 추적기에서 도구의 반사 마커 4개로 광선이 이어지는 3D 개념도' },
+          en: { caption: 'Concept of the optical-tracking principle: the two cameras and IR LEDs of SKADI see four reflective markers on a tool and compute its position and orientation (6DoF). Drag to rotate.', alt: '3D concept of a tracker with two lenses and IR LED rings, with rays to four reflective markers on a tool' }
+        }
+      },
       translations: {
         ko: {
           title: 'SKADI 데스크톱 앱·API', shortTitle: 'SKADI 데스크톱 앱·API', eyebrow: '컴퓨터비전·3D 공간 컴퓨팅 · 광학 위치추적',
@@ -1400,6 +1454,15 @@
             ko: { title: '다중 센서에서 안전 정책으로의 수렴', nodes: ['ToF·RGB 보정·SAM3', 'LiDAR 센서 통합', '비전 서보잉·BT 액션', '안전 정책·Zenoh'] },
             en: { title: 'Multi-sensor convergence to safety policy', nodes: ['ToF-RGB calibration and SAM3', 'LiDAR sensor integration', 'Vision servoing and BT actions', 'Safety policy and Zenoh'] }
           }
+        }
+      },
+      // Web-only 3D figure (js/scenes/fk-safety.js); excluded from the PDF source digest.
+      scene3d: {
+        name: 'fk-safety',
+        poster: 'assets/3d/fk-safety.webp',
+        translations: {
+          ko: { caption: '안전 관리자 초기 정책 개념도(기본 도형): 3단 가상 범퍼에서 경고 구역은 감속, 정지 구역은 정지, 가장 안쪽 구역은 E-STOP 래칭이며, 사람이 떠난 뒤에도 리셋 입력 전까지 래칭이 유지됩니다. 드래그해 돌려 볼 수 있습니다.', alt: '지게차 주위의 세 겹 구역 가운데 가장 안쪽 구역에 사람이 들어와 E-STOP이 래칭되는 3D 개념도' },
+          en: { caption: 'Concept of the initial safety-manager policy (primitive shapes): in the three-zone virtual bumper, the warning zone slows the vehicle, the stop zone stops it, and the innermost zone latches E-STOP, which holds after the person leaves until a reset input. Drag to rotate.', alt: '3D concept of a forklift surrounded by three nested zones, with E-STOP latched as a person enters the innermost zone' }
         }
       },
       translations: {

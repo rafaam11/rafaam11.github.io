@@ -15,6 +15,20 @@ const validator = require('../scripts/validate-portfolio.cjs');
 const read = (relativePath) => fs.readFileSync(path.join(root, relativePath), 'utf8');
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const sceneProjects = () => data.projects.filter((project) => project.scene3d);
+// Case -> scene (spec section 2). AI Build Lab has none.
+const expectedScenes = {
+  'surgical-navigation': 'smcnavi',
+  'mandibular-fracture': 'ms-frac',
+  'digital-occlusion-workflow': 'foaa',
+  'life-careverse': 'omfsvr',
+  'rtms-navigation': 'neuro',
+  'respiratory-surface-guidance': 'sgrt-poc',
+  'skadi-tracking-software': 'skadi',
+  'unmanned-forklift': 'fk-safety'
+};
+const defaultLayoutCases = ['mandibular-fracture', 'life-careverse', 'rtms-navigation', 'respiratory-surface-guidance', 'unmanned-forklift'];
+const storyLayoutCases = ['surgical-navigation', 'digital-occlusion-workflow'];
+const figureNumbers = (html) => [...html.matchAll(/sc-figure__label">[^<]*?(\d+)\./g)].map((match) => Number(match[1]));
 
 function caseFile(slug, locale) {
   return validator.publicPortfolioFiles(root).find((file) => file.route === `projects/${slug}/` && file.locale === locale);
@@ -29,7 +43,7 @@ function tempRoot(t) {
   return dir;
 }
 
-test('scene3d records are valid, unique, and the mandibular pilot is declared', () => {
+test('scene3d records are valid, unique, and every case except AI Build Lab declares its scene', () => {
   assert.deepEqual(render.dataErrors(data), []);
   const mandibular = data.projects.find((project) => project.slug === 'mandibular-fracture');
   assert.deepEqual(Object.keys(mandibular.scene3d).sort(), ['name', 'poster', 'translations']);
@@ -42,6 +56,15 @@ test('scene3d records are valid, unique, and the mandibular pilot is declared', 
   assert.equal(data.projects.find((project) => project.slug === 'ai-build-lab').scene3d, undefined, 'AI Build Lab has no 3D figure');
   const names = sceneProjects().map((project) => project.scene3d.name);
   assert.equal(new Set(names).size, names.length);
+  assert.deepEqual(Object.fromEntries(sceneProjects().map((project) => [project.slug, project.scene3d.name])), expectedScenes);
+  for (const project of sceneProjects()) {
+    assert.equal(project.scene3d.poster, `assets/3d/${project.scene3d.name}.webp`);
+    for (const locale of ['ko', 'en']) {
+      const copy = project.scene3d.translations[locale];
+      assert.match(copy.caption, locale === 'ko' ? /드래그해 돌려 볼 수 있습니다\.$/ : /Drag to rotate\.$/, `${project.slug} ${locale}: drag hint`);
+      assert.ok(copy.alt.trim(), `${project.slug} ${locale}: alt`);
+    }
+  }
 });
 
 test('scene3d data validation rejects malformed records', () => {
@@ -75,6 +98,17 @@ test('scene3d data validation rejects malformed records', () => {
 
 test('case renderer puts the 3D figure inside Approach after the lead and shifts the gallery numbers', () => {
   for (const [locale, figure] of [['ko', '그림'], ['en', 'Figure']]) {
+    for (const slug of defaultLayoutCases) {
+      const html = render.caseStudyHtml(data, slug, '../../', false, locale);
+      const name = expectedScenes[slug];
+      const labels = figureNumbers(html);
+      assert.deepEqual(labels, labels.map((_, i) => i + 1), `${slug} ${locale}: consecutive figure numbers`);
+      assert.equal((html.match(/class="sc-figure sc-figure3d"/g) || []).length, 1, `${slug} ${locale}: one 3D figure`);
+      assert.ok(html.includes(`<div class="view3d" data-scene="${name}"><img src="../../assets/3d/${name}.webp"`), `${slug} ${locale}: poster`);
+      const approachStart = html.indexOf(locale === 'ko' ? '<h2>접근</h2>' : '<h2>Approach</h2>');
+      const at = html.indexOf('sc-figure3d');
+      assert.ok(approachStart > 0 && at > approachStart && at < html.indexOf('</section>', approachStart), `${slug} ${locale}: 3D figure inside Approach`);
+    }
     const html = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, locale);
     const figures = html.match(/<figure\b[\s\S]*?<\/figure>/g);
     assert.match(figures[0], new RegExp(`${figure} 1\\.`));
@@ -89,14 +123,23 @@ test('case renderer puts the 3D figure inside Approach after the lead and shifts
     const at = html.indexOf('sc-figure3d');
     assert.ok(approachStart > 0 && at > approachStart && at < approachEnd, `${locale}: 3D figure inside Approach`);
   }
-  for (const slug of ['ai-build-lab', 'rtms-navigation']) {
-    assert.doesNotMatch(render.caseStudyHtml(data, slug, '', false, 'ko'), /view3d|sc-figure3d/, `${slug} has no 3D figure`);
-  }
+  assert.doesNotMatch(render.caseStudyHtml(data, 'ai-build-lab', '', false, 'ko'), /view3d|sc-figure3d/, 'ai-build-lab has no 3D figure');
 });
 
 test('story layout places the 3D figure in the overview section and shifts story figure numbers', () => {
+  for (const slug of storyLayoutCases) {
+    for (const locale of ['ko', 'en']) {
+      const html = render.caseStudyHtml(data, slug, '', false, locale);
+      const labels = figureNumbers(html);
+      assert.deepEqual(labels, labels.map((_, i) => i + 1), `${slug} ${locale}: consecutive figure numbers`);
+      const overview = html.indexOf(locale === 'ko' ? '<h2>프로젝트 개요</h2>' : '<h2>Project overview</h2>');
+      const at = html.indexOf(`data-scene="${expectedScenes[slug]}"`);
+      assert.ok(overview > 0 && at > overview && at < html.indexOf('</section>', overview), `${slug} ${locale}: 3D figure in the overview`);
+    }
+  }
   const candidate = clone(data);
   const story = candidate.projects.find((project) => Array.isArray(project.storySections) && project.storySections.length && project.caseLayout !== 'product-console');
+  delete story.scene3d;
   const before = render.caseStudyHtml(candidate, story.slug, '', false, 'en');
   story.scene3d = { name: 'story-test', poster: 'assets/3d/story-test.webp', translations: { ko: { caption: '개념', alt: '개념도' }, en: { caption: 'Concept', alt: 'Concept figure' } } };
   const after = render.caseStudyHtml(candidate, story.slug, '', false, 'en');
@@ -105,12 +148,53 @@ test('story layout places the 3D figure in the overview section and shifts story
   assert.deepEqual(count(after), count(after).map((_, i) => i + 1));
   const overview = after.indexOf('<h2>Project overview</h2>');
   assert.ok(overview > 0 && after.indexOf('sc-figure3d') > overview && after.indexOf('sc-figure3d') < after.indexOf('</section>', overview));
-  const consoleCase = candidate.projects.find((project) => project.caseLayout === 'product-console');
-  consoleCase.scene3d = { name: 'console-test', poster: 'assets/3d/console-test.webp', translations: story.scene3d.translations };
-  assert.doesNotMatch(render.caseStudyHtml(candidate, consoleCase.slug, '', false, 'en'), /sc-figure3d/, 'product-console placement is not wired yet');
+});
+
+test('product-console layout places the 3D figure after the product history and shifts media numbers and evidence links', () => {
+  const consoleCase = data.projects.find((project) => project.caseLayout === 'product-console');
+  assert.equal(consoleCase.scene3d.name, 'skadi');
+  const withoutScene = clone(data);
+  delete withoutScene.projects.find((project) => project.slug === consoleCase.slug).scene3d;
+  for (const [locale, figure] of [['ko', '그림'], ['en', 'Figure']]) {
+    const html = render.caseStudyHtml(data, consoleCase.slug, '../../', false, locale);
+    const plain = render.caseStudyHtml(withoutScene, consoleCase.slug, '../../', false, locale);
+    const history = html.indexOf('data-product-console-section="history"');
+    const scene = html.indexOf('data-product-console-section="figure3d"');
+    assert.ok(history > 0 && scene > history && scene < html.indexOf('data-product-console-section="desktop-app"'), `${locale}: after history, before the desktop app`);
+    assert.deepEqual(figureNumbers(html), [1, 2, 3, 4, 5, 6], `${locale}: 3D figure is Figure 1, media continue from 2`);
+    assert.deepEqual(figureNumbers(plain), [1, 2, 3, 4, 5], `${locale}: without a scene the media keep 1-5`);
+    const sceneFigure = html.slice(scene, html.indexOf('</figure>', scene));
+    assert.ok(sceneFigure.includes('class="sc-figure sc-figure3d"') && sceneFigure.includes(`${figure} 1.`), `${locale}: the 3D figure is Figure 1`);
+    // every evidence link names the figure that carries its anchor, one more than without the scene
+    const numberAt = (source, id) => {
+      const at = source.indexOf(`id="evidence-${id}"`);
+      return figureNumbers(source.slice(at, source.indexOf('</figure>', at)))[0];
+    };
+    const links = [...html.matchAll(/href="#evidence-([^"]+)">[^<]*?(\d+)</g)];
+    assert.ok(links.length > 0);
+    for (const [, id, number] of links) {
+      assert.equal(Number(number), numberAt(html, id), `${locale}: link to ${id}`);
+      const plainLink = [...plain.matchAll(/href="#evidence-([^"]+)">[^<]*?(\d+)</g)].find((match) => match[1] === id);
+      assert.equal(Number(number), Number(plainLink[2]) + 1, `${locale}: link to ${id} shifted by one`);
+    }
+    assert.doesNotMatch(plain, /figure3d/);
+  }
 });
 
 test('only pages with a declared scene load scene3d.js and their scene, right after the renderer', () => {
+  for (const [slug, name] of Object.entries(expectedScenes)) {
+    for (const locale of ['ko', 'en']) {
+      const file = caseFile(slug, locale);
+      const html = fs.readFileSync(file.absolutePath, 'utf8');
+      assert.deepEqual(validator.pageDependencyErrors(file, html), [], `${file.relativePath}`);
+      assert.equal(validator.pageScene3dName(file), name);
+      const base = locale === 'en' ? '../../../' : '../../';
+      assert.ok(html.includes(`<script src="${base}js/portfolio-render.js"></script><script src="${base}js/scene3d.js"></script><script src="${base}js/scenes/${name}.js"></script><script src="${base}js/nav.js"></script>`), `${file.relativePath}: script sequence`);
+      const alt = data.projects.find((item) => item.slug === slug).scene3d.translations[locale].alt;
+      const fallback = /<article class="td-case-fallback">[\s\S]*?<\/article>/.exec(html)[0];
+      assert.ok(fallback.includes(`<img src="${base}assets/3d/${name}.webp" alt="${alt}" width="1600" height="1000">`), `${file.relativePath}: no-JS poster`);
+    }
+  }
   for (const locale of ['ko', 'en']) {
     const file = caseFile('mandibular-fracture', locale);
     const html = fs.readFileSync(file.absolutePath, 'utf8');

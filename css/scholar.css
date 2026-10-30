@@ -148,7 +148,7 @@
 .view3d .lb.off { opacity: 0; }
 .view3d .lead3d { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .view3d .lead3d .ld { fill: var(--sc-bg); stroke: #9aa1a9; stroke-width: 1; }
-.view3d .readout { position: absolute; left: .6rem; bottom: .4rem; z-index: 2; pointer-events: none; color: var(--sc-muted); font-size: .8rem; }
+.view3d .readout { position: absolute; left: .45rem; bottom: .4rem; z-index: 2; padding: 0 .2rem; background: var(--sc-bg); pointer-events: none; color: var(--sc-muted); font-size: .8rem; }
 .view3d .readout:empty { display: none; }
 .view3d__reset { position: absolute; top: .3rem; right: .4rem; z-index: 3; padding: .15rem .3rem; border: 0; background: none; color: var(--sc-muted); font: inherit; font-size: .8rem; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
 .view3d__reset:hover { color: var(--sc-link); }

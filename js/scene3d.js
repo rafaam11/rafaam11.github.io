@@ -212,7 +212,8 @@
         for (let i = 0; i < 8; i++) P.push(new THREE.Vector3(i & 1 ? B.max.x : B.min.x, i & 2 ? B.max.y : B.min.y, i & 4 ? B.max.z : B.min.z));
         fillK = fillK || (opts.fit && opts.fit.fill) || 0.9;
         const pad = (opts.fit && opts.fit.pad) || [0, 0, 0, 0];   // extra px reserved [top, right, bottom, left]
-        const bot = (readout ? 34 : 8) + pad[2], top = 8 + pad[0];
+        // narrow figures also keep the top row free for the reset button (captures hide it)
+        const bot = (readout ? 34 : 8) + pad[2], top = 8 + pad[0] + (W < 520 && !capture ? 24 : 0);
         const AX0 = (-1 + 2 * (8 + pad[3]) / W) * fillK, AX1 = (1 - 2 * (8 + pad[1]) / W) * fillK;
         const AY0 = (-1 + 2 * bot / H) * fillK, AY1 = (1 - 2 * top / H) * fillK;
         const tanV = Math.tan(camera.fov * Math.PI / 360), tanH = tanV * W / H;

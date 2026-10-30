@@ -1788,6 +1788,7 @@ test('Scholar figure renderer skips pending media instead of drawing a placehold
     gallery: []
   };
   project.pdfSequence.evidenceId = project.media.lead.id;
+  delete project.scene3d;   // the 3D figure is not media; this test covers media placeholders only
   assert.equal(render.evidenceMediaHtml(project, 'en', '../../', false), '');
   const html = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
   assert.doesNotMatch(html, /<figure|<img|<video|role="img"|placeholder/i);
@@ -2004,9 +2005,9 @@ test('SMCNavi bilingual long-form renders approved workflows, organisations, med
     assert.match(html, new RegExp(expected.prototype));
     assert.match(html, /surgical-navigation-hololens-demo-01\.mp4/);
     assert.match(html, /surgical-navigation-smcnavi-features-01\.mp4/);
-    assert.equal(count(html, '<figure'), 10, `${locale}: one lead, eight media figures, and one diagram`);
-    assert.equal(count(html, 'class="sc-figure__label"'), 10, `${locale}: every figure has a localized numeric label`);
-    assertInOrder(html, Array.from({ length: 10 }, (_, index) => `${expected.figureLabel} ${index + 1}.`), `${locale}: ten consecutive numeric figure labels`);
+    assert.equal(count(html, '<figure'), 11, `${locale}: one lead, the 3D figure, eight media figures, and one diagram`);
+    assert.equal(count(html, 'class="sc-figure__label"'), 11, `${locale}: every figure has a localized numeric label`);
+    assertInOrder(html, Array.from({ length: 11 }, (_, index) => `${expected.figureLabel} ${index + 1}.`), `${locale}: eleven consecutive numeric figure labels`);
     assert.match(html, new RegExp(expected.diagramTitle));
     assert.doesNotMatch(html, /class="sc-gallery"|github\.com/i);
   }
@@ -2453,6 +2454,7 @@ test('SKADI product-console renderer follows the approved app-to-API-to-applicat
     assertInOrder(html, [
       'sc-case__header',
       'data-product-console-section="history"',
+      'data-product-console-section="figure3d"',
       'data-product-console-section="desktop-app"',
       'data-product-console-section="api"',
       'data-product-console-section="medical"',
@@ -2461,8 +2463,8 @@ test('SKADI product-console renderer follows the approved app-to-API-to-applicat
       'data-product-console-section="limits"',
       'sc-case__links'
     ], `${locale}: product-console sequence`);
-    assert.equal(count(html, '<figure'), 5, `${locale}: exact five approved evidence figures`);
-    assert.equal(count(html, 'class="sc-product-figure'), 5, `${locale}: no separate gallery figures`);
+    assert.equal(count(html, '<figure'), 6, `${locale}: the 3D figure plus exact five approved evidence figures`);
+    assert.equal(count(html, 'class="sc-product-figure '), 5, `${locale}: no separate gallery figures`);
     assert.equal(count(html, 'class="sc-boundary-panel"'), 4, `${locale}: role boundary belongs inside each product/application section`);
     assert.doesNotMatch(html, /<video\b|\.mp4|sc-gallery|evidence-first|role="tab"|class="[^\"]*tabs?/i);
     assertInOrder(html, ['data-api-node="application"', 'data-api-node="library"', 'data-api-node="entry"', 'data-api-outcome="ready"', 'data-api-outcome="error-handled"'], `${locale}: API flow`);
@@ -2676,7 +2678,7 @@ test('digital occlusion story uses headings, captions, controls, and no autoplay
   assert.ok(count(html, '<h2') >= 7);
   assert.match(html, /<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="none")/);
   assert.doesNotMatch(html, /\bautoplay\b|\bloop\b/);
-  assert.equal(count(html, '<figcaption>'), 6);
+  assert.equal(count(html, '<figcaption>'), 7, 'six media and diagram captions plus the 3D figure');
 });
 
 test('Task 5 exporter produces deterministic public-safe project and CV input', () => {
