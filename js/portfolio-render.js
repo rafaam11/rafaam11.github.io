@@ -1114,6 +1114,18 @@
     return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
   }
 
+  // Home intro 3D figure: unnumbered, in the intro's side column. Its portrait poster (640×800) is above the
+  // fold, so it is not lazy-loaded; three.js itself still loads only after the page has loaded.
+  function homeScene3dFigureHtml(scene, locale, base) {
+    if (!scene || typeof scene !== 'object' || typeof scene.name !== 'string' || !scene3dNamePattern.test(scene.name) ||
+        scene.poster !== 'assets/3d/' + scene.name + '.webp' || !isSafePublicPath(scene.poster)) return '';
+    var sceneCopy = translation(scene, localeOf(locale));
+    if (!sceneCopy.caption || !sceneCopy.alt) return '';
+    return '<figure class="sc-figure sc-figure3d sc-intro__figure" data-scene3d="' + escapeHtml(scene.name) + '"><div class="view3d" data-scene="' +
+      escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) + '" alt="' + escapeHtml(sceneCopy.alt) +
+      '" width="640" height="800" decoding="async"></div><figcaption>' + escapeHtml(sceneCopy.caption) + '</figcaption></figure>';
+  }
+
   function mediaPreload(item) {
     return item && item.type === 'video' && item.preload === 'metadata' ? 'metadata' : 'none';
   }
@@ -1660,6 +1672,7 @@
     relatedProjectsHtml: relatedProjectsHtml,
     caseStudyHtml: caseStudyHtml,
     scene3dFigureHtml: scene3dFigureHtml,
+    homeScene3dFigureHtml: homeScene3dFigureHtml,
     mountAll: mountAll
   };
 });

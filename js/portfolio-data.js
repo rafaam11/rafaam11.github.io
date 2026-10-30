@@ -1828,6 +1828,15 @@
 
   return {
     homeProjectSlugs: ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'],
+    // Web-only Home intro 3D figure (js/scenes/home-tracking.js); its elements follow the surgical-navigation case.
+    homeScene3d: {
+      name: 'home-tracking',
+      poster: 'assets/3d/home-tracking.webp',
+      translations: {
+        ko: { caption: '광학 추적·환자 정합·HoloLens 오버레이 개념도(합성 형상). 드래그해 돌려 볼 수 있습니다.', alt: '천장의 광학 추적기가 환자 머리의 레퍼런스 마커와 내비게이션 포인터의 마커를 보고, HoloLens 형태의 헤드셋 시야 안에서 합성 두개골 홀로그램이 환자 머리에 겹쳐 있는 3D 개념도' },
+        en: { caption: 'Optical tracking, patient registration and HoloLens overlay (synthetic geometry). Drag to rotate.', alt: '3D concept in which a ceiling-mounted optical tracker sees the patient reference marker and the marker of a navigation pointer, while a synthetic skull hologram is overlaid on the patient\'s head inside the view of a HoloLens-style headset' }
+      }
+    },
     news: news,
     capabilities: capabilities,
     tiers: tiers,

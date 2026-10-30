@@ -32,7 +32,7 @@
 .td-section-heading p { margin-top: .35rem; }
 
 /* Home intro */
-.sc-intro { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem 2.5rem; align-items: start; padding: 3.5rem 0 3rem; border-bottom: 1px solid var(--sc-rule); }
+.sc-intro { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 1.5rem 2.5rem; align-items: start; padding: 3.5rem 0 3rem; border-bottom: 1px solid var(--sc-rule); }
 .sc-intro h1 span[lang="en"] { display: block; color: var(--sc-muted); font-weight: 500; font-size: 1.1rem; letter-spacing: 0; }
 .sc-intro__role { margin-top: .35rem; font-size: 1.15rem; font-weight: 500; }
 .sc-intro__keywords { color: var(--sc-muted); font-size: var(--sc-meta); }
@@ -42,7 +42,8 @@
 .sc-intro__direction strong { color: var(--sc-ink); font-weight: 600; }
 .sc-intro__affiliation { color: var(--sc-muted); }
 .sc-intro__links { margin-top: .9rem; }
-.sc-intro__photo { width: 176px; height: 176px; object-fit: cover; border-radius: 4px; }
+.sc-intro__figure { margin: .3rem 0 0; } /* Home 3D figure (home-tracking) in the former photo column */
+.sc-intro__figure.sc-figure3d .view3d { aspect-ratio: 4 / 5; }
 .sc-capabilities { display: grid; grid-template-columns: max-content 1fr; gap: .5rem 1.5rem; margin: .9rem 0 0; color: var(--sc-ink); }
 .sc-capabilities div { display: contents; }
 .sc-capabilities dt { font-weight: 600; }
@@ -76,6 +77,9 @@
 .sc-list li { margin: .3rem 0; }
 .sc-list__year { color: var(--sc-faint); font-size: var(--sc-meta); margin-right: .35rem; }
 .sc-contact { padding-bottom: 1rem; }
+.sc-contact__line { display: flex; align-items: center; gap: 1rem; margin-top: .6rem; }
+.td-shell .sc-contact__line p { margin: 0; }
+.td-shell .sc-contact__photo { flex: none; width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
 
 /* Page headers (Projects, CV, Contact) */
 .sc-page-header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--sc-rule); }
@@ -244,7 +248,7 @@
 
 @media (max-width: 760px) {
   .sc-intro { grid-template-columns: 1fr; }
-  .sc-intro__photo { order: -1; width: 120px; height: 120px; }
+  .sc-intro__figure { width: 100%; max-width: 420px; }
   .sc-intro__role { font-size: 1.05rem; }
   .sc-gallery__grid { grid-template-columns: 1fr; }
   .sc-project__facts { grid-template-columns: 1fr; }

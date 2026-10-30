@@ -39,7 +39,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 ## File structure
 
 ```text
-index.html                         # Home: intro (name, role, keywords, lede, statement, affiliation, contacts, research direction, photo; Person JSON-LD in head), current-expertise list, selected research (3), publications + patents/awards line, News (4, curated), selected activities (local-feed overlay), contact line
+index.html                         # Home: intro (name, role, keywords, lede, statement, affiliation, contacts, research direction, home-tracking 3D figure in the side column; Person JSON-LD in head), current-expertise list, selected research (3), publications + patents/awards line, News (4, curated), selected activities (local-feed overlay), contact line with a small profile photo
 projects/index.html                # Projects groups: Surgical Robotics & Navigation (4), Computer Vision & 3D Spatial Computing (2), XR & Spatial Visualization (1), Robotics & Automation (1), AI Build Lab (1); tier `slugs` set the order
 projects/<slug>/index.html         # 9 shared-renderer case summaries
 en/                               # English counterparts for all 13 Korean routes

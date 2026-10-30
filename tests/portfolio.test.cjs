@@ -1750,7 +1750,9 @@ test('Scholar Home shells carry introduction, news and selected research without
     assert.match(html, new RegExp(identity, 'i'));
     assertInOrder(html, ['class="sc-intro"', 'id="implementation-title"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'id="news-title"', 'class="sc-contact"'], file);
     assert.doesNotMatch(html, /id="highlights-title"|sc-intro__topics/, `${file}: highlights close the publications section; capabilities are the dl, not a topics line`);
-    assert.match(html, new RegExp(`<img class="sc-intro__photo" src="${assetBase}img/profile_square.webp"`));
+    // the intro side column holds the 3D figure; the portrait sits small in the contact line
+    assert.match(html, /<section class="sc-intro"[\s\S]*?<figure class="sc-figure sc-figure3d sc-intro__figure" data-scene3d="home-tracking">[\s\S]*?<\/section>/);
+    assert.match(html, new RegExp(`<section class="sc-contact"[\\s\\S]*<img class="sc-contact__photo" src="${assetBase}img/profile_square\\.webp"`));
     assert.match(html, /mailto:uiop3847@naver\.com/);
     assert.match(html, /https:\/\/www\.linkedin\.com\/in\/rlawlsals/);
     assert.match(html, new RegExp(`${assetBase}cv/jinmin-kim-cv-(?:ko|en)\\.pdf`));
@@ -4682,6 +4684,8 @@ test('Task 6 review round 3 rejects real inert containers without trusting their
       '  <script src="js/site-i18n.js"></script>',
       '  <script src="js/portfolio-data.js"></script>',
       '  <script src="js/portfolio-render.js"></script>',
+      '  <script src="js/scene3d.js"></script>',
+      '  <script src="js/scenes/home-tracking.js"></script>',
       '  <script src="js/nav.js"></script>'
     ].join('\n');
     assert.ok(baseline.includes(scripts), 'Home fixture must contain the exact dependency block');
@@ -4795,6 +4799,8 @@ test('Task 6 review round 3 enforces classic required scripts after all live mou
       '  <script src="js/site-i18n.js"></script>',
       '  <script src="js/portfolio-data.js"></script>',
       '  <script src="js/portfolio-render.js"></script>',
+      '  <script src="js/scene3d.js"></script>',
+      '  <script src="js/scenes/home-tracking.js"></script>',
       '  <script src="js/nav.js"></script>'
     ];
     const scriptBlock = scriptLines.join('\n');
