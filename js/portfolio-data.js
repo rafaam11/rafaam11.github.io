@@ -1098,6 +1098,47 @@
       ],
       blocks: [],
       links: [],
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '분리된 특징점·교합·평가 기능을 한 앱의 end-to-end 워크플로로 재설계',
+          tags: ['3D Slicer', 'C++ · Qt', 'Python', 'VTK', 'PyBullet', 'SOFA'],
+          brief: {
+            problem: ['특징점 앱 분리·참고 이미지 대조 불편', '다중 시점 교합·저장·평가 화면 미통합'],
+            did: ['기술 리드·메인 개발자', 'Custom App 아키텍처·end-to-end UI/UX', '엔진 통합·평가·내보내기·패키징'],
+            result: ['7단계 워크플로가 동작하는 개발 빌드', '구강 스캔 특징점 주석 PoC 도구'],
+            team: ['연구진의 지표 정의·빌드 직접 검토', '특징점 알고리즘·교합 엔진 구현 지원']
+          },
+          sections: {
+            'redesign-background': { items: ['2023.04–12 이전 앱 유지보수·검증', '2025.09–10 v1 교합 시뮬레이터 정리', '2026.03 구조·워크플로 재설계 시작', '2026.04 특징점 주석 PoC 도구(PySide6·VTK)'] },
+            'integrated-workflow': { items: ['8개 3D 모델 준비', '치아 30개·악안면 30개 특징점 입력·가시화', '특징점 기반 해부학적 좌표계', '자동 교합·6-DOF 미세 조정·피봇 회전', '접촉 상태·거리 가시화', 'RMSE·Gap·FRE 평가, 저장·내보내기'] },
+            'user-centered-decisions': { items: ['특징점 입력 화면 옆 참고 이미지', '다중 시점 교합 비교', '저장·불러오기 흐름 통합', '시뮬레이션 재생바·피봇 회전 핸들', '모델 투명도·특징점 가시성 제어'] },
+            'system-architecture': { items: ['C++/Qt 셸 + Python 워크플로 모듈', '공통 상태·라이브러리', '협업 알고리즘은 통합 범위로 구분'] },
+            'verification-boundary': { hidden: true },
+            'long-term-direction': { items: ['정상 교합 기반 하악 운동 연결', '전체 구강악안면 수술계획으로 확장(장기 방향)'] }
+          },
+          sceneCaption: '디지털 교합 워크플로 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'Separate landmark, occlusion, and evaluation tools redesigned as one end-to-end app',
+          tags: ['3D Slicer', 'C++ · Qt', 'Python', 'VTK', 'PyBullet', 'SOFA'],
+          brief: {
+            problem: ['Landmark app separate from reference images', 'Occlusion views, saving, evaluation not integrated'],
+            did: ['Technical lead and main developer', 'Custom App architecture and end-to-end UI/UX', 'Engine integration, evaluation, export, packaging'],
+            result: ['Development build running the 7-step workflow', 'Intraoral-scan landmark annotation PoC tool'],
+            team: ['Researchers define metrics and review builds', 'Collaborators support landmark and occlusion engines']
+          },
+          sections: {
+            'redesign-background': { items: ['2023.04–12 maintained and verified the previous app', '2025.09–10 packaged the v1 occlusion simulator', '2026.03 redesign of structure and workflow', '2026.04 landmark annotation PoC (PySide6, VTK)'] },
+            'integrated-workflow': { items: ['Eight 3D models prepared', '30 dental and 30 maxillofacial landmarks', 'Landmark-based anatomical frame', 'Auto occlusion, 6-DOF fine-tuning, pivot rotation', 'Contact state and distance display', 'RMSE, Gap, FRE evaluation; save and export'] },
+            'user-centered-decisions': { items: ['Reference image beside landmark input', 'Multi-view occlusion comparison', 'Integrated save and load', 'Simulation playback bar and pivot handle', 'Model transparency and landmark visibility'] },
+            'system-architecture': { items: ['C++/Qt shell + Python workflow modules', 'Shared state and libraries', 'Collaborator algorithms kept as integration scope'] },
+            'verification-boundary': { hidden: true },
+            'long-term-direction': { items: ['Mandibular motion from normal occlusion', 'Toward full maxillofacial surgical planning (long-term)'] }
+          },
+          sceneCaption: 'Digital occlusion workflow concept (synthetic geometry)'
+        }
+      },
       // Web-only 3D figure (js/scenes/foaa.js); excluded from the PDF source digest.
       scene3d: {
         name: 'foaa',
@@ -1177,6 +1218,33 @@
           }
         }
       },
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '의료진·환자가 한 VR 상담실에서 같은 3D 악골 모델을 함께 봄',
+          tags: ['Unity 6', 'Photon PUN2 · Voice', 'OpenXR', 'Meta Quest 3', 'Galaxy XR', 'FastAPI'],
+          brief: {
+            problem: ['2D 계측과 3D 골격 변화를 함께 설명', '같은 지점을 보는지 확인할 방법 없음'],
+            did: ['Unity 클라이언트 전체', '룸·역할·상태 동기화·음성 채팅', 'OpenXR·Android XR 이식, 서버·전처리'],
+            result: ['3인 동시 VR 상담 세션', 'Quest 3·Galaxy XR 동작'],
+            team: ['소프트웨어 저작권 등록', '환자 데모·설문 진행 중']
+          },
+          points: ['접속 순서로 의사1·환자·의사2 역할 배정', '모델 자세·분절·페이지·발화자 공유', '환자 CT 볼륨을 3D·단면으로 로딩', '제조사 SDK → OpenXR·Android XR', 'FastAPI 파일 서버, STL 경량화·슬라이드 변환'],
+          sceneCaption: '3인 VR 상담실 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'Clinicians and patient share one 3D jaw model in one VR consultation room',
+          tags: ['Unity 6', 'Photon PUN2 · Voice', 'OpenXR', 'Meta Quest 3', 'Galaxy XR', 'FastAPI'],
+          brief: {
+            problem: ['2D measurements and 3D skeletal change explained together', 'No way to confirm everyone sees the same spot'],
+            did: ['Entire Unity client', 'Rooms, roles, state sync, voice chat', 'OpenXR/Android XR port, server and preprocessing'],
+            result: ['Three-person live VR consultation', 'Runs on Quest 3 and Galaxy XR'],
+            team: ['Software copyright registration', 'Patient demos and survey in progress']
+          },
+          points: ['Join order assigns doctor 1, patient, doctor 2', 'Shared model pose, segments, page, speaker', 'Patient CT volume loaded in 3D and slices', 'Vendor SDK → OpenXR and Android XR', 'FastAPI file server, STL decimation, slide conversion'],
+          sceneCaption: 'Three-person VR consultation room concept (synthetic geometry)'
+        }
+      },
       // Web-only 3D figure (js/scenes/omfsvr.js); excluded from the PDF source digest.
       scene3d: {
         name: 'omfsvr',
@@ -1248,6 +1316,33 @@
           }
         }
       },
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '광학 추적·3D Slicer 기반의 라이선스 배포 코일 내비게이션',
+          tags: ['3D Slicer', 'VTK', 'PyQt5', 'ICP', '광학 추적', 'TCP/IP'],
+          brief: {
+            problem: ['영상·트래커·태블릿·로봇 좌표계가 제각각', '하나의 검증 가능한 흐름 필요'],
+            did: ['화면 흐름·정합 엔진·좌표 체인 리드', '트래커 SDK 이전·태블릿 프로토콜·로봇 연동', '라이선스 검증·옵션 기능 게이팅'],
+            result: ['라이선스 배포 빌드 납품·유지보수', '이슈 단위 회귀 테스트 스위트'],
+            team: ['일부 화면 모듈은 동료와 공동']
+          },
+          points: ['홈 6개 메뉴가 DICOM→정합→표적→세션 단계 게이팅', '과녁 뷰와 거리·기울기 안내로 조준', '랜드마크 + ICP 3모드 정합', '표적별 거리·RMSE·CSV 비교 기능', '깊이 카메라 정합 프로그램(C++·Qt·VTK)'],
+          sceneCaption: '코일 내비게이션 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'Optical tracking and 3D Slicer as a licensed coil-navigation product',
+          tags: ['3D Slicer', 'VTK', 'PyQt5', 'ICP', 'Optical tracking', 'TCP/IP'],
+          brief: {
+            problem: ['Images, tracker, tablet, robot in separate frames', 'Needed one verifiable flow'],
+            did: ['Led screen flow, registration engine, transform chain', 'Tracker SDK migration, tablet protocol, robot link', 'License checks and option gating'],
+            result: ['Licensed release builds delivered and maintained', 'Issue-by-issue regression test suite'],
+            team: ['Some screen modules built with a colleague']
+          },
+          points: ['Six home menus gate DICOM → registration → target → session', 'Bullseye view with distance and tilt guidance', 'Landmark + ICP registration in three modes', 'Per-target distance, RMSE, CSV comparison', 'Depth-camera registration program (C++, Qt, VTK)'],
+          sceneCaption: 'Coil navigation concept (synthetic geometry)'
+        }
+      },
       // Web-only 3D figure (js/scenes/neuro.js); excluded from the PDF source digest.
       scene3d: {
         name: 'neuro',
@@ -1317,6 +1412,33 @@
             ko: { title: '두 광학 트랙이 하나의 출력으로 모인다', nodes: ['3D 광학 센서', '원거리 — 표면 재구성·CT 정합', '근거리 — ROI 깊이·호흡 파형', '셋업 오차·게이팅 트리거'] },
             en: { title: 'Two optical tracks converging on one output', nodes: ['3D optical sensors', 'Far field: surface reconstruction and CT registration', 'Near field: ROI depth and respiratory waveform', 'Setup offset and gating trigger'] }
           }
+        }
+      },
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '환자 체표면을 광학 3D로 읽는 SGRT 광학 파트를 국산 센서 스택으로',
+          tags: ['ToF', 'Structured light', 'Qt · VTK', 'OpenCV', 'Python', '4DCT'],
+          brief: {
+            problem: ['촬영·피부 마킹 없이 위치·호흡 파악', '센서별 거리·정확도 근거부터 필요'],
+            did: ['센서 검증 실험 총괄', '검증 도구 DtDepthScan 개발', '호흡 파형·게이팅 신호 알고리즘'],
+            result: ['센서 5종·5거리·55회 실측표', '재현성 ±0.05 mm, σ 50프레임 수렴'],
+            team: ['4DCT 재구성·영상유도·임상 자문 분담']
+          },
+          points: ['원거리: 점군 병합 → 계획 CT 정합', '근거리: 흉·복부 ROI 깊이 → 호흡 파형', 'Raw 연속 녹화로 실측 fps·σ·유효 픽셀', '0.5 m 기본 노출 IR 포화 확인', '콜드스타트 σ 최대 1.7배 악화 확인'],
+          sceneCaption: '표면유도 호흡추적 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'The optical part of SGRT, reading the body surface in 3D, on a domestic sensor stack',
+          tags: ['ToF', 'Structured light', 'Qt · VTK', 'OpenCV', 'Python', '4DCT'],
+          brief: {
+            problem: ['Position and breathing without imaging or skin marks', 'Needed per-sensor range and precision evidence first'],
+            did: ['Led the sensor validation experiments', 'Built the DtDepthScan validation tool', 'Breathing waveform and gating algorithm'],
+            result: ['5 sensors × 5 distances, 55 measured runs', 'Repeatability ±0.05 mm; σ converged by 50 frames'],
+            team: ['Consortium covers 4DCT, image guidance, clinical advice']
+          },
+          points: ['Far range: merged point clouds → planning-CT registration', 'Near range: chest/abdomen ROI depth → breathing waveform', 'Raw recording for measured fps, σ, valid-pixel ratio', 'Default exposure saturates IR at 0.5 m', 'Cold-start σ up to 1.7× worse'],
+          sceneCaption: 'Surface-guided breathing tracking concept (synthetic geometry)'
         }
       },
       // Web-only 3D figure (js/scenes/sgrt-poc.js); excluded from the PDF source digest.
@@ -1450,6 +1572,45 @@
           }
         }
       },
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '광학 마커 추적·좌표 변환 앱과 API — 수술 도구·로봇 추적의 기반',
+          tags: ['SKADI', 'C++', 'Python API', '3D Slicer', '광학 추적'],
+          brief: {
+            problem: ['응용마다 추적 장치 연결·상태 처리가 제각각'],
+            did: ['DtSkadi.dll 통합·OpenEx() 오류 분기', 'MarkerEditor 검증·캘리브레이션 도구', '유지보수·배포·문서·통합 지원'],
+            result: ['열기 실패 뒤 크래시 방지', '의료·로봇 추적 응용에 연결'],
+            team: ['장치·광학·기구 설계, 최종 응용']
+          },
+          sections: {
+            history: { items: ['Viewer = 이 앱의 이전 명칭', 'MarkerEditor = 마커 정의·파일 작업 화면'] },
+            'desktop-app': { items: ['마커 정의·파일 작업', '트래커 연결·6DoF 상태 확인'], owned: '입력 검증·마커 빌더·거리·각도 체커·피봇 캘리브레이션·FPS 도구·SDK 7.1.2' },
+            api: { items: ['DtSkadi.dll OpenEx()로 연결 시작', '성공·오류 결과 분리 → 준비 또는 처리된 오류'], owned: 'OpenEx() 오류 분기·공개 API 문서·Python SDK 번들' },
+            medical: { items: ['비식별 트레이·3D Slicer CT 화면 연결', '수술내비게이션 통합 경계 확인'], owned: '추적 API·데스크톱 앱 연결, Slicer 통합 지원' },
+            industrial: { items: ['로봇 말단·목표 마커 좌표 관계', '정밀 도킹 응용 통합 지원'], owned: '추적 API·좌표 통합 지원' }
+          },
+          sceneCaption: '광학 추적 장치와 마커 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'Optical marker tracking and transform app plus API — the base for tool and robot tracking',
+          tags: ['SKADI', 'C++', 'Python API', '3D Slicer', 'Optical tracking'],
+          brief: {
+            problem: ['Each application handled tracker connection and state its own way'],
+            did: ['DtSkadi.dll integration, OpenEx() error branches', 'MarkerEditor validation and calibration tools', 'Maintenance, releases, docs, integration support'],
+            result: ['Crash path after a failed open closed', 'Connected to medical and robot tracking apps'],
+            team: ['Device, optics, instrument design; final applications']
+          },
+          sections: {
+            history: { items: ['Viewer = earlier name of this app', 'MarkerEditor = marker definition and file screen'] },
+            'desktop-app': { items: ['Marker definition and file work', 'Tracker connection and 6DoF state'], owned: 'Input validation, marker builder, checker, pivot calibration, FPS tool, SDK 7.1.2' },
+            api: { items: ['DtSkadi.dll OpenEx() starts the connection', 'Success and error split → ready or handled error'], owned: 'OpenEx() error branches, public API docs, Python SDK bundle' },
+            medical: { items: ['Anonymized tray and 3D Slicer CT screen', 'Surgical-navigation integration boundary checked'], owned: 'Tracking API and desktop-app link, Slicer integration support' },
+            industrial: { items: ['Robot end-effector to target-marker frames', 'Precision docking integration support'], owned: 'Tracking API and coordinate integration support' }
+          },
+          sceneCaption: 'Optical tracker and marker concept (synthetic geometry)'
+        }
+      },
       // Web-only 3D figure (js/scenes/skadi.js); excluded from the PDF source digest.
       scene3d: {
         name: 'skadi',
@@ -1518,6 +1679,33 @@
             ko: { title: '다중 센서에서 안전 정책으로의 수렴', nodes: ['ToF·RGB 보정·SAM3', 'LiDAR 센서 통합', '비전 서보잉·BT 액션', '안전 정책·Zenoh'] },
             en: { title: 'Multi-sensor convergence to safety policy', nodes: ['ToF-RGB calibration and SAM3', 'LiDAR sensor integration', 'Vision servoing and BT actions', 'Safety policy and Zenoh'] }
           }
+        }
+      },
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '수술 내비게이션의 좌표 정합을 로봇 센서와 안전 판단에 적용',
+          tags: ['C++', 'Zenoh', 'BehaviorTree.CPP', 'ToF · RGB', 'SAM3', 'Jetson AGX Orin'],
+          brief: {
+            problem: ['센서마다 다른 좌표·주기', '안전 판단용 공통 흐름 필요'],
+            did: ['Jetson 비전 서비스·ToF↔RGB 캘리브레이션', '비전 서보잉·로딩 액션 행동트리 통합', '센서 통합 서비스·안전 관리자 초기 설계'],
+            result: ['시험장 통합 테스트(영상·사진)', 'ToF↔RGB 시각차 p95 16.6 ms(191프레임)'],
+            team: ['측위·차량 제어·미션 관리 담당', '시스템 통합·현장 검증']
+          },
+          points: ['SAM3 분할·품질 게이트·트럭 적재 연속 추적', '바퀴쌍 인식 → 포크 정렬·접근·삽입', '여러 센서 → 하나의 3D 점유 출력', '마스트 LiDAR 표면 검출, Zenoh 발행', '3단 가상 범퍼·E-STOP 래칭 정책'],
+          sceneCaption: '안전 관리자 초기 정책 개념도(합성 형상)'
+        },
+        en: {
+          thesis: 'Surgical-navigation registration applied to robot sensors and safety decisions',
+          tags: ['C++', 'Zenoh', 'BehaviorTree.CPP', 'ToF · RGB', 'SAM3', 'Jetson AGX Orin'],
+          brief: {
+            problem: ['Each sensor in its own frame and rate', 'Needed one flow usable for safety decisions'],
+            did: ['Jetson vision service, ToF↔RGB calibration', 'Visual servoing and loading actions in the behaviour tree', 'Sensor fusion service, initial safety manager design'],
+            result: ['Test-site integration runs (video, photos)', 'ToF↔RGB timing gap p95 16.6 ms (191 frames)'],
+            team: ['Localization, vehicle control, mission management', 'System integration and field validation']
+          },
+          points: ['SAM3 segmentation, quality gate, truck-load tracking', 'Wheel-pair detection → fork align, approach, insert', 'Many sensors → one 3D occupancy output', 'Mast LiDAR surface detection, Zenoh publishing', 'Three-zone virtual bumper and E-STOP latching'],
+          sceneCaption: 'Initial safety-manager policy concept (synthetic geometry)'
         }
       },
       // Web-only 3D figure (js/scenes/fk-safety.js); excluded from the PDF source digest.
@@ -1602,6 +1790,29 @@
         { href: 'https://github.com/rafaam11/view-anything', translations: { ko: { label: 'view-anything 저장소' }, en: { label: 'view-anything repository' } } },
         { href: 'https://github.com/rafaam11/public-transportation-info', translations: { ko: { label: '대구 버스 앱 저장소' }, en: { label: 'Daegu bus app repository' } } }
       ],
+      // Web-only condensed copy; excluded from the PDF source digest.
+      web: {
+        ko: {
+          thesis: '직접 겪은 문제를 제품으로 — AI는 구현을 증폭하는 수단',
+          tags: ['Electron', 'React · TypeScript', 'Tauri · Rust', 'Node.js', 'Cloudflare', 'GitHub Actions'],
+          brief: {
+            problem: ['반복되는 마찰이 임시 스크립트로 남음'],
+            did: ['요구사항·아키텍처·수용 기준 소유', '테스트·릴리스·운영 판단', 'AI는 구현 보조·증폭'],
+            result: ['네 앱의 공개 저장소·테스트·릴리스']
+          },
+          points: ['마찰 → 요구사항 → 아키텍처', '수용 기준 → 테스트 → 릴리스 → 운영', '사람: 맥락·수용·릴리스 판단', 'AI: 구현 증폭']
+        },
+        en: {
+          thesis: 'Problems I ran into, turned into products — AI amplifies the implementation',
+          tags: ['Electron', 'React · TypeScript', 'Tauri · Rust', 'Node.js', 'Cloudflare', 'GitHub Actions'],
+          brief: {
+            problem: ['Recurring friction stayed as throwaway scripts'],
+            did: ['Own requirements, architecture, acceptance', 'Tests, releases, and operations decisions', 'AI as implementation amplifier'],
+            result: ['Four apps with public repos, tests, releases']
+          },
+          points: ['Friction → requirements → architecture', 'Acceptance criteria → tests → release → operations', 'Human: context, acceptance, release decisions', 'AI: amplifies implementation']
+        }
+      },
       translations: {
         ko: {
           title: 'AI Build Lab - 필요한 도구를 직접 만든다', shortTitle: 'AI Build Lab', eyebrow: 'AI 빌드 랩 · 제품 엔지니어링',

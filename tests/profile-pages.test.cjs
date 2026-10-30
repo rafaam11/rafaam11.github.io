@@ -55,15 +55,22 @@ test('mandibular descriptions distinguish the lingual and buccal figures', () =>
   assert.match(gallery[0].translations.en.caption,/lingual cusp/);
   assert.match(gallery[1].translations.en.alt,/buccal-cusp/);
 });
-test('case pages keep one shared boundary while preserving distinct OMFS validation status', () => {
+test('dense case pages leave boundary and validation prose to the PDFs; the legacy path keeps one shared boundary', () => {
+  const boundary = /No clinical efficacy, quantitative accuracy, or regulatory status is claimed/g;
   const rtms = renderer.caseStudyHtml(data,'rtms-navigation','../../',true,'en');
-  assert.equal((rtms.match(/No clinical efficacy, quantitative accuracy, or regulatory status is claimed/g)||[]).length,1);
+  assert.equal((rtms.match(boundary)||[]).length,0);
   const omfs = renderer.caseStudyHtml(data,'life-careverse','../../',true,'en');
-  assert.match(omfs,/external-hospital validation is still planned/);
-  assert.match(omfs,/My role/);
-  assert.match(omfs,/team result/);
+  assert.doesNotMatch(omfs,/external-hospital validation is still planned|<h2>My role<\/h2>|Limits and team result/);
+  // Without web copy (synthetic legacy fixture) the shared boundary still renders exactly once and OMFS keeps its status.
+  const legacy = structuredClone(data);
+  for (const slug of ['rtms-navigation','life-careverse']) delete legacy.projects.find(p=>p.slug===slug).web;
+  assert.equal((renderer.caseStudyHtml(legacy,'rtms-navigation','../../',true,'en').match(boundary)||[]).length,1);
+  const legacyOmfs = renderer.caseStudyHtml(legacy,'life-careverse','../../',true,'en');
+  assert.match(legacyOmfs,/external-hospital validation is still planned/);
+  assert.match(legacyOmfs,/My role/);
+  assert.match(legacyOmfs,/team result/);
 });
-test('new distinct case limitations remain visible alongside the consolidated boundary', () => {
+test('new distinct case limitations stay PDF-only on dense pages and visible on the legacy path', () => {
   const candidate = structuredClone(data);
   candidate.projects.find(p=>p.slug==='rtms-navigation').blocks.push({
     key:'additional-device-limit',type:'limitation',translations:{
@@ -71,6 +78,8 @@ test('new distinct case limitations remain visible alongside the consolidated bo
       en:{heading:'Additional device limitation',body:'This connection does not support additional devices.'}
     }
   });
+  assert.doesNotMatch(renderer.caseStudyHtml(candidate,'rtms-navigation','../../',true,'en'),/This connection does not support additional devices/);
+  delete candidate.projects.find(p=>p.slug==='rtms-navigation').web;
   const html = renderer.caseStudyHtml(candidate,'rtms-navigation','../../',true,'en');
   assert.match(html,/This connection does not support additional devices/);
   assert.equal((html.match(/No clinical efficacy, quantitative accuracy, or regulatory status is claimed/g)||[]).length,1);

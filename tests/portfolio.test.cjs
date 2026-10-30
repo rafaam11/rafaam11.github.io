@@ -1798,7 +1798,11 @@ test('Scholar figure renderer skips pending media instead of drawing a placehold
   assert.equal(render.evidenceMediaHtml(project, 'en', '../../', false), '');
   const html = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
   assert.doesNotMatch(html, /<figure|<img|<video|role="img"|placeholder/i);
-  assert.match(html, new RegExp(project.translations.en.limitation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.match(html, /class="sc-brief"/, 'the dense page still renders without media');
+  delete project.web;   // legacy path: the limitation prose still renders, still without placeholders
+  const legacyHtml = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
+  assert.doesNotMatch(legacyHtml, /<figure|<img|<video|role="img"|placeholder/i);
+  assert.match(legacyHtml, new RegExp(project.translations.en.limitation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   const repositoryLead = clone(data.projects[data.projects.length - 1]);
   repositoryLead.media = { lead: { id: 'repository-lead', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' }, gallery: [] };
   assert.equal(render.evidenceMediaHtml(repositoryLead, 'en', '', false), '');
@@ -2445,7 +2449,7 @@ test('Scholar case article orders header, figure, five sections, gallery, and li
   assert.doesNotMatch(pendingGallery, /sc-gallery/);
 });
 
-test('SKADI product-console renderer follows the approved app-to-API-to-application order in both locales', () => {
+test('SKADI dense product-console renderer follows the approved app-to-API-to-application order in both locales', () => {
   const expectedResources = [
     'https://digitrack.notion.site/SKADI-Viewer-6a6710e4f7ba4d0b970376d07539e4c7',
     'https://digitrack.co.kr/business/products/3d-position-sensor/3',
@@ -2457,6 +2461,8 @@ test('SKADI product-console renderer follows the approved app-to-API-to-applicat
     assert.match(html, /<article class="sc-case sc-case--product-console"[^>]*data-case-layout="product-console"/);
     assertInOrder(html, [
       'sc-case__header',
+      'class="sc-tags"',
+      'class="sc-brief"',
       'data-product-console-section="history"',
       'data-product-console-section="figure3d"',
       'data-product-console-section="desktop-app"',
@@ -2464,12 +2470,13 @@ test('SKADI product-console renderer follows the approved app-to-API-to-applicat
       'data-product-console-section="medical"',
       'data-product-console-section="industrial"',
       'data-product-console-section="resources"',
-      'data-product-console-section="limits"',
       'sc-case__links'
-    ], `${locale}: product-console sequence`);
+    ], `${locale}: dense product-console sequence`);
+    assert.doesNotMatch(html, /data-product-console-section="limits"|sc-product-limits/, `${locale}: no limits section`);
     assert.equal(count(html, '<figure'), 6, `${locale}: the 3D figure plus exact five approved evidence figures`);
     assert.equal(count(html, 'class="sc-product-figure '), 5, `${locale}: no separate gallery figures`);
-    assert.equal(count(html, 'class="sc-boundary-panel"'), 4, `${locale}: role boundary belongs inside each product/application section`);
+    assert.equal(count(html, 'class="sc-boundary-panel"'), 0, `${locale}: no role boundary panels on the dense page`);
+    assert.equal(count(html, `<p class="sc-owned"><span class="sc-tag">${locale === 'ko' ? '담당' : 'My part'}</span> `), 4, `${locale}: one owned line per module and track`);
     assert.doesNotMatch(html, /<video\b|\.mp4|sc-gallery|evidence-first|role="tab"|class="[^\"]*tabs?/i);
     assertInOrder(html, ['data-api-node="application"', 'data-api-node="library"', 'data-api-node="entry"', 'data-api-outcome="ready"', 'data-api-outcome="error-handled"'], `${locale}: API flow`);
     assert.match(html, /DtSkadi\.dll/);
@@ -5494,6 +5501,7 @@ test('web copy contract enforces locales, budgets, noun-phrase endings, and stor
   assert.deepEqual(render.dataErrors(data), []);
   const mandibularIndex = data.projects.findIndex((item) => item.slug === 'mandibular-fracture');
   const surgicalIndex = data.projects.findIndex((item) => item.slug === 'surgical-navigation');
+  const skadiIndex = data.projects.findIndex((item) => item.slug === 'skadi-tracking-software');
   const cases = [
     [mandibularIndex, (web) => { delete web.en; }, /exactly ko and en/],
     [mandibularIndex, (web) => { web.ko.extra = 'x'; }, /allows only/],
@@ -5514,7 +5522,18 @@ test('web copy contract enforces locales, budgets, noun-phrase endings, and stor
     [mandibularIndex, (web) => { web.en.points[0] = 'Owned 80% of the role'; }, /contribution percentage/],
     [mandibularIndex, (web) => { web.en.tags[0] = 'KAERI'; }, /nonpublic partner/],
     [surgicalIndex, (web) => { web.ko.sections.missing = { items: ['a'] }; }, /unknown story section missing/],
-    [surgicalIndex, (web) => { web.en.sections['smcnavi-overview'] = { items: ['a'], body: 'b' }; }, /must contain only items/]
+    [surgicalIndex, (web) => { web.en.sections['smcnavi-overview'] = { items: ['a'], body: 'b' }; }, /allows only items, owned/],
+    [surgicalIndex, (web) => { web.ko.sections['smcnavi-overview'] = { owned: '담당 범위' }; }, /sections\.smcnavi-overview: needs 1–8 lines/],
+    [surgicalIndex, (web) => { web.ko.sections['smcnavi-overview'].owned = '가'.repeat(51); }, /smcnavi-overview\.owned: .* exceeds 50 characters/],
+    [surgicalIndex, (web) => { web.en.sections['smcnavi-overview'].owned = 'a'.repeat(91); }, /smcnavi-overview\.owned: .* exceeds 90 characters/],
+    [surgicalIndex, (web) => { web.ko.sections['smcnavi-overview'].owned = '연동을 담당했습니다'; }, /noun phrase/],
+    [surgicalIndex, (web) => { web.ko.sections['smcnavi-overview'] = { hidden: false }; }, /hidden must be true and stand alone/],
+    [surgicalIndex, (web) => { web.ko.sections['smcnavi-overview'] = { hidden: true, items: ['a'] }; }, /hidden must be true and stand alone/],
+    [surgicalIndex, (web) => { web.ko.sections.history = { items: ['a'] }; }, /unknown story section history/],
+    [skadiIndex, (web) => { web.ko.sections['smcnavi-overview'] = { items: ['a'] }; }, /unknown console section smcnavi-overview/],
+    [skadiIndex, (web) => { web.en.sections.limits = { items: ['a'] }; }, /unknown console section limits/],
+    [skadiIndex, (web) => { web.ko.sections.api = { hidden: true }; }, /product-console sections cannot be hidden/],
+    [skadiIndex, (web) => { web.en.sections.medical.extra = 'x'; }, /sections\.medical: allows only items, owned/]
   ];
   for (const [index, mutate, expected] of cases) {
     const candidate = clone(data);
@@ -5593,4 +5612,101 @@ test('web copy stays out of the PDF source digest', () => {
   const changed = clone(data);
   changed.projects.find((project) => project.web).web.en.tags[0] = 'Changed';
   assert.equal(pdfSource.pdfSourceDigest(pdfSource.canonicalPdfSource(changed, evidence, cv)), withWeb);
+});
+
+test('every case carries dense web copy whose section keys cover its layout', () => {
+  assert.deepEqual(data.projects.map((project) => project.slug).sort(), [...slugs].sort());
+  for (const project of data.projects) {
+    assert.ok(project.web && project.web.ko && project.web.en, `${project.slug}: web copy`);
+    for (const locale of ['ko', 'en']) {
+      const sections = Object.keys(project.web[locale].sections || {});
+      if (project.caseLayout === 'product-console') {
+        assert.deepEqual(sections.sort(), ['api', 'desktop-app', 'history', 'industrial', 'medical'], `${project.slug} ${locale}: console keys`);
+      } else if (project.storySections && project.storySections.length) {
+        assert.deepEqual(sections, project.storySections.map((section) => section.key), `${project.slug} ${locale}: story keys in order`);
+      } else {
+        assert.ok(project.web[locale].points.length >= 3, `${project.slug} ${locale}: points`);
+      }
+    }
+  }
+});
+
+test('dense SKADI console keeps the API strings and evidence links, drops summaries, boundary panels, and limits', () => {
+  const project = data.projects.find((item) => item.slug === 'skadi-tracking-software');
+  const escape = (value) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  for (const [locale, figure] of [['ko', '그림'], ['en', 'Figure']]) {
+    const html = render.caseStudyHtml(data, project.slug, '../../', false, locale);
+    const web = project.web[locale];
+    const ko = locale === 'ko';
+    for (const required of ['DtSkadi.dll', 'OpenEx()', 'MarkerEditor', 'Viewer']) assert.ok(html.includes(required), `${locale}: ${required}`);
+    const meta = /<p class="sc-case__meta">([\s\S]*?)<\/p>/.exec(html)[1];
+    assert.equal(count(meta, '<span>'), 2, `${locale}: meta is period and state only`);
+    assert.ok(html.includes(`<p class="sc-case__thesis">${escape(web.thesis)}</p>`), `${locale}: web thesis`);
+    assert.ok(html.indexOf('class="sc-brief"') < html.indexOf('data-product-console-section="history"'), `${locale}: brief before history`);
+    assert.ok(html.includes(`${figure} 1.</span> ${escape(web.sceneCaption)}</figcaption>`), `${locale}: short 3D caption`);
+    const history = html.slice(html.indexOf('data-product-console-section="history"'), html.indexOf('data-product-console-section="figure3d"'));
+    assert.ok(!history.includes(project.productHistory.translations[locale].body), `${locale}: history body replaced`);
+    for (const item of web.sections.history.items) assert.ok(history.includes(`<li>${escape(item)}</li>`), `${locale}: history ${item}`);
+    for (const record of [...project.consoleModules, ...project.applicationTracks]) {
+      const start = html.indexOf(`data-product-console-section="${record.key}"`);
+      const section = html.slice(start, html.indexOf('</section>', start));
+      const copy = record.translations[locale];
+      assert.ok(section.includes(`<h2>${escape(copy.title)}</h2>`), `${locale} ${record.key}: title kept`);
+      assert.ok(!section.includes(escape(copy.summary)), `${locale} ${record.key}: summary replaced`);
+      for (const field of ['ownedRole', 'teamBoundary']) assert.ok(!html.includes(escape(copy[field])), `${locale} ${record.key}: no ${field}`);
+      for (const item of web.sections[record.key].items) assert.ok(section.includes(`<li>${escape(item)}</li>`), `${locale} ${record.key}: ${item}`);
+      assert.ok(section.includes(`<p class="sc-owned"><span class="sc-tag">${ko ? '담당' : 'My part'}</span> ${escape(web.sections[record.key].owned)}</p>`), `${locale} ${record.key}: owned line`);
+      for (const id of record.evidenceIds) assert.ok(section.includes(`id="evidence-${id}"`) || section.includes(`href="#evidence-${id}"`), `${locale} ${record.key}: evidence ${id}`);
+    }
+    assert.match(html, /<h3 id="sc-api-flow-title-(?:ko|en)">/, `${locale}: API flow kept`);
+    for (const field of ['limitation', 'teamResult', 'role', 'summary', 'problem']) assert.ok(!html.includes(escape(project.translations[locale][field])), `${locale}: no ${field} prose`);
+    assert.doesNotMatch(html, ko ? /<h2>한계와 팀 성과<\/h2>/ : /<h2>Limits and team result<\/h2>/);
+  }
+  // Without web copy (synthetic fixture) the legacy console keeps its paragraphs, boundary panels, and limits section.
+  const legacy = clone(data);
+  delete legacy.projects.find((item) => item.slug === project.slug).web;
+  const legacyHtml = render.caseStudyHtml(legacy, project.slug, '../../', false, 'en');
+  assertInOrder(legacyHtml, ['data-product-console-section="resources"', 'data-product-console-section="limits"', 'sc-case__links'], 'legacy console limits');
+  assert.equal(count(legacyHtml, 'class="sc-boundary-panel"'), 4);
+  assert.doesNotMatch(legacyHtml, /class="sc-brief"|class="sc-owned"/);
+});
+
+test('dense digital occlusion drops its hidden verification section and keeps figures consecutive', () => {
+  const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
+  const hidden = project.storySections.find((section) => section.key === 'verification-boundary');
+  for (const locale of ['ko', 'en']) {
+    assert.deepEqual(project.web[locale].sections['verification-boundary'], { hidden: true });
+    const html = render.caseStudyHtml(data, project.slug, '../../', false, locale);
+    assert.doesNotMatch(html, /data-story-section="verification-boundary"/, `${locale}: hidden section absent`);
+    assert.ok(!html.includes(`<h2>${hidden.translations[locale].heading}</h2>`), `${locale}: hidden heading absent`);
+    const labels = [...html.matchAll(/sc-figure__label">[^<]*?(\d+)\./g)].map((match) => Number(match[1]));
+    assert.deepEqual(labels, [1, 2, 3, 4, 5, 6, 7], `${locale}: lead, 3D, three media, two diagrams, numbered consecutively`);
+    assertInOrder(html, ['data-story-section="system-architecture"', 'data-story-section="long-term-direction"'], `${locale}: neighbours remain`);
+  }
+});
+
+test('a hidden story section with media hands its figures to the previous visible section, or the next one', () => {
+  const candidate = clone(data);
+  const project = candidate.projects.find((item) => item.slug === 'surgical-navigation');
+  const before = render.caseStudyHtml(candidate, project.slug, '', false, 'en');
+  const figures = (html) => [...html.matchAll(/<figure\b[\s\S]*?<\/figure>/g)].map((match) => match[0]);
+  const original = project.web.en.sections['registration-calibration'];
+  project.web.en.sections['registration-calibration'] = { hidden: true };
+  assert.deepEqual(render.dataErrors(candidate), []);
+  const moved = render.caseStudyHtml(candidate, project.slug, '', false, 'en');
+  assert.doesNotMatch(moved, /data-story-section="registration-calibration"/);
+  assert.deepEqual(figures(moved), figures(before), 'same figures, same numbers, same order');
+  const previous = moved.slice(moved.indexOf('data-story-section="system-architecture"'), moved.indexOf('data-story-section="hololens-interface"'));
+  for (const item of project.storySections.find((section) => section.key === 'registration-calibration').media) {
+    assert.ok(previous.includes(item.publicPath), `moved ${item.id} into the previous section`);
+  }
+  project.web.en.sections['registration-calibration'] = original;
+  project.web.en.sections['smcnavi-overview'] = { hidden: true };
+  project.web.en.sections['smcnavi-workflows'] = { hidden: true };
+  const leading = render.caseStudyHtml(candidate, project.slug, '', false, 'en');
+  assert.doesNotMatch(leading, /data-story-section="smcnavi-(?:overview|workflows)"/);
+  assert.deepEqual(figures(leading), figures(before), 'leading hidden figures join the next visible section in order');
+  const next = leading.slice(leading.indexOf('data-story-section="system-architecture"'));
+  const firstWorkflowMedia = project.storySections.find((section) => section.key === 'smcnavi-workflows').media[0];
+  assert.ok(next.indexOf(firstWorkflowMedia.publicPath) >= 0 && next.indexOf(firstWorkflowMedia.publicPath) < next.indexOf('sc-flow-figure'), 'prepended before the next section\'s own figure');
 });

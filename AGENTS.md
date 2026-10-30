@@ -86,8 +86,10 @@ public/                            # Generated blog output; never edit for portf
 
 Spec: `docs/superpowers/specs/2026-10-31-dense-pages-design.md`.
 
-- A case with a `web` record in `js/portfolio-data.js` renders the dense layout: meta line (period · state), 1px-border keyword tags, thesis, a 문제/한 일/결과 brief grid whose team lines carry a small `팀`/`Team` tag, then one-line points (default layout) or one-line items per story section (story layout). Cases without `web` keep the legacy sections; product-console (SKADI) is unchanged for now.
+- A case with a `web` record in `js/portfolio-data.js` renders the dense layout: meta line (period · state), 1px-border keyword tags, thesis, a 문제/한 일/결과 brief grid whose team lines carry a small `팀`/`Team` tag, then one-line points (default layout) or one-line items per story section (story layout). All nine cases carry `web`; the legacy sections remain only for fixtures without it.
 - `web` is web-only and excluded from the PDF source digest, like `scene3d`. Limitation, team-result and research-boundary prose stays in the data for the PDFs and is not rendered on dense pages.
+- `web.sections[key]` holds `items` (1–8 lines) and an optional `owned` line (headline budget), or `{ hidden: true }` alone. Story keys are storySections keys; a hidden story section is not rendered and its figures, if any, join the previous visible section so numbering stays consecutive.
+- Product-console dense variant (SKADI): keys are `history`, the `consoleModules` keys and the `applicationTracks` keys (no `hidden`). Header and brief, then history items, the 3D figure, modules and tracks with their titles, figures, API flow and evidence links; items replace each summary and one `담당`/`My part` line (`.sc-owned`) replaces the role boundary panel. The limits section is not rendered; public resources stay.
 - Web copy only compresses facts already in the case fields (role, evidence, story sections): no new claims or numbers, noun phrases rather than sentences, ko ≤38 and en ≤70 characters per line (`validatePortfolioData` enforces budgets, endings and section keys).
 
 ## 3D figures

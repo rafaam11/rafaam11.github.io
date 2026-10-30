@@ -55,6 +55,7 @@
   // Web-only dense case copy (`web`): noun phrases within a per-line budget; PDFs keep the long fields.
   var webCopyKeys = ['thesis', 'tags', 'brief', 'points', 'sections', 'sceneCaption'];
   var webBriefKeys = ['problem', 'did', 'result', 'team'];
+  var webSectionKeys = ['items', 'owned'];
   var webLineBudget = { ko: 38, en: 70 };
   var webHeadlineBudget = { ko: 50, en: 90 };
   var webSentenceEndingPattern = /(?:습니다|입니다|합니다|했다|한다|이다)\.?$/;
@@ -79,7 +80,7 @@
       components: '구성', details: '자세히', pdf: 'PDF', openPdf: '사례 PDF 열기', figure: '그림', figures: '그림 모음',
       productHistory: '제품 명칭 안내', apiFlow: 'API 연결 흐름',
       publicResources: '공개 문서와 제품 정보', ownedRole: '내 역할', teamBoundary: '팀·협력자 경계', evidenceRefs: '연결 근거',
-      relatedProjects: '관련 프로젝트', brief: '요약', briefProblem: '문제', briefDid: '한 일', briefResult: '결과', team: '팀',
+      relatedProjects: '관련 프로젝트', brief: '요약', briefProblem: '문제', briefDid: '한 일', briefResult: '결과', team: '팀', owned: '담당',
       contact: '연락처', publications: '논문', patents: '특허', awards: '수상',
       patentSummary: function (filed, registered) { return '출원 ' + filed + '건 · 등록 ' + registered + '건'; }
     },
@@ -89,7 +90,7 @@
       components: 'Components', details: 'Details', pdf: 'PDF', openPdf: 'Open case PDF', figure: 'Figure', figures: 'Figures',
       productHistory: 'Product naming note', apiFlow: 'API connection flow',
       publicResources: 'Public documentation and product information', ownedRole: 'My role', teamBoundary: 'Team and partner boundary', evidenceRefs: 'Linked evidence',
-      relatedProjects: 'Related projects', brief: 'Summary', briefProblem: 'Problem', briefDid: 'What I did', briefResult: 'Result', team: 'Team',
+      relatedProjects: 'Related projects', brief: 'Summary', briefProblem: 'Problem', briefDid: 'What I did', briefResult: 'Result', team: 'Team', owned: 'My part',
       contact: 'Contact', publications: 'Publications', patents: 'Patents', awards: 'Awards',
       patentSummary: function (filed, registered) { return filed + ' filed · ' + registered + ' registered'; }
     }
@@ -776,7 +777,11 @@
     if (!web || typeof web !== 'object' || Array.isArray(web)) return [label + ': must be an object.'];
     var errors = [];
     if (JSON.stringify(Object.keys(web).sort()) !== JSON.stringify(['en', 'ko'])) errors.push(label + ': must contain exactly ko and en.');
-    var storyKeys = (Array.isArray(project.storySections) ? project.storySections : []).map(function (section) { return section && section.key; });
+    var isConsole = project.caseLayout === 'product-console';
+    // Story layouts key sections by storySections; the product console by history, its modules, and its application tracks.
+    var sectionKeys = isConsole
+      ? ['history'].concat((project.consoleModules || []).concat(project.applicationTracks || []).map(function (record) { return record && record.key; }))
+      : (Array.isArray(project.storySections) ? project.storySections : []).map(function (section) { return section && section.key; });
     ['ko', 'en'].forEach(function (locale) {
       var copy = web[locale];
       var where = label + ' ' + locale;
@@ -810,12 +815,19 @@
           errors.push(where + ' sections: must be an object.');
         } else {
           Object.keys(copy.sections).forEach(function (key) {
-            if (storyKeys.indexOf(key) === -1) errors.push(where + ' sections: unknown story section ' + key + '.');
+            if (sectionKeys.indexOf(key) === -1) errors.push(where + ' sections: unknown ' + (isConsole ? 'console' : 'story') + ' section ' + key + '.');
             var section = copy.sections[key];
-            if (!section || typeof section !== 'object' || Array.isArray(section) || JSON.stringify(Object.keys(section)) !== JSON.stringify(['items'])) {
-              errors.push(where + ' sections.' + key + ': must contain only items.');
+            if (!section || typeof section !== 'object' || Array.isArray(section)) {
+              errors.push(where + ' sections.' + key + ': must be an object.');
+            } else if (section.hidden !== undefined) {
+              // hidden: true drops a story section from the dense page; it carries no copy of its own.
+              if (section.hidden !== true || Object.keys(section).length !== 1) errors.push(where + ' sections.' + key + ': hidden must be true and stand alone.');
+              if (isConsole) errors.push(where + ' sections.' + key + ': product-console sections cannot be hidden.');
+            } else if (Object.keys(section).some(function (name) { return webSectionKeys.indexOf(name) === -1; })) {
+              errors.push(where + ' sections.' + key + ': allows only ' + webSectionKeys.join(', ') + '.');
             } else {
               lines(section.items, 'sections.' + key, 1, 8);
+              if (section.owned !== undefined) line(section.owned, 'sections.' + key + '.owned', webHeadlineBudget[locale]);
             }
           });
         }
@@ -1339,7 +1351,16 @@
     return section && section.placement ? section.placement : 'before-standard';
   }
 
+  // One "담당 / My part" line (dense pages): replaces the role boundary panel with the web `owned` line.
+  function webOwnedHtml(owned, locale) {
+    return typeof owned === 'string' && owned
+      ? '<p class="sc-owned"><span class="sc-tag">' + escapeHtml(pageCopy[localeOf(locale)].owned) + '</span> ' + escapeHtml(owned) + '</p>'
+      : '';
+  }
+
   // webSections (dense case pages): drop each section body and use its web one-line items when provided.
+  // A `hidden: true` section is not rendered; its figures, if any, join the previous visible section (or the next one)
+  // so figure numbers stay consecutive.
   function storySectionsHtml(project, locale, base, firstFigureNumber, placement, webSections) {
     var normalized = localeOf(locale);
     var figureNumber = firstFigureNumber;
@@ -1348,12 +1369,13 @@
       return storyPlacement(section) === requestedPlacement;
     });
     if (!matchingSections.length) return '';
-    var sections = matchingSections.map(function (section) {
+    var rendered = matchingSections.map(function (section) {
       var sectionCopy = translation(section, normalized);
+      var webSection = webSections && webSections[section.key];
       var copyHtml = '<div class="sc-story__copy"><h2>' + escapeHtml(sectionCopy.heading) + '</h2>';
-      var webItems = webSections && webSections[section.key] && webSections[section.key].items;
+      var webItems = webSection && webSection.items;
       if (webItems) {
-        copyHtml += pointsHtml(webItems);
+        copyHtml += pointsHtml(webItems) + webOwnedHtml(webSection.owned, normalized);
       } else if (!webSections && typeof sectionCopy.body === 'string' && sectionCopy.body) {
         copyHtml += '<p>' + escapeHtml(sectionCopy.body) + '</p>';
       }
@@ -1369,10 +1391,28 @@
       var diagramHtml = systemFlowDiagramHtml(section.diagram, normalized, figureNumber);
       if (diagramHtml) figureNumber += 1;
       mediaHtml += diagramHtml;
+      return { section: section, copyHtml: copyHtml, mediaHtml: mediaHtml, hidden: Boolean(webSection && webSection.hidden === true) };
+    });
+    var lastVisible = null;
+    var pendingMedia = '';
+    rendered.forEach(function (entry) {
+      if (entry.hidden) {
+        if (lastVisible) lastVisible.mediaHtml += entry.mediaHtml;
+        else pendingMedia += entry.mediaHtml;
+        return;
+      }
+      entry.mediaHtml = pendingMedia + entry.mediaHtml;
+      pendingMedia = '';
+      lastVisible = entry;
+    });
+    var sections = rendered.filter(function (entry) { return !entry.hidden; }).map(function (entry) {
+      var section = entry.section;
       return '<section class="sc-story__section sc-story__section--' + escapeHtml(section.layout) + '" data-story-section="' +
-        escapeHtml(section.key) + '">' + copyHtml + '<div class="sc-story__media sc-story__media--' + escapeHtml(section.layout) + '">' + mediaHtml + '</div></section>';
+        escapeHtml(section.key) + '">' + entry.copyHtml + '<div class="sc-story__media sc-story__media--' + escapeHtml(section.layout) + '">' + entry.mediaHtml + '</div></section>';
     }).join('');
-    return '<div class="sc-story">' + sections + '</div>';
+    // Every section of this placement hidden: keep any figures in a headingless media block.
+    if (pendingMedia) sections += '<div class="sc-story__media">' + pendingMedia + '</div>';
+    return sections ? '<div class="sc-story">' + sections + '</div>' : '';
   }
 
   function storyFigureCount(projectRecord, placement) {
@@ -1574,26 +1614,39 @@
     return links ? '<p class="sc-product-evidence"><span>' + escapeHtml(copy.evidenceRefs) + ':</span> ' + links + '</p>' : '';
   }
 
-  function productConsoleHistoryHtml(sourceProject, locale) {
+  // Dense product console (webSections set): web items replace the summary paragraph and one owned line replaces
+  // the role boundary panel. Without webSections the legacy paragraph and panel render.
+  function productConsoleCopyHtml(text, webSections, key) {
+    var webSection = webSections && webSections[key];
+    return webSection && webSection.items ? pointsHtml(webSection.items) : '<p>' + escapeHtml(text || '') + '</p>';
+  }
+
+  function productConsoleRoleHtml(record, locale, webSections) {
+    if (!webSections) return productConsoleBoundaryHtml(record, locale);
+    var webSection = webSections[record.key];
+    return webOwnedHtml(webSection && webSection.owned, locale);
+  }
+
+  function productConsoleHistoryHtml(sourceProject, locale, webSections) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
     var historyCopy = translation(sourceProject.productHistory, normalized);
     return '<section class="sc-product-history" data-product-console-section="history"><h2>' + escapeHtml(copy.productHistory) +
-      '</h2><p>' + escapeHtml(historyCopy.body || '') + '</p></section>';
+      '</h2>' + productConsoleCopyHtml(historyCopy.body, webSections, 'history') + '</section>';
   }
 
-  function productConsoleDesktopHtml(sourceProject, module, locale, base, figureOffset) {
+  function productConsoleDesktopHtml(sourceProject, module, locale, base, figureOffset, webSections) {
     var moduleCopy = translation(module, locale);
     var figures = (module.evidenceIds || []).map(function (id) {
       return productConsoleFigureHtml(sourceProject, id, locale, base, 'console', figureOffset);
     }).join('');
     return '<section class="sc-product-console" data-product-console-section="desktop-app"><div class="sc-product-console__heading">' +
       '<span class="sc-product-console__signal" aria-hidden="true"></span><div><p class="sc-product-console__kicker">Desktop product / live state</p>' +
-      '<h2>' + escapeHtml(moduleCopy.title || '') + '</h2><p>' + escapeHtml(moduleCopy.summary || '') + '</p></div></div>' +
-      '<div class="sc-product-console__screens">' + figures + '</div>' + productConsoleBoundaryHtml(module, locale) + '</section>';
+      '<h2>' + escapeHtml(moduleCopy.title || '') + '</h2>' + productConsoleCopyHtml(moduleCopy.summary, webSections, module.key) + '</div></div>' +
+      '<div class="sc-product-console__screens">' + figures + '</div>' + productConsoleRoleHtml(module, locale, webSections) + '</section>';
   }
 
-  function productConsoleApiHtml(sourceProject, module, locale, figureOffset) {
+  function productConsoleApiHtml(sourceProject, module, locale, figureOffset, webSections) {
     var normalized = localeOf(locale);
     var moduleCopy = translation(module, normalized);
     var flow = sourceProject.apiFlow;
@@ -1608,23 +1661,23 @@
     }).join('');
     var titleId = 'sc-api-flow-title-' + normalized;
     return '<section class="sc-case__section sc-product-api" data-product-console-section="api"><h2>' + escapeHtml(moduleCopy.title || '') +
-      '</h2><p>' + escapeHtml(moduleCopy.summary || '') + '</p><div class="sc-api-flow" role="group" aria-labelledby="' + titleId + '">' +
+      '</h2>' + productConsoleCopyHtml(moduleCopy.summary, webSections, module.key) + '<div class="sc-api-flow" role="group" aria-labelledby="' + titleId + '">' +
       '<div class="sc-api-flow__heading"><h3 id="' + titleId + '">' + escapeHtml(flowCopy.title || pageCopy[normalized].apiFlow) + '</h3><p>' +
       escapeHtml(flowCopy.summary || '') + '</p></div><ol class="sc-api-flow__nodes">' + nodes + '</ol><div class="sc-api-flow__outcomes"><span aria-hidden="true">↳</span>' +
       '<ul>' + outcomes + '</ul></div><p class="sc-change-note"><a href="' + escapeHtml(flow.changeNoteHref) + '" target="_blank" rel="noopener">' +
-      escapeHtml(flowCopy.changeNoteLabel || '') + '</a></p></div>' + productConsoleBoundaryHtml(module, normalized) +
+      escapeHtml(flowCopy.changeNoteLabel || '') + '</a></p></div>' + productConsoleRoleHtml(module, normalized, webSections) +
       productConsoleEvidenceLinksHtml(sourceProject, module.evidenceIds, normalized, figureOffset) + '</section>';
   }
 
-  function productConsoleTrackHtml(sourceProject, track, locale, base, figureOffset) {
+  function productConsoleTrackHtml(sourceProject, track, locale, base, figureOffset, webSections) {
     var trackCopy = translation(track, locale);
     var figures = (track.evidenceIds || []).map(function (id) {
       return productConsoleFigureHtml(sourceProject, id, locale, base, track.key, figureOffset);
     }).join('');
     return '<section class="sc-case__section sc-product-application" data-product-console-section="' + escapeHtml(track.key) + '" data-track="' +
       escapeHtml(track.key) + '" data-track-kind="' + escapeHtml(track.kind) + '"><p class="sc-product-application__kind">' +
-      escapeHtml(track.kind) + '</p><h2>' + escapeHtml(trackCopy.title || '') + '</h2><p>' + escapeHtml(trackCopy.summary || '') + '</p>' +
-      '<div class="sc-product-application__screens">' + figures + '</div>' + productConsoleBoundaryHtml(track, locale) + '</section>';
+      escapeHtml(track.kind) + '</p><h2>' + escapeHtml(trackCopy.title || '') + '</h2>' + productConsoleCopyHtml(trackCopy.summary, webSections, track.key) +
+      '<div class="sc-product-application__screens">' + figures + '</div>' + productConsoleRoleHtml(track, locale, webSections) + '</section>';
   }
 
   function productConsoleResourcesHtml(sourceProject, locale) {
@@ -1655,8 +1708,8 @@
     // Product-console cases have no lead: the 3D figure is Figure 1 after the product history and the media figures
     // (and their "Figure N" evidence links) shift by one.
     var isConsole = Boolean(sourceProject && sourceProject.caseLayout === 'product-console');
-    // Dense layout: cases with web-only condensed copy (`web`) replace the long prose sections; product-console stays as is.
-    var webCopy = !isConsole && sourceProject && sourceProject.web ? sourceProject.web[normalized] : null;
+    // Dense layout: cases with web-only condensed copy (`web`) replace the long prose sections.
+    var webCopy = sourceProject && sourceProject.web ? sourceProject.web[normalized] : null;
     var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption) : '';
     var afterSceneFigure = (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
@@ -1665,10 +1718,30 @@
     var hasStory = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
     var links = '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' + projectLinksInline(project, normalized) +
       ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p>';
+    var denseHeader = webCopy ? '<header class="sc-case__header"><h1>' + title + '</h1>' +
+      '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span></p>' +
+      webTagsHtml(webCopy.tags) + '<p class="sc-case__thesis">' + escapeHtml(webCopy.thesis || project.thesis) + '</p></header>' : '';
+    if (isConsole) {
+      // Dense console: brief after the header, web items and one owned line per section, no limits section.
+      var consoleWebSections = webCopy ? webCopy.sections || {} : null;
+      var modules = sourceProject.consoleModules || [];
+      var mediaOffset = sceneFigure ? 1 : 0;
+      var tracks = (sourceProject.applicationTracks || []).map(function (track) {
+        return productConsoleTrackHtml(sourceProject, track, normalized, base, mediaOffset, consoleWebSections);
+      }).join('');
+      var consoleScene = sceneFigure ? '<section class="sc-product-figure3d" data-product-console-section="figure3d">' + sceneFigure + '</section>' : '';
+      var consoleLimits = webCopy ? '' : '<section class="sc-case__section sc-product-limits" data-product-console-section="limits"><h2>' + escapeHtml(copy.limits) + '</h2><p>' +
+        escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p></section>';
+      return '<article class="sc-case sc-case--product-console" data-case="' + escapeHtml(project.slug) + '" data-case-layout="product-console">' +
+        (webCopy ? denseHeader + webBriefHtml(webCopy, normalized) : header) +
+        productConsoleHistoryHtml(sourceProject, normalized, consoleWebSections) + consoleScene +
+        productConsoleDesktopHtml(sourceProject, modules[0], normalized, base, mediaOffset, consoleWebSections) +
+        productConsoleApiHtml(sourceProject, modules[1], normalized, mediaOffset, consoleWebSections) + tracks +
+        productConsoleResourcesHtml(sourceProject, normalized) + consoleLimits +
+        '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' +
+          ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
+    }
     if (webCopy) {
-      var denseHeader = '<header class="sc-case__header"><h1>' + title + '</h1>' +
-        '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span></p>' +
-        webTagsHtml(webCopy.tags) + '<p class="sc-case__thesis">' + escapeHtml(webCopy.thesis || project.thesis) + '</p></header>';
       var denseOpen = '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + denseHeader + webBriefHtml(webCopy, normalized) + lead;
       var denseClose = relatedProjectsHtml(data, sourceProject, normalized, base, isFile) + links + '</article>';
       if (hasStory) {
@@ -1697,23 +1770,6 @@
           return block.type === type && !(type === 'limitation' && block.key === redundantLimitBlockKeys[project.slug]);
         }));
       }, []).map(function (block) { return blockHtml(block, normalized); }).join('');
-    }
-    if (sourceProject && sourceProject.caseLayout === 'product-console') {
-      var modules = sourceProject.consoleModules || [];
-      var mediaOffset = sceneFigure ? 1 : 0;
-      var tracks = (sourceProject.applicationTracks || []).map(function (track) {
-        return productConsoleTrackHtml(sourceProject, track, normalized, base, mediaOffset);
-      }).join('');
-      var consoleScene = sceneFigure ? '<section class="sc-product-figure3d" data-product-console-section="figure3d">' + sceneFigure + '</section>' : '';
-      return '<article class="sc-case sc-case--product-console" data-case="' + escapeHtml(project.slug) + '" data-case-layout="product-console">' +
-        header + productConsoleHistoryHtml(sourceProject, normalized) + consoleScene +
-        productConsoleDesktopHtml(sourceProject, modules[0], normalized, base, mediaOffset) +
-        productConsoleApiHtml(sourceProject, modules[1], normalized, mediaOffset) + tracks +
-        productConsoleResourcesHtml(sourceProject, normalized) +
-        '<section class="sc-case__section sc-product-limits" data-product-console-section="limits"><h2>' + escapeHtml(copy.limits) + '</h2><p>' +
-          escapeHtml(project.limitation) + '</p><p>' + escapeHtml(project.teamResult) + '</p></section>' +
-        '<p class="sc-case__links"><a href="' + escapeHtml(pdfHref) + '">' + escapeHtml(copy.openPdf) + '</a>' +
-          ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
     }
     var approach = '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2><p>' +
       escapeHtml(project.summary) + '</p>' + sceneFigure + blocksOfType(['system', 'text', 'list']) + '</section>';

@@ -61,4 +61,8 @@ The page shows these parts in order:
 
 **Product-console layout.** Modules keep their titles, figures, and the API flow. The summary becomes item lines, and the role boundary panel becomes one "담당" line. The limits section is removed.
 
+**Section entries (rollout to all nine cases, 2026-10-31).** `sections[key]` is `{ items[1–8], owned? }` or `{ hidden: true }` alone. `owned` follows the headline budget (ko ≤50, en ≤90) and is a noun phrase. A hidden story section is not rendered; if it holds figures they move to the end of the previous visible section (or the start of the next one), so figure numbers stay consecutive. Digital occlusion hides `verification-boundary`.
+
+**Product-console dense variant.** Valid keys are `history`, the `consoleModules[].key`s (`desktop-app`, `api`) and the `applicationTracks[].key`s (`medical`, `industrial`); console sections cannot be hidden. The page keeps `data-case-layout="product-console"` and the section order: dense header, brief, history (items replace the naming paragraph), 3D figure (`sceneCaption`), desktop app, API (flow diagram kept), medical, industrial, public resources, links. Each module and track keeps its title, figures and "Figure N" evidence links; items replace the summary and one `<p class="sc-owned">` line tagged `담당`/`My part` replaces the role and team boundary panel. The limits section is not rendered on the web; the PDF keeps it.
+
 **Removed from the web page.** The problem and summary paragraphs, the role, the evidence prose and blocks, and the limitation and team-result sections.
