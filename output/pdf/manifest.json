@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "31b672ab93f4063e24c11e5da8001ab56c1258c97089ea759286a7d39525257c",
+  "sourceDigest": "f1afb36ffe948fd8218e19c28ee3b3ffabf4c169c5bf3b2a0a10a8739969ef5c",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.3",
   "generatorSha256": "e911307ba8dbaaa9cf11a7c3e5bfb650cce5875eac0d7afa7cc1aafb0082133f",
@@ -186,22 +186,22 @@
       "kind": "project",
       "slug": "ai-build-lab",
       "locale": "ko",
-      "pages": 5,
-      "links": 9,
-      "characters": 2055,
-      "bytes": 687400,
-      "sha256": "3bfc02a1364ff062e9507c0b61a62768bb10a5099014341542d611e8db315302"
+      "pages": 6,
+      "links": 12,
+      "characters": 2510,
+      "bytes": 1240674,
+      "sha256": "b9d2a99ad086b76ee6cd92a2f2dd2ba8231bf1e40f8f67b201c2d12444f95076"
     },
     {
       "name": "ai-build-lab-en.pdf",
       "kind": "project",
       "slug": "ai-build-lab",
       "locale": "en",
-      "pages": 5,
-      "links": 9,
-      "characters": 3738,
-      "bytes": 573287,
-      "sha256": "2a5e5cda2f101944436ca558cfdbf42654278bbb889abbac160df18cd91577b6"
+      "pages": 6,
+      "links": 12,
+      "characters": 4427,
+      "bytes": 1119756,
+      "sha256": "eae363474bef6bedffae9046789a43c669cb86f4ae1894c52968ea860746106d"
     }
   ],
   "artifacts": [
@@ -210,18 +210,18 @@
       "kind": "project-pdf",
       "slug": "ai-build-lab",
       "locale": "en",
-      "pages": 5,
-      "bytes": 573287,
-      "sha256": "2a5e5cda2f101944436ca558cfdbf42654278bbb889abbac160df18cd91577b6"
+      "pages": 6,
+      "bytes": 1119756,
+      "sha256": "eae363474bef6bedffae9046789a43c669cb86f4ae1894c52968ea860746106d"
     },
     {
       "path": "assets/pdfs/ai-build-lab-ko.pdf",
       "kind": "project-pdf",
       "slug": "ai-build-lab",
       "locale": "ko",
-      "pages": 5,
-      "bytes": 687400,
-      "sha256": "3bfc02a1364ff062e9507c0b61a62768bb10a5099014341542d611e8db315302"
+      "pages": 6,
+      "bytes": 1240674,
+      "sha256": "b9d2a99ad086b76ee6cd92a2f2dd2ba8231bf1e40f8f67b201c2d12444f95076"
     },
     {
       "path": "assets/pdfs/digital-occlusion-workflow-en.pdf",
@@ -372,18 +372,18 @@
       "kind": "project-pdf",
       "slug": "ai-build-lab",
       "locale": "en",
-      "pages": 5,
-      "bytes": 573287,
-      "sha256": "2a5e5cda2f101944436ca558cfdbf42654278bbb889abbac160df18cd91577b6"
+      "pages": 6,
+      "bytes": 1119756,
+      "sha256": "eae363474bef6bedffae9046789a43c669cb86f4ae1894c52968ea860746106d"
     },
     {
       "path": "output/pdf/ai-build-lab-ko.pdf",
       "kind": "project-pdf",
       "slug": "ai-build-lab",
       "locale": "ko",
-      "pages": 5,
-      "bytes": 687400,
-      "sha256": "3bfc02a1364ff062e9507c0b61a62768bb10a5099014341542d611e8db315302"
+      "pages": 6,
+      "bytes": 1240674,
+      "sha256": "b9d2a99ad086b76ee6cd92a2f2dd2ba8231bf1e40f8f67b201c2d12444f95076"
     },
     {
       "path": "output/pdf/digital-occlusion-workflow-en.pdf",

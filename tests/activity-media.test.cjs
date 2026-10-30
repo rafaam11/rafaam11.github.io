@@ -127,7 +127,7 @@ test('news events, labels and activity-media evidence agree', () => {
     for (const eventId of record.eventIds) assert.ok(portfolioData.news.some((item) => item.id === eventId), `${record.id}: eventId ${eventId} exists`);
   }
   assert.ok(Object.keys(feed.labels).length >= portfolioData.news.filter((item) => !release(item)).length, 'labels cover the non-release news');
-  assert.deepEqual(profileHome.homeNews().map((item) => item.id), ['bus-info-v0-6-0', 'neuropilot-evaluation-review-2026', 'surface-guidance-research-2026', 'omfs-vr-poster-2026'], 'Home shows the newest release and dated research events');
+  assert.deepEqual(profileHome.homeNews().map((item) => item.id), ['view-anything-v0-1-0', 'neuropilot-evaluation-review-2026', 'surface-guidance-research-2026', 'omfs-vr-poster-2026'], 'Home shows the newest release and dated research events');
   const broken = { ...portfolioData.news[0], id: 'broken-event', evidence: { path: 'data/activity-media.json', locator: 'M012' } };
   assert.ok(profileHome.newsErrors([broken]).some((message) => /M012/.test(message)), 'evidence record must list the event');
   assert.ok(Object.values(feed.labels).filter((label) => label[0] === 'activity').length >= 8, 'activity events were added');
@@ -171,7 +171,7 @@ test('News posts name no private people, carry no review wording and claim no gr
 
 test('News keeps only the first public release of each personal app', () => {
   const releases = portfolioData.news.filter((item) => item.evidence.path === 'data/news-software-sources.json').map((item) => item.id).sort();
-  assert.deepEqual(releases, ['bus-info-v0-6-0', 'multi-cli-work-v1-0-0']);
+  assert.deepEqual(releases, ['bus-info-v0-6-0', 'harness-manager-v0-2-0', 'multi-cli-work-v1-0-0', 'view-anything-v0-1-0']);
   const sources = JSON.parse(read('data/news-software-sources.json'));
-  assert.deepEqual(sources.releases.map((release) => release.tag).sort(), ['v0.6.0', 'v1.0.0']);
+  assert.deepEqual(sources.releases.map((release) => release.tag).sort(), ['v0.1.0', 'v0.2.0', 'v0.6.0', 'v1.0.0']);
 });

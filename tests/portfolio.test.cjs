@@ -507,7 +507,7 @@ test('canonical records retain localized evidence, attribution, media, blocks, a
       }
     }
   }
-  assert.deepEqual(data.projects.at(-1).subcases.map((item) => item.key), ['llm-wiki', 'multi-cli-work', 'daegu-bus']);
+  assert.deepEqual(data.projects.at(-1).subcases.map((item) => item.key), ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus']);
 });
 
 test('digital occlusion case preserves approved role, validation, and roadmap boundaries', () => {
@@ -809,11 +809,15 @@ test('Task 4 public evidence register covers every canonical media id without pr
   const aiEvidence = register.entries.filter((entry) => entry.project === 'ai-build-lab');
   assert.deepEqual(aiEvidence.map((entry) => [entry.id, entry.type, entry.state, entry.source]), [
     ['multi-cli-work-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/multi-cli-work'],
+    ['harness-manager-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/harness-manager'],
+    ['view-anything-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/view-anything'],
     ['daegu-bus-repository', 'repository', 'approved-public', 'https://github.com/rafaam11/public-transportation-info'],
     ['ai-build-lab-lead-01', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-lead-01.png'],
     ['ai-build-lab-gallery-01', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-01.png'],
     ['ai-build-lab-gallery-02', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-02.png'],
-    ['ai-build-lab-gallery-03', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-03.png']
+    ['ai-build-lab-gallery-03', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-03.png'],
+    ['ai-build-lab-gallery-04', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-04.png'],
+    ['ai-build-lab-gallery-05', 'image', 'approved-public', 'assets/projects/ai-build-lab/ai-build-lab-gallery-05.png']
   ]);
 });
 

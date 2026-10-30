@@ -17,6 +17,7 @@
 //   --frames N        write N PNG frames into the --out directory (default: a temp folder) for a GIF/turntable
 //   --yaw-sweep       with --frames: orbit one full turn across the frames (else frames step the scene clock)
 //   --duration S      with --frames and no --yaw-sweep: clock span in seconds (default 4)
+//   --yaw-swing RAD   with --frames and no --yaw-sweep: also sway the camera yaw by ±RAD over one loop
 //   --angle MODE      ANGLE backend: default | d3d11 | gl | swiftshader (default: try GPU, then swiftshader)
 //   --chrome PATH     browser executable (default: installed Chrome, then Edge)
 //
@@ -100,7 +101,7 @@ function writeStage() {
 
 function parseArgs(argv) {
   const opts = { scene: '', size: [1600, 1000], css: [880, 550], png: false, quality: 88, lang: 'ko', labels: false,
-    time: null, view: null, frames: 0, yawSweep: false, duration: 4, angle: '', chrome: '', out: '' };
+    time: null, view: null, frames: 0, yawSweep: false, yawSwing: 0, duration: 4, angle: '', chrome: '', out: '' };
   const pair = (v) => { const m = /^(\d+)x(\d+)$/.exec(v || ''); if (!m) throw new Error(`expected WxH, got ${v}`); return [Number(m[1]), Number(m[2])]; };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i], next = () => argv[++i];
@@ -116,6 +117,7 @@ function parseArgs(argv) {
     else if (a === '--frames') opts.frames = Number(next());
     else if (a === '--yaw-sweep') opts.yawSweep = true;
     else if (a === '--duration') opts.duration = Number(next());
+    else if (a === '--yaw-swing') opts.yawSwing = Number(next());
     else if (a === '--angle') opts.angle = next();
     else if (a === '--chrome') opts.chrome = next();
     else if (!a.startsWith('--') && !opts.scene) opts.scene = a;
@@ -217,11 +219,15 @@ async function renderOnce(puppeteer, executablePath, opts, angle) {
     const files = [];
     const start = await page.evaluate(() => window.DECK3D_CLOCK);
     for (let i = 0; i < opts.frames; i++) {
-      await page.evaluate((i, n, sweep, t0, span) => {
+      await page.evaluate((i, n, sweep, t0, span, swing) => {
         const hooks = document.querySelector('.view3d').__scene3d;
         if (sweep) hooks.orbit(i === 0 ? 0 : Math.PI * 2 / n);
-        else window.DECK3D_CLOCK = t0 + span * i / n;
-      }, i, opts.frames, opts.yawSweep, start, opts.duration);
+        else {
+          window.DECK3D_CLOCK = t0 + span * i / n;
+          // the sway returns to its start on the last frame, so the loop has no seam
+          if (swing) hooks.orbit(swing * (Math.sin(Math.PI * 2 * i / n) - (i ? Math.sin(Math.PI * 2 * (i - 1) / n) : 0)));
+        }
+      }, i, opts.frames, opts.yawSweep, start, opts.duration, opts.yawSwing);
       await settle();
       const file = path.join(out, `${opts.scene}-${String(i).padStart(3, '0')}.png`);
       await shot(file);

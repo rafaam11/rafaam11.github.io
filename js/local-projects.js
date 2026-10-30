@@ -7,7 +7,7 @@
     'rtms-navigation': {'lead-01':'navigation-ui-workflow','gallery-01':'navigation-ui-workflow','gallery-02':'navigation-ui-workflow','gallery-03':'navigation-ui-workflow'},
     'respiratory-surface-guidance': {'gallery-01':'two-track-optics','gallery-02':'validation-protocol','gallery-03':'measured-findings','gallery-04':'measured-findings','gallery-05':'two-track-optics','gallery-06':'two-track-optics'},
     'unmanned-forklift': {'gallery-01':'integration-evidence','gallery-02':'integration-evidence','gallery-03':'integration-evidence'},
-    'ai-build-lab': {'gallery-01':'problem-to-product','gallery-02':'problem-to-product','gallery-03':'human-ai-boundary'}
+    'ai-build-lab': {'gallery-01':'problem-to-product','gallery-02':'problem-to-product','gallery-03':'human-ai-boundary','gallery-04':'public-product-proof','gallery-05':'public-product-proof'}
   };
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function figure(mid,lang,base,media) {

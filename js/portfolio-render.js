@@ -48,7 +48,7 @@
   var applicationTrackKeys = ['medical', 'industrial'];
   var applicationTrackKinds = ['primary', 'extension'];
   var publicResourceTypes = ['documentation', 'product'];
-  var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'daegu-bus'];
+  var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus'];
   // Web-only 3D figure: { name, poster: 'assets/3d/<name>.webp', translations: { ko: { caption, alt }, en } }.
   var scene3dKeys = ['name', 'poster', 'translations'];
   var scene3dNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -1013,7 +1013,7 @@
         }
         if (slug === 'ai-build-lab') {
           if (!Array.isArray(project.subcases) || project.subcases.length !== aiBuildLabSubcaseKeys.length) {
-            errors.push(slug + ': must contain exactly three subcases.');
+            errors.push(slug + ': must contain exactly ' + aiBuildLabSubcaseKeys.length + ' subcases.');
           } else {
             if (JSON.stringify(project.subcases.map(function (subcase) { return subcase && subcase.key; })) !== JSON.stringify(aiBuildLabSubcaseKeys)) {
               errors.push(slug + ': subcases must use the known ordered subcase keys.');

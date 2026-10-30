@@ -6,6 +6,8 @@ This register is the tracked source of truth for portfolio evidence identifiers.
 | --- | --- | --- | --- | --- | --- |
 | mandibular-publication | mandibular-fracture | publication | approved-public | https://link.springer.com/article/10.1007/s10278-024-01014-z | Public article page used as external research evidence. |
 | multi-cli-work-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/multi-cli-work | Public source and release history; registered as repository evidence, not visual media. |
+| harness-manager-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/harness-manager | Public source and release history; registered as repository evidence, not visual media. |
+| view-anything-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/view-anything | Public source and release history; registered as repository evidence, not visual media. |
 | daegu-bus-repository | ai-build-lab | repository | approved-public | https://github.com/rafaam11/public-transportation-info | Public source history; registered as repository evidence, not visual media. |
 | unmanned-forklift-clip-01 | unmanned-forklift | video | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-clip-01.mp4 | Approved derivative; caption in portfolio data. |
 | unmanned-forklift-poster-01 | unmanned-forklift | image | approved-public | assets/projects/unmanned-forklift/unmanned-forklift-poster-01.png | Approved derivative; caption in portfolio data. |
@@ -56,6 +58,8 @@ This register is the tracked source of truth for portfolio evidence identifiers.
 | ai-build-lab-gallery-01 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-01.png | Approved derivative; caption in portfolio data. |
 | ai-build-lab-gallery-02 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-02.png | Approved derivative; caption in portfolio data. |
 | ai-build-lab-gallery-03 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-03.png | Approved derivative; caption in portfolio data. |
+| ai-build-lab-gallery-04 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-04.png | Owner's own app (harness-manager) captured with demo data on 2026-10-30; owner-selected, downscaled, metadata-stripped derivative; caption in portfolio data. |
+| ai-build-lab-gallery-05 | ai-build-lab | image | approved-public | assets/projects/ai-build-lab/ai-build-lab-gallery-05.png | Owner's own app (view-anything) captured with synthetic point-cloud data on 2026-10-30; owner-selected, downscaled, metadata-stripped derivative; caption in portfolio data. |
 | respiratory-surface-guidance-gallery-01 | respiratory-surface-guidance | image | approved-public | assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-01.png | Approved derivative; caption in portfolio data. |
 | respiratory-surface-guidance-gallery-02 | respiratory-surface-guidance | image | approved-public | assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-02.png | Approved derivative; caption in portfolio data. |
 | respiratory-surface-guidance-gallery-03 | respiratory-surface-guidance | image | approved-public | assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-03.png | Approved derivative; caption in portfolio data. |

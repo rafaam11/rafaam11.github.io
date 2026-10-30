@@ -89,8 +89,8 @@
   function routeHref(base, lang, route) { return (base || '') + (locale(lang) === 'en' ? 'en/' : '') + route + 'index.html'; }
   function titleFor(event, lang) {
     if (labels[event.id]) return labels[event.id][lang === 'en' ? 2 : 1];
-    var release = event.id.match(/^(multi-cli-work|bus-info)-v(\d+)-(\d+)-(\d+)$/);
-    if (release) return (release[1] === 'multi-cli-work' ? 'multi-cli-work' : lang === 'en' ? 'Daegu bus app' : '대구 버스 정보 앱') + ' v' + release.slice(2).join('.') + (lang === 'en' ? ' release' : ' 공개');
+    var release = event.id.match(/^(multi-cli-work|harness-manager|view-anything|bus-info)-v(\d+)-(\d+)-(\d+)$/);
+    if (release) return (release[1] !== 'bus-info' ? release[1] : lang === 'en' ? 'Daegu bus app' : '대구 버스 정보 앱') + ' v' + release.slice(2).join('.') + (lang === 'en' ? ' release' : ' 공개');
     return event.translations[lang].body.split(/\.\s/)[0];
   }
   // Events without activity media borrow the approved cover of the case they link to, as a link preview.
