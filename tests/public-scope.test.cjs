@@ -64,6 +64,27 @@ test('private scans fail closed on absent, malformed or empty fixtures and catch
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('private term fixture entries are reported by entry number without disclosing the term', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-private-terms-'));
+  const fakeTerm = 'Example Private Term';
+  const write = extra => fs.writeFileSync(path.join(dir, 'private-validation.json'), JSON.stringify({ schema: 1, forbiddenPeople: ['Example Private Person'], ...extra }));
+  try {
+    const options = { privateRoot: dir };
+    write({ forbiddenTerms: ['Unused Private Marker', fakeTerm] });
+    assert.deepEqual(validator.privateValidationErrors(root, { ...options, texts: ['Public scene'] }), []);
+    const errors = validator.privateValidationErrors(root, { ...options, texts: ['Public scene', `Caption with ${fakeTerm} inside`, 'Fullwidth Ｅｘａｍｐｌｅ Private Term'] });
+    assert.deepEqual(errors, ['text 2: private term fixture entry 2', 'text 3: private term fixture entry 2']);
+    assert.ok(errors.every(error => !error.includes(fakeTerm) && !error.includes('Unused Private Marker')), 'errors never print the term');
+    assert.deepEqual(validator.privateValidationErrors(root, { ...options, texts: ['Example Private Person'] }), ['text 1: private person fixture entry 1'], 'people rules unchanged');
+    for (const forbiddenTerms of [fakeTerm, [''], ['  '], [7]]) {
+      write({ forbiddenTerms });
+      assert.match(validator.privateValidationErrors(root, { ...options, texts: ['Public scene'] }).join('\n'), /fixture/, JSON.stringify(forbiddenTerms));
+    }
+    write({});
+    assert.deepEqual(validator.privateValidationErrors(root, { ...options, texts: [fakeTerm] }), [], 'forbiddenTerms stays optional');
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('explicit source checking cannot succeed without the private ledger', () => {
   const missing = path.join(os.tmpdir(), 'missing-portfolio-' + process.pid);
   const result = spawnSync(process.execPath, ['scripts/activity-media.cjs', 'check', '--sources'], { cwd: root, env: { ...process.env, PORTFOLIO_PRIVATE_ROOT: missing }, encoding: 'utf8' });

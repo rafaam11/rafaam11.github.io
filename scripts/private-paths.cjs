@@ -23,6 +23,7 @@ function privateFixture(repoRoot, options = {}) {
   const dir = privateRoot(repoRoot, options.privateRoot);
   const fixture = JSON.parse(fs.readFileSync(path.join(dir, 'private-validation.json'), 'utf8'));
   if (fixture.schema !== 1 || !Array.isArray(fixture.forbiddenPeople) || !fixture.forbiddenPeople.length || fixture.forbiddenPeople.some(value => typeof value !== 'string' || !value.trim())) throw new Error('private fixture requires a nonempty forbiddenPeople list');
+  if (fixture.forbiddenTerms !== undefined && (!Array.isArray(fixture.forbiddenTerms) || fixture.forbiddenTerms.some(value => typeof value !== 'string' || !value.trim()))) throw new Error('private fixture forbiddenTerms must be a list of nonempty strings');
   return fixture;
 }
 module.exports = { within, realLocation, privateRoot, privateFixture };

@@ -88,6 +88,9 @@ function privateValidationErrors(rootDir, options = {}) {
   const inspect = (text, label) => {
     const normalized = text.normalize('NFKC');
     for (let i = 0; i < fixture.forbiddenPeople.length; i++) if (normalized.includes(fixture.forbiddenPeople[i].normalize('NFKC'))) errors.push(`${label}: private person fixture entry ${i + 1}`);
+    // Optional private term list (customer, site, vehicle or programme identifiers); report the entry number only.
+    const terms = fixture.forbiddenTerms || [];
+    for (let i = 0; i < terms.length; i++) if (normalized.includes(terms[i].normalize('NFKC'))) errors.push(`${label}: private term fixture entry ${i + 1}`);
   };
   if (options.texts) options.texts.forEach((text, i) => inspect(text, `text ${i + 1}`));
   else {
