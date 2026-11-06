@@ -49,7 +49,7 @@ function sortedNews(entries = data.news) {
   return entries.slice().sort((a, b) => b.eventDate.localeCompare(a.eventDate) || a.id.localeCompare(b.id));
 }
 const isReleaseNews = item => item.evidence?.path === 'data/news-software-sources.json';
-function homeNews(entries = data.news, limit = 4) {
+function homeNews(entries = data.news, limit = 3) {
   // Home keeps the newest software release once, then the newest research, conference, award and career items.
   let releaseSeen = false;
   return sortedNews(entries).filter(item => !isReleaseNews(item) || (!releaseSeen && (releaseSeen = true))).slice(0, limit);
@@ -133,12 +133,14 @@ function renderHome(locale, cv = readCv()) {
 <section class="sc-intro" aria-labelledby="home-title"><div><h1 id="home-title">${ko ? '김진민 <span lang="en">Jinmin Kim</span>' : 'Jinmin Kim'}</h1>
 <p class="sc-intro__role">${ko ? '수술 로보틱스·컴퓨터비전 R&amp;D 엔지니어' : 'Robotics &amp; Computer Vision R&amp;D Engineer'}</p>
 <p class="sc-intro__keywords"${ko ? ' lang="en"' : ''}>Surgical Navigation · 3D Registration · Optical Tracking · Computer Vision · XR · Robotics Integration</p>
-<p class="sc-intro__lede">${ko ? '3D 공간에서 해부학 구조, 수술 도구, 센서, 카메라, XR 기기, 로봇을 하나의 좌표계로 연결해 온 엔지니어입니다. 삼성서울병원 구강악안면외과와 3년 넘게 공동 R&amp;D를 하며 영상-환자 정합, 수술 도구 추적, 디지털 교합 워크플로우를 개발하고 있습니다.' : 'I connect anatomy, surgical instruments, sensors, cameras, XR devices, and robots in one 3D coordinate space. Through more than three years of collaborative R&amp;D with the oral and maxillofacial surgery team at Samsung Medical Center, I develop image-to-patient registration, surgical instrument tracking, and digital occlusion workflows.'}</p>
-<p class="sc-intro__statement">${ko ? '광학 추적·정합을 수술 내비게이션·XR·로봇 비전으로 연결하며, 연구진과 요구사항·평가 기준을 협의해 왔습니다. 기능 구현 뒤에도 기준 데이터의 품질과 현장 재현 조건을 확인합니다.' : 'I connect optical tracking and registration to surgical navigation, XR, and robot vision, working with researchers on requirements and evaluation criteria. After implementation, I also examine reference-data quality and the conditions needed to reproduce a result in the field.'}</p>
+<p class="sc-intro__lede">${ko ? '3D 공간에서 해부학 구조, 수술 도구, 센서, 카메라, XR 기기, 로봇을 하나의 좌표계로 연결해 온 엔지니어입니다.' : 'I connect anatomy, surgical instruments, sensors, cameras, XR devices, and robots in one 3D coordinate space.'}</p></div></section>
+${render.pipelineMapHtml(data,base,true,locale)}
+<section class="sc-intro__info">
 <p class="sc-intro__affiliation">${ko ? '㈜디지트랙 연구원 · 소프트웨어 R&amp;D<br>DGIST 로봇및기계전자공학 석사' : 'Research Engineer · Software R&amp;D, DIGITRACK Inc.<br>M.S. in Robotics and Mechatronics Engineering, DGIST'}</p>
-<p class="sc-intro__links">${cv.contacts.map(c => `<a href="${esc(c.href)}">${esc(c.label)}</a>`).join(' · ')} · <a href="${base}assets/cv/jinmin-kim-cv-${locale}.pdf">CV (PDF)</a></p>${directionHtml(locale, cv)}</div></section>
+<p class="sc-intro__collab">${ko ? '삼성서울병원 구강악안면외과와 3년 넘게 공동 R&amp;D를 하며 영상-환자 정합, 수술 도구 추적, 디지털 교합 워크플로우를 개발하고 있습니다.' : 'Through more than three years of collaborative R&amp;D with the oral and maxillofacial surgery team at Samsung Medical Center, I develop image-to-patient registration, surgical instrument tracking, and digital occlusion workflows.'}</p>
+<p class="sc-intro__links">${cv.contacts.map(c => `<a href="${esc(c.href)}">${esc(c.label)}</a>`).join(' · ')} · <a href="${base}assets/cv/jinmin-kim-cv-${locale}.pdf">CV (PDF)</a></p>${directionHtml(locale, cv)}</section>
 ${capabilitiesHtml(locale)}
-<section aria-labelledby="projects-title"><h2 id="projects-title">${ko ? '대표 연구' : 'Selected research'}</h2><div data-portfolio="home-projects">${render.homeProjectGalleryHtml(data,base,true,locale)}</div><p><a href="${href(base,locale,'projects/')}">${ko ? '전체 프로젝트 9개' : 'All 9 projects'}</a></p></section>
+<section aria-labelledby="projects-title"><h2 id="projects-title">${ko ? '대표 연구' : 'Selected research'}</h2><div data-portfolio="home-projects" data-tile="true">${render.homeProjectGalleryHtml(data,base,true,locale,{tile:true})}</div><p><a href="${href(base,locale,'projects/')}">${ko ? '전체 프로젝트 9개' : 'All 9 projects'}</a></p></section>
 ${achievementsHtml(locale,cv,base)}
 <section aria-labelledby="news-title"><h2 id="news-title">${ko ? '소식' : 'News'}</h2>${renderNews(locale, homeNews(), {base, groupYears:false})}<p><a href="${href(base,locale,'news/')}">${ko ? `모든 소식 (${data.news.length}건)` : `All news (${data.news.length})`}</a></p></section>
 <section class="sc-contact" aria-labelledby="contact-title"><h2 id="contact-title">${ko ? '연락' : 'Contact'}</h2><div class="sc-contact__line"><img class="sc-contact__photo" src="${base}assets/img/profile_square.webp" alt="${ko ? '김진민 프로필 사진' : 'Portrait of Jinmin Kim'}" width="160" height="160" loading="lazy" decoding="async"><p>${ko ? '공동연구와 연구 대화를 환영합니다.' : 'I welcome joint research and conversations about research.'} <a href="mailto:uiop3847@naver.com">uiop3847@naver.com</a> · <a href="${href(base,locale,'contact/')}">${ko ? '연락처 안내' : 'Contact information'}</a></p></div></section>
@@ -152,7 +154,7 @@ function newsPage(locale) {
 `;
 }
 function capabilitiesHtml(locale) {
-  return `<section aria-labelledby="implementation-title"><h2 id="implementation-title">${locale === 'ko' ? '현재 전문성' : 'Current expertise'}</h2><dl class="sc-capabilities">${data.capabilities.map(c => `<div><dt>${esc(c.translations[locale].title)}</dt><dd>${c.methods.map(esc).join(', ')}</dd></div>`).join('')}</dl></section>`;
+  return `<section aria-labelledby="implementation-title"><h2 id="implementation-title">${locale === 'ko' ? '기술 영역' : 'Technical areas'}</h2><dl class="sc-capabilities">${data.capabilities.map(c => `<div><dt>${esc(c.translations[locale].title)}</dt><dd>${c.methods.map(esc).join(', ')}</dd></div>`).join('')}</dl></section>`;
 }
 // Home-only structured data. knowsAbout lists current expertise; research interests appear
 // only as direction in the description. No email, partner or patient information.

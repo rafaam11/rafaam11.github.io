@@ -1755,7 +1755,7 @@ test('Scholar Home shells carry introduction, news and selected research without
   for (const [file, identity, assetBase] of pages) {
     const html = read(file);
     assert.match(html, new RegExp(identity, 'i'));
-    assertInOrder(html, ['class="sc-intro"', 'id="implementation-title"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'id="news-title"', 'class="sc-contact"'], file);
+    assertInOrder(html, ['class="sc-intro"', 'class="sc-map"', 'class="sc-intro__info"', 'id="implementation-title"', 'data-portfolio="home-projects"', 'id="publications-title"', 'data-portfolio="home-highlights"', 'id="news-title"', 'class="sc-contact"'], file);
     assert.doesNotMatch(html, /id="highlights-title"|sc-intro__topics/, `${file}: highlights close the publications section; capabilities are the dl, not a topics line`);
     // the intro has no 3D figure; the portrait sits small in the contact line
     assert.doesNotMatch(html, /sc-figure3d|data-scene3d/);

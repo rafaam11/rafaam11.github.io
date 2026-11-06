@@ -110,3 +110,25 @@ test('home has no 3D figure or selected-activity cards', () => {
   assert.equal(fs.existsSync(path.join(root, 'js/scenes/home-tracking.js')), false);
   assert.equal(require('../js/local-feed.js').selectedActivitiesHtml, undefined);
 });
+
+test('Home main order, one-sentence lede, technical areas, three tiles and three news items', () => {
+  const profile = require('../scripts/profile-home.cjs');
+  const lede = { ko: '3D 공간에서 해부학 구조, 수술 도구, 센서, 카메라, XR 기기, 로봇을 하나의 좌표계로 연결해 온 엔지니어입니다.', en: 'I connect anatomy, surgical instruments, sensors, cameras, XR devices, and robots in one 3D coordinate space.' };
+  for (const [locale, file] of [['ko', 'index.html'], ['en', 'en/index.html']]) {
+    const html = /<main[^>]*>([\s\S]*?)<\/main>/.exec(fs.readFileSync(path.join(root, file), 'utf8'))[1];
+    const names = ['class="sc-intro"', 'class="sc-map"', 'class="sc-intro__info"', 'id="implementation-title"', 'sc-project-list--tiles', 'id="publications-title"', 'id="news-title"', 'class="sc-contact"'];
+    const at = names.map((name) => html.indexOf(name));
+    assert.ok(at.every((i, k) => i >= 0 && (k === 0 || i > at[k - 1])), `${locale} order ${at}`);
+    assert.equal(/<p class="sc-intro__lede">([^<]*)<\/p>/.exec(html)[1], lede[locale]);
+    assert.doesNotMatch(html, /sc-intro__statement/);
+    assert.match(html, locale === 'ko' ? /<h2 id="implementation-title">기술 영역<\/h2>/ : /<h2 id="implementation-title">Technical areas<\/h2>/);
+    const tiles = [...html.matchAll(/<li class="sc-project sc-project--tile" data-project="([^"]+)">([\s\S]*?)<\/li>/g)];
+    assert.equal(tiles.length, 3);
+    for (const [, slug, body] of tiles) {
+      const p = data.projects.find((q) => q.slug === slug); const thesis = (p.web[locale] || {}).thesis || p.translations[locale].thesis;
+      assert.ok(body.includes(`<p class="sc-project__summary">${thesis.replace(/&/g, '&amp;')}</p>`), `${locale} ${slug} summary`);
+    }
+    assert.equal((html.match(/data-news-id=/g) || []).length, 3);
+    assert.equal(profile.homeNews().length, 3);
+  }
+});

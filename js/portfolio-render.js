@@ -1613,13 +1613,32 @@
     }).join('');
   }
 
-  function homeProjectGalleryHtml(data, base, isFile, locale) {
+  function projectTileHtml(project, rawProject, base, isFile, locale) {
+    var href = i18n.routeHref(base, locale, project.route, Boolean(isFile));
+    var thumb = thumbnailItem(project);
+    var webCopy = rawProject && rawProject.web && rawProject.web[locale] ? rawProject.web[locale] : {};
+    var visual = thumb
+      ? '<a class="sc-project__thumb" href="' + escapeHtml(href) + '" tabindex="-1" aria-hidden="true"><img src="' + escapeHtml(assetHref(base, thumb.publicPath)) + '" alt="" loading="lazy" decoding="async"></a>'
+      : '';
+    return '<li class="sc-project sc-project--tile" data-project="' + escapeHtml(project.slug) + '">' + visual +
+      '<h3 class="sc-project__title"><a href="' + escapeHtml(href) + '">' + escapeHtml(project.title) + '</a></h3>' +
+      '<p class="sc-project__meta">' + escapeHtml(project.period) + ' · ' + escapeHtml(projectStateLabel(project, locale)) + '</p>' +
+      '<p class="sc-project__summary">' + escapeHtml(webCopy.thesis || project.thesis || project.summary) + '</p></li>';
+  }
+
+  function homeProjectGalleryHtml(data, base, isFile, locale, options) {
     var projects = validProjects(data, locale);
     if (!projects.length) return '';
     var selected = (data.homeProjectSlugs || []).map(function (slug) {
       return projects.find(function (project) { return project.slug === slug; });
     }).filter(Boolean);
     if (!selected.length) return '';
+    if (options && options.tile) {
+      return '<ol class="sc-project-list sc-project-list--tiles">' + selected.map(function (project) {
+        var raw = (data.projects || []).filter(function (item) { return item.slug === project.slug; })[0];
+        return projectTileHtml(project, raw, base, isFile, locale);
+      }).join('') + '</ol>';
+    }
     return '<ol class="sc-project-list">' + selected.map(function (project) {
       return projectItemHtml(project, base, isFile, locale, { detailed: false, headingTag: 'h3' });
     }).join('') + '</ol>';
@@ -1912,7 +1931,7 @@
       });
     }
 
-    fill('[data-portfolio="home-projects"]', function () { return homeProjectGalleryHtml(data, base, isFile, locale); });
+    fill('[data-portfolio="home-projects"]', function (node) { return homeProjectGalleryHtml(data, base, isFile, locale, { tile: node && node.getAttribute && node.getAttribute('data-tile') === 'true' }); });
     fill('[data-portfolio="capability-index"]', function () { return capabilityIndexHtml(data, locale); });
     // Home achievements are generated from public-cv.json and remain accessible without JavaScript.
     fill('[data-portfolio="project-groups"]', function () { return projectGroupsHtml(data, base, isFile, locale); });

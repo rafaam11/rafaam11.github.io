@@ -62,14 +62,14 @@ test('Home hero separates the current role from the research direction', () => {
   const cv = JSON.parse(fs.readFileSync(path.join(root, 'data/public-cv.json'), 'utf8'));
   for (const locale of ['ko', 'en']) {
     const html = pages[locale];
-    const order = ['sc-intro__role', 'sc-intro__keywords', 'sc-intro__lede', 'sc-intro__statement', 'sc-intro__affiliation', 'sc-intro__links', 'sc-intro__direction'].map((name) => html.indexOf(`class="${name}"`));
+    const order = ['sc-intro__role', 'sc-intro__keywords', 'sc-intro__lede', 'sc-intro__affiliation', 'sc-intro__collab', 'sc-intro__links', 'sc-intro__direction'].map((name) => html.indexOf(`class="${name}"`));
     assert.ok(order.every((index, i) => index > 0 && (i === 0 || index > order[i - 1])), `${locale} hero order ${order}`);
     const direction = html.match(/<p class="sc-intro__direction">([\s\S]*?)<\/p>/)[1];
     for (const term of cv.interests[locale]) assert.ok(direction.includes(term), `${locale} direction ${term}`);
     // Research-direction terms stay out of the current-expertise list.
     const expertise = html.match(/<dl class="sc-capabilities">[\s\S]*?<\/dl>/)[0];
     for (const term of cv.interests[locale]) assert.ok(!expertise.includes(term), `${locale} expertise lists research direction ${term}`);
-    assert.match(html, locale === 'ko' ? /<h2 id="implementation-title">현재 전문성<\/h2>/ : /<h2 id="implementation-title">Current expertise<\/h2>/);
+    assert.match(html, locale === 'ko' ? /<h2 id="implementation-title">기술 영역<\/h2>/ : /<h2 id="implementation-title">Technical areas<\/h2>/);
     assert.match(html, locale === 'ko' ? /㈜디지트랙 연구원 · 소프트웨어 R&amp;D/ : /Research Engineer · Software R&amp;D, DIGITRACK Inc\./);
     assert.doesNotMatch(html, /hero-kicker/);
     // Selected publications link to their case pages when the CV names one.
