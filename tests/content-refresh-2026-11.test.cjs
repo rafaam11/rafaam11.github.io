@@ -36,4 +36,7 @@ test('rtms-navigation: handed over 2026-08, evaluation lives in a tool branch', 
   assert.match(p.translations.ko.role, /NaviClient/);
   const cv = require('../data/public-cv.json'); const rows = JSON.stringify(cv, null, 2);
   assert.match(rows, /"slug": "rtms-navigation",\s*"period": "2024\.07–2026\.08"/);
+  assert.equal(p.translations.en.status, 'Verified · Completed (handed over 2026.08)');
+  assert.doesNotMatch(JSON.stringify(p.web.en.points), /Per-target distance, RMSE, CSV comparison/);
+  assert.match(rows, /"slug": "rtms-navigation",\s*"period": "2024\.07–2026\.08"[\s\S]*?"Quantitative evaluation tool \(eval branch\)"/);
 });
