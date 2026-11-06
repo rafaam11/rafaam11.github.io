@@ -321,3 +321,44 @@
 @media (max-width: 540px) {
   .sc-news-item { grid-template-columns: 1fr; gap: .25rem; }
 }
+/* 2026-11 home map: five-stage technical pipeline with hover/focus linking. */
+.sc-map { margin: 2rem 0; }
+.sc-map__band { display: block; width: 100%; height: auto; margin-bottom: .6rem; }
+.sc-map__track { fill: none; stroke: var(--sc-rule); stroke-width: 1; }
+.sc-map__arrow { fill: none; stroke: var(--sc-faint); stroke-width: 1; }
+.sc-map__dot { fill: #fff; stroke: var(--sc-faint); stroke-width: 1; }
+.sc-map__digit { fill: var(--sc-ink); font-size: 14px; }
+.sc-map__stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .75rem; margin: 0; padding: 0; list-style: none; }
+.sc-map__stage { padding: .5rem; border: 1px solid var(--sc-rule); border-radius: 3px; transition: border-color .15s ease; }
+.sc-map__thumb { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--sc-rule); }
+.sc-map__title { margin: .6rem 0 .2rem; font-size: 1rem; line-height: 1.35; transition: color .15s ease; }
+.sc-map__n { color: var(--sc-faint); font-variant-numeric: tabular-nums; margin-right: .15rem; }
+.sc-map__blurb { margin: 0; color: var(--sc-muted); font-size: var(--sc-meta); line-height: 1.5; }
+.sc-map__chips { display: flex; flex-wrap: wrap; gap: .35rem; margin: .6rem 0 0; padding: 0; list-style: none; }
+.sc-map__chip { display: inline-block; padding: .1rem .45rem; border: 1px solid var(--sc-rule); border-radius: 3px; color: var(--sc-muted); font-size: var(--sc-meta); line-height: 1.5; text-decoration: none; transition: opacity .15s ease, border-color .15s ease; }
+.sc-map__chip:hover, .sc-map__chip:focus-visible { border-color: var(--sc-link); color: var(--sc-link); }
+.sc-map__tools { margin: .9rem 0 0; color: var(--sc-faint); font-size: var(--sc-meta); }
+.sc-map:has(.sc-map__chip[data-spans~="1"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="1"] { border-color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="1"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="1"] .sc-map__title { color: var(--sc-link); }
+.sc-map:has(.sc-map__stage[data-n="1"]:hover) .sc-map__chip[data-spans~="1"] { border-color: var(--sc-link); color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="2"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="2"] { border-color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="2"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="2"] .sc-map__title { color: var(--sc-link); }
+.sc-map:has(.sc-map__stage[data-n="2"]:hover) .sc-map__chip[data-spans~="2"] { border-color: var(--sc-link); color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="3"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="3"] { border-color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="3"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="3"] .sc-map__title { color: var(--sc-link); }
+.sc-map:has(.sc-map__stage[data-n="3"]:hover) .sc-map__chip[data-spans~="3"] { border-color: var(--sc-link); color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="4"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="4"] { border-color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="4"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="4"] .sc-map__title { color: var(--sc-link); }
+.sc-map:has(.sc-map__stage[data-n="4"]:hover) .sc-map__chip[data-spans~="4"] { border-color: var(--sc-link); color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="5"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="5"] { border-color: var(--sc-link); }
+.sc-map:has(.sc-map__chip[data-spans~="5"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="5"] .sc-map__title { color: var(--sc-link); }
+.sc-map:has(.sc-map__stage[data-n="5"]:hover) .sc-map__chip[data-spans~="5"] { border-color: var(--sc-link); color: var(--sc-link); }
+.sc-map:has(.sc-map__chip:is(:hover, :focus-visible)) .sc-map__chip:not(:hover):not(:focus-visible) { opacity: .45; }
+@media (max-width: 760px) {
+  .sc-map__band { display: none; }
+  .sc-map__stages { grid-template-columns: 1fr; }
+  .sc-map__stage { display: grid; grid-template-columns: 7rem minmax(0, 1fr); column-gap: .75rem; align-items: start; }
+  .sc-map__thumb { grid-row: 1 / span 3; width: 7rem; }
+  .sc-map__title { margin-top: 0; }
+  .sc-map__chips { grid-column: 2; }
+}

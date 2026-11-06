@@ -63,3 +63,40 @@ test('pipeline does not change the PDF source digest', () => {
   const d = (p) => pdf.pdfSourceDigest(pdf.canonicalPdfSource(p, evidence, cv));
   assert.equal(d(data), d(without));
 });
+const i18n = require('../js/site-i18n.js');
+test('pipelineMapHtml renders 5 stages, 8 chips and a tools chip in ko and en', () => {
+  for (const [locale, base] of [['ko', ''], ['en', ''], ['ko', '../'], ['en', '../']]) {
+    const html = render.pipelineMapHtml(data, base, true, locale);
+    assert.equal((html.match(/<li class="sc-map__stage"/g) || []).length, 5);
+    assert.equal((html.match(/data-primary="/g) || []).length, 8);
+    assert.equal((html.match(/data-spans=""/g) || []).length, 1);
+    assert.equal((html.match(/class="sc-map__chip"/g) || []).length, 9);
+    for (const pl of data.pipeline.placements.concat(data.pipeline.tools)) {
+      const project = data.projects.find(p => p.slug === pl.slug);
+      const href = i18n.routeHref(base, locale, project.route, true);
+      assert.ok(html.includes(`href="${href}"`), `${locale} ${pl.slug} href`);
+      assert.ok(html.includes(data.pipeline.translations ? pl.translations[locale].chip.replace(/&/g, '&amp;') : ''));
+    }
+    for (const pl of data.pipeline.placements) assert.ok(html.includes(`data-primary="${pl.primary}" data-spans="${pl.spans.join(' ')}"`));
+    for (const st of data.pipeline.stages) { const esc = (v) => v.replace(/&/g, '&amp;'); assert.ok(html.includes(esc(st.translations[locale].title))); assert.ok(html.includes(esc(st.translations[locale].blurb))); }
+    assert.ok(html.includes(`aria-label="${data.pipeline.translations[locale].label}"`));
+    const svg = /<svg[\s\S]*?<\/svg>/.exec(html)[0];
+    assert.match(svg, /aria-hidden="true"/);
+    assert.deepEqual([...svg.matchAll(/<text[^>]*>([^<]*)<\/text>/g)].map(m => m[1]), ['1', '2', '3', '4', '5']);
+  }
+});
+test('pipelineMapHtml returns empty string for invalid pipeline data', () => {
+  const bad = structuredClone(data); bad.pipeline.stages.pop();
+  assert.equal(render.pipelineMapHtml(bad, '', true, 'ko'), '');
+});
+test('map CSS has focus-visible highlighting, a 760px band rule and no dimming by default', () => {
+  const css = fs.readFileSync(path.join(root, 'css/scholar.css'), 'utf8');
+  assert.match(css, /\.sc-map:has\([^)]*:is\(:hover, :focus-visible\)\)/);
+  assert.match(css, /@media \(max-width: 760px\) \{\s*\.sc-map__band \{ display: none; \}/);
+  const mapCss = css.slice(css.indexOf('/* 2026-11 home map'));
+  assert.doesNotMatch(mapCss, /box-shadow|gradient|text-transform\s*:\s*uppercase|monospace/i);
+  const dim = mapCss.split('\n').filter(l => /opacity/.test(l));
+  assert.equal(dim.length, 2); // transition list + hover-only dimming
+  assert.ok(dim.some(l => /^\.sc-map:has\(.*:hover/.test(l) && /opacity: \.45/.test(l)));
+  assert.ok(!/^\.sc-map__chip \{[^}]*opacity: *0?\./.test(dim.find(l => l.startsWith('.sc-map__chip {')) || ''));
+});

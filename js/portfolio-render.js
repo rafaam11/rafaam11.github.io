@@ -1545,6 +1545,45 @@
     }).join('');
   }
 
+  function pipelineMapHtml(data, base, isFile, locale) {
+    if (pipelineErrors(data).length) return '';
+    var normalized = localeOf(locale);
+    var pipe = data.pipeline;
+    var projects = data.projects || [];
+    function chip(entry, attrs) {
+      var project = projects.filter(function (item) { return item.slug === entry.slug; })[0];
+      if (!project) return '';
+      var href = i18n.routeHref(base, normalized, project.route, Boolean(isFile));
+      return '<a class="sc-map__chip" href="' + escapeHtml(href) + '"' + attrs + '>' + escapeHtml(translation(entry, normalized).chip) + '</a>';
+    }
+    var band = '';
+    var arrows = '';
+    var dots = '';
+    for (var i = 0; i < 5; i++) {
+      var x = i * 200 + 4;
+      band += '<rect class="sc-map__track" x="' + x + '" y="18" width="184" height="36" rx="3"/>';
+      dots += '<circle class="sc-map__dot" cx="' + (x + 92) + '" cy="36" r="13"/><text class="sc-map__digit" x="' + (x + 92) + '" y="41" text-anchor="middle">' + (i + 1) + '</text>';
+      if (i < 4) arrows += '<path class="sc-map__arrow" d="M' + (x + 188) + ' 36h20m-6-5l6 5l-6 5"/>';
+    }
+    var svg = '<svg class="sc-map__band" viewBox="0 0 1000 72" aria-hidden="true" focusable="false">' + band + arrows + dots + '</svg>';
+    var stages = pipe.stages.map(function (stage) {
+      var copy = translation(stage, normalized);
+      var chips = pipe.placements.filter(function (placement) { return placement.primary === stage.n; }).map(function (placement) {
+        var html = chip(placement, ' data-primary="' + placement.primary + '" data-spans="' + placement.spans.join(' ') + '"');
+        return html ? '<li>' + html + '</li>' : '';
+      }).join('');
+      return '<li class="sc-map__stage" data-n="' + stage.n + '"><img class="sc-map__thumb" src="' + escapeHtml(assetHref(base, stage.thumb)) + '" alt="" width="640" height="360" decoding="async">' +
+        '<h3 class="sc-map__title"><span class="sc-map__n">' + stage.n + '</span> ' + escapeHtml(copy.title) + '</h3>' +
+        '<p class="sc-map__blurb">' + escapeHtml(copy.blurb) + '</p>' +
+        '<ul class="sc-map__chips">' + chips + '</ul></li>';
+    }).join('');
+    var tools = pipe.tools.map(function (tool) { return chip(tool, ' data-spans=""'); }).join(' ');
+    var label = translation(pipe, normalized);
+    return '<section class="sc-map" aria-label="' + escapeHtml(label.label) + '">' + svg +
+      '<ol class="sc-map__stages">' + stages + '</ol>' +
+      '<p class="sc-map__tools"><span>' + escapeHtml(label.tools) + '</span> ' + tools + '</p></section>';
+  }
+
   function projectItemHtml(project, base, isFile, locale, settings) {
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
@@ -1905,6 +1944,7 @@
     localizePortfolioData: localizePortfolioData,
     validatePortfolioData: validatePortfolioData,
     pipelineErrors: pipelineErrors,
+    pipelineMapHtml: pipelineMapHtml,
     homeProjectGalleryHtml: homeProjectGalleryHtml,
     capabilityIndexHtml: capabilityIndexHtml,
     highlightsHtml: highlightsHtml,
