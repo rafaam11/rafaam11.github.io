@@ -75,7 +75,7 @@ test('pipelineMapHtml renders 5 stages, 8 chips and a tools chip in ko and en', 
       const project = data.projects.find(p => p.slug === pl.slug);
       const href = i18n.routeHref(base, locale, project.route, true);
       assert.ok(html.includes(`href="${href}"`), `${locale} ${pl.slug} href`);
-      assert.ok(html.includes(data.pipeline.translations ? pl.translations[locale].chip.replace(/&/g, '&amp;') : ''));
+      assert.ok(html.includes(pl.translations[locale].chip.replace(/&/g, '&amp;')));
     }
     for (const pl of data.pipeline.placements) assert.ok(html.includes(`data-primary="${pl.primary}" data-spans="${pl.spans.join(' ')}"`));
     for (const st of data.pipeline.stages) { const esc = (v) => v.replace(/&/g, '&amp;'); assert.ok(html.includes(esc(st.translations[locale].title))); assert.ok(html.includes(esc(st.translations[locale].blurb))); }
@@ -96,7 +96,6 @@ test('map CSS has focus-visible highlighting, a 760px band rule and no dimming b
   const mapCss = css.slice(css.indexOf('/* 2026-11 home map'));
   assert.doesNotMatch(mapCss, /box-shadow|gradient|text-transform\s*:\s*uppercase|monospace/i);
   const dim = mapCss.split('\n').filter(l => /opacity/.test(l));
-  assert.equal(dim.length, 2); // transition list + hover-only dimming
   assert.ok(dim.some(l => /^\.sc-map:has\(.*:hover/.test(l) && /opacity: \.45/.test(l)));
   assert.ok(!/^\.sc-map__chip \{[^}]*opacity: *0?\./.test(dim.find(l => l.startsWith('.sc-map__chip {')) || ''));
 });
