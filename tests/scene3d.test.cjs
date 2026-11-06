@@ -133,7 +133,9 @@ test('case renderer orders the first visual above the brief and numbers the gall
     assert.match(figures[0], new RegExp(`${figure} 1\\.`));
     assert.match(figures[0], /<div class="view3d" data-scene="ms-frac"><img src="\.\.\/\.\.\/assets\/3d\/ms-frac\.webp" alt="[^"]+" width="1600" height="1000" decoding="async"><\/div>/);
     assert.match(figures[1], new RegExp(`${figure} 2\\.`));
-    assert.match(figures[1], /sc-figure--gallery/);
+    assert.match(figures[1], /sc-flow-figure/);
+    assert.match(figures[2], new RegExp(`${figure} 3\.`));
+    assert.match(figures[2], /sc-figure--gallery/);
     const labels = [...html.matchAll(/sc-figure__label">[^<]*?(\d+)\./g)].map((match) => Number(match[1]));
     assert.deepEqual(labels, labels.map((_, i) => i + 1), `${locale}: consecutive figure numbers`);
   }

@@ -54,7 +54,7 @@ test('video lead cases keep the 3D figure as figure 2; image lead + 3D cases mov
       const html = render.caseStudyHtml(data, slug, '', true, locale);
       const gallery = html.slice(html.indexOf('class="sc-gallery"'));
       assert.ok(gallery.includes(project.media.lead.publicPath), `${slug}: lead image in gallery`);
-      assert.match(gallery.match(/<figure[\s\S]*?<\/figure>/)[0], /(그림|Figure) 2\./, `${slug}: lead is figure 2`);
+      assert.match(gallery.match(/<figure[\s\S]*?<\/figure>/)[0], new RegExp('(그림|Figure) ' + (legacyKinds[slug] ? 3 : 2) + '\.'), `${slug}: lead follows the flow figure`);
       assert.ok(html.split(project.media.lead.publicPath).length === 2, `${slug}: lead image appears once`);
     }
   }
@@ -167,11 +167,14 @@ test('diagramSvg marker ids follow the prefix and bidirectional edges mark both 
   const model = render.normalizeDiagram(realDiagrams().find((d) => d.diagram.kind === 'sync-topology').diagram, 'en');
   const a = render.diagramSvg(model, { orientation: 'wide', idPrefix: 'one' });
   const b = render.diagramSvg(model, { orientation: 'wide', idPrefix: 'two' });
-  assert.match(a, /id="one-arrow"/);
-  assert.match(b, /id="two-arrow"/);
+  assert.match(a, /id="one-wide-arrow"/);
+  assert.match(b, /id="two-wide-arrow"/);
+  const tall = render.diagramSvg(model, { orientation: 'tall', idPrefix: 'one' });
+  assert.match(tall, /id="one-tall-arrow"/);
+  assert.notEqual(a.match(/<marker id="([^"]+)"/)[1], tall.match(/<marker id="([^"]+)"/)[1]);
   assert.equal((a.match(/marker-start=/g) || []).length, 3);
   assert.equal((a.match(/marker-end=/g) || []).length, 3);
-  assert.match(render.diagramSvg(model, { orientation: 'wide' }), /id="flow-arrow"/);
+  assert.match(render.diagramSvg(model, { orientation: 'wide' }), /id="flow-wide-arrow"/);
 });
 
 function boxesOf(svg) {
@@ -201,9 +204,26 @@ test('all boxes of one diagram share the tallest height and never overlap or lea
   }
 });
 
-test('long English labels wrap by word within two lines', () => {
+test('real data: labels with a detail line wrap to at most two lines, others to three', () => {
+  for (const locale of ['ko', 'en']) {
+    for (const item of realDiagrams()) {
+      const model = render.normalizeDiagram(item.diagram, locale);
+      for (const orientation of ['wide', 'tall']) {
+        const svg = render.diagramSvg(model, { orientation });
+        for (const node of model.nodes) {
+          const group = svg.split('<g class="sc-flow-svg__node').slice(1).find((part) => part.includes('data-node-key="' + node.key + '"')).split('</g>')[0];
+          const labelText = group.match(/<text class="sc-flow-svg__label">([\s\S]*?)<\/text>/)[1];
+          const lines = (labelText.match(/<tspan/g) || []).length;
+          assert.ok(lines <= (node.detail ? 2 : 3), `${item.id} ${locale} ${orientation} ${node.key}: ${lines} label lines`);
+          assert.ok(!group.includes('…'), `${item.id} ${locale} ${orientation} ${node.key}`);
+        }
+      }
+    }
+  }
+});
+
+test('long English labels wrap by word and overflow ends in an ellipsis', () => {
   const longest = realDiagrams().flatMap((d) => render.normalizeDiagram(d.diagram, 'en').nodes).sort((a, b) => b.label.length - a.label.length)[0];
-  assert.ok(longest.label.length > 40, longest.label);
   const model = {
     locale: 'en', title: 't', boundary: '',
     nodes: [
@@ -216,8 +236,7 @@ test('long English labels wrap by word within two lines', () => {
   const nodeA = (svg) => svg.match(/<g class="sc-flow-svg__node"[^>]*data-node-key="a">[\s\S]*?<\/g>/)[0];
   for (const orientation of ['wide', 'tall']) {
     const node = nodeA(render.diagramSvg(model, { orientation }));
-    const lines = (node.match(/<tspan/g) || []).length;
-    assert.ok(lines <= 2, `${orientation}: ${lines} lines`);
+    assert.ok((node.match(/<tspan/g) || []).length <= 3, orientation);
     assert.ok(!node.includes('…'));
     assert.equal(squash(decode(svgTextOf(node))), squash(longest.label));
   }
@@ -256,5 +275,60 @@ test('edge paths are orthogonal and labelled edges get a white backing rect', ()
       assert.equal((svg.match(/<text class="sc-flow-svg__edge-label"/g) || []).length, labelled);
       assert.equal(/sc-flow-svg__boundary-box/.test(svg), Boolean(model.boundary));
     }
+  }
+});
+
+test('case pages carry wide and tall flow SVGs with a hidden sentence and unique marker ids', () => {
+  const withFlow = all.filter((slug) => slug !== 'skadi-tracking-software');
+  let pagesWithDiagram = 0;
+  for (const locale of ['ko', 'en']) {
+    for (const slug of withFlow) {
+      const project = data.projects.find((p) => p.slug === slug);
+      const html = render.caseStudyHtml(data, slug, '', true, locale);
+      const figures = [...html.matchAll(/<figure class="sc-figure sc-flow sc-flow-figure">[\s\S]*?<\/figure>/g)].map((m) => m[0]);
+      const expected = (project.storySections || []).filter((s) => s.diagram && s.diagram.kind === 'system-flow').length +
+        (legacyKinds[slug] ? 1 : 0);
+      assert.equal(figures.length, expected, `${slug} ${locale}: flow figure count`);
+      if (!expected) continue;
+      pagesWithDiagram += 1;
+      for (const figure of figures) {
+        assert.equal((figure.match(/sc-flow-svg--wide"/g) || []).length, 1);
+        assert.equal((figure.match(/sc-flow-svg--tall"/g) || []).length, 1);
+        assert.equal((figure.match(/aria-hidden="true"/g) || []).length, 2);
+        const hidden = figure.match(/<p class="sc-visually-hidden">([^<]*)<\/p>/)[1];
+        for (const m of figure.matchAll(/<g class="sc-flow-svg__node[^"]*" data-node-key="[^"]+">[\s\S]*?<\/g>/g)) {
+          const label = decode(m[0].match(/<text class="sc-flow-svg__label">([\s\S]*?)<\/text>/)[1].replace(/<[^>]+>/g, ' '));
+          assert.ok(squash(decode(hidden)).includes(squash(label)), `${slug} ${locale}: hidden sentence has ${label}`);
+        }
+      }
+      if (legacyKinds[slug]) {
+        const title = project.pdfSequence.diagram.translations[locale].title;
+        assert.ok(figures.some((f) => f.includes('<strong>' + title + '</strong>')), `${slug} ${locale}: legacy title`);
+      }
+      const ids = [...html.matchAll(/<marker id="([^"]+)"/g)].map((m) => m[1]);
+      assert.equal(new Set(ids).size, ids.length, `${slug} ${locale}: marker ids unique`);
+      assert.deepEqual(labels(html), labels(html).map((_, i) => i + 1), `${slug} ${locale}: consecutive labels`);
+    }
+  }
+  assert.equal(pagesWithDiagram, 16, '8 cases x 2 locales');
+  const skadi = render.caseStudyHtml(data, 'skadi-tracking-software', '', true, 'en');
+  assert.doesNotMatch(skadi, /sc-flow-svg/);
+});
+
+test('flow CSS swaps wide for tall at 760px and avoids forbidden properties', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'css', 'scholar.css'), 'utf8');
+  const media = css.slice(css.indexOf('@media (max-width: 760px)'));
+  assert.match(media, /\.sc-flow-svg--wide \{ display: none/);
+  assert.match(media, /\.sc-flow-svg--tall \{ display: block/);
+  const flowRules = css.split('\n').filter((line) => line.includes('sc-flow')).join('\n');
+  assert.doesNotMatch(flowRules, /box-shadow|gradient|uppercase|monospace/i);
+  assert.ok(css.split(/\r?\n/).length <= 420);
+});
+
+test('product-console 3D poster is lazy because it sits below the fold', () => {
+  for (const locale of ['ko', 'en']) {
+    const html = render.caseStudyHtml(data, 'skadi-tracking-software', '', true, locale);
+    const scene = html.match(/<figure class="sc-figure sc-figure3d"[\s\S]*?<\/figure>/)[0];
+    assert.match(scene, /loading="lazy"/);
   }
 });

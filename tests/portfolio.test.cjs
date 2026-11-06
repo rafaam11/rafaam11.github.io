@@ -1799,12 +1799,14 @@ test('Scholar figure renderer skips pending media instead of drawing a placehold
   project.pdfSequence.evidenceId = project.media.lead.id;
   delete project.scene3d;   // the 3D figure is not media; this test covers media placeholders only
   assert.equal(render.evidenceMediaHtml(project, 'en', '../../', false), '');
+  // The generated SVG flow figure is data-driven, not media; strip it before looking for placeholders.
+  const withoutFlow = (markup) => markup.replace(/<figure class="sc-figure sc-flow sc-flow-figure">[\s\S]*?<\/figure>/g, '');
   const html = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
-  assert.doesNotMatch(html, /<figure|<img|<video|role="img"|placeholder/i);
+  assert.doesNotMatch(withoutFlow(html), /<figure|<img|<video|role="img"|placeholder/i);
   assert.match(html, /class="sc-brief"/, 'the dense page still renders without media');
   delete project.web;   // legacy path: the limitation prose still renders, still without placeholders
   const legacyHtml = render.caseStudyHtml(pendingData, project.slug, '../../', false, 'en');
-  assert.doesNotMatch(legacyHtml, /<figure|<img|<video|role="img"|placeholder/i);
+  assert.doesNotMatch(withoutFlow(legacyHtml), /<figure|<img|<video|role="img"|placeholder/i);
   assert.match(legacyHtml, new RegExp(project.translations.en.limitation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   const repositoryLead = clone(data.projects[data.projects.length - 1]);
   repositoryLead.media = { lead: { id: 'repository-lead', type: 'repository', status: 'approved', publicPath: 'https://github.com/rafaam11/multi-cli-work' }, gallery: [] };
@@ -2217,28 +2219,29 @@ test('SMCNavi story renderer distributes approved media, numbers figures, and ke
   assert.match(html, /data-story-section="system-architecture"/);
   assert.match(html, /<video\b(?=[^>]*\bcontrols\b)(?=[^>]*\bpreload="metadata")(?=[^>]*\bposter="\.\.\/\.\.\/\.\.\/assets\/projects\/surgical-navigation\/story-video-poster-01\.png")/);
   assert.doesNotMatch(html, /\bautoplay\b|\bloop\b/);
-  assert.match(html, /<small class="sc-flow__node-detail">Registration<\/small>/);
-  assert.match(html, /class="sc-flow__edge" data-from="tracker" data-to="core" data-direction="forward"[\s\S]*<small class="sc-flow__edge-label">Transforms<\/small>/);
-  assert.match(html, /<\/div><p class="sc-flow__boundary">Research prototype<\/p><\/figure>/);
+  assert.match(html, /<tspan [^>]*>Registration<\/tspan>/);
+  assert.match(html, /<g class="sc-flow-svg__edge" data-from="tracker" data-to="core" data-direction="forward">[\s\S]*?<tspan [^>]*>Transforms<\/tspan>/);
+  assert.match(html, /<p class="sc-visually-hidden">[^<]*Research prototype<\/p><\/figure>/);
+  assert.match(html, /sc-flow-svg--wide/);
+  assert.match(html, /sc-flow-svg--tall/);
   assertInOrder(html, ['Figure 1.', 'Figure 2.', 'Figure 3.', 'System flow', 'Research prototype', '3D Medical Imaging · Surgical Navigation Developer']);
   assert.doesNotMatch(html, /class="sc-gallery"/);
 });
 
 test('system-flow web renderer preserves branching edge tuples without inventing a sibling chain', () => {
   const diagram = branchingStoryDiagramFixture();
-  const html = render.systemFlowDiagramHtml(diagram, 'en', 1);
+  const full = render.systemFlowDiagramHtml(diagram, 'en', 1);
+  const html = full.slice(0, full.indexOf('<svg class="sc-flow-svg sc-flow-svg--tall"'));
   assert.deepEqual(
     [...html.matchAll(/data-node-key="([^"]+)"/g)].map((match) => match[1]),
     ['A', 'B', 'C', 'D']
   );
   assert.deepEqual(
-    [...html.matchAll(/class="sc-flow__edge" data-from="([^"]+)" data-to="([^"]+)" data-direction="([^"]+)"/g)]
+    [...html.matchAll(/class="sc-flow-svg__edge" data-from="([^"]+)" data-to="([^"]+)" data-direction="([^"]+)"/g)]
       .map((match) => match.slice(1)),
     [['A', 'B', 'forward'], ['B', 'C', 'forward'], ['B', 'D', 'bidirectional']]
   );
-  assert.match(html, /data-flow-level="2"[\s\S]*data-node-key="C"[\s\S]*data-node-key="D"/);
-  assert.match(html, /data-from="B" data-to="C"[\s\S]*>B node<[\s\S]*>C node</);
-  assert.match(html, /data-from="B" data-to="D"[\s\S]*>B node<[\s\S]*>D node</);
+  assert.match(full, /<p class="sc-visually-hidden">[^<]*B node[^<]*C node[^<]*B node[^<]*D node/);
   assert.doesNotMatch(html, /data-from="C" data-to="D"/);
 });
 
@@ -2246,8 +2249,9 @@ test('FOAA architecture web flow preserves all shared-state fan-out endpoints', 
   const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
   const diagram = project.storySections.find((item) => item.key === 'system-architecture').diagram;
   const expected = diagram.edges.map((edge) => [edge.from, edge.to, edge.direction]);
-  const html = render.systemFlowDiagramHtml(diagram, 'en', 5);
-  const actual = [...html.matchAll(/class="sc-flow__edge" data-from="([^"]+)" data-to="([^"]+)" data-direction="([^"]+)"/g)]
+  const fullHtml = render.systemFlowDiagramHtml(diagram, 'en', 5);
+  const html = fullHtml.slice(0, fullHtml.indexOf('<svg class="sc-flow-svg sc-flow-svg--tall"'));
+  const actual = [...html.matchAll(/class="sc-flow-svg__edge" data-from="([^"]+)" data-to="([^"]+)" data-direction="([^"]+)"/g)]
     .map((match) => match.slice(1));
   assert.deepEqual(actual, expected);
   assert.deepEqual(actual.slice(2).map((edge) => edge[0]), ['shared-state', 'shared-state', 'shared-state']);
@@ -2337,7 +2341,7 @@ test('story renderer places sections around standard evidence and renders locali
   assertInOrder(html, ['통합 워크플로우', '장기 방향', '관련 프로젝트'], 'story order');
   assert.doesNotMatch(html, /<h2>(?:내 역할|결과와 근거|한계와 팀 성과)<\/h2>|전체 수술계획으로 확장합니다/);
   assert.match(html, /href="\.\.\/\.\.\/projects\/mandibular-fracture\/"[^>]*>하악골 골절 정복 최적화<\/a>/);
-  assert.match(html, /class="sc-flow__track sc-flow__levels"/);
+  assert.match(html, /class="sc-flow-svg sc-flow-svg--wide"/);
 });
 
 test('reciprocal related projects render on story and legacy cases across locales and protocols', () => {
@@ -2647,30 +2651,28 @@ test('SMCNavi long-form CSS provides wide, grid, and narrow flow layouts', () =>
   const scholarCss = read('css/scholar.css');
   for (const selector of [
     '.sc-story', '.sc-story__section', '.sc-story__media--grid', '.sc-case__role-label',
-    '.sc-flow__graph', '.sc-flow__levels', '.sc-flow__level', '.sc-flow__node', '.sc-flow__node-detail',
-    '.sc-flow__edges', '.sc-flow__edge', '.sc-flow__edge-endpoints', '.sc-flow__arrow', '.sc-flow__edge-label', '.sc-flow__boundary'
+    '.sc-flow-svg', '.sc-flow-svg--wide', '.sc-flow-svg--tall', '.sc-flow-svg__box', '.sc-flow-svg__edge-line',
+    '.sc-flow-svg__edge-label-bg', '.sc-flow-svg__label', '.sc-flow-svg__detail', '.is-planned'
   ]) {
     assert.match(scholarCss, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   const narrow = cssAtRuleBodies(scholarCss, /@media\s*\(max-width:\s*760px\)/i).join('\n');
   assert.match(narrow, /\.sc-story__section--grid[\s\S]*grid-template-columns:\s*1fr/);
   assert.match(narrow, /\.sc-story__media--grid[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(narrow, /\.sc-flow__levels[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(narrow, /\.sc-flow__edges[\s\S]*grid-template-columns:\s*1fr/);
-  assert.doesNotMatch(narrow, /\.sc-flow__arrow\s*\{[^}]*transform\s*:/);
-  assert.doesNotMatch(narrow, /\.sc-flow__edge-label\s*\{[^}]*transform\s*:/);
+  assert.match(narrow, /\.sc-flow-svg--wide\s*\{\s*display:\s*none/);
+  assert.match(narrow, /\.sc-flow-svg--tall\s*\{\s*display:\s*block/);
+  assert.doesNotMatch(narrow, /\.sc-flow-svg[^{]*\{[^}]*transform\s*:/);
 });
 
-test('system-flow CSS presents topological levels and preserves explicit edge cards on narrow screens', () => {
+test('system-flow CSS sizes SVG text for the layout budget and swaps wide for tall on narrow screens', () => {
   const css = read('css/scholar.css');
-  for (const selector of ['.sc-flow__graph', '.sc-flow__levels', '.sc-flow__level', '.sc-flow__edges', '.sc-flow__edge-endpoints']) {
-    assert.ok(cssRuleBodies(css, selector).length, `missing selector ${selector}`);
-  }
-  assert.ok(cssRuleBodies(css, '.sc-flow__levels').some((body) => /display:\s*grid/.test(body)));
-  assert.ok(cssRuleBodies(css, '.sc-flow__level').some((body) => /display:\s*grid/.test(body)));
+  assert.ok(cssRuleBodies(css, '.sc-flow-svg').some((body) => /width:\s*100%/.test(body) && /height:\s*auto/.test(body)));
+  assert.ok(cssRuleBodies(css, '.sc-flow-svg__label').some((body) => /font-size:\s*15px/.test(body)));
+  assert.ok(cssRuleBodies(css, '.sc-flow-svg__detail').some((body) => /font-size:\s*12\.5px/.test(body)));
+  assert.doesNotMatch(css, /\.sc-flow__/);
   const narrow = cssAtRuleBodies(css, /@media\s*\(max-width:\s*760px\)/i).join('\n');
-  assert.match(narrow, /\.sc-flow__levels[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(narrow, /\.sc-flow__edges[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(narrow, /\.sc-flow-svg--wide\s*\{\s*display:\s*none/);
+  assert.match(narrow, /\.sc-flow-svg--tall\s*\{\s*display:\s*block/);
 });
 
 test('story CSS keeps media and system flow responsive without decorative components', () => {
@@ -2678,13 +2680,12 @@ test('story CSS keeps media and system flow responsive without decorative compon
   for (const selector of [
     '.sc-story__section',
     '.sc-story__media--grid',
-    '.sc-flow__levels',
-    '.sc-flow__node',
-    '.sc-flow__edge',
+    '.sc-flow-svg--tall',
+    '.sc-flow-svg__box',
     '.sc-related-projects'
   ]) assert.match(css, new RegExp(selector.replace(/[.*+?^$()|[\]{}]/g, '\\$&')));
   assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-story__media--grid[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-flow__levels[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.sc-flow-svg--tall\s*\{\s*display:\s*block/);
   assert.doesNotMatch(css, /carousel|lightbox|animation-name|filter:\s*drop-shadow/i);
 });
 
@@ -5555,7 +5556,7 @@ test('dense default case renders header tags, brief, Figure 1, Approach with the
     assertInOrder(html, [
       'sc-case__header', 'sc-case__meta', 'class="sc-tags"', 'class="sc-case__thesis"', 'sc-figure3d', ko ? '그림 1.' : 'Figure 1.', 'class="sc-brief"',
       ko ? '>문제<' : '>Problem<', ko ? '>한 일<' : '>What I did<', ko ? '>결과<' : '>Result<',
-      ko ? '<h2>접근</h2>' : '<h2>Approach</h2>', 'class="sc-points"', 'sc-gallery', ko ? '그림 2.' : 'Figure 2.', 'sc-related-projects', 'sc-case__links'
+      ko ? '<h2>접근</h2>' : '<h2>Approach</h2>', 'class="sc-points"', 'sc-flow-figure', ko ? '그림 2.' : 'Figure 2.', 'sc-gallery', ko ? '그림 3.' : 'Figure 3.', 'sc-related-projects', 'sc-case__links'
     ], `${locale}: dense sequence`);
     const meta = /<p class="sc-case__meta">([\s\S]*?)<\/p>/.exec(html)[1];
     assert.equal(count(meta, '<span>'), 2, `${locale}: meta is period and state only`);

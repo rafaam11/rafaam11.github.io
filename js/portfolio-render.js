@@ -1262,14 +1262,14 @@
   }
 
   // Numbered 3D figure: the captured poster stays until js/scene3d.js mounts WebGL into .view3d.
-  function scene3dFigureHtml(scene, locale, base, figureNumber, captionOverride) {
+  function scene3dFigureHtml(scene, locale, base, figureNumber, captionOverride, eager) {
     if (!scene || typeof scene !== 'object' || typeof scene.name !== 'string' || !scene3dNamePattern.test(scene.name) ||
         scene.poster !== 'assets/3d/' + scene.name + '.webp' || !isSafePublicPath(scene.poster)) return '';
     var normalized = localeOf(locale);
     var sceneCopy = translation(scene, normalized);
     if (!sceneCopy.caption || !sceneCopy.alt) return '';
     var visual = '<div class="view3d" data-scene="' + escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) +
-      '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000"' + (figureNumber === 1 ? '' : ' loading="lazy"') + ' decoding="async"></div>';
+      '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"></div>';
     return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', captionOverride || sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
   }
 
@@ -1350,45 +1350,6 @@
       levels[level].push(node);
     });
     return levels.filter(Boolean);
-  }
-
-  function systemFlowDiagramHtml(diagram, locale, figureNumber) {
-    if (!diagram || diagram.kind !== 'system-flow') return '';
-    var normalized = localeOf(locale);
-    var diagramCopy = translation(diagram, normalized);
-    var figureLabel = Number.isInteger(figureNumber)
-      ? '<span class="sc-figure__label">' + escapeHtml(pageCopy[normalized].figure + ' ' + figureNumber + '.') + '</span> '
-      : '';
-    var nodes = diagram.nodes || [];
-    var nodeByKey = new Map(nodes.map(function (node) { return [node.key, node]; }));
-    var ariaParts = [diagramCopy.title];
-    var levels = systemFlowLevels(diagram);
-    var levelHtml = levels.map(function (levelNodes, levelIndex) {
-      var nodeHtml = levelNodes.map(function (node) {
-        var nodeCopy = translation(node, normalized);
-        ariaParts.push(nodeCopy.label);
-        return '<div class="sc-flow__node" data-node-key="' + escapeHtml(node.key) + '" data-flow-level="' + levelIndex + '"><strong>' +
-          escapeHtml(nodeCopy.label) + '</strong><small class="sc-flow__node-detail">' + escapeHtml(nodeCopy.detail) + '</small></div>';
-      }).join('');
-      return '<div class="sc-flow__level" data-flow-level="' + levelIndex + '">' + nodeHtml + '</div>';
-    }).join('');
-    var edgeHtml = (diagram.edges || []).map(function (edge) {
-      var edgeCopy = translation(edge, normalized);
-      var sourceCopy = translation(nodeByKey.get(edge.from), normalized);
-      var targetCopy = translation(nodeByKey.get(edge.to), normalized);
-      var arrow = edge.direction === 'bidirectional' ? '⇄' : '→';
-      ariaParts.push(sourceCopy.label + ' ' + edgeCopy.label + ' ' + targetCopy.label);
-      return '<li class="sc-flow__edge" data-from="' + escapeHtml(edge.from) + '" data-to="' + escapeHtml(edge.to) +
-        '" data-direction="' + escapeHtml(edge.direction) + '"><span class="sc-flow__edge-endpoints"><span class="sc-flow__edge-from">' +
-        escapeHtml(sourceCopy.label) + '</span><span class="sc-flow__arrow" aria-hidden="true">' + arrow +
-        '</span><span class="sc-flow__edge-to">' + escapeHtml(targetCopy.label) + '</span></span><small class="sc-flow__edge-label">' +
-        escapeHtml(edgeCopy.label) + '</small></li>';
-    }).join('');
-    ariaParts.push(diagramCopy.boundaryLabel);
-    return '<figure class="sc-figure sc-flow sc-flow-figure"><figcaption>' + figureLabel + '<strong>' + escapeHtml(diagramCopy.title) + '</strong> ' +
-      escapeHtml(diagramCopy.caption) + '</figcaption><div class="sc-flow__graph" aria-label="' + escapeHtml(ariaParts.join(', ')) + '"><div class="sc-flow__track sc-flow__levels" style="--sc-flow-level-count:' +
-      levels.length + '">' + levelHtml + '</div><ol class="sc-flow__edges">' + edgeHtml + '</ol></div><p class="sc-flow__boundary">' +
-      escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
   }
 
   // ---- Stage 3: deterministic SVG flow diagrams (pure, no DOM, no font measurement) ----
@@ -1688,7 +1649,7 @@
       layout = best || flowLayoutWide(model, 1);
     }
     var width = FLOW.width[orientation];
-    var markerId = prefix + '-arrow';
+    var markerId = prefix + '-' + orientation + '-arrow';
     var boundary = '';
     if (model.boundary) {
       var textW = flowTextWidth(model.boundary, FLOW.edge) + 12;
@@ -1718,6 +1679,43 @@
       '" role="presentation" aria-hidden="true" focusable="false"><defs><marker id="' + markerId +
       '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-flow-svg__arrow" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs>' +
       boundary + edgeHtml + nodeHtml + '</svg>';
+  }
+
+  // Screen-reader sentence for a flow diagram: title, node labels, one clause per edge, boundary.
+  function flowReadableText(model) {
+    var labelByKey = new Map(model.nodes.map(function (node) { return [node.key, node.label]; }));
+    var parts = [model.title];
+    model.nodes.forEach(function (node) { parts.push(node.label); });
+    model.edges.forEach(function (edge) {
+      var link = edge.label || (edge.direction === 'bidirectional' ? '⇄' : '→');
+      parts.push(labelByKey.get(edge.from) + ' ' + link + ' ' + labelByKey.get(edge.to));
+    });
+    if (model.boundary) parts.push(model.boundary);
+    return parts.join(', ');
+  }
+
+  function flowFigureHtml(model, caption, locale, figureNumber, idPrefix) {
+    if (!model) return '';
+    var normalized = localeOf(locale);
+    var figureLabel = Number.isInteger(figureNumber)
+      ? '<span class="sc-figure__label">' + escapeHtml(pageCopy[normalized].figure + ' ' + figureNumber + '.') + '</span> '
+      : '';
+    return '<figure class="sc-figure sc-flow sc-flow-figure"><figcaption>' + figureLabel + '<strong>' + escapeHtml(model.title) + '</strong>' +
+      (caption ? ' ' + escapeHtml(caption) : '') + '</figcaption>' +
+      diagramSvg(model, { orientation: 'wide', idPrefix: idPrefix }) + diagramSvg(model, { orientation: 'tall', idPrefix: idPrefix }) +
+      '<p class="sc-visually-hidden">' + escapeHtml(flowReadableText(model)) + '</p></figure>';
+  }
+
+  function systemFlowDiagramHtml(diagram, locale, figureNumber, idPrefix) {
+    if (!diagram || diagram.kind !== 'system-flow') return '';
+    var normalized = localeOf(locale);
+    return flowFigureHtml(normalizeDiagram(diagram, normalized), translation(diagram, normalized).caption, normalized, figureNumber, idPrefix || 'flow');
+  }
+
+  // Legacy pdfSequence.diagram as a web figure (title only); '' for kinds without a synthesis rule.
+  function legacyFlowFigureHtml(project, locale, figureNumber) {
+    var diagram = project && project.pdfSequence && project.pdfSequence.diagram;
+    return flowFigureHtml(normalizeDiagram(diagram, locale), '', locale, figureNumber, 'flow-' + (project && project.slug));
   }
 
   function pointsHtml(items) {
@@ -1787,7 +1785,7 @@
         if (html) figureNumber += 1;
         return html;
       }).join('');
-      var diagramHtml = systemFlowDiagramHtml(section.diagram, normalized, figureNumber);
+      var diagramHtml = systemFlowDiagramHtml(section.diagram, normalized, figureNumber, 'flow-' + section.key);
       if (diagramHtml) figureNumber += 1;
       mediaHtml += diagramHtml;
       return { section: section, copyHtml: copyHtml, mediaHtml: mediaHtml, hidden: Boolean(webSection && webSection.hidden === true) };
@@ -2177,7 +2175,7 @@
     var hasStoryLayout = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
     // Dense default layout with an image lead and a 3D scene: the 3D figure is Figure 1 above the brief and the lead image joins the gallery.
     var sceneFirst = Boolean(webCopy && !isConsole && !hasStoryLayout && lead && sourceProject.media && isApprovedImage(sourceProject.media.lead));
-    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole || sceneFirst ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption) : '';
+    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole || sceneFirst ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption, !isConsole && !lead || sceneFirst) : '';
     if (sceneFirst && !sceneFigure) sceneFirst = false;
     var afterSceneFigure = sceneFirst ? 2 : (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
@@ -2220,8 +2218,9 @@
           storySectionsHtml(sourceProject, normalized, base, afterSceneFigure + storyFigureCount(sourceProject, 'before-standard'), 'after-standard', webSections) +
           denseClose;
       }
-      return denseOpen + '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2>' + (sceneFirst ? '' : sceneFigure) + pointsHtml(webCopy.points) + '</section>' +
-        caseGalleryHtml(project, normalized, base, afterSceneFigure, sceneFirst ? { lead: { item: sourceProject.media.lead, alt: translation(sourceProject, normalized).mediaAlt || sourceProject.mediaAlt || '', caption: translation(sourceProject, normalized).mediaCaption || sourceProject.mediaCaption || '' } } : null) + subcasesHtml(project, normalized) + denseClose;
+      var legacyFlow = legacyFlowFigureHtml(sourceProject, normalized, afterSceneFigure);
+      return denseOpen + '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2>' + (sceneFirst ? '' : sceneFigure) + pointsHtml(webCopy.points) + legacyFlow + '</section>' +
+        caseGalleryHtml(project, normalized, base, afterSceneFigure + (legacyFlow ? 1 : 0), sceneFirst ? { lead: { item: sourceProject.media.lead, alt: translation(sourceProject, normalized).mediaAlt || sourceProject.mediaAlt || '', caption: translation(sourceProject, normalized).mediaCaption || sourceProject.mediaCaption || '' } } : null) + subcasesHtml(project, normalized) + denseClose;
     }
     var redundantLimitBlockKeys = {
       'mandibular-fracture': 'research-boundary',
