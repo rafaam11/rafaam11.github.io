@@ -188,3 +188,15 @@ test('home projects block stays a tile block and pipeline thumb sources are appr
   (function walk(v) { if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === 'object') { if (v.publicPath) approved.add(v.publicPath); Object.values(v).forEach(walk); } })(data.projects);
   for (const src of srcs) assert.ok(approved.has(src), `unapproved thumb source ${src}`);
 });
+test('home counts journal articles and conference presentations separately, never as one number', () => {
+  const cv = require('../data/public-cv.json');
+  const journal = cv.publications.filter((p) => /^Journal article/.test(p.translations.en.role)).length;
+  const talks = cv.publications.length - journal;
+  assert.ok(journal >= 1 && talks >= 1);
+  const text = { ko: `학술지 논문 ${journal}편 · 학회 발표 ${talks}건 전체 보기`, en: `All work: ${journal} journal article${journal === 1 ? '' : 's'} · ${talks} conference presentations` };
+  for (const [locale, file] of [['ko', 'index.html'], ['en', 'en/index.html']]) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.ok(html.includes(`>${text[locale]}</a>`), `${locale} count link`);
+    assert.doesNotMatch(html, new RegExp(`연구 실적 ${cv.publications.length}건|All ${cv.publications.length} publications`), locale);
+  }
+});

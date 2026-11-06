@@ -119,7 +119,9 @@ function achievementsHtml(locale, cv, base) {
     return `<li><span class="sc-list__year">${esc(p.year)}</span> ${p.href ? `<a href="${esc(p.href)}">${title}</a>` : title}<p class="sc-list__venue">${esc(t.venue)} · ${esc(t.role)}${caseLink}</p></li>`;
   }).join('');
   const registered = cv.patents.filter(p => p.status === 'granted').length;
-  return `<section aria-labelledby="publications-title"><h2 id="publications-title">${ko ? '주요 논문·학회 발표' : 'Selected publications & presentations'}</h2><ol class="sc-list">${publications}</ol><p><a href="${cvHref}">${ko ? `전체 연구 실적 ${cv.publications.length}건` : `All ${cv.publications.length} publications & presentations`}</a></p><div data-portfolio="home-highlights"><p>${ko ? `특허 출원 ${cv.patents.length}건 중 등록 ${registered}건 · 수상 ${cv.awards.length}건` : `${cv.patents.length} patent applications, including ${registered} granted · ${cv.awards.length} awards`} · <a href="${cvHref}">${ko ? '전체 목록과 상태' : 'Full list and status'}</a></p></div></section>`;
+  // Journal articles and conference presentations are always counted separately, never as one number.
+  const journal = cv.publications.filter(p => /^Journal article/.test(p.translations.en.role)).length, talks = cv.publications.length - journal;
+  return `<section aria-labelledby="publications-title"><h2 id="publications-title">${ko ? '주요 논문·학회 발표' : 'Selected publications & presentations'}</h2><ol class="sc-list">${publications}</ol><p><a href="${cvHref}">${ko ? `학술지 논문 ${journal}편 · 학회 발표 ${talks}건 전체 보기` : `All work: ${journal} journal article${journal === 1 ? '' : 's'} · ${talks} conference presentations`}</a></p><div data-portfolio="home-highlights"><p>${ko ? `특허 출원 ${cv.patents.length}건 중 등록 ${registered}건 · 수상 ${cv.awards.length}건` : `${cv.patents.length} patent applications, including ${registered} granted · ${cv.awards.length} awards`} · <a href="${cvHref}">${ko ? '전체 목록과 상태' : 'Full list and status'}</a></p></div></section>`;
 // The patents and awards line now closes the publications section; Home has no separate highlights heading.
 }
 function directionHtml(locale, cv) {
