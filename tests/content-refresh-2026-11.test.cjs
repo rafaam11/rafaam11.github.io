@@ -70,3 +70,12 @@ test('respiratory-surface-guidance: no gating or CT-registration claims; first-y
     assert.ok(html.includes(f.startsWith('en/') ? p.scene3d.translations.en.alt : p.scene3d.translations.ko.alt), f);
   }
 });
+
+test('life-careverse: preprocessing tool 2026.07 then maintenance', () => {
+  const j = JSON.stringify(by('life-careverse'));
+  assert.match(j, /2026\.07[^"]*유지보수|maintenance/); assert.match(j, /슬라이드 에디터|slide editor/i);
+});
+test('skadi: 2026-07 desktop stabilisation and API 7 python binding', () => {
+  const j = JSON.stringify(by('skadi-tracking-software'));
+  assert.match(j, /연결 진단 로그|connection diagnostic log/i); assert.match(j, /API 7/);
+});

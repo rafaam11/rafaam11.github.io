@@ -1253,7 +1253,7 @@
           brief: {
             problem: ['2D 계측과 3D 골격 변화를 함께 설명', '같은 지점을 보는지 확인할 방법 없음'],
             did: ['Unity 클라이언트 전체', '룸·역할·상태 동기화·음성 채팅', 'OpenXR·Android XR 이식, 서버·전처리'],
-            result: ['3인 동시 VR 상담 세션', 'Quest 3·Galaxy XR 동작'],
+            result: ['3인 동시 VR 상담 세션', 'Quest 3·Galaxy XR 동작', '2026.07 전처리 도구 → 유지보수'],
             team: ['소프트웨어 저작권 등록', '환자 데모·설문 진행 중']
           },
           points: ['접속 순서로 의사1·환자·의사2 역할 배정', '모델 자세·분절·페이지·발화자 공유', '환자 CT 볼륨을 3D·단면으로 로딩', '제조사 SDK → OpenXR·Android XR', 'FastAPI 파일 서버, STL 경량화·슬라이드 변환'],
@@ -1265,7 +1265,7 @@
           brief: {
             problem: ['2D measurements and 3D skeletal change explained together', 'No way to confirm everyone sees the same spot'],
             did: ['Entire Unity client', 'Rooms, roles, state sync, voice chat', 'OpenXR/Android XR port, server and preprocessing'],
-            result: ['Three-person live VR consultation', 'Runs on Quest 3 and Galaxy XR'],
+            result: ['Three-person live VR consultation', 'Runs on Quest 3 and Galaxy XR', 'Preprocessing tool by 2026.07, then maintenance'],
             team: ['Software copyright registration', 'Patient demos and survey in progress']
           },
           points: ['Join order assigns doctor 1, patient, doctor 2', 'Shared model pose, segments, page, speaker', 'Patient CT volume loaded in 3D and slices', 'Vendor SDK → OpenXR and Android XR', 'FastAPI file server, STL decimation, slide conversion'],
@@ -1311,7 +1311,7 @@
       },
       blocks: [
         { key: 'shared-state', type: 'system', translations: { ko: { heading: '공유 상태', body: '접속 순서로 의사·환자·의사 세 역할을 배정하고, 모델 자세와 분절 상태, 페이지 번호, 발화자 표시를 세 참가자에게 같이 반영했습니다.' }, en: { heading: 'Shared state', body: 'Assigned the clinician, patient, and clinician roles by join order, and reflected model pose, segment state, page number, and speaker indication to all three participants together.' } } },
-        { key: 'xr-application', type: 'text', translations: { ko: { heading: '상담 공간과 클라이언트 범위', body: '의사1(Master)·환자·의사2가 앉는 세 자리와 2D 계측 패널, 3D 모델 영역의 위치를 상담 동선에 맞춰 배치 설계했습니다. 로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다. 클라이언트 구현과 함께 서버 연동, 모델 경량화·슬라이드 변환 전처리, 사용 가이드를 정리해 연구팀의 자료 준비와 시연을 지원했습니다.' }, en: { heading: 'Consultation space and client scope', body: 'Laid out the room around the consultation itself: three seats for clinician 1 (master), the patient, and clinician 2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset. Alongside the client, I contributed server integration, model simplification and slide conversion, and user guidance to support research-team data preparation and demonstrations.' } } },
+        { key: 'xr-application', type: 'text', translations: { ko: { heading: '상담 공간과 클라이언트 범위', body: '의사1(Master)·환자·의사2가 앉는 세 자리와 2D 계측 패널, 3D 모델 영역의 위치를 상담 동선에 맞춰 배치 설계했습니다. 로그인에서 로비를 거쳐 상담룸으로 들어가는 흐름을 만들고, 백엔드에서 받은 환자 케이스를 고르면 해당 CT 볼륨을 3D와 단면으로 불러오도록 했습니다. 이후 입력·카메라 구성을 특정 제조사 SDK에서 OpenXR·Android XR 표준으로 옮겨 같은 빌드가 여러 헤드셋에서 돌아가게 정리했습니다. 클라이언트 구현과 함께 서버 연동, 모델 경량화·슬라이드 변환 전처리, 사용 가이드를 정리해 연구팀의 자료 준비와 시연을 지원했습니다. 2026.07까지 전처리 도구(3열 웹 탐색기, 업로드·드래그앤드롭, 슬라이드 에디터, 5장 가이드)를 만들었고 이후 유지보수 단계입니다.' }, en: { heading: 'Consultation space and client scope', body: 'Laid out the room around the consultation itself: three seats for clinician 1 (master), the patient, and clinician 2, a 2D measurement panel, and the 3D model area. Built the login to lobby to consultation-room flow, so that selecting a patient case served by the backend loads that CT volume as both a 3D model and cross-sections, then moved the input and camera rig off a single vendor SDK onto the OpenXR and Android XR standards so one build runs on more than one headset. Alongside the client, I contributed server integration, model simplification and slide conversion, and user guidance to support research-team data preparation and demonstrations. Development continued until 2026.07 with the preprocessing tool (three-column web explorer, upload and drag-and-drop, slide editor, five-chapter guide); the project has been in maintenance since.' } } },
         { key: 'multiuser-demo', type: 'evidence', translations: { ko: { heading: '멀티유저 시연', body: '세 참가자의 시점을 동시에 녹화해, 한쪽의 조작이 나머지 두 화면에 같은 상태로 나타나는지를 근거로 삼습니다.' }, en: { heading: 'Multi-user demonstration', body: 'Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the other two views show the same state.' } } },
         { key: 'adoption-boundary', type: 'limitation', translations: { ko: { heading: '채택 경계', body: '환자 데모와 설문조사는 진행 중이고 외부 병원 실증은 예정 단계입니다. 연구팀의 등록·데모·실증 계획을 개인 성과나 임상 효과로 확대하지 않습니다.' }, en: { heading: 'Adoption boundary', body: 'The patient demonstration and survey are under way and the external-hospital validation is still planned. Do not turn the research team registration, demonstrations, or validation plans into individual or clinical-outcome claims.' } } }
       ]
@@ -1542,15 +1542,15 @@
         {
           key: 'desktop-app', evidenceIds: ['skadi-desktop-marker-files-01', 'skadi-desktop-tracker-6dof-01'],
           translations: {
-            ko: { title: 'SKADI 데스크톱 앱', summary: '마커 정의·파일 작업과 트래커 연결·6DoF 상태 확인을 하나의 제품 흐름에서 다룹니다.', ownedRole: 'MarkerEditor의 마커 좌표 입력 검증을 구현하고 데스크톱 앱의 유지보수·배포와 사용 문서를 맡았습니다. 마커 빌더·캘리브레이션 화면 개선, 마커 간 거리·각도 체커, 피봇 캘리브레이션, 트래커 FPS 측정 도구, SDK 7.1.2 대응도 구현했습니다.', teamBoundary: '광학 추적 장치와 마커·기구 하드웨어 설계는 팀의 결과입니다.' },
-            en: { title: 'SKADI desktop app', summary: 'One product flow covers marker definition and file work, tracker connection, and 6DoF status inspection.', ownedRole: 'I implemented MarkerEditor marker-coordinate input validation and own desktop-app maintenance, releases, and user documentation. I also improved the marker builder and calibration screens and added a marker-to-marker distance and angle checker, pivot calibration, a tracker FPS measurement tool, and SDK 7.1.2 support.', teamBoundary: 'The optical tracker and marker or instrument hardware are team results.' }
+            ko: { title: 'SKADI 데스크톱 앱', summary: '마커 정의·파일 작업과 트래커 연결·6DoF 상태 확인을 하나의 제품 흐름에서 다룹니다.', ownedRole: 'MarkerEditor의 마커 좌표 입력 검증을 구현하고 데스크톱 앱의 유지보수·배포와 사용 문서를 맡았습니다. 마커 빌더·캘리브레이션 화면 개선, 마커 간 거리·각도 체커, 피봇 캘리브레이션, 트래커 FPS 측정 도구, SDK 7.1.2 대응도 구현했습니다. 2026-07 안정화로 카메라 오픈 오류 분기 세분화, 연결 진단 로그, FPS 측정 입력 반영 수정을 했습니다.', teamBoundary: '광학 추적 장치와 마커·기구 하드웨어 설계는 팀의 결과입니다.' },
+            en: { title: 'SKADI desktop app', summary: 'One product flow covers marker definition and file work, tracker connection, and 6DoF status inspection.', ownedRole: 'I implemented MarkerEditor marker-coordinate input validation and own desktop-app maintenance, releases, and user documentation. I also improved the marker builder and calibration screens and added a marker-to-marker distance and angle checker, pivot calibration, a tracker FPS measurement tool, and SDK 7.1.2 support. The 2026-07 stabilisation added finer camera-open error branches, a connection diagnostic log, and a fix so the FPS measurement honours its duration input.', teamBoundary: 'The optical tracker and marker or instrument hardware are team results.' }
           }
         },
         {
           key: 'api', evidenceIds: ['skadi-desktop-tracker-6dof-01'],
           translations: {
-            ko: { title: 'SKADI API', summary: '응용은 DtSkadi.dll의 OpenEx()로 연결을 시작하고, 성공과 오류 결과를 분리해 준비 상태 또는 처리된 오류로 전이합니다.', ownedRole: 'DtSkadi.dll 통합과 OpenEx() 오류 분기를 정리해 실패 뒤 잘못된 상태로 진행하지 않도록 했고, 공개 API 문서와 통합 지원을 맡았습니다. Python SDK 바인딩 번들도 새 SDK 버전에 맞춰 갱신했습니다.', teamBoundary: 'API를 사용하는 최종 의료·산업 응용과 제품 성능은 팀·협력자의 결과입니다.' },
-            en: { title: 'SKADI API', summary: 'An application starts the connection through OpenEx() in DtSkadi.dll, then branches to either a ready state or a handled error.', ownedRole: 'I structured the DtSkadi.dll integration and OpenEx() error branch so failure stops before an invalid state, and I own public API documentation and integration support. I also updated the Python SDK binding bundle for new SDK versions.', teamBoundary: 'Final medical or industrial applications and product performance belong to the team and partners.' }
+            ko: { title: 'SKADI API', summary: '응용은 DtSkadi.dll의 OpenEx()로 연결을 시작하고, 성공과 오류 결과를 분리해 준비 상태 또는 처리된 오류로 전이합니다.', ownedRole: 'DtSkadi.dll 통합과 OpenEx() 오류 분기를 정리해 실패 뒤 잘못된 상태로 진행하지 않도록 했고, 공개 API 문서와 통합 지원을 맡았습니다. Python SDK 바인딩 번들도 새 SDK 버전에 맞춰 갱신했고, 2026-08 SKADI API 7 대응 Python 바인딩 번들을 갱신했습니다.', teamBoundary: 'API를 사용하는 최종 의료·산업 응용과 제품 성능은 팀·협력자의 결과입니다.' },
+            en: { title: 'SKADI API', summary: 'An application starts the connection through OpenEx() in DtSkadi.dll, then branches to either a ready state or a handled error.', ownedRole: 'I structured the DtSkadi.dll integration and OpenEx() error branch so failure stops before an invalid state, and I own public API documentation and integration support. I also updated the Python SDK binding bundle for new SDK versions, including the 2026-08 update for SKADI API 7.', teamBoundary: 'Final medical or industrial applications and product performance belong to the team and partners.' }
           }
         }
       ],
@@ -1612,8 +1612,8 @@
           },
           sections: {
             history: { items: ['Viewer = 이 앱의 이전 명칭', 'MarkerEditor = 마커 정의·파일 작업 화면'] },
-            'desktop-app': { items: ['마커 정의·파일 작업', '트래커 연결·6DoF 상태 확인'], owned: '입력 검증·마커 빌더·거리·각도 체커·피봇 캘리브레이션·FPS 도구·SDK 7.1.2' },
-            api: { items: ['DtSkadi.dll OpenEx()로 연결 시작', '성공·오류 결과 분리 → 준비 또는 처리된 오류'], owned: 'OpenEx() 오류 분기·공개 API 문서·Python SDK 번들' },
+            'desktop-app': { items: ['마커 정의·파일 작업', '트래커 연결·6DoF 상태 확인', '2026-07 안정화: 연결 진단 로그 등'], owned: '입력 검증·마커 빌더·거리·각도 체커·피봇 캘리브레이션·FPS 도구·SDK 7.1.2' },
+            api: { items: ['DtSkadi.dll OpenEx()로 연결 시작', '성공·오류 결과 분리 → 준비 또는 처리된 오류', '2026-08 SKADI API 7 Python 바인딩 갱신'], owned: 'OpenEx() 오류 분기·공개 API 문서·Python SDK 번들' },
             medical: { items: ['비식별 트레이·3D Slicer CT 화면 연결', '수술내비게이션 통합 경계 확인'], owned: '추적 API·데스크톱 앱 연결, Slicer 통합 지원' },
             industrial: { items: ['로봇 말단·목표 마커 좌표 관계', '정밀 도킹 응용 통합 지원'], owned: '추적 API·좌표 통합 지원' }
           },
@@ -1630,8 +1630,8 @@
           },
           sections: {
             history: { items: ['Viewer = earlier name of this app', 'MarkerEditor = marker definition and file screen'] },
-            'desktop-app': { items: ['Marker definition and file work', 'Tracker connection and 6DoF state'], owned: 'Input validation, marker builder, checker, pivot calibration, FPS tool, SDK 7.1.2' },
-            api: { items: ['DtSkadi.dll OpenEx() starts the connection', 'Success and error split → ready or handled error'], owned: 'OpenEx() error branches, public API docs, Python SDK bundle' },
+            'desktop-app': { items: ['Marker definition and file work', 'Tracker connection and 6DoF state', '2026-07 stabilisation: connection diagnostic log'], owned: 'Input validation, marker builder, checker, pivot calibration, FPS tool, SDK 7.1.2' },
+            api: { items: ['DtSkadi.dll OpenEx() starts the connection', 'Success and error split → ready or handled error', '2026-08 Python binding bundle for SKADI API 7'], owned: 'OpenEx() error branches, public API docs, Python SDK bundle' },
             medical: { items: ['Anonymized tray and 3D Slicer CT screen', 'Surgical-navigation integration boundary checked'], owned: 'Tracking API and desktop-app link, Slicer integration support' },
             industrial: { items: ['Robot end-effector to target-marker frames', 'Precision docking integration support'], owned: 'Tracking API and coordinate integration support' }
           },
