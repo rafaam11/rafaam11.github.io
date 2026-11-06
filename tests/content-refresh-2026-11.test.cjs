@@ -51,3 +51,14 @@ test('digital-occlusion-workflow: four source STLs, hospital-provided AI model, 
   for (const f of ['그라인딩', 'Overjet', 'Overbite', 'Midline', '622', 'Slicer 5.12.4', 'ONNX']) assert.ok(j.includes(f), f);
   assert.ok(['Qt 6', 'ONNX Runtime', 'CTest', 'NSIS'].every(t => p.tech.includes(t)));
 });
+
+test('respiratory-surface-guidance: no gating or CT-registration claims; first-year sensor validation done', () => {
+  const p = by('respiratory-surface-guidance'); const j = JSON.stringify(p);
+  assert.doesNotMatch(j, /게이팅 신호|게이팅 윈도우|계획 CT 정합|gating signal|gating window|CT registration/i);
+  assert.match(j, /게이팅\(계획\)|gating \(planned\)/);
+  assert.match(j, /STL 기준/); assert.match(j, /point-to-surface ICP/);
+  assert.match(j, /1차년도[^"]*완료|first-year[^"]*complete/i); assert.match(j, /2차년도|second year/i);
+  assert.ok(!p.tech.includes('Python') && !p.tech.includes('4DCT'));
+  const cv = JSON.stringify(require('../data/public-cv.json'));
+  assert.doesNotMatch(cv, /"4DCT 정합"|"4DCT registration"/);
+});

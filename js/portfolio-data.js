@@ -1417,7 +1417,7 @@
     project({
       slug: 'respiratory-surface-guidance', tier: 'spatial-computing', period: '2026.06 – present', evidenceState: 'ongoing', lifecycleState: 'research',
       capabilityKeys: ['registration', 'sensor-fusion', 'medical-navigation'], route: 'projects/respiratory-surface-guidance/',
-      tech: ['ToF camera', 'Structured light', 'Qt', 'VTK', 'OpenCV', 'Python', '4DCT'],
+      tech: ['ToF camera', 'Structured light', 'Qt', 'VTK', 'OpenCV', 'C++20', 'ICP'],
       media: {
         lead: { id: 'respiratory-surface-guidance-lead-01', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-lead-01.png' },
         gallery: [
@@ -1425,8 +1425,8 @@
           { id: 'respiratory-surface-guidance-gallery-02', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-02.png', translations: { ko: { caption: '검증에 사용한 상용 3D 센서 5종 — ToF 3종, 구조광 1종, 액티브 스테레오 1종', alt: '책상 위에 나란히 놓인 상용 3D 깊이 센서 다섯 대' }, en: { caption: 'The five commercial 3D sensors put through validation: three ToF, one structured-light, one active-stereo', alt: 'Five commercial 3D depth sensors lined up on a desk' } } },
           { id: 'respiratory-surface-guidance-gallery-03', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-03.png', translations: { ko: { caption: '센서 5종의 거리별 정밀도 σ·실측 fps·유효 픽셀 비율(본인 측정)', alt: '상용 3D 센서 5종의 거리별 정밀도 σ, 실측 fps, 유효 픽셀 비율 실측표' }, en: { caption: 'Measured precision σ, delivered fps, and fill rate for the five sensors by distance (author-measured)', alt: 'Table of measured precision, frame rate, and fill rate for five commercial 3D sensors by distance' } } },
           { id: 'respiratory-surface-guidance-gallery-04', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-04.png', translations: { ko: { caption: '실측에서 나온 운용 조건 네 가지 — 근거리 노출, 워밍업, 재현성, 노출 단위 불일치', alt: '센서 검증에서 확인한 운용 조건 네 가지를 정리한 도해' }, en: { caption: 'Four operating conditions the measurements produced: near-field exposure, warm-up, repeatability, mismatched exposure units', alt: 'Figure summarising four operating conditions found during sensor validation' } } },
-          { id: 'respiratory-surface-guidance-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-05.png', translations: { ko: { caption: '원거리 트랙 — 여러 시점의 점군을 병합해 표면을 만들고 계획 CT에 정합합니다', alt: '천장 센서, 부분 점군 병합, 표면 재구성, CT 정합 네 단계를 보여주는 도해' }, en: { caption: 'Far-field track: merge point clouds from several viewpoints, reconstruct the surface, register it to the planning CT', alt: 'Diagram of four steps: ceiling sensors, partial point-cloud merge, surface reconstruction, CT registration' } } },
-          { id: 'respiratory-surface-guidance-gallery-06', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-06.png', translations: { ko: { caption: '근거리 트랙 — 흉·복부 ROI 깊이를 호흡 파형으로 바꾸고 게이팅 윈도우를 판정합니다', alt: '깊이 카메라, 흉부·복부 ROI, 정규화된 호흡 파형과 게이팅 윈도우를 보여주는 도해' }, en: { caption: 'Near-field track: chest and abdomen ROI depth becomes a respiratory waveform, and the gating window is judged on it', alt: 'Diagram of a depth camera, chest and abdomen ROIs, a normalised respiratory waveform, and the gating window' } } }
+          { id: 'respiratory-surface-guidance-gallery-05', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-05.png', translations: { ko: { caption: '원거리 트랙 — 여러 시점의 점군을 병합해 표면을 만들고 보정용 STL 기준 좌표계에 정합합니다', alt: '천장 센서, 부분 점군 병합, 표면 재구성, STL 기준 정합 네 단계를 보여주는 도해' }, en: { caption: 'Far-field track: merge point clouds from several viewpoints, reconstruct the surface, register it to the calibration-STL reference frame', alt: 'Diagram of four steps: ceiling sensors, partial point-cloud merge, surface reconstruction, STL-referenced registration' } } },
+          { id: 'respiratory-surface-guidance-gallery-06', type: 'image', status: 'approved', publicPath: 'assets/projects/respiratory-surface-guidance/respiratory-surface-guidance-gallery-06.png', translations: { ko: { caption: '근거리 트랙 — 흉·복부 ROI 깊이를 호흡 파형으로 바꾸고 B1 지표(진폭 오차·잔차·상관)를 산출합니다', alt: '깊이 카메라, 흉부·복부 ROI, 정규화된 호흡 파형과 B1 지표를 보여주는 도해' }, en: { caption: 'Near-field track: chest and abdomen ROI depth becomes a respiratory waveform, and the B1 metrics (amplitude error, residual, correlation) are computed on it', alt: 'Diagram of a depth camera, chest and abdomen ROIs, a normalised respiratory waveform, and the B1 metrics' } } }
         ]
       },
       pdf: { ko: 'assets/pdfs/respiratory-surface-guidance-ko.pdf', en: 'assets/pdfs/respiratory-surface-guidance-en.pdf' },
@@ -1436,8 +1436,8 @@
         diagram: {
           kind: 'surface-gating-chain',
           translations: {
-            ko: { title: '두 광학 트랙이 하나의 출력으로 모인다', nodes: ['3D 광학 센서', '원거리 — 표면 재구성·CT 정합', '근거리 — ROI 깊이·호흡 파형', '셋업 오차·게이팅 트리거'] },
-            en: { title: 'Two optical tracks converging on one output', nodes: ['3D optical sensors', 'Far field: surface reconstruction and CT registration', 'Near field: ROI depth and respiratory waveform', 'Setup offset and gating trigger'] }
+            ko: { title: '두 광학 트랙이 셋업 지표와 호흡 파형으로 모인다', nodes: ['3D 광학 센서', '원거리 — 표면 재구성·STL 기준 정합', '근거리 — ROI 깊이·호흡 파형', '셋업 오차 지표 · 게이팅(계획)'] },
+            en: { title: 'Two optical tracks converging on setup metrics and a respiratory waveform', nodes: ['3D optical sensors', 'Far field: surface reconstruction, STL-referenced registration', 'Near field: ROI depth and respiratory waveform', 'Setup-error metrics · gating (planned)'] }
           }
         }
       },
@@ -1445,26 +1445,26 @@
       web: {
         ko: {
           thesis: '환자 체표면을 광학 3D로 읽는 SGRT 광학 파트를 국산 센서 스택으로',
-          tags: ['ToF', 'Structured light', 'Qt · VTK', 'OpenCV', 'Python', '4DCT'],
+          tags: ['ToF', 'Structured light', 'Qt · VTK', 'OpenCV', 'ICP', 'KLT'],
           brief: {
             problem: ['촬영·피부 마킹 없이 위치·호흡 파악', '센서별 거리·정확도 근거부터 필요'],
-            did: ['센서 검증 실험 총괄', '검증 도구 DtDepthScan 개발', '호흡 파형·게이팅 신호 알고리즘'],
+            did: ['센서 검증 실험 총괄', '검증 도구 DtDepthScan 개발', '호흡 파형 정량(B0·B1)·STL 기준 ICP'],
             result: ['센서 5종·5거리·55회 실측표', '재현성 ±0.05 mm, σ 50프레임 수렴'],
             team: ['4DCT 재구성·영상유도·임상 자문 분담']
           },
-          points: ['원거리: 점군 병합 → 계획 CT 정합', '근거리: 흉·복부 ROI 깊이 → 호흡 파형', 'Raw 연속 녹화로 실측 fps·σ·유효 픽셀', '0.5 m 기본 노출 IR 포화 확인', '콜드스타트 σ 최대 1.7배 악화 확인'],
+          points: ['원거리: 점군 병합 → STL 기준 ICP 정합', '근거리: 흉·복부 ROI 깊이 → 호흡 파형', 'Raw 연속 녹화로 실측 fps·σ·유효 픽셀', '0.5 m 기본 노출 IR 포화 확인', '콜드스타트 σ 최대 1.7배 악화 확인', '게이팅·CT 정합은 다음 단계(계획)'],
           sceneCaption: '표면유도 호흡추적 개념도(합성 형상)'
         },
         en: {
           thesis: 'The optical part of SGRT, reading the body surface in 3D, on a domestic sensor stack',
-          tags: ['ToF', 'Structured light', 'Qt · VTK', 'OpenCV', 'Python', '4DCT'],
+          tags: ['ToF', 'Structured light', 'Qt · VTK', 'OpenCV', 'ICP', 'KLT'],
           brief: {
             problem: ['Position and breathing without imaging or skin marks', 'Needed per-sensor range and precision evidence first'],
-            did: ['Led the sensor validation experiments', 'Built the DtDepthScan validation tool', 'Breathing waveform and gating algorithm'],
+            did: ['Led the sensor validation experiments', 'Built the DtDepthScan validation tool', 'Breathing waveform metrics (B0, B1), STL-referenced ICP'],
             result: ['5 sensors × 5 distances, 55 measured runs', 'Repeatability ±0.05 mm; σ converged by 50 frames'],
             team: ['Consortium covers 4DCT, image guidance, clinical advice']
           },
-          points: ['Far range: merged point clouds → planning-CT registration', 'Near range: chest/abdomen ROI depth → breathing waveform', 'Raw recording for measured fps, σ, valid-pixel ratio', 'Default exposure saturates IR at 0.5 m', 'Cold-start σ up to 1.7× worse'],
+          points: ['Far range: merged point clouds → STL-referenced ICP', 'Near range: chest/abdomen ROI depth → breathing waveform', 'Raw recording for measured fps, σ, valid-pixel ratio', 'Default exposure saturates IR at 0.5 m', 'Cold-start σ up to 1.7× worse', 'Gating and CT alignment: next stage (planned)'],
           sceneCaption: 'Surface-guided breathing tracking concept (synthetic geometry)'
         }
       },
@@ -1473,40 +1473,40 @@
         name: 'sgrt-poc',
         poster: 'assets/3d/sgrt-poc.webp',
         translations: {
-          ko: { caption: '호흡 추적 PoC 개념도(1차년도 센서 검증 단계, 파형은 예시): 3D 깊이 센서가 흉부 ROI 깊이를 읽어 호흡 파형으로 바꾸고, 그 파형에서 게이트 신호 예시를 만듭니다. 치료 장비는 그리지 않았습니다.', alt: '삼각대 위 3D 깊이 센서가 앉은 사람의 흉부 ROI를 보고, 옆 화면에 호흡 파형과 게이트 신호 예시가 그려지는 3D 개념도' },
-          en: { caption: 'Concept of the breathing-tracking proof of concept (first-year sensor groundwork; illustrative waveform): a 3D depth sensor reads chest-ROI depth, which becomes a respiratory waveform and an example gating signal. No treatment equipment is shown.', alt: '3D concept of a tripod-mounted depth sensor viewing the chest ROI of a seated person, with a respiratory waveform and an example gating signal on a nearby display' }
+          ko: { caption: '호흡 추적 PoC 개념도(1차년도 센서 검증 단계, 파형은 예시): 3D 깊이 센서가 흉부 ROI 깊이를 읽어 호흡 파형으로 바꾸는 파형 정량 장면입니다(게이팅은 계획). 치료 장비는 그리지 않았습니다.', alt: '삼각대 위 3D 깊이 센서가 앉은 사람의 흉부 ROI를 보고, 옆 화면에 호흡 파형이 그려지는 3D 개념도' },
+          en: { caption: 'Concept of the breathing-tracking proof of concept (first-year sensor groundwork; illustrative waveform): a 3D depth sensor reads chest-ROI depth, which becomes a respiratory waveform (waveform quantification; gating is planned). No treatment equipment is shown.', alt: '3D concept of a tripod-mounted depth sensor viewing the chest ROI of a seated person, with a respiratory waveform on a nearby display' }
         }
       },
       translations: {
         ko: {
           title: '표면유도 호흡추적 (SGRT)', shortTitle: '표면유도 호흡추적', eyebrow: '컴퓨터비전·3D 공간 컴퓨팅 · 방사선치료 연구',
-          thesis: '환자 체표면을 광학 3D로 읽어 셋업 정합과 호흡 게이팅 신호를 만드는 표면유도 방사선치료(SGRT)의 광학 파트를 국산 센서 스택으로 구성합니다.',
-          summary: 'K-LINAC 대과제(주관 한국전기연구원, 세부주관 ETRI)의 디지트랙 위탁 연구로, 원거리 표면 재구성과 근거리 실시간 호흡 추적을 상용 3D 센서로 구현하는 초기 단계 연구입니다. 상용 시스템은 센서·알고리즘 선택 근거를 공개하지 않아, 국산 스택은 그 근거부터 직접 만들어야 합니다.',
+          thesis: '환자 체표면을 광학 3D로 읽어 셋업 정합 지표와 호흡 파형 정량을 만드는 표면유도 방사선치료(SGRT)의 광학 파트를 국산 센서 스택으로 구성합니다.',
+          summary: 'K-LINAC 대과제(주관 한국전기연구원, 세부주관 ETRI)의 디지트랙 위탁 연구로, 원거리 표면 재구성과 근거리 실시간 호흡 추적을 상용 3D 센서로 구현하는 초기 단계 연구입니다. 1차년도 센서·알고리즘 검증 단계는 완료했고 2차년도를 기다립니다. 상용 시스템은 센서·알고리즘 선택 근거를 공개하지 않아, 국산 스택은 그 근거부터 직접 만들어야 합니다.',
           problem: '치료 중 환자의 위치와 호흡을 추가 촬영이나 피부 마킹 없이 알아야 합니다. 어떤 센서가 어느 거리에서 얼마나 정확한지부터 직접 재야 했습니다.',
-          role: '센서 검증 실험을 총괄하고, 그 실험을 하려고 자체 검증 도구 DtDepthScan(Qt·VTK·OpenCV)을 먼저 만들었습니다 — Raw 연속 녹화와 취득 시각 기록, ROI 깊이 시계열, σ·실측 fps·유효 픽셀 비율 자동 산출, 외부 교차 검증용 PLY·CSV 내보내기. 이어서 ROI 깊이에서 호흡 파형과 게이팅 신호를 뽑는 추적 알고리즘 설계·구현, 센서 인터페이스와 전송 프로토콜 정의, 과제 실무를 담당합니다.',
+          role: '센서 검증 실험을 총괄하고, 그 실험을 하려고 자체 검증 도구 DtDepthScan(Qt·VTK·OpenCV)을 먼저 만들었습니다 — Raw 연속 녹화와 취득 시각 기록, ROI 깊이 시계열, σ·실측 fps·유효 픽셀 비율 자동 산출, 외부 교차 검증용 PLY·CSV 내보내기. 센서 컨트롤러 5종(RealSense·Helios2·NSL·Orbbec·Basler)을 추상화하고, 정밀도 탭(KLT ROI 추적·ROI 시계열)과 표면 재구성 탭(보정용 STL 기준 좌표, 대응점 + point-to-surface ICP, RMS ≤ 2 mm·inlier ≥ 20% 승인, 승인 위치만 PLY 병합)을 구현했습니다. 호흡 추적은 median Z → 변위 → 5샘플 이동 중앙값 → 1 Hz 저역통과로 파형을 만들고, B0는 포즈 모델이 제안한 몸통 ROI를 사용자가 확인하며, B1은 진폭 오차 ≤ 1.0 mm·잔차 σ ≤ 0.4 mm·상관 ≥ 0.95를 기준 지표로 산출합니다. `--self-test`를 제공합니다. 센서 인터페이스와 전송 프로토콜 정의, 과제 실무도 담당합니다. 게이팅 판정·하드웨어 트리거·계획 CT와의 정합은 이 버전 범위 밖(다음 단계)입니다.',
           teamResult: '컨소시엄이 4DCT 재구성, 영상유도 체계, 임상 자문을 나눠 맡습니다. 과제 전체 성과를 개인 성과로 쓰지 않습니다.',
           evidence: '실리콘 인체 팬텀을 0.5~3.0 m 다섯 구간에서 상용 3D 센서 5종으로 총 55회, 회당 500프레임 측정해 정밀도 σ·실측 fps·유효 픽셀 비율을 냈습니다. 반복 재현성은 ±0.05 mm였고 σ는 약 50프레임에서 수렴했습니다. 이 실측표와 DtDepthScan 화면이 본인 측정 근거입니다.',
-          limitation: '1차년도 센서 검증 결과이며 임상 성능이나 과제 목표 달성을 주장하지 않고 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
+          limitation: '1차년도 센서·알고리즘 검증 단계는 완료했고 2차년도를 기다립니다. 임상 성능이나 과제 목표 달성을 주장하지 않고 과제 목표치·연구비·타 기관 지표는 싣지 않습니다.',
           collaboration: '연구기관과 센서·표면·호흡 추적 인터페이스와 평가 준비를 협의합니다. 측정 결과, 문헌값, 추정치와 미측정 항목을 구분하고 센서 확보·실험 조건을 후속 검증의 선행 조건으로 남겼습니다.',
           mediaAlt: 'DtDepthScan 측정 화면 — 팬텀 점군 위에 지정한 ROI 상자와 시간 노이즈 σ 판독값.', mediaCaption: '자체 검증 도구 DtDepthScan으로 실리콘 인체 팬텀을 재는 화면입니다. 점군 위 ROI에서 평균 깊이와 시간 노이즈 σ를 실시간으로 산출합니다. 장비 시리얼과 주소는 가렸습니다.',
-          status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측표; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합과 호흡 게이팅 신호를 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '센서 정밀도 실측표.', visualCaption: '센서 5종 거리별 정밀도 실측표.'
+          status: '진행 중 · 연구', cardProblem: '추가 촬영 없이 환자 표면과 호흡을 읽는 광학 파트를 국산 센서로 구성합니다.', cardOwnedRole: '센서 검증 실험·검증 도구·호흡 추적 알고리즘·인터페이스를 담당합니다.', cardEvidence: '센서 5종 거리별 정밀도 실측표; 임상 성능은 주장하지 않습니다.', problemSummary: '광학 표면 기반 셋업 정합 지표와 호흡 파형 정량을 국산 센서로 만듭니다.', ownedRole: '센서 검증·검증 도구·호흡 추적 알고리즘·프로토콜을 담당합니다.', verifiedEvidence: '본인이 측정한 센서 정밀도·fps·Fill rate 표가 근거입니다.', visualAlt: '센서 정밀도 실측표.', visualCaption: '센서 5종 거리별 정밀도 실측표.'
         },
         en: {
           title: 'Surface-guided Respiratory Tracking (SGRT)', shortTitle: 'Surface-guided Respiratory Tracking', eyebrow: 'Computer Vision & 3D Spatial Computing · Radiotherapy Research',
-          thesis: 'Build the optical part of surface-guided radiotherapy — patient-surface setup registration and respiratory gating — on a domestic 3D sensor stack.',
-          summary: 'An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme (led by KERI, imaging sub-project led by ETRI): far-field surface reconstruction and near-field real-time breathing tracking with commercial 3D sensors. Commercial systems do not publish the reasoning behind their sensor and algorithm choices, so a domestic stack has to build that evidence itself.',
+          thesis: 'Build the optical part of surface-guided radiotherapy — patient-surface setup-registration metrics and respiratory-waveform quantification — on a domestic 3D sensor stack.',
+          summary: 'An early-stage research assignment contracted to DIGITRACK within the K-LINAC programme (led by KERI, imaging sub-project led by ETRI): far-field surface reconstruction and near-field real-time breathing tracking with commercial 3D sensors. The first-year sensor and algorithm validation stage is complete, and the second year is awaited. Commercial systems do not publish the reasoning behind their sensor and algorithm choices, so a domestic stack has to build that evidence itself.',
           problem: 'Patient position and breathing must be known during treatment without extra imaging or skin marks.',
-          role: 'Lead the sensor validation campaign, which first required building the in-house tool DtDepthScan (Qt, VTK, OpenCV): raw continuous recording with acquisition timestamps, ROI depth time series, automatic σ, delivered fps and fill rate, and PLY/CSV export for cross-checking elsewhere. Then design and implement the breathing-tracking algorithm from ROI depth to respiratory waveform and gating signal, define the sensor interface and transport protocol, and run day-to-day project work.',
+          role: 'Lead the sensor validation campaign, which first required building the in-house tool DtDepthScan (Qt, VTK, OpenCV): raw continuous recording with acquisition timestamps, ROI depth time series, automatic σ, delivered fps and fill rate, and PLY/CSV export for cross-checking elsewhere. Then abstract five sensor controllers (RealSense, Helios2, NSL, Orbbec, Basler) and implement a precision tab (KLT ROI tracking, ROI time series) and a surface-reconstruction tab (calibration STL as reference frame, correspondence plus point-to-surface ICP, approval at RMS ≤ 2 mm and inlier ≥ 20%, PLY merge of approved poses only). Breathing tracking runs median Z → displacement → 5-sample moving median → 1 Hz low-pass; B0 takes an automatic torso ROI proposed by a pose model for the user to confirm; B1 computes metrics against criteria of amplitude error ≤ 1.0 mm, residual σ ≤ 0.4 mm and correlation ≥ 0.95. A `--self-test` is provided. Also define the sensor interface and transport protocol and run day-to-day project work. Gating decisions, hardware trigger and registration to the planning CT are out of scope of this version (next stage).',
           teamResult: 'Consortium partners own 4DCT reconstruction, the image-guidance framework, and clinical advice. Programme-level results are not attributed to me.',
           evidence: 'A silicone body phantom measured at five distances from 0.5 to 3.0 m with five commercial 3D sensors, 55 runs of 500 frames each, gave precision σ, delivered fps, and fill rate; repeats agreed to within ±0.05 mm. That table and the DtDepthScan captures are my own measurements.',
-          limitation: 'First-year sensor validation only; no clinical performance or programme-target achievement is claimed, and programme targets, budgets, and metrics of other institutions are not published here.',
+          limitation: 'First-year sensor and algorithm validation is complete and the second year is awaited; no clinical performance or programme-target achievement is claimed, and programme targets, budgets, and metrics of other institutions are not published here.',
           collaboration: 'Coordinate sensor, surface, and respiratory-tracking interfaces and evaluation preparation with research partners. Measured results, literature values, estimates, and unmeasured items are distinguished, with equipment availability and experimental conditions recorded as prerequisites for follow-up validation.',
           mediaAlt: 'DtDepthScan measurement screen with an ROI box on the phantom point cloud and the temporal-noise σ readout.', mediaCaption: 'The in-house validation tool DtDepthScan measuring a silicone body phantom: mean depth and temporal noise σ are computed live from the ROI on the point cloud. Device serial and address are masked.',
-          status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision table by distance; no clinical claim.', problemSummary: 'Surface-based setup registration and gating signals on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate table.', visualAlt: 'Sensor precision measurement table.', visualCaption: 'Five-sensor precision table by distance.'
+          status: 'Ongoing · Research', cardProblem: 'Read patient surface and breathing without extra imaging, on domestic sensors.', cardOwnedRole: 'Own sensor validation, the validation tool, the breathing-tracking algorithm, and interfaces.', cardEvidence: 'Five-sensor precision table by distance; no clinical claim.', problemSummary: 'Surface-based setup-registration metrics and respiratory-waveform quantification on domestic sensors.', ownedRole: 'Own sensor validation, tooling, tracking algorithm, and protocol.', verifiedEvidence: 'Self-measured precision, fps, and fill-rate table.', visualAlt: 'Sensor precision measurement table.', visualCaption: 'Five-sensor precision table by distance.'
         }
       },
       blocks: [
-        { key: 'two-track-optics', type: 'system', translations: { ko: { heading: '두 트랙으로 나눈 광학', body: '원거리 센서는 점군을 병합해 표면을 만들고 계획 CT에 정합하며, 근거리 센서는 흉·복부 ROI 깊이를 호흡 파형과 게이팅 신호로 바꿉니다.' }, en: { heading: 'Two optical tracks', body: 'Far-field sensors merge point clouds into a surface and register it to the planning CT; near-field sensors turn chest and abdomen ROI depth into a respiratory waveform and gating signal.' } } },
+        { key: 'two-track-optics', type: 'system', translations: { ko: { heading: '두 트랙으로 나눈 광학', body: '원거리 센서는 점군을 병합해 표면을 만들고 보정용 STL 기준 좌표계에 정합하며, 근거리 센서는 흉·복부 ROI 깊이를 호흡 파형으로 바꿉니다.' }, en: { heading: 'Two optical tracks', body: 'Far-field sensors merge point clouds into a surface and register it to the calibration-STL reference frame; near-field sensors turn chest and abdomen ROI depth into a respiratory waveform.' } } },
         { key: 'dtdepthscan', type: 'text', translations: { ko: { heading: '검증 도구를 먼저 만들었다', body: '카메라 계층을 추상화해 어떤 센서든 같은 절차를 돌립니다. 취득 시각을 남긴 Raw 연속 녹화로 실측 fps를 재고, ROI 깊이 시계열에서 σ와 유효 픽셀 비율을 자동 산출하며, PLY·CSV로 내보내 교차 검증합니다.' }, en: { heading: 'The tool came first', body: 'Abstracting the camera layer lets any sensor run the same procedure. Timestamped raw recording gives delivered fps, ROI depth time series yield σ and fill rate automatically, and PLY and CSV export allow cross-checking elsewhere.' } } },
         { key: 'validation-protocol', type: 'list', translations: { ko: { heading: '다섯 대를 같은 절차로 재다', items: ['실리콘 인체 팬텀 고정, 0.5~3.0 m 다섯 거리', '센서 5종·조건 스윕 포함 총 55회', '회당 500프레임 연속 취득', '재현성 ±0.05 mm, σ 50프레임 수렴'] }, en: { heading: 'One procedure, five sensors', items: ['Silicone body phantom, five distances 0.5-3.0 m', 'Five sensors and condition sweeps, 55 runs', '500 frames per run', 'Repeatability ±0.05 mm, σ settles by 50 frames'] } } },
         { key: 'measured-findings', type: 'evidence', translations: { ko: { heading: '숫자보다 조건이 남았다', body: '더 오래 쓸 결과는 운용 조건이었습니다. 0.5 m에서 기본 노출은 IR 포화로 측정이 안 되고, 콜드스타트 σ는 열평형 대비 최대 1.7배 나빠집니다. 둘 다 실시간 모듈의 설계 입력이 됐습니다.' }, en: { heading: 'The conditions outlived the numbers', body: 'The operating conditions will outlast the σ table. At 0.5 m the default exposure saturates the IR return and no depth is produced, and from a cold start σ is up to 1.7 times worse than at thermal steady state. Both became design inputs for the real-time module.' } } },

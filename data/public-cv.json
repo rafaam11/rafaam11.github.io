@@ -241,7 +241,7 @@
                   "period": "2026.06–",
                   "did": [
                     "3D 표면 호흡추적",
-                    "4DCT 정합"
+                    "STL 기준 ICP 정합·B1 지표"
                   ],
                   "result": "한국전기연구원 대형과제"
                 }
@@ -317,7 +317,7 @@
                   "period": "2026.06–",
                   "did": [
                     "3D surface breathing tracking",
-                    "4DCT registration"
+                    "STL-referenced ICP, B1 metrics"
                   ],
                   "result": "KERI large-scale programme"
                 }
