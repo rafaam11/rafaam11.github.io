@@ -371,7 +371,7 @@
       lifecycleState: 'ongoing',
       capabilityKeys: ['registration', 'medical-navigation', 'xr-engineering'],
       route: 'projects/surgical-navigation/',
-      tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink', 'Holographic Remoting'],
+      tech: ['HoloLens 2', 'Optical tracking', '3D Slicer', 'Unity', 'MRTK', 'OpenIGTLink', 'Holographic Remoting', 'C++', 'Qt 6', 'CTest', 'NSIS', 'Cython'],
       media: {
         lead: {
           id: 'surgical-navigation-hololens-demo-01',
@@ -432,11 +432,11 @@
       // Web-only condensed copy; excluded from the PDF source digest.
       web: {
         ko: {
-          thesis: '정합·추적·캘리브레이션을 3D Slicer에 통합하고 HoloLens까지 연결',
-          tags: ['3D Slicer', '광학 추적', 'OpenIGTLink', 'Unity · MRTK', 'HoloLens 2'],
+          thesis: '정합·추적·캘리브레이션 통합 → OprNavi·OmfsNavi 재구성',
+          tags: ['3D Slicer', '광학 추적', 'OpenIGTLink', 'C++ · Qt 6', 'HoloLens 2'],
           brief: {
             problem: ['영상·환자·도구·공간 표시가 분절', '정합 상태와 데이터 흐름 검토 어려움'],
-            did: ['아키텍처 설계·사실상 단독 개발', '추적·정합·캘리브레이션 통합', 'HoloLens PC 확장·공간 표시'],
+            did: ['아키텍처 설계·사실상 단독 개발', '추적·정합·캘리브레이션·HoloLens 확장', '2026 OprNavi v0.1.0·OmfsNavi 재구성'],
             result: ['6개 구강악안면 워크플로 구현·시연', 'SMCNavi→HoloLens 팬텀 통합 시험'],
             team: ['DIGITRACK·삼성서울병원 연구 협력', '요구사항·수용 기준 공동 검토']
           },
@@ -445,16 +445,17 @@
             'smcnavi-workflows': { items: ['상악종양 제거술 내비게이션', '하악종양 제거술 내비게이션', '양악수술 내비게이션', '하악운동 트래킹', '골이식 위치설정', '광대·안와 골절 미러링'] },
             'system-architecture': { items: ['광학 추적 → SMCNavi 변환·정합·워크플로', 'OpenIGTLink → PC 확장(변환·영상·모델)', 'Holographic Remoting ↔ HoloLens 2'] },
             'registration-calibration': { items: ['광학 추적 SDK·실시간 마커 파이프라인', '영상·환자·마커·기구 좌표 변환 체인', '환자 정합·정합 상태 피드백', '마커·비표준·장기구 캘리브레이션', '미러 평면 정합·피봇점 설정', '2026 공용 추적 서비스·SDK v7.1.2 이전', '2026 지연 측정 하네스 설계·계측'] },
-            'hololens-interface': { items: ['OpenIGTLink 변환·영상·모델 교환', 'Unity·MRTK PC 렌더링·공간 배치', 'Holographic Remoting으로 HoloLens 2 표시', '상호작용 입력을 PC 확장으로 반환', '광학 추적·SMCNavi·HoloLens 팬텀 시험'] }
+            'hololens-interface': { items: ['OpenIGTLink 변환·영상·모델 교환', 'Unity·MRTK PC 렌더링·공간 배치', 'Holographic Remoting으로 HoloLens 2 표시', '상호작용 입력을 PC 확장으로 반환', '광학 추적·SMCNavi·HoloLens 팬텀 시험', 'HoloLens 확장은 2024–2025 종료', 'Galaxy XR 미러링 실험(2025.11–2026.01)'] },
+            'navigation-lineage': { items: ['공용 추적 서비스·SDK 7.1.2 이전', '핸즈프리 조작 PoC(풋스위치·음성)', 'OprNavi v0.1.0 범용 케이스 기반 내비', '안전 마진·끝점–표면 가이던스', '점별 잔차 RMSE·정합 프리셋', '추적 녹화·재생·트래커 진단', 'OmfsNavi Slicer·Qt 6·C++ 모듈', '독립 확인점·수술 계획 importer'] }
           },
           sceneCaption: '좌표 정합 체인 개념도(합성 형상)'
         },
         en: {
-          thesis: 'Registration, tracking, and calibration in 3D Slicer, carried to HoloLens',
-          tags: ['3D Slicer', 'Optical tracking', 'OpenIGTLink', 'Unity · MRTK', 'HoloLens 2'],
+          thesis: 'Registration, tracking, and calibration in 3D Slicer, rebuilt as OprNavi and OmfsNavi',
+          tags: ['3D Slicer', 'Optical tracking', 'OpenIGTLink', 'C++ · Qt 6', 'HoloLens 2'],
           brief: {
             problem: ['Images, patient, tools, and display were fragmented', 'Registration state and data flow hard to inspect'],
-            did: ['Architecture and near-solo development', 'Tracking, registration, calibration in one app', 'HoloLens PC extension and spatial display'],
+            did: ['Architecture and near-solo development', 'Tracking, registration, calibration, HoloLens extension', '2026 OprNavi v0.1.0 and OmfsNavi rebuild'],
             result: ['Six oral and maxillofacial workflows built and demonstrated', 'SMCNavi-to-HoloLens phantom integration tests'],
             team: ['DIGITRACK and Samsung Medical Center research collaboration', 'Joint review of requirements and acceptance criteria']
           },
@@ -463,7 +464,8 @@
             'smcnavi-workflows': { items: ['Maxillary tumour resection navigation', 'Mandibular tumour resection navigation', 'Orthognathic surgery navigation', 'Mandibular motion tracking', 'Bone-graft positioning', 'Zygomatic and orbital fracture mirroring'] },
             'system-architecture': { items: ['Optical tracking → SMCNavi transforms, registration, workflows', 'OpenIGTLink → PC extension (transforms, images, models)', 'Holographic Remoting ↔ HoloLens 2'] },
             'registration-calibration': { items: ['Optical-tracking SDK and live marker pipeline', 'Image, patient, marker, and tool transform chain', 'Patient registration with state feedback', 'Marker, non-standard, and long-tool calibration', 'Mirror-plane registration and pivot setup', '2026: shared tracking service, SDK v7.1.2 migration', '2026: latency measurement harness design'] },
-            'hololens-interface': { items: ['OpenIGTLink exchange of transforms, images, models', 'Unity and MRTK rendering and placement on the PC', 'HoloLens 2 display via Holographic Remoting', 'Interaction input returned to the PC extension', 'Tracker, SMCNavi, and HoloLens phantom tests'] }
+            'hololens-interface': { items: ['OpenIGTLink exchange of transforms, images, models', 'Unity and MRTK rendering and placement on the PC', 'HoloLens 2 display via Holographic Remoting', 'Interaction input returned to the PC extension', 'Tracker, SMCNavi, and HoloLens phantom tests', 'HoloLens extension ended 2024–2025', 'Galaxy XR WebRTC mirroring experiment (2025.11–2026.01)'] },
+            'navigation-lineage': { items: ['Shared tracking service, SDK 7.1.2 migration', 'Hands-free control PoC (foot switch, voice)', 'OprNavi v0.1.0 general case-based navigation', 'Safety margin, endpoint-to-surface guidance', 'Per-point residual RMSE, registration presets', 'Tracking record/replay, tracker diagnostics', 'OmfsNavi: Slicer, Qt 6, C++ modules', 'Independent check point, surgical-plan importer'] }
           },
           sceneCaption: 'Transform-chain concept (synthetic geometry)'
         }
@@ -473,23 +475,23 @@
         name: 'smcnavi',
         poster: 'assets/3d/smcnavi.webp',
         translations: {
-          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다.', alt: '합성 두개골 주위의 트래커, 환자 레퍼런스 마커, CT 볼륨, 추적 포인터, 하악 마커를 점선 좌표 체인으로 잇는 3D 개념도' },
-          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker.', alt: '3D concept linking a tracker, a patient reference marker, a CT volume, a tracked pointer and a mandible marker around a synthetic skull with dashed transform lines' }
+          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다. HoloLens 오버레이(2024–2025)는 별도 PC 확장으로 연결했습니다.', alt: '합성 두개골 주위의 트래커, 환자 레퍼런스 마커, CT 볼륨, 추적 포인터, 하악 마커를 점선 좌표 체인으로 잇는 3D 개념도' },
+          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker. The HoloLens overlay (2024–2025) was connected through a separate PC extension.', alt: '3D concept linking a tracker, a patient reference marker, a CT volume, a tracked pointer and a mandible marker around a synthetic skull with dashed transform lines' }
         }
       },
       translations: {
         ko: {
-          title: 'SMCNavi · HoloLens 수술내비게이션',
-          shortTitle: 'SMCNavi · HoloLens',
+          title: '구강악안면 수술 내비게이션 (SMCNavi → OprNavi → OmfsNavi)',
+          shortTitle: '수술 내비게이션',
           eyebrow: '수술 로보틱스·내비게이션 · 연구 프로토타입',
           thesis: '영상-환자 정합, 수술 도구 추적, 캘리브레이션을 SMCNavi에 통합하고, 그 결과를 HoloLens XR 수술 시각화까지 연결했습니다.',
-          summary: 'DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 맞춤형 3D Slicer 수술내비게이션 플랫폼과 별도 HoloLens 공간 인터페이스 확장입니다.',
+          summary: 'DIGITRACK이 삼성서울병원과 연구 협력으로 개발한 SMCNavi 플랫폼과 HoloLens 확장입니다. 2026년 OprNavi v0.1.0을 거쳐 OmfsNavi(C++ 재구성)로 이어집니다.',
           problem: '구강악안면 내비게이션은 의료영상, 환자와 기구 좌표, 수술별 도구, 공간 표시가 한 흐름으로 맞아야 하지만 기능이 분절되면 정합 상태와 데이터 흐름을 검토하기 어렵습니다.',
           roleLabel: '3D 의료영상·수술내비게이션 개발자',
-          role: '전체 소프트웨어 아키텍처를 설계하고 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적 SDK와 데이터 파이프라인, 영상·환자·마커·기구 좌표 변환, 환자 정합과 피드백, 마커·비표준·장기구 캘리브레이션, 6개 워크플로와 미러링, HoloLens–PC 통신·공간 표시·상호작용, 팬텀 통합 시험과 검증 도구의 주 구현을 맡았습니다. 개발은 사실상 단독으로 진행했으며, 2026년에는 공용 추적 서비스, 광학 추적 SDK v7.1.2 이전, 미러 평면 정합, 내비게이션 지연 측정 하네스 설계·계측으로 안정화를 이어갔습니다.',
+          role: '전체 소프트웨어 아키텍처를 설계하고 DICOM·3D 모델 로딩, MPR·3D 시각화, 광학 추적 SDK와 데이터 파이프라인, 영상·환자·마커·기구 좌표 변환, 환자 정합과 피드백, 마커·비표준·장기구 캘리브레이션, 6개 워크플로와 미러링, HoloLens–PC 통신·공간 표시·상호작용, 팬텀 통합 시험과 검증 도구의 주 구현을 맡았습니다. 개발은 사실상 단독으로 진행했으며, 2025년 8–9월에 미러 평면 정합을 구현했습니다. 2026년에는 공용 추적 서비스 안정화와 광학 추적 SDK 7.1.2 이전, 내비게이션 지연 측정 하네스 설계·계측을 이어가고 핸즈프리 조작 PoC(풋스위치·음성, 정합·Collect 같은 위험 명령 제외)를 만들었으며, 범용 케이스 기반 내비게이션 OprNavi v0.1.0(signed-distance 안전 마진, 끝점–표면 가이던스, 점별 잔차 RMSE, 정합 프리셋, 추적 녹화·재생, 트래커 SDK 선택·진단, 체크섬 manifest 설치본, 서비스 테스트 58개)과 OmfsNavi(Slicer 5.12.4·Qt 6·C++ loadable 모듈, 모듈 독립 추적과 기능별 준비 상태, 정합에 쓰지 않는 독립 확인점, plan.json v1 수술 계획 importer, CTest, 모의 백엔드)로 재구성했습니다. plan.json importer와 디지털 교합 워크플로우(수술 전 계획 앱)의 연계는 호환을 검증하지 않았습니다.',
           teamResult: 'DIGITRACK과 삼성서울병원 연구팀은 임상 워크플로와 요구사항 맥락, 수용 검토 기준, 통합 시연을 공동으로 검토했습니다.',
           evidence: '두 전체 길이 영상과 화면·좌표계·기구·팬텀 그림은 위치, 모델, 영상, 상호작용 데이터가 SMCNavi에서 HoloLens 경로까지 연결된 연구 프로토타입을 보여줍니다.',
-          limitation: '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.',
+          limitation: '설치본과 체크섬 manifest는 있으나 실물 정확도 시험과 장시간 안정성은 검증되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.',
           collaboration: '연구진과 수술별 조작·표시 요구, 설치·사용 피드백과 평가 준비를 협의했습니다. 임상 시나리오와 연구 평가의 책임은 연구진에, 담당 소프트웨어의 구현·통합은 제 역할에 둡니다.',
           mediaAlt: 'HoloLens 2를 착용한 사용자의 시점과 팬텀 위 홀로그램, 추적 기구, MPR 화면이 이어지는 디지털 트윈 시연 영상.',
           mediaCaption: 'HoloLens 2 디지털 트윈과 추적 기구·영상 표시를 연결한 전체 길이 연구 프로토타입 시연입니다.',
@@ -504,17 +506,17 @@
           visualCaption: 'SMCNavi–HoloLens 전체 길이 연구 프로토타입 시연.'
         },
         en: {
-          title: 'SMCNavi · HoloLens Surgical Navigation',
-          shortTitle: 'SMCNavi · HoloLens',
+          title: 'Oral and Maxillofacial Surgical Navigation (SMCNavi → OprNavi → OmfsNavi)',
+          shortTitle: 'Surgical navigation',
           eyebrow: 'Surgical Robotics & Navigation · Research Prototype',
           thesis: 'Integrated image-to-patient registration, surgical instrument tracking, and calibration in SMCNavi, then carried the result into XR surgical visualization on HoloLens.',
-          summary: 'A custom 3D Slicer surgical-navigation platform developed by DIGITRACK with Samsung Medical Center in a research collaboration, plus a separate HoloLens spatial-interface extension.',
+          summary: 'The SMCNavi platform and HoloLens extension developed by DIGITRACK with Samsung Medical Center in a research collaboration. In 2026 it continued through OprNavi v0.1.0 into OmfsNavi, a C++ rebuild.',
           problem: 'Oral and maxillofacial navigation must align medical images, patient and instrument coordinates, procedure-specific tools, and spatial presentation in one flow; fragmented functions make registration state and data flow difficult to inspect.',
           roleLabel: '3D Medical Imaging · Surgical Navigation Developer',
-          role: 'Designed the overall software architecture and served as the primary implementer for DICOM and 3D-model loading, MPR and 3D visualisation, the optical-tracker SDK and data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens–PC communication and interaction, and phantom integration tests and verification tooling. I was effectively the sole developer, and in 2026 continued its stabilisation with a shared tracking service, migration to tracker SDK v7.1.2, mirror-plane registration, and the design and instrumentation of a navigation-latency measurement harness.',
+          role: 'Designed the overall software architecture and served as the primary implementer for DICOM and 3D-model loading, MPR and 3D visualisation, the optical-tracker SDK and data pipeline, image/patient/marker/instrument transforms, patient registration and feedback, marker/non-standard/long-instrument calibration, six workflows and mirroring, HoloLens–PC communication and interaction, and phantom integration tests and verification tooling. I was effectively the sole developer, and implemented mirror-plane registration in August–September 2025. In 2026 I continued with a shared tracking service stabilisation, migration to tracker SDK 7.1.2, and the design and instrumentation of a navigation-latency measurement harness, built a hands-free control PoC (foot switch and voice, excluding risky commands such as registration and Collect), and rebuilt the work as OprNavi v0.1.0, a general case-based navigation (signed-distance safety margin, endpoint-to-surface guidance, per-point residual RMSE, registration presets, tracking record and replay, tracker SDK selection and diagnostics, checksum-manifest installer, 58 service tests), and OmfsNavi (Slicer 5.12.4, Qt 6, C++ loadable modules, module-independent tracking with per-feature readiness, an independent check point not used for registration, a plan.json v1 surgical-plan importer, CTest, a mock backend). Compatibility of the plan.json importer with the digital occlusion workflow app (pre-operative planning) has not been verified.',
           teamResult: 'The DIGITRACK and Samsung Medical Center research team jointly reviewed the clinical-workflow and requirements context, acceptance criteria, and integration demonstrations.',
           evidence: 'Two full-length videos and interface, coordinate-frame, instrument, and phantom figures show a working research prototype carrying position, model, image, and interaction data from SMCNavi through the HoloLens path.',
-          limitation: 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.',
+          limitation: 'An installer with a checksum manifest exists, but accuracy testing on physical systems and long-duration stability have not been verified. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.',
           collaboration: 'I worked with researchers on procedure-specific controls and displays, installation feedback, and evaluation preparation. Researchers own the clinical scenarios and research evaluation; I own the assigned software implementation and integration.',
           mediaAlt: 'Digital-twin demonstration moving between a HoloLens 2 viewpoint, a hologram over a phantom, a tracked instrument, and MPR displays.',
           mediaCaption: 'Full-length research-prototype demonstration connecting the HoloLens 2 digital twin with tracked instruments and image presentation.',
@@ -695,14 +697,14 @@
           layout: 'grid',
           translations: {
             ko: {
-              heading: 'HoloLens 공간 인터페이스',
-              body: 'SMCNavi가 소유한 정합·워크플로 상태를 별도 PC 확장에서 렌더링하고 HoloLens 2의 공간 표시와 상호작용으로 연결했습니다.',
-              items: ['OpenIGTLink를 통한 변환과 승인된 영상·모델 데이터 교환', 'Unity·MRTK 기반 PC 렌더링과 공간 배치', 'Holographic Remoting을 통한 HoloLens 2 표시', 'HoloLens 상호작용 입력의 PC 확장 반환', '광학 추적·SMCNavi·HoloLens 팬텀 통합 시험']
+              heading: 'HoloLens 공간 인터페이스 (2024–2025, 종료)',
+              body: 'SMCNavi가 소유한 정합·워크플로 상태를 별도 PC 확장에서 렌더링하고 HoloLens 2의 공간 표시와 상호작용으로 연결했습니다. HoloLens 경로는 2024–2025년에 진행했고 종료되었습니다.',
+              items: ['OpenIGTLink를 통한 변환과 승인된 영상·모델 데이터 교환', 'Unity·MRTK 기반 PC 렌더링과 공간 배치', 'Holographic Remoting을 통한 HoloLens 2 표시', 'HoloLens 상호작용 입력의 PC 확장 반환', '광학 추적·SMCNavi·HoloLens 팬텀 통합 시험', '2025.11–2026.01 Galaxy XR WebRTC 미러링 실험(화면 캡처 → H.264 하드웨어 인코딩 → WebRTC → Unity; 지연 수치 미주장)']
             },
             en: {
-              heading: 'HoloLens spatial interface',
-              body: 'Rendered SMCNavi-owned registration and workflow state in a separate PC extension and connected it to HoloLens 2 spatial presentation and interaction.',
-              items: ['Transform and approved image/model exchange through OpenIGTLink', 'PC rendering and spatial placement with Unity and MRTK', 'HoloLens 2 presentation through Holographic Remoting', 'Return of HoloLens interaction input to the PC extension', 'Phantom integration tests across optical tracking, SMCNavi, and HoloLens']
+              heading: 'HoloLens spatial interface (2024–2025, ended)',
+              body: 'Rendered SMCNavi-owned registration and workflow state in a separate PC extension and connected it to HoloLens 2 spatial presentation and interaction. The HoloLens path ran in 2024–2025 and has ended.',
+              items: ['Transform and approved image/model exchange through OpenIGTLink', 'PC rendering and spatial placement with Unity and MRTK', 'HoloLens 2 presentation through Holographic Remoting', 'Return of HoloLens interaction input to the PC extension', 'Phantom integration tests across optical tracking, SMCNavi, and HoloLens', 'Nov 2025 – Jan 2026: Galaxy XR WebRTC mirroring experiment (screen capture → H.264 hardware encoding → WebRTC → Unity; no latency figures claimed)']
             }
           },
           media: [
@@ -727,6 +729,23 @@
               }
             }
           ]
+        },
+        {
+          key: 'navigation-lineage',
+          layout: 'wide',
+          translations: {
+            ko: {
+              heading: 'SMCNavi 이후 — OprNavi v0.1.0과 OmfsNavi 재구성(2026.10–)',
+              body: 'SMCNavi 이후 2026년에는 추적 서비스 안정화와 조작 PoC를 거쳐 범용 케이스 기반 내비게이션 OprNavi v0.1.0을 만들었고, 이를 C++ 기반 OmfsNavi로 재구성하고 있습니다. 회사 업무이며 이 사례는 제품 배포나 임상 사용을 주장하지 않습니다.',
+              items: ['공용 추적 서비스 안정화, 광학 추적 SDK 7.1.2 이전', '핸즈프리 조작 PoC: 풋스위치·음성(정합·Collect 같은 위험 명령 제외)', 'OprNavi v0.1.0: 범용 케이스 기반 내비게이션, signed-distance 안전 마진, 끝점–표면 가이던스', 'OprNavi: 점별 잔차 RMSE, 정합 프리셋, 추적 녹화·재생, 트래커 SDK 선택·진단', 'OprNavi: 체크섬 manifest 설치본, 서비스 테스트 58개', 'OmfsNavi: Slicer 5.12.4·Qt 6·C++ loadable 모듈, 모듈 독립 추적과 기능별 준비 상태', 'OmfsNavi: 정합에 쓰지 않는 독립 확인점, plan.json v1 수술 계획 importer(디지털 교합 워크플로우(수술 전 계획 앱)와의 연계는 호환 미검증), CTest, 모의 백엔드']
+            },
+            en: {
+              heading: 'After SMCNavi — OprNavi v0.1.0 and the OmfsNavi rebuild (2026.10–)',
+              body: 'After SMCNavi, 2026 work moved through tracking-service stabilisation and a control PoC to OprNavi v0.1.0, a general case-based navigation, which is now being rebuilt as the C++-based OmfsNavi. This is company work, and the case does not claim product deployment or clinical use.',
+              items: ['Shared tracking service stabilisation, tracker SDK 7.1.2 migration', 'Hands-free control PoC: foot switch and voice (risky commands such as registration and Collect excluded)', 'OprNavi v0.1.0: general case-based navigation, signed-distance safety margin, endpoint-to-surface guidance', 'OprNavi: per-point residual RMSE, registration presets, tracking record and replay, tracker SDK selection and diagnostics', 'OprNavi: checksum-manifest installer, 58 service tests', 'OmfsNavi: Slicer 5.12.4, Qt 6, C++ loadable modules, module-independent tracking with per-feature readiness', 'OmfsNavi: independent check point not used for registration, plan.json v1 surgical-plan importer (compatibility with the digital occlusion workflow app (pre-operative planning) unverified), CTest, mock backend']
+            }
+          },
+          media: []
         }
       ],
       blocks: [],

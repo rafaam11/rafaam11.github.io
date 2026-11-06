@@ -1779,7 +1779,7 @@ test('Scholar Projects page groups detailed rows by tier in data order', () => {
     assert.equal(count(group, '<li class="sc-project'), data.projects.filter((project) => project.tier === tier.key).length);
   }
   assert.doesNotMatch(html, /<dt>Problem<\/dt>|<dt>My role<\/dt>/);
-  assert.match(html, /<h3 class="sc-project__title"><a href="\.\.\/en\/projects\/surgical-navigation\/">SMCNavi · HoloLens Surgical Navigation<\/a><\/h3>/);
+  assert.match(html, /<h3 class="sc-project__title"><a href="\.\.\/en\/projects\/surgical-navigation\/">Oral and Maxillofacial Surgical Navigation \(SMCNavi → OprNavi → OmfsNavi\)<\/a><\/h3>/);
   assert.doesNotMatch(html, /td-|Featured|More Projects/i);
 });
 
@@ -1929,8 +1929,8 @@ test('SMCNavi canonical case carries the approved title, workflows, ownership, t
   assert.equal(project.period, '2023.07 – present');
   assert.equal(project.evidenceState, 'prototype');
   assert.equal(project.lifecycleState, 'ongoing');
-  assert.equal(project.translations.ko.title, 'SMCNavi · HoloLens 수술내비게이션');
-  assert.equal(project.translations.en.title, 'SMCNavi · HoloLens Surgical Navigation');
+  assert.equal(project.translations.ko.title, '구강악안면 수술 내비게이션 (SMCNavi → OprNavi → OmfsNavi)');
+  assert.equal(project.translations.en.title, 'Oral and Maxillofacial Surgical Navigation (SMCNavi → OprNavi → OmfsNavi)');
   assert.equal(project.translations.ko.roleLabel, '3D 의료영상·수술내비게이션 개발자');
   assert.equal(project.translations.en.roleLabel, '3D Medical Imaging · Surgical Navigation Developer');
   assert.deepEqual(project.storySections.map((section) => section.key), [
@@ -1938,7 +1938,7 @@ test('SMCNavi canonical case carries the approved title, workflows, ownership, t
     'smcnavi-workflows',
     'system-architecture',
     'registration-calibration',
-    'hololens-interface'
+    'hololens-interface', 'navigation-lineage'
   ]);
   assert.deepEqual(project.storySections[1].translations.ko.items, [
     '상악종양 제거술 내비게이션',
@@ -1964,8 +1964,8 @@ test('SMCNavi canonical case carries the approved title, workflows, ownership, t
   assert.deepEqual(project.blocks, []);
   assert.deepEqual(project.links, []);
   assert.deepEqual(render.dataErrors(data), []);
-  assert.equal(project.translations.ko.limitation, '장시간 안정성, 성능 최적화, 배포 설정, 패키징은 제품화 수준으로 마무리되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.');
-  assert.equal(project.translations.en.limitation, 'Long-duration robustness, performance optimisation, deployment setup, and packaging were not completed to productisation level. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.');
+  assert.equal(project.translations.ko.limitation, '설치본과 체크섬 manifest는 있으나 실물 정확도 시험과 장시간 안정성은 검증되지 않았습니다. 이 사례는 생산 배포, 실제 수술 사용, 임상 효능·안전성·정확도를 주장하지 않습니다.');
+  assert.equal(project.translations.en.limitation, 'An installer with a checksum manifest exists, but accuracy testing on physical systems and long-duration stability have not been verified. This case does not claim production deployment, use in real surgery, or clinical efficacy, safety, or accuracy.');
 
   const publicCaseCopy = JSON.stringify(project);
   assert.doesNotMatch(publicCaseCopy, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|super app|digitrack-inc|특허출원|patent application/i);
@@ -2350,28 +2350,28 @@ test('reciprocal related projects render on story and legacy cases across locale
       surgicalHref: '../../projects/mandibular-fracture/',
       mandibularHref: '../../projects/surgical-navigation/',
       surgicalTitle: '하악골 골절 정복 최적화',
-      mandibularTitle: 'SMCNavi · HoloLens 수술내비게이션'
+      mandibularTitle: '구강악안면 수술 내비게이션 (SMCNavi → OprNavi → OmfsNavi)'
     },
     {
       locale: 'ko', base: '../../', isFile: true,
       surgicalHref: '../../projects/mandibular-fracture/index.html',
       mandibularHref: '../../projects/surgical-navigation/index.html',
       surgicalTitle: '하악골 골절 정복 최적화',
-      mandibularTitle: 'SMCNavi · HoloLens 수술내비게이션'
+      mandibularTitle: '구강악안면 수술 내비게이션 (SMCNavi → OprNavi → OmfsNavi)'
     },
     {
       locale: 'en', base: '../../../', isFile: false,
       surgicalHref: '../../../en/projects/mandibular-fracture/',
       mandibularHref: '../../../en/projects/surgical-navigation/',
       surgicalTitle: 'Mandibular Fracture Reduction Optimization',
-      mandibularTitle: 'SMCNavi · HoloLens Surgical Navigation'
+      mandibularTitle: 'Oral and Maxillofacial Surgical Navigation (SMCNavi → OprNavi → OmfsNavi)'
     },
     {
       locale: 'en', base: '../../../', isFile: true,
       surgicalHref: '../../../en/projects/mandibular-fracture/index.html',
       mandibularHref: '../../../en/projects/surgical-navigation/index.html',
       surgicalTitle: 'Mandibular Fracture Reduction Optimization',
-      mandibularTitle: 'SMCNavi · HoloLens Surgical Navigation'
+      mandibularTitle: 'Oral and Maxillofacial Surgical Navigation (SMCNavi → OprNavi → OmfsNavi)'
     }
   ];
 
@@ -3068,7 +3068,7 @@ test('SMCNavi PDF source preserves story sections, representative figures, and o
   const payload = require('../scripts/export-portfolio-data.cjs').exportData();
   const project = payload.projects.find((item) => item.slug === 'surgical-navigation');
   assert.equal(payload.schemaVersion, 1);
-  assert.equal(project.storySections.length, 5);
+  assert.equal(project.storySections.length, 6);
   assert.deepEqual(project.pdfSequence.diagram, { storySectionKey: 'system-architecture' });
   assert.equal(project.pdfSequence.figureIds.length, 6);
   assert.equal(project.storySections.find((item) => item.key === 'system-architecture').diagram.kind, 'system-flow');
@@ -3403,8 +3403,8 @@ test('Task 5 integrated review renders each middle block on its contracted page 
     }
     assert.equal(extracted.approvedImage, true, 'approved local images must be placed in the document');
     for (const [locale, required] of [
-      ['ko', ['SMCNavi · HoloLens 수술내비게이션', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '3D Slicer · 영상·모델 · 변환·정합·캘리브레이션 · 6개 워크플로', '연구 프로토타입', '주장하지 않습니다']],
-      ['en', ['SMCNavi · HoloLens Surgical Navigation', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', '3D Slicer · images and models · transforms, registration, calibration · six workflows', 'Research prototype', 'This case does not claim']]
+      ['ko', ['구강악안면 수술 내비게이션 (SMCNavi → OprNavi → OmfsNavi)', '광대·안와 골절 미러링', '3D 의료영상·수술내비게이션 개발자', '3D Slicer · 영상·모델 · 변환·정합·캘리브레이션 · 6개 워크플로', '연구 프로토타입', '주장하지 않습니다']],
+      ['en', ['Oral and Maxillofacial Surgical Navigation (SMCNavi → OprNavi → OmfsNavi)', 'Zygomatic-orbital fracture mirroring', '3D Medical Imaging · Surgical Navigation Developer', '3D Slicer · images and models · transforms, registration, calibration · six workflows', 'Research prototype', 'This case does not claim']]
     ]) {
       const text = extracted[`surgical-navigation-${locale}.pdf`];
       const normalizedText = text.replace(/\s+/g, ' ');

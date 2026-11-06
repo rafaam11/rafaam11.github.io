@@ -10,7 +10,7 @@ Jinmin Kim의 연구자풍 포트폴리오입니다. 수술 로보틱스·컴퓨
 
 **Surgical Robotics & Navigation**
 
-1. SMCNavi · HoloLens Surgical Navigation
+1. Oral and Maxillofacial Surgical Navigation (SMCNavi → OprNavi → OmfsNavi)
 2. Maxillofacial Digital Occlusion Workflow
 3. rTMS Coil Navigation Software (NeuroPilot)
 4. Mandibular Fracture Reduction Optimization
