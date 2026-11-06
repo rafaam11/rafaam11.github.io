@@ -3,7 +3,7 @@ const data = require('../js/portfolio-data.js');
 const by = slug => data.projects.find(p => p.slug === slug);
 const text = JSON.stringify(data.projects);
 test('refresh 2026-11: no stale facts remain', () => {
-  for (const stale of ['8개 3D 모델', 'eight 3D models', '게이팅 윈도우', 'gating window', '계획 CT 정합', '3단 가상 범퍼', 'three-tier virtual bumper', '계속 유지보수합니다', '2024 – present', 'v1.24 — 프로젝트 시작 화면']) {
+  for (const stale of ['8개 3D 모델', 'eight 3D models', '게이팅 윈도우', 'gating window', '계획 CT 정합', '계속 유지보수합니다', '2024 – present', 'v1.24 — 프로젝트 시작 화면']) {
     assert.ok(!text.includes(stale), stale);
   }
 });
@@ -78,4 +78,14 @@ test('life-careverse: preprocessing tool 2026.07 then maintenance', () => {
 test('skadi: 2026-07 desktop stabilisation and API 7 python binding', () => {
   const j = JSON.stringify(by('skadi-tracking-software'));
   assert.match(j, /연결 진단 로그|connection diagnostic log/i); assert.match(j, /API 7/);
+});
+
+test('unmanned-forklift: cart recognition/classification workflow, field trial status, safety wording', () => {
+  const p = by('unmanned-forklift'); const j = JSON.stringify(p);
+  assert.doesNotMatch(j, /3단 가상 범퍼|three-tier virtual bumper/i);
+  assert.match(j, /E-STOP 래칭|E-STOP latch/i);
+  for (const f of ['DINOv2', 'top-3', '99.5', '2,010', '4.66', 'Isaac Sim', 'ChArUco', '24종', '8묶음']) assert.ok(j.includes(f), f);
+  assert.match(j, /고객 현장 시험 운용|customer-site trial/i);
+  assert.doesNotMatch(p.translations.ko.limitation, /공개 클립과 사진은 시험장 테스트입니다/);
+  assert.ok(p.tech.includes('DINOv2') && p.tech.includes('Isaac Sim'));
 });

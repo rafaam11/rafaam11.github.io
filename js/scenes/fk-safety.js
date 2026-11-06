@@ -165,7 +165,7 @@
       ];
 
       D.labels(box, [
-        { t: { ko: '3단 가상 범퍼', en: 'Three-zone virtual bumper' }, c: 's r', obj: 'bumper', off: [HW + 40, 0, 190] },
+        { t: { ko: '센서별 경고·정지 구역', en: 'Per-sensor warning and stop zones' }, c: 's r', obj: 'bumper', off: [HW + 40, 0, 190] },
         { t: 'LiDAR', c: 's n', obj: 'lidar', off: [0, 12, 0] },
         { t: 'ToF', c: 's c', obj: 'sensor', off: [-18, 10, 30] },
         { t: { ko: '리셋 입력', en: 'Reset input' }, c: 's o', obj: 'reset', off: [3, 0, 0], ph: '5' }

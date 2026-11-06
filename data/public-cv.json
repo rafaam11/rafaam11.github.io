@@ -347,7 +347,7 @@
                   "slug": "unmanned-forklift",
                   "period": "2025.11–",
                   "did": [
-                    "Jetson 비전·ToF–RGB 보정·SAM3",
+                    "Jetson 비전·SAM3 인식·DINOv2 분류",
                     "비전 서보잉·로딩 액션",
                     "안전 관리자 초기 설계·센서 통합"
                   ],
@@ -384,7 +384,7 @@
                   "slug": "unmanned-forklift",
                   "period": "2025.11–",
                   "did": [
-                    "Jetson vision, ToF–RGB calibration, SAM3",
+                    "Jetson vision, SAM3 detection, DINOv2 classifier",
                     "Visual servoing and loading actions",
                     "Initial safety manager, sensor integration"
                   ],
