@@ -32,7 +32,7 @@ Jinmin Kim의 연구자풍 포트폴리오입니다. 수술 로보틱스·컴퓨
 
 9. AI Build Lab
 
-다섯 역량 스택(현재 전문성)은 별도 라우트 없이 Home에 표시됩니다: Surgical Navigation & Optical Tracking, 3D Registration & Computer Vision, XR & Spatial Computing, Robot Vision & Sensor Integration, Product Engineering with AI. 연구 방향(Surgical Robotics, Physical AI 등)은 현재 전문성과 분리해 Home의 연구 방향 줄과 CV에만 씁니다.
+다섯 역량 스택(기술 영역)은 별도 라우트 없이 Home에 표시됩니다: Surgical Navigation & Optical Tracking, 3D Registration & Computer Vision, XR & Spatial Computing, Robot Vision & Sensor Integration, Product Engineering with AI. 연구 방향(Surgical Robotics, Physical AI 등)은 기술 영역과 분리해 Home의 연구 방향 줄과 CV에만 씁니다.
 
 실제 이미지·영상은 [공개 근거 레지스터](assets/projects/EVIDENCE_REGISTER.md)에 등록하고 승인된 파생본만 `assets/projects/<slug>/`에 둡니다. 프로젝트별 한국어·영어 PDF는 `assets/pdfs/`에 생성되고, 공개 안전 이력서 PDF(국문·영문)는 생성 대상이 아니라 추적되는 원본으로 `assets/cv/`에 있습니다. PDF 입력 내보내기와 생성기는 각각 `scripts/export-portfolio-data.cjs`, `scripts/generate-portfolio-pdfs.py`입니다.
 

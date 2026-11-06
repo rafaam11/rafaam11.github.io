@@ -2190,7 +2190,7 @@ function localReferenceErrors(file, html, rootDir) {
   return errors;
 }
 
-// Declared 3D figures: [{ owner: 'home' | <case slug>, name, poster }].
+// Declared 3D figures: [{ owner: <case slug>, name, poster }].
 function scene3dDeclarations(candidate = data) {
   const declarations = [];
   for (const project of candidate?.projects || []) {
