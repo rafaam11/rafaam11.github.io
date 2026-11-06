@@ -54,7 +54,7 @@ endobj
 <<
 /Annots [ 5 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 33 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.0a869dd02b391ac75e44dbb5f0b52047 6 0 R /FormXob.fbeb5b35533d1af11507699f42bf493e 7 0 R
+/FormXob.68b53b22245c21c450f543b24294431d 7 0 R /FormXob.d25d77f4bd248408dc60a216205ccbed 6 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -113,7 +113,7 @@ endobj
 <<
 /Annots [ 12 0 R ] /Contents 37 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 33 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.6d406b419b9b6fe39b4796b150440a57 14 0 R /FormXob.ca8ad14c89a1e36232550b69e5ff798d 13 0 R
+/FormXob.473a1aa133cc4f514e60838a0b0a66fc 13 0 R /FormXob.c34782a468c7d4a79ce735929f810863 14 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -168,7 +168,7 @@ endobj
 <<
 /Annots [ 16 0 R 18 0 R 19 0 R 20 0 R 21 0 R ] /Contents 38 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 33 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.94d626fe9227d3f98c55fab417e70f47 17 0 R
+/FormXob.89b5ad9354d1312003c089590707d870 17 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -952,13 +952,13 @@ BT 1 0 0 1 48 715.8898 Tm /F3+0 14 Tf 16.8 TL (SKADI desktop app) Tj T* ET
 BT 1 0 0 1 48 692.3898 Tm /F2+0 9.5 Tf 11.4 TL (One product flow covers marker definition and file work, tracker connection, and 6DoF status inspection.) Tj T* ET
 q
 395.7778 0 0 130 99.74891 549.8898 cm
-/FormXob.0a869dd02b391ac75e44dbb5f0b52047 Do
+/FormXob.d25d77f4bd248408dc60a216205ccbed Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 540.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 1. Marker definition and file work in the desktop app) Tj T* ET
 q
 382.0408 0 0 195 106.6174 314.8898 cm
-/FormXob.fbeb5b35533d1af11507699f42bf493e Do
+/FormXob.68b53b22245c21c450f543b24294431d Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 305.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 2. Tracker status and real-time 6DoF view) Tj T* ET
@@ -1236,13 +1236,13 @@ BT 1 0 0 1 48 692.3898 Tm /F2+0 9.5 Tf 11.4 TL (The same desktop app and API con
 BT 1 0 0 1 48 678.3898 Tm /F2+0 9.5 Tf 11.4 TL (surgical-navigation integration boundary.) Tj T* ET
 q
 242.6378 0 0 176.9234 48 467.4281 cm
-/FormXob.ca8ad14c89a1e36232550b69e5ff798d Do
+/FormXob.473a1aa133cc4f514e60838a0b0a66fc Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 436.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 3. De-identified tray used in the medical integration) Tj T* ET
 q
 242.6378 0 0 144.1185 304.6378 483.8305 cm
-/FormXob.6d406b419b9b6fe39b4796b150440a57 Do
+/FormXob.c34782a468c7d4a79ce735929f810863 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 304.6378 436.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 4. De-identified CT workspace in the medical integration) Tj T* ET
@@ -1315,7 +1315,7 @@ BT 1 0 0 1 48 734.1898 Tm /F2+0 8.7 Tf 10.44 TL (The same 6DoF tracking layer wa
 BT 1 0 0 1 48 721.6898 Tm /F2+0 8.7 Tf 10.44 TL (precision-docking integration.) Tj T* ET
 q
 105.8201 0 0 125 244.7277 587.8898 cm
-/FormXob.94d626fe9227d3f98c55fab417e70f47 Do
+/FormXob.89b5ad9354d1312003c089590707d870 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 578.8898 Tm /F2+0 7.7 Tf 9.24 TL (Figure 5. Robot-tracking field setup for the industrial extension) Tj T* ET

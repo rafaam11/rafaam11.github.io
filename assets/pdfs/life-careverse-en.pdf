@@ -29,7 +29,7 @@ endobj
 <<
 /Annots [ 3 0 R ] /Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.82325b7cdac406cd64843bc65d07ebdb 4 0 R
+/FormXob.2b8783cd76b4fe6284fcf65330b4e678 4 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -89,7 +89,7 @@ endobj
 <<
 /Annots [ 8 0 R ] /Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.69856933942d0a03e60a9c10e84748e3 11 0 R /FormXob.ca8439bc464116e086c5a3d9bf956818 9 0 R
+/FormXob.44f1c4cd901bad9865304094442800e2 9 0 R /FormXob.ea4935ff2d80e6ef7af3d011ab889321 11 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -124,7 +124,7 @@ endobj
 <<
 /Annots [ 13 0 R ] /Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 31 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /XObject <<
-/FormXob.90a7d9822412260faf38e135d3e47a82 15 0 R /FormXob.9156ffe26a549bbc3554839ff6869a81 14 0 R
+/FormXob.b3e32b4b5b59c39ca86c09f423e2e863 14 0 R /FormXob.c93030c6d0197e7299dd78b3c678d9c9 15 0 R
 >>
 >> /Rotate 0 
   /Trans <<
@@ -819,7 +819,7 @@ BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (join order and all three viewpoints
 BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (panel. Built on OpenXR to run on Meta Quest 3 and Galaxy XR.) Tj T* ET
 q
 499.2756 0 0 171.626 48 312.2638 cm
-/FormXob.82325b7cdac406cd64843bc65d07ebdb Do
+/FormXob.2b8783cd76b4fe6284fcf65330b4e678 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 291.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. A 24-second clip of a three-user VR consultation session recorded from each participant viewpoint at once: clinician 1) Tj T* ET
@@ -846,7 +846,7 @@ endstream
 endobj
 33 0 obj
 <<
-/Length 8128
+/Length 8183
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -896,143 +896,143 @@ BT 1 0 0 1 48 490.8898 Tm /F2+0 10 Tf 12 TL (XR standards so one build runs on m
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 474.8898 Tm /F2+0 10 Tf 12 TL (integration, model simplification and slide conversion, and user guidance to support research-team data) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 458.8898 Tm /F2+0 10 Tf 12 TL (preparation and demonstrations.) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 428.8898 Tm /F3+0 10.5 Tf 12.6 TL (Three-user shared state) Tj T* ET
-.101961 .337255 .858824 RG
-1.2 w
-n 140 413.8898 m 297.6378 361.8898 l S
-.101961 .337255 .858824 rg
-n
-299.8378 361.8898 m
-299.8378 363.1048 298.8528 364.0898 297.6378 364.0898 c
-296.4228 364.0898 295.4378 363.1048 295.4378 361.8898 c
-295.4378 360.6747 296.4228 359.6898 297.6378 359.6898 c
-298.8528 359.6898 299.8378 360.6747 299.8378 361.8898 c
-f*
-.101961 .337255 .858824 RG
-1.2 w
-n 455.2756 413.8898 m 297.6378 361.8898 l S
-.101961 .337255 .858824 rg
-n
-299.8378 361.8898 m
-299.8378 363.1048 298.8528 364.0898 297.6378 364.0898 c
-296.4228 364.0898 295.4378 363.1048 295.4378 361.8898 c
-295.4378 360.6747 296.4228 359.6898 297.6378 359.6898 c
-298.8528 359.6898 299.8378 360.6747 299.8378 361.8898 c
-f*
-.101961 .337255 .858824 RG
-1.2 w
-n 297.6378 309.8898 m 297.6378 361.8898 l S
-.101961 .337255 .858824 rg
-n
-299.8378 361.8898 m
-299.8378 363.1048 298.8528 364.0898 297.6378 364.0898 c
-296.4228 364.0898 295.4378 363.1048 295.4378 361.8898 c
-295.4378 360.6747 296.4228 359.6898 297.6378 359.6898 c
-298.8528 359.6898 299.8378 360.6747 299.8378 361.8898 c
-f*
-1 1 1 rg
-.878431 .878431 .878431 RG
-.8 w
-n
-227.6378 338.8898 m
-367.6378 338.8898 l
-369.2962 338.8898 370.6378 340.2314 370.6378 341.8898 c
-370.6378 381.8898 l
-370.6378 383.5482 369.2962 384.8898 367.6378 384.8898 c
-227.6378 384.8898 l
-225.9794 384.8898 224.6378 383.5482 224.6378 381.8898 c
-224.6378 341.8898 l
-224.6378 340.2314 225.9794 338.8898 227.6378 338.8898 c
-h
-B*
-.101961 .337255 .858824 rg
-BT 1 0 0 1 233.6378 370.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 233.6378 353.8898 Tm /F3+0 7.4 Tf 8.88 TL (PUN2 shared state) Tj T* ET
-1 1 1 rg
-.878431 .878431 .878431 RG
-.8 w
-n
-80 390.8898 m
-200 390.8898 l
-201.6584 390.8898 203 392.2314 203 393.8898 c
-203 433.8898 l
-203 435.5482 201.6584 436.8898 200 436.8898 c
-80 436.8898 l
-78.3416 436.8898 77 435.5482 77 433.8898 c
-77 393.8898 l
-77 392.2314 78.3416 390.8898 80 390.8898 c
-h
-B*
-.101961 .337255 .858824 rg
-BT 1 0 0 1 86 422.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 86 405.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 1 \(Master\)) Tj T* ET
-1 1 1 rg
-.878431 .878431 .878431 RG
-.8 w
-n
-395.2756 390.8898 m
-515.2756 390.8898 l
-516.934 390.8898 518.2756 392.2314 518.2756 393.8898 c
-518.2756 433.8898 l
-518.2756 435.5482 516.934 436.8898 515.2756 436.8898 c
-395.2756 436.8898 l
-393.6172 436.8898 392.2756 435.5482 392.2756 433.8898 c
-392.2756 393.8898 l
-392.2756 392.2314 393.6172 390.8898 395.2756 390.8898 c
-h
-B*
-.101961 .337255 .858824 rg
-BT 1 0 0 1 401.2756 422.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 401.2756 405.8898 Tm /F3+0 7.4 Tf 8.88 TL (Patient) Tj T* ET
-1 1 1 rg
-.878431 .878431 .878431 RG
-.8 w
-n
-237.6378 286.8898 m
-357.6378 286.8898 l
-359.2962 286.8898 360.6378 288.2314 360.6378 289.8898 c
-360.6378 329.8898 l
-360.6378 331.5482 359.2962 332.8898 357.6378 332.8898 c
-237.6378 332.8898 l
-235.9794 332.8898 234.6378 331.5482 234.6378 329.8898 c
-234.6378 289.8898 l
-234.6378 288.2314 235.9794 286.8898 237.6378 286.8898 c
-h
-B*
-.101961 .337255 .858824 rg
-BT 1 0 0 1 243.6378 318.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 243.6378 301.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 2) Tj T* ET
+BT 1 0 0 1 48 458.8898 Tm /F2+0 10 Tf 12 TL (preparation and demonstrations. Development continued until 2026.07 with the preprocessing tool) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 250.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 442.8898 Tm /F2+0 10 Tf 12 TL (\(three-column web explorer, upload and drag-and-drop, slide editor, five-chapter guide\); the project has) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 426.8898 Tm /F2+0 10 Tf 12 TL (been in maintenance since.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 396.8898 Tm /F3+0 10.5 Tf 12.6 TL (Three-user shared state) Tj T* ET
+.101961 .337255 .858824 RG
+1.2 w
+n 140 381.8898 m 297.6378 329.8898 l S
+.101961 .337255 .858824 rg
+n
+299.8378 329.8898 m
+299.8378 331.1048 298.8528 332.0898 297.6378 332.0898 c
+296.4228 332.0898 295.4378 331.1048 295.4378 329.8898 c
+295.4378 328.6747 296.4228 327.6898 297.6378 327.6898 c
+298.8528 327.6898 299.8378 328.6747 299.8378 329.8898 c
+f*
+.101961 .337255 .858824 RG
+1.2 w
+n 455.2756 381.8898 m 297.6378 329.8898 l S
+.101961 .337255 .858824 rg
+n
+299.8378 329.8898 m
+299.8378 331.1048 298.8528 332.0898 297.6378 332.0898 c
+296.4228 332.0898 295.4378 331.1048 295.4378 329.8898 c
+295.4378 328.6747 296.4228 327.6898 297.6378 327.6898 c
+298.8528 327.6898 299.8378 328.6747 299.8378 329.8898 c
+f*
+.101961 .337255 .858824 RG
+1.2 w
+n 297.6378 277.8898 m 297.6378 329.8898 l S
+.101961 .337255 .858824 rg
+n
+299.8378 329.8898 m
+299.8378 331.1048 298.8528 332.0898 297.6378 332.0898 c
+296.4228 332.0898 295.4378 331.1048 295.4378 329.8898 c
+295.4378 328.6747 296.4228 327.6898 297.6378 327.6898 c
+298.8528 327.6898 299.8378 328.6747 299.8378 329.8898 c
+f*
+1 1 1 rg
+.878431 .878431 .878431 RG
+.8 w
+n
+227.6378 306.8898 m
+367.6378 306.8898 l
+369.2962 306.8898 370.6378 308.2314 370.6378 309.8898 c
+370.6378 349.8898 l
+370.6378 351.5482 369.2962 352.8898 367.6378 352.8898 c
+227.6378 352.8898 l
+225.9794 352.8898 224.6378 351.5482 224.6378 349.8898 c
+224.6378 309.8898 l
+224.6378 308.2314 225.9794 306.8898 227.6378 306.8898 c
+h
+B*
+.101961 .337255 .858824 rg
+BT 1 0 0 1 233.6378 338.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 233.6378 321.8898 Tm /F3+0 7.4 Tf 8.88 TL (PUN2 shared state) Tj T* ET
+1 1 1 rg
+.878431 .878431 .878431 RG
+.8 w
+n
+80 358.8898 m
+200 358.8898 l
+201.6584 358.8898 203 360.2314 203 361.8898 c
+203 401.8898 l
+203 403.5482 201.6584 404.8898 200 404.8898 c
+80 404.8898 l
+78.3416 404.8898 77 403.5482 77 401.8898 c
+77 361.8898 l
+77 360.2314 78.3416 358.8898 80 358.8898 c
+h
+B*
+.101961 .337255 .858824 rg
+BT 1 0 0 1 86 390.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 86 373.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 1 \(Master\)) Tj T* ET
+1 1 1 rg
+.878431 .878431 .878431 RG
+.8 w
+n
+395.2756 358.8898 m
+515.2756 358.8898 l
+516.934 358.8898 518.2756 360.2314 518.2756 361.8898 c
+518.2756 401.8898 l
+518.2756 403.5482 516.934 404.8898 515.2756 404.8898 c
+395.2756 404.8898 l
+393.6172 404.8898 392.2756 403.5482 392.2756 401.8898 c
+392.2756 361.8898 l
+392.2756 360.2314 393.6172 358.8898 395.2756 358.8898 c
+h
+B*
+.101961 .337255 .858824 rg
+BT 1 0 0 1 401.2756 390.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 401.2756 373.8898 Tm /F3+0 7.4 Tf 8.88 TL (Patient) Tj T* ET
+1 1 1 rg
+.878431 .878431 .878431 RG
+.8 w
+n
+237.6378 254.8898 m
+357.6378 254.8898 l
+359.2962 254.8898 360.6378 256.2314 360.6378 257.8898 c
+360.6378 297.8898 l
+360.6378 299.5482 359.2962 300.8898 357.6378 300.8898 c
+237.6378 300.8898 l
+235.9794 300.8898 234.6378 299.5482 234.6378 297.8898 c
+234.6378 257.8898 l
+234.6378 256.2314 235.9794 254.8898 237.6378 254.8898 c
+h
+B*
+.101961 .337255 .858824 rg
+BT 1 0 0 1 243.6378 286.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 243.6378 269.8898 Tm /F3+0 7.4 Tf 8.88 TL (Clinician 2) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 218.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 218.8898 m 547.2756 218.8898 l S
+n 48 186.8898 m 547.2756 186.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 184.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
+BT 1 0 0 1 48 152.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 160.8898 Tm /F2+0 10 Tf 12 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence.) Tj T* ET
+BT 1 0 0 1 48 128.8898 Tm /F2+0 10 Tf 12 TL (A consultation-session clip recorded simultaneously from all three participant viewpoints is the evidence.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 144.8898 Tm /F2+0 10 Tf 12 TL (Clinician 1 \(master\), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one) Tj T* ET
+BT 1 0 0 1 48 112.8898 Tm /F2+0 10 Tf 12 TL (Clinician 1 \(master\), the patient, and clinician 2 sit in one frame, so a viewer can check directly whether one) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 128.8898 Tm /F2+0 10 Tf 12 TL (person moving the model leaves the other two views showing the same pose and the same measurements.) Tj T* ET
+BT 1 0 0 1 48 96.88976 Tm /F2+0 10 Tf 12 TL (person moving the model leaves the other two views showing the same pose and the same measurements.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 99.88976 Tm /F3+0 11 Tf 13.2 TL (Multi-user demonstration) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 79.88976 Tm /F2+0 10 Tf 12 TL (Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the) Tj T* ET
-.333333 .333333 .333333 rg
-BT 1 0 0 1 48 63.88976 Tm /F2+0 10 Tf 12 TL (other two views show the same state.) Tj T* ET
+BT 1 0 0 1 48 67.88976 Tm /F3+0 11 Tf 13.2 TL (Multi-user demonstration) Tj T* ET
  
 endstream
 endobj
 34 0 obj
 <<
-/Length 1338
+/Length 1645
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1049,20 +1049,24 @@ BT 1 0 0 1 48 17 Tm /F2+0 7.5 Tf 9 TL (OMFS VR - Multi-user surgical consultatio
 BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (3 / 5) Tj T* ET
 .101961 .337255 .858824 rg
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 753.8898 Tm /F2+0 10 Tf 12 TL (Recording all three viewpoints at once makes the evidence checkable: one participant manipulates, and the) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 737.8898 Tm /F2+0 10 Tf 12 TL (other two views show the same state.) Tj T* ET
 q
-434.1564 0 0 300 80.55961 463.8898 cm
-/FormXob.ca8439bc464116e086c5a3d9bf956818 Do
+434.1564 0 0 300 80.55961 419.8898 cm
+/FormXob.44f1c4cd901bad9865304094442800e2 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 443.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. VR consultation room layout: three seats for clinician 1 \(master\), the patient, and clinician 2, plus the 2D measurement) Tj T* ET
+BT 1 0 0 1 48 399.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 2. VR consultation room layout: three seats for clinician 1 \(master\), the patient, and clinician 2, plus the 2D measurement) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 431.3898 Tm /F2+0 8.5 Tf 10.2 TL (panel and 3D model area) Tj T* ET
+BT 1 0 0 1 48 387.3898 Tm /F2+0 8.5 Tf 10.2 TL (panel and 3D model area) Tj T* ET
 q
-499.2756 0 0 171.626 48 242.2638 cm
-/FormXob.69856933942d0a03e60a9c10e84748e3 Do
+499.2756 0 0 171.626 48 198.2638 cm
+/FormXob.ea4935ff2d80e6ef7af3d011ab889321 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 221.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The measurement panel shown identically from all three viewpoints: clinician 1 \(master\), the patient, clinician 2) Tj T* ET
+BT 1 0 0 1 48 177.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 3. The measurement panel shown identically from all three viewpoints: clinician 1 \(master\), the patient, clinician 2) Tj T* ET
  
 endstream
 endobj
@@ -1087,7 +1091,7 @@ BT 1 0 0 1 530.7705 17 Tm /F2+0 7.5 Tf 9 TL (4 / 5) Tj T* ET
 BT 1 0 0 1 415.3925 17 Tm /F2+0 7.5 Tf 9 TL (uiop3847@naver.com) Tj T* ET
 q
 499.2756 0 0 171.626 48 592.2638 cm
-/FormXob.9156ffe26a549bbc3554839ff6869a81 Do
+/FormXob.b3e32b4b5b59c39ca86c09f423e2e863 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 571.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. A detached maxillary segment reflected across all three viewpoints at once, with two avatars visible in the right-hand) Tj T* ET
@@ -1095,7 +1099,7 @@ BT 1 0 0 1 48 571.7638 Tm /F2+0 8.5 Tf 10.2 TL (Figure 4. A detached maxillary s
 BT 1 0 0 1 48 559.7638 Tm /F2+0 8.5 Tf 10.2 TL (view) Tj T* ET
 q
 499.2756 0 0 281.282 48 260.9818 cm
-/FormXob.90a7d9822412260faf38e135d3e47a82 Do
+/FormXob.c93030c6d0197e7299dd78b3c678d9c9 Do
 Q
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 240.4818 Tm /F2+0 8.5 Tf 10.2 TL (Figure 5. A headset session run in a hospital waiting area \(faces de-identified\)) Tj T* ET
@@ -1227,9 +1231,9 @@ xref
 0002987939 00000 n 
 0002988026 00000 n 
 0002991571 00000 n 
-0002999751 00000 n 
-0003001141 00000 n 
-0003003325 00000 n 
+0002999806 00000 n 
+0003001503 00000 n 
+0003003687 00000 n 
 trailer
 <<
 /ID 
@@ -1241,5 +1245,5 @@ trailer
 /Size 37
 >>
 startxref
-3007215
+3007577
 %%EOF

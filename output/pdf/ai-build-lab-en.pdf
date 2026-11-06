@@ -822,7 +822,7 @@ endobj
 endobj
 38 0 obj
 <<
-/Length 2873
+/Length 2966
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -852,24 +852,24 @@ BT 1 0 0 1 48 634.8898 Tm /F3+0 13 Tf 15.6 TL (acceptance criteria, tested produ
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 614.8898 Tm /F3+0 13 Tf 15.6 TL (implementation but does not own context or acceptance.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 584.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2024 - present   |   Evidence state Ongoing   |   Portfolio tier AI Build Lab) Tj T* ET
+BT 1 0 0 1 48 584.8898 Tm /F2+0 9 Tf 10.8 TL (Period 2025.05 - present   |   Evidence state Ongoing   |   Portfolio tier AI Build Lab) Tj T* ET
 .878431 .878431 .878431 RG
 .7 w
 n 48 561.8898 m 547.2756 561.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (One combined case connects a local-first knowledge system and four applications I build and use) Tj T* ET
+BT 1 0 0 1 48 537.8898 Tm /F2+0 10 Tf 12 TL (One combined case connects a local-first knowledge system, four public applications I build and use) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (\(multi-cli-work, harness-manager, view-anything, and a Daegu bus-information app\) through the same) Tj T* ET
+BT 1 0 0 1 48 521.8898 Tm /F2+0 10 Tf 12 TL (\(multi-cli-work, harness-manager, view-anything, and a Daegu bus-information app\), and three private) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (problem-to-product loop.) Tj T* ET
+BT 1 0 0 1 48 505.8898 Tm /F2+0 10 Tf 12 TL (personal apps \(deck, bolt, jk-video-editor\) through the same problem-to-product loop.) Tj T* ET
 q
 467.8363 0 0 300 63.71967 183.8898 cm
 /FormXob.7ada26aa6ceee50d0905497a2acb0f66 Do
 Q
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 163.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees. Local paths are) Tj T* ET
+BT 1 0 0 1 48 163.3898 Tm /F2+0 8.5 Tf 10.2 TL (Figure 1. multi-cli-work v1.24 \(captured 2026.07\): one project opens CLI and agent sessions alongside git status and worktrees.) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 151.3898 Tm /F2+0 8.5 Tf 10.2 TL (blurred.) Tj T* ET
+BT 1 0 0 1 48 151.3898 Tm /F2+0 8.5 Tf 10.2 TL (Local paths are blurred.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
 n 48 119.8898 m 547.2756 119.8898 l S
@@ -882,7 +882,7 @@ endstream
 endobj
 39 0 obj
 <<
-/Length 6862
+/Length 7345
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -915,150 +915,156 @@ BT 1 0 0 1 48 626.8898 Tm /F2+0 10 Tf 12 TL (decisions while using AI to amplify
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 597.8898 Tm /F3+0 11 Tf 13.2 TL (Problem to product) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 577.8898 Tm /F2+0 10 Tf 12 TL (Connect friction to requirements, architecture, acceptance, tests, releases, and operations.) Tj T* ET
-.101961 .101961 .101961 rg
-BT 1 0 0 1 48 548.8898 Tm /F3+0 11 Tf 13.2 TL (Human-AI boundary) Tj T* ET
+BT 1 0 0 1 48 577.8898 Tm /F2+0 10 Tf 12 TL (Connect friction to requirements, architecture, acceptance, tests, releases, and operations. The work started) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 528.8898 Tm /F2+0 10 Tf 12 TL (AI amplifies implementation; people own context, acceptance, and release decisions.) Tj T* ET
+BT 1 0 0 1 48 561.8898 Tm /F2+0 10 Tf 12 TL (with the Claude Code launch in May 2025, and since April 2026 I have been an early member of the Claude) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 545.8898 Tm /F2+0 10 Tf 12 TL (Code in Daegu community \(about 160 people\).) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 498.8898 Tm /F3+0 10.5 Tf 12.6 TL (Product loop from friction to operation) Tj T* ET
+BT 1 0 0 1 48 516.8898 Tm /F3+0 11 Tf 13.2 TL (Human-AI boundary) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 496.8898 Tm /F2+0 10 Tf 12 TL (AI amplifies implementation; people own context, acceptance, and release decisions.) Tj T* ET
+.101961 .101961 .101961 rg
+BT 1 0 0 1 48 466.8898 Tm /F3+0 10.5 Tf 12.6 TL (Product loop from friction to operation) Tj T* ET
 .101961 .337255 .858824 RG
 1.2 w
-n 297.6378 474.8898 m 452.6378 426.8898 l S
+n 297.6378 442.8898 m 452.6378 394.8898 l S
 .101961 .337255 .858824 rg
 n
-454.8378 426.8898 m
-454.8378 428.1048 453.8528 429.0898 452.6378 429.0898 c
-451.4228 429.0898 450.4378 428.1048 450.4378 426.8898 c
-450.4378 425.6747 451.4228 424.6898 452.6378 424.6898 c
-453.8528 424.6898 454.8378 425.6747 454.8378 426.8898 c
+454.8378 394.8898 m
+454.8378 396.1048 453.8528 397.0898 452.6378 397.0898 c
+451.4228 397.0898 450.4378 396.1048 450.4378 394.8898 c
+450.4378 393.6747 451.4228 392.6898 452.6378 392.6898 c
+453.8528 392.6898 454.8378 393.6747 454.8378 394.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 452.6378 426.8898 m 297.6378 378.8898 l S
+n 452.6378 394.8898 m 297.6378 346.8898 l S
 .101961 .337255 .858824 rg
 n
-299.8378 378.8898 m
-299.8378 380.1048 298.8528 381.0898 297.6378 381.0898 c
-296.4228 381.0898 295.4378 380.1048 295.4378 378.8898 c
-295.4378 377.6747 296.4228 376.6898 297.6378 376.6898 c
-298.8528 376.6898 299.8378 377.6747 299.8378 378.8898 c
+299.8378 346.8898 m
+299.8378 348.1048 298.8528 349.0898 297.6378 349.0898 c
+296.4228 349.0898 295.4378 348.1048 295.4378 346.8898 c
+295.4378 345.6747 296.4228 344.6898 297.6378 344.6898 c
+298.8528 344.6898 299.8378 345.6747 299.8378 346.8898 c
 f*
 .101961 .337255 .858824 RG
 1.2 w
-n 297.6378 378.8898 m 142.6378 426.8898 l S
+n 297.6378 346.8898 m 142.6378 394.8898 l S
 .101961 .337255 .858824 rg
 n
-144.8378 426.8898 m
-144.8378 428.1048 143.8528 429.0898 142.6378 429.0898 c
-141.4228 429.0898 140.4378 428.1048 140.4378 426.8898 c
-140.4378 425.6747 141.4228 424.6898 142.6378 424.6898 c
-143.8528 424.6898 144.8378 425.6747 144.8378 426.8898 c
+144.8378 394.8898 m
+144.8378 396.1048 143.8528 397.0898 142.6378 397.0898 c
+141.4228 397.0898 140.4378 396.1048 140.4378 394.8898 c
+140.4378 393.6747 141.4228 392.6898 142.6378 392.6898 c
+143.8528 392.6898 144.8378 393.6747 144.8378 394.8898 c
 f*
 .603922 .203922 .070588 RG
 1.2 w
-n 142.6378 426.8898 m 297.6378 474.8898 l S
+n 142.6378 394.8898 m 297.6378 442.8898 l S
 .603922 .203922 .070588 rg
 n
-299.8378 474.8898 m
-299.8378 476.1048 298.8528 477.0898 297.6378 477.0898 c
-296.4228 477.0898 295.4378 476.1048 295.4378 474.8898 c
-295.4378 473.6747 296.4228 472.6898 297.6378 472.6898 c
-298.8528 472.6898 299.8378 473.6747 299.8378 474.8898 c
+299.8378 442.8898 m
+299.8378 444.1048 298.8528 445.0898 297.6378 445.0898 c
+296.4228 445.0898 295.4378 444.1048 295.4378 442.8898 c
+295.4378 441.6747 296.4228 440.6898 297.6378 440.6898 c
+298.8528 440.6898 299.8378 441.6747 299.8378 442.8898 c
 f*
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-234.6378 451.8898 m
-360.6378 451.8898 l
-362.2962 451.8898 363.6378 453.2314 363.6378 454.8898 c
-363.6378 494.8898 l
-363.6378 496.5482 362.2962 497.8898 360.6378 497.8898 c
-234.6378 497.8898 l
-232.9794 497.8898 231.6378 496.5482 231.6378 494.8898 c
-231.6378 454.8898 l
-231.6378 453.2314 232.9794 451.8898 234.6378 451.8898 c
+234.6378 419.8898 m
+360.6378 419.8898 l
+362.2962 419.8898 363.6378 421.2314 363.6378 422.8898 c
+363.6378 462.8898 l
+363.6378 464.5482 362.2962 465.8898 360.6378 465.8898 c
+234.6378 465.8898 l
+232.9794 465.8898 231.6378 464.5482 231.6378 462.8898 c
+231.6378 422.8898 l
+231.6378 421.2314 232.9794 419.8898 234.6378 419.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 240.6378 483.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
+BT 1 0 0 1 240.6378 451.8898 Tm /F3+0 8 Tf 9.6 TL (01) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 240.6378 466.8898 Tm /F3+0 7.4 Tf 8.88 TL (Experienced friction) Tj T* ET
+BT 1 0 0 1 240.6378 434.8898 Tm /F3+0 7.4 Tf 8.88 TL (Experienced friction) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-389.6378 403.8898 m
-515.6378 403.8898 l
-517.2962 403.8898 518.6378 405.2314 518.6378 406.8898 c
-518.6378 446.8898 l
-518.6378 448.5482 517.2962 449.8898 515.6378 449.8898 c
-389.6378 449.8898 l
-387.9794 449.8898 386.6378 448.5482 386.6378 446.8898 c
-386.6378 406.8898 l
-386.6378 405.2314 387.9794 403.8898 389.6378 403.8898 c
+389.6378 371.8898 m
+515.6378 371.8898 l
+517.2962 371.8898 518.6378 373.2314 518.6378 374.8898 c
+518.6378 414.8898 l
+518.6378 416.5482 517.2962 417.8898 515.6378 417.8898 c
+389.6378 417.8898 l
+387.9794 417.8898 386.6378 416.5482 386.6378 414.8898 c
+386.6378 374.8898 l
+386.6378 373.2314 387.9794 371.8898 389.6378 371.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 395.6378 435.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
+BT 1 0 0 1 395.6378 403.8898 Tm /F3+0 8 Tf 9.6 TL (02) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 395.6378 418.8898 Tm /F3+0 7.4 Tf 8.88 TL (Requirements and architecture) Tj T* ET
+BT 1 0 0 1 395.6378 386.8898 Tm /F3+0 7.4 Tf 8.88 TL (Requirements and architecture) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-234.6378 355.8898 m
-360.6378 355.8898 l
-362.2962 355.8898 363.6378 357.2314 363.6378 358.8898 c
-363.6378 398.8898 l
-363.6378 400.5482 362.2962 401.8898 360.6378 401.8898 c
-234.6378 401.8898 l
-232.9794 401.8898 231.6378 400.5482 231.6378 398.8898 c
-231.6378 358.8898 l
-231.6378 357.2314 232.9794 355.8898 234.6378 355.8898 c
+234.6378 323.8898 m
+360.6378 323.8898 l
+362.2962 323.8898 363.6378 325.2314 363.6378 326.8898 c
+363.6378 366.8898 l
+363.6378 368.5482 362.2962 369.8898 360.6378 369.8898 c
+234.6378 369.8898 l
+232.9794 369.8898 231.6378 368.5482 231.6378 366.8898 c
+231.6378 326.8898 l
+231.6378 325.2314 232.9794 323.8898 234.6378 323.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 240.6378 387.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
+BT 1 0 0 1 240.6378 355.8898 Tm /F3+0 8 Tf 9.6 TL (03) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 240.6378 370.8898 Tm /F3+0 7.4 Tf 8.88 TL (Tests and acceptance) Tj T* ET
+BT 1 0 0 1 240.6378 338.8898 Tm /F3+0 7.4 Tf 8.88 TL (Tests and acceptance) Tj T* ET
 1 1 1 rg
 .878431 .878431 .878431 RG
 .8 w
 n
-79.6378 403.8898 m
-205.6378 403.8898 l
-207.2962 403.8898 208.6378 405.2314 208.6378 406.8898 c
-208.6378 446.8898 l
-208.6378 448.5482 207.2962 449.8898 205.6378 449.8898 c
-79.6378 449.8898 l
-77.9794 449.8898 76.6378 448.5482 76.6378 446.8898 c
-76.6378 406.8898 l
-76.6378 405.2314 77.9794 403.8898 79.6378 403.8898 c
+79.6378 371.8898 m
+205.6378 371.8898 l
+207.2962 371.8898 208.6378 373.2314 208.6378 374.8898 c
+208.6378 414.8898 l
+208.6378 416.5482 207.2962 417.8898 205.6378 417.8898 c
+79.6378 417.8898 l
+77.9794 417.8898 76.6378 416.5482 76.6378 414.8898 c
+76.6378 374.8898 l
+76.6378 373.2314 77.9794 371.8898 79.6378 371.8898 c
 h
 B*
 .101961 .337255 .858824 rg
-BT 1 0 0 1 85.6378 435.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
+BT 1 0 0 1 85.6378 403.8898 Tm /F3+0 8 Tf 9.6 TL (04) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 85.6378 418.8898 Tm /F3+0 7.4 Tf 8.88 TL (Release and operation) Tj T* ET
+BT 1 0 0 1 85.6378 386.8898 Tm /F3+0 7.4 Tf 8.88 TL (Release and operation) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 320.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
+BT 1 0 0 1 48 288.3898 Tm /F2+0 8.5 Tf 10.2 TL (Explanatory system relationship diagram; it is not photographic or experimental evidence.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 288.8898 m 547.2756 288.8898 l S
+n 48 256.8898 m 547.2756 256.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 254.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
+BT 1 0 0 1 48 222.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 230.8898 Tm /F2+0 10 Tf 12 TL (Screens from a released multi-cli-work build and from harness-manager and view-anything \(demo or) Tj T* ET
+BT 1 0 0 1 48 198.8898 Tm /F2+0 10 Tf 12 TL (Screens from a released multi-cli-work build and from harness-manager and view-anything \(demo or) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 214.8898 Tm /F2+0 10 Tf 12 TL (synthetic data\), together with the public repositories, tests, and releases of all four applications, provide) Tj T* ET
+BT 1 0 0 1 48 182.8898 Tm /F2+0 10 Tf 12 TL (synthetic data\), together with the repositories, tests, and releases of the four public applications \(the three) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 198.8898 Tm /F2+0 10 Tf 12 TL (public-safe evidence; private knowledge data is excluded.) Tj T* ET
+BT 1 0 0 1 48 166.8898 Tm /F2+0 10 Tf 12 TL (private apps are in private repositories and not linked\), provide public-safe evidence; private knowledge data) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 150.8898 Tm /F2+0 10 Tf 12 TL (is excluded.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 169.8898 Tm /F3+0 11 Tf 13.2 TL (Public product proof) Tj T* ET
+BT 1 0 0 1 48 121.8898 Tm /F3+0 11 Tf 13.2 TL (Public product proof) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 149.8898 Tm /F2+0 10 Tf 12 TL (Use public repositories, automated tests, and release artifacts as observable evidence.) Tj T* ET
+BT 1 0 0 1 48 101.8898 Tm /F2+0 10 Tf 12 TL (Use public repositories, automated tests, and release artifacts as observable evidence.) Tj T* ET
  
 endstream
 endobj
@@ -1294,11 +1300,11 @@ xref
 0001099903 00000 n 
 0001100485 00000 n 
 0001100579 00000 n 
-0001103504 00000 n 
-0001110418 00000 n 
-0001111599 00000 n 
-0001112987 00000 n 
-0001115918 00000 n 
+0001103597 00000 n 
+0001110994 00000 n 
+0001112175 00000 n 
+0001113563 00000 n 
+0001116494 00000 n 
 trailer
 <<
 /ID 
@@ -1310,5 +1316,5 @@ trailer
 /Size 44
 >>
 startxref
-1118658
+1119234
 %%EOF

@@ -2511,11 +2511,7 @@ test('Task 3 all eighteen case shells share one fetch-free, localized renderer c
       assert.match(html, new RegExp(`data-lang="${locale}"`));
       assert.match(html, /data-portfolio="case-study"/);
       assert.match(html, new RegExp(copy.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-      const fallbackSummary = project.slug === 'digital-occlusion-workflow'
-        ? (locale === 'ko'
-          ? '특징점·교합·평가를 연구진이 한 앱에서 다루는 end-to-end 워크플로우로 재설계했습니다.'
-          : 'Redesigned landmarking, occlusion, and evaluation as an end-to-end workflow that researchers can operate in one application.')
-        : copy.summary;
+      const fallbackSummary = copy.summary;
       assert.match(html, new RegExp(fallbackSummary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
       // The no-JS fallback keeps title, one summary paragraph, poster, and PDF link; limitation and collaboration prose is PDF-only.
       const fallback = /<article class="td-case-fallback">[\s\S]*?<\/article>/.exec(html)[0];
@@ -2776,10 +2772,10 @@ test('Task 5 lifecycle follow-up keeps canonical evidence and lifecycle status o
     'mandibular-fracture': { ko: '검증됨 · 완료', en: 'Verified · Completed' },
     'digital-occlusion-workflow': { ko: '진행 중 · 연구진 검증', en: 'Ongoing · Researcher Validation' },
     'life-careverse': { ko: '진행 중', en: 'Ongoing' },
-    'rtms-navigation': { ko: '검증됨 · 진행 중', en: 'Verified · Ongoing' },
+    'rtms-navigation': { ko: '검증됨 · 완료 (2026.08 이관)', en: 'Verified · Completed (handed over 2026.08)' },
     'respiratory-surface-guidance': { ko: '진행 중 · 연구', en: 'Ongoing · Research' },
     'skadi-tracking-software': { ko: '진행 중', en: 'Ongoing' },
-    'unmanned-forklift': { ko: '진행 중', en: 'Ongoing' },
+    'unmanned-forklift': { ko: '진행 중 · 고객 현장 시험 운용', en: 'Ongoing · Customer-site trial operation' },
     'ai-build-lab': { ko: '진행 중', en: 'Ongoing' }
   };
   assert.deepEqual(Object.fromEntries(data.projects.map((project) => [
@@ -3392,7 +3388,8 @@ test('Task 5 integrated review renders each middle block on its contracted page 
         const section = project.storySections
           ? project.storySections.find((candidate) => candidate.key === key)
           : project.blocks.find((candidate) => candidate.key === key);
-        assert.ok(extracted[project.slug].includes(section.translations.en.heading), `${project.slug}: document omits ${key}`);
+        // The PDF generator folds en dashes to hyphens, so compare the normalized heading.
+        assert.ok(extracted[project.slug].includes(section.translations.en.heading.replace(/–/g, '-')), `${project.slug}: document omits ${key}`);
       }
       const contracts = project.pdfSequence.diagrams || [project.pdfSequence.diagram];
       for (const contract of contracts) {
@@ -3413,11 +3410,14 @@ test('Task 5 integrated review renders each middle block on its contracted page 
         assert.ok(normalizedText.includes(value.replace(/\s+/g, ' ')), `${locale}: missing ${value}`);
       }
       assert.doesNotMatch(text, /Azure Spatial Anchors|Photon Unity Networking|\bASA\b|\bPUN\b|digitrack-inc|특허출원|patent application/i);
-      assert.equal(text.split('→').length - 1, 1, `${locale}: one forward flow direction symbol`);
+      // The case title now carries '(SMCNavi → OprNavi → OmfsNavi)' (cover, running headers); the remaining arrows are the
+      // diagram's one forward flow symbol plus the three in the Galaxy XR mirroring sentence (capture → H.264 → WebRTC → Unity).
+      const withoutTitle = normalizedText.split(required[0].replace(/\s+/g, ' ')).join('');
+      assert.equal(withoutTitle.split('→').length - 1, 4, `${locale}: one diagram forward flow symbol beside the title and the mirroring sentence`);
       assert.equal(text.split('⇄').length - 1, 4, `${locale}: four bidirectional flow direction symbols`);
     }
     assert.equal(extracted.pages['surgical-navigation-ko.pdf'], 6);
-    assert.equal(extracted.pages['surgical-navigation-en.pdf'], 6);
+    assert.equal(extracted.pages['surgical-navigation-en.pdf'], 7);
     for (const [locale, required] of [
       ['ko', ['구강악안면 디지털 교합 워크플로우', '기술 리드', '연구진 검증', 'RMSE', 'Gap', 'FRE', '개인 소유와 팀 결과 분리']],
       ['en', ['Maxillofacial Digital Occlusion Workflow', 'Technical Lead', 'Researcher Validation', 'RMSE', 'Gap', 'FRE', 'Individual ownership separated from team results']]
@@ -3481,9 +3481,10 @@ test('Task 5 integrated review embeds an approved poster instead of opening a vi
     const audit = childProcess.spawnSync(python, ['-c', [
       'import sys',
       'from pypdf import PdfReader',
-      'page = PdfReader(sys.argv[1]).pages[3]',
-      'xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
-      'print(any(ref.get_object().get("/Subtype") == "/Image" for ref in xobjects.values()))'
+      'def sizes(page):',
+      '    xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
+      '    return [(ref.get_object().get("/Width"), ref.get_object().get("/Height")) for ref in xobjects.values() if ref.get_object().get("/Subtype") == "/Image"]',
+      'print(any((1032, 774) in sizes(page) for page in PdfReader(sys.argv[1]).pages))'
     ].join('\n'), path.join(temporaryRoot, 'output', 'pdf', 'surgical-navigation-en.pdf')], {
       cwd: root, encoding: 'utf8', timeout: 30_000
     });
@@ -5209,7 +5210,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
     ['mandibular-fracture', 'verified', 'completed'],
     ['digital-occlusion-workflow', 'ongoing', 'research'],
     ['life-careverse', 'ongoing', 'ongoing'],
-    ['rtms-navigation', 'verified', 'ongoing'],
+    ['rtms-navigation', 'verified', 'completed'],
     ['respiratory-surface-guidance', 'ongoing', 'research'],
     ['skadi-tracking-software', 'ongoing', 'ongoing'],
     ['unmanned-forklift', 'ongoing', 'ongoing'],
@@ -5218,7 +5219,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
 
   const projectsHtml = render.projectGroupsHtml(data, '', false, 'en');
   assert.match(projectsHtml, /Verified · Completed/);
-  assert.match(projectsHtml, /Verified · Ongoing/);
+  assert.equal(projectsHtml.split('Verified · Completed').length - 1, 2, 'mandibular-fracture and rtms-navigation both list as Verified · Completed');
   assert.match(projectsHtml, /Ongoing · Research/);
   assert.doesNotMatch(projectsHtml, /Ongoing · Ongoing/);
   const caseHtml = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, 'ko');
