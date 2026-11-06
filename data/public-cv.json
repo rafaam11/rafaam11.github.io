@@ -419,7 +419,6 @@
               "rows": [
                 {
                   "project": "사내 도구",
-                  "slug": "ai-build-lab",
                   "period": "2026–",
                   "did": [
                     "업무 작업대·HWP 편집기",
@@ -444,7 +443,6 @@
               "rows": [
                 {
                   "project": "In-house tools",
-                  "slug": "ai-build-lab",
                   "period": "2026–",
                   "did": [
                     "Desktop workbench, HWP editor",

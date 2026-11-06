@@ -19,7 +19,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 
 - 팀 전체 결과를 개인 성과로 쓰지 않는다. `My Role`과 `Team Result`를 분리한다(고밀도 사례 웹은 결과 칸의 `팀` 표기로 분리, PDF는 기존 단락).
 - 기여율 퍼센트 대신 소유한 문제, 결정, 구현, 검증 근거를 쓴다.
-- 기관·제품 실명은 승인 목록(2026-08-21 사용자 승인)만 쓴다: 디지트랙/DIGITRACK, SKADI, SMCNavi, NeuroPilot, DOTORI, 삼성서울병원, 서울성모병원, AT&C, KERI, ETRI, KAIST, A4LAB, 정부과제명. 타인의 이름(교수·임원·동료), 연구비, 문서·특허 번호, 과제 목표치·타 기관 지표는 쓰지 않는다. 본인이 직접 측정한 수치만 인용한다.
+- 기관·제품 실명은 승인 목록(2026-08-21 사용자 승인, OprNavi·OmfsNavi는 2026-11-06 추가 승인)만 쓴다: 디지트랙/DIGITRACK, SKADI, SMCNavi, OprNavi, OmfsNavi, NeuroPilot, DOTORI, 삼성서울병원, 서울성모병원, AT&C, KERI, ETRI, KAIST, A4LAB, 정부과제명. 타인의 이름(교수·임원·동료), 연구비, 문서·특허 번호, 과제 목표치·타 기관 지표는 쓰지 않는다. 본인이 직접 측정한 수치만 인용한다.
 - `Verified`, `Ongoing`, `Prototype`, `Expected`, `Research`, `Completed` 상태를 구분한다.
 - **현재 전문성과 연구 방향을 분리한다.** 현재 전문성(수술 내비게이션·3D 정합·광학 추적·컴퓨터비전·XR/공간 컴퓨팅·로봇/비전/센서 통합)만 역량·티어·`knowsAbout`에 쓴다. 연구 방향(수술 로보틱스·Physical AI·Surgical AI·3D 비전·로봇 인지·멀티모달 인지·공간 지능)은 `data/public-cv.json` `interests`에서 나와 홈 연구 방향 줄·CV 요약·JSON-LD description에만 쓴다. 로봇 보조 수술 시스템 개발, SLAM, 센서퓨전 알고리즘 전문성, 임상시험 책임, "Physical AI 전문가"는 주장하지 않고 과거 프로젝트를 Physical AI로 소급하지 않는다.
 - 공저자 이름은 예외적으로 본인 논문 JIIM 2024의 서지 정보(`publications[].authors`)에만 허용한다. 홈·사례·소식 본문에는 교수님 성함을 쓰지 않는다(CV의 지도교수 표기는 2026-08-22 승인 사항).
