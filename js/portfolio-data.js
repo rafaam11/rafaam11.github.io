@@ -857,7 +857,7 @@
       lifecycleState: 'research',
       capabilityKeys: ['medical-navigation', 'registration'],
       route: 'projects/digital-occlusion-workflow/',
-      tech: ['3D Slicer', 'C++', 'Qt', 'Python', 'VTK', 'PyBullet', 'SOFA'],
+      tech: ['3D Slicer', 'C++', 'Qt 6', 'Python', 'VTK', 'PyBullet', 'SOFA', 'ONNX Runtime', 'CTest', 'NSIS'],
       media: {
         lead: {
           id: 'digital-occlusion-workflow-demo-01',
@@ -936,26 +936,32 @@
               heading: '한 앱으로 연결한 7단계 워크플로우',
               body: '데이터 준비부터 평가와 내보내기까지 프로젝트 상태가 한 흐름 안에서 이어집니다.',
               items: [
-                '8개 3D 모델 준비',
+                '원본 STL 4개(두개·상악, 하악, 상·하악 스캔 치아) → 작업 모델 합성',
                 '치아 특징점 30개(상악 15개·하악 15개)와 악안면 특징점 30개 입력·가시화',
                 '특징점 기반 해부학적 좌표계 구성',
                 '자동 교합, 6-DOF 미세 조정, 피봇 회전',
                 '접촉 상태와 거리 가시화',
-                'RMSE·Gap·FRE 평가',
-                '프로젝트 저장과 결과 내보내기'
+                '조기접촉 가상 절삭(그라인딩) 후 재교합·재평가 루프',
+                'Midline·Overjet·Overbite 목표값 지표',
+                'FH·정중시상·관상 평면 축 기준 악궁 중점 6-DOF 미세조정',
+                'RMSE·Gap·FRE 평가, 적합/검토 필요 판정 요약',
+                '프로젝트 저장과 PNG·CSV·HTML 리포트 내보내기'
               ]
             },
             en: {
               heading: 'A seven-stage workflow in one application',
               body: 'Project state remains connected from data preparation through evaluation and export.',
               items: [
-                'Prepare eight 3D models',
+                'Four source STLs (skull and maxilla, mandible, upper and lower scanned teeth) → composed working models',
                 'Enter and visualize 30 dental landmarks (15 upper and 15 lower) plus 30 maxillofacial landmarks',
                 'Construct anatomical frames from the landmarks',
                 'Run automatic occlusion, 6-DOF fine adjustment, and pivot rotation',
                 'Visualize contact state and distance',
-                'Evaluate RMSE, Gap, and FRE',
-                'Save the project and export results'
+                'Re-occlude and re-evaluate after virtual grinding of premature contacts',
+                'Target-value metrics for Midline, Overjet, and Overbite',
+                'Arch-centre 6-DOF fine adjustment on FH, midsagittal, and coronal plane axes',
+                'Evaluate RMSE, Gap, and FRE, with a fit / review-needed summary',
+                'Save the project and export PNG, CSV, and HTML reports'
               ]
             }
           },
@@ -967,7 +973,7 @@
               en: { title: 'Data preparation through evaluation', caption: 'The seven-stage digital-occlusion workflow implemented in the current build.', boundaryLabel: 'Implemented scope · Under researcher validation' }
             },
             nodes: [
-              { key: 'prep', translations: { ko: { label: '모델 준비', detail: '8개 3D 모델' }, en: { label: 'Model preparation', detail: 'Eight 3D models' } } },
+              { key: 'prep', translations: { ko: { label: '모델 준비', detail: '원본 STL 4개 → 작업 모델' }, en: { label: 'Model preparation', detail: 'Four STLs → working models' } } },
               { key: 'landmarks', translations: { ko: { label: '특징점', detail: '치아 30개 · 악안면 30개' }, en: { label: 'Landmarks', detail: '30 dental · 30 maxillofacial' } } },
               { key: 'frame', translations: { ko: { label: '해부학 좌표계', detail: '특징점 기반 기준 구성' }, en: { label: 'Anatomical frame', detail: 'Landmark-based reference' } } },
               { key: 'occlusion', translations: { ko: { label: '교합·미세 조정', detail: '자동 교합 · 6-DOF · 피봇 회전' }, en: { label: 'Occlusion and adjustment', detail: 'Automatic occlusion · 6-DOF · pivot rotation' } } },
@@ -1053,8 +1059,8 @@
           layout: 'wide',
           placement: 'before-standard',
           translations: {
-            ko: { heading: 'Custom App 아키텍처와 소유권', body: '3D Slicer Custom App의 C++/Qt 셸, Python 워크플로우 모듈, 공통 상태·라이브러리를 한 구조로 설계했습니다. 협업 알고리즘과 엔진은 개인 구현으로 재귀속하지 않고, 이를 상태 흐름·UI·가시화·평가로 통합한 범위를 구분합니다.' },
-            en: { heading: 'Custom App architecture and ownership', body: 'The 3D Slicer Custom App is structured around a C++/Qt shell, Python workflow modules, and shared state and libraries. Collaborative algorithms and engines are not reassigned as individual implementations; the individually owned integration into state flow, UI, visualization, and evaluation remains explicit.' }
+            ko: { heading: 'Custom App 아키텍처와 소유권', body: '3D Slicer Custom App의 C++/Qt 셸, Python 워크플로우 모듈, 공통 상태·라이브러리를 한 구조로 설계했습니다. 협업 알고리즘과 엔진은 개인 구현으로 재귀속하지 않고, 이를 상태 흐름·UI·가시화·평가로 통합한 범위를 구분합니다. 2026년에는 Slicer 5.12.4·Qt 6으로 이관하고 AI 특징점 모델을 ONNX Runtime 별도 프로세스로 분리했으며, NSIS 설치본·포터블 배포와 Cython 보호를 적용했습니다.', items: ['Slicer 5.12.4·Qt 6 이관', 'ONNX Runtime 별도 프로세스(CPU/CUDA 선택)', 'NSIS 설치본·포터블 배포, Cython 보호'] },
+            en: { heading: 'Custom App architecture and ownership', body: 'The 3D Slicer Custom App is structured around a C++/Qt shell, Python workflow modules, and shared state and libraries. Collaborative algorithms and engines are not reassigned as individual implementations; the individually owned integration into state flow, UI, visualization, and evaluation remains explicit. In 2026 the app was ported to Slicer 5.12.4 and Qt 6, the AI landmark model runs as a separate ONNX Runtime process, and delivery uses an NSIS installer, a portable build, and Cython protection.', items: ['Port to Slicer 5.12.4 and Qt 6', 'Separate ONNX Runtime process (CPU/CUDA selection)', 'NSIS installer and portable build, Cython protection'] }
           },
           diagram: {
             kind: 'system-flow',
@@ -1089,7 +1095,8 @@
               heading: '현재 검증 상태와 한계',
               body: '기능 동작과 임상 활용 가능성을 같은 주장으로 섞지 않습니다.',
               items: [
-                '구현됨: 8개 모델 준비, 치아·악안면 특징점, 해부학 좌표계, 자동 교합·6-DOF·접촉 분석, 평가·내보내기',
+                '구현됨: 원본 STL 4개 작업 모델 합성, 치아·악안면 특징점, 해부학 좌표계, 자동 교합·6-DOF·접촉 분석, 그라인딩 재평가 루프, 평가·내보내기',
+                '단위 시험 622개, 이전 버전(v1) golden 케이스 동등성 검증(차이 원장)',
                 '검증 중: 연구진이 개발·시연 빌드를 직접 사용하며 워크플로우 사용성과 교합 결과를 검토',
                 '주장하지 않음: 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성, 화면 예시값의 성능 해석'
               ]
@@ -1098,7 +1105,8 @@
               heading: 'Current validation state and limitations',
               body: 'Functional operation and clinical applicability remain separate claims.',
               items: [
-                'Implemented: eight-model preparation, dental and maxillofacial landmarks, anatomical frames, automatic occlusion, 6-DOF and contact analysis, evaluation, and export',
+                'Implemented: working models composed from four source STLs, dental and maxillofacial landmarks, anatomical frames, automatic occlusion, 6-DOF and contact analysis, grinding re-evaluation loop, evaluation, and export',
+                '622 unit tests, and golden-case parity checks against the previous version (v1) with a difference ledger',
                 'Under review: researchers directly use development and demonstration builds to review workflow usability and occlusion output',
                 'Not claimed: hospital installation, use in real surgery, medical-device status, clinical efficacy, accuracy or safety, or performance interpretation of displayed example values'
               ]
@@ -1110,8 +1118,8 @@
           layout: 'wide',
           placement: 'after-standard',
           translations: {
-            ko: { heading: '디지털 교합에서 전체 수술계획으로', body: '다음 연구 방향은 정상 교합 기반 하악 운동을 연결하고, 장기적으로 디지털 교합·계측·하악 운동을 포함하는 전체 구강악안면 수술계획 소프트웨어로 확장하는 것입니다. 이는 구현 완료가 아닌 삼성서울병원과 DIGITRACK의 장기 R&D 방향입니다.' },
-            en: { heading: 'From digital occlusion to complete surgical planning', body: 'The next research direction connects normal-occlusion-based mandibular motion and, over the longer term, expands toward complete oral and maxillofacial surgical-planning software spanning digital occlusion, measurement, and mandibular motion. This is the long-term Samsung Medical Center and DIGITRACK R&D direction, not completed functionality.' }
+            ko: { heading: '디지털 교합에서 전체 수술계획으로', body: '다음 연구 방향은 정상 교합 기반 하악 운동을 연결하고, 장기적으로 디지털 교합·계측·하악 운동을 포함하는 전체 구강악안면 수술계획 소프트웨어로 확장하는 것입니다. 이는 구현 완료가 아닌 삼성서울병원과 DIGITRACK의 장기 R&D 방향입니다. (설계) 절골·분절·가이드 계획과, 수술 중 내비게이션(OmfsNavi)으로 plan.json을 전달하는 방안은 호환 미검증 상태입니다.' },
+            en: { heading: 'From digital occlusion to complete surgical planning', body: 'The next research direction connects normal-occlusion-based mandibular motion and, over the longer term, expands toward complete oral and maxillofacial surgical-planning software spanning digital occlusion, measurement, and mandibular motion. This is the long-term Samsung Medical Center and DIGITRACK R&D direction, not completed functionality. (Design) Osteotomy, segment, and guide planning, and handing plan.json to intraoperative navigation (OmfsNavi), are not yet verified for compatibility.' }
           }
         }
       ],
@@ -1121,7 +1129,7 @@
       web: {
         ko: {
           thesis: '분리된 특징점·교합·평가 기능을 한 앱의 end-to-end 워크플로로 재설계',
-          tags: ['3D Slicer', 'C++ · Qt', 'Python', 'VTK', 'PyBullet', 'SOFA'],
+          tags: ['3D Slicer', 'C++ · Qt', 'Python', 'VTK', 'PyBullet', 'ONNX Runtime'],
           brief: {
             problem: ['특징점 앱 분리·참고 이미지 대조 불편', '다중 시점 교합·저장·평가 화면 미통합'],
             did: ['기술 리드·메인 개발자', 'Custom App 아키텍처·end-to-end UI/UX', '엔진 통합·평가·내보내기·패키징'],
@@ -1130,17 +1138,17 @@
           },
           sections: {
             'redesign-background': { items: ['2023.04–12 이전 앱 유지보수·검증', '2025.09–10 v1 교합 시뮬레이터 정리', '2026.03 구조·워크플로 재설계 시작', '2026.04 특징점 주석 PoC 도구(PySide6·VTK)'] },
-            'integrated-workflow': { items: ['8개 3D 모델 준비', '치아 30개·악안면 30개 특징점 입력·가시화', '특징점 기반 해부학적 좌표계', '자동 교합·6-DOF 미세 조정·피봇 회전', '접촉 상태·거리 가시화', 'RMSE·Gap·FRE 평가, 저장·내보내기'] },
+            'integrated-workflow': { items: ['원본 STL 4개 → 작업 모델 합성', '치아 30개·악안면 30개 특징점 입력·가시화', '특징점 기반 해부학적 좌표계', '자동 교합·악궁 중점 6-DOF·피봇 회전', '접촉 상태·거리 가시화', '그라인딩 후 재교합·재평가 루프', 'Midline·Overjet·Overbite 목표값 지표', 'RMSE·Gap·FRE, 판정 요약·PNG·CSV·HTML 리포트'] },
             'user-centered-decisions': { items: ['특징점 입력 화면 옆 참고 이미지', '다중 시점 교합 비교', '저장·불러오기 흐름 통합', '시뮬레이션 재생바·피봇 회전 핸들', '모델 투명도·특징점 가시성 제어'] },
-            'system-architecture': { items: ['C++/Qt 셸 + Python 워크플로 모듈', '공통 상태·라이브러리', '협업 알고리즘은 통합 범위로 구분'] },
+            'system-architecture': { items: ['C++/Qt 셸 + Python 워크플로 모듈', '공통 상태·라이브러리', '협업 알고리즘은 통합 범위로 구분', 'Slicer 5.12.4·Qt 6 이관', 'ONNX Runtime 별도 프로세스', 'NSIS 설치본·포터블, Cython 보호'] },
             'verification-boundary': { hidden: true },
-            'long-term-direction': { items: ['정상 교합 기반 하악 운동 연결', '전체 구강악안면 수술계획으로 확장(장기 방향)'] }
+            'long-term-direction': { items: ['정상 교합 기반 하악 운동 연결', '전체 구강악안면 수술계획으로 확장(장기 방향)', '(설계) 절골·분절·가이드 계획, OmfsNavi 전달 미검증'] }
           },
           sceneCaption: '디지털 교합 워크플로 개념도(합성 형상)'
         },
         en: {
           thesis: 'Separate landmark, occlusion, and evaluation tools redesigned as one end-to-end app',
-          tags: ['3D Slicer', 'C++ · Qt', 'Python', 'VTK', 'PyBullet', 'SOFA'],
+          tags: ['3D Slicer', 'C++ · Qt', 'Python', 'VTK', 'PyBullet', 'ONNX Runtime'],
           brief: {
             problem: ['Landmark app separate from reference images', 'Occlusion views, saving, evaluation not integrated'],
             did: ['Technical lead and main developer', 'Custom App architecture and end-to-end UI/UX', 'Engine integration, evaluation, export, packaging'],
@@ -1149,11 +1157,11 @@
           },
           sections: {
             'redesign-background': { items: ['2023.04–12 maintained and verified the previous app', '2025.09–10 packaged the v1 occlusion simulator', '2026.03 redesign of structure and workflow', '2026.04 landmark annotation PoC (PySide6, VTK)'] },
-            'integrated-workflow': { items: ['Eight 3D models prepared', '30 dental and 30 maxillofacial landmarks', 'Landmark-based anatomical frame', 'Auto occlusion, 6-DOF fine-tuning, pivot rotation', 'Contact state and distance display', 'RMSE, Gap, FRE evaluation; save and export'] },
+            'integrated-workflow': { items: ['Four source STLs → composed working models', '30 dental and 30 maxillofacial landmarks', 'Landmark-based anatomical frame', 'Auto occlusion, arch-centre 6-DOF, pivot rotation', 'Contact state and distance display', 'Grinding, then re-occlusion and re-evaluation loop', 'Midline, Overjet, Overbite target metrics', 'RMSE, Gap, FRE; verdict summary; PNG, CSV, HTML reports'] },
             'user-centered-decisions': { items: ['Reference image beside landmark input', 'Multi-view occlusion comparison', 'Integrated save and load', 'Simulation playback bar and pivot handle', 'Model transparency and landmark visibility'] },
-            'system-architecture': { items: ['C++/Qt shell + Python workflow modules', 'Shared state and libraries', 'Collaborator algorithms kept as integration scope'] },
+            'system-architecture': { items: ['C++/Qt shell + Python workflow modules', 'Shared state and libraries', 'Collaborator algorithms kept as integration scope', 'Port to Slicer 5.12.4 and Qt 6', 'Separate ONNX Runtime process', 'NSIS installer, portable build, Cython protection'] },
             'verification-boundary': { hidden: true },
-            'long-term-direction': { items: ['Mandibular motion from normal occlusion', 'Toward full maxillofacial surgical planning (long-term)'] }
+            'long-term-direction': { items: ['Mandibular motion from normal occlusion', 'Toward full maxillofacial surgical planning (long-term)', '(Design) Osteotomy and guide planning; OmfsNavi handoff unverified'] }
           },
           sceneCaption: 'Digital occlusion workflow concept (synthetic geometry)'
         }
@@ -1173,10 +1181,10 @@
           shortTitle: '디지털 교합 워크플로우',
           eyebrow: '수술 로보틱스·내비게이션 · 임상 워크플로우 통합',
           thesis: '분리된 특징점·교합·평가 기능을 연구진이 한 앱에서 직접 다룰 수 있는 사용자 친화적 end-to-end 워크플로우로 재설계했습니다.',
-          summary: '8개 3D 모델 준비, AI 해부학 특징점 검출 모델을 통합한 치아·악안면 특징점 단계, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
+          summary: '원본 STL 4개 → 작업 모델 합성, 병원 제공 AI 해부학 특징점 검출 모델을 별도 프로세스로 통합한 치아·악안면 특징점 단계, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
           problem: '이전 흐름은 특징점 앱이 분리되어 참고 이미지 대조와 확대·이동이 불편했고, 교합의 다중 시점, 저장·불러오기, 악안면 특징점, 평가 화면이 충분히 통합되지 않았습니다.',
           role: '기술 리드·메인 개발자로 C++/Qt 셸, Python 모듈, 공통 라이브러리의 전체 Custom App 아키텍처를 설계하고 end-to-end UI/UX, 알고리즘·엔진 통합, 평가·내보내기, CMake/SuperBuild·테스트·패키징을 주도했습니다. 워크플로우에 들어가는 특징점 데이터를 위해 구강 스캔 특징점 주석 PoC 도구(PySide6·VTK)도 만들었습니다.',
-          teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. DIGITRACK 협업 팀은 특징점 알고리즘과 교합 엔진 구현·연구를 지원했습니다.',
+          teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. AI 특징점 모델은 삼성서울병원 연구팀이 제공한 것이며, 저는 이를 별도 프로세스로 통합(CPU/CUDA 선택, 취소 시 롤백, 정답 비교)했고 학습은 하지 않았습니다. DIGITRACK 협업 팀은 교합 엔진 구현·연구를 지원했습니다.',
           evidence: '특징점 입력, 다중 시점 교합, 접촉 가시화, RMSE·Gap·FRE 평가와 내보내기가 동작하는 개발 빌드 영상·화면과 연구진 직접 사용 피드백이 근거입니다.',
           limitation: '현재는 개발·시연 빌드의 연구진 검증 단계입니다. 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성을 주장하지 않으며 화면 값도 성능 결과로 인용하지 않습니다.',
           collaboration: '삼성서울병원과 DIGITRACK의 장기 R&D로 디지털 교합에서 정상 교합 기반 하악 운동과 전체 구강악안면 수술계획으로 확장하는 방향을 검토하고 있습니다. 2026년 협의에서는 병원 정의 특징점을 원본 STL 좌표로 전달하고, 주석·모델 학습·앱 통합의 책임을 구분했습니다. 재설계는 3월에 시작했고 새 저장소의 최초 커밋은 4월입니다.',
@@ -1193,10 +1201,10 @@
           shortTitle: 'Digital Occlusion Workflow',
           eyebrow: 'Surgical Robotics & Navigation · Clinical Workflow Integration',
           thesis: 'Redesigned separate landmarking, occlusion, and evaluation tools into a user-friendly end-to-end workflow that researchers can operate in one application.',
-          summary: 'Connected eight-model preparation, a dental and maxillofacial landmark step that integrates an AI anatomical-landmark detection model, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.',
+          summary: 'Connected four source STLs → composed working models, a dental and maxillofacial landmark step that integrates a hospital-provided AI anatomical-landmark detection model as a separate process, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in one Custom App.',
           problem: 'The earlier flow separated landmarking into another application, made reference comparison and view navigation awkward, lacked multi-view occlusion, fragmented save/load, omitted maxillofacial landmarks, and had no sufficiently integrated result screen.',
           role: 'As technical lead and primary developer, designed the complete Custom App architecture across the C++/Qt shell, Python modules, and shared library, and led the end-to-end UI/UX, algorithm and engine integration, evaluation/export, CMake/SuperBuild, testing, and packaging. Also built a proof-of-concept oral-scan landmark annotation tool (PySide6 and VTK) for the landmark data that feeds the workflow.',
-          teamResult: 'Samsung Medical Center researchers jointly define the clinical workflow, landmarks, and evaluation metrics and directly review development builds. The DIGITRACK team supports the landmark algorithms and occlusion-engine implementation and research.',
+          teamResult: 'Samsung Medical Center researchers jointly define the clinical workflow, landmarks, and evaluation metrics and directly review development builds. The AI landmark model was provided by the Samsung Medical Center research team; I integrated it as a separate process (CPU/CUDA selection, rollback on cancel, ground-truth comparison) and did not train it. The DIGITRACK team supports occlusion-engine implementation and research.',
           evidence: 'A working development build demonstrates landmarking, multi-view occlusion, contact visualization, RMSE/Gap/FRE evaluation, and export, with direct researcher use and feedback.',
           limitation: 'The software is under researcher validation as a development and demonstration build. This case does not claim hospital installation, use in real surgery, medical-device status, or clinical efficacy, accuracy, or safety; displayed values are not performance outcomes.',
           collaboration: 'The long-term Samsung Medical Center and DIGITRACK R&D direction expands from digital occlusion toward normal-occlusion-based mandibular motion and complete oral and maxillofacial surgical planning. The 2026 discussions specified hospital-defined landmarks in the original STL coordinate frame and distinguished annotation, model training, and application integration responsibilities. Redesign began in March; the first commit in the new repository dates to April.',

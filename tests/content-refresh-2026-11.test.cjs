@@ -40,3 +40,13 @@ test('rtms-navigation: handed over 2026-08, evaluation lives in a tool branch', 
   assert.doesNotMatch(JSON.stringify(p.web.en.points), /Per-target distance, RMSE, CSV comparison/);
   assert.match(rows, /"slug": "rtms-navigation",\s*"period": "2024\.07–2026\.08"[\s\S]*?"Quantitative evaluation tool \(eval branch\)"/);
 });
+
+test('digital-occlusion-workflow: four source STLs, hospital-provided AI model, 2026 features', () => {
+  const p = by('digital-occlusion-workflow'); const j = JSON.stringify(p);
+  assert.doesNotMatch(j, /8개 3D 모델|eight 3D models|Eight 3D models/i);
+  assert.match(j, /STL 4개/); assert.match(j, /Four source STLs/i);
+  assert.match(p.translations.ko.teamResult, /삼성서울병원 연구팀이 제공한/);
+  assert.doesNotMatch(p.translations.ko.teamResult, /DIGITRACK 협업 팀은 특징점 알고리즘/);
+  for (const f of ['그라인딩', 'Overjet', 'Overbite', 'Midline', '622', 'Slicer 5.12.4', 'ONNX']) assert.ok(j.includes(f), f);
+  assert.ok(['Qt 6', 'ONNX Runtime', 'CTest', 'NSIS'].every(t => p.tech.includes(t)));
+});
