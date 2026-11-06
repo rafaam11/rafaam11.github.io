@@ -1938,7 +1938,8 @@ test('SMCNavi canonical case carries the approved title, workflows, ownership, t
     'smcnavi-workflows',
     'system-architecture',
     'registration-calibration',
-    'hololens-interface', 'navigation-lineage'
+    'hololens-interface',
+    'navigation-lineage'
   ]);
   assert.deepEqual(project.storySections[1].translations.ko.items, [
     '상악종양 제거술 내비게이션',
