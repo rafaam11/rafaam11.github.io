@@ -507,7 +507,7 @@ test('canonical records retain localized evidence, attribution, media, blocks, a
       }
     }
   }
-  assert.deepEqual(data.projects.at(-1).subcases.map((item) => item.key), ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus']);
+  assert.deepEqual(data.projects.at(-1).subcases.map((item) => item.key), ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus', 'deck', 'bolt', 'jk-video-editor']);
 });
 
 test('digital occlusion case preserves approved role, validation, and roadmap boundaries', () => {

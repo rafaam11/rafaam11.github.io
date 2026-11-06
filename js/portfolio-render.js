@@ -48,7 +48,7 @@
   var applicationTrackKeys = ['medical', 'industrial'];
   var applicationTrackKinds = ['primary', 'extension'];
   var publicResourceTypes = ['documentation', 'product'];
-  var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus'];
+  var aiBuildLabSubcaseKeys = ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus', 'deck', 'bolt', 'jk-video-editor'];
   // Web-only 3D figure: { name, poster: 'assets/3d/<name>.webp', translations: { ko: { caption, alt }, en } }.
   var scene3dKeys = ['name', 'poster', 'translations'];
   var scene3dNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

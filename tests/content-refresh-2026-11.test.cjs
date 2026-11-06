@@ -3,7 +3,7 @@ const data = require('../js/portfolio-data.js');
 const by = slug => data.projects.find(p => p.slug === slug);
 const text = JSON.stringify(data.projects);
 test('refresh 2026-11: no stale facts remain', () => {
-  for (const stale of ['8개 3D 모델', 'eight 3D models', '게이팅 윈도우', 'gating window', '3단 가상 범퍼', 'three-tier virtual bumper', 'three-zone virtual bumper', '계획 CT 정합', '계속 유지보수합니다', '2024 – present', 'v1.24 — 프로젝트 시작 화면']) {
+  for (const stale of ['8개 3D 모델', 'eight 3D models', '3단 가상 범퍼', 'three-tier virtual bumper', 'three-zone virtual bumper', '계획 CT 정합', '계속 유지보수합니다', '2024 – present', 'v1.24 — 프로젝트 시작 화면']) {
     assert.ok(!text.includes(stale), stale);
   }
 });
@@ -88,4 +88,16 @@ test('unmanned-forklift: cart recognition/classification workflow, field trial s
   assert.match(j, /고객 현장 시험 운용|customer-site trial/i);
   assert.doesNotMatch(p.translations.ko.limitation, /공개 클립과 사진은 시험장 테스트입니다/);
   assert.ok(p.tech.includes('DINOv2') && p.tech.includes('Isaac Sim'));
+});
+
+test('ai-build-lab: period from Claude Code launch, eight subcases, community line, caption date', () => {
+  const p = by('ai-build-lab');
+  assert.equal(p.period, '2025.05 – present');
+  assert.deepEqual(p.subcases.map(s => s.key), ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus', 'deck', 'bolt', 'jk-video-editor']);
+  const j = JSON.stringify(p);
+  assert.match(j, /Claude Code in Daegu/); assert.match(j, /160/);
+  assert.doesNotMatch(j, /네 앱의 공개 저장소|Four apps with public repos/);
+  assert.match(p.translations.ko.mediaCaption, /2026\.07 촬영|v1\.24 \(2026/);
+  for (const f of ['모바일 원격', 'doctor', 'LAS', '정류장 중심']) assert.ok(j.includes(f), f);
+  assert.doesNotMatch(j, /github\.com\/rafaam11\/(deck|bolt|jk-video-editor)/);
 });

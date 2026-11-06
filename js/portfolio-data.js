@@ -1780,7 +1780,7 @@
       ]
     }),
     project({
-      slug: 'ai-build-lab', tier: 'ai-build-lab', period: '2024 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
+      slug: 'ai-build-lab', tier: 'ai-build-lab', period: '2025.05 – present', evidenceState: 'ongoing', lifecycleState: 'ongoing',
       capabilityKeys: ['ai-product-engineering'], route: 'projects/ai-build-lab/',
       tech: ['Electron', 'React', 'TypeScript', 'Tauri', 'Rust', 'Node.js', 'Cloudflare', 'GitHub Actions', 'Agent workflows'],
       media: {
@@ -1825,7 +1825,7 @@
           brief: {
             problem: ['반복되는 마찰이 임시 스크립트로 남음'],
             did: ['요구사항·아키텍처·수용 기준 소유', '테스트·릴리스·운영 판단', 'AI는 구현 보조·증폭'],
-            result: ['네 앱의 공개 저장소·테스트·릴리스']
+            result: ['공개 앱 4개의 저장소·테스트·릴리스(개인용 3개는 비공개)']
           },
           points: ['마찰 → 요구사항 → 아키텍처', '수용 기준 → 테스트 → 릴리스 → 운영', '사람: 맥락·수용·릴리스 판단', 'AI: 구현 증폭']
         },
@@ -1835,7 +1835,7 @@
           brief: {
             problem: ['Recurring friction stayed as throwaway scripts'],
             did: ['Own requirements, architecture, acceptance', 'Tests, releases, and operations decisions', 'AI as implementation amplifier'],
-            result: ['Four apps with public repos, tests, releases']
+            result: ['Four public apps: repos, tests, releases (three private)']
           },
           points: ['Friction → requirements → architecture', 'Acceptance criteria → tests → release → operations', 'Human: context, acceptance, release decisions', 'AI: amplifies implementation']
         }
@@ -1844,39 +1844,42 @@
         ko: {
           title: 'AI Build Lab - 필요한 도구를 직접 만든다', shortTitle: 'AI Build Lab', eyebrow: 'AI 빌드 랩 · 제품 엔지니어링',
           thesis: '직접 겪은 문제를 요구사항, 아키텍처, 수용 기준, 테스트 제품, 릴리스, 운영으로 바꾸고 AI는 구현을 증폭하는 수단으로 사용합니다.',
-          summary: '로컬 지식 시스템과 직접 만들어 쓰는 네 앱(multi-cli-work, harness-manager, view-anything, 대구 버스 정보 앱)을 하나의 문제-제품 파이프라인으로 묶어 보여줍니다.',
+          summary: '로컬 지식 시스템과 직접 만들어 쓰는 공개 앱 4개(multi-cli-work, harness-manager, view-anything, 대구 버스 정보 앱)와 개인용 앱 3개(deck, bolt, jk-video-editor)를 하나의 문제-제품 파이프라인으로 묶어 보여줍니다.',
           problem: '자주 겪는 마찰이 임시 스크립트로 남지 않고 반복 사용 가능한 제품 요구사항으로 바뀌어야 했습니다.',
           role: '문제 맥락, 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영 판단을 소유하고 AI를 구현 보조·증폭 수단으로 사용했습니다.',
           teamResult: '공개 저장소와 릴리스 아티팩트는 확인 가능한 제품 결과이지만 사용자 수, 생산성, 유지보수 효과를 주장하지 않습니다.',
-          evidence: 'multi-cli-work 릴리스 빌드와 harness-manager·view-anything의 실제 화면(시연·합성 데이터), 네 앱의 공개 저장소·테스트·릴리스를 근거로 삼고, 로컬 지식 시스템의 비공개 데이터는 배제합니다.',
+          evidence: 'multi-cli-work 릴리스 빌드와 harness-manager·view-anything의 실제 화면(시연·합성 데이터), 공개 앱 4개의 저장소·테스트·릴리스(개인용 3개는 비공개)를 근거로 삼고, 로컬 지식 시스템의 비공개 데이터는 배제합니다.',
           limitation: '로컬 지식 시스템의 원문·개인 데이터를 공개하지 않고 검증되지 않은 사용자·생산성 지표를 주장하지 않습니다. 회사 안에서 만든 사내 도구는 비공개 저장소라 이 사례의 근거에 넣지 않고 이력서에만 적습니다.',
           collaboration: 'AI는 구현 증폭 수단이며 맥락, 아키텍처, 수용 기준, 리뷰와 릴리스 결정은 사람이 소유합니다.',
-          mediaAlt: 'multi-cli-work 프로젝트 시작 화면 — PowerShell·Claude Code·Codex·에이전트 세션 시작 버튼과 git 상태·워크트리 카드.', mediaCaption: 'multi-cli-work v1.24 — 프로젝트 하나에서 CLI·에이전트 세션을 열고 git 상태와 워크트리를 함께 봅니다. 로컬 경로는 블러 처리했습니다.',
+          mediaAlt: 'multi-cli-work 프로젝트 시작 화면 — PowerShell·Claude Code·Codex·에이전트 세션 시작 버튼과 git 상태·워크트리 카드.', mediaCaption: 'multi-cli-work v1.24 (2026.07 촬영) — 프로젝트 하나에서 CLI·에이전트 세션을 열고 git 상태와 워크트리를 함께 봅니다. 로컬 경로는 블러 처리했습니다.',
           status: '진행 중', cardProblem: '직접 겪은 마찰을 테스트·릴리스·운영되는 도구로 바꿉니다.', cardOwnedRole: '맥락·아키텍처·수용 기준을 소유하고 AI로 구현을 증폭합니다.', cardEvidence: '공개 저장소, 테스트, 릴리스; 비공개 데이터와 지표는 배제합니다.', problemSummary: '직접 겪은 문제를 반복 사용 가능한 제품으로 바꿉니다.', ownedRole: '맥락, 아키텍처, 수용 기준, 릴리스 판단을 소유합니다.', verifiedEvidence: '공개 저장소, 테스트, 릴리스 아티팩트.', visualAlt: 'AI Build Lab 공개 제품 근거.', visualCaption: '비공개 데이터와 지표는 포함하지 않습니다.'
         },
         en: {
           title: 'AI Build Lab - Tools I Needed, Built and Shipped', shortTitle: 'AI Build Lab', eyebrow: 'AI Build Lab · Product Engineering',
           thesis: 'Personally experienced problems become requirements, architecture, acceptance criteria, tested products, releases, and operations; AI amplifies implementation but does not own context or acceptance.',
-          summary: 'One combined case connects a local-first knowledge system and four applications I build and use (multi-cli-work, harness-manager, view-anything, and a Daegu bus-information app) through the same problem-to-product loop.',
+          summary: 'One combined case connects a local-first knowledge system, four public applications I build and use (multi-cli-work, harness-manager, view-anything, and a Daegu bus-information app), and three private personal apps (deck, bolt, jk-video-editor) through the same problem-to-product loop.',
           problem: 'Recurring friction needed to become reusable product requirements rather than one-off scripts.',
           role: 'Owned problem context, requirements, architecture, acceptance criteria, tests, releases, and operating decisions while using AI to amplify implementation.',
           teamResult: 'Public repositories and release artifacts are observable product results; no user-count, productivity, or maintainability metrics are claimed.',
-          evidence: 'Screens from a released multi-cli-work build and from harness-manager and view-anything (demo or synthetic data), together with the public repositories, tests, and releases of all four applications, provide public-safe evidence; private knowledge data is excluded.',
+          evidence: 'Screens from a released multi-cli-work build and from harness-manager and view-anything (demo or synthetic data), together with the repositories, tests, and releases of the four public applications (the three private apps are not linked), provide public-safe evidence; private knowledge data is excluded.',
           limitation: 'Never expose private knowledge-system source data or claim unverified user or productivity metrics. In-house company tools live in private repositories, so they are listed in the CV only and are not used as evidence here.',
           collaboration: 'AI amplifies implementation; people own context, architecture, acceptance criteria, review, and release decisions.',
-          mediaAlt: 'multi-cli-work project start screen with PowerShell, Claude Code, Codex, and agent session buttons beside git status and worktree cards.', mediaCaption: 'multi-cli-work v1.24: one project opens CLI and agent sessions alongside git status and worktrees. Local paths are blurred.',
+          mediaAlt: 'multi-cli-work project start screen with PowerShell, Claude Code, Codex, and agent session buttons beside git status and worktree cards.', mediaCaption: 'multi-cli-work v1.24 (captured 2026.07): one project opens CLI and agent sessions alongside git status and worktrees. Local paths are blurred.',
           status: 'Ongoing', cardProblem: 'Turn lived friction into tested, released, and operated tools.', cardOwnedRole: 'Own context, architecture, and acceptance while AI amplifies implementation.', cardEvidence: 'Public repositories, tests, and releases; no private data or unverified metrics.', problemSummary: 'Turn personally experienced problems into reusable products.', ownedRole: 'Own context, architecture, acceptance criteria, tests, and releases.', verifiedEvidence: 'Public repositories, tests, and release artifacts.', visualAlt: 'AI Build Lab public product evidence.', visualCaption: 'Private data and unverified metrics are excluded.'
         }
       },
       subcases: [
         { key: 'llm-wiki', translations: { ko: { title: '로컬 지식 시스템', summary: '개인 데이터를 공개하지 않고 맥락과 검증 경계를 관리합니다.' }, en: { title: 'Local-first knowledge system', summary: 'Manage context and verification boundaries without exposing private data.' } } },
-        { key: 'multi-cli-work', translations: { ko: { title: 'multi-cli-work', summary: '복수 AI CLI 세션을 운영하는 데스크톱 앱을 테스트하고 릴리스합니다.' }, en: { title: 'multi-cli-work', summary: 'Test and release a desktop application for operating multiple AI CLI sessions.' } } },
-        { key: 'harness-manager', translations: { ko: { title: 'harness-manager', summary: 'Claude Code와 Codex의 전역 환경을 함께 구성·검증하는 로컬 전용 데스크톱 앱을 릴리스합니다.' }, en: { title: 'harness-manager', summary: 'Release a local-only desktop application that configures and verifies Claude Code and Codex global environments together.' } } },
-        { key: 'view-anything', translations: { ko: { title: 'view-anything', summary: 'Markdown·PDF·3D 모델·포인트클라우드를 더블클릭으로 여는 뷰어에 두 점군의 강체 ICP 정합을 구현합니다.' }, en: { title: 'view-anything', summary: 'Implement a double-click viewer for Markdown, PDF, 3D models, and point clouds, with rigid ICP registration between two point clouds.' } } },
-        { key: 'daegu-bus', translations: { ko: { title: '대구 버스 정보 앱', summary: '직접 필요한 대중교통 정보를 공개 제품으로 구현합니다.' }, en: { title: 'Daegu bus-information app', summary: 'Implement personally needed public-transport information as a public product.' } } }
+        { key: 'multi-cli-work', translations: { ko: { title: 'multi-cli-work', summary: '모바일 원격 동반 앱, 팀 보드와 `jk` MCP 도구, 진행률·구독 사용량 표시, 워크트리 setup/teardown 기능을 더했습니다.' }, en: { title: 'multi-cli-work', summary: 'Added a mobile remote companion app, a team board with `jk` MCP tools, progress and subscription-usage display, and worktree setup/teardown.' } } },
+        { key: 'harness-manager', translations: { ko: { title: 'harness-manager', summary: '전면 재설계로 doctor 대시보드, 설치 엔진·설정 병합, 마켓플레이스, 승인 기반 AI 설정 복구를 갖췄습니다. 초기 대시보드에서 셋업 도구로 바뀌었습니다.' }, en: { title: 'harness-manager', summary: 'Fully redesigned with a doctor dashboard, an install engine with settings merge, a marketplace, and approval-based AI settings repair, moving from an early dashboard to a setup tool.' } } },
+        { key: 'view-anything', translations: { ko: { title: 'view-anything', summary: 'Markdown·PDF·3D·점군에 이미지·CSV·텍스트 편집, LAS/LAZ, ICP 정합 품질 보고를 더했습니다(Windows·Linux).' }, en: { title: 'view-anything', summary: 'Added image, CSV, and text editing, LAS/LAZ, and ICP registration quality reports to the Markdown, PDF, 3D, and point-cloud viewer (Windows and Linux).' } } },
+        { key: 'daegu-bus', translations: { ko: { title: '대구 버스 정보 앱', summary: '정류장 중심으로 재설계하고 초정밀 위치 지도와 즐겨찾기 위젯을 더해 안정화했습니다.' }, en: { title: 'Daegu bus-information app', summary: 'Redesigned around bus stops, with a high-precision location map and a favorites widget, now stabilised.' } } },
+        { key: 'deck', translations: { ko: { title: 'deck', summary: '메모·할 일 PWA입니다. React 19·BlockNote·오프라인·REST API·Android 설치를 지원합니다(비공개 저장소).' }, en: { title: 'deck', summary: 'A notes and to-do PWA with React 19, BlockNote, offline use, a REST API, and Android install (private repository).' } } },
+        { key: 'bolt', translations: { ko: { title: 'bolt', summary: '개인 운영 대시보드입니다. Electron+React 공용 renderer, FastAPI 사이드카, Notion 연동으로 구성했습니다(비공개 저장소, 화면 미공개).' }, en: { title: 'bolt', summary: 'A personal operations dashboard built with a shared Electron + React renderer, a FastAPI sidecar, and Notion integration (private repository, no screens shown).' } } },
+        { key: 'jk-video-editor', translations: { ko: { title: 'jk-video-editor', summary: 'Electron·Remotion 영상 편집기입니다. 2026-08까지 개발했습니다(비공개 저장소).' }, en: { title: 'jk-video-editor', summary: 'A video editor built with Electron and Remotion, developed through 2026-08 (private repository).' } } }
       ],
       blocks: [
-        { key: 'problem-to-product', type: 'system', translations: { ko: { heading: '문제에서 제품까지', body: '마찰을 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영으로 이었습니다.' }, en: { heading: 'Problem to product', body: 'Connect friction to requirements, architecture, acceptance, tests, releases, and operations.' } } },
+        { key: 'problem-to-product', type: 'system', translations: { ko: { heading: '문제에서 제품까지', body: '마찰을 요구사항, 아키텍처, 수용 기준, 테스트, 릴리스, 운영으로 이었습니다. 2025년 5월 Claude Code 출시 시점부터 시작했고, 2026년 4월부터 Claude Code in Daegu 커뮤니티(약 160명)의 초기 멤버로 활동합니다.' }, en: { heading: 'Problem to product', body: 'Connect friction to requirements, architecture, acceptance, tests, releases, and operations. The work started with the Claude Code launch in May 2025, and since April 2026 I have been an early member of the Claude Code in Daegu community (about 160 people).' } } },
         { key: 'human-ai-boundary', type: 'text', translations: { ko: { heading: '사람과 AI의 경계', body: 'AI는 구현을 증폭하고 사람은 맥락·수용·릴리스 판단을 소유합니다.' }, en: { heading: 'Human-AI boundary', body: 'AI amplifies implementation; people own context, acceptance, and release decisions.' } } },
         { key: 'public-product-proof', type: 'evidence', translations: { ko: { heading: '공개 제품 근거', body: '공개 저장소, 자동화 테스트, 릴리스 아티팩트를 확인 가능한 근거로 삼습니다.' }, en: { heading: 'Public product proof', body: 'Use public repositories, automated tests, and release artifacts as observable evidence.' } } },
         { key: 'privacy-metric-boundary', type: 'limitation', translations: { ko: { heading: '개인정보·지표 경계', body: '비공개 지식 데이터와 검증되지 않은 사용자·생산성 지표를 배제합니다.' }, en: { heading: 'Privacy and metric boundary', body: 'Exclude private knowledge data and unverified user or productivity metrics.' } } }
