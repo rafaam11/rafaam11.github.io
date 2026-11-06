@@ -2147,6 +2147,28 @@
       translations: { ko: { body: '대학창의발명대회에서 우수상을 받았습니다.', post: '대학창의발명대회에서 우수상을 받았습니다. 대학 첫 해의 수상이었고, 2019년에는 같은 대회에서 후원기관상을 받았습니다.' }, en: { body: 'Received an Excellence Award at the University Creative Invention Contest.', post: 'I received an Excellence Award at the University Creative Invention Contest in my first university year; in 2019 I received a Sponsor\'s Award at the same contest.' } } }
   ];
 
+  var pipeline = {
+    translations: { ko: { label: '기술 파이프라인', tools: '도구 레이어' }, en: { label: 'Technical pipeline', tools: 'Tooling layer' } },
+    stages: [
+      { n: 1, id: 'sensing', thumb: 'assets/pipeline/stage-1.webp', translations: { ko: { title: '영상·센서', blurb: 'CT·구강 스캔·ToF·LiDAR 입력' }, en: { title: 'Imaging & sensors', blurb: 'CT, intraoral scans, ToF and LiDAR input' } } },
+      { n: 2, id: 'models', thumb: 'assets/pipeline/stage-2.webp', translations: { ko: { title: '모델·특징점', blurb: '치아·악안면 특징점, 대차·바퀴 분할' }, en: { title: 'Models & landmarks', blurb: 'Dental and craniofacial landmarks, cart and wheel segmentation' } } },
+      { n: 3, id: 'registration', thumb: 'assets/pipeline/stage-3.webp', translations: { ko: { title: '정합', blurb: '영상-환자·STL 기준·ICP 정합' }, en: { title: 'Registration', blurb: 'Image-to-patient, STL-referenced and ICP registration' } } },
+      { n: 4, id: 'tracking', thumb: 'assets/pipeline/stage-4.webp', translations: { ko: { title: '추적', blurb: '광학 마커 6DoF, 호흡 파형' }, en: { title: 'Tracking', blurb: 'Optical-marker 6DoF, breathing waveform' } } },
+      { n: 5, id: 'planning', thumb: 'assets/pipeline/stage-5.webp', translations: { ko: { title: '계획·내비·시각화', blurb: '수술 계획·내비게이션·XR 표시' }, en: { title: 'Planning, navigation & visualisation', blurb: 'Surgical planning, navigation and XR display' } } }
+    ],
+    placements: [
+      { slug: 'unmanned-forklift', primary: 1, spans: [1, 2, 3, 4], translations: { ko: { chip: '무인지게차' }, en: { chip: 'Autonomous forklift' } } },
+      { slug: 'respiratory-surface-guidance', primary: 1, spans: [1, 3, 4], translations: { ko: { chip: 'SGRT 호흡추적' }, en: { chip: 'SGRT breathing tracking' } } },
+      { slug: 'mandibular-fracture', primary: 2, spans: [2, 3, 5], translations: { ko: { chip: '하악골 골절 정복' }, en: { chip: 'Mandibular fracture reduction' } } },
+      { slug: 'digital-occlusion-workflow', primary: 2, spans: [1, 2, 5], translations: { ko: { chip: '디지털 교합' }, en: { chip: 'Digital occlusion' } } },
+      { slug: 'surgical-navigation', primary: 3, spans: [3, 4, 5], translations: { ko: { chip: '수술 내비게이션' }, en: { chip: 'Surgical navigation' } } },
+      { slug: 'skadi-tracking-software', primary: 4, spans: [4, 5], translations: { ko: { chip: 'SKADI' }, en: { chip: 'SKADI' } } },
+      { slug: 'rtms-navigation', primary: 5, spans: [3, 4, 5], translations: { ko: { chip: 'NeuroPilot' }, en: { chip: 'NeuroPilot' } } },
+      { slug: 'life-careverse', primary: 5, spans: [5], translations: { ko: { chip: 'OMFS VR' }, en: { chip: 'OMFS VR' } } }
+    ],
+    tools: [{ slug: 'ai-build-lab', translations: { ko: { chip: 'AI Build Lab' }, en: { chip: 'AI Build Lab' } } }]
+  };
+
   return {
     homeProjectSlugs: ['digital-occlusion-workflow', 'mandibular-fracture', 'surgical-navigation'],
     // Web-only Home intro 3D figure (js/scenes/home-tracking.js); its elements follow the surgical-navigation case.
@@ -2159,6 +2181,7 @@
       }
     },
     news: news,
+    pipeline: pipeline,
     capabilities: capabilities,
     tiers: tiers,
     impactMetrics: impactMetrics,

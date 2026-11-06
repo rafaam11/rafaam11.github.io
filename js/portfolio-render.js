@@ -845,6 +845,73 @@
     return errors;
   }
 
+  var pipelineBudgets = { title: { ko: 14, en: 40 }, blurb: { ko: 38, en: 70 }, chip: { ko: 14, en: 32 }, label: { ko: 14, en: 40 }, tools: { ko: 14, en: 40 } };
+
+  function pipelineErrors(data) {
+    var errors = [];
+    var pipe = data && data.pipeline;
+    if (!pipe || typeof pipe !== 'object' || Array.isArray(pipe)) return ['pipeline: must be an object.'];
+    function text(record, locale, key, kind, where) {
+      var value = record && record.translations && record.translations[locale] && record.translations[locale][key];
+      if (typeof value !== 'string' || !value.trim()) { errors.push(where + ' ' + locale + ' ' + key + ': must be a non-empty string.'); return; }
+      var budget = pipelineBudgets[kind][locale];
+      if (Array.from(value).length > budget) errors.push(where + ' ' + locale + ' ' + key + ': "' + value + '" exceeds ' + budget + ' characters.');
+      if (/\.$/.test(value.trim()) || (locale === 'ko' && webSentenceEndingPattern.test(value.trim()))) {
+        errors.push(where + ' ' + locale + ' ' + key + ': "' + value + '" must be a noun phrase, not a sentence.');
+      }
+    }
+    ['ko', 'en'].forEach(function (locale) {
+      text(pipe, locale, 'label', 'label', 'pipeline');
+      text(pipe, locale, 'tools', 'tools', 'pipeline');
+    });
+    var stages = Array.isArray(pipe.stages) ? pipe.stages : [];
+    if (stages.length !== 5) errors.push('pipeline: stages must contain exactly 5 entries.');
+    var ids = [];
+    stages.forEach(function (stage, index) {
+      var where = 'pipeline stage ' + (index + 1);
+      if (!stage || stage.n !== index + 1) errors.push(where + ': n must be ' + (index + 1) + '.');
+      if (!stage) return;
+      if (typeof stage.id !== 'string' || !stage.id) errors.push(where + ': id must be a non-empty string.');
+      else if (ids.indexOf(stage.id) !== -1) errors.push(where + ': duplicate id ' + stage.id + '.');
+      ids.push(stage.id);
+      if (stage.thumb !== 'assets/pipeline/stage-' + stage.n + '.webp') errors.push(where + ': thumb must be assets/pipeline/stage-' + stage.n + '.webp.');
+      ['ko', 'en'].forEach(function (locale) {
+        text(stage, locale, 'title', 'title', where);
+        text(stage, locale, 'blurb', 'blurb', where);
+      });
+    });
+    var seen = {};
+    function claim(slug, where) {
+      if (seen[slug]) errors.push(where + ': project ' + slug + ' is placed more than once.');
+      seen[slug] = true;
+    }
+    (Array.isArray(pipe.placements) ? pipe.placements : []).forEach(function (placement) {
+      var slug = placement && placement.slug;
+      var where = 'pipeline placement ' + slug;
+      claim(slug, where);
+      var spans = placement && placement.spans;
+      var ok = Array.isArray(spans) && spans.length > 0 && spans.every(function (n, i) {
+        return Number.isInteger(n) && n >= 1 && n <= 5 && (i === 0 || n > spans[i - 1]);
+      });
+      if (!ok) errors.push(where + ': spans must be ascending unique integers within 1..5.');
+      if (!Array.isArray(spans) || spans.indexOf(placement.primary) === -1) errors.push(where + ': primary must be one of spans.');
+      ['ko', 'en'].forEach(function (locale) { text(placement, locale, 'chip', 'chip', where); });
+    });
+    (Array.isArray(pipe.tools) ? pipe.tools : []).forEach(function (tool) {
+      var where = 'pipeline tool ' + (tool && tool.slug);
+      claim(tool && tool.slug, where);
+      ['ko', 'en'].forEach(function (locale) { text(tool, locale, 'chip', 'chip', where); });
+    });
+    var projects = Array.isArray(data.projects) ? data.projects : [];
+    projects.forEach(function (project) {
+      if (!seen[project.slug]) errors.push('pipeline: project ' + project.slug + ' is missing from placements and tools.');
+    });
+    Object.keys(seen).forEach(function (slug) {
+      if (!projects.some(function (project) { return project.slug === slug; })) errors.push('pipeline: unknown project ' + slug + '.');
+    });
+    return errors;
+  }
+
   function validatePortfolioData(data) {
     var errors = [];
     if (!data || typeof data !== 'object') return ['Portfolio data must be an object.'];
@@ -1130,6 +1197,7 @@
 
     // Home enables its 3D figure through data (homeScene3d), like the cases.
     if (data.homeScene3d !== undefined) errors = errors.concat(scene3dErrors(data.homeScene3d, 'home'));
+    errors = errors.concat(pipelineErrors(data));
     errors = errors.concat(highlightsErrors(data.highlights));
     errors = errors.concat(publicCopySafetyErrors(data));
     var serialized = JSON.stringify(data);
@@ -1836,6 +1904,7 @@
     displayPeriod: displayPeriod,
     localizePortfolioData: localizePortfolioData,
     validatePortfolioData: validatePortfolioData,
+    pipelineErrors: pipelineErrors,
     homeProjectGalleryHtml: homeProjectGalleryHtml,
     capabilityIndexHtml: capabilityIndexHtml,
     highlightsHtml: highlightsHtml,

@@ -43,3 +43,23 @@ test('pipeline thumbnail validator rejects missing files and EXIF chunks', () =>
     assert.ok(pipelineThumbErrors(tmp).some(e => /EXIF chunk/.test(e)));
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 });
+test('pipeline data passes validation', () => {
+  assert.deepEqual(render.pipelineErrors(data), []);
+  assert.deepEqual(render.validatePortfolioData(data), []);
+});
+test('pipelineErrors rejects broken pipelines', () => {
+  const bad = (mutate) => { const c = structuredClone(data); mutate(c); return render.pipelineErrors(c).join('\n'); };
+  assert.match(bad((c) => { c.pipeline.stages.pop(); }), /exactly 5/);
+  assert.match(bad((c) => { c.pipeline.placements.pop(); }), /life-careverse is missing/);
+  assert.match(bad((c) => { c.pipeline.tools.push({ slug: 'unmanned-forklift', translations: { ko: { chip: 'x' }, en: { chip: 'x' } } }); }), /unmanned-forklift is placed more than once/);
+  assert.match(bad((c) => { c.pipeline.placements[0].primary = 5; }), /primary must be one of spans/);
+  assert.match(bad((c) => { c.pipeline.placements[0].spans = [1, 2, 6]; }), /spans must be ascending/);
+  assert.match(bad((c) => { c.pipeline.stages[0].translations.en.blurb = 'x'.repeat(71); }), /exceeds 70/);
+});
+test('pipeline does not change the PDF source digest', () => {
+  const pdf = require('../scripts/portfolio-pdf-source.cjs');
+  const evidence = { items: [] }, cv = JSON.parse(fs.readFileSync(path.join(root, 'data/public-cv.json'), 'utf8'));
+  const without = structuredClone(data); delete without.pipeline;
+  const d = (p) => pdf.pdfSourceDigest(pdf.canonicalPdfSource(p, evidence, cv));
+  assert.equal(d(data), d(without));
+});
