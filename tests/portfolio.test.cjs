@@ -294,6 +294,7 @@ function copyTask6Surface(targetRoot) {
     'output/pdf',
     'assets/local-review',
     'assets/3d',
+    'assets/pipeline',
     'js/scenes',
     'js/vendor'
   ]) {

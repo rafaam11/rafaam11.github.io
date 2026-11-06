@@ -37,7 +37,7 @@ function caseFile(slug, locale) {
 function tempRoot(t) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'scene3d-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  for (const relativePath of ['js/scene3d.js', 'js/vendor/three-r128.min.js', 'js/scenes', 'assets/3d']) {
+  for (const relativePath of ['js/scene3d.js', 'js/vendor/three-r128.min.js', 'js/scenes', 'assets/3d', 'assets/pipeline']) {
     fs.cpSync(path.join(root, relativePath), path.join(dir, relativePath), { recursive: true });
   }
   return dir;
