@@ -10,7 +10,6 @@
   }
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  var selectedIds = ['quadruped-engineering-award-2020', 'ism-launcher-paper-2019', 'accas-occlusion-paper-2022'];
   // Media attach to events through each record's eventIds (data/activity-media.json), ordered by 'order'.
   function mediaIndex(mediaData) {
     var media = mediaData && (mediaData.media || mediaData) || {};
@@ -81,8 +80,8 @@
     'invention-excellence-award-2015': ['award', '대학창의발명대회 우수상', 'University Creative Invention Contest Excellence Award']
   };
   var copy = {
-    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', selected: '선택한 활동', selectedIntro: '로봇 제작, 해외 심포지엄, 학회 발표의 기록입니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', mediaOnly: '사진·영상 있는 소식만', photos: '사진', close: '닫기', prev: '이전', next: '다음', play: '영상', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' }, tags: { research: '연구', conference: '학회', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허', software: '소프트웨어' } },
-    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', selected: 'Selected activities', selectedIntro: 'Records of building robots, an overseas symposium and a conference presentation.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', mediaOnly: 'Only posts with photos or videos', photos: 'Photos', close: 'Close', prev: 'Previous', next: 'Next', play: 'Video', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' }, tags: { research: 'Research', conference: 'Conference', award: 'Award', career: 'Career', activity: 'Activity', patent: 'Patent', software: 'Software' } }
+    ko: { title: '소식', intro: '연구, 발표, 수상, 대외활동과 소프트웨어 작업을 시간순으로 기록합니다.', year: '연도', type: '분류', allYears: '모든 연도', allTypes: '모든 분류', reset: '필터 초기화', empty: '선택한 조건에 해당하는 소식이 없습니다.', mediaOnly: '사진·영상 있는 소식만', photos: '사진', close: '닫기', prev: '이전', next: '다음', play: '영상', local: '활동 기록에 연결된 공개 사진·영상입니다.', types: { research: '연구', conference: '학회·발표', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허 출원', software: '소프트웨어' }, tags: { research: '연구', conference: '학회', award: '수상', career: '경력·학위', activity: '대외활동', patent: '특허', software: '소프트웨어' } },
+    en: { title: 'News', intro: 'Research, presentations, awards, activities and software work, in chronological order.', year: 'Year', type: 'Type', allYears: 'All years', allTypes: 'All types', reset: 'Reset filters', empty: 'No news matches these filters.', mediaOnly: 'Only posts with photos or videos', photos: 'Photos', close: 'Close', prev: 'Previous', next: 'Next', play: 'Video', local: 'Public photos and videos linked to the activity records.', types: { research: 'Research', conference: 'Conferences', award: 'Awards', career: 'Career & degrees', activity: 'Activities', patent: 'Patent applications', software: 'Software' }, tags: { research: 'Research', conference: 'Conference', award: 'Award', career: 'Career', activity: 'Activity', patent: 'Patent', software: 'Software' } }
   };
   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
@@ -110,8 +109,6 @@
     filters = filters || {};
     return events.filter(function (event) { return (!filters.year || filters.year === 'all' || event.year === filters.year) && (!filters.type || filters.type === 'all' || event.categories.indexOf(filters.type) !== -1) && (!filters.mediaOnly || event.media.length > 0); });
   }
-  function selectActivities(events) { return selectedIds.map(function (id) { return events.find(function (event) { return event.id === id; }); }).filter(Boolean); }
-  function eventHref(event, options) { return routeHref(options.base, options.lang, 'news/') + '#news-' + event.id; }
   function linksHtml(event, options) {
     return event.links.map(function (link) { var href = link.route ? routeHref(options.base, options.lang, link.route) : link.href; return '<a href="' + esc(href) + '">' + esc(link.translations[options.lang].label) + '</a>'; }).join('<span aria-hidden="true"> · </span>');
   }
@@ -232,15 +229,6 @@
     if (details) details.open = true;
     return target;
   }
-  function selectedActivitiesHtml(events, options) {
-    options = Object.assign({ lang: 'ko', base: '' }, options || {}); options.lang = locale(options.lang);
-    var c = copy[options.lang];
-    return '<section class="lf-selected" aria-labelledby="selected-activities-title"><h2 id="selected-activities-title">' + c.selected + '</h2><p class="lf-selected-intro">' + c.selectedIntro + '</p><div class="lf-activity-grid">' + selectActivities(events).map(function (event) {
-      var href = esc(eventHref(event, options));
-      var thumb = thumbItem(event);
-      return '<article class="lf-activity" data-activity-id="' + esc(event.id) + '">' + (thumb ? '<a class="lf-activity-thumb" href="' + href + '"><img src="' + esc(thumbSrc(thumb, options)) + '" alt="' + esc(thumb.translations[options.lang].alt) + '"' + (thumb.width && thumb.height ? ' width="' + thumb.width + '" height="' + thumb.height + '"' : '') + ' loading="lazy" decoding="async"></a>' : '') + '<time datetime="' + esc(event.eventDate) + '">' + esc(event.eventDate.replace(/-/g, '.')) + '</time><h3><a href="' + href + '">' + esc(event.title) + '</a></h3></article>';
-    }).join('') + '</div></section>';
-  }
   function countText(shown, total, lang) { return lang === 'en' ? shown + ' of ' + total + ' entries' : '전체 ' + total + '건 중 ' + shown + '건'; }
   function controlsHtml(events, lang) {
     var c = copy[lang], years = Array.from(new Set(events.map(function (event) { return event.year; })));
@@ -250,16 +238,12 @@
   function mount(doc, portfolio, mediaData) {
     if (!portfolio || !Array.isArray(portfolio.news)) return;
     var body = doc.body, page = body.dataset.page;
-    if (page !== 'news' && page !== 'home') return;
+    if (page !== 'news') return;
     var main = doc.getElementById('main-content');
     if (!main || main.dataset.localFeedMounted) return;
     var options = { lang: locale(body.dataset.lang), base: body.dataset.base || '' };
     var events = buildModel(portfolio.news, options.lang, mediaData);
-    if (page === 'home') {
-      var news = main.querySelector('[aria-labelledby="news-title"]');
-      if (news) news.insertAdjacentHTML('afterend', selectedActivitiesHtml(events, options));
-      else { var contact = main.querySelector('.sc-contact'); if (contact) contact.insertAdjacentHTML('beforebegin', selectedActivitiesHtml(events, options)); }
-    } else {
+    {
       var header = main.querySelector('.sc-page-header');
       var last = main.lastElementChild;
       var back = last && last.tagName === 'P' && last.querySelector('a') ? last.outerHTML : '';
@@ -287,5 +271,5 @@
     }
     main.dataset.localFeedMounted = 'true';
   }
-  return { selectedIds: selectedIds, mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, selectActivities: selectActivities, titleFor: titleFor, dateLabel: dateLabel, feedHtml: feedHtml, selectedActivitiesHtml: selectedActivitiesHtml, mediaHtml: mediaHtml, lightboxHtml: lightboxHtml, hashTargetId: hashTargetId, openFromHash: openFromHash, routeHref: routeHref, mount: mount };
+  return { mediaIndex: mediaIndex, labels: labels, buildModel: buildModel, filterEvents: filterEvents, titleFor: titleFor, dateLabel: dateLabel, feedHtml: feedHtml, mediaHtml: mediaHtml, lightboxHtml: lightboxHtml, hashTargetId: hashTargetId, openFromHash: openFromHash, routeHref: routeHref, mount: mount };
 });

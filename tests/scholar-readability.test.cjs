@@ -68,21 +68,20 @@ test('Scholar v2 aligns the local feed and CV sheets with the shared tokens', ()
   assert.equal(ruleBodies(feed, '.td-shell .lf-links').length, 0, 'lf-links sizing comes from scholar.css');
   assert.ok(ruleBodies(feed, '.td-shell .lf-title').some((body) => /font-size:\s*1rem/.test(body)), 'timeline row titles are compact');
   assert.ok(ruleBodies(feed, '.lf-thumb').some((body) => /width:\s*56px/.test(body) && /height:\s*56px/.test(body)), 'row thumbnails are 56px squares');
-  assert.ok(ruleBodies(feed, '.td-shell .lf-activity-thumb img').some((body) => /height:\s*120px/.test(body)), 'selected-activity thumbnails are 120px tall');
   assert.doesNotMatch(feed, /box-shadow|gradient|text-transform\s*:\s*uppercase|monospace/i, 'local feed follows the quiet Scholar devices');
   const cv = read('css/cv-pdf.css');
   assert.ok(ruleBodies(cv, '.sc-cv__meta').some((body) => /var\(--sc-faint\)/.test(body)), 'CV meta uses --sc-faint');
   assert.ok(ruleBodies(cv, '.sc-cv__intro h2').some((body) => /margin(?:-top)?:\s*0\b/.test(body)), 'CV intro heading ignores the global 4rem');
 });
 
-test('Local feed renders no review notes and mounts activities after Home News', () => {
+test('Local feed renders no review notes and no longer mounts on Home', () => {
   const feed = require('../js/local-feed.js');
   const event = { id: 'x', eventDate: '2022-01-01', links: [], media: [{ id: 'M1', type: 'image', path: 'assets/x.png', translations: { ko: { alt: 'a', caption: 'c', note: 'review note' }, en: { alt: 'a', caption: 'c', note: 'review note' } } }] };
   const html = feed.mediaHtml(event, { lang: 'ko', base: '' });
   assert.ok(html.includes('<figcaption>c</figcaption>'), 'caption only');
   assert.ok(!html.includes('lf-review-note') && !html.includes('review note'), 'no review note');
   const source = read('js/local-feed.js');
-  assert.ok(source.includes('[aria-labelledby="news-title"]'), 'home anchor is the News section');
+  assert.ok(!source.includes('[aria-labelledby="news-title"]') && !source.includes("'home'"), 'no Home mount branch');
   assert.ok(!source.includes('highlights-title'), 'no stale anchor');
   assert.ok(!read('css/local-feed.css').includes('lf-review-note'), 'no orphan review-note style');
 });

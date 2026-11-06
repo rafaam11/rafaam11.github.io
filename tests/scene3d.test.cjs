@@ -66,7 +66,6 @@ test('scene3d records are valid, unique, and every case except AI Build Lab decl
       assert.ok(copy.alt.trim(), `${project.slug} ${locale}: alt`);
     }
   }
-  for (const locale of ['ko', 'en']) assert.doesNotMatch(data.homeScene3d.translations[locale].caption, /드래그|Drag to rotate/i, `home ${locale}: no caption drag hint`);
 });
 
 test('engine shows one quiet drag hint while live, kept out of captures and away from labels', () => {
@@ -105,9 +104,6 @@ test('scene3d data validation rejects malformed records', () => {
   const partner = clone(data);
   partner.projects[index].scene3d.translations.en.caption = 'KAERI concept';
   assert.match(render.dataErrors(partner).join('\n'), /nonpublic partner/i);
-  const home = clone(data);
-  home.homeScene3d = { name: 'home-tracking', poster: 'assets/3d/home.webp', translations: { ko: { caption: 'c', alt: 'a' }, en: { caption: 'c', alt: 'a' } } };
-  assert.match(render.dataErrors(home).join('\n'), /home: scene3d poster must be assets\/3d\/home-tracking\.webp/);
 });
 
 test('case renderer puts the 3D figure inside Approach after the lead and shifts the gallery numbers', () => {
@@ -227,33 +223,23 @@ test('only pages with a declared scene load scene3d.js and their scene, right af
   assert.deepEqual(validator.pageDependencyErrors(plain, plainHtml), []);
   const injected = plainHtml.replace('<script src="../../js/nav.js"></script>', '<script src="../../js/scene3d.js"></script><script src="../../js/scenes/ms-frac.js"></script><script src="../../js/nav.js"></script>');
   assert.match(validator.pageDependencyErrors(plain, injected).join('\n'), /unexpected local script dependency \.\.\/\.\.\/js\/scene3d\.js/);
-  // Home is enabled by data (homeScene3d).
-  const home = { page: 'home', route: '' };
-  assert.equal(validator.pageScene3dName(home), 'home-tracking');
-  const withoutHome = clone(data);
-  delete withoutHome.homeScene3d;
-  assert.equal(validator.pageScene3dName(home, withoutHome), '');
+  // Home declares no 3D scene.
+  assert.equal(validator.pageScene3dName({ page: 'home', route: '' }), '');
   assert.equal(validator.pageScene3dName(caseFile('mandibular-fracture', 'en')), 'ms-frac');
 });
 
-test('Home shows its unnumbered 3D figure in the intro and loads the engine and scene after the renderer', () => {
-  assert.equal(data.homeScene3d.name, 'home-tracking');
-  assert.equal(data.homeScene3d.poster, 'assets/3d/home-tracking.webp');
+test('Home has no 3D figure and loads only the shared scripts, in order', () => {
+  assert.equal(data.homeScene3d, undefined);
   for (const locale of ['ko', 'en']) {
     const file = validator.publicPortfolioFiles(root).find((item) => item.page === 'home' && item.locale === locale);
     const html = fs.readFileSync(file.absolutePath, 'utf8');
     const base = locale === 'en' ? '../' : '';
     assert.deepEqual(validator.pageDependencyErrors(file, html), [], file.relativePath);
-    const sequence = ['portfolio-render.js', 'scene3d.js', 'scenes/home-tracking.js', 'nav.js'].map((name) => `<script src="${base}js/${name}"></script>`).join('');
+    const sequence = ['site-i18n.js', 'portfolio-data.js', 'portfolio-render.js', 'nav.js'].map((name) => `<script src="${base}js/${name}"></script>`).join('');
     assert.ok(html.replace(/>\s+</g, '><').includes(sequence), `${file.relativePath}: script sequence`);
-    const intro = /<section class="sc-intro"[\s\S]*?<\/section>/.exec(html)[0];
-    const figure = /<figure class="sc-figure sc-figure3d sc-intro__figure"[\s\S]*?<\/figure>/.exec(intro)[0];
-    const copy = data.homeScene3d.translations[locale];
-    assert.ok(figure.includes(`<div class="view3d" data-scene="home-tracking"><img src="${base}assets/3d/home-tracking.webp" alt="${copy.alt.replace(/'/g, '&#039;')}" width="640" height="800" decoding="async"></div>`), `${file.relativePath}: poster`);
-    assert.ok(figure.includes(`<figcaption>${copy.caption}</figcaption>`), `${file.relativePath}: plain caption`);
-    assert.doesNotMatch(figure, /data-project|sc-figure__label|loading="lazy"/, `${file.relativePath}: no project key, no figure number, poster not lazy`);
+    assert.deepEqual([...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]), ['site-i18n.js', 'portfolio-data.js', 'portfolio-render.js', 'nav.js'].map((name) => `${base}js/${name}`), `${file.relativePath}: exactly four scripts`);
+    assert.doesNotMatch(html, /sc-figure3d|data-scene3d|view3d/, `${file.relativePath}: no 3D figure`);
   }
-  assert.equal(render.homeScene3dFigureHtml({ ...data.homeScene3d, poster: 'assets/3d/other.webp' }, 'ko', ''), '');
 });
 
 test('scene assets: engine, vendor, scene files, and metadata-free WebP posters', (t) => {

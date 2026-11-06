@@ -1066,7 +1066,7 @@ function projectPublicText(project) {
 }
 
 function portfolioPublicText(candidate) {
-  const surfaces = [candidate?.homeScene3d?.translations];
+  const surfaces = [];
   for (const capability of candidate?.capabilities || []) surfaces.push(capability?.methods, capability?.translations);
   for (const tier of candidate?.tiers || []) surfaces.push(tier?.translations);
   for (const project of candidate?.projects || []) surfaces.push(projectPublicText(project));
@@ -2190,16 +2190,14 @@ function localReferenceErrors(file, html, rootDir) {
 // Declared 3D figures: [{ owner: 'home' | <case slug>, name, poster }].
 function scene3dDeclarations(candidate = data) {
   const declarations = [];
-  if (candidate?.homeScene3d) declarations.push({ owner: 'home', ...candidate.homeScene3d });
   for (const project of candidate?.projects || []) {
     if (project?.scene3d) declarations.push({ owner: project.slug, ...project.scene3d });
   }
   return declarations;
 }
 
-// The scene a page must load: Home uses homeScene3d, a case page its project's scene3d.
+// The scene a page must load: a case page loads its project's scene3d; Home has none.
 function pageScene3dName(file, candidate = data) {
-  if (file.page === 'home') return candidate?.homeScene3d?.name || '';
   const match = /^projects\/([a-z0-9-]+)\/$/.exec(file.route || '');
   if (!match) return '';
   const project = (candidate?.projects || []).find((item) => item?.slug === match[1]);

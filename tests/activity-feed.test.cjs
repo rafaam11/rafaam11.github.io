@@ -114,16 +114,6 @@ test('the media-only toggle keeps events with activity photos or videos', () => 
   assert.match(feed.lightboxHtml('en'), /<dialog class="lf-lightbox"[^>]*>.*aria-label="Previous".*aria-label="Next".*aria-label="Close"/);
 });
 
-test('Home selected activities are three small cards: thumbnail, date and title link', () => {
-  assert.deepEqual(feed.selectedIds, ['quadruped-engineering-award-2020', 'ism-launcher-paper-2019', 'accas-occlusion-paper-2022']);
-  const html = feed.selectedActivitiesHtml(events, { lang: 'ko', base: '' });
-  assert.equal(html.split('<article class="lf-activity"').length - 1, 3);
-  assert.equal(html.split('<img ').length - 1, 3);
-  assert.equal(html.split('<a class="lf-activity-thumb" href="news/index.html#news-').length - 1, 3);
-  assert.ok(!html.includes('<video') && !html.includes('lf-grid') && !html.includes('<figcaption'));
-  for (const id of feed.selectedIds) assert.match(html, new RegExp(`<h3><a href="news/index.html#news-${id}">`));
-});
-
 test('media grids name their event for assistive technology', () => {
   const html = feed.mediaHtml({ id: 'x', title: 'DGIST 졸업', eventDate: '2023-02-16', links: [], media: ['M1', 'M2', 'M3', 'M4'].map((id) => photo(id, 4)) }, { lang: 'ko', base: '' });
   assert.match(html, /role="group" aria-label="DGIST 졸업 — 사진·영상 4개"/);

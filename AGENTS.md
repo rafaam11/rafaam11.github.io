@@ -39,7 +39,7 @@ Jinmin Kim의 GitHub Pages 개인 포트폴리오. 순수 정적 HTML/CSS/JavaSc
 ## File structure
 
 ```text
-index.html                         # Home: intro (name, role, keywords, lede, statement, affiliation, contacts, research direction, home-tracking 3D figure in the side column; Person JSON-LD in head), current-expertise list, selected research (3), publications + patents/awards line, News (4, curated), selected activities (local-feed overlay), contact line with a small profile photo
+index.html                         # Home: intro (name, role, keywords, lede, statement, affiliation, contacts, research direction; Person JSON-LD in head), current-expertise list, selected research (3), publications + patents/awards line, News (4, curated), contact line with a small profile photo
 projects/index.html                # Projects groups: Surgical Robotics & Navigation (4), Computer Vision & 3D Spatial Computing (2), XR & Spatial Visualization (1), Robotics & Automation (1), AI Build Lab (1); tier `slugs` set the order
 projects/<slug>/index.html         # 9 shared-renderer case summaries
 en/                               # English counterparts for all 13 Korean routes
@@ -81,7 +81,7 @@ public/                            # Generated blog output; never edit for portf
 - Dense CV (2026-10-31): web-only `identity.translations.<locale>.brief` (1–2 lines, ko ≤70/en ≤160 characters) replaces the summary prose on the page, with `interests` on its own 연구 방향/Research direction line; each experience area's `rows` (`project`, optional case `slug`, `period`, `did[]`, `result`) and optional `keywords` render a project table with tags instead of `items` (ko ≤38/en ≤70 per line). `items` and `summary` stay for the PDF synchronization review, and `scripts/portfolio-pdf-source.cjs` strips the web-only fields from the PDF digest. Web lines only compress facts already in the CV items or the public cases.
 - The two PDFs in `assets/cv/` are **not** generated here. They are the author's own Word CV, localized and sanitized by `tools/cv-media/` in the LLMwiki workspace and committed as source; the generator never writes to `assets/cv/`. Keep `data/public-cv.json` in step with whatever those PDFs say. Approved as public on 2026-08-22: KIPO patent application numbers and the thesis advisor's name. Other people's names, phone numbers, addresses, and patient data stay out.
 - Do not restore the removed Research/Capabilities route, excluded project routes, decorative SVG fallbacks, Bootstrap/StartBootstrap, or the old sidebar layout.
-- Home uses generated introduction, capability list, selected research, achievements and curated News; home-projects can also render at runtime. The home-highlights block closes the publications section, is generated from CV data and is not replaced by JavaScript. `js/local-feed.js` inserts the selected-activities block after the Home News section. Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
+- Home uses generated introduction, capability list, selected research, achievements and curated News; home-projects can also render at runtime. The home-highlights block closes the publications section, is generated from CV data and is not replaced by JavaScript. `js/local-feed.js` mounts only on the News page. Projects mounts project-groups; case shells mount case-study. The hero mosaic and media ledger are removed; do not restore them.
 
 ## Dense case pages
 
@@ -97,7 +97,7 @@ Spec: `docs/superpowers/specs/2026-10-31-dense-pages-design.md`.
 
 Spec: `docs/superpowers/specs/2026-10-30-3d-figures-design.md`.
 
-- Home has one 3D figure (`home-tracking`); each case except `ai-build-lab` has one, declared as `scene3d` in `js/portfolio-data.js`. Projects cards keep their approved real images.
+- Home has no 3D figure; each case except `ai-build-lab` has one, declared as `scene3d` in `js/portfolio-data.js`. Projects cards keep their approved real images.
 - `js/scene3d.js` is the shared engine (three.js r128, ported from the 2026-10 presentation decks). It injects `js/vendor/three-r128.min.js` on demand when a figure nears the viewport, keeps at most two live WebGL contexts, disables wheel zoom, lets one-finger touch scroll the page and honours `prefers-reduced-motion`. While live it shows one quiet "드래그로 회전 / Drag to rotate" hint; captions do not repeat it.
 - Scenes live in `js/scenes/<name>.js`, are procedural only (no GLB, textures or network loads) and carry ko/en labels. Every visible element and label must match a sentence in the case's public role, summary or evidence; do not depict robot-assisted surgery, design-stage features as finished, customer hardware CAD, partner names or internal document sources.
 - Each figure shows a captured WebP poster (`assets/3d/<name>.webp`) until WebGL mounts; the poster is also the no-JS, no-WebGL and print image. These real scene captures are not the forbidden decorative SVG fallbacks.

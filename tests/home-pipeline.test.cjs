@@ -97,5 +97,16 @@ test('map CSS has focus-visible highlighting, a 760px band rule and no dimming b
   assert.doesNotMatch(mapCss, /box-shadow|gradient|text-transform\s*:\s*uppercase|monospace/i);
   const dim = mapCss.split('\n').filter(l => /opacity/.test(l));
   assert.ok(dim.some(l => /^\.sc-map:has\(.*:hover/.test(l) && /opacity: \.45/.test(l)));
-  assert.ok(!/^\.sc-map__chip \{[^}]*opacity: *0?\./.test(dim.find(l => l.startsWith('.sc-map__chip {')) || ''));
+  const chipLine = mapCss.split('\n').find(l => l.startsWith('.td-shell .sc-map__chip {'));
+  assert.ok(chipLine, 'default chip rule exists');
+  assert.doesNotMatch(chipLine, /[{;\s]opacity\s*:/, 'default chip is not dimmed (transition: opacity is allowed)');
+});
+test('home has no 3D figure or selected-activity cards', () => {
+  for (const f of ['index.html', 'en/index.html']) {
+    const html = fs.readFileSync(path.join(root, f), 'utf8');
+    assert.doesNotMatch(html, /view3d|data-scene3d|home-tracking|local-feed|lf-activity/, f);
+  }
+  assert.equal(data.homeScene3d, undefined);
+  assert.equal(fs.existsSync(path.join(root, 'js/scenes/home-tracking.js')), false);
+  assert.equal(require('../js/local-feed.js').selectedActivitiesHtml, undefined);
 });

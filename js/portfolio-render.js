@@ -1195,8 +1195,6 @@
       });
     }
 
-    // Home enables its 3D figure through data (homeScene3d), like the cases.
-    if (data.homeScene3d !== undefined) errors = errors.concat(scene3dErrors(data.homeScene3d, 'home'));
     errors = errors.concat(pipelineErrors(data));
     errors = errors.concat(highlightsErrors(data.highlights));
     errors = errors.concat(publicCopySafetyErrors(data));
@@ -1263,18 +1261,6 @@
     var visual = '<div class="view3d" data-scene="' + escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) +
       '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000" loading="lazy" decoding="async"></div>';
     return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', captionOverride || sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
-  }
-
-  // Home intro 3D figure: unnumbered, in the intro's side column. Its portrait poster (640×800) is above the
-  // fold, so it is not lazy-loaded; three.js itself still loads only after the page has loaded.
-  function homeScene3dFigureHtml(scene, locale, base) {
-    if (!scene || typeof scene !== 'object' || typeof scene.name !== 'string' || !scene3dNamePattern.test(scene.name) ||
-        scene.poster !== 'assets/3d/' + scene.name + '.webp' || !isSafePublicPath(scene.poster)) return '';
-    var sceneCopy = translation(scene, localeOf(locale));
-    if (!sceneCopy.caption || !sceneCopy.alt) return '';
-    return '<figure class="sc-figure sc-figure3d sc-intro__figure" data-scene3d="' + escapeHtml(scene.name) + '"><div class="view3d" data-scene="' +
-      escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) + '" alt="' + escapeHtml(sceneCopy.alt) +
-      '" width="640" height="800" decoding="async"></div><figcaption>' + escapeHtml(sceneCopy.caption) + '</figcaption></figure>';
   }
 
   function mediaPreload(item) {
@@ -1960,7 +1946,6 @@
     relatedProjectsHtml: relatedProjectsHtml,
     caseStudyHtml: caseStudyHtml,
     scene3dFigureHtml: scene3dFigureHtml,
-    homeScene3dFigureHtml: homeScene3dFigureHtml,
     mountAll: mountAll
   };
 });
