@@ -943,7 +943,7 @@
                 '접촉 상태와 거리 가시화',
                 '조기접촉 가상 절삭(그라인딩) 후 재교합·재평가 루프',
                 'Midline·Overjet·Overbite 목표값 지표',
-                'FH·정중시상·관상 평면 축 기준 악궁 중점 6-DOF 미세조정',
+                'FH·정중시상·관상 평면 축 기준 악궁 중점 6-DOF 미세 조정',
                 'RMSE·Gap·FRE 평가, 적합/검토 필요 판정 요약',
                 '프로젝트 저장과 PNG·CSV·HTML 리포트 내보내기'
               ]
@@ -1134,7 +1134,7 @@
             problem: ['특징점 앱 분리·참고 이미지 대조 불편', '다중 시점 교합·저장·평가 화면 미통합'],
             did: ['기술 리드·메인 개발자', 'Custom App 아키텍처·end-to-end UI/UX', '엔진 통합·평가·내보내기·패키징'],
             result: ['7단계 워크플로가 동작하는 개발 빌드', '구강 스캔 특징점 주석 PoC 도구'],
-            team: ['연구진의 지표 정의·빌드 직접 검토', '특징점 알고리즘·교합 엔진 구현 지원']
+            team: ['연구진의 지표 정의·빌드 직접 검토', '병원 제공 AI 특징점 모델·교합 엔진 지원']
           },
           sections: {
             'redesign-background': { items: ['2023.04–12 이전 앱 유지보수·검증', '2025.09–10 v1 교합 시뮬레이터 정리', '2026.03 구조·워크플로 재설계 시작', '2026.04 특징점 주석 PoC 도구(PySide6·VTK)'] },
@@ -1153,7 +1153,7 @@
             problem: ['Landmark app separate from reference images', 'Occlusion views, saving, evaluation not integrated'],
             did: ['Technical lead and main developer', 'Custom App architecture and end-to-end UI/UX', 'Engine integration, evaluation, export, packaging'],
             result: ['Development build running the 7-step workflow', 'Intraoral-scan landmark annotation PoC tool'],
-            team: ['Researchers define metrics and review builds', 'Collaborators support landmark and occlusion engines']
+            team: ['Researchers define metrics and review builds', 'Hospital-provided AI landmark model; occlusion-engine support']
           },
           sections: {
             'redesign-background': { items: ['2023.04–12 maintained and verified the previous app', '2025.09–10 packaged the v1 occlusion simulator', '2026.03 redesign of structure and workflow', '2026.04 landmark annotation PoC (PySide6, VTK)'] },
@@ -1161,7 +1161,7 @@
             'user-centered-decisions': { items: ['Reference image beside landmark input', 'Multi-view occlusion comparison', 'Integrated save and load', 'Simulation playback bar and pivot handle', 'Model transparency and landmark visibility'] },
             'system-architecture': { items: ['C++/Qt shell + Python workflow modules', 'Shared state and libraries', 'Collaborator algorithms kept as integration scope', 'Port to Slicer 5.12.4 and Qt 6', 'Separate ONNX Runtime process', 'NSIS installer, portable build, Cython protection'] },
             'verification-boundary': { hidden: true },
-            'long-term-direction': { items: ['Mandibular motion from normal occlusion', 'Toward full maxillofacial surgical planning (long-term)', '(Design) Osteotomy and guide planning; OmfsNavi handoff unverified'] }
+            'long-term-direction': { items: ['Mandibular motion from normal occlusion', 'Toward full maxillofacial surgical planning (long-term)', '(Design) Osteotomy/segment/guide plans; OmfsNavi handoff unverified'] }
           },
           sceneCaption: 'Digital occlusion workflow concept (synthetic geometry)'
         }
@@ -1184,7 +1184,7 @@
           summary: '원본 STL 4개 → 작업 모델 합성, 병원 제공 AI 해부학 특징점 검출 모델을 별도 프로세스로 통합한 치아·악안면 특징점 단계, 해부학적 좌표계, 자동 교합·6-DOF 조정·접촉 분석, RMSE·Gap·FRE 평가와 내보내기를 하나의 Custom App으로 연결했습니다.',
           problem: '이전 흐름은 특징점 앱이 분리되어 참고 이미지 대조와 확대·이동이 불편했고, 교합의 다중 시점, 저장·불러오기, 악안면 특징점, 평가 화면이 충분히 통합되지 않았습니다.',
           role: '기술 리드·메인 개발자로 C++/Qt 셸, Python 모듈, 공통 라이브러리의 전체 Custom App 아키텍처를 설계하고 end-to-end UI/UX, 알고리즘·엔진 통합, 평가·내보내기, CMake/SuperBuild·테스트·패키징을 주도했습니다. 워크플로우에 들어가는 특징점 데이터를 위해 구강 스캔 특징점 주석 PoC 도구(PySide6·VTK)도 만들었습니다.',
-          teamResult: '삼성서울병원 연구진은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. AI 특징점 모델은 삼성서울병원 연구팀이 제공한 것이며, 저는 이를 별도 프로세스로 통합(CPU/CUDA 선택, 취소 시 롤백, 정답 비교)했고 학습은 하지 않았습니다. DIGITRACK 협업 팀은 교합 엔진 구현·연구를 지원했습니다.',
+          teamResult: '삼성서울병원 연구팀은 임상 워크플로우·특징점·평가 지표를 함께 정의하고 개발 빌드를 직접 검토합니다. AI 특징점 모델은 삼성서울병원 연구팀이 제공한 것이며, 저는 이를 별도 프로세스로 통합(CPU/CUDA 선택, 취소 시 롤백, 정답 비교)했고 학습은 하지 않았습니다. DIGITRACK 협업 팀은 교합 엔진 구현·연구를 지원했습니다.',
           evidence: '특징점 입력, 다중 시점 교합, 접촉 가시화, RMSE·Gap·FRE 평가와 내보내기가 동작하는 개발 빌드 영상·화면과 연구진 직접 사용 피드백이 근거입니다.',
           limitation: '현재는 개발·시연 빌드의 연구진 검증 단계입니다. 병원 설치, 실제 수술 사용, 의료기기 상태, 임상 효능·정확도·안전성을 주장하지 않으며 화면 값도 성능 결과로 인용하지 않습니다.',
           collaboration: '삼성서울병원과 DIGITRACK의 장기 R&D로 디지털 교합에서 정상 교합 기반 하악 운동과 전체 구강악안면 수술계획으로 확장하는 방향을 검토하고 있습니다. 2026년 협의에서는 병원 정의 특징점을 원본 STL 좌표로 전달하고, 주석·모델 학습·앱 통합의 책임을 구분했습니다. 재설계는 3월에 시작했고 새 저장소의 최초 커밋은 4월입니다.',
