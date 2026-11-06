@@ -159,7 +159,7 @@
         S.t({ ko: '정상 주행', en: 'Driving' }),
         S.t({ ko: '경고 구역 · 감속', en: 'Warning zone · slow down' }),
         S.t({ ko: '정지 구역 · 정지', en: 'Stop zone · stop' }),
-        S.t({ ko: '가상 범퍼 · E-STOP 래칭', en: 'Virtual bumper · E-STOP latched' }),
+        S.t({ ko: 'E-STOP 구역 · 래칭', en: 'E-STOP zone · latched' }),
         S.t({ ko: '사람 이탈 · 래칭 유지', en: 'Person gone · latch held' }),
         S.t({ ko: '리셋 입력 · 해제 후 재출발', en: 'Reset input · released, moving again' })
       ];

@@ -3,7 +3,7 @@ const data = require('../js/portfolio-data.js');
 const by = slug => data.projects.find(p => p.slug === slug);
 const text = JSON.stringify(data.projects);
 test('refresh 2026-11: no stale facts remain', () => {
-  for (const stale of ['8개 3D 모델', 'eight 3D models', '게이팅 윈도우', 'gating window', '계획 CT 정합', '계속 유지보수합니다', '2024 – present', 'v1.24 — 프로젝트 시작 화면']) {
+  for (const stale of ['8개 3D 모델', 'eight 3D models', '게이팅 윈도우', 'gating window', '3단 가상 범퍼', 'three-tier virtual bumper', 'three-zone virtual bumper', '계획 CT 정합', '계속 유지보수합니다', '2024 – present', 'v1.24 — 프로젝트 시작 화면']) {
     assert.ok(!text.includes(stale), stale);
   }
 });
@@ -82,7 +82,7 @@ test('skadi: 2026-07 desktop stabilisation and API 7 python binding', () => {
 
 test('unmanned-forklift: cart recognition/classification workflow, field trial status, safety wording', () => {
   const p = by('unmanned-forklift'); const j = JSON.stringify(p);
-  assert.doesNotMatch(j, /3단 가상 범퍼|three-tier virtual bumper/i);
+  assert.doesNotMatch(j, /3단 가상 범퍼|three-(tier|zone) virtual bumper/i);
   assert.match(j, /E-STOP 래칭|E-STOP latch/i);
   for (const f of ['DINOv2', 'top-3', '99.5', '2,010', '4.66', 'Isaac Sim', 'ChArUco', '24종', '8묶음']) assert.ok(j.includes(f), f);
   assert.match(j, /고객 현장 시험 운용|customer-site trial/i);
