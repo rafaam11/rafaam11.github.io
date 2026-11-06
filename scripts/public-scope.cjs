@@ -48,6 +48,8 @@ function registeredMedia(read) {
   }
   // 3D figure posters are declared as scene3d records and verified by the portfolio validator.
   for (const match of (read('js/portfolio-data.js') || '').matchAll(/assets\/3d\/[a-z0-9-]+\.webp/g)) allowed.add(match[0]);
+  // Home pipeline thumbnails are allowed only while scripts/pipeline-thumbs.cjs (their generator) lists them.
+  for (const match of (read('scripts/pipeline-thumbs.cjs') || '').matchAll(/assets\/pipeline\/stage-[1-5]\.webp/g)) allowed.add(match[0]);
   // Authored CV PDF raster fallbacks are also referenced and verified by the CV validator.
   for (const file of ['cv/index.html', 'en/cv/index.html']) for (const match of (read(file) || '').matchAll(/(?:assets|output)\/[a-zA-Z0-9_./-]+\.(?:png|jpg|webp|pdf)/g)) allowed.add(match[0]);
   return allowed;

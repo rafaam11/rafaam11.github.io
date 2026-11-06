@@ -2571,6 +2571,31 @@ function staticPageErrors(file, html, rootDir) {
   return errors;
 }
 
+const pipelineThumbMaxBytes = 90 * 1024;
+const pipelineThumbTotalBytes = 300 * 1024;
+function pipelineThumbErrors(rootDir) {
+  const errors = [];
+  const { webpSize, metadataLeaks } = require('./activity-media.cjs');
+  let total = 0;
+  for (let n = 1; n <= 5; n++) {
+    const rel = `assets/pipeline/stage-${n}.webp`;
+    const file = path.join(rootDir, ...rel.split('/'));
+    if (!fs.existsSync(file)) { errors.push(`${rel}: missing pipeline thumbnail.`); continue; }
+    const buffer = fs.readFileSync(file);
+    total += buffer.length;
+    const size = webpSize(buffer);
+    if (!size) { errors.push(`${rel}: thumbnail must be a decodable WebP image.`); continue; }
+    if (size.width !== 640 || size.height !== 360) errors.push(`${rel}: thumbnail must be 640x360, found ${size.width}x${size.height}.`);
+    if (buffer.length > pipelineThumbMaxBytes) errors.push(`${rel}: ${buffer.length} bytes; the per-file budget is ${pipelineThumbMaxBytes}.`);
+    for (const leak of metadataLeaks(buffer, 'webp')) errors.push(`${rel}: thumbnail must be metadata-stripped (${leak}).`);
+    for (let off = 12; off + 8 <= buffer.length; off += 8 + buffer.readUInt32LE(off + 4) + (buffer.readUInt32LE(off + 4) % 2)) {
+      if (buffer.toString('ascii', off, off + 4) === 'ICCP') errors.push(`${rel}: thumbnail must be metadata-stripped (ICC chunk).`);
+    }
+  }
+  if (total > pipelineThumbTotalBytes) errors.push(`assets/pipeline: thumbnails total ${total} bytes; the budget is ${pipelineThumbTotalBytes}.`);
+  return errors;
+}
+
 function validatePortfolio(rootDir) {
   const errors = portfolioDataErrors(data).slice();
   try {
@@ -2584,6 +2609,7 @@ function validatePortfolio(rootDir) {
   errors.push(...evidenceDirectoryErrors(rootDir));
   errors.push(...pdfArtifactErrors(rootDir));
   errors.push(...scene3dAssetErrors(rootDir));
+  errors.push(...pipelineThumbErrors(rootDir));
 
   for (const file of publicPortfolioFiles(rootDir)) {
     if (!fs.existsSync(file.absolutePath)) {
@@ -2653,6 +2679,7 @@ module.exports = {
   pageScene3dName,
   scene3dDeclarations,
   scene3dAssetErrors,
+  pipelineThumbErrors,
   parseEvidenceRegister,
   readEvidenceRegister,
   evidenceRegistryErrors,

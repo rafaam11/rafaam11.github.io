@@ -15,3 +15,31 @@ test('every case shell title matches its data title', () => {
     assert.ok(title.startsWith(p.translations[locale].title), `${locale} ${p.slug}: ${title}`);
   }
 });
+test('pipeline thumbnails: five WebP files within budget and valid', () => {
+  const { pipelineThumbErrors } = require('../scripts/validate-portfolio.cjs');
+  let total = 0;
+  for (let n = 1; n <= 5; n++) {
+    const buf = fs.readFileSync(path.join(root, 'assets/pipeline', `stage-${n}.webp`));
+    assert.equal(buf.toString('ascii', 0, 4), 'RIFF'); assert.equal(buf.toString('ascii', 8, 12), 'WEBP');
+    assert.ok(buf.length <= 90 * 1024, `stage-${n} size`); total += buf.length;
+  }
+  assert.ok(total <= 300 * 1024);
+  assert.deepEqual(pipelineThumbErrors(root), []);
+});
+test('pipeline thumbnail validator rejects missing files and EXIF chunks', () => {
+  const { pipelineThumbErrors } = require('../scripts/validate-portfolio.cjs');
+  const tmp = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'pipe-'));
+  try {
+    assert.ok(pipelineThumbErrors(tmp).some(e => /missing pipeline thumbnail/.test(e)));
+    fs.mkdirSync(path.join(tmp, 'assets/pipeline'), { recursive: true });
+    for (let n = 1; n <= 5; n++) fs.copyFileSync(path.join(root, 'assets/pipeline', `stage-${n}.webp`), path.join(tmp, 'assets/pipeline', `stage-${n}.webp`));
+    assert.deepEqual(pipelineThumbErrors(tmp), []);
+    // Append an EXIF chunk and fix the RIFF size.
+    const f = path.join(tmp, 'assets/pipeline/stage-2.webp');
+    const buf = fs.readFileSync(f);
+    const chunk = Buffer.concat([Buffer.from('EXIF'), Buffer.from([4, 0, 0, 0]), Buffer.from('abcd')]);
+    const out = Buffer.concat([buf, chunk]); out.writeUInt32LE(out.length - 8, 4);
+    fs.writeFileSync(f, out);
+    assert.ok(pipelineThumbErrors(tmp).some(e => /EXIF chunk/.test(e)));
+  } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+});
