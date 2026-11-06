@@ -414,9 +414,11 @@ test('callouts render pins at percentage positions and a list before the caption
 test('items without callouts render exactly as before', () => {
   assert.equal(render.calloutFigureHtml('<img src="a">', {}, 'ko'), '<img src="a">');
   assert.equal(render.calloutFigureHtml('<img src="a">', { callouts: [] }, 'en'), '<img src="a">');
-  for (const slug of all) assert.doesNotMatch(render.caseStudyHtml(data, slug, '', true, 'ko'), /sc-callout/, slug);
+  assert.doesNotMatch(render.caseStudyHtml(data, 'ai-build-lab', '', true, 'ko'), /sc-callout/, 'ai-build-lab has no callouts');
   // adding callouts changes only the wrapped figure: removing the frame, pins and list gives back the plain page
-  const plain = render.caseStudyHtml(data, 'life-careverse', '', true, 'ko');
+  const bare = clone(data);
+  delete findItem(bare.projects, 'life-careverse-gallery-01').callouts;
+  const plain = render.caseStudyHtml(bare, 'life-careverse', '', true, 'ko');
   const pinned = render.caseStudyHtml(withCallouts('life-careverse-gallery-01'), 'life-careverse', '', true, 'ko');
   assert.notEqual(pinned, plain);
   const restored = pinned
@@ -496,4 +498,61 @@ test('callout CSS pins by percentage, ignores the pointer and avoids forbidden p
   assert.match(pin, /background: var\(--sc-link\)/);
   assert.doesNotMatch(css.split(/\r?\n/).filter((line) => line.includes('sc-callout')).join('\n'), /box-shadow|gradient|uppercase|monospace/i);
   assert.ok(css.split(/\r?\n/).length <= 420);
+});
+
+// ---- Published callouts: one screenshot per case ----
+const calloutTargets = {
+  'surgical-navigation': 'surgical-navigation-smcnavi-ui-01',
+  'mandibular-fracture': 'mandibular-fracture-lead-01',
+  'digital-occlusion-workflow': 'digital-occlusion-workflow-landmark-01',
+  'life-careverse': 'life-careverse-gallery-01',
+  'rtms-navigation': 'rtms-navigation-lead-01',
+  'respiratory-surface-guidance': 'respiratory-surface-guidance-lead-01',
+  'skadi-tracking-software': 'skadi-desktop-tracker-6dof-01',
+  'unmanned-forklift': 'unmanned-forklift-gallery-01'
+};
+function collectCallouts(root, found = []) {
+  if (Array.isArray(root)) root.forEach((entry) => collectCallouts(entry, found));
+  else if (root && typeof root === 'object') {
+    if (root.callouts) found.push(root);
+    Object.keys(root).forEach((key) => collectCallouts(root[key], found));
+  }
+  return found;
+}
+
+test('each case but ai-build-lab carries callouts on exactly one pinned image', () => {
+  for (const project of data.projects) {
+    const carriers = collectCallouts(project);
+    if (!calloutTargets[project.slug]) { assert.equal(carriers.length, 0, `${project.slug}: no callouts`); continue; }
+    assert.equal(carriers.length, 1, `${project.slug}: one image`);
+    assert.equal(carriers[0].id, calloutTargets[project.slug], `${project.slug}: target id`);
+    assert.equal(carriers[0].type, 'image');
+    assert.ok(carriers[0].callouts.length >= 3 && carriers[0].callouts.length <= 5, `${project.slug}: 3-5 pins`);
+  }
+  assert.equal(Object.keys(calloutTargets).length, 8);
+});
+
+test('callout labels avoid customer names, internal codes and percentages', () => {
+  const banned = /고객사|\d\s*%/;
+  for (const project of data.projects) {
+    for (const item of collectCallouts(project)) {
+      for (const pin of item.callouts) {
+        for (const locale of ['ko', 'en']) assert.doesNotMatch(pin.translations[locale].label, banned, `${item.id} ${locale} ${pin.n}`);
+      }
+    }
+  }
+});
+
+test('published callouts render as pins and a label list on every case page', () => {
+  const esc = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  for (const [slug, id] of Object.entries(calloutTargets)) {
+    const item = findItem(data.projects, id);
+    for (const locale of ['ko', 'en']) {
+      const html = render.caseStudyHtml(data, slug, '', true, locale);
+      const figure = figureOf(html, id);
+      assert.equal((figure.match(/<span class="sc-callout-pin"/g) || []).length, item.callouts.length, `${id} ${locale}: pins`);
+      const items = [...figure.matchAll(/<li>(.*?)<\/li>/g)].map((m) => m[1]);
+      assert.deepEqual(items, item.callouts.map((c) => esc(c.translations[locale].label)), `${id} ${locale}: list`);
+    }
+  }
 });
