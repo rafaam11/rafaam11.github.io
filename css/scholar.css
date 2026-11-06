@@ -256,6 +256,12 @@
 .sc-product-application h2 { margin-top: .3rem; }
 .sc-product-application__screens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-top: 1.25rem; }
 .sc-product-application__screens .sc-product-figure img { height: auto; max-height: 360px; border: 1px solid var(--sc-rule); background: #f4f6f8; }
+.sc-product-figure .sc-callout-frame { align-self: start; } /* The frame hugs the drawn image so pins stay on it */
+.sc-product-figure .sc-callout-frame img { height: auto; max-height: none; padding: 0; border: 0; }
+.sc-product-console .sc-product-figure .sc-callout-frame { border: 1px solid var(--pc-console-line); background: #0b1117; }
+.sc-product-application__screens .sc-product-figure .sc-callout-frame { border: 1px solid var(--sc-rule); background: #f4f6f8; }
+.sc-product-console .sc-product-figure:has(.sc-callout-frame) { grid-template-rows: auto; align-content: start; }
+.sc-product-console .sc-callout-list { color: #adbbc6; }
 .sc-product-application[data-track="industrial"] .sc-product-application__screens { grid-template-columns: minmax(240px, 420px); }
 .sc-product-limits { padding-bottom: .5rem; }
 /* End product-console case. */

@@ -454,6 +454,15 @@ test('validation accepts the fixture and rejects each broken callout rule', () =
   assert.equal(lead.type, 'video');
   lead.callouts = threeCallouts();
   assert.ok(errorsOf(video).some((error) => /allowed only on image media/.test(error)));
+  // a video item inside story media or a gallery rejects them too, and posters never take callouts
+  const story = clone(data);
+  const storyVideo = story.projects.find((p) => p.slug === 'surgical-navigation').storySections.flatMap((section) => section.media || []).find((item) => item.type === 'video');
+  assert.ok(storyVideo, 'story video exists');
+  storyVideo.callouts = threeCallouts();
+  assert.ok(errorsOf(story).some((error) => /allowed only on image media/.test(error)), 'story video');
+  const posterCopy = clone(data);
+  posterCopy.projects.find((p) => p.slug === 'surgical-navigation').media.poster.callouts = threeCallouts();
+  assert.ok(errorsOf(posterCopy).some((error) => /not allowed on a poster/.test(error)), 'poster');
 });
 
 test('callouts are accepted on lead, gallery, story media and console slots', () => {
@@ -477,6 +486,8 @@ test('PDF source digest ignores callouts at every depth', () => {
 test('callout CSS pins by percentage, ignores the pointer and avoids forbidden properties', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'css', 'scholar.css'), 'utf8');
   assert.match(css, /\.sc-callout-frame \{ position: relative;/);
+  assert.match(css, /\.sc-product-figure \.sc-callout-frame img \{ height: auto; max-height: none; padding: 0; border: 0; \}/);
+  assert.match(css, /\.sc-product-figure \.sc-callout-frame \{ align-self: start;/);
   const pin = css.split(/\r?\n/).find((line) => line.startsWith('.sc-callout-pin '));
   assert.match(pin, /position: absolute/);
   assert.match(pin, /pointer-events: none/);

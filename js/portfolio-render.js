@@ -406,10 +406,10 @@
     return errors;
   }
 
-  function mediaItemErrors(item, label, allowedTypes) {
+  function mediaItemErrors(item, label, allowedTypes, isPoster) {
     var errors = [];
     if (!item || typeof item !== 'object') return [label + ': media item must be an object.'];
-    if (item.callouts !== undefined) errors = errors.concat(calloutErrors(item, label));
+    if (item.callouts !== undefined) errors = errors.concat(isPoster ? [label + ': callouts are not allowed on a poster.'] : calloutErrors(item, label));
     if (typeof item.id !== 'string' || !item.id) errors.push(label + ': media item requires a stable id.');
     if (!mediaTypes.includes(item.type)) errors.push(label + ': unknown media type.');
     else if (allowedTypes && !allowedTypes.includes(item.type)) errors.push(label + ': unsupported ' + item.type + ' media type for this slot.');
@@ -593,7 +593,7 @@
         }
         if (item && item.poster !== undefined) {
           var posterLabel = mediaLabel + ' poster';
-          errors = errors.concat(mediaItemErrors(item.poster, posterLabel, ['image']));
+          errors = errors.concat(mediaItemErrors(item.poster, posterLabel, ['image'], true));
           if (item.poster && item.poster.status === 'approved' && (!isSafePublicPath(item.poster.publicPath) || !item.poster.publicPath.startsWith('assets/projects/' + slug + '/'))) {
             errors.push(posterLabel + ': approved story poster requires a repository-relative project path.');
           }
@@ -1045,7 +1045,7 @@
         } else {
           errors = errors.concat(mediaItemErrors(project.media.lead, slug + ' lead', leadMediaTypes));
           if (project.media.video) errors = errors.concat(mediaItemErrors(project.media.video, slug + ' video', ['video']));
-          if (project.media.poster) errors = errors.concat(mediaItemErrors(project.media.poster, slug + ' poster', ['image']));
+          if (project.media.poster) errors = errors.concat(mediaItemErrors(project.media.poster, slug + ' poster', ['image'], true));
           if (project.media.references !== undefined && !Array.isArray(project.media.references)) {
             errors.push(slug + ': media references must be an array.');
           } else {
