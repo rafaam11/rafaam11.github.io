@@ -290,6 +290,12 @@
     return String(base || '') + value;
   }
 
+  function displayPeriod(period, locale) {
+    var text = String(period == null ? '' : period);
+    if (locale !== 'ko') return text;
+    return text.replace(/ – present$/, ' – 현재');
+  }
+
   function localizePortfolioData(data, locale) {
     var normalized = localeOf(locale);
     var source = data && typeof data === 'object' ? data : {};
@@ -312,7 +318,7 @@
         return {
           slug: project.slug,
           tier: project.tier,
-          period: copy.periodLabel || project.period,
+          period: copy.periodLabel || displayPeriod(project.period, normalized),
           evidenceState: project.evidenceState,
           lifecycleState: project.lifecycleState,
           statusLabel: copy.statusLabel || '',
@@ -1827,6 +1833,7 @@
     policy: policy,
     dataErrors: validatePortfolioData,
     isSafePublicPath: isSafePublicPath,
+    displayPeriod: displayPeriod,
     localizePortfolioData: localizePortfolioData,
     validatePortfolioData: validatePortfolioData,
     homeProjectGalleryHtml: homeProjectGalleryHtml,
