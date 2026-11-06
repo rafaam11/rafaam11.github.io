@@ -1269,7 +1269,7 @@
     var sceneCopy = translation(scene, normalized);
     if (!sceneCopy.caption || !sceneCopy.alt) return '';
     var visual = '<div class="view3d" data-scene="' + escapeHtml(scene.name) + '"><img src="' + escapeHtml(assetHref(base, scene.poster)) +
-      '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000" loading="lazy" decoding="async"></div>';
+      '" alt="' + escapeHtml(sceneCopy.alt) + '" width="1600" height="1000"' + (figureNumber === 1 ? '' : ' loading="lazy"') + ' decoding="async"></div>';
     return figureHtml(visual, pageCopy[normalized].figure + ' ' + figureNumber + '.', captionOverride || sceneCopy.caption, 'sc-figure3d', ' data-scene3d="' + escapeHtml(scene.name) + '"');
   }
 
@@ -1519,11 +1519,15 @@
     var normalized = localeOf(locale);
     var copy = pageCopy[normalized];
     var items = (project.media && Array.isArray(project.media.gallery) ? project.media.gallery : []).filter(isApprovedImage);
-    if (!items.length) return '';
-    var figures = items.map(function (item, offset) {
+    var leadItem = settings && settings.lead && isApprovedImage(settings.lead.item) ? settings.lead : null;
+    if (!items.length && !leadItem) return '';
+    var entries = (leadItem ? [{ item: leadItem.item, alt: leadItem.alt, caption: leadItem.caption }] : []).concat(items.map(function (item) {
       var itemCopy = translation(item, normalized);
-      var visual = '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || project.mediaAlt || '') + '" loading="lazy" decoding="async">';
-      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', itemCopy.caption || '', 'sc-figure--gallery', '');
+      return { item: item, alt: itemCopy.alt || project.mediaAlt || '', caption: itemCopy.caption || '' };
+    }));
+    var figures = entries.map(function (entry, offset) {
+      var visual = '<img src="' + escapeHtml(assetHref(base, entry.item.publicPath)) + '" alt="' + escapeHtml(entry.alt) + '" loading="lazy" decoding="async">';
+      return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', entry.caption, 'sc-figure--gallery', '');
     }).join('');
     return '<section class="sc-gallery" aria-label="' + escapeHtml(copy.figures) + '"><div class="sc-gallery__grid">' + figures + '</div></section>';
   }
@@ -1841,8 +1845,12 @@
     var isConsole = Boolean(sourceProject && sourceProject.caseLayout === 'product-console');
     // Dense layout: cases with web-only condensed copy (`web`) replace the long prose sections.
     var webCopy = sourceProject && sourceProject.web ? sourceProject.web[normalized] : null;
-    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption) : '';
-    var afterSceneFigure = (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
+    var hasStoryLayout = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
+    // Dense default layout with an image lead and a 3D scene: the 3D figure is Figure 1 above the brief and the lead image joins the gallery.
+    var sceneFirst = Boolean(webCopy && !isConsole && !hasStoryLayout && lead && sourceProject.media && isApprovedImage(sourceProject.media.lead));
+    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole || sceneFirst ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption) : '';
+    if (sceneFirst && !sceneFigure) sceneFirst = false;
+    var afterSceneFigure = sceneFirst ? 2 : (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +
       '<p class="sc-case__meta"><span>' + escapeHtml(project.period) + '</span> · <span>' + escapeHtml(projectStateLabel(project, normalized)) + '</span> · <span>' + project.tech.map(escapeHtml).join(', ') + '</span></p>' +
       '<p class="sc-case__thesis">' + escapeHtml(project.thesis) + '</p></header>';
@@ -1873,7 +1881,7 @@
           ' · <a href="' + escapeHtml(contactHref) + '">' + escapeHtml(copy.contact) + '</a></p></article>';
     }
     if (webCopy) {
-      var denseOpen = '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + denseHeader + webBriefHtml(webCopy, normalized) + lead;
+      var denseOpen = '<article class="sc-case" data-case="' + escapeHtml(project.slug) + '">' + denseHeader + (sceneFirst ? sceneFigure : lead) + webBriefHtml(webCopy, normalized);
       var denseClose = relatedProjectsHtml(data, sourceProject, normalized, base, isFile) + links + '</article>';
       if (hasStory) {
         var webSections = webCopy.sections || {};
@@ -1883,8 +1891,8 @@
           storySectionsHtml(sourceProject, normalized, base, afterSceneFigure + storyFigureCount(sourceProject, 'before-standard'), 'after-standard', webSections) +
           denseClose;
       }
-      return denseOpen + '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2>' + sceneFigure + pointsHtml(webCopy.points) + '</section>' +
-        caseGalleryHtml(project, normalized, base, afterSceneFigure) + subcasesHtml(project, normalized) + denseClose;
+      return denseOpen + '<section class="sc-case__section"><h2>' + escapeHtml(copy.approach) + '</h2>' + (sceneFirst ? '' : sceneFigure) + pointsHtml(webCopy.points) + '</section>' +
+        caseGalleryHtml(project, normalized, base, afterSceneFigure, sceneFirst ? { lead: { item: sourceProject.media.lead, alt: translation(sourceProject, normalized).mediaAlt || sourceProject.mediaAlt || '', caption: translation(sourceProject, normalized).mediaCaption || sourceProject.mediaCaption || '' } } : null) + subcasesHtml(project, normalized) + denseClose;
     }
     var redundantLimitBlockKeys = {
       'mandibular-fracture': 'research-boundary',

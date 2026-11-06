@@ -5553,10 +5553,9 @@ test('dense default case renders header tags, brief, Figure 1, Approach with the
     const web = project.web[locale];
     const ko = locale === 'ko';
     assertInOrder(html, [
-      'sc-case__header', 'sc-case__meta', 'class="sc-tags"', 'class="sc-case__thesis"', 'class="sc-brief"',
+      'sc-case__header', 'sc-case__meta', 'class="sc-tags"', 'class="sc-case__thesis"', 'sc-figure3d', ko ? '그림 1.' : 'Figure 1.', 'class="sc-brief"',
       ko ? '>문제<' : '>Problem<', ko ? '>한 일<' : '>What I did<', ko ? '>결과<' : '>Result<',
-      ko ? '그림 1.' : 'Figure 1.', ko ? '<h2>접근</h2>' : '<h2>Approach</h2>', 'sc-figure3d', ko ? '그림 2.' : 'Figure 2.',
-      'class="sc-points"', 'sc-gallery', 'sc-related-projects', 'sc-case__links'
+      ko ? '<h2>접근</h2>' : '<h2>Approach</h2>', 'class="sc-points"', 'sc-gallery', ko ? '그림 2.' : 'Figure 2.', 'sc-related-projects', 'sc-case__links'
     ], `${locale}: dense sequence`);
     const meta = /<p class="sc-case__meta">([\s\S]*?)<\/p>/.exec(html)[1];
     assert.equal(count(meta, '<span>'), 2, `${locale}: meta is period and state only`);
@@ -5566,7 +5565,7 @@ test('dense default case renders header tags, brief, Figure 1, Approach with the
     const team = ko ? '팀' : 'Team';
     for (const line of web.brief.team) assert.ok(html.includes(`<li><span class="sc-tag sc-tag--team">${team}</span> ${line}</li>`), `${locale}: team ${line}`);
     assert.ok(html.indexOf('sc-tag--team') > html.indexOf(ko ? '>결과<' : '>Result<'), `${locale}: team lines close the result cell`);
-    assert.ok(html.includes(`${ko ? '그림 2.' : 'Figure 2.'}</span> ${web.sceneCaption}</figcaption>`), `${locale}: short 3D caption`);
+    assert.ok(html.includes(`${ko ? '그림 1.' : 'Figure 1.'}</span> ${web.sceneCaption}</figcaption>`), `${locale}: short 3D caption`);
     const labels = [...html.matchAll(/sc-figure__label">[^<]*?(\d+)\./g)].map((match) => Number(match[1]));
     assert.deepEqual(labels, labels.map((_, i) => i + 1), `${locale}: consecutive figure numbers`);
     assert.doesNotMatch(html, ko ? /<h2>(?:문제|내 역할|결과와 근거|한계와 팀 성과)<\/h2>/ : /<h2>(?:Problem|My role|Results and evidence|Limits and team result)<\/h2>/);
@@ -5588,7 +5587,7 @@ test('dense story case keeps all eleven figures, replaces section prose with one
     const html = render.caseStudyHtml(data, project.slug, '../../', false, locale);
     assert.equal(count(html, '<figure'), 11, `${locale}: lead, 3D, eight media figures, and one diagram`);
     assertInOrder(html, Array.from({ length: 11 }, (_, index) => `${figure} ${index + 1}.`), `${locale}: consecutive labels`);
-    assertInOrder(html, ['class="sc-tags"', 'class="sc-brief"', `${figure} 1.`, locale === 'ko' ? '<h2>프로젝트 개요</h2>' : '<h2>Project overview</h2>', 'sc-figure3d', 'class="sc-story"', 'sc-case__links'], `${locale}: dense story order`);
+    assertInOrder(html, ['class="sc-tags"', `${figure} 1.`, 'class="sc-brief"', locale === 'ko' ? '<h2>프로젝트 개요</h2>' : '<h2>Project overview</h2>', 'sc-figure3d', 'class="sc-story"', 'sc-case__links'], `${locale}: dense story order`);
     const overview = html.slice(html.indexOf(locale === 'ko' ? '<h2>프로젝트 개요</h2>' : '<h2>Project overview</h2>'));
     assert.match(overview, /^<h2>[^<]+<\/h2><figure class="sc-figure sc-figure3d"/, `${locale}: no overview summary paragraph`);
     for (const section of project.storySections) {

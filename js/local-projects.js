@@ -1,14 +1,6 @@
 /* Private project-feed-v2 overlay. Public data and approval policy stay unchanged. */
 (function(root) {
   'use strict';
-  const placement = {
-    'mandibular-fracture': {'gallery-02':'research-pipeline','gallery-03':'published-evidence'},
-    'life-careverse': {'gallery-01':'xr-application','gallery-02':'shared-state','gallery-03':'shared-state','gallery-04':'adoption-boundary'},
-    'rtms-navigation': {'lead-01':'navigation-ui-workflow','gallery-01':'navigation-ui-workflow','gallery-02':'navigation-ui-workflow','gallery-03':'navigation-ui-workflow'},
-    'respiratory-surface-guidance': {'gallery-01':'two-track-optics','gallery-02':'validation-protocol','gallery-03':'measured-findings','gallery-04':'measured-findings','gallery-05':'two-track-optics','gallery-06':'two-track-optics'},
-    'unmanned-forklift': {'gallery-01':'integration-evidence','gallery-02':'integration-evidence','gallery-03':'integration-evidence'},
-    'ai-build-lab': {'gallery-01':'problem-to-product','gallery-02':'problem-to-product','gallery-03':'human-ai-boundary','gallery-04':'public-product-proof','gallery-05':'public-product-proof'}
-  };
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function figure(mid,lang,base,media,caption) {
     const m=media[mid], t=m.translations[lang];
@@ -22,13 +14,6 @@
     const slug=article.dataset.case, project=data.projects.find(p=>p.slug===slug);
     const node=html=>{const div=doc.createElement('div');div.innerHTML=html;return div.firstElementChild;};
     const block=key=>{const b=project.blocks.find(b=>b.key===key);return b&&Array.from(article.querySelectorAll('.sc-block')).find(n=>n.querySelector('h3')?.textContent===b.translations[lang].heading);};
-    const move=(suffix,target)=>{const item=article.querySelector(`img[src$="/${slug}-${suffix}.png"]`);if(item&&target){const f=item.closest('figure');f.dataset.localPlacement='context';target.append(f);}};
-    Object.entries(placement[slug]||{}).forEach(([suffix,key])=>move(suffix,block(key)));
-    const lead=article.querySelector(':scope > figure');
-    const leadTargets={'life-careverse':'multiuser-demo','rtms-navigation':'device-system-integration','unmanned-forklift':'integration-evidence','respiratory-surface-guidance':'two-track-optics'};
-    if(lead&&leadTargets[slug]&&block(leadTargets[slug]))block(leadTargets[slug]).append(lead);
-    if(slug==='digital-occlusion-workflow'&&lead)article.querySelector('[data-story-section="integrated-workflow"] .sc-story__media')?.prepend(lead);
-    if(slug==='surgical-navigation'&&lead)article.querySelector('[data-story-section="hololens-interface"] .sc-story__media')?.prepend(lead);
     if(slug==='mandibular-fracture') {
       ['gallery-01','gallery-04','gallery-05'].forEach(s=>article.querySelector(`img[src$="/${slug}-${s}.png"]`)?.closest('figure').remove());
       const stages=[
@@ -55,6 +40,6 @@
     // Reordering must not leave misleading legacy figure numbers.
     article.querySelectorAll('.sc-figure__label').forEach((n,i)=>{n.textContent=(lang==='ko'?'그림 ':'Figure ')+(i+1)+'. ';});
   }
-  const api={placement,figure,mount};if(typeof module==='object'&&module.exports)module.exports=api;root.LocalProjects=api;
+  const api={figure,mount};if(typeof module==='object'&&module.exports)module.exports=api;root.LocalProjects=api;
   if(root.document)root.document.addEventListener('DOMContentLoaded',()=>mount(root.document,root.PortfolioData,root.LocalMediaData));
 })(typeof globalThis!=='undefined'?globalThis:this);

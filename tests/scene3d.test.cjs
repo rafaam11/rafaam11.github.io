@@ -106,7 +106,8 @@ test('scene3d data validation rejects malformed records', () => {
   assert.match(render.dataErrors(partner).join('\n'), /nonpublic partner/i);
 });
 
-test('case renderer puts the 3D figure inside Approach after the lead and shifts the gallery numbers', () => {
+test('case renderer orders the first visual above the brief and numbers the gallery after it', () => {
+  const imageLeadScene = ['mandibular-fracture', 'respiratory-surface-guidance'];
   for (const [locale, figure] of [['ko', '그림'], ['en', 'Figure']]) {
     for (const slug of defaultLayoutCases) {
       const html = render.caseStudyHtml(data, slug, '../../', false, locale);
@@ -115,23 +116,26 @@ test('case renderer puts the 3D figure inside Approach after the lead and shifts
       assert.deepEqual(labels, labels.map((_, i) => i + 1), `${slug} ${locale}: consecutive figure numbers`);
       assert.equal((html.match(/class="sc-figure sc-figure3d"/g) || []).length, 1, `${slug} ${locale}: one 3D figure`);
       assert.ok(html.includes(`<div class="view3d" data-scene="${name}"><img src="../../assets/3d/${name}.webp"`), `${slug} ${locale}: poster`);
-      const approachStart = html.indexOf(locale === 'ko' ? '<h2>접근</h2>' : '<h2>Approach</h2>');
       const at = html.indexOf('sc-figure3d');
-      assert.ok(approachStart > 0 && at > approachStart && at < html.indexOf('</section>', approachStart), `${slug} ${locale}: 3D figure inside Approach`);
+      if (imageLeadScene.includes(slug)) {
+        // 3D is Figure 1, directly after the header and before the brief; the lead image moved into the gallery
+        assert.ok(at > html.indexOf('</header>') && at < html.indexOf('sc-brief'), `${slug} ${locale}: 3D figure above the brief`);
+        assert.match(html.match(/<figure\b[\s\S]*?<\/figure>/)[0], new RegExp(`${figure} 1\\.`));
+        assert.doesNotMatch(html.match(/<figure class="sc-figure sc-figure3d"[\s\S]*?<\/figure>/)[0], /loading="lazy"/, `${slug} ${locale}: figure 1 is eager`);
+      } else {
+        const approachStart = html.indexOf(locale === 'ko' ? '<h2>접근</h2>' : '<h2>Approach</h2>');
+        assert.ok(approachStart > 0 && at > approachStart && at < html.indexOf('</section>', approachStart), `${slug} ${locale}: 3D figure inside Approach`);
+      }
     }
     const html = render.caseStudyHtml(data, 'mandibular-fracture', '../../', false, locale);
     const figures = html.match(/<figure\b[\s\S]*?<\/figure>/g);
+    assert.match(figures[0], /class="sc-figure sc-figure3d"/);
     assert.match(figures[0], new RegExp(`${figure} 1\\.`));
-    assert.match(figures[1], /class="sc-figure sc-figure3d"/);
+    assert.match(figures[0], /<div class="view3d" data-scene="ms-frac"><img src="\.\.\/\.\.\/assets\/3d\/ms-frac\.webp" alt="[^"]+" width="1600" height="1000" decoding="async"><\/div>/);
     assert.match(figures[1], new RegExp(`${figure} 2\\.`));
-    assert.match(figures[1], /<div class="view3d" data-scene="ms-frac"><img src="\.\.\/\.\.\/assets\/3d\/ms-frac\.webp" alt="[^"]+" width="1600" height="1000" loading="lazy" decoding="async"><\/div>/);
+    assert.match(figures[1], /sc-figure--gallery/);
     const labels = [...html.matchAll(/sc-figure__label">[^<]*?(\d+)\./g)].map((match) => Number(match[1]));
     assert.deepEqual(labels, labels.map((_, i) => i + 1), `${locale}: consecutive figure numbers`);
-    // the figure is inside the Approach section, never a direct child of the article (js/local-projects.js lead rule)
-    const approachStart = html.indexOf(locale === 'ko' ? '<h2>접근</h2>' : '<h2>Approach</h2>');
-    const approachEnd = html.indexOf('</section>', approachStart);
-    const at = html.indexOf('sc-figure3d');
-    assert.ok(approachStart > 0 && at > approachStart && at < approachEnd, `${locale}: 3D figure inside Approach`);
   }
   assert.doesNotMatch(render.caseStudyHtml(data, 'ai-build-lab', '', false, 'ko'), /view3d|sc-figure3d/, 'ai-build-lab has no 3D figure');
 });
