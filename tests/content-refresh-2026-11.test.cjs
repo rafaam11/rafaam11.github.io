@@ -95,9 +95,11 @@ test('ai-build-lab: period from Claude Code launch, eight subcases, community li
   assert.equal(p.period, '2025.05 – present');
   assert.deepEqual(p.subcases.map(s => s.key), ['llm-wiki', 'multi-cli-work', 'harness-manager', 'view-anything', 'daegu-bus', 'deck', 'bolt', 'jk-video-editor']);
   const j = JSON.stringify(p);
-  assert.match(j, /Claude Code in Daegu/); assert.match(j, /160/);
+  assert.match(j, /Claude Code in Daegu/); assert.match(j, /약 160명|about 160 people/);
   assert.doesNotMatch(j, /네 앱의 공개 저장소|Four apps with public repos/);
   assert.match(p.translations.ko.mediaCaption, /2026\.07 촬영|v1\.24 \(2026/);
   for (const f of ['모바일 원격', 'doctor', 'LAS', '정류장 중심']) assert.ok(j.includes(f), f);
   assert.doesNotMatch(j, /github\.com\/rafaam11\/(deck|bolt|jk-video-editor)/);
+  assert.match(p.translations.en.mediaCaption, /\(captured 2026\.07\)/);
+  for (const k of ['deck', 'bolt', 'jk-video-editor']) { const t = p.subcases.find(s => s.key === k).translations; assert.match(t.ko.summary, /비공개/, k); assert.match(t.en.summary, /private/, k); }
 });
