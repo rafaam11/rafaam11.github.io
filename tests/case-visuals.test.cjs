@@ -146,7 +146,7 @@ test('diagramSvg is deterministic, aria-hidden, and carries every label and edge
       for (const orientation of ['wide', 'tall']) {
         const svg = render.diagramSvg(model, { orientation, idPrefix: 'a' });
         assert.equal(svg, render.diagramSvg(model, { orientation, idPrefix: 'a' }), `${item.id} deterministic`);
-        const width = orientation === 'wide' ? 1000 : 600;
+        const width = orientation === 'wide' ? 1000 : 440;
         assert.match(svg, new RegExp(`^<svg class="sc-flow-svg sc-flow-svg--${orientation}" viewBox="0 0 ${width} [\\d.]+" role="presentation" aria-hidden="true" focusable="false">`), item.id);
         const text = squash(decode(svgTextOf(svg)));
         for (const node of model.nodes) {
@@ -330,5 +330,29 @@ test('product-console 3D poster is lazy because it sits below the fold', () => {
     const html = render.caseStudyHtml(data, 'skadi-tracking-software', '', true, locale);
     const scene = html.match(/<figure class="sc-figure sc-figure3d"[\s\S]*?<\/figure>/)[0];
     assert.match(scene, /loading="lazy"/);
+  }
+});
+
+test('tall flow layout is narrow enough that detail and edge text stay legible at 390px', () => {
+  // Rendered px = user-unit size x (350px content width / viewBox width); 9px floor at a 390px viewport.
+  for (const locale of ['ko', 'en']) {
+    for (const item of realDiagrams()) {
+      const svg = render.diagramSvg(render.normalizeDiagram(item.diagram, locale), { orientation: 'tall' });
+      const width = Number(svg.match(/viewBox="0 0 ([\d.]+) /)[1]);
+      assert.ok(width <= 440, `${item.id} ${locale}: tall viewBox width ${width} <= 440`);
+      assert.ok(11.5 * 350 / width >= 9, `${item.id}: edge text >= 9px`);
+      assert.ok(12.5 * 350 / width >= 9, `${item.id}: detail text >= 9px`);
+    }
+  }
+});
+
+test('tall rail edges each get their own lane with at least 10 units between vertical segments', () => {
+  const sgrt = realDiagrams().find((d) => !d.system && d.diagram.kind === 'surface-gating-chain').diagram;
+  for (const locale of ['ko', 'en']) {
+    const svg = render.diagramSvg(render.normalizeDiagram(sgrt, locale), { orientation: 'tall' });
+    const paths = [...svg.matchAll(/class="sc-flow-svg__edge-line" d="([^"]+)"/g)].map((m) => m[1]);
+    const rails = paths.filter((d) => / H [\d.]+ V [\d.]+ H /.test(d)).map((d) => Number(d.match(/ H ([\d.]+) V /)[1]));
+    assert.equal(rails.length, 2, `${locale}: two rail edges`);
+    assert.ok(Math.abs(rails[0] - rails[1]) >= 10, `${locale}: rail x ${rails.join(' vs ')}`);
   }
 });

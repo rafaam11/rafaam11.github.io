@@ -1354,7 +1354,7 @@
 
   // ---- Stage 3: deterministic SVG flow diagrams (pure, no DOM, no font measurement) ----
   var FLOW = {
-    width: { wide: 1000, tall: 600 },
+    width: { wide: 1000, tall: 440 },
     outer: 32, pad: 12,
     label: 15, detail: 12.5, edge: 11.5,
     labelLH: 19, detailLH: 16, edgeLH: 14, textGap: 4,
@@ -1573,15 +1573,9 @@
       var to = index[edge.to];
       if (to !== from + 1) rails.push({ position: position, lo: Math.min(from, to), hi: Math.max(from, to), lane: -1 });
     });
-    rails.slice().sort(function (a, b) { return (a.hi - a.lo) - (b.hi - b.lo) || a.position - b.position; }).forEach(function (rail, at, sorted) {
-      for (var lane = 0; rail.lane < 0; lane += 1) {
-        var taken = sorted.slice(0, at).some(function (other) {
-          return other.lane === lane && other.lo <= rail.hi && rail.lo <= other.hi;
-        });
-        if (!taken) rail.lane = lane;
-      }
-    });
-    var laneCount = rails.reduce(function (max, rail) { return Math.max(max, rail.lane + 1); }, 0);
+    // Every rail edge gets its own lane so vertical segments never share an x.
+    rails.slice().sort(function (a, b) { return (a.hi - a.lo) - (b.hi - b.lo) || a.position - b.position; }).forEach(function (rail, at) { rail.lane = at; });
+    var laneCount = rails.length;
     var boxW = Math.min(FLOW.boxMaxTall, FLOW.width.tall - 2 * FLOW.outer - (laneCount ? laneCount * 16 + 16 : 0));
     var boxX = laneCount ? FLOW.outer : (FLOW.width.tall - boxW) / 2;
     var measure = flowMeasure(model, boxW);
@@ -2175,7 +2169,8 @@
     var hasStoryLayout = Boolean(sourceProject && Array.isArray(sourceProject.storySections) && sourceProject.storySections.length);
     // Dense default layout with an image lead and a 3D scene: the 3D figure is Figure 1 above the brief and the lead image joins the gallery.
     var sceneFirst = Boolean(webCopy && !isConsole && !hasStoryLayout && lead && sourceProject.media && isApprovedImage(sourceProject.media.lead));
-    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole || sceneFirst ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption, !isConsole && !lead || sceneFirst) : '';
+    // Eager only when the 3D poster is the first visual.
+    var sceneFigure = sourceProject ? scene3dFigureHtml(sourceProject.scene3d, normalized, base, isConsole || sceneFirst ? 1 : (lead ? 2 : 1), webCopy && webCopy.sceneCaption, sceneFirst || (!lead && !isConsole)) : '';
     if (sceneFirst && !sceneFigure) sceneFirst = false;
     var afterSceneFigure = sceneFirst ? 2 : (lead ? 2 : 1) + (sceneFigure ? 1 : 0);
     var header = '<header class="sc-case__header"><h1>' + title + '</h1>' +

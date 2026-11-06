@@ -140,7 +140,7 @@
 .sc-flow-svg { display: block; width: 100%; height: auto; }
 .sc-flow-svg--tall { display: none; }
 .sc-flow-svg text { font-family: inherit; }
-.sc-flow-svg__box { fill: #fafafa; stroke: var(--sc-rule); stroke-width: 1; }
+.sc-flow-svg__box { fill: var(--sc-bg); stroke: var(--sc-rule); stroke-width: 1; }
 .sc-flow-svg__edge-line { fill: none; stroke: var(--sc-ink); stroke-width: 1; }
 .sc-flow-svg__arrow { fill: var(--sc-ink); stroke: none; }
 .sc-flow-svg__edge-label-bg { fill: var(--sc-bg); stroke: none; }
