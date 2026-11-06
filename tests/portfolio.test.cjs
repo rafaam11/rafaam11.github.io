@@ -134,6 +134,8 @@ const standaloneLegacyFiles = [
 
 const profileHome = require('../scripts/profile-home.cjs');
 const { privatePeoplePattern } = require('./helpers/private-people.cjs');
+// Mirrors ASCII_HYPHENS in scripts/generate-portfolio-pdfs.py: the PDF text folds these dashes to '-'.
+const foldPdfHyphens = (value) => value.replace(/[֊᠆‐-‒–—−⸗⸺⸻﹘﹣－]/g, '-');
 
 function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -3389,7 +3391,7 @@ test('Task 5 integrated review renders each middle block on its contracted page 
           ? project.storySections.find((candidate) => candidate.key === key)
           : project.blocks.find((candidate) => candidate.key === key);
         // The PDF generator folds en dashes to hyphens, so compare the normalized heading.
-        assert.ok(extracted[project.slug].includes(section.translations.en.heading.replace(/–/g, '-')), `${project.slug}: document omits ${key}`);
+        assert.ok(extracted[project.slug].includes(foldPdfHyphens(section.translations.en.heading)), `${project.slug}: document omits ${key}`);
       }
       const contracts = project.pdfSequence.diagrams || [project.pdfSequence.diagram];
       for (const contract of contracts) {
@@ -3484,12 +3486,12 @@ test('Task 5 integrated review embeds an approved poster instead of opening a vi
       'def sizes(page):',
       '    xobjects = (page.get("/Resources") or {}).get("/XObject") or {}',
       '    return [(ref.get_object().get("/Width"), ref.get_object().get("/Height")) for ref in xobjects.values() if ref.get_object().get("/Subtype") == "/Image"]',
-      'print(any((1032, 774) in sizes(page) for page in PdfReader(sys.argv[1]).pages))'
+      'print([index + 1 for index, page in enumerate(PdfReader(sys.argv[1]).pages) if (1032, 774) in sizes(page)])'
     ].join('\n'), path.join(temporaryRoot, 'output', 'pdf', 'surgical-navigation-en.pdf')], {
       cwd: root, encoding: 'utf8', timeout: 30_000
     });
     assert.equal(audit.status, 0, audit.stderr || audit.stdout);
-    assert.equal(audit.stdout.trim(), 'True', 'approved video evidence must use its approved image poster in the PDF');
+    assert.equal(audit.stdout.trim(), '[1]', 'approved video evidence must use its approved image poster, and only on the cover page');
   } finally {
     fs.rmSync(temporaryRoot, { recursive: true, force: true });
   }
@@ -5218,7 +5220,7 @@ test('Integrated review separates evidence maturity from project lifecycle', () 
   ]);
 
   const projectsHtml = render.projectGroupsHtml(data, '', false, 'en');
-  assert.match(projectsHtml, /Verified · Completed/);
+  assert.doesNotMatch(projectsHtml, /Verified · Ongoing/);
   assert.equal(projectsHtml.split('Verified · Completed').length - 1, 2, 'mandibular-fracture and rtms-navigation both list as Verified · Completed');
   assert.match(projectsHtml, /Ongoing · Research/);
   assert.doesNotMatch(projectsHtml, /Ongoing · Ongoing/);
