@@ -54,11 +54,19 @@ test('digital-occlusion-workflow: four source STLs, hospital-provided AI model, 
 
 test('respiratory-surface-guidance: no gating or CT-registration claims; first-year sensor validation done', () => {
   const p = by('respiratory-surface-guidance'); const j = JSON.stringify(p);
-  assert.doesNotMatch(j, /게이팅 신호|게이팅 윈도우|계획 CT 정합|gating signal|gating window|CT registration/i);
+  assert.doesNotMatch(j, /게이팅 신호|게이팅 윈도우(?! 단계는 다음 단계\(계획\)|\(계획)|계획 CT 정합|gating signal|gating window|CT registration(?! \(planned)/i);
   assert.match(j, /게이팅\(계획\)|gating \(planned\)/);
   assert.match(j, /STL 기준/); assert.match(j, /point-to-surface ICP/);
-  assert.match(j, /1차년도[^"]*완료|first-year[^"]*complete/i); assert.match(j, /2차년도|second year/i);
+  const t = p.translations;
+  assert.match(t.ko.summary, /1차년도[^"]*완료/); assert.match(t.en.summary, /first-year[^"]*complete/i);
+  assert.match(t.ko.summary, /2차년도/); assert.match(t.en.summary, /second year/i);
   assert.ok(!p.tech.includes('Python') && !p.tech.includes('4DCT'));
   const cv = JSON.stringify(require('../data/public-cv.json'));
   assert.doesNotMatch(cv, /"4DCT 정합"|"4DCT registration"/);
+  const fs = require('fs');
+  for (const f of ['projects/respiratory-surface-guidance/index.html', 'en/projects/respiratory-surface-guidance/index.html']) {
+    const html = fs.readFileSync(require('path').join(__dirname, '..', f), 'utf8');
+    assert.doesNotMatch(html, /게이트 신호|gating signal/i, f);
+    assert.ok(html.includes(f.startsWith('en/') ? p.scene3d.translations.en.alt : p.scene3d.translations.ko.alt), f);
+  }
 });

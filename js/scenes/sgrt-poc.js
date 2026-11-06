@@ -103,10 +103,10 @@
         { t: { ko: '흉부 ROI 깊이', en: 'Chest ROI depth' }, c: 's c', obj: 'roi', off: [0, 0, 0] },
         { t: { ko: '3D 깊이 센서', en: '3D depth sensor' }, c: 's n', obj: 'cam', off: [0, 0, 0] },
         { t: { ko: '호흡 파형', en: 'Respiratory waveform' }, c: 's n', obj: 'wave', off: [0, 0, 0] },
-        { t: { ko: '게이트 신호 예시', en: 'Example gating signal' }, c: 's o', obj: 'gate', off: [0, 0, 0] }
+        { t: { ko: '게이팅(계획) 예시', en: 'Gating (planned) example' }, c: 's o', obj: 'gate', off: [0, 0, 0] }
       ]);
       const inhale = S.t({ ko: '들숨', en: 'Inhalation' }), exhale = S.t({ ko: '날숨', en: 'Exhalation' });
-      const flow = S.t({ ko: ' · 흉부 ROI 깊이 → 호흡 파형 → 게이트 신호', en: ' · chest ROI depth → respiratory waveform → gating signal' });
+      const flow = S.t({ ko: ' · 흉부 ROI 깊이 → 호흡 파형 → 게이팅(계획)', en: ' · chest ROI depth → respiratory waveform → gating (planned)' });
       const corner = [V(0, 0, 0), V(0, 0, 0), V(0, 0, 0), V(0, 0, 0)], cw = V(0, 0, 0);
       let last = '';
 
