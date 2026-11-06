@@ -1391,6 +1391,335 @@
       escapeHtml(diagramCopy.boundaryLabel) + '</p></figure>';
   }
 
+  // ---- Stage 3: deterministic SVG flow diagrams (pure, no DOM, no font measurement) ----
+  var FLOW = {
+    width: { wide: 1000, tall: 600 },
+    outer: 32, pad: 12,
+    label: 15, detail: 12.5, edge: 11.5,
+    labelLH: 19, detailLH: 16, edgeLH: 14, textGap: 4,
+    colGap: 48, colGapLabeled: 120, rowGap: 20, wrapGap: 44, wrapGapLabeled: 56, tallGap: 44,
+    labelLines: 2, detailLines: 3, edgeLines: 3, tallEdgeLines: 2,
+    boxMaxTall: 480
+  };
+  var FLOW_LEGACY = {
+    'optimization-loop': { levels: [[0], [1], [2], [3]], edges: [[0, 1], [1, 2], [2, 3], [3, 0]] },
+    'navigation-loop': { levels: [[0], [1], [2], [3]], edges: [[0, 1], [1, 2], [2, 3], [3, 0]] },
+    'product-loop': { levels: [[0], [1], [2], [3]], edges: [[0, 1], [1, 2], [2, 3], [3, 0]] },
+    'surface-gating-chain': { levels: [[0], [1, 2], [3]], edges: [[0, 1], [0, 2], [1, 3], [2, 3]] },
+    'sensor-convergence': { levels: [[0, 1, 2], [3]], edges: [[0, 3], [1, 3], [2, 3]] },
+    'sync-topology': { levels: [[0], [1, 2, 3]], edges: [[0, 1, true], [0, 2, true], [0, 3, true]] }
+  };
+
+  function flowIsPlanned(text) {
+    return /\((계획|planned)\)/i.test(String(text || ''));
+  }
+
+  // Accepts a system-flow diagram object or a legacy pdfSequence.diagram object.
+  function normalizeDiagram(diagram, locale) {
+    if (!diagram || typeof diagram !== 'object') return null;
+    var normalized = localeOf(locale);
+    var copy = translation(diagram, normalized);
+    if (diagram.kind === 'system-flow') {
+      var nodes = (diagram.nodes || []).map(function (node) {
+        var nodeCopy = translation(node, normalized);
+        return {
+          key: node.key,
+          label: nodeCopy.label || '',
+          detail: nodeCopy.detail || '',
+          planned: flowIsPlanned(nodeCopy.label) || flowIsPlanned(nodeCopy.detail)
+        };
+      });
+      return {
+        locale: normalized,
+        title: copy.title || '',
+        nodes: nodes,
+        edges: (diagram.edges || []).map(function (edge) {
+          return {
+            from: edge.from,
+            to: edge.to,
+            direction: edge.direction === 'bidirectional' ? 'bidirectional' : 'forward',
+            label: translation(edge, normalized).label || ''
+          };
+        }),
+        levels: systemFlowLevels(diagram).map(function (level) {
+          return level.map(function (node) { return node.key; });
+        }),
+        boundary: copy.boundaryLabel || ''
+      };
+    }
+    var spec = FLOW_LEGACY[diagram.kind];
+    if (!spec || !Array.isArray(copy.nodes) || copy.nodes.length !== 4) return null;
+    return {
+      locale: normalized,
+      title: copy.title || '',
+      nodes: copy.nodes.map(function (label, index) {
+        return { key: 'n' + index, label: String(label), detail: '', planned: flowIsPlanned(label) };
+      }),
+      edges: spec.edges.map(function (pair) {
+        return { from: 'n' + pair[0], to: 'n' + pair[1], direction: pair[2] ? 'bidirectional' : 'forward', label: '' };
+      }),
+      levels: spec.levels.map(function (level) {
+        return level.map(function (index) { return 'n' + index; });
+      }),
+      boundary: ''
+    };
+  }
+
+  function flowNum(value) {
+    return String(Math.round(value * 10) / 10);
+  }
+
+  function flowTextWidth(text, size) {
+    var width = 0;
+    for (var index = 0; index < text.length; index += 1) {
+      width += text.charCodeAt(index) >= 0x1100 ? size : size * 0.55;
+    }
+    return width;
+  }
+
+  // Budget wrap: ko counts characters (1.0 em each), en counts characters at 0.55 em; words stay whole when they fit.
+  function flowWrap(text, size, innerWidth, locale, maxLines) {
+    var perLine = Math.max(1, Math.floor(innerWidth / (size * (locale === 'ko' ? 1 : 0.55))));
+    var lines = [];
+    var current = '';
+    String(text || '').split(/\s+/).filter(Boolean).forEach(function (word) {
+      while (word.length > perLine) {
+        if (current) { lines.push(current); current = ''; }
+        lines.push(word.slice(0, perLine));
+        word = word.slice(perLine);
+      }
+      if (!current) current = word;
+      else if ((current + ' ' + word).length <= perLine) current += ' ' + word;
+      else { lines.push(current); current = word; }
+    });
+    if (current) lines.push(current);
+    var clipped = lines.length > maxLines;
+    if (clipped) {
+      lines = lines.slice(0, maxLines);
+      var last = lines[maxLines - 1];
+      if (last.length >= perLine) last = last.slice(0, perLine - 1);
+      lines[maxLines - 1] = last.replace(/\s+$/, '') + '…';
+    }
+    return { lines: lines, clipped: clipped };
+  }
+
+  function flowMeasure(model, boxWidth) {
+    var inner = boxWidth - 2 * FLOW.pad;
+    var info = {};
+    var height = 0;
+    var clipped = false;
+    model.nodes.forEach(function (node) {
+      var label = flowWrap(node.label, FLOW.label, inner, model.locale, node.detail ? FLOW.labelLines : FLOW.labelLines + 1);
+      var detail = node.detail ? flowWrap(node.detail, FLOW.detail, inner, model.locale, FLOW.detailLines) : { lines: [], clipped: false };
+      info[node.key] = { label: label.lines, detail: detail.lines };
+      clipped = clipped || label.clipped || detail.clipped;
+      height = Math.max(height, 2 * FLOW.pad + label.lines.length * FLOW.labelLH + (detail.lines.length ? FLOW.textGap + detail.lines.length * FLOW.detailLH : 0));
+    });
+    return { info: info, height: height, clipped: clipped };
+  }
+
+  function flowEdgeLabel(text, budget, locale, maxLines) {
+    if (!text) return null;
+    var wrapped = flowWrap(text, FLOW.edge, budget, locale, maxLines);
+    var width = 0;
+    wrapped.lines.forEach(function (line) { width = Math.max(width, flowTextWidth(line, FLOW.edge)); });
+    return { lines: wrapped.lines, width: width, height: wrapped.lines.length * FLOW.edgeLH, anchor: 'middle', x: 0, y: 0 };
+  }
+
+  // Wide: each level is a column; columns wrap into rows when the labelled gaps would starve the boxes.
+  function flowLayoutWide(model, requestedCols) {
+    var levelCount = model.levels.length;
+    var rows = Math.ceil(levelCount / requestedCols);
+    var cols = Math.ceil(levelCount / rows);
+    var labeled = model.edges.some(function (edge) { return edge.label; });
+    var gap = labeled ? FLOW.colGapLabeled : FLOW.colGap;
+    var wrapGap = labeled ? FLOW.wrapGapLabeled : FLOW.wrapGap;
+    var boxW = (FLOW.width.wide - 2 * FLOW.outer - (cols - 1) * gap) / cols;
+    var measure = flowMeasure(model, boxW);
+    var boxH = measure.height;
+    var place = {};
+    var rowTop = model.boundary ? 34 : 20;
+    var rowBottoms = [];
+    for (var row = 0; row < rows; row += 1) {
+      var rowLevels = model.levels.slice(row * cols, row * cols + cols);
+      var stack = Math.max.apply(null, rowLevels.map(function (level) { return level.length; }));
+      var band = stack * boxH + (stack - 1) * FLOW.rowGap;
+      rowLevels.forEach(function (level, col) {
+        var levelH = level.length * boxH + (level.length - 1) * FLOW.rowGap;
+        level.forEach(function (key, index) {
+          place[key] = {
+            x: FLOW.outer + col * (boxW + gap),
+            y: rowTop + (band - levelH) / 2 + index * (boxH + FLOW.rowGap),
+            w: boxW, h: boxH, row: row, col: col, level: row * cols + col, stacked: level.length > 1
+          };
+        });
+      });
+      rowBottoms.push(rowTop + band);
+      rowTop += band + wrapGap;
+    }
+    var bad = false;
+    var bottomRoute = false;
+    var bottomY = rowBottoms[rows - 1] + 22;
+    var edges = model.edges.map(function (edge) {
+      var s = place[edge.from];
+      var t = place[edge.to];
+      var d;
+      var label = null;
+      if (s.row === t.row && t.col === s.col + 1) {
+        var x1 = s.x + s.w;
+        var y1 = s.y + s.h / 2;
+        var x2 = t.x;
+        var y2 = t.y + t.h / 2;
+        var xm = labeled ? x1 + 12 : (x1 + x2) / 2;
+        d = y1 === y2 ? 'M ' + flowNum(x1) + ' ' + flowNum(y1) + ' H ' + flowNum(x2)
+          : 'M ' + flowNum(x1) + ' ' + flowNum(y1) + ' H ' + flowNum(xm) + ' V ' + flowNum(y2) + ' H ' + flowNum(x2);
+        label = flowEdgeLabel(edge.label, x2 - xm - 20, model.locale, FLOW.edgeLines);
+        if (label) { label.x = (xm + x2) / 2 - 3; label.y = y2; }
+      } else if (t.row === s.row + 1 && t.col === 0 && t.level > s.level) {
+        var sx = s.x + s.w / 2;
+        var tx = t.x + t.w / 2;
+        var ym = s.y + s.h + wrapGap / 2;
+        if (s.stacked || t.stacked) bad = true;
+        d = 'M ' + flowNum(sx) + ' ' + flowNum(s.y + s.h) + ' V ' + flowNum(ym) + ' H ' + flowNum(tx) + ' V ' + flowNum(t.y);
+        label = flowEdgeLabel(edge.label, 300, model.locale, FLOW.edgeLines);
+        if (label) { label.x = (sx + tx) / 2; label.y = ym; }
+      } else {
+        var bx1 = s.x + s.w / 2;
+        var bx2 = t.x + t.w / 2;
+        bottomRoute = true;
+        d = 'M ' + flowNum(bx1) + ' ' + flowNum(s.y + s.h) + ' V ' + flowNum(bottomY) + ' H ' + flowNum(bx2) + ' V ' + flowNum(t.y + t.h);
+        label = flowEdgeLabel(edge.label, 300, model.locale, FLOW.edgeLines);
+        if (label) { label.x = (bx1 + bx2) / 2; label.y = bottomY; }
+      }
+      return { edge: edge, d: d, label: label };
+    });
+    return {
+      place: place, edges: edges, measure: measure, boxH: boxH,
+      clipped: measure.clipped, bad: bad,
+      height: rowBottoms[rows - 1] + (bottomRoute ? 22 : 0) + 20
+    };
+  }
+
+  // Tall: nodes read top to bottom in level order; adjacent edges are straight, others run on right-hand rails.
+  function flowLayoutTall(model) {
+    var order = [];
+    model.levels.forEach(function (level) { level.forEach(function (key) { order.push(key); }); });
+    var index = {};
+    order.forEach(function (key, position) { index[key] = position; });
+    var rails = [];
+    model.edges.forEach(function (edge, position) {
+      var from = index[edge.from];
+      var to = index[edge.to];
+      if (to !== from + 1) rails.push({ position: position, lo: Math.min(from, to), hi: Math.max(from, to), lane: -1 });
+    });
+    rails.slice().sort(function (a, b) { return (a.hi - a.lo) - (b.hi - b.lo) || a.position - b.position; }).forEach(function (rail, at, sorted) {
+      for (var lane = 0; rail.lane < 0; lane += 1) {
+        var taken = sorted.slice(0, at).some(function (other) {
+          return other.lane === lane && other.lo <= rail.hi && rail.lo <= other.hi;
+        });
+        if (!taken) rail.lane = lane;
+      }
+    });
+    var laneCount = rails.reduce(function (max, rail) { return Math.max(max, rail.lane + 1); }, 0);
+    var boxW = Math.min(FLOW.boxMaxTall, FLOW.width.tall - 2 * FLOW.outer - (laneCount ? laneCount * 16 + 16 : 0));
+    var boxX = laneCount ? FLOW.outer : (FLOW.width.tall - boxW) / 2;
+    var measure = flowMeasure(model, boxW);
+    var boxH = measure.height;
+    var top = model.boundary ? 34 : 20;
+    var place = {};
+    order.forEach(function (key, position) {
+      place[key] = { x: boxX, y: top + position * (boxH + FLOW.tallGap), w: boxW, h: boxH };
+    });
+    var cx = boxX + boxW / 2;
+    var edges = model.edges.map(function (edge, position) {
+      var s = place[edge.from];
+      var t = place[edge.to];
+      var rail = rails.filter(function (item) { return item.position === position; })[0];
+      var d;
+      var label;
+      if (!rail) {
+        d = 'M ' + flowNum(cx) + ' ' + flowNum(s.y + s.h) + ' V ' + flowNum(t.y);
+        label = flowEdgeLabel(edge.label, boxW / 2 - 16, model.locale, FLOW.tallEdgeLines);
+        if (label) { label.anchor = 'start'; label.x = cx + 8; label.y = s.y + s.h + FLOW.tallGap / 2; }
+      } else {
+        var rx = boxX + boxW + 16 * (rail.lane + 1);
+        d = 'M ' + flowNum(boxX + boxW) + ' ' + flowNum(s.y + s.h / 2) + ' H ' + flowNum(rx) + ' V ' + flowNum(t.y + t.h / 2) + ' H ' + flowNum(boxX + boxW);
+        label = flowEdgeLabel(edge.label, boxW - 40, model.locale, FLOW.tallEdgeLines);
+        if (label) { label.anchor = 'end'; label.x = boxX + boxW - 6; label.y = t.y - FLOW.tallGap / 2; }
+      }
+      return { edge: edge, d: d, label: label };
+    });
+    return {
+      place: place, edges: edges, measure: measure, boxH: boxH, clipped: measure.clipped, bad: false,
+      height: top + order.length * boxH + (order.length - 1) * FLOW.tallGap + 20
+    };
+  }
+
+  function flowTspans(lines, x, firstBaseline, lineHeight) {
+    return lines.map(function (line, at) {
+      return '<tspan x="' + flowNum(x) + '" y="' + flowNum(firstBaseline + at * lineHeight) + '">' + escapeHtml(line) + '</tspan>';
+    }).join('');
+  }
+
+  function flowEdgeLabelHtml(label) {
+    if (!label) return '';
+    var w = label.width + 8;
+    var h = label.height + 4;
+    var left = label.anchor === 'middle' ? label.x - w / 2 : label.anchor === 'start' ? label.x - 4 : label.x - w + 4;
+    var top = label.y - h / 2;
+    return '<rect class="sc-flow-svg__edge-label-bg" x="' + flowNum(left) + '" y="' + flowNum(top) + '" width="' + flowNum(w) + '" height="' + flowNum(h) + '"/>' +
+      '<text class="sc-flow-svg__edge-label" text-anchor="' + label.anchor + '">' +
+      flowTspans(label.lines, label.x, top + 2 + (FLOW.edgeLH - FLOW.edge) / 2 + FLOW.edge * 0.85, FLOW.edgeLH) + '</text>';
+  }
+
+  function diagramSvg(model, options) {
+    if (!model || !Array.isArray(model.nodes) || !model.nodes.length) return '';
+    var orientation = options && options.orientation === 'tall' ? 'tall' : 'wide';
+    var prefix = String((options && options.idPrefix) || 'flow').replace(/[^A-Za-z0-9_-]/g, '-');
+    var layout;
+    if (orientation === 'tall') {
+      layout = flowLayoutTall(model);
+    } else {
+      var best = null;
+      for (var cols = Math.min(model.levels.length, 5); cols >= 1 && !best; cols -= 1) {
+        var candidate = flowLayoutWide(model, cols);
+        if (!candidate.clipped && !candidate.bad) best = candidate;
+      }
+      layout = best || flowLayoutWide(model, 1);
+    }
+    var width = FLOW.width[orientation];
+    var markerId = prefix + '-arrow';
+    var boundary = '';
+    if (model.boundary) {
+      var textW = flowTextWidth(model.boundary, FLOW.edge) + 12;
+      boundary = '<g class="sc-flow-svg__boundary"><rect class="sc-flow-svg__boundary-box" x="10" y="18" width="' + (width - 20) + '" height="' +
+        flowNum(layout.height - 28) + '"/><rect class="sc-flow-svg__edge-label-bg" x="20" y="10" width="' + flowNum(textW) + '" height="16"/>' +
+        '<text class="sc-flow-svg__boundary-label" x="26" y="22">' + escapeHtml(model.boundary) + '</text></g>';
+    }
+    var edgeHtml = layout.edges.map(function (item) {
+      var both = item.edge.direction === 'bidirectional';
+      return '<g class="sc-flow-svg__edge" data-from="' + escapeHtml(item.edge.from) + '" data-to="' + escapeHtml(item.edge.to) +
+        '" data-direction="' + escapeHtml(item.edge.direction) + '"><path class="sc-flow-svg__edge-line" d="' + item.d + '" fill="none" marker-end="url(#' + markerId + ')"' +
+        (both ? ' marker-start="url(#' + markerId + ')"' : '') + '/>' + flowEdgeLabelHtml(item.label) + '</g>';
+    }).join('');
+    var nodeHtml = model.nodes.map(function (node) {
+      var box = layout.place[node.key];
+      var info = layout.measure.info[node.key];
+      var labelBase = box.y + FLOW.pad + (FLOW.labelLH - FLOW.label) / 2 + FLOW.label * 0.85;
+      var detailTop = box.y + FLOW.pad + info.label.length * FLOW.labelLH + FLOW.textGap;
+      var detailBase = detailTop + (FLOW.detailLH - FLOW.detail) / 2 + FLOW.detail * 0.85;
+      var textX = box.x + FLOW.pad;
+      return '<g class="sc-flow-svg__node' + (node.planned ? ' is-planned' : '') + '" data-node-key="' + escapeHtml(node.key) + '">' +
+        '<rect class="sc-flow-svg__box" x="' + flowNum(box.x) + '" y="' + flowNum(box.y) + '" width="' + flowNum(box.w) + '" height="' + flowNum(layout.boxH) + '" rx="3"/>' +
+        '<text class="sc-flow-svg__label">' + flowTspans(info.label, textX, labelBase, FLOW.labelLH) + '</text>' +
+        (info.detail.length ? '<text class="sc-flow-svg__detail">' + flowTspans(info.detail, textX, detailBase, FLOW.detailLH) + '</text>' : '') + '</g>';
+    }).join('');
+    return '<svg class="sc-flow-svg sc-flow-svg--' + orientation + '" viewBox="0 0 ' + width + ' ' + flowNum(layout.height) +
+      '" role="presentation" aria-hidden="true" focusable="false"><defs><marker id="' + markerId +
+      '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-flow-svg__arrow" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs>' +
+      boundary + edgeHtml + nodeHtml + '</svg>';
+  }
+
   function pointsHtml(items) {
     return Array.isArray(items) && items.length
       ? '<ul class="sc-points">' + items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>'
@@ -1982,6 +2311,8 @@
     storySectionsHtml: storySectionsHtml,
     systemFlowDiagramHtml: systemFlowDiagramHtml,
     systemFlowLevels: systemFlowLevels,
+    normalizeDiagram: normalizeDiagram,
+    diagramSvg: diagramSvg,
     storyFigureCount: storyFigureCount,
     relatedProjectsHtml: relatedProjectsHtml,
     caseStudyHtml: caseStudyHtml,
