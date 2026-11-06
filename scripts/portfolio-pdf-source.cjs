@@ -15,11 +15,18 @@ const PDF_SOURCE_SITE = Object.freeze({
 // Web-only fields never reach the PDFs, so they stay out of the source digest.
 const WEB_ONLY_PROJECT_FIELDS = Object.freeze(['scene3d', 'web']);
 
+// Screenshot callouts sit on individual media items (lead, gallery, story media, references), so they are removed at any depth.
+function withoutCallouts(value) {
+  if (Array.isArray(value)) return value.map(withoutCallouts);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'callouts').map(([key, inner]) => [key, withoutCallouts(inner)]));
+}
+
 function pdfProject(project) {
   if (!project || typeof project !== 'object') return project;
   const copy = { ...project };
   for (const field of WEB_ONLY_PROJECT_FIELDS) delete copy[field];
-  return copy;
+  return withoutCallouts(copy);
 }
 
 // Web-only CV fields: the identity `brief` and each experience area's `rows`/`keywords`

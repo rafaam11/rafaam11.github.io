@@ -34,7 +34,7 @@
   var storyPlacements = ['before-standard', 'after-standard'];
   var storyMediaTypes = ['image', 'video'];
   var storyDirections = ['forward', 'bidirectional'];
-  var storyMediaKeys = ['id', 'poster', 'preload', 'publicPath', 'status', 'translations', 'type', 'videoPolicy'];
+  var storyMediaKeys = ['callouts', 'id', 'poster', 'preload', 'publicPath', 'status', 'translations', 'type', 'videoPolicy'];
   var videoPolicyKeys = [
     'codec', 'height', 'maxBytes', 'requireFastStart', 'requireNoAudio',
     'targetDurationSeconds', 'toleranceSeconds', 'width'
@@ -376,9 +376,40 @@
     return errors;
   }
 
+  // Web-only screenshot callouts (image items): 3-5 numbered pins, x/y as 0-1 ratios of the image, short noun-phrase labels.
+  var calloutBudget = { ko: 24, en: 48 };
+  function calloutErrors(item, label) {
+    var errors = [];
+    var list = item.callouts;
+    var where = label + ' callouts';
+    if (item.type !== 'image') return [where + ': allowed only on image media.'];
+    if (!Array.isArray(list) || list.length < 3 || list.length > 5) return [where + ': needs 3-5 entries.'];
+    list.forEach(function (callout, index) {
+      var at = where + ' ' + (index + 1);
+      if (!callout || typeof callout !== 'object' || Array.isArray(callout) ||
+          Object.keys(callout).some(function (key) { return ['n', 'x', 'y', 'translations'].indexOf(key) === -1; })) {
+        errors.push(at + ': must contain only n, x, y and translations.');
+        return;
+      }
+      if (callout.n !== index + 1) errors.push(at + ': n must run 1..' + list.length + ' in order.');
+      ['x', 'y'].forEach(function (axis) {
+        if (typeof callout[axis] !== 'number' || !isFinite(callout[axis]) || callout[axis] < 0 || callout[axis] > 1) errors.push(at + ': ' + axis + ' must be a number from 0 through 1.');
+      });
+      ['ko', 'en'].forEach(function (locale) {
+        var copy = callout.translations && callout.translations[locale];
+        var text = copy && typeof copy.label === 'string' ? copy.label.trim() : '';
+        if (!text) { errors.push(at + ': missing ' + locale + ' label.'); return; }
+        if (Array.from(text).length > calloutBudget[locale]) errors.push(at + ' ' + locale + ': "' + text + '" exceeds ' + calloutBudget[locale] + ' characters.');
+        if (/\.$/.test(text) || (locale === 'ko' && webSentenceEndingPattern.test(text))) errors.push(at + ' ' + locale + ': "' + text + '" must be a noun phrase, not a sentence.');
+      });
+    });
+    return errors;
+  }
+
   function mediaItemErrors(item, label, allowedTypes) {
     var errors = [];
     if (!item || typeof item !== 'object') return [label + ': media item must be an object.'];
+    if (item.callouts !== undefined) errors = errors.concat(calloutErrors(item, label));
     if (typeof item.id !== 'string' || !item.id) errors.push(label + ': media item requires a stable id.');
     if (!mediaTypes.includes(item.type)) errors.push(label + ': unknown media type.');
     else if (allowedTypes && !allowedTypes.includes(item.type)) errors.push(label + ': unsupported ' + item.type + ' media type for this slot.');
@@ -1291,11 +1322,27 @@
       visual = '<video controls preload="' + escapeHtml(mediaPreload(media)) + '" tabindex="0" poster="' + escapeHtml(assetHref(base, posterItem.publicPath)) + '"' +
         ' aria-label="' + escapeHtml(alt) + '"><source src="' + escapeHtml(assetHref(base, media.publicPath)) + '"></video>';
     } else if (isApprovedImage(media)) {
-      visual = '<img src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">';
+      visual = calloutFigureHtml('<img src="' + escapeHtml(assetHref(base, media.publicPath)) + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">', media, normalized);
     } else {
       return '';
     }
     return figureHtml(visual, copy.figure + ' 1.', caption, '');
+  }
+
+  function pinPercent(ratio) {
+    return String(Math.round(ratio * 1000) / 10) + '%';
+  }
+
+  // Wraps an approved image with numbered pins; the list inside the figure is the accessible version of the pins.
+  function calloutFigureHtml(imgHtml, item, locale) {
+    var callouts = item && Array.isArray(item.callouts) ? item.callouts : [];
+    if (!callouts.length) return imgHtml;
+    var normalized = localeOf(locale);
+    var pins = callouts.map(function (callout) {
+      return '<span class="sc-callout-pin" style="left:' + pinPercent(callout.x) + ';top:' + pinPercent(callout.y) + '" aria-hidden="true">' + escapeHtml(callout.n) + '</span>';
+    }).join('');
+    var labels = callouts.map(function (callout) { return '<li>' + escapeHtml(translation(callout, normalized).label || '') + '</li>'; }).join('');
+    return '<div class="sc-callout-frame">' + imgHtml + pins + '</div><ol class="sc-callout-list">' + labels + '</ol>';
   }
 
   function storyMediaFigureHtml(item, locale, base, figureNumber) {
@@ -1303,7 +1350,7 @@
     var itemCopy = translation(item, normalized);
     var visual = '';
     if (isApprovedImage(item)) {
-      visual = '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt) + '" loading="lazy" decoding="async">';
+      visual = calloutFigureHtml('<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt) + '" loading="lazy" decoding="async">', item, normalized);
     } else if (isApprovedVideo(item) && isApprovedImage(item.poster)) {
       visual = '<video controls preload="' + escapeHtml(mediaPreload(item)) + '" tabindex="0" poster="' +
         escapeHtml(assetHref(base, item.poster.publicPath)) + '" aria-label="' + escapeHtml(itemCopy.alt) + '">' +
@@ -1847,7 +1894,7 @@
       return { item: item, alt: itemCopy.alt || project.mediaAlt || '', caption: itemCopy.caption || '' };
     }));
     var figures = entries.map(function (entry, offset) {
-      var visual = '<img src="' + escapeHtml(assetHref(base, entry.item.publicPath)) + '" alt="' + escapeHtml(entry.alt) + '" loading="lazy" decoding="async">';
+      var visual = calloutFigureHtml('<img src="' + escapeHtml(assetHref(base, entry.item.publicPath)) + '" alt="' + escapeHtml(entry.alt) + '" loading="lazy" decoding="async">', entry.item, normalized);
       return figureHtml(visual, copy.figure + ' ' + (firstFigureNumber + offset) + '.', entry.caption, 'sc-figure--gallery', '');
     }).join('');
     return '<section class="sc-gallery" aria-label="' + escapeHtml(copy.figures) + '"><div class="sc-gallery__grid">' + figures + '</div></section>';
@@ -2045,7 +2092,7 @@
     var number = items.findIndex(function (candidate) { return candidate.id === identifier; }) + 1 + (figureOffset || 0);
     return '<figure class="sc-product-figure sc-product-figure--' + escapeHtml(modifier || 'default') + '" id="evidence-' +
       escapeHtml(item.id) + '" data-media-status="approved" data-evidence-id="' + escapeHtml(item.id) + '">' +
-      '<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || '') + '" loading="lazy" decoding="async">' +
+      calloutFigureHtml('<img src="' + escapeHtml(assetHref(base, item.publicPath)) + '" alt="' + escapeHtml(itemCopy.alt || '') + '" loading="lazy" decoding="async">', item, normalized) +
       '<figcaption><span class="sc-figure__label">' + escapeHtml(copy.figure + ' ' + number + '.') + '</span> ' +
       escapeHtml(itemCopy.caption || '') + '</figcaption></figure>';
   }
@@ -2305,6 +2352,7 @@
     storySectionsHtml: storySectionsHtml,
     systemFlowDiagramHtml: systemFlowDiagramHtml,
     systemFlowLevels: systemFlowLevels,
+    calloutFigureHtml: calloutFigureHtml,
     normalizeDiagram: normalizeDiagram,
     diagramSvg: diagramSvg,
     storyFigureCount: storyFigureCount,

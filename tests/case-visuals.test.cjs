@@ -356,3 +356,133 @@ test('tall rail edges each get their own lane with at least 10 units between ver
     assert.ok(Math.abs(rails[0] - rails[1]) >= 10, `${locale}: rail x ${rails.join(' vs ')}`);
   }
 });
+
+// ---- Screenshot callouts ----
+const { canonicalPdfSource, pdfSourceDigest } = require('../scripts/portfolio-pdf-source.cjs');
+const clone = (value) => JSON.parse(JSON.stringify(value));
+const callout = (n, x, y, ko, en) => ({ n, x, y, translations: { ko: { label: ko }, en: { label: en } } });
+const threeCallouts = () => [
+  callout(1, 0.42, 0.31, '추적 상태 패널', 'Tracking status panel'),
+  callout(2, 0.1, 0.8, '장면 보기', 'Scene view'),
+  callout(3, 0.925, 0.05, '워크플로 목록', 'Workflow list')
+];
+function findItem(root, id) {
+  if (Array.isArray(root)) { for (const entry of root) { const hit = findItem(entry, id); if (hit) return hit; } return null; }
+  if (!root || typeof root !== 'object') return null;
+  if (root.id === id && root.type) return root;
+  for (const key of Object.keys(root)) { const hit = findItem(root[key], id); if (hit) return hit; }
+  return null;
+}
+function withCallouts(id, list) {
+  const copy = clone(data);
+  findItem(copy.projects, id).callouts = list || threeCallouts();
+  return copy;
+}
+function figureOf(html, id) {
+  const at = html.indexOf(findItem(data.projects, id).publicPath);
+  assert.ok(at > 0, `${id} rendered`);
+  return html.slice(html.lastIndexOf('<figure', at), html.indexOf('</figure>', at) + 9);
+}
+const errorsOf = (copy) => render.validatePortfolioData(copy);
+
+test('callouts render pins at percentage positions and a list before the caption on all four image paths', () => {
+  const cases = [
+    ['surgical-navigation', 'surgical-navigation-smcnavi-ui-01'], // story media
+    ['mandibular-fracture', 'mandibular-fracture-lead-01'], // lead moved into the gallery
+    ['ai-build-lab', 'ai-build-lab-lead-01'], // image lead
+    ['life-careverse', 'life-careverse-gallery-01'], // gallery
+    ['skadi-tracking-software', 'skadi-desktop-tracker-6dof-01'] // product console
+  ];
+  for (const locale of ['ko', 'en']) {
+    for (const [slug, id] of cases) {
+      const html = render.caseStudyHtml(withCallouts(id), slug, '', true, locale);
+      const figure = figureOf(html, id);
+      assert.equal((figure.match(/<span class="sc-callout-pin"/g) || []).length, 3, `${id} ${locale}: pins`);
+      assert.match(figure, /<span class="sc-callout-pin" style="left:42%;top:31%" aria-hidden="true">1<\/span>/);
+      assert.match(figure, /style="left:10%;top:80%"/);
+      assert.match(figure, /style="left:92\.5%;top:5%"/);
+      assert.equal((figure.match(/<li>/g) || []).length, 3, `${id}: list items`);
+      assert.ok(figure.includes(locale === 'ko' ? '<li>추적 상태 패널</li>' : '<li>Tracking status panel</li>'));
+      assert.ok(figure.indexOf('sc-callout-list') < figure.indexOf('<figcaption>'), `${id}: list before caption`);
+      assert.ok(figure.indexOf('<img') > figure.indexOf('sc-callout-frame'), `${id}: img inside frame`);
+      assert.equal((figure.match(/<ol class="sc-callout-list">/g) || []).length, 1);
+      assert.deepEqual(labels(html), labels(html).map((_, i) => i + 1), `${id} ${locale}: consecutive labels`);
+    }
+  }
+});
+
+test('items without callouts render exactly as before', () => {
+  assert.equal(render.calloutFigureHtml('<img src="a">', {}, 'ko'), '<img src="a">');
+  assert.equal(render.calloutFigureHtml('<img src="a">', { callouts: [] }, 'en'), '<img src="a">');
+  for (const slug of all) assert.doesNotMatch(render.caseStudyHtml(data, slug, '', true, 'ko'), /sc-callout/, slug);
+  // adding callouts changes only the wrapped figure: removing the frame, pins and list gives back the plain page
+  const plain = render.caseStudyHtml(data, 'life-careverse', '', true, 'ko');
+  const pinned = render.caseStudyHtml(withCallouts('life-careverse-gallery-01'), 'life-careverse', '', true, 'ko');
+  assert.notEqual(pinned, plain);
+  const restored = pinned
+    .replace('<div class="sc-callout-frame">', '')
+    .replace(/<span class="sc-callout-pin"[^>]*>\d<\/span>/g, '')
+    .replace(/<\/div><ol class="sc-callout-list">.*?<\/ol>/, '');
+  assert.equal(restored, plain);
+});
+
+test('validation accepts the fixture and rejects each broken callout rule', () => {
+  const id = 'life-careverse-gallery-01';
+  assert.deepEqual(errorsOf(clone(data)), []);
+  assert.deepEqual(errorsOf(withCallouts(id)), []);
+  const bad = (mutate, pattern, message) => {
+    const list = threeCallouts();
+    mutate(list);
+    const errors = errorsOf(withCallouts(id, list));
+    assert.ok(errors.some((error) => pattern.test(error)), `${message}: ${errors.join(' | ')}`);
+  };
+  bad((l) => { l[2].n = 4; }, /n must run 1\.\.3/, 'n gap');
+  bad((l) => { l[0].x = 1.2; }, /x must be a number from 0 through 1/, 'x > 1');
+  bad((l) => { l[1].y = -0.1; }, /y must be a number from 0 through 1/, 'y < 0');
+  bad((l) => { l[0].translations.ko.label = '가'.repeat(25); }, /exceeds 24 characters/, 'ko 25 chars');
+  bad((l) => { l[0].translations.en.label = 'a'.repeat(49); }, /exceeds 48 characters/, 'en 49 chars');
+  bad((l) => { l[0].translations.ko.label = '상태를 확인합니다'; }, /noun phrase/, 'ko sentence');
+  bad((l) => { l[0].translations.ko.label = '상태 패널.'; }, /noun phrase/, 'ko period');
+  bad((l) => { l[0].translations.en.label = 'Shows the status.'; }, /noun phrase/, 'en period');
+  bad((l) => { delete l[1].translations.en; }, /missing en label/, 'missing en');
+  bad((l) => { l[0].extra = 1; }, /only n, x, y and translations/, 'unknown key');
+  bad((l) => { l.pop(); }, /needs 3-5 entries/, 'too few');
+  bad((l) => { l.push(callout(4, 0.5, 0.5, '넷', 'Four'), callout(5, 0.5, 0.5, '다섯', 'Five'), callout(6, 0.5, 0.5, '여섯', 'Six')); }, /needs 3-5 entries/, 'too many');
+  // callouts are image-only: a video item rejects them
+  const video = clone(data);
+  const lead = video.projects.find((p) => p.slug === 'surgical-navigation').media.lead;
+  assert.equal(lead.type, 'video');
+  lead.callouts = threeCallouts();
+  assert.ok(errorsOf(video).some((error) => /allowed only on image media/.test(error)));
+});
+
+test('callouts are accepted on lead, gallery, story media and console slots', () => {
+  for (const id of ['mandibular-fracture-lead-01', 'life-careverse-gallery-01', 'surgical-navigation-smcnavi-ui-01', 'skadi-desktop-tracker-6dof-01']) {
+    assert.deepEqual(errorsOf(withCallouts(id)), [], id);
+  }
+});
+
+test('PDF source digest ignores callouts at every depth', () => {
+  const evidence = { items: [] };
+  const cv = { identity: {} };
+  const before = pdfSourceDigest(canonicalPdfSource(data, evidence, cv));
+  const copy = clone(data);
+  for (const id of ['mandibular-fracture-lead-01', 'life-careverse-gallery-01', 'surgical-navigation-smcnavi-ui-01', 'skadi-desktop-tracker-6dof-01']) findItem(copy.projects, id).callouts = threeCallouts();
+  const source = canonicalPdfSource(copy, evidence, cv);
+  assert.equal(pdfSourceDigest(source), before);
+  assert.doesNotMatch(JSON.stringify(source), /callouts/);
+  assert.notEqual(JSON.stringify(copy), JSON.stringify(data), 'fixture really has callouts');
+});
+
+test('callout CSS pins by percentage, ignores the pointer and avoids forbidden properties', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'css', 'scholar.css'), 'utf8');
+  assert.match(css, /\.sc-callout-frame \{ position: relative;/);
+  const pin = css.split(/\r?\n/).find((line) => line.startsWith('.sc-callout-pin '));
+  assert.match(pin, /position: absolute/);
+  assert.match(pin, /pointer-events: none/);
+  assert.match(pin, /translate\(-50%, -50%\)/);
+  assert.match(pin, /border: 1px solid/);
+  assert.match(pin, /background: var\(--sc-link\)/);
+  assert.doesNotMatch(css.split(/\r?\n/).filter((line) => line.includes('sc-callout')).join('\n'), /box-shadow|gradient|uppercase|monospace/i);
+  assert.ok(css.split(/\r?\n/).length <= 420);
+});
