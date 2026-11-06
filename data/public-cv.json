@@ -219,11 +219,11 @@
                 {
                   "project": "NeuroPilot rTMS 내비게이션",
                   "slug": "rtms-navigation",
-                  "period": "2024.07–",
+                  "period": "2024.07–2026.08",
                   "did": [
                     "주도 개발",
                     "코일 위치 디지털트윈 가시화",
-                    "거리·RMSE·CSV 비교 기능"
+                    "정량평가 도구(평가 브랜치)"
                   ],
                   "result": "보건의료 정부과제"
                 },
@@ -295,11 +295,11 @@
                 {
                   "project": "NeuroPilot rTMS navigation",
                   "slug": "rtms-navigation",
-                  "period": "2024.07–",
+                  "period": "2024.07–2026.08",
                   "did": [
                     "Led development",
                     "Coil-position digital twin view",
-                    "Distance, RMSE, CSV comparison"
+                    "Quantitative evaluation tool (eval branch)"
                   ],
                   "result": "Government health R&D programme"
                 },

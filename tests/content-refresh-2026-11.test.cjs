@@ -24,3 +24,16 @@ test('surgical-navigation: lineage title, XR status, mirror year', () => {
   assert.doesNotMatch(p.translations.ko.limitation, /패키징은 제품화 수준으로 마무리되지 않았습니다/);
   assert.ok(['C++', 'Qt 6', 'CTest'].every(t => p.tech.includes(t)));
 });
+
+test('rtms-navigation: handed over 2026-08, evaluation lives in a tool branch', () => {
+  const p = by('rtms-navigation');
+  assert.equal(p.period, '2024.07 – 2026.08'); assert.equal(p.lifecycleState, 'completed'); assert.equal(p.evidenceState, 'verified');
+  assert.doesNotMatch(p.translations.ko.summary, /계속 유지보수/);
+  assert.match(p.translations.ko.summary, /2026\.08|2026년 8월/);
+  assert.doesNotMatch(JSON.stringify(p.web.ko.points), /표적별 거리·RMSE·CSV 비교 기능/);
+  assert.match(JSON.stringify(p.web.ko.points) + JSON.stringify(p.blocks), /평가 전용 브랜치|평가 브랜치/);
+  assert.match(p.translations.ko.role, /7\.1\.2/); assert.match(p.translations.ko.role, /어댑터/);
+  assert.match(p.translations.ko.role, /NaviClient/);
+  const cv = require('../data/public-cv.json'); const rows = JSON.stringify(cv, null, 2);
+  assert.match(rows, /"slug": "rtms-navigation",\s*"period": "2024\.07–2026\.08"/);
+});

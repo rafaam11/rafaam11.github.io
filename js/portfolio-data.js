@@ -1309,7 +1309,7 @@
       ]
     }),
     project({
-      slug: 'rtms-navigation', tier: 'surgical-robotics', period: '2024.07 – present', evidenceState: 'verified', lifecycleState: 'ongoing',
+      slug: 'rtms-navigation', tier: 'surgical-robotics', period: '2024.07 – 2026.08', evidenceState: 'verified', lifecycleState: 'completed',
       capabilityKeys: ['medical-navigation', 'registration'], route: 'projects/rtms-navigation/',
       tech: ['3D Slicer', 'VTK', 'PyQt5', 'Python', 'PyTorch (inference integration)', 'Optical tracking', 'TCP/IP binary protocol', 'License gating'],
       media: {
@@ -1343,10 +1343,10 @@
           brief: {
             problem: ['영상·트래커·태블릿·로봇 좌표계가 제각각', '하나의 검증 가능한 흐름 필요'],
             did: ['화면 흐름·정합 엔진·좌표 체인 리드', '트래커 SDK 이전·태블릿 프로토콜·로봇 연동', '라이선스 검증·옵션 기능 게이팅'],
-            result: ['라이선스 배포 빌드 납품·유지보수', '이슈 단위 회귀 테스트 스위트'],
+            result: ['라이선스 배포 빌드 납품', '이슈 단위 회귀 테스트 스위트', '2026.08 고객사 이관·자문'],
             team: ['일부 화면 모듈은 동료와 공동']
           },
-          points: ['홈 6개 메뉴가 DICOM→정합→표적→세션 단계 게이팅', '과녁 뷰와 거리·기울기 안내로 조준', '랜드마크 + ICP 3모드 정합', '표적별 거리·RMSE·CSV 비교 기능', '깊이 카메라 정합 프로그램(C++·Qt·VTK)'],
+          points: ['홈 6개 메뉴가 DICOM→정합→표적→세션 단계 게이팅', '과녁 뷰와 거리·기울기 안내로 조준', '랜드마크 + ICP 3모드 정합', '정량평가 도구(평가 전용 브랜치)', '깊이 카메라 정합 프로그램(C++·Qt·VTK)'],
           sceneCaption: '코일 내비게이션 개념도(합성 형상)'
         },
         en: {
@@ -1355,10 +1355,10 @@
           brief: {
             problem: ['Images, tracker, tablet, robot in separate frames', 'Needed one verifiable flow'],
             did: ['Led screen flow, registration engine, transform chain', 'Tracker SDK migration, tablet protocol, robot link', 'License checks and option gating'],
-            result: ['Licensed release builds delivered and maintained', 'Issue-by-issue regression test suite'],
+            result: ['Licensed release builds delivered', 'Issue-by-issue regression test suite', 'Handed over to customer, advising, 2026.08'],
             team: ['Some screen modules built with a colleague']
           },
-          points: ['Six home menus gate DICOM → registration → target → session', 'Bullseye view with distance and tilt guidance', 'Landmark + ICP registration in three modes', 'Per-target distance, RMSE, CSV comparison', 'Depth-camera registration program (C++, Qt, VTK)'],
+          points: ['Six home menus gate DICOM → registration → target → session', 'Bullseye view with distance and tilt guidance', 'Landmark + ICP registration in three modes', 'Quantitative evaluation tool (evaluation branch)', 'Depth-camera registration program (C++, Qt, VTK)'],
           sceneCaption: 'Coil navigation concept (synthetic geometry)'
         }
       },
@@ -1373,37 +1373,37 @@
       },
       translations: {
         ko: {
-          title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '수술 로보틱스·내비게이션 · 검증됨',
+          title: 'rTMS 코일 내비게이션 소프트웨어 (NeuroPilot)', shortTitle: 'NeuroPilot 코일 내비게이션', eyebrow: '수술 로보틱스·내비게이션 · 검증됨 · 이관',
           thesis: '광학 트래킹과 3D Slicer를 라이선스로 배포되는 코일 내비게이션 제품으로 완성해, 코일의 위치·각도와 타깃 오차를 표시합니다.',
-          summary: '3D Slicer 위에 시술 준비부터 실시간 코일 내비게이션까지 이어지는 화면 흐름, 랜드마크·ICP 정합 엔진, 광학 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 설계해 고객사에 납품하고 계속 유지보수합니다.',
+          summary: '3D Slicer 위에 시술 준비부터 실시간 코일 내비게이션까지 이어지는 화면 흐름, 랜드마크·ICP 정합 엔진, 광학 트래커·태블릿·로봇 연동, 라이선스 기반 제품 구조를 설계해 고객사에 납품했고, 2026년 8월 고객사 개발팀으로 이관한 뒤 자문으로 참여합니다.',
           problem: '서로 다른 좌표계에 있는 의료영상, 트래커, 태블릿, 로봇을 하나의 검증 가능한 흐름으로 묶어야 했습니다.',
-          role: '3D Slicer 기반 시술 준비·내비게이션 화면 흐름, 랜드마크와 ICP를 함께 쓰는 정합 엔진과 좌표 변환 체인, 광학 트래커 SDK 마이그레이션·태블릿 프로토콜·로봇 연동, 라이선스 검증과 옵션 기능 게이팅을 포함한 제품 구조를 리드했습니다. 보건의료 R&D 과제용 깊이 카메라(LiDAR/ToF) 기반 정합 프로그램(C++·Qt·VTK)에서는 정합 워크플로우, 결과 패널·행렬 내보내기, 트래커 SDK 연동 개선을 맡았습니다.',
+          role: '3D Slicer 기반 시술 준비·내비게이션 화면 흐름, 랜드마크와 ICP를 함께 쓰는 정합 엔진과 좌표 변환 체인, 광학 트래커 SDK 마이그레이션·태블릿 프로토콜·로봇 연동, 라이선스 검증과 옵션 기능 게이팅을 포함한 제품 구조를 리드했습니다. 2026년 6~8월에는 광학 추적 SDK를 v6에서 v7.1.2로 옮기며 코어 DLL 5개를 DtSkadi.dll 하나로 합쳤고, 제품·옵션 게이팅과 PC 바인딩을 갖춘 제품 인증 라이선스 체계와 발급 도구를 만들었습니다. 고객 제공 AI 모듈(랜드마크·치료 위치·코일 각도 최적화)은 폴더 교체로 갱신하는 어댑터 경계로 연결하고 각도 최적화 UI·진행 표시·중단, 프로젝트 초기화와 다중 실행 방지를 구현했습니다. 태블릿 TCP 프로토콜은 동료가 만든 C++ NaviClient 프로토콜을 이식했습니다. 보건의료 R&D 과제용 깊이 카메라(LiDAR/ToF) 기반 정합 프로그램(C++·Qt·VTK)에서는 정합 워크플로우, 결과 패널·행렬 내보내기, 트래커 SDK 연동 개선을 맡았습니다.',
           teamResult: 'AT&C가 라이선스 운영과 도입을 판단합니다. 정합·좌표 변환·내비게이션 UI 구조는 직접 설계했고 일부 화면 모듈은 동료 한 명과 함께했습니다.',
           evidence: '라이선스로 기능이 게이팅되는 실제 배포 빌드, 이슈 단위로 쌓아 온 회귀 테스트 스위트, 좌표 변환·정합 동작 로그가 근거입니다.',
           limitation: '임상적 유효성, 정량 정확도, 인허가 상태는 주장하지 않고 환자 데이터도 포함하지 않습니다.',
           collaboration: '고객이 제공한 AI 모델을 앱에 통합하고, 정합·타겟·통신의 책임과 평가 데이터의 정의를 협의했습니다. 기준 좌표의 품질 문제는 재측정 요청으로 남겼으며 모델 자체의 학습·개발과 구분합니다.',
           mediaAlt: '로봇 암과 치료 의자, 코일, 내비게이션 화면이 배치된 전시 부스에서 TMS 로봇 시스템이 동작하는 장면.', mediaCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다 — 로봇 암, 치료 의자, 코일, 내비게이션 화면이 한자리에 놓인 구성.',
-          status: '검증됨 · 진행 중', cardProblem: '서로 다른 좌표계의 장치를 하나의 제품 흐름으로 묶습니다.', cardOwnedRole: '화면 흐름·정합 엔진·장치 연동·제품 구조를 리드했습니다.', cardEvidence: '라이선스 게이팅 배포 빌드와 회귀 테스트 스위트.', problemSummary: '트래커·태블릿·로봇을 하나의 내비게이션 제품으로 묶습니다.', ownedRole: '화면 흐름, 정합 엔진, 장치 연동, 제품 구조를 리드했습니다.', verifiedEvidence: '라이선스 게이팅 배포 빌드와 이슈별 회귀 테스트가 근거이며 임상 결과는 주장하지 않습니다.', visualAlt: '전시 부스의 TMS 코일 내비게이션 로봇 시스템.', visualCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다.'
+          status: '검증됨 · 완료 (2026.08 이관)', cardProblem: '서로 다른 좌표계의 장치를 하나의 제품 흐름으로 묶습니다.', cardOwnedRole: '화면 흐름·정합 엔진·장치 연동·제품 구조를 리드했습니다.', cardEvidence: '라이선스 게이팅 배포 빌드와 회귀 테스트 스위트.', problemSummary: '트래커·태블릿·로봇을 하나의 내비게이션 제품으로 묶습니다.', ownedRole: '화면 흐름, 정합 엔진, 장치 연동, 제품 구조를 리드했습니다.', verifiedEvidence: '라이선스 게이팅 배포 빌드와 이슈별 회귀 테스트가 근거이며 임상 결과는 주장하지 않습니다.', visualAlt: '전시 부스의 TMS 코일 내비게이션 로봇 시스템.', visualCaption: '전시 부스의 TMS 코일 내비게이션 로봇 시스템 시연입니다.'
         },
         en: {
-          title: 'rTMS Coil Navigation Software (NeuroPilot)', shortTitle: 'NeuroPilot Coil Navigation', eyebrow: 'Surgical Robotics & Navigation · Verified',
+          title: 'rTMS Coil Navigation Software (NeuroPilot)', shortTitle: 'NeuroPilot Coil Navigation', eyebrow: 'Surgical Robotics & Navigation · Verified · Handed over',
           thesis: 'Turn optical tracking and 3D Slicer into a license-gated coil-navigation product that gives operators position and angle guidance they can rely on.',
-          summary: 'Designed the 3D Slicer workflow from procedure setup to real-time coil navigation, the landmark-and-ICP registration engine, tracker, tablet, and robot integration, and a license-gated product structure.',
+          summary: 'Designed the 3D Slicer workflow from procedure setup to real-time coil navigation, the landmark-and-ICP registration engine, tracker, tablet, and robot integration, and a license-gated product structure, delivered it to the customer, and handed it over to the customer’s development team in August 2026, after which I take part as an adviser.',
           problem: 'Medical images, a tracker, a tablet, and a robot each sit in their own coordinate frame and had to become one verifiable flow.',
-          role: 'Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining landmarks and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and robot integration, and the product structure covering license verification and optional-feature gating. For a health-technology R&D programme, also owned the registration workflow, result panel and matrix export, and tracker-SDK integration improvements of a depth-camera (LiDAR/ToF) registration program (C++, Qt, VTK).',
+          role: 'Led the 3D Slicer procedure-setup and navigation workflow, the registration engine combining landmarks and ICP with its coordinate-transform chain, the optical-tracker SDK migration with the tablet protocol and robot integration, and the product structure covering license verification and optional-feature gating. From June to August 2026 I migrated the optical-tracking SDK from v6 to v7.1.2, merging five core DLLs into a single DtSkadi.dll, and built a product-license scheme with product and option gating, PC binding, and an issuing tool. Customer-provided AI modules (landmarks, treatment position, coil-angle optimization) connect through an adapter boundary that is updated by swapping a folder, with an angle-optimization UI, progress display and cancellation, project reset, and multiple-instance prevention. The tablet TCP protocol is a port of the C++ NaviClient protocol a colleague wrote. For a health-technology R&D programme, also owned the registration workflow, result panel and matrix export, and tracker-SDK integration improvements of a depth-camera (LiDAR/ToF) registration program (C++, Qt, VTK).',
           teamResult: 'AT&C owns license operations and adoption. I designed the core structure; a colleague built specific screens.',
           evidence: 'The evidence is the license-gated deployment build, a regression-test suite grown issue by issue, and coordinate-transform and registration logs.',
           limitation: 'No clinical efficacy, quantitative accuracy, or regulatory status is claimed, and patient data stays out of this case.',
           collaboration: 'Integrated customer-provided AI models into the application and agreed on registration, target, and communication responsibilities and evaluation-data definitions. Reference-coordinate quality issues led to a remeasurement request; model training and development remain separate responsibilities.',
           mediaAlt: 'TMS robot system running on an exhibition stand with a robot arm, treatment chair, coil, and navigation displays.', mediaCaption: 'Demonstration of the TMS coil-navigation robot system on an exhibition stand: robot arm, treatment chair, coil, and navigation displays in one setup.',
-          status: 'Verified · Ongoing', cardProblem: 'Tie devices in different coordinate frames into one product flow.', cardOwnedRole: 'Led the workflow, registration engine, device integration, and product structure.', cardEvidence: 'A license-gated build and a regression-test suite.', problemSummary: 'Tie the tracker, tablet, and robot into one navigation product.', ownedRole: 'Led the workflow, registration engine, device integration, and product structure.', verifiedEvidence: 'The license-gated deployment build and issue-tracked regression tests are the evidence; no clinical outcome is claimed.', visualAlt: 'TMS coil-navigation robot system on an exhibition stand.', visualCaption: 'TMS coil-navigation robot system demonstrated on an exhibition stand.'
+          status: 'Verified · Completed (handed over 2026.08)', cardProblem: 'Tie devices in different coordinate frames into one product flow.', cardOwnedRole: 'Led the workflow, registration engine, device integration, and product structure.', cardEvidence: 'A license-gated build and a regression-test suite.', problemSummary: 'Tie the tracker, tablet, and robot into one navigation product.', ownedRole: 'Led the workflow, registration engine, device integration, and product structure.', verifiedEvidence: 'The license-gated deployment build and issue-tracked regression tests are the evidence; no clinical outcome is claimed.', visualAlt: 'TMS coil-navigation robot system on an exhibition stand.', visualCaption: 'TMS coil-navigation robot system demonstrated on an exhibition stand.'
         }
       },
       blocks: [
         { key: 'navigation-ui-workflow', type: 'system', translations: { ko: { heading: '내비게이션 UI 워크플로', body: '홈 화면 여섯 메뉴가 DICOM 적재부터 재구성·정합·표적 설정·실시간 세션까지 단계를 게이팅하고, 조준은 과녁 뷰와 거리·기울기 안내로 합니다.' }, en: { heading: 'Navigation UI workflow', body: 'Six Home-screen menus gate the run from DICOM load through reconstruction, registration, and targets to the live session, with crosshair aiming.' } } },
         { key: 'coordinate-registration-chain', type: 'text', translations: { ko: { heading: '좌표 변환·정합 엔진', body: '영상·환자·트래커·코일 변환 체인을 명시하고, ICP 정합을 세 가지 모드로 나눴습니다.' }, en: { heading: 'Coordinate and registration engine', body: 'Image, patient, tracker, and coil transforms stay explicit; ICP offers three modes.' } } },
-        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '트래커 SDK 이전, 태블릿 TCP 프로토콜과 로봇 연동을 구현했습니다. 2026년 통합 협의에서는 정합을 NeuroPilot로 일원화하고 타겟 파일·자세 정보·동기화 요구를 나눴습니다. 과제 참여는 2024.07부터, NeuroPilot 저장소의 주 구현 기록은 2025.07부터입니다.' }, en: { heading: 'Device and system integration', body: 'Implemented the tracker SDK migration, tablet TCP protocol, and robot interfaces. Integration discussions in 2026 consolidated registration in NeuroPilot and separated target-file, pose-data, and synchronization requirements. Programme participation began in July 2024; the main NeuroPilot repository implementation is recorded from July 2025.' } } },
-        { key: 'clinical-product-boundary', type: 'limitation', translations: { ko: { heading: '임상·제품 경계', body: '2026-06-01에는 기준 좌표 로딩·3D 마커 표시, 표적별 거리·RMSE 계산과 CSV 내보내기를 구현했습니다. 샘플 검토에서 해부학 영역 매핑과 기준 좌표 품질 문제를 확인해, 타겟 정의 문서와 프로토콜에 따른 재측정을 요청했습니다. 비교 기능 구현과 최종 평가의 성립은 별개이며, 임상적 유효성·정량 정확도·인허가 상태는 주장하지 않습니다.' }, en: { heading: 'Clinical and product boundary', body: 'By 1 June 2026 I had implemented reference-coordinate loading, 3D markers, per-target distance and RMSE calculation, and CSV export. Sample review exposed anatomical-region mapping and reference-coordinate quality issues, so I requested target definitions and remeasurement under a protocol still to be agreed. Implementing the comparison tool does not establish a valid final evaluation; no clinical efficacy, quantitative accuracy, or regulatory status is claimed.' } } }
+        { key: 'device-system-integration', type: 'evidence', translations: { ko: { heading: '장치·시스템 통합', body: '트래커 SDK 이전, 태블릿 TCP 프로토콜과 로봇 연동을 구현했습니다. 광학 추적 SDK는 v6에서 v7.1.2로 옮겼고, 고객 제공 AI 모듈은 폴더 교체로 갱신하는 어댑터 경계로 연결했습니다. 2026년 통합 협의에서는 정합을 NeuroPilot로 일원화하고 타겟 파일·자세 정보·동기화 요구를 나눴습니다. 과제 참여는 2024.07부터, NeuroPilot 저장소의 주 구현 기록은 2025.07부터입니다.' }, en: { heading: 'Device and system integration', body: 'Implemented the tracker SDK migration, tablet TCP protocol, and robot interfaces. Moved the optical-tracking SDK from v6 to v7.1.2 and connected customer-provided AI modules through an adapter boundary updated by swapping a folder. Integration discussions in 2026 consolidated registration in NeuroPilot and separated target-file, pose-data, and synchronization requirements. Programme participation began in July 2024; the main NeuroPilot repository implementation is recorded from July 2025.' } } },
+        { key: 'clinical-product-boundary', type: 'limitation', translations: { ko: { heading: '임상·제품 경계', body: '2026-06-01에는 기준 좌표 로딩·3D 마커 표시, 표적별 거리·RMSE 계산과 CSV 내보내기를 구현했습니다. 샘플 검토에서 해부학 영역 매핑과 기준 좌표 품질 문제를 확인해, 타겟 정의 문서와 프로토콜에 따른 재측정을 요청했습니다. 정량평가 화면은 납품본에서 분리해 평가 전용 브랜치 도구로 유지하며, 2026-08 이관 후에는 자문으로 참여합니다. 비교 기능 구현과 최종 평가의 성립은 별개이며, 임상적 유효성·정량 정확도·인허가 상태는 주장하지 않습니다.' }, en: { heading: 'Clinical and product boundary', body: 'By 1 June 2026 I had implemented reference-coordinate loading, 3D markers, per-target distance and RMSE calculation, and CSV export. Sample review exposed anatomical-region mapping and reference-coordinate quality issues, so I requested target definitions and remeasurement under a protocol still to be agreed. The quantitative-evaluation screen is kept out of the delivered build and maintained as a tool in a separate evaluation branch; after the August 2026 handover I take part as an adviser. Implementing the comparison tool does not establish a valid final evaluation; no clinical efficacy, quantitative accuracy, or regulatory status is claimed.' } } }
       ]
     }),
     project({
