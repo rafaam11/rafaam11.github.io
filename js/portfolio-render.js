@@ -169,12 +169,22 @@
     return decodedPublicCopy(collectStrings(surfaces, []).join('\n'));
   }
 
+  function pipelinePublicSurfaces(data) {
+    var pipe = data && data.pipeline;
+    if (!pipe) return [];
+    return [pipe.translations].concat(
+      (pipe.stages || []).map(function (stage) { return stage && stage.translations; }),
+      (pipe.placements || []).concat(pipe.tools || []).map(function (entry) { return entry && entry.translations; })
+    );
+  }
+
   function portfolioPublicCopy(data) {
     var surfaces = [];
     (data && data.capabilities || []).forEach(function (capability) {
       surfaces.push(capability && capability.methods, capability && capability.translations);
     });
     (data && data.tiers || []).forEach(function (tier) { surfaces.push(tier && tier.translations); });
+    surfaces.push(pipelinePublicSurfaces(data));
     (data && data.projects || []).forEach(function (project) { surfaces.push(projectPublicCopy(project)); });
     // Highlights only surface `translations` here, not `href` values: an `https://` URL matches
     // the private-path pattern's `[a-z]:[\/]` clause as a false positive. Hrefs are validated separately by `isSafeProjectLink` in `highlightsErrors`.
@@ -1536,11 +1546,14 @@
     var normalized = localeOf(locale);
     var pipe = data.pipeline;
     var projects = data.projects || [];
-    function chip(entry, attrs) {
+    function chip(entry, attrs, spans) {
       var project = projects.filter(function (item) { return item.slug === entry.slug; })[0];
       if (!project) return '';
       var href = i18n.routeHref(base, normalized, project.route, Boolean(isFile));
-      return '<a class="sc-map__chip" href="' + escapeHtml(href) + '"' + attrs + '>' + escapeHtml(translation(entry, normalized).chip) + '</a>';
+      var stagesNote = spans && spans.length
+        ? '<span class="sc-visually-hidden"> ' + (normalized === 'ko' ? '(' + spans.join('·') + '단계)' : '(stages ' + spans.join(', ') + ')') + '</span>'
+        : '';
+      return '<a class="sc-map__chip" href="' + escapeHtml(href) + '"' + attrs + '>' + escapeHtml(translation(entry, normalized).chip) + stagesNote + '</a>';
     }
     var band = '';
     var arrows = '';
@@ -1555,7 +1568,7 @@
     var stages = pipe.stages.map(function (stage) {
       var copy = translation(stage, normalized);
       var chips = pipe.placements.filter(function (placement) { return placement.primary === stage.n; }).map(function (placement) {
-        var html = chip(placement, ' data-primary="' + placement.primary + '" data-spans="' + placement.spans.join(' ') + '"');
+        var html = chip(placement, ' data-primary="' + placement.primary + '" data-spans="' + placement.spans.join(' ') + '"', placement.spans);
         return html ? '<li>' + html + '</li>' : '';
       }).join('');
       return '<li class="sc-map__stage" data-n="' + stage.n + '"><img class="sc-map__thumb" src="' + escapeHtml(assetHref(base, stage.thumb)) + '" alt="" width="640" height="360" decoding="async">' +
@@ -1565,7 +1578,7 @@
     }).join('');
     var tools = pipe.tools.map(function (tool) { return chip(tool, ' data-spans=""'); }).join(' ');
     var label = translation(pipe, normalized);
-    return '<section class="sc-map" aria-label="' + escapeHtml(label.label) + '">' + svg +
+    return '<section class="sc-map" aria-labelledby="pipeline-title"><h2 id="pipeline-title" class="sc-visually-hidden">' + escapeHtml(label.label) + '</h2>' + svg +
       '<ol class="sc-map__stages">' + stages + '</ol>' +
       '<p class="sc-map__tools"><span>' + escapeHtml(label.tools) + '</span> ' + tools + '</p></section>';
   }

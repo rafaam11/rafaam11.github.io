@@ -1069,6 +1069,9 @@ function portfolioPublicText(candidate) {
   const surfaces = [];
   for (const capability of candidate?.capabilities || []) surfaces.push(capability?.methods, capability?.translations);
   for (const tier of candidate?.tiers || []) surfaces.push(tier?.translations);
+  surfaces.push(candidate?.pipeline?.translations);
+  for (const stage of candidate?.pipeline?.stages || []) surfaces.push(stage?.translations);
+  for (const entry of [...(candidate?.pipeline?.placements || []), ...(candidate?.pipeline?.tools || [])]) surfaces.push(entry?.translations);
   for (const project of candidate?.projects || []) surfaces.push(projectPublicText(project));
   let text = collectPublicStrings(surfaces).join('\n');
   for (let index = 0; index < 6; index += 1) {

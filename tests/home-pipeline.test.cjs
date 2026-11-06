@@ -79,7 +79,8 @@ test('pipelineMapHtml renders 5 stages, 8 chips and a tools chip in ko and en', 
     }
     for (const pl of data.pipeline.placements) assert.ok(html.includes(`data-primary="${pl.primary}" data-spans="${pl.spans.join(' ')}"`));
     for (const st of data.pipeline.stages) { const esc = (v) => v.replace(/&/g, '&amp;'); assert.ok(html.includes(esc(st.translations[locale].title))); assert.ok(html.includes(esc(st.translations[locale].blurb))); }
-    assert.ok(html.includes(`aria-label="${data.pipeline.translations[locale].label}"`));
+    assert.ok(html.includes(`aria-labelledby="pipeline-title"`));
+    assert.ok(html.includes(`<h2 id="pipeline-title" class="sc-visually-hidden">${data.pipeline.translations[locale].label}</h2>`));
     const svg = /<svg[\s\S]*?<\/svg>/.exec(html)[0];
     assert.match(svg, /aria-hidden="true"/);
     assert.deepEqual([...svg.matchAll(/<text[^>]*>([^<]*)<\/text>/g)].map(m => m[1]), ['1', '2', '3', '4', '5']);
@@ -89,10 +90,10 @@ test('pipelineMapHtml returns empty string for invalid pipeline data', () => {
   const bad = structuredClone(data); bad.pipeline.stages.pop();
   assert.equal(render.pipelineMapHtml(bad, '', true, 'ko'), '');
 });
-test('map CSS has focus-visible highlighting, a 760px band rule and no dimming by default', () => {
+test('map CSS has focus-visible highlighting, a 900px band rule and no dimming by default', () => {
   const css = fs.readFileSync(path.join(root, 'css/scholar.css'), 'utf8');
   assert.match(css, /\.sc-map:has\([^)]*:is\(:hover, :focus-visible\)\)/);
-  assert.match(css, /@media \(max-width: 760px\) \{\s*\.sc-map__band \{ display: none; \}/);
+  assert.match(css, /@media \(max-width: 900px\) \{\s*\.sc-map__band \{ display: none; \}/);
   const mapCss = css.slice(css.indexOf('/* 2026-11 home map'));
   assert.doesNotMatch(mapCss, /box-shadow|gradient|text-transform\s*:\s*uppercase|monospace/i);
   const dim = mapCss.split('\n').filter(l => /opacity/.test(l));
@@ -131,4 +132,59 @@ test('Home main order, one-sentence lede, technical areas, three tiles and three
     assert.equal((html.match(/data-news-id=/g) || []).length, 3);
     assert.equal(profile.homeNews().length, 3);
   }
+});
+
+test('home heading order has no skipped levels', () => {
+  for (const [locale, file] of [['ko', 'index.html'], ['en', 'en/index.html']]) {
+    const html = /<main[^>]*>([\s\S]*?)<\/main>/.exec(fs.readFileSync(path.join(root, file), 'utf8'))[1];
+    const levels = [...html.matchAll(/<h([1-6])[\s>]/g)].map((m) => Number(m[1]));
+    assert.deepEqual(levels.slice(0, 7), [1, 2, 3, 3, 3, 3, 3], locale);
+    assert.equal(levels[7], 2, locale);
+    levels.forEach((level, i) => { if (i) assert.ok(level <= levels[i - 1] + 1, `${locale} heading jump at ${i}: ${levels.join('')}`); });
+    assert.match(html, locale === 'ko' ? /id="pipeline-title" class="sc-visually-hidden">기술 파이프라인</ : /id="pipeline-title" class="sc-visually-hidden">Technical pipeline</);
+  }
+  const css = fs.readFileSync(path.join(root, 'css/scholar.css'), 'utf8');
+  assert.match(css, /\.sc-visually-hidden \{[^}]*position: absolute;[^}]*width: 1px;[^}]*height: 1px;[^}]*margin: -1px;[^}]*overflow: hidden;[^}]*clip: rect\(0 0 0 0\);[^}]*white-space: nowrap;[^}]*border: 0;/);
+});
+test('map chips carry hidden stage labels, tools chips none', () => {
+  for (const locale of ['ko', 'en']) {
+    const html = render.pipelineMapHtml(data, '', true, locale);
+    for (const pl of data.pipeline.placements) {
+      const chip = pl.translations[locale].chip.replace(/&/g, '&amp;');
+      const label = locale === 'ko' ? ` (${pl.spans.join('·')}단계)` : ` (stages ${pl.spans.join(', ')})`;
+      assert.ok(html.includes(`${chip}<span class="sc-visually-hidden">${label}</span></a>`), `${locale} ${pl.slug}`);
+    }
+    const tools = /<p class="sc-map__tools">[\s\S]*<\/p>/.exec(html)[0];
+    assert.doesNotMatch(tools, /sc-visually-hidden/);
+    assert.equal((html.match(/<span class="sc-visually-hidden">/g) || []).length, 8);
+  }
+});
+test('pipeline copy is included in the public safety scans', () => {
+  const validator = require('../scripts/validate-portfolio.cjs');
+  const run = (mutate) => { const c = structuredClone(data); mutate(c); return [validator.portfolioDataErrors(c).join('\n'), render.validatePortfolioData(c).join('\n')]; };
+  for (const out of run((c) => { c.pipeline.placements[0].translations.en.chip = 'Contribution 47%'; })) assert.match(out, /contribution percentage/i);
+  for (const out of run((c) => { c.pipeline.stages[0].translations.ko.blurb = 'C:\\Users\\x\\a.png'; })) assert.match(out, /private source path/i);
+  for (const out of run((c) => { c.pipeline.translations.en.label = 'Genoray pipeline'; })) assert.match(out, /nonpublic partner/i);
+});
+test('map CSS pins the hover rules for every stage and dimming only under :has', () => {
+  const css = fs.readFileSync(path.join(root, 'css/scholar.css'), 'utf8');
+  for (let n = 1; n <= 5; n++) {
+    assert.ok(css.includes(`.sc-map:has(.sc-map__chip[data-spans~="${n}"]:is(:hover, :focus-visible)) .sc-map__stage[data-n="${n}"] { border-color`), `chip->stage border ${n}`);
+    assert.ok(css.includes(`.sc-map__stage[data-n="${n}"] .sc-map__title { color`), `chip->title ${n}`);
+    assert.ok(css.includes(`.sc-map:has(.sc-map__stage[data-n="${n}"]:hover):not(:has(.sc-map__chip:hover)) .sc-map__chip[data-spans~="${n}"] {`), `stage->chip ${n}`);
+  }
+  const dims = css.split('\n').filter((l) => /opacity:\s*\.45/.test(l));
+  assert.ok(dims.length >= 1);
+  for (const l of dims) assert.match(l, /^\.sc-map:has\(/);
+});
+test('home projects block stays a tile block and pipeline thumb sources are approved images', () => {
+  const profile = fs.readFileSync(path.join(root, 'scripts/profile-home.cjs'), 'utf8');
+  assert.match(profile, /data-portfolio="home-projects" data-tile="true"/);
+  for (const f of ['index.html', 'en/index.html']) assert.match(fs.readFileSync(path.join(root, f), 'utf8'), /data-portfolio="home-projects" data-tile="true"/, f);
+  const thumbs = fs.readFileSync(path.join(root, 'scripts/pipeline-thumbs.cjs'), 'utf8');
+  const srcs = [...thumbs.matchAll(/src:\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
+  assert.ok(srcs.length >= 5, 'found thumb sources');
+  const approved = new Set();
+  (function walk(v) { if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === 'object') { if (v.publicPath) approved.add(v.publicPath); Object.values(v).forEach(walk); } })(data.projects);
+  for (const src of srcs) assert.ok(approved.has(src), `unapproved thumb source ${src}`);
 });
