@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "sourceDigest": "32b06512a64ac3a2c71adbf0238580f25bc727656b749dc4cc1bd05165bec438",
+  "sourceDigest": "16f3ad669ded0e7cf3d97064254a22d96f8d2161b934bb006f5be9db49855523",
   "generator": "scripts/generate-portfolio-pdfs.py",
   "generatorVersion": "3.3",
   "generatorSha256": "e911307ba8dbaaa9cf11a7c3e5bfb650cce5875eac0d7afa7cc1aafb0082133f",
@@ -56,9 +56,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 4350,
-      "bytes": 1543881,
-      "sha256": "d3e679edd004074d03b68804d9899e4892d9ff6edd4a0bd9a5bccc59799e09cc"
+      "characters": 4352,
+      "bytes": 1543892,
+      "sha256": "8c4bfc6702b961b3947929f4143c3ff63f80725292f2191f77a0ef484f32ba7d"
     },
     {
       "name": "digital-occlusion-workflow-en.pdf",
@@ -67,9 +67,9 @@
       "locale": "en",
       "pages": 6,
       "links": 8,
-      "characters": 8889,
-      "bytes": 1378927,
-      "sha256": "7799e479faeb2c08315599ad237dae441eb28eacc1747c846973dce4954b3996"
+      "characters": 8897,
+      "bytes": 1378932,
+      "sha256": "385807799041e83e57e4bef83b534c782e2b7a065872cc62e2ef188701303de9"
     },
     {
       "name": "life-careverse-ko.pdf",
@@ -122,9 +122,9 @@
       "locale": "ko",
       "pages": 6,
       "links": 8,
-      "characters": 3672,
-      "bytes": 3424007,
-      "sha256": "7e835ebf55214773870857a4d2ed7e4e3059f869110709a849722da8659c8ca9"
+      "characters": 3632,
+      "bytes": 3423223,
+      "sha256": "05a491052cb994fe145a635ccd670f6e21fcb41bcfa9459935663ed93db346a5"
     },
     {
       "name": "respiratory-surface-guidance-en.pdf",
@@ -133,9 +133,9 @@
       "locale": "en",
       "pages": 7,
       "links": 9,
-      "characters": 7440,
-      "bytes": 3252096,
-      "sha256": "c596996447ad4c5146f4d0e487c847387b94fb71c4f6a06bbf4e634517f4576b"
+      "characters": 7393,
+      "bytes": 3251713,
+      "sha256": "80ba29769b56167a6f8d9c9cef0c19a61aa15e429a4b9d5358e224ef06f35bea"
     },
     {
       "name": "skadi-tracking-software-ko.pdf",
@@ -144,9 +144,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 10,
-      "characters": 3217,
-      "bytes": 2383687,
-      "sha256": "f87e70ab857eecb89aaef0aa4db1afd3e843978747fce77821ed241d4aac772e"
+      "characters": 3211,
+      "bytes": 2383688,
+      "sha256": "8c465546e084df7b47a883936542d66875116d105d29ac3c9ad0c14f750a3a30"
     },
     {
       "name": "skadi-tracking-software-en.pdf",
@@ -166,9 +166,9 @@
       "locale": "ko",
       "pages": 5,
       "links": 7,
-      "characters": 3807,
-      "bytes": 9328679,
-      "sha256": "0b3ec413ff6c7025a132d1b3058cc018e8f667da9b08a4b1fed1029909612800"
+      "characters": 3901,
+      "bytes": 9330096,
+      "sha256": "2663f997ec6feab0163ecf567b2dfffbe48facd088f5db601a3e90b921ec6929"
     },
     {
       "name": "unmanned-forklift-en.pdf",
@@ -177,9 +177,9 @@
       "locale": "en",
       "pages": 5,
       "links": 7,
-      "characters": 7615,
-      "bytes": 9182448,
-      "sha256": "4af4cad0015792138b121ab79befe208568f90ae7e24092129a839cfc3c895b2"
+      "characters": 7803,
+      "bytes": 9182802,
+      "sha256": "8d3e3f5eec84ac5d286dbfc3b5af5a88e5726eddbecf2e42a8a4bf4eb5179afd"
     },
     {
       "name": "ai-build-lab-ko.pdf",
@@ -229,8 +229,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "en",
       "pages": 6,
-      "bytes": 1378927,
-      "sha256": "7799e479faeb2c08315599ad237dae441eb28eacc1747c846973dce4954b3996"
+      "bytes": 1378932,
+      "sha256": "385807799041e83e57e4bef83b534c782e2b7a065872cc62e2ef188701303de9"
     },
     {
       "path": "assets/pdfs/digital-occlusion-workflow-ko.pdf",
@@ -238,8 +238,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "ko",
       "pages": 6,
-      "bytes": 1543881,
-      "sha256": "d3e679edd004074d03b68804d9899e4892d9ff6edd4a0bd9a5bccc59799e09cc"
+      "bytes": 1543892,
+      "sha256": "8c4bfc6702b961b3947929f4143c3ff63f80725292f2191f77a0ef484f32ba7d"
     },
     {
       "path": "assets/pdfs/life-careverse-en.pdf",
@@ -283,8 +283,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "en",
       "pages": 7,
-      "bytes": 3252096,
-      "sha256": "c596996447ad4c5146f4d0e487c847387b94fb71c4f6a06bbf4e634517f4576b"
+      "bytes": 3251713,
+      "sha256": "80ba29769b56167a6f8d9c9cef0c19a61aa15e429a4b9d5358e224ef06f35bea"
     },
     {
       "path": "assets/pdfs/respiratory-surface-guidance-ko.pdf",
@@ -292,8 +292,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "ko",
       "pages": 6,
-      "bytes": 3424007,
-      "sha256": "7e835ebf55214773870857a4d2ed7e4e3059f869110709a849722da8659c8ca9"
+      "bytes": 3423223,
+      "sha256": "05a491052cb994fe145a635ccd670f6e21fcb41bcfa9459935663ed93db346a5"
     },
     {
       "path": "assets/pdfs/rtms-navigation-en.pdf",
@@ -328,8 +328,8 @@
       "slug": "skadi-tracking-software",
       "locale": "ko",
       "pages": 5,
-      "bytes": 2383687,
-      "sha256": "f87e70ab857eecb89aaef0aa4db1afd3e843978747fce77821ed241d4aac772e"
+      "bytes": 2383688,
+      "sha256": "8c465546e084df7b47a883936542d66875116d105d29ac3c9ad0c14f750a3a30"
     },
     {
       "path": "assets/pdfs/surgical-navigation-en.pdf",
@@ -355,8 +355,8 @@
       "slug": "unmanned-forklift",
       "locale": "en",
       "pages": 5,
-      "bytes": 9182448,
-      "sha256": "4af4cad0015792138b121ab79befe208568f90ae7e24092129a839cfc3c895b2"
+      "bytes": 9182802,
+      "sha256": "8d3e3f5eec84ac5d286dbfc3b5af5a88e5726eddbecf2e42a8a4bf4eb5179afd"
     },
     {
       "path": "assets/pdfs/unmanned-forklift-ko.pdf",
@@ -364,8 +364,8 @@
       "slug": "unmanned-forklift",
       "locale": "ko",
       "pages": 5,
-      "bytes": 9328679,
-      "sha256": "0b3ec413ff6c7025a132d1b3058cc018e8f667da9b08a4b1fed1029909612800"
+      "bytes": 9330096,
+      "sha256": "2663f997ec6feab0163ecf567b2dfffbe48facd088f5db601a3e90b921ec6929"
     },
     {
       "path": "output/pdf/ai-build-lab-en.pdf",
@@ -391,8 +391,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "en",
       "pages": 6,
-      "bytes": 1378927,
-      "sha256": "7799e479faeb2c08315599ad237dae441eb28eacc1747c846973dce4954b3996"
+      "bytes": 1378932,
+      "sha256": "385807799041e83e57e4bef83b534c782e2b7a065872cc62e2ef188701303de9"
     },
     {
       "path": "output/pdf/digital-occlusion-workflow-ko.pdf",
@@ -400,8 +400,8 @@
       "slug": "digital-occlusion-workflow",
       "locale": "ko",
       "pages": 6,
-      "bytes": 1543881,
-      "sha256": "d3e679edd004074d03b68804d9899e4892d9ff6edd4a0bd9a5bccc59799e09cc"
+      "bytes": 1543892,
+      "sha256": "8c4bfc6702b961b3947929f4143c3ff63f80725292f2191f77a0ef484f32ba7d"
     },
     {
       "path": "output/pdf/life-careverse-en.pdf",
@@ -445,8 +445,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "en",
       "pages": 7,
-      "bytes": 3252096,
-      "sha256": "c596996447ad4c5146f4d0e487c847387b94fb71c4f6a06bbf4e634517f4576b"
+      "bytes": 3251713,
+      "sha256": "80ba29769b56167a6f8d9c9cef0c19a61aa15e429a4b9d5358e224ef06f35bea"
     },
     {
       "path": "output/pdf/respiratory-surface-guidance-ko.pdf",
@@ -454,8 +454,8 @@
       "slug": "respiratory-surface-guidance",
       "locale": "ko",
       "pages": 6,
-      "bytes": 3424007,
-      "sha256": "7e835ebf55214773870857a4d2ed7e4e3059f869110709a849722da8659c8ca9"
+      "bytes": 3423223,
+      "sha256": "05a491052cb994fe145a635ccd670f6e21fcb41bcfa9459935663ed93db346a5"
     },
     {
       "path": "output/pdf/rtms-navigation-en.pdf",
@@ -490,8 +490,8 @@
       "slug": "skadi-tracking-software",
       "locale": "ko",
       "pages": 5,
-      "bytes": 2383687,
-      "sha256": "f87e70ab857eecb89aaef0aa4db1afd3e843978747fce77821ed241d4aac772e"
+      "bytes": 2383688,
+      "sha256": "8c465546e084df7b47a883936542d66875116d105d29ac3c9ad0c14f750a3a30"
     },
     {
       "path": "output/pdf/surgical-navigation-en.pdf",
@@ -517,8 +517,8 @@
       "slug": "unmanned-forklift",
       "locale": "en",
       "pages": 5,
-      "bytes": 9182448,
-      "sha256": "4af4cad0015792138b121ab79befe208568f90ae7e24092129a839cfc3c895b2"
+      "bytes": 9182802,
+      "sha256": "8d3e3f5eec84ac5d286dbfc3b5af5a88e5726eddbecf2e42a8a4bf4eb5179afd"
     },
     {
       "path": "output/pdf/unmanned-forklift-ko.pdf",
@@ -526,8 +526,8 @@
       "slug": "unmanned-forklift",
       "locale": "ko",
       "pages": 5,
-      "bytes": 9328679,
-      "sha256": "0b3ec413ff6c7025a132d1b3058cc018e8f667da9b08a4b1fed1029909612800"
+      "bytes": 9330096,
+      "sha256": "2663f997ec6feab0163ecf567b2dfffbe48facd088f5db601a3e90b921ec6929"
     }
   ]
 }

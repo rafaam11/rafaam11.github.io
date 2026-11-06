@@ -127,14 +127,14 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (mailto:uiop3847@naver.com)
->> /Border [ 0 0 0 ] /Rect [ 48 138.8898 141.5852 154.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 122.8898 141.5852 138.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 17 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://rafaam11.github.io)
->> /Border [ 0 0 0 ] /Rect [ 48 118.8898 128.2212 134.3898 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 48 102.8898 128.2212 118.3898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 18 0 obj
@@ -918,7 +918,7 @@ endstream
 endobj
 32 0 obj
 <<
-/Length 6147
+/Length 6376
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1054,11 +1054,11 @@ n 48 541.8898 m 547.2756 541.8898 l S
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 507.8898 Tm /F3+0 14 Tf 16.8 TL (Verification and evidence ledger) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 483.8898 Tm /F2+0 10 Tf 12 TL (Test-site recordings, photographs, and capture-specific sensor comparisons provide the evidence. The) Tj T* ET
+BT 1 0 0 1 48 483.8898 Tm /F2+0 10 Tf 12 TL (Test-ground recordings and photographs, capture-specific sensor comparisons, and my own field-trial) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 467.8898 Tm /F2+0 10 Tf 12 TL (integration-evidence section below states the timestamp and extrinsic-measurement conditions and) Tj T* ET
+BT 1 0 0 1 48 467.8898 Tm /F2+0 10 Tf 12 TL (measurements provide the evidence. The integration-evidence section below states the timestamp and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 451.8898 Tm /F2+0 10 Tf 12 TL (differences by axis.) Tj T* ET
+BT 1 0 0 1 48 451.8898 Tm /F2+0 10 Tf 12 TL (extrinsic-measurement conditions and differences by axis.) Tj T* ET
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 422.8898 Tm /F3+0 11 Tf 13.2 TL (Integration evidence) Tj T* ET
 .333333 .333333 .333333 rg
@@ -1070,11 +1070,13 @@ BT 1 0 0 1 48 370.8898 Tm /F2+0 10 Tf 12 TL (comparison on 11 September was with
 .333333 .333333 .333333 rg
 BT 1 0 0 1 48 354.8898 Tm /F2+0 10 Tf 12 TL (29 mm in z; it does not establish overall 3D accuracy. My own measurements: offline classification top-1) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 338.8898 Tm /F2+0 10 Tf 12 TL (99.5% on 2,010 queries \(phone video, 24 types\), a front 2 m measurement of 4.66 s \(median of 10\), a track) Tj T* ET
+BT 1 0 0 1 48 338.8898 Tm /F2+0 10 Tf 12 TL (99.5% on 2,010 queries \(phone video, 24 types\); in the field trial, a front 2 m measurement of 4.66 s \(median) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 322.8898 Tm /F2+0 10 Tf 12 TL (read of 0.71 m against 0.75 m by tape, and a measurable range of 1.5-5 m.) Tj T* ET
+BT 1 0 0 1 48 322.8898 Tm /F2+0 10 Tf 12 TL (of 10\) and a track read of 0.71 m against 0.75 m by tape. The measurable range of about 1.5-5 m \(limit\) is) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 306.8898 Tm /F2+0 10 Tf 12 TL (the operating limit of the vision measurement, not a measured result.) Tj T* ET
 q
-414.0262 0 0 232.8898 90.62467 72 cm
+385.5818 0 0 216.8898 104.8469 72 cm
 /FormXob.7cb97161b753edc599e63b9ece43c4da Do
 Q
 .333333 .333333 .333333 rg
@@ -1123,7 +1125,7 @@ endstream
 endobj
 34 0 obj
 <<
-/Length 4851
+/Length 4976
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1153,55 +1155,57 @@ BT 1 0 0 1 48 684.8898 Tm /F2+0 10 Tf 12 TL (validation. This is not presented a
 .101961 .101961 .101961 rg
 BT 1 0 0 1 48 655.8898 Tm /F3+0 11 Tf 13.2 TL (Limitations) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 635.8898 Tm /F2+0 10 Tf 12 TL (The public clip and photos are de-identified scenes from the test site and the field trial, and the) Tj T* ET
+BT 1 0 0 1 48 635.8898 Tm /F2+0 10 Tf 12 TL (The public clip and photos show tests at the test ground. The 4.66 s and 0.71 m values are my own) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 619.8898 Tm /F2+0 10 Tf 12 TL (measurements are my own on-site measurements. No production or customer outcomes are claimed.) Tj T* ET
+BT 1 0 0 1 48 619.8898 Tm /F2+0 10 Tf 12 TL (field-trial measurements, and the classification accuracy is based on offline phone video. No production or) Tj T* ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 48 603.8898 Tm /F2+0 10 Tf 12 TL (customer outcomes are claimed.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 590.8898 Tm /F3+0 11 Tf 13.2 TL (Field boundary) Tj T* ET
+BT 1 0 0 1 48 574.8898 Tm /F3+0 11 Tf 13.2 TL (Field boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 570.8898 Tm /F2+0 10 Tf 12 TL (In earlier forklift field work during 2025, I supported operation, issue observation, and handovers. The public) Tj T* ET
+BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (In earlier forklift field work during 2025, I supported operation, issue observation, and handovers. The public) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (record of participation in the in-house DOTORI project begins in November 2025, followed by) Tj T* ET
+BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (record of participation in the in-house DOTORI project begins in November 2025, followed by) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (implementation records in the current repositories during 2026. Field support and later vision/sensor) Tj T* ET
+BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (implementation records in the current repositories during 2026. Field support and later vision/sensor) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (implementation are distinct; test-site validation is not a production or customer outcome.) Tj T* ET
+BT 1 0 0 1 48 506.8898 Tm /F2+0 10 Tf 12 TL (implementation are distinct; test-site validation is not a production or customer outcome.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 493.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
+BT 1 0 0 1 48 477.8898 Tm /F3+0 11 Tf 13.2 TL (Collaboration boundary) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 473.8898 Tm /F2+0 10 Tf 12 TL (Vehicle-control, localisation, mission, safety, and field-validation owners integrate the system jointly. The) Tj T* ET
+BT 1 0 0 1 48 457.8898 Tm /F2+0 10 Tf 12 TL (Vehicle-control, localisation, mission, safety, and field-validation owners integrate the system jointly. The) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 457.8898 Tm /F2+0 10 Tf 12 TL (middleware is an in-house Zenoh-based implementation that follows ROS 2-style patterns.) Tj T* ET
+BT 1 0 0 1 48 441.8898 Tm /F2+0 10 Tf 12 TL (middleware is an in-house Zenoh-based implementation that follows ROS 2-style patterns.) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 425.8898 m 547.2756 425.8898 l S
+n 48 409.8898 m 547.2756 409.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 391.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
+BT 1 0 0 1 48 375.8898 Tm /F3+0 14 Tf 16.8 TL (Implementation technologies) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 367.8898 Tm /F2+0 10 Tf 12 TL (C++ \001 Zenoh \001 BehaviorTree.CPP \001 ToF \001 RGB \001 SAM3 \001 Jetson AGX Orin \001 2D LiDAR \001 DINOv2 \001 Isaac Sim) Tj T* ET
+BT 1 0 0 1 48 351.8898 Tm /F2+0 10 Tf 12 TL (C++ \001 Zenoh \001 BehaviorTree.CPP \001 ToF \001 RGB \001 SAM3 \001 Jetson AGX Orin \001 2D LiDAR \001 DINOv2 \001 Isaac Sim) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 342.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
+BT 1 0 0 1 48 326.8898 Tm /F3+0 11 Tf 13.2 TL (Primary capability) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 322.8898 Tm /F2+0 10 Tf 12 TL (Robot Vision & Sensor Integration \001 3D Registration & Computer Vision) Tj T* ET
+BT 1 0 0 1 48 306.8898 Tm /F2+0 10 Tf 12 TL (Robot Vision & Sensor Integration \001 3D Registration & Computer Vision) Tj T* ET
 .101961 .101961 .101961 RG
 .9 w
-n 48 290.8898 m 547.2756 290.8898 l S
+n 48 274.8898 m 547.2756 274.8898 l S
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 256.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
+BT 1 0 0 1 48 240.8898 Tm /F3+0 14 Tf 16.8 TL (Registered public evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 232.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
+BT 1 0 0 1 48 216.8898 Tm /F2+0 10 Tf 12 TL (No external public link is currently registered.) Tj T* ET
 .101961 .101961 .101961 rg
-BT 1 0 0 1 48 203.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
+BT 1 0 0 1 48 187.8898 Tm /F3+0 11 Tf 13.2 TL (What to bring) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 183.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
+BT 1 0 0 1 48 167.8898 Tm /F2+0 10 Tf 12 TL (Share the problem, data or sensors, target validation, and schedule. We can define coordinate and evidence) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 167.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
+BT 1 0 0 1 48 151.8898 Tm /F2+0 10 Tf 12 TL (boundaries together.) Tj T* ET
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 142.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
-n 48 140.8898 m 141.5852 140.8898 l S
+BT 1 0 0 1 48 126.8898 Tm /F2+0 9.5 Tf 11.4 TL (uiop3847@naver.com) Tj T* ET
+n 48 124.8898 m 141.5852 124.8898 l S
 .101961 .337255 .858824 rg
-BT 1 0 0 1 48 122.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
-n 48 120.8898 m 128.2212 120.8898 l S
+BT 1 0 0 1 48 106.8898 Tm /F2+0 9.5 Tf 11.4 TL (rafaam11.github.io) Tj T* ET
+n 48 104.8898 m 128.2212 104.8898 l S
  
 endstream
 endobj
@@ -1240,8 +1244,8 @@ xref
 0009159588 00000 n 
 0009162604 00000 n 
 0009169102 00000 n 
-0009175301 00000 n 
-0009176627 00000 n 
+0009175530 00000 n 
+0009176856 00000 n 
 trailer
 <<
 /ID 
@@ -1253,5 +1257,5 @@ trailer
 /Size 35
 >>
 startxref
-9181530
+9181884
 %%EOF

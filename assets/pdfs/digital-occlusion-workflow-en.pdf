@@ -1011,7 +1011,7 @@ endobj
 endobj
 36 0 obj
 <<
-/Length 3403
+/Length 3408
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1046,13 +1046,13 @@ BT 1 0 0 1 48 601.8898 Tm /F2+0 9 Tf 10.8 TL (Navigation) Tj T* ET
 .7 w
 n 48 578.8898 m 547.2756 578.8898 l S
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (Connected four source STLs \002 composed working models, a dental and maxillofacial landmark step that) Tj T* ET
+BT 1 0 0 1 48 554.8898 Tm /F2+0 10 Tf 12 TL (Composed working models from four source STLs and connected, in one Custom App, a dental and) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (integrates a hospital-provided AI anatomical-landmark detection model as a separate process, anatomical) Tj T* ET
+BT 1 0 0 1 48 538.8898 Tm /F2+0 10 Tf 12 TL (maxillofacial landmark step that integrates a hospital-provided AI anatomical-landmark detection model as a) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (frames, automatic occlusion, 6-DOF adjustment, contact analysis, RMSE/Gap/FRE evaluation, and export in) Tj T* ET
+BT 1 0 0 1 48 522.8898 Tm /F2+0 10 Tf 12 TL (separate process, anatomical frames, automatic occlusion, 6-DOF adjustment, contact analysis,) Tj T* ET
 .333333 .333333 .333333 rg
-BT 1 0 0 1 48 506.8898 Tm /F2+0 10 Tf 12 TL (one Custom App.) Tj T* ET
+BT 1 0 0 1 48 506.8898 Tm /F2+0 10 Tf 12 TL (RMSE/Gap/FRE evaluation, and export.) Tj T* ET
 q
 499.2756 0 0 239.2362 48 245.6535 cm
 /FormXob.ed711ded2cd7bb7696da03e17dc3d2e1 Do
@@ -1908,11 +1908,11 @@ xref
 0001340456 00000 n 
 0001340986 00000 n 
 0001341079 00000 n 
-0001344534 00000 n 
-0001351732 00000 n 
-0001362295 00000 n 
-0001370779 00000 n 
-0001374255 00000 n 
+0001344539 00000 n 
+0001351737 00000 n 
+0001362300 00000 n 
+0001370784 00000 n 
+0001374260 00000 n 
 trailer
 <<
 /ID 
@@ -1924,5 +1924,5 @@ trailer
 /Size 42
 >>
 startxref
-1377869
+1377874
 %%EOF
