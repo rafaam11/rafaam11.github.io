@@ -9,7 +9,7 @@
   'use strict';
   if (!S) return;
   S.register('occlusion', {
-    target: [0, -1.4, 0], dist: 74, yaw: 0, pitch: 0.4, fov: 30, autoYaw: 0.01,
+    target: [0, -1.4, 0], dist: 74, yaw: 0, pitch: 0.4, fov: 30, autoYaw: 0.01, ground: false,
     loop: 11,
     steps: [
       { id: 'landmarks', t0: 0, t1: 2.4, label: { ko: '치아 랜드마크', en: 'Tooth landmarks' } },
@@ -259,7 +259,7 @@
 
       D.labels(box, [
         { t: { ko: '치아 랜드마크<small>상악 15 · 하악 15</small>', en: 'Tooth landmarks<small>15 upper · 15 lower</small>' }, c: 's', obj: 'dent', ph: '1' },
-        { t: { ko: '하악 치열<small>자동 교합 · 6-DOF 조정</small>', en: 'Lower dentition<small>Automatic occlusion · 6-DOF adjustment</small>' }, c: 's o', obj: 'low', ph: '2' },
+        { t: { ko: '하악 치열<small>자동 교합 · 6-DOF 조정</small>', en: 'Lower dentition<small>Automatic occlusion · 6-DOF adjustment</small>' }, c: 's o', obj: 'low', off: [0, -26, 0], ph: '2' },
         { t: { ko: '접촉 상태와 거리', en: 'Contact state and distance' }, c: 's r', obj: 'low', ph: '3' }
       ]);
 

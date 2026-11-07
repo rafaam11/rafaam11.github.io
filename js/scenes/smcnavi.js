@@ -7,7 +7,7 @@
   'use strict';
   if (!S) return;
   S.register('smcnavi', {
-    target: [42, 8, 55], dist: 245, yaw: -0.5, pitch: 0.4, fov: 30, autoYaw: 0.015,
+    target: [42, 8, 55], dist: 245, yaw: -0.5, pitch: 0.4, fov: 30, autoYaw: 0.015, ground: false,
     loop: 9,
     steps: [
       { id: 'chain', t0: 0, t1: 4, label: { ko: '환자–CT 좌표 체인', en: 'Patient–CT transform chain' } },

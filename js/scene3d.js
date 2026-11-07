@@ -216,13 +216,14 @@
     geo.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
     geo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
     geo.setIndex(I);
-    geo.type = 'CircleGeometry';             // a flat disc as far as isFlat() and the tests are concerned
+    geo.name = 'floor-plate';
     const m = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false, fog: false });
     m.userData.lin = true;
     const plate = new THREE.Mesh(geo, m);
     plate.rotation.x = -Math.PI / 2;
     plate.position.set(center.x, y, center.z);
     plate.userData.noShadow = true;
+    plate.userData.kind = 'floor-plate';
     return plate;
   }
 
@@ -245,7 +246,7 @@
     return out;
   }
 
-  function isFlat(o) { return o.geometry && /Plane|Circle/.test(o.geometry.type); }
+  function isFlat(o) { return !!o.geometry && (/Plane|Circle/.test(o.geometry.type) || o.userData.kind === 'floor-plate'); }
   function shown(o) { for (; o; o = o.parent) if (!o.visible) return false; return true; }
 
   // ---- step buttons: div.view3d__steps > numbered buttons + a polite live label of the current step ------

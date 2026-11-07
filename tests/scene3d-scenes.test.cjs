@@ -226,7 +226,8 @@ test('prepareMaterials linearizes once, honours gltf, flags shadows and returns 
 test('floorPlate fades from a light grey centre to the page white at the rim', () => {
   const { S, THREE } = ko;
   const plate = S.floorPlate(THREE, new THREE.Vector3(5, 0, 7), -3, 100);
-  assert.equal(plate.geometry.type, 'CircleGeometry');
+  assert.equal(plate.userData.kind, 'floor-plate');
+  assert.equal(plate.geometry.type, 'BufferGeometry', 'honest geometry type');
   assert.equal(plate.material.toneMapped, false);
   assert.equal(plate.material.vertexColors, true);
   assert.equal(plate.userData.noShadow, true);
@@ -298,6 +299,8 @@ const BATCH_A = {
     ['register', 0, 4.2, '랜드마크·ICP 정합', 'Landmark + ICP registration', '1'],
     ['align', 4.6, 9, '로봇 연동 코일 정렬', 'Coil alignment via robot', '2']] }
 };
+// floating content (enlarged dentition, tracker) would read as lying on a floor: these scenes opt out of the plate
+const GROUND_OFF = new Set(['occlusion', 'smcnavi']);
 const LABEL_CLASSES = new Set(['s', 's c', 's n', 's o', 's r', 's g']);
 
 function snapshot(built) {
@@ -347,7 +350,9 @@ for (const [name, spec] of Object.entries(BATCH_A)) {
     assert.equal(opts.fov, 30);
     assert.ok(opts.pitch >= 0.35 && opts.pitch <= 0.45, `pitch ${opts.pitch}`);
     assert.ok(opts.autoYaw === undefined || (opts.autoYaw >= 0.01 && opts.autoYaw <= 0.06));
-    for (const key of ['exposure', 'env', 'groundShadow', 'shadowMap', 'stillTime', 'ground']) assert.ok(!(key in opts), `${name}: option ${key}`);
+    for (const key of ['exposure', 'env', 'groundShadow', 'shadowMap', 'stillTime']) assert.ok(!(key in opts), `${name}: option ${key}`);
+    if (GROUND_OFF.has(name)) assert.strictEqual(opts.ground, false, `${name}: floating content, no floor`);
+    else assert.ok(!('ground' in opts), `${name}: option ground`);
     const src = read(`js/scenes/${name}.js`);
     assert.match(src, /matLib\(/);
     assert.doesNotMatch(src, /0x9aa5b4/);
