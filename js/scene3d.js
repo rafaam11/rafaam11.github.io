@@ -227,11 +227,14 @@
     return plate;
   }
 
+  // scene radius: half the bbox diagonal, at least 40 (light rig distance and floor size)
+  function sceneRadius(THREE, bb) { return Math.max(40, bb.getSize(new THREE.Vector3()).length() / 2); }
+
   // floor plate (+ contact-shadow plane 0.1 above it) under the opaque bbox bb; ground === false adds neither
   function addFloor(THREE, scene, bb, opts, shadowOn) {
     const out = { plate: null, shadow: null };
     if (opts.ground === false || bb.isEmpty()) return out;
-    const c = bb.getCenter(new THREE.Vector3()), R = Math.max(40, bb.getSize(new THREE.Vector3()).length() / 2);
+    const c = bb.getCenter(new THREE.Vector3()), R = sceneRadius(THREE, bb);
     out.plate = floorPlate(THREE, c, bb.min.y - 0.4, R * 3);
     out.plate.renderOrder = -1;
     scene.add(out.plate);
@@ -380,7 +383,7 @@
       // after build: linear colours, shadow flags, then the light rig and the floor fitted to the content
       const bb = prepareMaterials(scene, 1);
       if (bb.isEmpty()) bb.set(new THREE.Vector3(-100, -100, -100), new THREE.Vector3(100, 100, 100));
-      const c = bb.getCenter(new THREE.Vector3()), R = Math.max(40, bb.getSize(new THREE.Vector3()).length() / 2);
+      const c = bb.getCenter(new THREE.Vector3()), R = sceneRadius(THREE, bb);
       const kd = new THREE.Vector3(0.45, 1, 0.55).normalize();
       key.position.copy(c).addScaledVector(kd, R * 2.2); key.target.position.copy(c);
       fill.position.copy(c).add(new THREE.Vector3(-1, 0.4, 0.3).multiplyScalar(R * 2));

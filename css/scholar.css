@@ -190,7 +190,7 @@
 .view3d__step[aria-pressed="true"] { border-color: var(--sc-link); background: var(--sc-link); color: var(--sc-bg); }
 .view3d__step.is-planned { border-style: dashed; }
 .view3d__step:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 2px; }
-.view3d__step-label { min-width: 0; margin-left: .2rem; overflow: hidden; color: var(--sc-ink); font-size: .8rem; text-overflow: ellipsis; white-space: nowrap; }
+.view3d__step-label { min-width: 0; margin-left: .2rem; padding-right: .4rem; overflow: hidden; color: var(--sc-ink); font-size: .8rem; text-overflow: ellipsis; white-space: nowrap; }
 @media print { .view3d canvas, .view3d .lb, .view3d .lead3d, .view3d .readout, .view3d__reset, .view3d__steps, .view3d__hint { display: none !important; } .view3d > img { display: block !important; } }
 
 /* Product-console cases: one dark desktop surface, then a light API-to-application narrative. */

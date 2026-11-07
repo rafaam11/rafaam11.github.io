@@ -149,7 +149,7 @@
         { t: { ko: 'TMS 코일', en: 'TMS coil' }, c: 's n', obj: 'coil', off: [0, 10, 0], ph: '2' },
         { t: { ko: '광학 트래커', en: 'Optical tracker' }, c: 's n', obj: 'tracker', off: [0, 6, 0], ph: '1' },
         { t: { ko: '로봇 연동', en: 'Robot integration' }, c: 's o', obj: 'elbow', off: [0, 0, 0], ph: '2' },
-        { t: { ko: '머리 마커', en: 'Head marker' }, c: 's', obj: 'hm', off: [0, 2, 0], ph: '1' }
+        { t: { ko: '환자 마커', en: 'Patient marker' }, c: 's', obj: 'hm', off: [0, 2, 0], ph: '1' }
       ]);
 
       const T = 11, tmpA = new THREE.Vector3(), wa = new THREE.Vector3(), wb = new THREE.Vector3();
@@ -161,7 +161,6 @@
         const a = OR[0], b = OR[1], ch = sh => Math.round(((a >> sh) & 255) * (1 - k) + ((b >> sh) & 255) * k);
         return (ch(16) << 16) | (ch(8) << 8) | ch(0);
       };
-      const lmTxt = S.t({ ko: '랜드마크', en: 'Landmarks' });
       const icpTxt = n => S.t({ ko: 'ICP 반복 ' + n, en: 'ICP iteration ' + n });
       const alignTxt = n => S.t({ ko: '표적 ' + n, en: 'target ' + n });
       // timeline: [end time, from pose, to pose]
@@ -207,7 +206,7 @@
           const active = stage2 ? (u > 0.5 || k1 === k0 ? k1 : k0) : -1;
           dots.forEach((d, i) => d.scale.setScalar(i === active - 1 ? 1.6 : 1));
           box.dataset.ph = t >= 4.6 ? 2 : 1;
-          const m = stage2 ? alignTxt(active >= 1 ? active : (t < 6.1 ? 1 : 2)) : (t < 1.4 ? lmTxt : icpTxt(Math.max(1, n)));
+          const m = stage2 ? alignTxt(active >= 1 ? active : (t < 6.1 ? 1 : 2)) : (t < 1.4 ? '' : icpTxt(Math.max(1, n)));
           if (read && m !== last) { read.textContent = m; last = m; }
         }
       };
