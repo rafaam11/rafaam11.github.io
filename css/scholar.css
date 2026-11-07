@@ -159,6 +159,7 @@
 .sc-callout-pin { position: absolute; display: block; width: 1.35rem; height: 1.35rem; border: 1px solid var(--sc-bg); border-radius: 50%; background: var(--sc-link); color: var(--sc-bg); font-size: .75rem; font-weight: 600; line-height: calc(1.35rem - 2px); text-align: center; transform: translate(-50%, -50%); pointer-events: none; }
 .sc-callout-list { margin: .5rem 0 0; padding-left: 1.4rem; color: var(--sc-muted); font-size: var(--sc-meta); line-height: 1.5; }
 .sc-callout-list li::marker { color: var(--sc-link); font-weight: 600; }
+@media print { .sc-callout-pin { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 .sc-gallery { margin-top: 2.5rem; }
 .sc-gallery__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1.25rem; }
 .sc-figure--gallery { margin: 0; }
@@ -262,6 +263,7 @@
 .sc-product-application__screens .sc-product-figure .sc-callout-frame { border: 1px solid var(--sc-rule); background: #f4f6f8; }
 .sc-product-console .sc-product-figure:has(.sc-callout-frame) { grid-template-rows: auto; align-content: start; }
 .sc-product-console .sc-callout-list { color: #adbbc6; }
+.sc-product-console .sc-callout-list li::marker { color: var(--pc-signal); }
 .sc-product-application[data-track="industrial"] .sc-product-application__screens { grid-template-columns: minmax(240px, 420px); }
 .sc-product-limits { padding-bottom: .5rem; }
 /* End product-console case. */

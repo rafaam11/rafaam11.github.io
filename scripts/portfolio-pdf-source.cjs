@@ -16,10 +16,14 @@ const PDF_SOURCE_SITE = Object.freeze({
 const WEB_ONLY_PROJECT_FIELDS = Object.freeze(['scene3d', 'web']);
 
 // Screenshot callouts sit on individual media items (lead, gallery, story media, references), so they are removed at any depth.
+// Image items also carry web-only `width`/`height` (intrinsic pixel size); video items keep none (their size lives in videoPolicy).
 function withoutCallouts(value) {
   if (Array.isArray(value)) return value.map(withoutCallouts);
   if (!value || typeof value !== 'object') return value;
-  return Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'callouts').map(([key, inner]) => [key, withoutCallouts(inner)]));
+  const isImage = value.type === 'image';
+  return Object.fromEntries(Object.entries(value)
+    .filter(([key]) => key !== 'callouts' && !(isImage && (key === 'width' || key === 'height')))
+    .map(([key, inner]) => [key, withoutCallouts(inner)]));
 }
 
 function pdfProject(project) {

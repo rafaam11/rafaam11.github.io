@@ -300,6 +300,16 @@ test('case pages carry wide and tall flow SVGs with a hidden sentence and unique
           const label = decode(m[0].match(/<text class="sc-flow-svg__label">([\s\S]*?)<\/text>/)[1].replace(/<[^>]+>/g, ' '));
           assert.ok(squash(decode(hidden)).includes(squash(label)), `${slug} ${locale}: hidden sentence has ${label}`);
         }
+        const spoken = squash(decode(hidden));
+        for (const m of figure.matchAll(/<text class="sc-flow-svg__detail">([\s\S]*?)<\/text>/g)) {
+          const detail = squash(decode(m[1].replace(/<[^>]+>/g, ' ')));
+          assert.ok(spoken.includes(detail), `${slug} ${locale}: hidden sentence has node detail "${detail}"`);
+        }
+        // Edges are spoken in words: the only arrow glyphs left are the ones inside node text itself (counted once, from the wide SVG).
+        const glyphs = (text) => (text.match(/[→⇄]/g) || []).length;
+        const wide = figure.slice(0, figure.indexOf('sc-flow-svg--tall'));
+        const nodeTexts = [...wide.matchAll(/<text class="sc-flow-svg__(?:label|detail)">([\s\S]*?)<\/text>/g)].map((m) => decode(m[1].replace(/<[^>]+>/g, ' '))).join(' ');
+        assert.equal(glyphs(decode(hidden)), glyphs(nodeTexts), `${slug} ${locale}: no edge arrow glyphs in the hidden sentence`);
       }
       if (legacyKinds[slug]) {
         const title = project.pdfSequence.diagram.translations[locale].title;
@@ -333,7 +343,7 @@ test('product-console 3D poster is lazy because it sits below the fold', () => {
   }
 });
 
-test('tall flow layout is narrow enough that detail and edge text stay legible at 390px', () => {
+test('tall flow viewBox width keeps the computed 390px text size of detail and edge text at 9px or more', () => {
   // Rendered px = user-unit size x (350px content width / viewBox width); 9px floor at a 390px viewport.
   for (const locale of ['ko', 'en']) {
     for (const item of realDiagrams()) {
@@ -532,7 +542,8 @@ test('each case but ai-build-lab carries callouts on exactly one pinned image', 
   assert.equal(Object.keys(calloutTargets).length, 8);
 });
 
-test('callout labels avoid customer names, internal codes and percentages', () => {
+// Screens only the callout labels for the word "고객사" and digit-percent patterns; partner-name screening is the --private validator.
+test('callout labels contain no "고객사" and no digit-percent pattern', () => {
   const banned = /고객사|\d\s*%/;
   for (const project of data.projects) {
     for (const item of collectCallouts(project)) {
@@ -555,4 +566,97 @@ test('published callouts render as pins and a label list on every case page', ()
       assert.deepEqual(items, item.callouts.map((c) => esc(c.translations[locale].label)), `${id} ${locale}: list`);
     }
   }
+});
+
+// ---- Final review fixes ----
+test('flowReadableText speaks unlabelled edges in words, never as arrow glyphs', () => {
+  const names = ['A', 'B', 'C', 'D'];
+  const diagram = (kind) => ({ kind, nodes: names, translations: { ko: { title: 't', nodes: names }, en: { title: 't', nodes: names } } });
+  const sync = (locale) => render.flowReadableText(render.normalizeDiagram(diagram('sync-topology'), locale));
+  assert.match(sync('ko'), /A와 B 양방향/);
+  assert.match(sync('en'), /A and B, both ways/);
+  const loop = render.flowReadableText(render.normalizeDiagram(diagram('optimization-loop'), 'en'));
+  assert.match(loop, /A to B/);
+  assert.match(render.flowReadableText(render.normalizeDiagram(diagram('optimization-loop'), 'ko')), /A에서 B로/);
+  assert.doesNotMatch(sync('ko') + sync('en') + loop, /[→⇄]/);
+});
+
+test('system-flow node details are spoken as "label (detail)"', () => {
+  const item = realDiagrams().find((d) => d.system);
+  for (const locale of ['ko', 'en']) {
+    const model = render.normalizeDiagram(item.diagram, locale);
+    const text = render.flowReadableText(model);
+    const withDetail = model.nodes.filter((n) => n.detail);
+    assert.ok(withDetail.length, 'fixture has node details');
+    for (const n of withDetail) assert.ok(text.includes(n.label + ' (' + n.detail + ')'), `${locale}: ${n.label}`);
+  }
+});
+
+test('surgical-navigation lead caption keeps the 2024-2025 context; other cases use mediaCaption', () => {
+  const capOf = (html) => html.match(/<figcaption><span class="sc-figure__label">[^<]*<\/span> ([^<]*)<\/figcaption>/)[1];
+  for (const locale of ['ko', 'en']) {
+    const html = render.caseStudyHtml(data, 'surgical-navigation', '', true, locale);
+    assert.match(capOf(html), /2024–2025/, locale);
+    assert.ok(capOf(html).includes(locale === 'ko' ? 'HoloLens 확장(2024–2025, 종료)' : 'HoloLens extension (2024–2025, ended)'));
+    // the 3D scene shows only the transform chain, so its short web caption names no HoloLens date
+  }
+  // without leadCaption the long mediaCaption is used, and nothing else changes
+  const copy = clone(data);
+  const nav = copy.projects.find((p) => p.slug === 'surgical-navigation');
+  delete nav.web.ko.leadCaption; delete nav.web.en.leadCaption;
+  const html = render.caseStudyHtml(copy, 'surgical-navigation', '', true, 'ko');
+  assert.ok(capOf(html).includes(nav.translations.ko.mediaCaption));
+  for (const slug of all.filter((s) => s !== 'surgical-navigation')) {
+    assert.equal(render.caseStudyHtml(copy, slug, '', true, 'en'), render.caseStudyHtml(data, slug, '', true, 'en'), slug);
+  }
+});
+
+test('leadCaption is web-only, budgeted and stripped from the PDF digest', () => {
+  const copy = clone(data);
+  const web = copy.projects.find((p) => p.slug === 'surgical-navigation').web;
+  assert.deepEqual(errorsOf(copy), []);
+  web.ko.leadCaption = 'x'.repeat(61);
+  assert.ok(errorsOf(copy).some((e) => /leadCaption/.test(e) && /exceeds/.test(e)));
+  web.ko.leadCaption = '짧은 캡션입니다.';
+  assert.ok(errorsOf(copy).some((e) => /leadCaption/.test(e) && /noun phrase/.test(e)));
+  const evidence = { items: [] }; const cv = { identity: {} };
+  const source = canonicalPdfSource(data, evidence, cv);
+  assert.doesNotMatch(JSON.stringify(source), /leadCaption/);
+  const other = clone(data);
+  other.projects.find((p) => p.slug === 'surgical-navigation').web.ko.leadCaption = '다른 캡션';
+  assert.equal(pdfSourceDigest(canonicalPdfSource(other, evidence, cv)), pdfSourceDigest(source));
+});
+
+test('rtms-navigation bullseye callout label does not clash with the gallery caption', () => {
+  const item = findItem(data.projects, 'rtms-navigation-lead-01');
+  assert.equal(item.callouts[2].translations.en.label, 'Bullseye view');
+});
+
+test('callout images carry intrinsic width and height; the numbers are web-only and validated', () => {
+  for (const [slug, id] of Object.entries(calloutTargets)) {
+    const item = findItem(data.projects, id);
+    assert.ok(Number.isInteger(item.width) && item.width > 0 && Number.isInteger(item.height) && item.height > 0, `${id}: stored size`);
+    for (const locale of ['ko', 'en']) {
+      const figure = figureOf(render.caseStudyHtml(data, slug, '', true, locale), id);
+      assert.match(figure, new RegExp('<img [^>]*width="' + item.width + '" height="' + item.height + '"'), `${id} ${locale}`);
+    }
+  }
+  const copy = clone(data);
+  findItem(copy.projects, 'mandibular-fracture-lead-01').width = 0;
+  assert.ok(errorsOf(copy).some((e) => /width/.test(e)));
+  const half = clone(data);
+  delete findItem(half.projects, 'mandibular-fracture-lead-01').height;
+  assert.ok(errorsOf(half).some((e) => /width and height/.test(e)));
+  const evidence = { items: [] }; const cv = { identity: {} };
+  const bare = clone(data);
+  collectCallouts(bare.projects).forEach((i) => { delete i.width; delete i.height; });
+  assert.equal(pdfSourceDigest(canonicalPdfSource(data, evidence, cv)), pdfSourceDigest(canonicalPdfSource(bare, evidence, cv)));
+  assert.doesNotMatch(JSON.stringify(canonicalPdfSource(data, evidence, cv).projects.find((p) => p.slug === 'rtms-navigation')), /"width":1471/);
+});
+
+test('console callout numerals use the accent token and pins survive printing', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'css', 'scholar.css'), 'utf8');
+  assert.match(css, /\.sc-product-console \.sc-callout-list li::marker \{ color: var\(--pc-signal\);/);
+  assert.match(css, /@media print \{[^}]*\.sc-callout-pin \{[^}]*print-color-adjust: exact;[^}]*-webkit-print-color-adjust: exact;/);
+  assert.ok(css.split(/\r?\n/).length <= 420);
 });
