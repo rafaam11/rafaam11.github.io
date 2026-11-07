@@ -7,7 +7,7 @@
   'use strict';
   if (!S) return;
   S.register('ms-frac', {
-    target: [0.4, -3.8, 3.5], dist: 30, yaw: 0.5, pitch: 0.3, fov: 30, autoYaw: 0.015,
+    target: [0.4, -3.8, 3.5], dist: 30, yaw: 0.5, pitch: 0.4, fov: 30, autoYaw: 0.015,
     loop: 8,
     steps: [
       { id: 'features', t0: 0, t1: 1.8, label: { ko: '치아·골절 단면 특징점', en: 'Tooth and fracture features' } },
@@ -15,7 +15,7 @@
       { id: 'reduce', t0: 4.8, t1: 5.5, label: { ko: '교합 기준 정복', en: 'Occlusion-based reduction' } },
       { id: 'distance', t0: 5.5, t1: 7.0, label: { ko: '표면 거리 비교', en: 'Surface-distance check' } }
     ],
-    fit: { box: [[-6.4, -7.8, -1.6], [7.4, 2.2, 10]], fill: 0.92, pad: [18, 0, -14, 0] },
+    fit: { box: [[-6, -7.4, -0.8], [7.2, 2.4, 9.6]], fill: 0.95 },
     build(scene, THREE, box) {
       const D = S, V = (a) => new THREE.Vector3().fromArray(a);
       const mpts = [[-5.3, 0.6, 0], [-5.1, -2.6, 0.3], [-4.8, -4.6, 1.4], [-4.1, -5.6, 4.4], [-2.3, -6.0, 7.6], [0, -6.2, 8.7], [2.3, -6.0, 7.6], [4.1, -5.6, 4.4], [4.8, -4.6, 1.4], [5.1, -2.6, 0.3], [5.3, 0.6, 0]].map(V);
@@ -27,8 +27,8 @@
 
       const arc = (y, zb, zf, xw) => new THREE.CatmullRomCurve3([[-xw, y, zb], [-xw * 0.85, y, (zb + zf) / 2], [-xw * 0.45, y, zf - 0.6], [0, y, zf], [xw * 0.45, y, zf - 0.6], [xw * 0.85, y, (zb + zf) / 2], [xw, y, zb]].map(V));
 
-      const mA = D.mat(THREE, 0x1e5aa8, { rough: 0.5 }), mB = D.mat(THREE, 0x2fa36b, { rough: 0.5 });
-      const mX = D.mat(THREE, 0xd3dae5, { rough: 0.5, opacity: 0.8 }), mT = D.mat(THREE, 0xfbfaf4, { rough: 0.35 });
+      const mA = D.matLib(THREE, 'plastic', { color: 0x1e5aa8 }), mB = D.matLib(THREE, 'plastic', { color: 0x2fa36b });
+      const mX = D.matLib(THREE, 'plastic', { color: 0xd3dae5, opacity: 0.8 }), mT = D.matLib(THREE, 'plastic', { color: 0xfbfaf4 });
       const lmk = new THREE.MeshBasicMaterial({ color: 0xe5484d, transparent: true, toneMapped: false });
       const fxm = new THREE.MeshBasicMaterial({ color: 0x00b7ff, transparent: true, toneMapped: false });
 

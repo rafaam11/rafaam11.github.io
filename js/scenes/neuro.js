@@ -8,28 +8,27 @@
   'use strict';
   if (!S) return;
   S.register('neuro', {
-    target: [16, 106, 30], dist: 290, yaw: 0.5, pitch: 0.16, fov: 30, groundShadow: 0.18, autoYaw: 0.02, stillTime: 2.6,
-    fit: { box: [[-50, 98, -10], [46, 152, 60]], fill: 0.98 },
+    target: [8, 76, 0], dist: 330, yaw: 0.5, pitch: 0.4, fov: 30, autoYaw: 0.02,
+    loop: 11,
+    steps: [
+      { id: 'register', t0: 0, t1: 4.2, label: { ko: '랜드마크·ICP 정합', en: 'Landmark + ICP registration' } },
+      { id: 'align', t0: 4.6, t1: 9, label: { ko: '로봇 연동 코일 정렬', en: 'Coil alignment via robot' } }
+    ],
+    fit: { box: [[-52, 0, -62], [68, 152, 62]], fill: 0.98 },
     build(scene, THREE, box) {
       const D = S, V = (x, y, z) => new THREE.Vector3(x, y, z);
-      const steel = D.mat(THREE, 0x9aa5b4, { rough: 0.3, metal: 0.6 });
-      const skinM = D.mat(THREE, 0xe7bf9f, { rough: 0.7 });
+      const steel = D.matLib(THREE, 'steel');
+      const skinM = D.matLib(THREE, 'skin');
       const cloth = D.mat(THREE, 0x9fb4cf, { rough: 0.85 });
       const dk = D.mat(THREE, 0x2d3440, { rough: 0.5 });
 
-      // ---- floor, treatment chair, seated patient
-      scene.add(D.mesh(THREE, D.rbox(THREE, 230, 2, 230, 1), D.mat(THREE, 0xeef2f6, { rough: 0.9 }), 22, -1, 20));
-      const chair = new THREE.Group(); scene.add(chair);
-      const cm = D.mat(THREE, 0x47556b, { rough: 0.6 });
-      chair.add(D.mesh(THREE, D.rbox(THREE, 46, 6, 46, 3), cm, 0, 41, 2));
-      chair.add(D.mesh(THREE, D.rbox(THREE, 44, 62, 5, 3), cm, 0, 78, -16));
-      chair.add(D.mesh(THREE, D.rbox(THREE, 24, 14, 5, 2), cm, 0, 118, -15));
-      chair.add(D.mesh(THREE, new THREE.CylinderGeometry(3, 3, 36, 14), steel, 0, 20, 0));
+      // ---- treatment chair (shared office chair plus armrests), seated patient; the engine adds the floor
+      const chair = D.chair(THREE); scene.add(chair);
+      const armM = D.matLib(THREE, 'anodized', { color: 0x4a5568 });
       [-1, 1].forEach(s => {
-        chair.add(D.mesh(THREE, D.rbox(THREE, 8, 4, 36, 2), cm, s * 25, 58, 12));
+        chair.add(D.mesh(THREE, D.rbox(THREE, 8, 4, 36, 2), armM, s * 25, 58, 12));
         chair.add(D.mesh(THREE, D.rbox(THREE, 3, 14, 3, 1), steel, s * 25, 50, 2));
       });
-      chair.add(D.mesh(THREE, new THREE.CylinderGeometry(21, 21, 3, 32), steel, 0, 1.5, 0));
       const body = new THREE.Group(); scene.add(body);
       const tg = new THREE.LatheGeometry([[0.001, 44], [0.78, 45], [0.82, 60], [0.9, 76], [0.97, 88], [0.92, 96], [0.62, 101], [0.3, 104], [0.001, 105]].map(p => new THREE.Vector2(p[0], p[1])), 40);
       const torso = new THREE.Mesh(tg, cloth); torso.scale.set(21, 1, 12); torso.position.set(0, 0, -4); body.add(torso);
@@ -99,24 +98,34 @@
       const lmLinks = D.segs(THREE, 3, 0xe07b22, 0.9); scene.add(lmLinks);
 
       // tracked pointer: during registration its tip rests on the face, moving between a few points
-      const steelP = D.mat(THREE, 0x9aa5b4, { rough: 0.3, metal: 0.6 });
-      const pointer = new THREE.Group(); scene.add(pointer);
-      const PL = 30;
-      pointer.add(D.mesh(THREE, new THREE.CylinderGeometry(0.45, 0.45, PL, 12), steelP, 0, 2 + PL / 2, 0));
-      pointer.add(D.mesh(THREE, new THREE.ConeGeometry(0.45, 2, 12), D.mat(THREE, 0xe07b22, { rough: 0.4 }), 0, 1, 0).rotateX(Math.PI));
-      const pmk = D.marker4(THREE, 0.9, 0x4a5568); pmk.position.set(0, 2 + PL + 1, 0); pmk.rotation.x = -Math.PI / 2; pointer.add(pmk);
+      const ptr = D.pointer(THREE, { len: 30, marker: 0.9 });
+      const pointer = ptr.root, pmk = ptr.marker; scene.add(pointer);
       const PT = [surf(-0.5, 0.05, 0.86), surf(0.15, 0.45, 0.88), surf(0.55, -0.15, 0.82)];
       const pdir = V(0.95, 0.05, 0.32).normalize(), upY = V(0, 1, 0);
       const tipAt = V(0, 0, 0);
 
       // ---- generic arm on a cart + figure-eight TMS coil
       const RB = V(46, 40, -34);
-      scene.add(D.mesh(THREE, D.rbox(THREE, 38, 40, 40, 3), D.mat(THREE, 0xa3afc0, { rough: 0.4, metal: 0.3 }), RB.x, 20, RB.z));
+      const cartM = D.matLib(THREE, 'anodized', { color: 0xa3afc0 });
+      scene.add(D.mesh(THREE, D.rbox(THREE, 38, 34, 40, 3), cartM, RB.x, 23, RB.z));
+      [-1, 1].forEach(sx => {
+        scene.add(D.mesh(THREE, new THREE.CylinderGeometry(0.9, 0.9, 7, 10), steel, RB.x + sx * 13, 33, RB.z - 23.5).rotateX(Math.PI / 2));   // handle posts
+        [-1, 1].forEach(sz => {
+          const w = D.mesh(THREE, new THREE.CylinderGeometry(3, 3, 2.4, 16), D.matLib(THREE, 'anodized'), RB.x + sx * 15, 3, RB.z + sz * 15);
+          w.rotation.z = Math.PI / 2; scene.add(w);                                                                                       // casters
+          scene.add(D.mesh(THREE, new THREE.CylinderGeometry(0.8, 0.8, 3, 8), steel, RB.x + sx * 15, 6.2, RB.z + sz * 15));
+        });
+      });
+      scene.add(D.mesh(THREE, new THREE.CylinderGeometry(0.9, 0.9, 26 + 1.8, 10), steel, RB.x, 33, RB.z - 27).rotateZ(Math.PI / 2));          // handle bar
+
       const arm = D.arm6(THREE, { L: [9, 58, 52, 10, 9, 7] });
       arm.root.position.copy(RB); scene.add(arm.root);
       const coil = new THREE.Group(); arm.flange.add(coil);
-      const ringM = D.mat(THREE, 0x1e5aa8, { rough: 0.35 });
-      [-1, 1].forEach(s => coil.add(D.mesh(THREE, new THREE.TorusGeometry(4.2, 1.3, 14, 36), ringM, s * 4.4, 10, 0).rotateX(Math.PI / 2)));
+      const ringM = D.matLib(THREE, 'plastic', { color: 0x1e5aa8 });
+      // figure-eight coil: two flat oval windings that overlap at the centre
+      const wing = new THREE.TorusGeometry(4.2, 1.2, 14, 40).rotateX(Math.PI / 2).scale(0.92, 0.5, 1.14);
+      const lid = new THREE.CylinderGeometry(1, 1, 0.6, 32).scale(3.9, 1, 4.6);
+      [-1, 1].forEach(s => { coil.add(D.mesh(THREE, wing, ringM, s * 4.5, 10, 0)); coil.add(D.mesh(THREE, lid, ringM, s * 4.5, 10.1, 0)); });
       coil.add(D.mesh(THREE, D.rbox(THREE, 3, 2.6, 3.2, 1), dk, 0, 10, 0));
       coil.add(D.mesh(THREE, new THREE.CylinderGeometry(1.3, 1.3, 9, 14), dk, 0, 5, 0));
       const cmk = D.marker4(THREE, 1.1, 0x4a5568); cmk.position.set(0, 4, -5.2); cmk.rotation.y = Math.PI; coil.add(cmk);
@@ -152,10 +161,9 @@
         const a = OR[0], b = OR[1], ch = sh => Math.round(((a >> sh) & 255) * (1 - k) + ((b >> sh) & 255) * k);
         return (ch(16) << 16) | (ch(8) << 8) | ch(0);
       };
-      const reg = S.t({ ko: '① 랜드마크+ICP 정합', en: '① Landmark + ICP registration' });
-      const lmTxt = reg + S.t({ ko: ' · 랜드마크', en: ' · landmarks' });
-      const icpTxt = n => reg + S.t({ ko: ' · ICP 반복 ' + n, en: ' · ICP iteration ' + n });
-      const alignTxt = n => S.t({ ko: '② 코일 정렬 · 표적 ' + n, en: '② Coil alignment · target ' + n });
+      const lmTxt = S.t({ ko: '랜드마크', en: 'Landmarks' });
+      const icpTxt = n => S.t({ ko: 'ICP 반복 ' + n, en: 'ICP iteration ' + n });
+      const alignTxt = n => S.t({ ko: '표적 ' + n, en: 'target ' + n });
       // timeline: [end time, from pose, to pose]
       const SEG = [[4.6, 0, 0], [6.1, 0, 1], [7.0, 1, 1], [8.5, 1, 2], [9.4, 2, 2], [10.6, 2, 0], [11, 0, 0]];
       let last = '';
@@ -198,7 +206,7 @@
           solve();
           const active = stage2 ? (u > 0.5 || k1 === k0 ? k1 : k0) : -1;
           dots.forEach((d, i) => d.scale.setScalar(i === active - 1 ? 1.6 : 1));
-          box.dataset.ph = stage2 ? 2 : 1;
+          box.dataset.ph = t >= 4.6 ? 2 : 1;
           const m = stage2 ? alignTxt(active >= 1 ? active : (t < 6.1 ? 1 : 2)) : (t < 1.4 ? lmTxt : icpTxt(Math.max(1, n)));
           if (read && m !== last) { read.textContent = m; last = m; }
         }

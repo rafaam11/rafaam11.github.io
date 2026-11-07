@@ -7,8 +7,13 @@
   'use strict';
   if (!S) return;
   S.register('smcnavi', {
-    target: [42, 8, 55], dist: 245, yaw: -0.5, pitch: 0.2, fov: 28, autoYaw: 0.015, ground: false, stillTime: 5.6,
-    fit: { box: [[-20, -19, -16], [70, 36, 84]], fill: 0.98, pad: [6, 0, -110, 0] },
+    target: [42, 8, 55], dist: 245, yaw: -0.5, pitch: 0.4, fov: 30, autoYaw: 0.015,
+    loop: 9,
+    steps: [
+      { id: 'chain', t0: 0, t1: 4, label: { ko: '환자–CT 좌표 체인', en: 'Patient–CT transform chain' } },
+      { id: 'track', t0: 4.5, t1: 7.5, label: { ko: '도구·하악 추적', en: 'Tool and mandible tracking' } }
+    ],
+    fit: { box: [[-20, -15, -14], [74, 36, 80]], fill: 0.98 },
     build(scene, THREE, box) {
       const D = S, K = 2.2, V = THREE.Vector3;
       const sk = D.skull(THREE);
@@ -32,7 +37,7 @@
         return new V(c[0] + u.x * k, c[1] + u.y * k, c[2] + u.z * k).multiplyScalar(K);
       };
       const CR = [[0, 3, -1], [7.3, 7.6, 9.3]], FA = [[0, -2.6, 4.6], [5.4, 4.6, 4.4]];
-      const steel = D.mat(THREE, 0x9aa5b4, { rough: 0.3, metal: 0.6 });
+      const steel = D.matLib(THREE, 'steel');
       const rod = (a, b, r) => {
         const m = D.mesh(THREE, new THREE.CylinderGeometry(r, r, 1, 12), steel);
         const d = b.clone().sub(a);
@@ -54,7 +59,8 @@
       const mm = D.marker4(THREE, 0.34, 0x4a5568);
       const mmBase = new V(4.3, -7.5, 4.6), mmPos = new V(7.2, -7.2, 7.4);
       mm.position.copy(mmPos); mm.rotation.y = 0.8;
-      sk.mandible.add(rod(mmBase, mmPos, 0.25), mm);
+      const mmRod = rod(mmBase, mmPos, 0.25);
+      sk.mandible.add(mmRod, mm);
 
       // CT image volume around the skull
       const ctC = new V(0, -0.5, 2.5).multiplyScalar(K);
@@ -68,11 +74,10 @@
         surf(CR[0], CR[1], [-0.3, 0.5, 0.82]),
         surf(FA[0], FA[1], [0.4, -0.35, 0.85])
       ];
-      const pdir = new V(0.5, 0.42, 0.9).normalize(), PL = 36;
-      const shaft = D.mesh(THREE, new THREE.CylinderGeometry(0.7, 0.7, PL, 12), steel);
-      const ptip = D.mesh(THREE, new THREE.ConeGeometry(0.7, 3, 12), D.mat(THREE, 0xe07b22, { rough: 0.4 }));
-      scene.add(shaft, ptip);
-      const pm = D.marker4(THREE, 1.1, 0x4a5568); scene.add(pm);
+      const pdir = new V(0.5, 0.42, 0.9).normalize();
+      const ptr = D.pointer(THREE, { len: 36, marker: 1.1 });
+      scene.add(ptr.root);
+      const pm = ptr.marker;
       const pAx = D.axes(THREE, 5); scene.add(pAx);
       const tipObj = new THREE.Object3D(); scene.add(tipObj);
       const up = new V(0, 1, 0);
@@ -82,7 +87,7 @@
         camRef: D.dashLink(THREE, 0x00b7ff, 3), refCt: D.dashLink(THREE, 0x1e5aa8, 2.5),
         camPtr: D.dashLink(THREE, 0x00b7ff, 3), ptrTip: D.dashLink(THREE, 0xe07b22, 2)
       };
-      Object.keys(L).forEach(k => scene.add(L[k]));
+      Object.keys(L).forEach(k => { L[k].userData.link = k; scene.add(L[k]); });
 
       D.labels(box, [
         { t: { ko: '트래커', en: 'Tracker' }, c: 's n', at: [camPos.x, camPos.y + 5, camPos.z], ph: '1 2' },
@@ -94,7 +99,7 @@
 
       const read = box.querySelector('.readout');
       const opening = S.t({ ko: '하악 개구 ', en: 'Mandible opening ' });
-      const a = new V(), b = new V(), tp = new V(), pmPos = new V();
+      const a = new V(), b = new V(), tp = new V(), pmPos = new V(), pq = new THREE.Quaternion();
       const T = 9, ss = x => x * x * (3 - 2 * x);
       let last = '';
       return {
@@ -107,19 +112,23 @@
           a.copy(pts[i % 3]); b.copy(pts[(i + 1) % 3]);
           tp.lerpVectors(a, b, g).addScaledVector(pdir, 1.2 + 9 * Math.sin(Math.PI * g) + 0.4 * Math.sin(s * 5));
           tipObj.position.copy(tp);
-          ptip.position.copy(tp).addScaledVector(pdir, 1.5);
-          ptip.quaternion.setFromUnitVectors(up, pdir.clone().negate());
-          shaft.position.copy(tp).addScaledVector(pdir, 3 + PL / 2);
-          shaft.quaternion.setFromUnitVectors(up, pdir);
-          pmPos.copy(tp).addScaledVector(pdir, 3 + PL + 1);
-          pm.position.copy(pmPos); pm.lookAt(camPos);
-          pAx.position.copy(pmPos); pAx.quaternion.copy(pm.quaternion);
+          ptr.root.position.copy(tp);
+          ptr.root.quaternion.setFromUnitVectors(up, pdir);
+          pm.lookAt(camPos);
+          ptr.root.updateMatrixWorld(true);
+          pm.getWorldPosition(pmPos); pm.getWorldQuaternion(pq);
+          pAx.position.copy(pmPos); pAx.quaternion.copy(pq);
           scene.updateMatrixWorld(true);
           L.camRef.set(camPos, refPos);
           L.refCt.set(refPos, ctC);
           L.camPtr.set(camPos, pmPos);
           L.ptrTip.set(pmPos, tp);
-          box.dataset.ph = (s % T) < 4.5 ? 1 : 2;
+          // phase 1: tracker - reference - CT only; phase 2: tracker - pointer - tip and the mandible marker
+          const two = (s % T) >= 4.5;
+          box.dataset.ph = two ? 2 : 1;
+          L.camRef.visible = L.refCt.visible = !two;
+          L.camPtr.visible = L.ptrTip.visible = two;
+          ptr.root.visible = pAx.visible = mm.visible = mmRod.visible = two;
           if (read) {
             const m = opening + (sk.mandible.rotation.x * 180 / Math.PI).toFixed(1) + '°';
             if (m !== last) { read.textContent = m; last = m; }

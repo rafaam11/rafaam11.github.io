@@ -2,20 +2,29 @@
  * Left: a synthetic skull whose mandible follows the occlusion. Right: the same dentition enlarged.
  * Loop (11 s): (1) 15 upper + 15 lower tooth landmarks -> (2) occlusal alignment: automatic occlusion and
  * 6-DOF adjustment of the lower dentition -> (3) occlusion evaluation: contact state and distance colour.
- * Upper dentition fixed, lower dentition moves. Units mm, front = +z, up = +y.
+ * Upper dentition fixed, lower dentition moves. Units cm (the content is modelled in mm inside a 0.1-scaled group),
+ * front = +z, up = +y.
  */
 (function (S) {
   'use strict';
   if (!S) return;
   S.register('occlusion', {
-    target: [0, -14, 0], dist: 740, yaw: 0, pitch: 0.2, fov: 22, autoYaw: 0.01, ground: false, stillTime: 9.6,
-    fit: { box: [[-205, -60, -50], [288, 104, 80]], fill: 0.98, pad: [6, 0, 0, 0] },
+    target: [0, -1.4, 0], dist: 74, yaw: 0, pitch: 0.4, fov: 30, autoYaw: 0.01,
+    loop: 11,
+    steps: [
+      { id: 'landmarks', t0: 0, t1: 2.4, label: { ko: '치아 랜드마크', en: 'Tooth landmarks' } },
+      { id: 'align', t0: 2.4, t1: 7.5, label: { ko: '교합 정렬', en: 'Occlusal alignment' } },
+      { id: 'evaluate', t0: 7.6, t1: 9.6, label: { ko: '교합 평가', en: 'Occlusion evaluation' } }
+    ],
+    fit: { box: [[-20.5, -6, -5], [28.8, 10.4, 8]], fill: 0.98, pad: [6, 0, 0, 0] },
     build(scene, THREE, box) {
       const D = S, V = (x, y, z) => new THREE.Vector3(x, y, z);
       const sm = (a, b, x) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
       const lin = hex => new THREE.Color(hex).convertSRGBToLinear();
-      const bone = D.mat(THREE, 0xe8dcc3, { rough: 0.62 }), boneMx = D.mat(THREE, 0xead9b8, { rough: 0.6 }), boneMn = D.mat(THREE, 0xe9d6b2, { rough: 0.6 });
-      const dark = D.mat(THREE, 0x544a40, { rough: 1 }), enamel = D.mat(THREE, 0xf7f4ec, { rough: 0.28 });
+      // content is modelled in mm; the world group scales it to cm
+      const world = new THREE.Group(); world.scale.setScalar(0.1); scene.add(world);
+      const bone = D.matLib(THREE, 'bone'), boneMx = D.matLib(THREE, 'bone', { color: 0xead9b8 }), boneMn = D.matLib(THREE, 'bone', { color: 0xe9d6b2 });
+      const dark = D.mat(THREE, 0x544a40, { rough: 1 }), enamel = D.matLib(THREE, 'plastic', { color: 0xf7f4ec });
       const ell = (m, sx, sy, sz, x, y, z, seg) => { const o = D.mesh(THREE, new THREE.SphereGeometry(1, seg || 32, seg ? Math.round(seg * 0.7) : 22), m, x, y, z); o.scale.set(sx, sy, sz); return o; };
 
       // ---- teeth: procedural crowns per tooth type
@@ -125,7 +134,7 @@
       const gumBand = (Dn, y) => { const pts = Array.from({ length: 15 }, (_, i) => archAt(Dn.A, -Dn.thEnd + 2 * Dn.thEnd * i / 14).setY(y)); return sweep(pts, pts.map(() => V(0, 1, 0)), pts.map(() => 3.0), pts.map(() => 4.7), 80); };
 
       // ---- left: synthetic skull for context
-      const skull = new THREE.Group(); skull.position.set(-130, 0, 0); skull.rotation.y = 0.4; scene.add(skull);
+      const skull = new THREE.Group(); skull.position.set(-130, 0, 0); skull.rotation.y = 0.4; world.add(skull);
       {
         const g = new THREE.SphereGeometry(1, 56, 40), p = g.attributes.position;
         for (let i = 0; i < p.count; i++) {
@@ -177,8 +186,8 @@
       [-1, 1].forEach(s => { const c = ell(boneMn, 10, 6.5, 7.5, s * 50, 44, -63, 20); c.rotation.y = s * 0.3; mnIn.add(c); });
 
       // ---- right: the dentition enlarged
-      const dent = new THREE.Group(); dent.position.set(150, -12, 30); dent.scale.setScalar(3.7); dent.rotation.set(0.12, -0.42, 0); scene.add(dent);
-      const gum = D.mat(THREE, 0xecb6b4, { rough: 0.7 }), gumU = D.mat(THREE, 0xecb6b4, { rough: 0.7 }), enamelU = D.mat(THREE, 0xf7f4ec, { rough: 0.28 });
+      const dent = new THREE.Group(); dent.position.set(150, -12, 30); dent.scale.setScalar(3.7); dent.rotation.set(0.12, -0.42, 0); world.add(dent);
+      const gum = D.matLib(THREE, 'skin', { color: 0xecb6b4 }), gumU = D.matLib(THREE, 'skin', { color: 0xecb6b4 }), enamelU = D.matLib(THREE, 'plastic', { color: 0xf7f4ec });
       const dU = new THREE.Group(); dent.add(dU);
       DU.geos.forEach(g => dU.add(new THREE.Mesh(g, enamelU)));
       dU.add(new THREE.Mesh(gumBand(DU, 10.6), gumU));
@@ -186,12 +195,13 @@
       const dIn = new THREE.Group(); dIn.position.copy(PV).negate(); dPivot.add(dIn);
       dIn.add(new THREE.Mesh(gumBand(DL, -10.2), gum));
       // dashed guide from the skull dentition to the enlarged view
+      // the guide and the correspondence lines live in world (cm) coordinates
       scene.updateMatrixWorld(true);
-      const zoom = D.dashLink(THREE, 0x8a97aa, 5); scene.add(zoom);
+      const zoom = D.dashLink(THREE, 0x8a97aa, 0.5); scene.add(zoom);
       zoom.set(skull.localToWorld(O.clone().add(V(0, 0, 14))), dent.localToWorld(V(-24, 0, 6)));
 
       // lower-crown distance colour to the upper dentition (vertex colours, linear)
-      const lowMat = D.mat(THREE, 0xffffff, { rough: 0.34 }); lowMat.vertexColors = true;
+      const lowMat = D.matLib(THREE, 'plastic', { color: 0xffffff }); lowMat.vertexColors = true;
       const cEn = lin(0xf7f4ec), stops = [[0.35, lin(0xd94436)], [0.9, lin(0xf2c230)], [1.6, lin(0x3fae5a)], [2.6, lin(0x3b7fd6)]];
       const heatOf = d => {
         if (d <= stops[0][0]) return stops[0][1].clone();
@@ -249,23 +259,16 @@
 
       D.labels(box, [
         { t: { ko: '치아 랜드마크<small>상악 15 · 하악 15</small>', en: 'Tooth landmarks<small>15 upper · 15 lower</small>' }, c: 's', obj: 'dent', ph: '1' },
-        { t: { ko: '하악 치열', en: 'Lower dentition' }, c: 's o', obj: 'low', ph: '2' },
+        { t: { ko: '하악 치열<small>자동 교합 · 6-DOF 조정</small>', en: 'Lower dentition<small>Automatic occlusion · 6-DOF adjustment</small>' }, c: 's o', obj: 'low', ph: '2' },
         { t: { ko: '접촉 상태와 거리', en: 'Contact state and distance' }, c: 's r', obj: 'low', ph: '3' }
       ]);
 
-      const TXT = [
-        S.t({ ko: '① 치아 랜드마크', en: '① Tooth landmarks' }),
-        S.t({ ko: '② 교합 정렬 — 자동 교합 · 6-DOF 조정', en: '② Occlusal alignment — automatic occlusion · 6-DOF adjustment' }),
-        S.t({ ko: '③ 교합 평가', en: '③ Occlusion evaluation' })
-      ];
-      const read = box.querySelector('.readout');
       const a = V(0, 0, 0), b = V(0, 0, 0), cc = new THREE.Color(), lp = lgeo.attributes.position, lc = lgeo.attributes.color;
-      let last = '';
       return {
         anchors: { dent: aDent, low: aLow },
         tick(s) {
           const t = s % 11;
-          let step = 0, linkK = 0, heatT = 0;
+          let step = 0, linkK = 0, heatT = 0;   // step: 0 landmarks, 1 alignment, 2 evaluation
           // (1) landmarks appear one by one
           lmU.forEach((o, i) => { const k = Math.max(0.001, t < 2.4 ? sm(0.2 + i * 0.1, 0.4 + i * 0.1, t) : 1); o.scale.setScalar(k); lmL[i].scale.setScalar(k); });
           // (3) evaluation: tilt the enlarged view toward the occlusal surface and fade the upper dentition
@@ -290,14 +293,13 @@
           lmU.forEach((su, i) => {
             su.getWorldPosition(a); lmL[i].getWorldPosition(b);
             lp.setXYZ(2 * i, a.x, a.y, a.z); lp.setXYZ(2 * i + 1, b.x, b.y, b.z);
-            const r = Math.min(1, Math.max(0, (a.distanceTo(b) - lFinal[i] - 0.5) / 18));
+            const r = Math.min(1, Math.max(0, (a.distanceTo(b) * 10 - lFinal[i] - 0.5) / 18));
             if (r < 0.5) cc.copy(cNear).lerp(cMid, r * 2); else cc.copy(cMid).lerp(cFar, (r - 0.5) * 2);
             lc.setXYZ(2 * i, cc.r, cc.g, cc.b); lc.setXYZ(2 * i + 1, cc.r, cc.g, cc.b);
           });
           lp.needsUpdate = lc.needsUpdate = true;
           setHeat(heatT);
-          box.dataset.ph = step + 1;
-          if (read && TXT[step] !== last) { read.textContent = TXT[step]; last = TXT[step]; }
+          box.dataset.ph = t <= 2.4 ? 1 : t < 7.6 ? 2 : 3;
         }
       };
     }

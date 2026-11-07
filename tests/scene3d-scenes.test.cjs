@@ -278,3 +278,145 @@ test('every registered scene still builds with the refined library parts', () =>
   S.person(THREE, { gear: 'quest' }).root.traverse((o) => { if (o.material && o.material.userData.lib) kinds.add(o.material.userData.lib); });
   assert.ok(kinds.has('visor-glass') && kinds.has('skin'));
 });
+
+// ---- scene batch A: ms-frac, occlusion, smcnavi, neuro --------------------------------------------------
+// Widen BATCH_A (or the file list in the "ignored options" test) when more scene files adopt the shared look.
+const BATCH_A = {
+  'ms-frac': { loop: 8, readout: /^$/, steps: [
+    ['features', 0, 1.8, '치아·골절 단면 특징점', 'Tooth and fracture features', undefined],
+    ['optimize', 1.8, 4.8, '골절편 위치 최적화', 'Fragment pose optimization', undefined],
+    ['reduce', 4.8, 5.5, '교합 기준 정복', 'Occlusion-based reduction', undefined],
+    ['distance', 5.5, 7, '표면 거리 비교', 'Surface-distance check', undefined]] },
+  occlusion: { loop: 11, readout: /^$/, steps: [
+    ['landmarks', 0, 2.4, '치아 랜드마크', 'Tooth landmarks', '1'],
+    ['align', 2.4, 7.5, '교합 정렬', 'Occlusal alignment', '2'],
+    ['evaluate', 7.6, 9.6, '교합 평가', 'Occlusion evaluation', '3']] },
+  smcnavi: { loop: 9, readout: /하악 개구|Mandible opening/, steps: [
+    ['chain', 0, 4, '환자–CT 좌표 체인', 'Patient–CT transform chain', '1'],
+    ['track', 4.5, 7.5, '도구·하악 추적', 'Tool and mandible tracking', '2']] },
+  neuro: { loop: 11, readout: /ICP|표적|target/, steps: [
+    ['register', 0, 4.2, '랜드마크·ICP 정합', 'Landmark + ICP registration', '1'],
+    ['align', 4.6, 9, '로봇 연동 코일 정렬', 'Coil alignment via robot', '2']] }
+};
+const LABEL_CLASSES = new Set(['s', 's c', 's n', 's o', 's r', 's g']);
+
+function snapshot(built) {
+  const pos = new built.scene.position.constructor();
+  const anchors = Object.keys(built.api.anchors || {}).sort().map((k) => {
+    const o = built.api.anchors[k];
+    o.updateWorldMatrix(true, false);
+    o.getWorldPosition(pos);
+    return `${k}:${pos.x.toFixed(3)},${pos.y.toFixed(3)},${pos.z.toFixed(3)}`;
+  });
+  return JSON.stringify({ readout: built.readout(), ph: built.ph(), anchors });
+}
+
+for (const [name, spec] of Object.entries(BATCH_A)) {
+  test(`${name}: step table, readout, labels and time purity in ko and en`, () => {
+    for (const env of [ko, en]) {
+      const lang = env === ko ? 'ko' : 'en';
+      const opts = env.S.registry[name];
+      assert.equal(opts.loop, spec.loop);
+      assert.deepEqual(Array.from(opts.steps, (s) => [s.id, s.t0, s.t1]), spec.steps.map((s) => s.slice(0, 3)));
+      assert.deepEqual(Array.from(opts.steps, (s) => s.label[lang]), spec.steps.map((s) => (lang === 'ko' ? s[3] : s[4])));
+      assert.ok(opts.steps.every((s) => !s.planned));
+      const built = buildScene(env, name);
+      spec.steps.forEach((s) => {
+        built.tick(s[2]);
+        if (s[5]) assert.equal(String(built.ph()), s[5], `${name}/${s[0]}: ph at t1`);
+        assert.match(built.readout(), spec.readout, `${name}/${s[0]}: readout`);
+        assert.ok(![...built.readout()].some((ch) => CIRCLED.includes(ch)), 'no circled digits in the readout');
+        for (const st of opts.steps) assert.ok(!built.readout().includes(st.label[lang]), 'readout does not repeat a step label');
+      });
+      const lastT1 = spec.steps[spec.steps.length - 1][2], firstT0 = spec.steps[0][1];
+      built.tick(lastT1); const a = snapshot(built);
+      built.tick(firstT0); built.tick(lastT1);
+      assert.equal(snapshot(built), a, `${name}: state depends on time only`);
+      assert.ok(built.labels.length >= 1);
+      for (const l of built.labels) {
+        assert.ok(LABEL_CLASSES.has(l.cls), `${name}: class "${l.cls}"`);
+        assert.ok([...l.text].length <= (lang === 'ko' ? KO_MAX : EN_MAX), `${name}: label "${l.text}" over budget`);
+        assert.ok(![...l.text].some((ch) => CIRCLED.includes(ch)), 'no circled digits in a label');
+      }
+      assert.equal(built.lights, 0, 'scenes add no lights');
+    }
+  });
+
+  test(`${name}: unified camera, shared look and no ignored options`, () => {
+    const opts = ko.S.registry[name];
+    assert.equal(opts.fov, 30);
+    assert.ok(opts.pitch >= 0.35 && opts.pitch <= 0.45, `pitch ${opts.pitch}`);
+    assert.ok(opts.autoYaw === undefined || (opts.autoYaw >= 0.01 && opts.autoYaw <= 0.06));
+    for (const key of ['exposure', 'env', 'groundShadow', 'shadowMap', 'stillTime', 'ground']) assert.ok(!(key in opts), `${name}: option ${key}`);
+    const src = read(`js/scenes/${name}.js`);
+    assert.match(src, /matLib\(/);
+    assert.doesNotMatch(src, /0x9aa5b4/);
+  });
+}
+
+test('batch A scene sources use the shared parts', () => {
+  assert.match(read('js/scenes/neuro.js'), /D\.chair\(/);
+  assert.match(read('js/scenes/neuro.js'), /D\.pointer\(/);
+  assert.match(read('js/scenes/smcnavi.js'), /D\.pointer\(/);
+  const fit = ko.S.registry.occlusion.fit.box;
+  assert.ok(fit[1][0] - fit[0][0] >= 30 && fit[1][0] - fit[0][0] <= 70, 'occlusion fit box is in cm');
+  assert.doesNotMatch(read('js/scenes/occlusion.js'), /Units mm/);
+});
+
+test('smcnavi phase 1 shows the patient-CT links, phase 2 the pointer links', () => {
+  const built = buildScene(ko, 'smcnavi');
+  const links = built.scene.children.filter((o) => o.userData && o.userData.link);
+  assert.equal(links.length, 4, 'four tagged chain links');
+  const shown = () => links.filter((o) => o.visible).map((o) => o.userData.link).sort().join();
+  built.tick(4); assert.equal(shown(), 'camRef,refCt');
+  built.tick(7.5); assert.equal(shown(), 'camPtr,ptrTip');
+});
+
+test('neuro readout counts ICP iterations and targets', () => {
+  const k = buildScene(ko, 'neuro'), e = buildScene(en, 'neuro');
+  k.tick(4.2); assert.match(k.readout(), /^ICP 반복 \d$/);
+  k.tick(9); assert.match(k.readout(), /^표적 \d$/);
+  e.tick(4.2); assert.match(e.readout(), /^ICP iteration \d$/);
+  e.tick(9); assert.match(e.readout(), /^target \d$/);
+});
+
+test('no batch A scene file passes exposure, env, groundShadow or shadowMap', () => {
+  for (const name of ['ms-frac', 'occlusion', 'smcnavi', 'neuro']) {
+    assert.doesNotMatch(read(`js/scenes/${name}.js`), /\b(exposure|env|groundShadow|shadowMap)\s*:/, name);
+  }
+});
+
+test('engine mount: floor plate at bbox min.y - 0.4, radius about 3R, contact shadow 0.1 above; ground:false adds neither', () => {
+  const { S, THREE } = ko;
+  const group = new THREE.Group();
+  group.add(new THREE.Mesh(new THREE.BoxGeometry(60, 80, 100), new THREE.MeshStandardMaterial()));
+  group.position.set(10, 50, -20);
+  const scene = new THREE.Scene(); scene.add(group); scene.updateMatrixWorld(true);
+  const bb = S.prepareMaterials(scene, 1);
+  const R = Math.max(40, bb.getSize(new THREE.Vector3()).length() / 2);
+  const on = S.addFloor(THREE, scene, bb, {}, true);
+  assert.ok(on.plate && on.shadow);
+  assert.ok(Math.abs(on.plate.position.y - (bb.min.y - 0.4)) < 1e-9);
+  on.plate.geometry.computeBoundingBox();
+  assert.ok(Math.abs(on.plate.geometry.boundingBox.max.x - R * 3) < 1e-6, 'radius = 3R');
+  assert.ok(Math.abs(on.shadow.position.y - on.plate.position.y - 0.1) < 1e-9, 'shadow plane 0.1 above');
+  assert.ok(scene.children.includes(on.plate) && scene.children.includes(on.shadow));
+  const noShadowMap = S.addFloor(THREE, new THREE.Scene(), bb, {}, false);
+  assert.ok(noShadowMap.plate && !noShadowMap.shadow);
+  const scene2 = new THREE.Scene();
+  const off = S.addFloor(THREE, scene2, bb, { ground: false }, true);
+  assert.equal(off.plate, null); assert.equal(off.shadow, null);
+  assert.equal(scene2.children.length, 0);
+});
+
+test('floorPlate eases out: monotone toward the page white, flattening at the rim', () => {
+  const { S, THREE } = ko;
+  const plate = S.floorPlate(THREE, new THREE.Vector3(), 0, 100), c = plate.geometry.attributes.color, p = plate.geometry.attributes.position;
+  const byR = new Map();
+  for (let i = 0; i < c.count; i++) byR.set(Math.round(Math.hypot(p.getX(i), p.getY(i))), c.getX(i));
+  const rs = [...byR.keys()].sort((a, b) => a - b);
+  assert.ok(rs.length >= 6, 'intermediate rings exist');
+  let prev = -1;
+  for (const r of rs) { assert.ok(byR.get(r) >= prev - 1e-9, 'monotone toward white'); prev = byR.get(r); }
+  assert.ok(byR.get(rs[rs.length - 1]) - byR.get(rs[rs.length - 2]) < byR.get(rs[2]) - byR.get(rs[1]), 'ramp flattens toward the rim');
+});
