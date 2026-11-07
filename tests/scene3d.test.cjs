@@ -19,7 +19,7 @@ const sceneProjects = () => data.projects.filter((project) => project.scene3d);
 const expectedScenes = {
   'surgical-navigation': 'smcnavi',
   'mandibular-fracture': 'ms-frac',
-  'digital-occlusion-workflow': 'foaa',
+  'digital-occlusion-workflow': 'occlusion',
   'life-careverse': 'omfsvr',
   'rtms-navigation': 'neuro',
   'respiratory-surface-guidance': 'sgrt-poc',

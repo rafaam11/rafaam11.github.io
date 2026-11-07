@@ -93,7 +93,7 @@
 | 홈 | `home-tracking` | A4LAB `scene-cover`에서 로봇팔을 빼고 경력 소개 덱 `scene-skadi`와 합침 | 추적·정합·내비만 |
 | mandibular-fracture | `ms-frac` | `scene-ms-frac.js` | 시뮬레이터·최적화(연구) |
 | surgical-navigation | `smcnavi` | `scene-smcnavi.js` | 좌표 정합 체인. HoloLens는 본문 근거가 있을 때만 |
-| digital-occlusion-workflow | `foaa` | `scene-foaa.js` | 수술계획 요소는 빼거나 "(설계)"로 표시 |
+| digital-occlusion-workflow | `occlusion` | 덱 원본 장면 파일 | 수술계획 요소는 빼거나 "(설계)"로 표시 |
 | life-careverse | `omfsvr` | `scene-omfsvr.js` | 3인 VR 상담·CT 턱 모델 |
 | rtms-navigation | `neuro` | `scene-neuro.js` | 본문에 UR 연동이 없으면 로봇 요소 제거. 기관명 라벨 금지 |
 | respiratory-surface-guidance | `sgrt-poc` | `scene-sgrt-poc.js` | 1차년도 센서 검증·호흡 추적 PoC만 |
@@ -264,7 +264,7 @@ Optical tracking · 3D registration · Surgical navigation · XR · Robot/vision
 | 장면 | 원본 라벨 | 판정 | 사이트 라벨(ko) |
 |---|---|---|---|
 | smcnavi | 트래커 · 환자 레퍼런스 · 하악 마커 · 도구 끝 · 하악 개구 각 | 유지 — 사례에 하악운동 워크플로·마커·기구 변환 있음 | 원본 유지 |
-| foaa | ① 랜드마크(두개골·치아 15+15) ② 기준 평면 FH·Mid-sag·Coronal ③ 수술계획(설계) ④ 교합 시뮬레이션 SVD/seating ⑤ 최종 교합·간극 맵 | ③ 삭제(사례는 랜드마크·교합·평가까지, 수술계획은 다음 연구 방향). FH·SVD·조기접촉·간극은 본문에 없음 → 일반어로 | 치아 랜드마크 → 교합 정렬 → 교합 평가 |
+| occlusion | ① 랜드마크(두개골·치아 15+15) ② 기준 평면 FH·Mid-sag·Coronal ③ 수술계획(설계) ④ 교합 시뮬레이션 SVD/seating ⑤ 최종 교합·간극 맵 | ③ 삭제(사례는 랜드마크·교합·평가까지, 수술계획은 다음 연구 방향). FH·SVD·조기접촉·간극은 본문에 없음 → 일반어로 | 치아 랜드마크 → 교합 정렬 → 교합 평가 |
 | omfsvr | 의사 · 환자 · 참여 3명 · 동기화 · 2D 계획 · 3D 수술계획 | "수술계획" 과장 → 본문 용어로 | 참여 3명 · 동기화 · CT 기반 턱 모델 · 측정 패널 |
 | neuro | 머리 마커 · TMS 코일 · UR 로봇 · 얼굴 점군 RGB-D · ① 정합 ② 코일 정렬 | 로봇은 본문 "로봇 연동" 범위로, 제조사명 삭제. 정합은 랜드마크+ICP | 머리 마커 · TMS 코일 · 로봇 연동 · 랜드마크+ICP 정합 · 코일 정렬 |
 | sgrt-poc | 흉부 ROI(KLT 추적) · 들숨/날숨 · 1 Hz LPF · p-p 약 18–21 mm · 게이트 예시 | 수치 판독·KLT는 본문에 없음 → 삭제. 파형·게이트 신호는 본문 범위 | 흉부 ROI 깊이 → 호흡 파형 · 게이트 신호 예시 |

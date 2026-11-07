@@ -1,4 +1,4 @@
-/* foaa: digital occlusion workflow (procedural geometry only, no patient data).
+/* occlusion: digital occlusion workflow (procedural geometry only, no patient data).
  * Left: a synthetic skull whose mandible follows the occlusion. Right: the same dentition enlarged.
  * Loop (11 s): (1) 15 upper + 15 lower tooth landmarks -> (2) occlusal alignment: automatic occlusion and
  * 6-DOF adjustment of the lower dentition -> (3) occlusion evaluation: contact state and distance colour.
@@ -7,7 +7,7 @@
 (function (S) {
   'use strict';
   if (!S) return;
-  S.register('foaa', {
+  S.register('occlusion', {
     target: [0, -14, 0], dist: 740, yaw: 0, pitch: 0.2, fov: 22, autoYaw: 0.01, ground: false, stillTime: 9.6,
     fit: { box: [[-205, -60, -50], [288, 104, 80]], fill: 0.98, pad: [6, 0, 0, 0] },
     build(scene, THREE, box) {

@@ -2245,7 +2245,7 @@ test('system-flow web renderer preserves branching edge tuples without inventing
   assert.doesNotMatch(html, /data-from="C" data-to="D"/);
 });
 
-test('FOAA architecture web flow preserves all shared-state fan-out endpoints', () => {
+test('Digital occlusion architecture web flow preserves all shared-state fan-out endpoints', () => {
   const project = data.projects.find((item) => item.slug === 'digital-occlusion-workflow');
   const diagram = project.storySections.find((item) => item.key === 'system-architecture').diagram;
   const expected = diagram.edges.map((edge) => [edge.from, edge.to, edge.direction]);

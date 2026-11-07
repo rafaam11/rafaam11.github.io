@@ -1168,10 +1168,10 @@
           sceneCaption: 'Digital occlusion workflow concept (synthetic geometry)'
         }
       },
-      // Web-only 3D figure (js/scenes/foaa.js); excluded from the PDF source digest.
+      // Web-only 3D figure (js/scenes/occlusion.js); excluded from the PDF source digest.
       scene3d: {
-        name: 'foaa',
-        poster: 'assets/3d/foaa.webp',
+        name: 'occlusion',
+        poster: 'assets/3d/occlusion.webp',
         translations: {
           ko: { caption: '디지털 교합 워크플로우 개념도(합성 형상): 상악 15개·하악 15개 치아 랜드마크, 자동 교합과 6-DOF 조정으로 하악 치열을 맞추는 교합 정렬, 접촉 상태와 거리를 보는 교합 평가 순서입니다.', alt: '합성 두개골과 확대한 치열에서 치아 랜드마크, 하악 치열의 교합 정렬, 접촉·거리 색 표시가 이어지는 3D 개념도' },
           en: { caption: 'Concept of the digital occlusion workflow (synthetic geometry): 15 upper and 15 lower tooth landmarks, occlusal alignment of the lower dentition by automatic occlusion and 6-DOF adjustment, then occlusion evaluation of contact state and distance.', alt: '3D concept of a synthetic skull and an enlarged dentition showing tooth landmarks, occlusal alignment of the lower dentition and a contact and distance colour map' }
