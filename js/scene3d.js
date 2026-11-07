@@ -173,6 +173,48 @@
   // runtime colour change in sRGB hex, e.g. D.col(lamp.color, 0x38a169)
   function col(c, hex) { return c.setHex(hex).convertSRGBToLinear(); }
 
+  // one studio look for every figure: scenes pass no exposure, environment or light options
+  const LOOK = Object.freeze({ exposure: 0.92, hemi: 0.08, key: 1.45, fill: 0.22, rim: 0.4, groundShadow: 0.2 });
+
+  // post-build material pass: linear colours once, environment scale once, shadow flags; returns the world bbox of
+  // the opaque, non-flat meshes. gltf: true keeps colours (loaders already deliver linear ones).
+  function prepareMaterials(obj, envK, o) {
+    const THREE = root.THREE, gltf = !!(o && o.gltf), bb = new THREE.Box3(), tmp = new THREE.Box3();
+    obj.traverse(n => {
+      if (n.material) [].concat(n.material).forEach(m => {
+        if (gltf) m.userData.lin = true; else linearize(m);
+        if (m.envMapIntensity !== undefined && !m.userData.envK) { m.userData.envK = true; m.envMapIntensity *= envK; }
+      });
+      if (!n.isMesh) return;
+      const opaque = [].concat(n.material).every(m => !m.transparent);
+      n.castShadow = opaque && !isFlat(n) && !n.userData.noShadow;
+      n.receiveShadow = !n.userData.noShadow;
+      if (opaque && !isFlat(n) && n.geometry) {
+        n.updateWorldMatrix(true, false); n.geometry.computeBoundingBox();
+        tmp.copy(n.geometry.boundingBox).applyMatrix4(n.matrixWorld); bb.union(tmp);
+      }
+    });
+    return bb;
+  }
+
+  // light disc under the figure: centre #eef2f6 fading to the page white (#ffffff, --sc-bg) at the rim, so no edge shows
+  function floorPlate(THREE, center, y, radius) {
+    const geo = new THREE.CircleGeometry(radius, 64), n = geo.attributes.position.count, cols = new Float32Array(n * 3);
+    const mid = new THREE.Color(0xeef2f6).convertSRGBToLinear();
+    for (let i = 0; i < n; i++) {
+      const k = i === 0 ? 0 : 1;
+      cols[i * 3] = mid.r + (1 - mid.r) * k; cols[i * 3 + 1] = mid.g + (1 - mid.g) * k; cols[i * 3 + 2] = mid.b + (1 - mid.b) * k;
+    }
+    geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+    const m = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false, fog: false });
+    m.userData.lin = true;
+    const plate = new THREE.Mesh(geo, m);
+    plate.rotation.x = -Math.PI / 2;
+    plate.position.set(center.x, y, center.z);
+    plate.userData.noShadow = true;
+    return plate;
+  }
+
   function isFlat(o) { return o.geometry && /Plane|Circle/.test(o.geometry.type); }
   function shown(o) { for (; o; o = o.parent) if (!o.visible) return false; return true; }
 
@@ -223,7 +265,7 @@
       renderer.setSize(W, H, false);
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = opts.exposure || 0.92;
+      renderer.toneMappingExposure = LOOK.exposure;
       renderer.shadowMap.enabled = opts.shadows !== false;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.physicallyCorrectLights = false;
@@ -233,10 +275,10 @@
       scene.environment = envRT.texture;
       const camera = new THREE.PerspectiveCamera(opts.fov || 35, W / H, opts.near || 1, opts.far || 20000);
       if (opts.fog) scene.fog = new THREE.Fog(opts.fog[0], opts.fog[1], opts.fog[2]);
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x8f9db3, 0.08));
-      const key = new THREE.DirectionalLight(0xfff4e6, 1.45);
-      const fill = new THREE.DirectionalLight(0xdfe9ff, 0.22);
-      const rim = new THREE.DirectionalLight(0xffffff, 0.4);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x8f9db3, LOOK.hemi));
+      const key = new THREE.DirectionalLight(0xfff4e6, LOOK.key);
+      const fill = new THREE.DirectionalLight(0xdfe9ff, LOOK.fill);
+      const rim = new THREE.DirectionalLight(0xffffff, LOOK.rim);
       scene.add(key, key.target, fill, rim);
 
       // step readout (scenes write their current step into .readout)
@@ -304,19 +346,8 @@
       if (!curFit && opts.fit && opts.fit.box) curFit = { box: opts.fit.box, yaw: home.yaw, pitch: home.pitch, fill: opts.fit.fill };
       applyFit(true);
 
-      // after build: linear colours, shadow flags, light rig and a contact-shadow ground fitted to the content
-      const bb = new THREE.Box3(), tmp = new THREE.Box3(), envK = dflt(opts.env, 1);
-      scene.traverse(o => {
-        if (o.material) [].concat(o.material).forEach(m => {
-          linearize(m);
-          if (m.envMapIntensity !== undefined && !m.userData.envK) { m.userData.envK = true; m.envMapIntensity *= envK; }
-        });
-        if (!o.isMesh) return;
-        const opaque = [].concat(o.material).every(m => !m.transparent);
-        o.castShadow = opaque && !isFlat(o) && !o.userData.noShadow;
-        o.receiveShadow = !o.userData.noShadow;
-        if (opaque && !isFlat(o)) { o.updateWorldMatrix(true, false); if (o.geometry) { o.geometry.computeBoundingBox(); tmp.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld); bb.union(tmp); } }
-      });
+      // after build: linear colours, shadow flags, then the light rig and the floor fitted to the content
+      const bb = prepareMaterials(scene, 1);
       if (bb.isEmpty()) bb.set(new THREE.Vector3(-100, -100, -100), new THREE.Vector3(100, 100, 100));
       const c = bb.getCenter(new THREE.Vector3()), R = Math.max(40, bb.getSize(new THREE.Vector3()).length() / 2);
       const kd = new THREE.Vector3(0.45, 1, 0.55).normalize();
@@ -344,8 +375,13 @@
         sc.updateProjectionMatrix();
         key.shadow.bias = -0.0003; key.shadow.radius = 3;
       }
+      if (opts.ground !== false) {
+        const plate = floorPlate(THREE, c, bb.min.y - 0.4, R * 3);
+        plate.renderOrder = -1;
+        scene.add(plate);
+      }
       if (opts.ground !== false && renderer.shadowMap.enabled) {
-        const gr = new THREE.Mesh(new THREE.PlaneGeometry(R * 6, R * 6), new THREE.ShadowMaterial({ opacity: opts.groundShadow || 0.22 }));
+        const gr = new THREE.Mesh(new THREE.PlaneGeometry(R * 6, R * 6), new THREE.ShadowMaterial({ opacity: LOOK.groundShadow }));
         gr.rotation.x = -Math.PI / 2;
         gr.position.set(c.x, bb.min.y - 0.3, c.z);
         gr.receiveShadow = true;
@@ -732,6 +768,23 @@
     if (o.side) m.side = THREE.DoubleSide;
     return m;
   }
+  // shared material kinds (sRGB hex; prepareMaterials linearizes after build). A new instance per call.
+  const MATLIB = {
+    steel: { c: 0x9aa5b4, r: 0.3, m: 0.6 }, anodized: { c: 0x2b313b, r: 0.4, m: 0.35 }, plastic: { c: 0xe4e9f0, r: 0.45, m: 0.05 },
+    skin: { c: 0xe7bf9f, r: 0.7, m: 0 }, bone: { c: 0xe5d6ba, r: 0.72, m: 0 }, 'visor-glass': { c: 0x0a0f18, r: 0.08, m: 0.3 },
+    'emissive-marker': { c: 0xf4f6f8, r: 0.22, m: 0.05, e: 0x2a2a2a }
+  };
+  // o: {color, opacity}
+  function matLib(THREE, kind, o) {
+    const d = Object.prototype.hasOwnProperty.call(MATLIB, kind) ? MATLIB[kind] : null;
+    if (!d) throw new Error('matLib: unknown kind "' + kind + '"');
+    o = o || {};
+    const m = new THREE.MeshStandardMaterial({ color: o.color === undefined ? d.c : o.color, roughness: d.r, metalness: d.m, envMapIntensity: 0.45 });
+    if (d.e) m.emissive = new THREE.Color(d.e);
+    if (o.opacity !== undefined) { m.transparent = true; m.opacity = o.opacity; m.depthWrite = false; }
+    m.userData.lib = kind;
+    return m;
+  }
   function mesh(THREE, geo, m, x, y, z) {
     const o = new THREE.Mesh(geo, m);
     o.position.set(x || 0, y || 0, z || 0);
@@ -912,14 +965,16 @@
   function cam(THREE, pos, aim, coneColor, coneOpacity, spread) {
     const g = new THREE.Group();
     g.position.fromArray(pos);
-    g.add(mesh(THREE, rbox(THREE, 26, 9, 12, 2.5), mat(THREE, 0x1a2b45, { rough: 0.35, metal: 0.3 })));
-    g.add(mesh(THREE, rbox(THREE, 22, 6, 1, 0.4), mat(THREE, 0x05080f, { rough: 0.08, metal: 0.2 }), 0, 0, 6.2));
+    g.add(mesh(THREE, rbox(THREE, 26, 9, 12, 2.5), matLib(THREE, 'anodized', { color: 0x1a2b45 })));
+    g.add(mesh(THREE, rbox(THREE, 22, 6, 1, 0.4), matLib(THREE, 'visor-glass'), 0, 0, 6.2));
     const lens = mesh(THREE, new THREE.CylinderGeometry(2.6, 2.6, 2, 24), mat(THREE, 0x00b7ff, { emissive: 0x00648c, rough: 0.1 }), 4, 0, 6.8);
     lens.rotation.x = Math.PI / 2;
     const ir = mesh(THREE, new THREE.CylinderGeometry(1.4, 1.4, 1.6, 16), mat(THREE, 0x7a1f1f, { emissive: 0x3a0a0a, rough: 0.2 }), -6, 0, 6.8);
     ir.rotation.x = Math.PI / 2;
     g.add(lens, ir);
-    const metal = mat(THREE, 0x8c9fac, { rough: 0.3, metal: 0.7 });
+    const metal = matLib(THREE, 'steel');
+    g.add(mesh(THREE, rbox(THREE, 9, 2.6, 7, 0.7), metal, 0, -5.7, -1));                                  // tripod mount block
+    g.add(mesh(THREE, new THREE.CylinderGeometry(1.1, 1.1, 1.6, 14), metal, 0, -7.6, -1));
     for (let x = -10; x <= 10; x += 4) g.add(mesh(THREE, rbox(THREE, 1.2, 0.4, 6, 0.08), metal, x, 4.6, -1));
     [-10, 10].forEach(x => [-2.5, 2.5].forEach(y => g.add(mesh(THREE, new THREE.CylinderGeometry(0.38, 0.38, 0.3, 12), metal, x, y, 6.8).rotateX(Math.PI / 2))));
     const len = new THREE.Vector3().fromArray(aim).distanceTo(g.position) + 10;
@@ -956,8 +1011,8 @@
     s = s || 1;
     const g = new THREE.Group();
     const P = [[0, 0], [5.2, 1.6], [-3.6, 4.2], [1.2, -6]];
-    const arm = mat(THREE, plateColor || 0x4a5568, { rough: 0.45, metal: 0.4 });
-    const ball = mat(THREE, 0xf4f6f8, { rough: 0.22, metal: 0.05, emissive: 0x2a2a2a });
+    const arm = matLib(THREE, 'anodized', { color: plateColor || 0x4a5568 });
+    const ball = matLib(THREE, 'emissive-marker');
     g.add(mesh(THREE, new THREE.CylinderGeometry(1.1 * s, 1.1 * s, 0.8 * s, 20), arm).rotateX(Math.PI / 2));
     g.spheres = [];
     P.forEach(([x, y]) => {
@@ -967,7 +1022,8 @@
         a.rotation.z = Math.atan2(y, x) - Math.PI / 2;
         g.add(a);
       }
-      const b = mesh(THREE, new THREE.SphereGeometry(0.78 * s, 24, 16), ball, x * s, y * s, 0.6 * s);
+      g.add(mesh(THREE, new THREE.CylinderGeometry(0.28 * s, 0.34 * s, 1.3 * s, 10), arm, x * s, y * s, 0.65 * s).rotateX(Math.PI / 2));   // post under each sphere
+      const b = mesh(THREE, new THREE.SphereGeometry(0.78 * s, 24, 16), ball, x * s, y * s, 1.3 * s);
       g.add(b); g.spheres.push(b);
     });
     return g;
@@ -977,21 +1033,26 @@
   function skadiCam(THREE, floorY, standX) {
     const root3 = new THREE.Group(), head = new THREE.Group();
     root3.add(head);
-    const shell = mat(THREE, 0x2b313b, { rough: 0.4, metal: 0.35 }), glass = mat(THREE, 0x0a0f18, { rough: 0.08, metal: 0.3 });
-    const metal = mat(THREE, 0x78909d, { rough: 0.32, metal: 0.7 });
+    const hoodM = matLib(THREE, 'anodized'), shell = matLib(THREE, 'anodized'), glass = matLib(THREE, 'visor-glass'), metal = matLib(THREE, 'steel');
+    hoodM.side = THREE.DoubleSide;
     head.add(mesh(THREE, rbox(THREE, 54, 9, 11, 3), shell));
     head.add(mesh(THREE, rbox(THREE, 12, 2.2, 0.6, 0.5), mat(THREE, 0x00b7ff, { emissive: 0x005577 }), 0, 0, 5.6));
     for (let x = -15; x <= 15; x += 3) head.add(mesh(THREE, rbox(THREE, 1.1, 0.18, 3.5, 0.06), metal, x, 4.6, -1));
+    head.add(mesh(THREE, rbox(THREE, 8, 2.4, 6, 0.7), metal, 0, -5.5, -1));                                // mounting boss underneath
+    head.add(mesh(THREE, new THREE.CylinderGeometry(1.5, 1.5, 1.2, 16), metal, 0, -6.9, -1));
+    head.add(tube(THREE, [[0, -1.5, -5.4], [0, -2.5, -9], [4, -3, -13], [12, -3.4, -15]], 0.55, shell, 20));   // cable at the back
     const lenses = [-21, 21].map(x => {
       const l = new THREE.Group(); l.position.set(x, 0, 5.6);
       l.add(mesh(THREE, new THREE.CylinderGeometry(2.6, 2.8, 2, 28), glass).rotateX(Math.PI / 2));
       l.add(mesh(THREE, new THREE.TorusGeometry(3.6, 0.55, 10, 36), mat(THREE, 0xc0392b, { emissive: 0x7a1010, rough: 0.3 })));
       const ring = mesh(THREE, new THREE.TorusGeometry(2.55, 0.13, 10, 40), metal); ring.rotation.x = Math.PI / 2; l.add(ring);
+      l.add(mesh(THREE, new THREE.TorusGeometry(4.3, 0.42, 10, 40), metal, 0, 0, 0));                 // window bezel
+      l.add(mesh(THREE, new THREE.CylinderGeometry(3.95, 3.95, 1.6, 36, 1, true), hoodM, 0, 0, 0.9).rotateX(Math.PI / 2));   // short hood
       head.add(l);
       return l;
     });
     if (floorY !== undefined) {
-      const steel = mat(THREE, 0x9aa5b4, { rough: 0.3, metal: 0.6 });
+      const steel = matLib(THREE, 'steel');
       const h = -floorY - 6;
       root3.add(mesh(THREE, new THREE.CylinderGeometry(1.6, 1.6, h, 16), steel, standX || 0, -6 - h / 2, -2));
       for (let i = 0; i < 3; i++) {
@@ -1145,7 +1206,7 @@
   // stylised synthetic skull (≈18 cm long), face toward +z. .mandible pivots about x at the condyles
   function skull(THREE, o) {
     o = o || {};
-    const bone = o.bone || mat(THREE, 0xe5d6ba, { rough: 0.72, metal: 0 }), tooth = mat(THREE, 0xf7f1df, { rough: 0.3, metal: 0 }), shade = mat(THREE, 0x594b40, { rough: 0.95, metal: 0 });
+    const bone = o.bone || matLib(THREE, 'bone'), tooth = mat(THREE, 0xf7f1df, { rough: 0.3, metal: 0 }), shade = mat(THREE, 0x594b40, { rough: 0.95, metal: 0 });
     const root3 = new THREE.Group();
     root3.add(ell(THREE, bone, 0, 3.3, -1.6, 7.25, 7.5, 8.8));
     root3.add(ell(THREE, bone, 0, -3.7, 4.1, 4.6, 2.6, 3.6));
@@ -1172,10 +1233,48 @@
     return { root: root3, mandible: mand };
   }
 
+  // office chair on a five-star caster base: floor at y = 0, seat top at y = 44 (userData.seatY), facing +z
+  function chair(THREE) {
+    const g = new THREE.Group(), steel = matLib(THREE, 'steel'), dark = matLib(THREE, 'anodized'), pad = matLib(THREE, 'anodized', { color: 0x4a5568 });
+    for (let i = 0; i < 5; i++) {
+      const a = i / 5 * Math.PI * 2 + 0.3, arm = new THREE.Group();
+      arm.rotation.y = -a;
+      arm.add(mesh(THREE, rbox(THREE, 24, 2.6, 3.6, 1), dark, 12, 5.2, 0));
+      arm.add(mesh(THREE, new THREE.SphereGeometry(2.2, 14, 10), steel, 24, 2.2, 0));                      // caster
+      g.add(arm);
+    }
+    g.add(mesh(THREE, new THREE.CylinderGeometry(3.4, 4.4, 5, 18), dark, 0, 7, 0));
+    g.add(mesh(THREE, new THREE.CylinderGeometry(2.1, 2.1, 28, 14), steel, 0, 22, 0));                  // gas cylinder
+    g.add(mesh(THREE, new THREE.CylinderGeometry(7, 7, 3, 20), dark, 0, 37.5, 0));
+    g.add(mesh(THREE, rbox(THREE, 46, 7, 44, 3.4), pad, 0, 40.5, 0));                                       // seat, top at y = 44
+    const back = mesh(THREE, rbox(THREE, 40, 44, 5, 2.6), pad, 0, 66, -21); back.rotation.x = -0.08; g.add(back);
+    g.add(mesh(THREE, rbox(THREE, 5, 22, 3, 1), dark, 0, 49, -21.4));
+    g.userData.seatY = 44;
+    return g;
+  }
+
+  // hand-held tool with a marker array: tip at the origin, shaft along +y, marker4 at the top end
+  function pointer(THREE, o) {
+    o = o || {};
+    const len = o.len === undefined ? 30 : o.len, ms = o.marker === undefined ? 0.9 : o.marker;
+    const root3 = new THREE.Group(), steel = matLib(THREE, 'steel'), sleeve = matLib(THREE, 'anodized');
+    const tip = mesh(THREE, new THREE.CylinderGeometry(0.6, 0.05, 6, 14), steel, 0, 3, 0); root3.add(tip);   // tapered tip
+    root3.add(mesh(THREE, new THREE.CylinderGeometry(0.6, 0.6, len - 6, 14), steel, 0, 6 + (len - 6) / 2, 0));
+    const h0 = len * 0.38, h1 = len * 0.82;
+    root3.add(mesh(THREE, new THREE.CylinderGeometry(1.15, 1.15, h1 - h0, 20), sleeve, 0, (h0 + h1) / 2, 0));      // handle sleeve
+    for (let i = 0; i < 3; i++) root3.add(mesh(THREE, new THREE.TorusGeometry(1.2, 0.14, 8, 24), steel, 0, h0 + (h1 - h0) * (0.3 + 0.2 * i), 0).rotateX(Math.PI / 2));   // grip grooves
+    const marker = marker4(THREE, ms);
+    marker.position.set(0, len + 1.2, 0);
+    marker.rotation.x = -Math.PI / 2 + 0.45;
+    root3.add(mesh(THREE, new THREE.CylinderGeometry(0.8, 0.8, 2.4, 14), steel, 0, len + 0.2, 0));
+    root3.add(marker);
+    return { root: root3, marker: marker };
+  }
+
   // standing person (≈172 cm), feet at y=0, facing +z. gear: 'quest' | 'glasses' | 'hololens'
   function person(THREE, o) {
     o = o || {};
-    const cloth = mat(THREE, o.color || 0x5f9ea0, { rough: 0.85 }), skin = mat(THREE, o.skin || 0xe7bf9f, { rough: 0.7 }),
+    const cloth = mat(THREE, o.color || 0x5f9ea0, { rough: 0.85 }), skin = matLib(THREE, 'skin', o.skin === undefined ? undefined : { color: o.skin }),
       dk = mat(THREE, 0x2d3440, { rough: 0.5 });
     const root3 = new THREE.Group();
     [-1, 1].forEach(s => {
@@ -1190,9 +1289,13 @@
     head.add(faceDetails(o.skin));
     const eye = new THREE.Object3D(); eye.position.set(0, 3, 10.5); head.add(eye);
     if (o.gear === 'quest') {
-      head.add(mesh(THREE, rbox(THREE, 19, 10, 9, 3), mat(THREE, 0xf2f4f7, { rough: 0.4 }), 0, 2.5, 11.5));
-      head.add(mesh(THREE, rbox(THREE, 17, 7, 0.6, 2), dk, 0, 2.5, 16.1));
-      const st = mesh(THREE, new THREE.TorusGeometry(10.6, 0.9, 8, 40), dk, 0, 3, 0); st.rotation.x = Math.PI / 2; head.add(st);
+      const shellM = matLib(THREE, 'plastic'), strap = matLib(THREE, 'anodized');
+      head.add(mesh(THREE, rbox(THREE, 19, 10, 9, 4.2), shellM, 0, 2.5, 11.5));                           // rounded body
+      head.add(mesh(THREE, rbox(THREE, 17.4, 7.6, 0.8, 3), matLib(THREE, 'visor-glass'), 0, 2.5, 16.1));   // front panel (visor)
+      head.add(mesh(THREE, rbox(THREE, 15, 0.9, 0.5, 0.3), strap, 0, 6.6, 16.2));                          // brow trim
+      const st = mesh(THREE, new THREE.TorusGeometry(10.6, 0.9, 8, 40), strap, 0, 3, 0); st.rotation.x = Math.PI / 2; head.add(st);
+      head.add(tube(THREE, [[0, 7, 11], [0, 12.6, 4], [0, 12, -3], [0, 5.5, -10.4]], 0.7, strap, 24));      // top strap
+      [-1, 1].forEach(sd => head.add(tube(THREE, [[sd * 9.4, 2.6, 11], [sd * 10.4, 2.9, 7], [sd * 10.5, 3, 3]], 0.75, strap, 12)));   // side straps
     } else if (o.gear === 'glasses') {
       head.add(mesh(THREE, rbox(THREE, 16, 3.6, 1.4, 0.7), mat(THREE, 0x1b2230, { rough: 0.2, metal: 0.3 }), 0, 3, 11.2));
       [-1, 1].forEach(s => head.add(mesh(THREE, rbox(THREE, 0.8, 1.2, 11, 0.3), dk, s * 8, 3.3, 5.6)));
@@ -1362,7 +1465,7 @@
     // live state for QA and the capture script
     get liveCount() { let n = 0; states.forEach(state => { if (state.live) n += 1; }); return n; },
     get threeState() { return threeState; },
-    mat: mat, mesh: mesh, rbox: rbox, outline: outline, linac: linac, patient: patient, col: col, arrow: arrow, cam: cam,
+    mat: mat, matLib: matLib, prepareMaterials: prepareMaterials, floorPlate: floorPlate, LOOK: LOOK, chair: chair, pointer: pointer, mesh: mesh, rbox: rbox, outline: outline, linac: linac, patient: patient, col: col, arrow: arrow, cam: cam,
     V3: V3, axes: axes, marker4: marker4, skadiCam: skadiCam, frustum: frustum, dashLink: dashLink, segs: segs, arm6: arm6,
     skull: skull, person: person, humanoid: humanoid, orTable: orTable, ctTex: ctTex, ctVolume: ctVolume, cloud: cloud,
     labels: labels, fade: fade, mute: mute, headGeometry: headGeometry, faceDetails: faceDetails, toothGeometry: toothGeometry

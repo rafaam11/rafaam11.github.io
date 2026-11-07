@@ -173,3 +173,108 @@ test('capture script: --step, step-aware default time, stage hides the step bar'
   assert.match(capture, /steps\[steps\.length - 1\]\.t1|steps\.at\(-1\)\.t1/);
   assert.match(capture, /\.stage \.view3d__steps/);
 });
+
+test('matLib: seven kinds with the library defaults, fresh instances, unknown kinds throw', () => {
+  const { S, THREE } = ko;
+  const want = {
+    steel: [0x9aa5b4, 0.3, 0.6], anodized: [0x2b313b, 0.4, 0.35], plastic: [0xe4e9f0, 0.45, 0.05], skin: [0xe7bf9f, 0.7, 0],
+    bone: [0xe5d6ba, 0.72, 0], 'visor-glass': [0x0a0f18, 0.08, 0.3], 'emissive-marker': [0xf4f6f8, 0.22, 0.05]
+  };
+  assert.equal(typeof S.matLib, 'function');
+  for (const [kind, [color, rough, metal]] of Object.entries(want)) {
+    const a = S.matLib(THREE, kind), b = S.matLib(THREE, kind);
+    assert.notEqual(a, b, `${kind} is a new instance per call`);
+    assert.equal(a.color.getHex(), color, `${kind} colour`);
+    assert.equal(a.roughness, rough, `${kind} roughness`);
+    assert.equal(a.metalness, metal, `${kind} metalness`);
+    assert.equal(a.userData.lib, kind);
+  }
+  assert.equal(S.matLib(THREE, 'emissive-marker').emissive.getHex(), 0x2a2a2a);
+  const o = S.matLib(THREE, 'steel', { color: 0x123456, opacity: 0.5 });
+  assert.equal(o.color.getHex(), 0x123456);
+  assert.equal(o.opacity, 0.5);
+  assert.equal(o.transparent, true);
+  assert.throws(() => S.matLib(THREE, 'chrome'), /chrome/);
+});
+
+test('prepareMaterials linearizes once, honours gltf, flags shadows and returns the opaque bbox', () => {
+  const { S, THREE } = ko;
+  const group = new THREE.Group();
+  const grey = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  const solid = new THREE.Mesh(new THREE.BoxGeometry(10, 20, 30), grey);
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(50, 50, 50), new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 }));
+  group.add(solid, glass);
+  const expected = new THREE.Color(0x808080).convertSRGBToLinear().getHex();
+  const bb = S.prepareMaterials(group, 1);
+  assert.equal(grey.color.getHex(), expected);
+  S.prepareMaterials(group, 1);
+  assert.equal(grey.color.getHex(), expected, 'second call does not convert again');
+  assert.equal(solid.castShadow, true);
+  assert.equal(glass.castShadow, false, 'transparent meshes cast no shadow');
+  assert.ok(!bb.isEmpty());
+  assert.equal(bb.getSize(new THREE.Vector3()).x, 10, 'bbox ignores transparent meshes');
+  const g2 = new THREE.Group(), m2 = new THREE.MeshStandardMaterial({ color: 0x808080, envMapIntensity: 1 });
+  g2.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), m2));
+  S.prepareMaterials(g2, 0.5, { gltf: true });
+  assert.equal(m2.color.getHex(), 0x808080, 'gltf colours stay as loaded');
+  assert.equal(m2.userData.lin, true);
+  assert.equal(m2.envMapIntensity, 0.5);
+  S.prepareMaterials(g2, 0.5, { gltf: true });
+  assert.equal(m2.envMapIntensity, 0.5, 'envK applied once');
+});
+
+test('floorPlate fades from a light grey centre to the page white at the rim', () => {
+  const { S, THREE } = ko;
+  const plate = S.floorPlate(THREE, new THREE.Vector3(5, 0, 7), -3, 100);
+  assert.equal(plate.geometry.type, 'CircleGeometry');
+  assert.equal(plate.material.toneMapped, false);
+  assert.equal(plate.material.vertexColors, true);
+  assert.equal(plate.userData.noShadow, true);
+  assert.equal(plate.position.y, -3);
+  const c = plate.geometry.attributes.color, mid = new THREE.Color(0xeef2f6).convertSRGBToLinear();
+  assert.ok(Math.abs(c.getX(0) - mid.r) < 1e-3 && Math.abs(c.getY(0) - mid.g) < 1e-3 && Math.abs(c.getZ(0) - mid.b) < 1e-3, 'centre vertex');
+  const last = c.count - 1;
+  assert.deepEqual([c.getX(last), c.getY(last), c.getZ(last)], [1, 1, 1]);
+});
+
+test('lighting comes from the shared LOOK constants, not scene options', () => {
+  const engine = read('js/scene3d.js');
+  assert.doesNotMatch(engine, /opts\.(exposure|env|groundShadow)\b/);
+  assert.match(engine, /toneMappingExposure = LOOK\.exposure/);
+  assert.match(engine, /HemisphereLight\([^)]*LOOK\.hemi/);
+  assert.match(engine, /DirectionalLight\([^)]*LOOK\.key/);
+  assert.match(engine, /DirectionalLight\([^)]*LOOK\.fill/);
+  assert.match(engine, /DirectionalLight\([^)]*LOOK\.rim/);
+  assert.match(engine, /opacity: LOOK\.groundShadow/);
+  assert.deepEqual(JSON.parse(JSON.stringify(ko.S.LOOK)), { exposure: 0.92, hemi: 0.08, key: 1.45, fill: 0.22, rim: 0.4, groundShadow: 0.2 });
+});
+
+test('chair and pointer helpers sit where their contracts say', () => {
+  const { S, THREE } = ko;
+  const chair = S.chair(THREE);
+  const cb = new THREE.Box3().setFromObject(chair);
+  assert.ok(cb.min.y >= -0.01 && cb.min.y <= 0.5, `chair floor at y=0 (${cb.min.y})`);
+  assert.equal(chair.userData.seatY, 44);
+  assert.ok(Math.abs(cb.max.y - 44) > 0 && cb.max.y > 44, 'back rises above the seat');
+  const p = S.pointer(THREE);
+  const pb = new THREE.Box3().setFromObject(p.root);
+  assert.ok(pb.min.y >= -0.5, `tip at the origin (${pb.min.y})`);
+  assert.ok(pb.max.y > 25, 'default length about 30');
+  let inside = false;
+  for (let o = p.marker; o; o = o.parent) if (o === p.root) inside = true;
+  assert.ok(inside, 'marker is a descendant of root');
+  const long = new THREE.Box3().setFromObject(S.pointer(THREE, { len: 50 }).root);
+  assert.ok(long.max.y > pb.max.y + 15);
+});
+
+test('every registered scene still builds with the refined library parts', () => {
+  for (const name of Object.keys(ko.S.registry)) assert.doesNotThrow(() => buildScene(ko, name), name);
+  const { S, THREE } = ko;
+  const cam = S.skadiCam(THREE);
+  assert.deepEqual(Array.from(cam.lenses.map((l) => l.position.x)), [-21, 21]);
+  const size = new THREE.Box3().setFromObject(cam.head).getSize(new THREE.Vector3());
+  assert.ok(size.x >= 53.9 && size.x <= 56, `bar width ${size.x}`);
+  const kinds = new Set();
+  S.person(THREE, { gear: 'quest' }).root.traverse((o) => { if (o.material && o.material.userData.lib) kinds.add(o.material.userData.lib); });
+  assert.ok(kinds.has('visor-glass') && kinds.has('skin'));
+});
