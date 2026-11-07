@@ -170,7 +170,7 @@
 .td-shell .sc-figure3d .view3d > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border-radius: 0; background: var(--sc-bg); }
 .view3d canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; cursor: grab; touch-action: pan-y; }
 .view3d canvas:active { cursor: grabbing; }
-.view3d.live > img, .view3d:not(.live) :is(.lb, .lead3d, .readout, .view3d__reset, .view3d__hint) { display: none; }
+.view3d.live > img, .view3d:not(.live) :is(.lb, .lead3d, .readout, .view3d__reset, .view3d__steps, .view3d__hint) { display: none; }
 .view3d .lb { position: absolute; z-index: 2; pointer-events: none; white-space: nowrap; padding: 0 .35rem; border: 1px solid var(--sc-rule); border-radius: 2px; background: var(--sc-bg); color: var(--sc-ink); font-size: .78rem; line-height: 1.5; transition: opacity .3s; }
 .view3d .lb small { display: block; color: var(--sc-faint); font-size: .72rem; }
 .view3d .lb.off { opacity: 0; }
@@ -182,7 +182,16 @@
 .view3d__reset:hover { color: var(--sc-link); }
 .view3d__hint { position: absolute; top: .3rem; left: .45rem; z-index: 3; padding: .15rem 0; pointer-events: none; color: var(--sc-faint); font-size: .75rem; }
 .view3d__reset:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 2px; }
-@media print { .view3d canvas, .view3d .lb, .view3d .lead3d, .view3d .readout, .view3d__reset, .view3d__hint { display: none !important; } .view3d > img { display: block !important; } }
+/* Step buttons: numbered, one per step; the current step label follows on the same line. */
+.view3d__steps { position: absolute; left: .45rem; bottom: .4rem; z-index: 3; display: flex; align-items: center; gap: .25rem; max-width: calc(100% - .9rem); background: var(--sc-bg); }
+.view3d.has-steps .readout { bottom: 2.3rem; }
+.view3d__step { flex: none; box-sizing: border-box; min-width: 1.5rem; height: 1.5rem; padding: 0 .2rem; border: 1px solid var(--sc-rule); border-radius: 3px; background: var(--sc-bg); color: var(--sc-muted); font: inherit; font-size: .85rem; line-height: 1; cursor: pointer; }
+.view3d__step:hover { border-color: var(--sc-link); color: var(--sc-link); }
+.view3d__step[aria-pressed="true"] { border-color: var(--sc-link); background: var(--sc-link); color: var(--sc-bg); }
+.view3d__step.is-planned { border-style: dashed; }
+.view3d__step:focus-visible { outline: 2px solid var(--sc-link); outline-offset: 2px; }
+.view3d__step-label { min-width: 0; margin-left: .2rem; overflow: hidden; color: var(--sc-ink); font-size: .8rem; text-overflow: ellipsis; white-space: nowrap; }
+@media print { .view3d canvas, .view3d .lb, .view3d .lead3d, .view3d .readout, .view3d__reset, .view3d__steps, .view3d__hint { display: none !important; } .view3d > img { display: block !important; } }
 
 /* Product-console cases: one dark desktop surface, then a light API-to-application narrative. */
 .sc-case--product-console {

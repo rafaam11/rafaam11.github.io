@@ -6,9 +6,14 @@
  * - three.js is not a static script: it is injected from js/vendor/ the first time a figure nears the viewport.
  * - At most two WebGL contexts live at once; a figure that leaves the viewport is released (context returned).
  * - Mouse drag orbits; one-finger touch scrolls the page, two fingers orbit. No wheel zoom.
- * - prefers-reduced-motion: no auto sway, scene time frozen at opts.stillTime (default 2.5 s).
- * - window.DECK3D_CLOCK (seconds) freezes scene time for deterministic captures.
- * - Scenes register by name: register(name, { fit, target, dist, yaw, pitch, fov, autoYaw, stillTime,
+ * - Step scenes declare loop: T and steps: [{ id, t0, t1, label: {ko, en}, planned? }] (2-6, ordered, last t1 < loop).
+ *   While live they get a row of numbered step buttons (stepBar). Time model, highest first:
+ *   window.DECK3D_CLOCK (a number, seconds; deterministic captures) > prefers-reduced-motion (current step t1, no
+ *   playback) > playing: min(t1, t0 + elapsed), then held > held at the current step t1. A figure mounts on its
+ *   last step, held. A click, on the current step too, plays that step again from t0. The auto sway uses wall-clock
+ *   seconds since mount (0 under DECK3D_CLOCK), never scene time.
+ * - Scenes without steps keep a continuous clock; prefers-reduced-motion freezes it at opts.stillTime (default 2.5 s).
+ * - Scenes register by name: register(name, { loop, steps, fit, target, dist, yaw, pitch, fov, autoYaw, stillTime,
  *   build(scene, THREE, box, camera, ctl) -> { tick(s), anchors, dispose } }). Units: cm, y up.
  * Procedural geometry only: no model files, image textures or network loads.
  */
@@ -43,6 +48,23 @@
         pause(now) { if (start === null) start = now; if (stopped === null) stopped = now; },
         resume(now) { if (stopped !== null) { offset += now - stopped; stopped = null; } },
         get paused() { return stopped !== null; }
+      };
+    }
+    // Step scenes: starts held on the last step. play(i, now) restarts step i from its t0; time() is the scene time.
+    function stepClock(steps) {
+      let index = steps.length - 1, start = 0, playing = false;
+      return {
+        time(now, reduced) {
+          const st = steps[index];
+          if (reduced) { playing = false; return st.t1; }
+          if (!playing) return st.t1;
+          const v = st.t0 + Math.max(0, now - start) / 1000;
+          if (v >= st.t1) { playing = false; return st.t1; }
+          return v;
+        },
+        play(i, now) { index = i; start = now; playing = true; },
+        get index() { return index; },
+        get playing() { return playing; }
       };
     }
     // Labels stay next to their anchor: candidates are 8 directions at a few short distances.
@@ -83,7 +105,7 @@
     function edge(r, ax, ay) {
       return { x: Math.max(r.x, Math.min(r.x + r.w, ax)), y: Math.max(r.y, Math.min(r.y + r.h, ay)) };
     }
-    return { clock, labels, edge };
+    return { clock, stepClock, labels, edge };
   })();
 
   // ---- capability probes ----------------------------------------------------------------------
@@ -154,6 +176,30 @@
   function isFlat(o) { return o.geometry && /Plane|Circle/.test(o.geometry.type); }
   function shown(o) { for (; o; o = o.parent) if (!o.visible) return false; return true; }
 
+  // ---- step buttons: div.view3d__steps > numbered buttons + a polite live label of the current step ------
+  function stepBar(document, steps, onPick) {
+    const el = document.createElement('div');
+    el.className = 'view3d__steps'; el.setAttribute('role', 'group'); el.setAttribute('aria-label', t({ ko: '단계', en: 'Steps' }));
+    const buttons = steps.map((step, i) => {
+      const b = document.createElement('button'), name = t(step.label);
+      b.setAttribute('type', 'button'); b.className = 'view3d__step' + (step.planned ? ' is-planned' : '');
+      b.textContent = String.fromCharCode(0x2460 + i);
+      b.setAttribute('aria-label', name); b.setAttribute('title', name); b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => onPick(i));
+      el.appendChild(b);
+      return b;
+    });
+    const label = document.createElement('span');
+    label.className = 'view3d__step-label'; label.setAttribute('aria-live', 'polite');
+    el.appendChild(label);
+    function set(i) {
+      buttons.forEach((b, k) => b.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
+      label.textContent = t(steps[i].label);
+    }
+    set(steps.length - 1);
+    return { el, set };
+  }
+
   // ---- one live figure ------------------------------------------------------------------------
   function mount(box, opts, state) {
     const THREE = root.THREE;
@@ -168,6 +214,7 @@
       const HQ = root.DECK3D_HQ || null;
       const capture = root.SCENE3D_CAPTURE || null;
       const still = reducedMotion();
+      const steps = opts.steps && opts.steps.length ? opts.steps : null;
       // loop state is declared first: ctl.goTo() may wake the loop while build() runs
       let first = true, lastS = 0, lastTick = NaN, raf = 0, alive = true, snap = false;
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: !!capture });
@@ -213,7 +260,7 @@
         fillK = fillK || (opts.fit && opts.fit.fill) || 0.9;
         const pad = (opts.fit && opts.fit.pad) || [0, 0, 0, 0];   // extra px reserved [top, right, bottom, left]
         // narrow figures also keep the top row free for the drag hint and reset button (captures hide them)
-        const bot = (readout ? 34 : 8) + pad[2], top = 8 + pad[0] + (W < 520 && !capture ? 24 : 0);
+        const bot = (steps ? 56 : readout ? 34 : 8) + pad[2], top = 8 + pad[0] + (W < 520 && !capture ? 24 : 0);
         const AX0 = (-1 + 2 * (8 + pad[3]) / W) * fillK, AX1 = (1 - 2 * (8 + pad[1]) / W) * fillK;
         const AY0 = (-1 + 2 * bot / H) * fillK, AY1 = (1 - 2 * top / H) * fillK;
         const tanV = Math.tan(camera.fov * Math.PI / 360), tanH = tanV * W / H;
@@ -355,6 +402,21 @@
       reset.textContent = t({ ko: '원위치', en: 'Reset view' });
       on(reset, 'click', goHome);
       box.appendChild(reset); generated.push(reset);
+      // step buttons (step scenes only): a click replays that step from its t0; the bar sits under the readout
+      let stepsBar = null, bar = null, stepClk = null;
+      if (steps) {
+        stepClk = Layout.stepClock(steps);
+        bar = stepBar(doc, steps, i => playStep(i));
+        stepsBar = bar.el;
+        box.appendChild(stepsBar); generated.push(stepsBar);
+        box.classList.add('has-steps');
+      }
+      function playStep(i) {
+        if (!stepClk || !(i >= 0 && i < steps.length)) return;
+        stepClk.play(i, root.performance.now());
+        bar.set(i);
+        wake();
+      }
       // one quiet drag hint per figure (captions no longer repeat it); captures leave it out
       let hint = null;
       if (!capture) {
@@ -396,7 +458,7 @@
           cand.push({ ax: (v.x + 1) / 2 * W, ay: (1 - v.y) / 2 * H, w: l.el.offsetWidth, h: l.el.offsetHeight, prev: l.slot });
           vis.push(l);
         });
-        const obs = [obstacle(readout), obstacle(reset), obstacle(hint), obstacle(box.querySelector('.cap3')), obstacle(box.querySelector('.inset3d'))].filter(Boolean);
+        const obs = [obstacle(readout), obstacle(reset), obstacle(hint), obstacle(stepsBar), obstacle(box.querySelector('.cap3')), obstacle(box.querySelector('.inset3d'))].filter(Boolean);
         Layout.labels(cand, W, H, obs).forEach((p, i) => {
           const l = vis[i], el = l.el, a = cand[i];
           l.slot = p.slot;
@@ -413,16 +475,19 @@
       // ---- render loop: runs only while the figure is near the viewport and the tab is visible
       const clock = Layout.clock();
       const stillTime = typeof opts.stillTime === 'number' ? opts.stillTime : 2.5;
+      const fixed = () => typeof root.DECK3D_CLOCK === 'number';
       function sceneTime(now) {
-        if (typeof root.DECK3D_CLOCK === 'number') return root.DECK3D_CLOCK;
+        if (fixed()) return root.DECK3D_CLOCK;
+        if (stepClk) return stepClk.time(now, still);
         if (still) return stillTime;
         return Math.max(0, clock.time(now));
       }
       function draw(now) {
         const s = sceneTime(now);
+        const wall = fixed() ? 0 : Math.max(0, clock.time(now));      // sway runs on wall-clock seconds since mount
         lastS = s;
         if (snap) { first = true; snap = false; }
-        if (opts.autoYaw && !touched && !still) goal.yaw = home.yaw + opts.autoYaw * Math.sin(s * 0.25);
+        if (opts.autoYaw && !touched && !still) goal.yaw = home.yaw + opts.autoYaw * Math.sin(wall * 0.25);
         if (!dragging && (vy || vp)) {          // inertia after release
           vy *= 0.9; vp *= 0.9;
           goal.yaw += vy; goal.pitch = Math.max(0.05, Math.min(1.45, goal.pitch + vp));
@@ -443,7 +508,8 @@
       }
       // a frozen scene (reduced motion or fixed clock) stops drawing once the camera has settled
       function settled() {
-        if (!(still || typeof root.DECK3D_CLOCK === 'number') || dragging || vy || vp) return false;
+        const timeStill = fixed() || still || (stepClk && !stepClk.playing && (touched || !opts.autoYaw));
+        if (!timeStill || dragging || vy || vp) return false;
         const d = Math.abs(goal.yaw - cur.yaw) + Math.abs(goal.pitch - cur.pitch) + Math.abs(goal.dist - cur.dist) / Math.max(1, goal.dist) + target.distanceTo(tgoal) / Math.max(1, goal.dist);
         return d < 1e-4;
       }
@@ -494,6 +560,8 @@
           touched = true; snap = true; wake();
         },
         render() { draw(root.performance.now()); },
+        steps, play: playStep,
+        get step() { return stepClk ? stepClk.index : -1; },
         time: () => lastS,
         get view() { return { yaw: cur.yaw, pitch: cur.pitch, dist: cur.dist, target: target.toArray(), fov: camera.fov }; },
         fitCheck() {
@@ -525,14 +593,14 @@
           renderer.forceContextLoss();
           canvas.remove();
           box.removeAttribute('data-scene3d-ready');
-          box.classList.remove('live');
+          box.classList.remove('live'); box.classList.remove('has-steps');
         }
       };
     } catch (err) {
       cleanup();
       if (envRT) envRT.dispose();
       if (renderer) { try { renderer.dispose(); renderer.forceContextLoss(); } catch (_) { /* context already gone */ } }
-      box.classList.remove('live');
+      box.classList.remove('live'); box.classList.remove('has-steps');
       box.querySelectorAll('canvas').forEach(cv => cv.remove());
       if (root.console) root.console.warn('3D figure disabled:', err);
       return null;
@@ -1289,7 +1357,7 @@
   }
 
   const api = {
-    register: register, scan: scan, t: t, lang: lang, layout: Layout, registry: registry,
+    register: register, stepBar: stepBar, scan: scan, t: t, lang: lang, layout: Layout, registry: registry,
     // live state for QA and the capture script
     get liveCount() { let n = 0; states.forEach(state => { if (state.live) n += 1; }); return n; },
     get threeState() { return threeState; },

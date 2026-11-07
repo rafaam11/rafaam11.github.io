@@ -7,7 +7,14 @@
   'use strict';
   if (!S) return;
   S.register('ms-frac', {
-    target: [0.4, -3.8, 3.5], dist: 30, yaw: 0.5, pitch: 0.3, fov: 30, autoYaw: 0.015, stillTime: 2.2,
+    target: [0.4, -3.8, 3.5], dist: 30, yaw: 0.5, pitch: 0.3, fov: 30, autoYaw: 0.015,
+    loop: 8,
+    steps: [
+      { id: 'features', t0: 0, t1: 1.8, label: { ko: '치아·골절 단면 특징점', en: 'Tooth and fracture features' } },
+      { id: 'optimize', t0: 1.8, t1: 4.8, label: { ko: '골절편 위치 최적화', en: 'Fragment pose optimization' } },
+      { id: 'reduce', t0: 4.8, t1: 5.5, label: { ko: '교합 기준 정복', en: 'Occlusion-based reduction' } },
+      { id: 'distance', t0: 5.5, t1: 7.0, label: { ko: '표면 거리 비교', en: 'Surface-distance check' } }
+    ],
     fit: { box: [[-6.4, -7.8, -1.6], [7.4, 2.2, 10]], fill: 0.92, pad: [18, 0, -14, 0] },
     build(scene, THREE, box) {
       const D = S, V = (a) => new THREE.Vector3().fromArray(a);
@@ -133,21 +140,12 @@
         { t: { ko: '골절편', en: 'Fracture fragment' }, c: 's c', obj: 'B', off: [2.4, -0.4, -4.2] },
         { t: { ko: '상악 치열(기준)', en: 'Upper dentition (reference)' }, c: 's n', obj: 'maxi', off: [-3.4, -2.4, 6.6] }
       ]);
-      const read = box.querySelector('.readout');
-      const steps = [
-        S.t({ ko: '① 특징점: 치아와 골절 단면', en: '① Features: teeth and fracture surfaces' }),
-        S.t({ ko: '② 골절편 위치 최적화', en: '② Fragment pose optimization' }),
-        S.t({ ko: '③ 교합 기준 정복', en: '③ Occlusion-based reduction' }),
-        S.t({ ko: '④ 표면 거리 비교', en: '④ Surface-distance check' })
-      ];
-
       // displacement before reduction (fragment translation + rotation)
       const OFF = new THREE.Vector3(1.9, 1.0, 1.5), ROT = new THREE.Vector3(0.1, -0.24, 0.13);
       const sm = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
       const ramp = (t, a, b) => sm((t - a) / (b - a));
       const U = [1, 0.62, 0.38, 0.2, 0.09, 0.03, 0];
       const wa = new THREE.Vector3(), wb = new THREE.Vector3();
-      let last = '';
       return {
         anchors: { B: bG, maxi },
         tick(s) {
@@ -166,10 +164,6 @@
           for (let i = 0; i < 8; i++) { fxA[i].getWorldPosition(wa); fxB[i].getWorldPosition(wb); links.set(i, wa, wb); }
           const h = ramp(t, 5.5, 6.0) * (1 - ramp(t, 7.0, 7.4));
           hA.material.opacity = h; hB.material.opacity = h;
-          if (read) {
-            const m = t < 1.8 ? steps[0] : t < 4.8 ? steps[1] : t < 5.5 ? steps[2] : t < 7.2 ? steps[3] : '';
-            if (m !== last) { read.textContent = m; last = m; }
-          }
         }
       };
     }

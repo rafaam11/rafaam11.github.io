@@ -12,7 +12,8 @@
 //   --quality N       WebP quality 1-100 (default 88)
 //   --lang ko|en      label language (default ko)
 //   --labels          keep labels and the step readout (posters are language-neutral, so off by default)
-//   --time S          scene time in seconds (default: the scene's stillTime, else 2.5)
+//   --time S          scene time in seconds (default: the last step's t1, else the scene's stillTime, else 2.5)
+//   --step N          step scenes: capture the end (t1) of step N, counted from 1; cannot be combined with --time
 //   --view JSON       camera override, e.g. '{"yaw":0.6,"pitch":0.35}' (keys: yaw, pitch, dist, target, fov)
 //   --frames N        write N PNG frames into the --out directory (default: a temp folder) for a GIF/turntable
 //   --yaw-sweep       with --frames: orbit one full turn across the frames (else frames step the scene clock)
@@ -47,7 +48,7 @@ const STAGE_HTML = `<!doctype html>
   body { font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; }
   .stage { position: relative; overflow: hidden; background: #fff; }
   .stage.no-labels .lb, .stage.no-labels .lead3d, .stage.no-labels .readout { visibility: hidden !important; }
-  .stage .view3d__reset, .stage .view3d__hint { display: none !important; }
+  .stage .view3d__reset, .stage .view3d__hint, .stage .view3d__steps { display: none !important; }
   .stage > img { display: none; }
 </style>
 <script>
@@ -101,7 +102,7 @@ function writeStage() {
 
 function parseArgs(argv) {
   const opts = { scene: '', size: [1600, 1000], css: [880, 550], png: false, quality: 88, lang: 'ko', labels: false,
-    time: null, view: null, frames: 0, yawSweep: false, yawSwing: 0, duration: 4, angle: '', chrome: '', out: '' };
+    time: null, step: null, view: null, frames: 0, yawSweep: false, yawSwing: 0, duration: 4, angle: '', chrome: '', out: '' };
   const pair = (v) => { const m = /^(\d+)x(\d+)$/.exec(v || ''); if (!m) throw new Error(`expected WxH, got ${v}`); return [Number(m[1]), Number(m[2])]; };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i], next = () => argv[++i];
@@ -113,6 +114,7 @@ function parseArgs(argv) {
     else if (a === '--lang') opts.lang = next() === 'en' ? 'en' : 'ko';
     else if (a === '--labels') opts.labels = true;
     else if (a === '--time') opts.time = Number(next());
+    else if (a === '--step') opts.step = Number(next());
     else if (a === '--view') opts.view = JSON.parse(next());
     else if (a === '--frames') opts.frames = Number(next());
     else if (a === '--yaw-sweep') opts.yawSweep = true;
@@ -123,6 +125,8 @@ function parseArgs(argv) {
     else if (!a.startsWith('--') && !opts.scene) opts.scene = a;
     else throw new Error(`unknown argument ${a}`);
   }
+  if (opts.step !== null && opts.time !== null) throw new Error('--step and --time cannot be combined');
+  if (opts.step !== null && !(Number.isInteger(opts.step) && opts.step >= 1)) throw new Error('--step expects a whole number from 1');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(opts.scene)) throw new Error('usage: node scripts/capture-3d.mjs <scene> [options]');
   if (!fs.existsSync(path.join(root, 'js', 'scenes', `${opts.scene}.js`))) throw new Error(`no scene file js/scenes/${opts.scene}.js`);
   if (!opts.out) opts.out = opts.frames ? path.join(os.tmpdir(), 'scene3d-frames', opts.scene) : path.join('assets', '3d', `${opts.scene}.${opts.png ? 'png' : 'webp'}`);
@@ -181,13 +185,23 @@ async function renderOnce(puppeteer, executablePath, opts, angle) {
     } catch (error) {
       throw new Error(`scene did not mount (${angle || 'default'}): ${logs.join(' | ') || error.message}`);
     }
-    // default scene time = the scene's own still frame
-    await page.evaluate(() => {
+    // default scene time = --step N's end, else the last step's end, else the scene's own still frame
+    const pick = await page.evaluate((step) => {
       const box = document.querySelector('.view3d');
       const opts = window.Scene3D.registry[box.dataset.scene] || {};
-      if (typeof window.DECK3D_CLOCK !== 'number') window.DECK3D_CLOCK = typeof opts.stillTime === 'number' ? opts.stillTime : 2.5;
+      const steps = opts.steps || [];
+      if (step !== null && (step > steps.length)) return { count: steps.length };
+      if (typeof window.DECK3D_CLOCK !== 'number') {
+        window.DECK3D_CLOCK = step !== null ? steps[step - 1].t1
+          : steps.length ? steps[steps.length - 1].t1
+            : typeof opts.stillTime === 'number' ? opts.stillTime : 2.5;
+      }
       box.__scene3d.render();
-    });
+      return { count: steps.length };
+    }, opts.step);
+    if (opts.step !== null && opts.step > pick.count) {
+      throw Object.assign(new Error(`scene ${opts.scene} has ${pick.count} steps`), { fatal: true });
+    }
     if (opts.view) await page.evaluate((view) => document.querySelector('.view3d').__scene3d.set(view), opts.view);
     const settle = () => page.evaluate(() => new Promise((resolve) => {
       document.querySelector('.view3d').__scene3d.render();
@@ -252,6 +266,7 @@ async function main() {
       for (const file of files) process.stdout.write(`${path.relative(root, file)} (${fs.statSync(file).size} bytes, ANGLE ${mode})\n`);
       return;
     } catch (error) {
+      if (error.fatal) throw error;
       lastError = error;
       process.stderr.write(`capture with ANGLE ${mode} failed: ${error.message}\n`);
     }
