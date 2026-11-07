@@ -179,6 +179,7 @@
   // post-build material pass: linear colours once, environment scale once, shadow flags; returns the world bbox of
   // the opaque, non-flat meshes. gltf: true keeps colours (loaders already deliver linear ones).
   function prepareMaterials(obj, envK, o) {
+    // the gltf option and envK are reserved for the spec glTF path (not adopted); procedural scenes use the defaults
     const THREE = root.THREE, gltf = !!(o && o.gltf), bb = new THREE.Box3(), tmp = new THREE.Box3();
     obj.traverse(n => {
       if (n.material) [].concat(n.material).forEach(m => {
@@ -260,7 +261,7 @@
       const b = document.createElement('button'), name = t(step.label);
       b.setAttribute('type', 'button'); b.className = 'view3d__step' + (step.planned ? ' is-planned' : '');
       b.textContent = String.fromCharCode(0x2460 + i);
-      b.setAttribute('aria-label', name); b.setAttribute('title', name); b.setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-label', b.textContent + ' ' + name); b.setAttribute('title', name); b.setAttribute('aria-pressed', 'false');
       b.addEventListener('click', () => onPick(i));
       el.appendChild(b);
       return b;

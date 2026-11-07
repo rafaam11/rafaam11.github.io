@@ -137,7 +137,7 @@
 **unmanned-forklift (DOTORI)** (사용자 결정: 2025.11 유지, 고객 현장 시험 운용 중, Isaac Sim 공개(실험), 본인 담당 = dotori_vision·비전 서보잉/approach_plane 액션·safety 초기 설계·sensor_integrator·대차 분류기)
 - 상태 문구: "고객 현장 시험 운용 중(고객사명 비공개)". 2026.02 Windows 프로토타입(DtScanProgram) → 2026.04 팀 레포 → 2026.07 Set3 기준선 → Jetson 운영 저장소(dotori_vision) 이관 단계 보강.
 - 추가(본인): **AI 비전 대차 인식·분류·액션 워크플로우** — 인식(SAM3 "cart/wheel/floor" 프롬프트 분할 → 바퀴쌍 중점 pose, ToF+RGB 3단계 보정 사슬: RGB 왜곡→ToF↔RGB→카메라↔포크, ChArUco), **대차 분류기**(DINOv2-S 특징 + 갤러리 최근접 top-3, 24종→프로파일 8묶음, 오프라인 top-1 99.5%/2,010 질의 — 본인 평가면 수치 유지, 로봇 카메라 질의는 미검증 명시, Basler 풍 증강, DINOv3 비교는 연구용), 작업자 확인(PDA 후보 3장) → 프로파일 값으로 측정·정렬·삽입 액션. 바닥 평면 SAM3 마스크 vs ToF RANSAC A/B, 바닥 반사 signed-height gate, 안쪽 caster 오선택 방어(fail-close), `RequestImage`/`RequestPointCloud` TCP API, 측정 거리 1.5~5 m 한계. 비전 서보잉 액션(approach_cart_rgbd, check_fork_alignable). approach_plane_lidar/tof는 "개발·실험 단계(실차 벽 1회)"로 한 줄. Isaac Sim 디지털트윈(RTX LiDAR·CAN 모의·운영자 콘솔·RCS 전체 스택 E2E, 2026-07~08, 실험·프로토타입). 측정 시간·정확도 수치는 브리핑의 본인 실측(4.66 s, 트랙 0.71 vs 0.75 m 편차)만, 출처는 "현장 측정".
-- 정정: 안전 구역 "3단 가상 범퍼" → "경고·정지 구역(센서별 warn/stop) + E-STOP 래칭, 초기 설계 이후 팀이 프로파일 방식으로 확장". 센서: 안전용 2D LiDAR 3대·마스트 LiDAR·반사판 측위 스캐너·ToF(Basler blaze-102)·RGB — 모델명은 센서 종류 수준으로. 지도·미션 도구(Traffic Studio)는 "팀이 만든 현장 도구와 연동"으로만. 3D 장면 `fk-safety` 라벨 동기화.
+- 정정: 안전 구역 "3단 가상 범퍼" → "경고·정지 구역(센서별 warn/stop) + E-STOP 래칭, 초기 설계 이후 팀이 프로파일 방식으로 확장". 센서: 안전용 2D LiDAR 3대·마스트 LiDAR·반사판 측위 스캐너·ToF 카메라·RGB — 모델명은 센서 종류 수준으로. 지도·미션 도구(Traffic Studio)는 "팀이 만든 현장 도구와 연동"으로만. 3D 장면 `fk-safety` 라벨 동기화.
 - 비공개 참고 자료(레포 밖)는 사실 추출에만 쓰고 고객명·현장 코드는 옮기지 않는다.
 
 **ai-build-lab** (사용자 결정: 기간 2025.05~, 커뮤니티 활동 명시, deck·bolt·jk-video-editor 추가)

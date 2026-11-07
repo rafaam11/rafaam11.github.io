@@ -1,7 +1,6 @@
 /* fk-safety: safety-manager policy for an unmanned forklift (vehicle built from primitives, no model files).
  * Per-sensor warning and stop zones around the vehicle: warning (slow down) -> stop -> innermost E-STOP zone
- * (E-STOP, latched). The latch holds after the person leaves and is released only by a reset input, then the vehicle
- * moves again. Three safety 2D LiDARs (two front corners, one rear) scan the zones; the mast LiDAR and the ToF
+ * (E-STOP, latched). The latch holds for the rest of the loop (the figure ends on the latched state). Three safety 2D LiDARs (two front corners, one rear) scan the zones; the mast LiDAR and the ToF
  * sensor are devices without a zone of their own here. 12 s loop. The vehicle stays in place on screen; the floor
  * marks and the person move relative to it.
  */
@@ -13,10 +12,9 @@
     loop: 12,
     // t0/t1 come from sampling sim() at 1/60 s: ph 1 = [4.70, 5.12), ph 2 = [5.12, 5.47), ph 3 = [5.47, 6.40), ph 5 = [8.47, 10.37); every t1 sits inside its ph
     steps: [
-      { id: 'warn', t0: 2, t1: 4.9, label: { ko: '경고 구역 감속', en: 'Warning zone: slow down' } },
+      { id: 'warn', t0: 4, t1: 4.9, label: { ko: '경고 구역 감속', en: 'Warning zone: slow down' } },
       { id: 'stop', t0: 4.9, t1: 5.3, label: { ko: '정지 구역 정지', en: 'Stop zone: stop' } },
-      { id: 'estop', t0: 5.3, t1: 6.1, label: { ko: 'E-STOP 래칭', en: 'E-STOP latched' } },
-      { id: 'reset', t0: 6.1, t1: 9.6, label: { ko: '리셋 후 재출발', en: 'Reset, then moving again' } }
+      { id: 'estop', t0: 5.3, t1: 6.1, label: { ko: 'E-STOP 래칭', en: 'E-STOP latched' } }
     ],
     fit: { box: [[-100, 0, -150], [120, 185, 232]], fill: 0.96 },
     build(scene, THREE, box) {
@@ -133,11 +131,6 @@
         return m;
       });
 
-      // reset switch on the side (lights green when pressed)
-      const resetBtnM = D.matLib(THREE, 'anodized', { color: 0x2d3440 }); resetBtnM.emissive = new THREE.Color(0x3fb06a); resetBtnM.emissiveIntensity = 0;
-      const resetPlate = D.mesh(THREE, D.rbox(THREE, 3, 16, 18, 2), M(0xe9eef5, { rough: 0.5 }), 45, 40, -30); fl.add(resetPlate);
-      const resetBtn = D.mesh(THREE, new THREE.CylinderGeometry(5, 5, 4, 20), resetBtnM, 47.5, 40, -30); resetBtn.rotation.z = Math.PI / 2; fl.add(resetBtn);
-
       // ---- a person in a high-visibility vest
       const pr = D.person(THREE, { color: 0x1f3a5f, skin: 0xe7bf9f, cap: true, capColor: 0xf4d21f });
       const worker = new THREE.Group(); worker.add(pr.root); worker.userData.worker = true; scene.add(worker);
@@ -162,46 +155,34 @@
         }
         return 0;
       }
-      const RESET_WAIT = 1.6, RESET_HOLD = 0.5;
       function sim(t) {
-        let Z = 0, v = VMAX, latched = false, leave = -1, rel = -1, zone = 0, pressed = false;
+        let Z = 0, v = VMAX, latched = false, zone = 0;
         const dt = 1 / 60, n = Math.floor(t / dt);
         for (let i = 0; i <= n; i++) {
-          const tt = i * dt, px = personX(tt);
+          const px = personX(i * dt);
           zone = zoneOf(px, PZ - Z);
-          if (zone === 3) latched = true;
-          pressed = false;
-          if (latched) {
-            // the latch holds after the cause is gone; only a new reset input releases it
-            if (zone === 0) { if (leave < 0) leave = tt; if (tt - leave > RESET_WAIT) { pressed = true; if (tt - leave > RESET_WAIT + RESET_HOLD) { latched = false; rel = tt; } } }
-            else leave = -1;
-          }
+          if (zone === 3) latched = true;   // the latch holds for the rest of the loop
           const tgt = latched ? 0 : [1, 0.45, 0, 0][zone] * VMAX;
           v += (tgt - v) * Math.min(1, dt * (tgt < v ? 4 : 1.6));
           Z += v * dt;
         }
-        let ph;
-        if (zone === 3) ph = 3;
-        else if (latched) ph = pressed ? 5 : 4;
-        else if (rel >= 0 && t - rel < 1.4) ph = 5;
-        else ph = zone;   // 0 normal, 1 warning, 2 stop
-        return { Z, v, latched, zone, ph, pressed, px: personX(t) };
+        const ph = latched ? 3 : zone;   // 0 normal, 1 warning, 2 stop, 3 E-STOP latched
+        return { Z, v, latched, zone, ph, px: personX(t) };
       }
-      // the step bar names warning, stop, E-STOP and reset; the readout only covers the two states it does not (ph 0 and 4)
-      const TXT = [S.t({ ko: '정상 주행', en: 'Driving' }), '', '', '', S.t({ ko: '사람 이탈 · 래칭 유지', en: 'Person gone · latch held' }), ''];
+      // the step bar names warning, stop and E-STOP; the readout only covers the normal driving state (ph 0)
+      const TXT = [S.t({ ko: '정상 주행', en: 'Driving' }), '', '', ''];
 
       D.labels(box, [
         { t: { ko: '센서별 경고·정지 구역', en: 'Per-sensor warn/stop zones' }, c: 's r', obj: 'zones', off: [HW + 40, 0, 190] },
         { t: { ko: '안전 2D LiDAR', en: 'Safety 2D LiDAR' }, c: 's c', obj: 'safe', off: [0, 6, 0] },
         { t: { ko: '마스트 LiDAR', en: 'Mast LiDAR' }, c: 's n', obj: 'lidar', off: [0, 12, 0] },
-        { t: 'ToF', c: 's c', obj: 'sensor', off: [-18, 10, 30] },
-        { t: { ko: '리셋 입력', en: 'Reset input' }, c: 's o', obj: 'reset', off: [3, 0, 0], ph: '5' }
+        { t: 'ToF', c: 's c', obj: 'sensor', off: [-18, 10, 30] }
       ]);
       const read = box.querySelector('.readout');
       let last = null;
 
       return {
-        anchors: { lidar, safe: safeLidar, sensor, zones, reset: resetBtn },
+        anchors: { lidar, safe: safeLidar, sensor, zones },
         tick(s) {
           const t = s % T, st = sim(t);
           const wrap = (st.Z % 360 + 360) % 360;
@@ -223,8 +204,6 @@
             m.opacity = hot === z ? blink : 0.22;
             m.emissiveIntensity = hot === z ? 1.4 : 0.6;
           });
-          resetBtnM.emissiveIntensity = st.pressed || (st.ph === 5) ? 1.8 : 0;
-          resetBtn.position.x = st.pressed ? 46.5 : 47.5;
           // status lamps and beacon
           const lit = st.latched || st.zone === 3 ? 2 : (st.zone > 0 ? 1 : 0);
           lamps.forEach((m, i) => { m.emissiveIntensity = i === lit ? (st.latched ? (blink > 0.5 ? 1.6 : 0.5) : 1.6) : 0.08; });

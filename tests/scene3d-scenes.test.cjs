@@ -61,7 +61,7 @@ test('stepBar builds an accessible numbered button row in both languages', () =>
       assert.ok(b.classList.contains('view3d__step'));
       assert.equal(b.textContent, CIRCLED[i]);
       assert.equal(b.getAttribute('type'), 'button');
-      assert.equal(b.getAttribute('aria-label'), steps[i].label[lang]);
+      assert.equal(b.getAttribute('aria-label'), CIRCLED[i] + ' ' + steps[i].label[lang], 'accessible name contains the visible glyph (WCAG 2.5.3)');
       assert.equal(b.getAttribute('title'), steps[i].label[lang]);
       assert.equal(b.classList.contains('is-planned'), !!steps[i].planned);
     });
@@ -104,7 +104,7 @@ test('every scene with steps follows the step schema and label budgets', () => {
   for (const [name, opts] of withSteps) checkSteps(name, opts);
 });
 
-test('ms-frac declares the four planned steps and leaves the readout to the step bar', () => {
+test('ms-frac declares the four steps and leaves the readout to the step bar', () => {
   const opts = ko.S.registry['ms-frac'];
   assert.equal(opts.loop, 8);
   assert.deepEqual(Array.from(opts.steps, (s) => [s.id, s.t0, s.t1]), [['features', 0, 1.8], ['optimize', 1.8, 4.8], ['reduce', 4.8, 5.5], ['distance', 5.5, 7]]);
@@ -256,7 +256,7 @@ test('chair and pointer helpers sit where their contracts say', () => {
   const cb = new THREE.Box3().setFromObject(chair);
   assert.ok(cb.min.y >= -0.01 && cb.min.y <= 0.5, `chair floor at y=0 (${cb.min.y})`);
   assert.equal(chair.userData.seatY, 44);
-  assert.ok(Math.abs(cb.max.y - 44) > 0 && cb.max.y > 44, 'back rises above the seat');
+  assert.ok(cb.max.y > 44, 'back rises above the seat');
   const p = S.pointer(THREE);
   const pb = new THREE.Box3().setFromObject(p.root);
   assert.ok(pb.min.y >= -0.5, `tip at the origin (${pb.min.y})`);
@@ -304,12 +304,11 @@ const BATCH = {
     ['roi', 0, 3, '흉부 ROI 깊이', 'Chest ROI depth', '1'],
     ['wave', 3, 8, '호흡 파형', 'Respiratory waveform', '2'],
     ['gating', 8, 11.5, '게이팅(계획)', 'Gating (planned)', '3', true]] },
-  // t0/t1 come from sampling sim() at 1/60 s: ph 1 = [4.70, 5.12), ph 2 = [5.12, 5.47), ph 3 = [5.47, 6.40), ph 5 = [8.47, 10.37); every t1 sits inside its ph
+  // t0/t1 come from sampling sim() at 1/60 s: ph 1 = [4.70, 5.12), ph 2 = [5.12, 5.47), ph 3 = [5.47, 12) (the latch never releases); every t1 sits inside its ph
   'fk-safety': { loop: 12, readout: /^$/, steps: [
-    ['warn', 2, 4.9, '경고 구역 감속', 'Warning zone: slow down', '1'],
+    ['warn', 4, 4.9, '경고 구역 감속', 'Warning zone: slow down', '1'],
     ['stop', 4.9, 5.3, '정지 구역 정지', 'Stop zone: stop', '2'],
-    ['estop', 5.3, 6.1, 'E-STOP 래칭', 'E-STOP latched', '3'],
-    ['reset', 6.1, 9.6, '리셋 후 재출발', 'Reset, then moving again', '5']] }
+    ['estop', 5.3, 6.1, 'E-STOP 래칭', 'E-STOP latched', '3']] }
 };
 // floating content (enlarged dentition, trackers) would read as lying on a floor: these scenes opt out of the plate
 // omfsvr draws its own room floor (plan ruling 7)
@@ -443,7 +442,7 @@ test('floorPlate eases out: monotone toward the page white, flattening at the ri
 test('step counts across all eight scenes', () => {
   const counts = {};
   for (const [name, o] of Object.entries(ko.S.registry)) counts[name] = o.steps ? o.steps.length : 0;
-  assert.deepEqual(counts, { 'ms-frac': 4, neuro: 2, occlusion: 3, smcnavi: 2, omfsvr: 2, 'sgrt-poc': 3, 'fk-safety': 4, skadi: 0 });
+  assert.deepEqual(counts, { 'ms-frac': 4, neuro: 2, occlusion: 3, smcnavi: 2, omfsvr: 2, 'sgrt-poc': 3, 'fk-safety': 3, skadi: 0 });
 });
 
 test('all eight scene sources use the material library', () => {
@@ -508,14 +507,15 @@ test('fk-safety: per-sensor zones, E-STOP with the person in the innermost zone,
   assert.equal(safety, 3);
   const seen = {};
   for (let i = 0; i <= 720; i++) { k.tick(i / 60); (seen[k.ph()] = seen[k.ph()] || new Set()).add(k.readout()); }
-  assert.deepEqual(Object.keys(seen).sort(), ['0', '1', '2', '3', '4', '5']);
-  // phases advance in order within one loop: normal, warn, stop, E-STOP latched, held, reset, normal again
+  assert.deepEqual(Object.keys(seen).sort(), ['0', '1', '2', '3']);
+  // phases advance in order within one loop and the E-STOP latch holds to the end of it (no reset, no release)
   const order = [];
-  for (let i = 0; i <= 12 * 60; i++) { k.tick(i / 60); const p = Number(k.ph()); if (order[order.length - 1] !== p) order.push(p); }
-  assert.deepEqual(order, [0, 1, 2, 3, 4, 5, 0], 'fk-safety phase order over one loop');
-  for (const ph of ['1', '2', '3', '5']) assert.deepEqual([...seen[ph]], [''], `ph ${ph} has an empty readout`);
+  for (let i = 0; i < 12 * 60; i++) { k.tick(i / 60); const p = Number(k.ph()); if (order[order.length - 1] !== p) order.push(p); }
+  assert.deepEqual(order, [0, 1, 2, 3], 'fk-safety phase order over one loop');
+  for (const t of [6.1, 8, 10, 11.99]) { k.tick(t); assert.equal(String(k.ph()), '3', `latched at ${t}`); }
+  for (const ph of ['1', '2', '3']) assert.deepEqual([...seen[ph]], [''], `ph ${ph} has an empty readout`);
   assert.deepEqual([...seen['0']], ['정상 주행']);
-  assert.deepEqual([...seen['4']], ['사람 이탈 · 래칭 유지']);
+  assert.doesNotMatch(src, /리셋|[Rr]eset/);
   const worker = k.scene.children.find((o) => o.userData && o.userData.worker);
   assert.ok(worker, 'worker tagged');
   k.tick(6.1);

@@ -477,8 +477,8 @@
         name: 'smcnavi',
         poster: 'assets/3d/smcnavi.webp',
         translations: {
-          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다. HoloLens 오버레이(2024–2025)는 별도 PC 확장으로 연결했습니다.', alt: '합성 두개골 주위의 트래커, 환자 레퍼런스 마커, CT 볼륨, 추적 포인터, 하악 마커를 점선 좌표 체인으로 잇는 3D 개념도' },
-          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker. The HoloLens overlay (2024–2025) was connected through a separate PC extension.', alt: '3D concept linking a tracker, a patient reference marker, a CT volume, a tracked pointer and a mandible marker around a synthetic skull with dashed transform lines' }
+          ko: { caption: '좌표 정합 체인 개념도(합성 형상): 트래커–환자 레퍼런스–CT 영상 좌표, 트래커–포인터–도구 끝 변환, 하악 마커로 추적하는 하악 운동을 보여 줍니다. HoloLens 오버레이(2024–2025)는 별도 PC 확장으로 연결했습니다.', alt: '합성 두개골과 CT 볼륨, 환자 레퍼런스·하악 마커, 추적 포인터, 트래커를 보여 주고 트래커에서 포인터 도구 끝까지를 점선으로 잇는 3D 개념도' },
+          en: { caption: 'Concept of the transform chain (synthetic geometry): tracker to patient reference to CT image frame, tracker to pointer to tool tip, and mandibular motion followed by a mandible marker. The HoloLens overlay (2024–2025) was connected through a separate PC extension.', alt: '3D concept of a synthetic skull with a CT volume, patient reference and mandible markers, a tracked pointer and a tracker, with a dashed line from the tracker to the pointer tool tip' }
         }
       },
       translations: {
@@ -812,8 +812,8 @@
         name: 'ms-frac',
         poster: 'assets/3d/ms-frac.webp',
         translations: {
-          ko: { caption: '골절편 정복 최적화 개념도(합성 형상): 치아·골절 단면 특징점, 골절편 위치 최적화, 교합 기준 정복, 표면 거리 비교 순서입니다.', alt: '합성 하악골 모델에서 초록색 골절편이 상악 치열을 기준으로 제자리에 맞춰지는 3D 개념도' },
-          en: { caption: 'Concept of fragment reduction optimization (synthetic geometry): tooth and fracture-surface features, fragment pose optimization, occlusion-based reduction, then a surface-distance check.', alt: '3D concept in which the green fracture fragment of a synthetic mandible is moved into place against the upper dentition' }
+          ko: { caption: '골절편 정복 최적화 개념도(합성 형상): 치아·골절 단면 특징점, 골절편 위치 최적화, 교합 기준 정복, 표면 거리 비교 순서입니다.', alt: '합성 하악골 모델에서 골절편이 상악 치열을 기준으로 제자리에 맞춰진 뒤 표면 거리를 색 지도로 비교하는 3D 개념도' },
+          en: { caption: 'Concept of fragment reduction optimization (synthetic geometry): tooth and fracture-surface features, fragment pose optimization, occlusion-based reduction, then a surface-distance check.', alt: '3D concept in which the fracture fragment of a synthetic mandible is moved into place against the upper dentition and its surface distance is compared on a colour map' }
         }
       },
       translations: {
