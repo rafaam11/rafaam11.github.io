@@ -197,15 +197,26 @@
     return bb;
   }
 
-  // light disc under the figure: centre #eef2f6 fading to the page white (#ffffff, --sc-bg) at the rim, so no edge shows
+  // light disc under the figure: centre #eef2f6 easing out to the page white (#ffffff, --sc-bg) at the rim (zero slope there),
+  // so no edge shows. Vertex 0 is the centre, the last vertex sits on the rim.
   function floorPlate(THREE, center, y, radius) {
-    const geo = new THREE.CircleGeometry(radius, 64), n = geo.attributes.position.count, cols = new Float32Array(n * 3);
-    const mid = new THREE.Color(0xeef2f6).convertSRGBToLinear();
-    for (let i = 0; i < n; i++) {
-      const k = i === 0 ? 0 : 1;
-      cols[i * 3] = mid.r + (1 - mid.r) * k; cols[i * 3 + 1] = mid.g + (1 - mid.g) * k; cols[i * 3 + 2] = mid.b + (1 - mid.b) * k;
+    const SEG = 64, RINGS = 10, P = [0, 0, 0], I = [], cols = [], mid = new THREE.Color(0xeef2f6).convertSRGBToLinear();
+    const put = (k) => cols.push(mid.r + (1 - mid.r) * k, mid.g + (1 - mid.g) * k, mid.b + (1 - mid.b) * k);
+    put(0);
+    for (let r = 1; r <= RINGS; r++) {
+      const f = r / RINGS, k = f * f * (3 - 2 * f);
+      for (let s = 0; s < SEG; s++) { const a = s / SEG * Math.PI * 2; P.push(Math.cos(a) * radius * f, Math.sin(a) * radius * f, 0); put(k); }
     }
-    geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+    for (let s = 0; s < SEG; s++) I.push(0, 1 + s, 1 + (s + 1) % SEG);
+    for (let r = 1; r < RINGS; r++) for (let s = 0; s < SEG; s++) {
+      const a = 1 + (r - 1) * SEG + s, b = 1 + (r - 1) * SEG + (s + 1) % SEG, c = a + SEG, d = b + SEG;
+      I.push(a, c, b, b, c, d);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+    geo.setIndex(I);
+    geo.type = 'CircleGeometry';             // a flat disc as far as isFlat() and the tests are concerned
     const m = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false, fog: false });
     m.userData.lin = true;
     const plate = new THREE.Mesh(geo, m);
@@ -213,6 +224,25 @@
     plate.position.set(center.x, y, center.z);
     plate.userData.noShadow = true;
     return plate;
+  }
+
+  // floor plate (+ contact-shadow plane 0.1 above it) under the opaque bbox bb; ground === false adds neither
+  function addFloor(THREE, scene, bb, opts, shadowOn) {
+    const out = { plate: null, shadow: null };
+    if (opts.ground === false || bb.isEmpty()) return out;
+    const c = bb.getCenter(new THREE.Vector3()), R = Math.max(40, bb.getSize(new THREE.Vector3()).length() / 2);
+    out.plate = floorPlate(THREE, c, bb.min.y - 0.4, R * 3);
+    out.plate.renderOrder = -1;
+    scene.add(out.plate);
+    if (shadowOn) {
+      const gr = new THREE.Mesh(new THREE.PlaneGeometry(R * 6, R * 6), new THREE.ShadowMaterial({ opacity: LOOK.groundShadow }));
+      gr.rotation.x = -Math.PI / 2;
+      gr.position.set(c.x, bb.min.y - 0.3, c.z);
+      gr.receiveShadow = true;
+      scene.add(gr);
+      out.shadow = gr;
+    }
+    return out;
   }
 
   function isFlat(o) { return o.geometry && /Plane|Circle/.test(o.geometry.type); }
@@ -375,18 +405,7 @@
         sc.updateProjectionMatrix();
         key.shadow.bias = -0.0003; key.shadow.radius = 3;
       }
-      if (opts.ground !== false) {
-        const plate = floorPlate(THREE, c, bb.min.y - 0.4, R * 3);
-        plate.renderOrder = -1;
-        scene.add(plate);
-      }
-      if (opts.ground !== false && renderer.shadowMap.enabled) {
-        const gr = new THREE.Mesh(new THREE.PlaneGeometry(R * 6, R * 6), new THREE.ShadowMaterial({ opacity: LOOK.groundShadow }));
-        gr.rotation.x = -Math.PI / 2;
-        gr.position.set(c.x, bb.min.y - 0.3, c.z);
-        gr.receiveShadow = true;
-        scene.add(gr);
-      }
+      addFloor(THREE, scene, bb, opts, renderer.shadowMap.enabled);
 
       const canvas = renderer.domElement;
       canvas.setAttribute('role', 'img');
@@ -1465,7 +1484,7 @@
     // live state for QA and the capture script
     get liveCount() { let n = 0; states.forEach(state => { if (state.live) n += 1; }); return n; },
     get threeState() { return threeState; },
-    mat: mat, matLib: matLib, prepareMaterials: prepareMaterials, floorPlate: floorPlate, LOOK: LOOK, chair: chair, pointer: pointer, mesh: mesh, rbox: rbox, outline: outline, linac: linac, patient: patient, col: col, arrow: arrow, cam: cam,
+    mat: mat, matLib: matLib, prepareMaterials: prepareMaterials, floorPlate: floorPlate, addFloor: addFloor, LOOK: LOOK, chair: chair, pointer: pointer, mesh: mesh, rbox: rbox, outline: outline, linac: linac, patient: patient, col: col, arrow: arrow, cam: cam,
     V3: V3, axes: axes, marker4: marker4, skadiCam: skadiCam, frustum: frustum, dashLink: dashLink, segs: segs, arm6: arm6,
     skull: skull, person: person, humanoid: humanoid, orTable: orTable, ctTex: ctTex, ctVolume: ctVolume, cloud: cloud,
     labels: labels, fade: fade, mute: mute, headGeometry: headGeometry, faceDetails: faceDetails, toothGeometry: toothGeometry
