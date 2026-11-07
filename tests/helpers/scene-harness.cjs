@@ -22,7 +22,7 @@ function matches(el, sel) {
     if ((m = /^\[([\w-]+)\]$/.exec(part))) return el.hasAttribute(m[1]);
     if ((m = /^([a-z0-9]+)$/i.exec(part))) return el.tagName === m[1].toLowerCase();
     if ((m = /^\.([\w-]+)\[([\w-]+)\]$/.exec(part))) return el.classList.contains(m[1]) && el.hasAttribute(m[2]);
-    return false;
+    throw new Error(`fake DOM: unsupported selector "${part}"`);
   });
 }
 

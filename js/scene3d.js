@@ -412,9 +412,10 @@
         box.classList.add('has-steps');
       }
       function playStep(i) {
-        if (!stepClk || !(i >= 0 && i < steps.length)) return;
-        stepClk.play(i, root.performance.now());
-        bar.set(i);
+        const n = Number(i);
+        if (!stepClk || !Number.isInteger(n) || n < 0 || n >= steps.length) return;
+        stepClk.play(n, root.performance.now());
+        bar.set(n);
         wake();
       }
       // one quiet drag hint per figure (captions no longer repeat it); captures leave it out
@@ -560,7 +561,7 @@
           touched = true; snap = true; wake();
         },
         render() { draw(root.performance.now()); },
-        steps, play: playStep,
+        steps: steps || [], play: playStep,
         get step() { return stepClk ? stepClk.index : -1; },
         time: () => lastS,
         get view() { return { yaw: cur.yaw, pitch: cur.pitch, dist: cur.dist, target: target.toArray(), fov: camera.fov }; },

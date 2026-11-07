@@ -11,7 +11,7 @@
 //   --png             write PNG instead of WebP
 //   --quality N       WebP quality 1-100 (default 88)
 //   --lang ko|en      label language (default ko)
-//   --labels          keep labels and the step readout (posters are language-neutral, so off by default)
+//   --labels          keep labels and the readout (posters are language-neutral, so off by default)
 //   --time S          scene time in seconds (default: the last step's t1, else the scene's stillTime, else 2.5)
 //   --step N          step scenes: capture the end (t1) of step N, counted from 1; cannot be combined with --time
 //   --view JSON       camera override, e.g. '{"yaw":0.6,"pitch":0.35}' (keys: yaw, pitch, dist, target, fov)
