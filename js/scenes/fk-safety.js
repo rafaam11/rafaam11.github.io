@@ -1,7 +1,8 @@
 /* fk-safety: safety-manager policy for an unmanned forklift (vehicle built from primitives, no model files).
  * Per-sensor warning and stop zones around the vehicle: warning (slow down) -> stop -> innermost E-STOP zone
- * (E-STOP, latched). The latch holds for the rest of the loop (the figure ends on the latched state). Three safety 2D LiDARs (two front corners, one rear) scan the zones; the mast LiDAR and the ToF
- * sensor are devices without a zone of their own here. 12 s loop. The vehicle stays in place on screen; the floor
+ * (E-STOP, latched). The latch holds for the rest of the loop, so the figure ends on the latched state.
+ * Three safety 2D LiDARs (two front corners, one rear) scan the zones; the mast LiDAR and the ToF sensor are
+ * devices without a zone of their own here. 12 s loop. The vehicle stays in place on screen; the floor
  * marks and the person move relative to it.
  */
 (function (S) {
@@ -10,7 +11,7 @@
   S.register('fk-safety', {
     target: [0, 60, 40], dist: 700, yaw: -0.75, pitch: 0.45, fov: 30, autoYaw: 0.06,
     loop: 12,
-    // t0/t1 come from sampling sim() at 1/60 s: ph 1 = [4.70, 5.12), ph 2 = [5.12, 5.47), ph 3 = [5.47, 6.40), ph 5 = [8.47, 10.37); every t1 sits inside its ph
+    // t0/t1 come from sampling sim() at 1/60 s: ph 1 = [4.70, 5.12), ph 2 = [5.12, 5.47), ph 3 = [5.47, end of loop); every t1 sits inside its ph
     steps: [
       { id: 'warn', t0: 4, t1: 4.9, label: { ko: '경고 구역 감속', en: 'Warning zone: slow down' } },
       { id: 'stop', t0: 4.9, t1: 5.3, label: { ko: '정지 구역 정지', en: 'Stop zone: stop' } },
