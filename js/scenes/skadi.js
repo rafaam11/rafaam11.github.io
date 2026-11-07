@@ -7,7 +7,7 @@
   'use strict';
   if (!S) return;
   S.register('skadi', {
-    target: [60, -20, 0], dist: 174, yaw: 0.55, pitch: 0.2, fov: 22, autoYaw: 0.02, stillTime: 2.5, ground: false,
+    target: [60, -20, 0], dist: 130, yaw: 0.55, pitch: 0.4, fov: 30, autoYaw: 0.02, stillTime: 2.5,
     fit: { box: [[-14, -60, -28], [130, 22, 28]], fill: 0.98 },
     build(scene, THREE, box) {
       const D = S;
@@ -24,15 +24,14 @@
         f.position.set(l.position.x, l.position.y, l.position.z); G.add(f);
       });
 
-      // tool: shaft + tip + marker plate
+      // tool: the shared pointer (tip at its origin, marker plate at the far end). The rig turns the plate to face +z
+      // of the tool frame and puts the plate centre on the tool origin, which is what the tracker follows.
       const tool = new THREE.Group(); G.add(tool);
-      const mk = D.marker4(THREE, 3, 0x4a5568);
-      tool.add(mk);
-      const steel = D.mat(THREE, 0x9aa5b4, { rough: 0.3, metal: 0.6 });
-      const shaft = D.mesh(THREE, new THREE.CylinderGeometry(1, 1, 40, 14), steel, 0, -26, -1.2);
-      const tip = D.mesh(THREE, new THREE.ConeGeometry(1, 5, 14), steel, 0, -48, -1.2);
-      tip.rotation.x = Math.PI;
-      tool.add(shaft, tip);
+      const ptr = D.pointer(THREE, { len: 44, marker: 3 }), mk = ptr.marker;
+      const PHI = Math.PI / 2 - 0.45, LEN = 45.2;
+      ptr.root.rotation.x = PHI; ptr.root.position.set(0, -LEN * Math.cos(PHI), -LEN * Math.sin(PHI));
+      tool.add(ptr.root);
+      ptr.root.add(D.mesh(THREE, new THREE.SphereGeometry(1.3, 14, 10), D.matLib(THREE, 'emissive-marker', { color: 0xe5484d }), 0, 0, 0));   // tracked tip point
       const ax = D.axes(THREE, 15);
       G.add(ax);
 

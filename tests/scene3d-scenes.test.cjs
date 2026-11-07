@@ -280,9 +280,8 @@ test('every registered scene still builds with the refined library parts', () =>
   assert.ok(kinds.has('visor-glass') && kinds.has('skin'));
 });
 
-// ---- scene batch A: ms-frac, occlusion, smcnavi, neuro --------------------------------------------------
-// Widen BATCH_A (or the file list in the "ignored options" test) when more scene files adopt the shared look.
-const BATCH_A = {
+// ---- scene batches A and B: ms-frac, occlusion, smcnavi, neuro, sgrt-poc, fk-safety, omfsvr, skadi --------------------------------------------------
+const BATCH = {
   'ms-frac': { loop: 8, readout: /^$/, steps: [
     ['features', 0, 1.8, '치아·골절 단면 특징점', 'Tooth and fracture features', undefined],
     ['optimize', 1.8, 4.8, '골절편 위치 최적화', 'Fragment pose optimization', undefined],
@@ -297,10 +296,24 @@ const BATCH_A = {
     ['track', 4.5, 7.5, '도구·하악 추적', 'Tool and mandible tracking', '2']] },
   neuro: { loop: 11, readout: /ICP|표적|target/, steps: [
     ['register', 0, 4.2, '랜드마크·ICP 정합', 'Landmark + ICP registration', '1'],
-    ['align', 4.6, 9, '로봇 연동 코일 정렬', 'Coil alignment via robot', '2']] }
+    ['align', 4.6, 9, '로봇 연동 코일 정렬', 'Coil alignment via robot', '2']] },
+  omfsvr: { loop: 8, readout: /^$/, steps: [
+    ['session', 0, 3.6, '3인 상담 세션', 'Three-user session', '1'],
+    ['sync', 4, 7.6, '모델·페이지 동기화', 'Shared model pose and page', '2']] },
+  'sgrt-poc': { loop: 13, readout: /^(들숨|날숨|Inhalation|Exhalation)$/, steps: [
+    ['roi', 0, 3, '흉부 ROI 깊이', 'Chest ROI depth', '1'],
+    ['wave', 3, 8, '호흡 파형', 'Respiratory waveform', '2'],
+    ['gating', 8, 11.5, '게이팅(계획)', 'Gating (planned)', '3', true]] },
+  // t0/t1 come from sampling sim() at 1/60 s: ph 1 = [4.70, 5.12), ph 2 = [5.12, 5.47), ph 3 = [5.47, 6.40), ph 5 = [8.47, 10.37); every t1 sits inside its ph
+  'fk-safety': { loop: 12, readout: /^$/, steps: [
+    ['warn', 2, 4.9, '경고 구역 감속', 'Warning zone: slow down', '1'],
+    ['stop', 4.9, 5.3, '정지 구역 정지', 'Stop zone: stop', '2'],
+    ['estop', 5.3, 6.1, 'E-STOP 래칭', 'E-STOP latched', '3'],
+    ['reset', 6.1, 9.6, '리셋 후 재출발', 'Reset, then moving again', '5']] }
 };
 // floating content (enlarged dentition, tracker) would read as lying on a floor: these scenes opt out of the plate
-const GROUND_OFF = new Set(['occlusion', 'smcnavi']);
+// omfsvr draws its own room floor (plan ruling 7)
+const GROUND_OFF = new Set(['occlusion', 'smcnavi', 'omfsvr']);
 const LABEL_CLASSES = new Set(['s', 's c', 's n', 's o', 's r', 's g']);
 
 function snapshot(built) {
@@ -314,7 +327,7 @@ function snapshot(built) {
   return JSON.stringify({ readout: built.readout(), ph: built.ph(), anchors });
 }
 
-for (const [name, spec] of Object.entries(BATCH_A)) {
+for (const [name, spec] of Object.entries(BATCH)) {
   test(`${name}: step table, readout, labels and time purity in ko and en`, () => {
     for (const env of [ko, en]) {
       const lang = env === ko ? 'ko' : 'en';
@@ -322,7 +335,7 @@ for (const [name, spec] of Object.entries(BATCH_A)) {
       assert.equal(opts.loop, spec.loop);
       assert.deepEqual(Array.from(opts.steps, (s) => [s.id, s.t0, s.t1]), spec.steps.map((s) => s.slice(0, 3)));
       assert.deepEqual(Array.from(opts.steps, (s) => s.label[lang]), spec.steps.map((s) => (lang === 'ko' ? s[3] : s[4])));
-      assert.ok(opts.steps.every((s) => !s.planned));
+      assert.deepEqual(Array.from(opts.steps, (s) => !!s.planned), spec.steps.map((s) => !!s[6]));
       const built = buildScene(env, name);
       spec.steps.forEach((s) => {
         built.tick(s[2]);
@@ -359,7 +372,7 @@ for (const [name, spec] of Object.entries(BATCH_A)) {
   });
 }
 
-test('batch A scene sources use the shared parts', () => {
+test('scene sources use the shared parts', () => {
   assert.match(read('js/scenes/neuro.js'), /D\.chair\(/);
   assert.match(read('js/scenes/neuro.js'), /D\.pointer\(/);
   assert.match(read('js/scenes/smcnavi.js'), /D\.pointer\(/);
@@ -385,8 +398,8 @@ test('neuro readout counts ICP iterations and targets', () => {
   e.tick(9); assert.match(e.readout(), /^target \d$/);
 });
 
-test('no batch A scene file passes exposure, env, groundShadow or shadowMap', () => {
-  for (const name of ['ms-frac', 'occlusion', 'smcnavi', 'neuro']) {
+test('no scene file passes exposure, env, groundShadow or shadowMap', () => {
+  for (const name of ['ms-frac', 'occlusion', 'smcnavi', 'neuro', 'sgrt-poc', 'fk-safety', 'omfsvr', 'skadi']) {
     assert.doesNotMatch(read(`js/scenes/${name}.js`), /\b(exposure|env|groundShadow|shadowMap)\s*:/, name);
   }
 });
@@ -424,4 +437,108 @@ test('floorPlate eases out: monotone toward the page white, flattening at the ri
   let prev = -1;
   for (const r of rs) { assert.ok(byR.get(r) >= prev - 1e-9, 'monotone toward white'); prev = byR.get(r); }
   assert.ok(byR.get(rs[rs.length - 1]) - byR.get(rs[rs.length - 2]) < byR.get(rs[2]) - byR.get(rs[1]), 'ramp flattens toward the rim');
+});
+
+// ---- batch B specifics ------------------------------------------------------------------------------------
+test('step counts across all eight scenes', () => {
+  const counts = {};
+  for (const [name, o] of Object.entries(ko.S.registry)) counts[name] = o.steps ? o.steps.length : 0;
+  assert.deepEqual(counts, { 'ms-frac': 4, neuro: 2, occlusion: 3, smcnavi: 2, omfsvr: 2, 'sgrt-poc': 3, 'fk-safety': 4, skadi: 0 });
+});
+
+test('all eight scene sources use the material library', () => {
+  for (const name of Object.keys(ko.S.registry)) assert.match(read(`js/scenes/${name}.js`), /matLib\(/, name);
+});
+
+test('skadi: continuous clock, unified camera, shared pointer, no ground option', () => {
+  const opts = ko.S.registry.skadi;
+  assert.equal(opts.steps, undefined);
+  assert.equal(typeof opts.stillTime, 'number');
+  assert.equal(opts.fov, 30);
+  assert.ok(opts.pitch >= 0.35 && opts.pitch <= 0.45, `pitch ${opts.pitch}`);
+  assert.ok(opts.autoYaw === undefined || (opts.autoYaw >= 0.01 && opts.autoYaw <= 0.06));
+  for (const key of ['exposure', 'env', 'groundShadow', 'shadowMap', 'ground']) assert.ok(!(key in opts), key);
+  assert.match(read('js/scenes/skadi.js'), /D\.pointer\(THREE, \{ len: 44, marker: 3 \}\)/);
+  for (const env of [ko, en]) {
+    const built = buildScene(env, 'skadi');
+    built.tick(2.5);
+    assert.match(built.readout(), /6DoF/);
+    assert.equal(built.lights, 0);
+    for (const l of built.labels) assert.ok([...l.text].length <= (env === ko ? KO_MAX : EN_MAX), l.text);
+  }
+});
+
+test('sgrt-poc: dashed gating window only in the planned step, shared chair', () => {
+  const src = read('js/scenes/sgrt-poc.js');
+  assert.doesNotMatch(src, /gating signal|게이트 신호|derived from it/i);
+  assert.match(src, /D\.chair\(/);
+  assert.match(src, /LineDashedMaterial/);
+  assert.match(src, /computeLineDistances/);
+  for (const env of [ko, en]) {
+    const lang = env === ko ? 'ko' : 'en';
+    const built = buildScene(env, 'sgrt-poc');
+    const gate = built.labels.find((l) => /게이팅|Gating/.test(l.text));
+    assert.ok(gate && gate.ph === '3', 'gating label shows in ph 3 only');
+    assert.match(gate.text, lang === 'ko' ? /\(계획\)/ : /\(planned\)/);
+    const shown = (o) => { for (; o; o = o.parent) if (!o.visible) return false; return true; };
+    let dashed = null, wave = null;
+    built.scene.traverse((o) => { if (o.userData && o.userData.gate) dashed = o; if (o.userData && o.userData.wave) wave = o; });
+    assert.ok(dashed && dashed.material.isLineDashedMaterial, 'dashed gating line is tagged userData.gate');
+    assert.ok(wave, 'waveform line is tagged userData.wave');
+    built.tick(8); assert.equal(shown(dashed), false, 'hidden before the planned step (ph 2)');
+    built.tick(11.5); assert.equal(String(built.ph()), '3'); assert.equal(shown(dashed), true);
+    built.tick(3); assert.equal(shown(dashed), false);
+    assert.equal(shown(wave), false, 'no waveform in ph 1');
+    built.tick(8); assert.equal(shown(wave), true);
+  }
+});
+
+test('fk-safety: per-sensor zones, E-STOP with the person in the innermost zone, safety LiDAR x3', () => {
+  const src = read('js/scenes/fk-safety.js');
+  assert.doesNotMatch(src, /bumper|범퍼|three-zone|three-tier|세 겹|3단/i);
+  const k = buildScene(ko, 'fk-safety'), e = buildScene(en, 'fk-safety');
+  assert.ok(k.labels.some((l) => l.text === '센서별 경고·정지 구역'));
+  assert.ok(e.labels.some((l) => l.text === 'Per-sensor warn/stop zones'));
+  assert.ok(k.labels.some((l) => l.text === '안전 2D LiDAR') && e.labels.some((l) => l.text === 'Safety 2D LiDAR'));
+  assert.ok(k.labels.some((l) => l.text === '마스트 LiDAR') && e.labels.some((l) => l.text === 'Mast LiDAR'));
+  assert.ok(k.api.anchors.zones, 'zones anchor');
+  let safety = 0;
+  k.scene.traverse((o) => { if (o.userData && o.userData.safetyLidar) safety += 1; });
+  assert.equal(safety, 3);
+  const seen = {};
+  for (let i = 0; i <= 720; i++) { k.tick(i / 60); (seen[k.ph()] = seen[k.ph()] || new Set()).add(k.readout()); }
+  assert.deepEqual(Object.keys(seen).sort(), ['0', '1', '2', '3', '4', '5']);
+  for (const ph of ['1', '2', '3', '5']) assert.deepEqual([...seen[ph]], [''], `ph ${ph} has an empty readout`);
+  assert.deepEqual([...seen['0']], ['정상 주행']);
+  assert.deepEqual([...seen['4']], ['사람 이탈 · 래칭 유지']);
+  const worker = k.scene.children.find((o) => o.userData && o.userData.worker);
+  assert.ok(worker, 'worker tagged');
+  k.tick(6.1);
+  assert.equal(String(k.ph()), '3');
+  assert.ok(Math.abs(worker.position.x) < 46 + 12, `person x ${worker.position.x}: innermost zone`);
+});
+
+test('HoloLens in any scene string carries its period', () => {
+  for (const env of [ko, en]) {
+    for (const name of Object.keys(env.S.registry)) {
+      const built = buildScene(env, name);
+      const strings = built.labels.map((l) => l.text + ' ' + l.small).concat((built.opts.steps || []).map((s) => s.label.ko + ' ' + s.label.en));
+      for (const str of strings) if (/HoloLens|홀로렌즈/.test(str)) assert.match(str, /\(2024–2025\)/, `${name}: ${str}`);
+    }
+  }
+  const data = require('../js/portfolio-data.js');
+  const nav = data.projects.find((p) => p.slug === 'surgical-navigation').scene3d.translations;
+  assert.match(nav.ko.caption, /\(2024–2025\)/);
+  assert.match(nav.en.caption, /\(2024–2025\)/);
+});
+
+test('neuro: no readout fragment during landmarks, patient marker label', () => {
+  const k = buildScene(ko, 'neuro');
+  k.tick(1); assert.equal(k.readout(), '');
+  assert.ok(k.labels.some((l) => l.text === '환자 마커'));
+  assert.ok(buildScene(en, 'neuro').labels.some((l) => l.text === 'Patient marker'));
+});
+
+test('floor radius is computed once in the engine', () => {
+  assert.equal((read('js/scene3d.js').match(/Math\.max\(40, /g) || []).length, 1);
 });

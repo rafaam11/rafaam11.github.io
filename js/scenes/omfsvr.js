@@ -1,13 +1,19 @@
 /* omfsvr: three-user VR consultation room as a procedural cutaway (no patient data, generic avatars).
  * Clinician 1 (master), the patient and clinician 2 sit at an oval desk wearing headsets and look at one shared
  * segmented 3D jaw model; a wall panel shows 2D measurement pages. Model pose and page number are shared through a
- * synchronization service (dashed lines from each headset). 8 s loop.
+ * synchronization service (dashed lines from each headset). 8 s loop: three-user session, then model pose and page sync.
+ * Own room floor and walls (no engine floor plate); the engine light rig is the only light.
  */
 (function (S) {
   'use strict';
   if (!S) return;
   S.register('omfsvr', {
-    target: [-26, 130, 46], dist: 575, yaw: Math.PI + 0.5, pitch: 0.55, fov: 30, autoYaw: 0.015, ground: false, stillTime: 1.6,
+    target: [-26, 130, 46], dist: 575, yaw: Math.PI + 0.5, pitch: 0.45, fov: 30, autoYaw: 0.015, ground: false,
+    loop: 8,
+    steps: [
+      { id: 'session', t0: 0, t1: 3.6, label: { ko: '3인 상담 세션', en: 'Three-user session' } },
+      { id: 'sync', t0: 4, t1: 7.6, label: { ko: '모델·페이지 동기화', en: 'Shared model pose and page' } }
+    ],
     fit: { box: [[-140, 40, -95], [140, 226, 90]], fill: 1 },
     build(scene, THREE, box) {
       const D = S, V = (x, y, z) => new THREE.Vector3(x, y, z), doc = box.ownerDocument;
@@ -73,7 +79,7 @@
       cap(W + 28, CUT, 14, CX, CUT / 2, ZF - 7);
       cap(14, H, 14, XR + 7, H / 2, ZF - 7);
       cap(14, H, 14, XL - 7, H / 2, ZB + 7);
-      const alu = D.mat(THREE, 0xb9bec4, { rough: 0.35, metal: 0.6 });
+      const alu = D.matLib(THREE, 'steel', { color: 0xb9bec4 });
       [[-157, -89], [-85, -12], [5, 79], [83, 151]].forEach(([a, b]) => {
         scene.add(D.mesh(THREE, new THREE.BoxGeometry(b - a, 3, 5), alu, (a + b) / 2, CUT + 1.5, ZF - 3));
         [a, b].forEach(x => scene.add(D.mesh(THREE, new THREE.BoxGeometry(3, 10, 5), alu, x, CUT + 5, ZF - 3)));
@@ -124,7 +130,7 @@
       }
       const pages = [0, 1, 2].map(pageTex);
       const scr = new THREE.Group(); scene.add(scr);
-      const metal = D.mat(THREE, 0xc9ced4, { rough: 0.3, metal: 0.7 }), dk = D.mat(THREE, 0x2b2e33, { rough: 0.5 });
+      const metal = D.matLib(THREE, 'steel', { color: 0xc9ced4 }), dk = D.matLib(THREE, 'anodized', { color: 0x2b2e33 });
       const housing = D.mesh(THREE, new THREE.CylinderGeometry(4.2, 4.2, SCW + 14, 24), metal, SCX, SCY1 + 7, SCZ + 1); housing.rotation.z = Math.PI / 2; scr.add(housing);
       [-1, 1].forEach(s => scr.add(D.mesh(THREE, new THREE.CylinderGeometry(4.8, 4.8, 3, 20), dk, SCX + s * (SCW / 2 + 8), SCY1 + 7, SCZ + 1).rotateZ(Math.PI / 2)));
       scr.add(D.mesh(THREE, new THREE.BoxGeometry(SCW + 6, SCY1 - SCY0 + 6, 0.8), dk, SCX, (SCY0 + SCY1) / 2, SCZ + 1.4));
@@ -145,7 +151,7 @@
       pad.rotation.x = Math.PI / 2; pad.userData.noShadow = true; scene.add(pad);
 
       // ---- three chairs on the window side
-      const seatM = D.mat(THREE, 0x2f3134, { rough: 0.85 }), wood = D.mat(THREE, 0xd2b183, { rough: 0.6 });
+      const seatM = D.matLib(THREE, 'anodized', { color: 0x2f3134 }), wood = D.mat(THREE, 0xd2b183, { rough: 0.6 });
       function chair() {
         const g = new THREE.Group();
         g.add(D.mesh(THREE, D.rbox(THREE, 48, 7, 46, 3), seatM, 0, 45, 0));
@@ -215,10 +221,6 @@
       const dots = [];
       heads.forEach((h, i) => { for (let k = 0; k < 2; k++) { const d = D.mesh(THREE, new THREE.SphereGeometry(1.6, 10, 8), dotM); d.userData.noShadow = true; scene.add(d); dots.push({ d, i, k }); } });
 
-      // soft window light on the walls and the panel (no shadows)
-      const win = new THREE.DirectionalLight(0xfff8ee, 0.38); win.position.set(-120, 260, -420); win.target.position.set(0, 80, 60);
-      scene.add(win, win.target);
-
       // first half: the three participants; second half: model, measurement panel, synchronization
       D.labels(box, [
         { t: { ko: 'CT 기반 3D 악골 모델', en: 'CT-derived 3D jaw model' }, c: 's c', at: [0, SY + 22, SKZ] },
@@ -228,20 +230,17 @@
         { t: { ko: '2D 계측 패널', en: '2D measurement panel' }, c: 's', at: [SCX + 40, SCY0 + 30, SCZ - 2], ph: '2' },
         { t: { ko: '상태 동기화', en: 'State synchronization' }, c: 's n', at: [srv.position.x, srv.position.y + 8, srv.position.z], ph: '2' }
       ]);
-      const read = box.querySelector('.readout');
-      if (read) read.textContent = S.t({ ko: '참여 3명 · 모델 자세와 페이지 동기화', en: 'Three participants · shared model pose and page' });
-
       let pageNo = 0;
       return {
         anchors: { docA: docA.head, pat: pat.head, docB: docB.head },
         tick(s) {
-          const T = Math.PI * 2 * s / 8, ph = (s % 8) / 8;
-          box.dataset.ph = ph < 0.5 ? 1 : 2;
+          const T = Math.PI * 2 * s / 8;
+          box.dataset.ph = s < 4 ? 1 : 2;
           // model: turns slowly toward the participants (shared pose)
           skull.root.rotation.y = Math.PI - 0.5 + 0.7 * Math.sin(T);
           skull.root.position.y = SY + Math.sin(T * 2) * 1.2;
           // shared page number
-          const pn = Math.min(2, Math.floor(ph * 3));
+          const pn = s < 4.4 ? 0 : s < 6 ? 1 : 2;          // pages turn during the sync step
           if (pn !== pageNo) { pageNo = pn; screenMat.map = pages[pn]; screenMat.needsUpdate = true; }
           pad.rotation.z = T;
           // ray: controller tip -> a point on the model
