@@ -509,6 +509,10 @@ test('fk-safety: per-sensor zones, E-STOP with the person in the innermost zone,
   const seen = {};
   for (let i = 0; i <= 720; i++) { k.tick(i / 60); (seen[k.ph()] = seen[k.ph()] || new Set()).add(k.readout()); }
   assert.deepEqual(Object.keys(seen).sort(), ['0', '1', '2', '3', '4', '5']);
+  // phases advance in order within one loop: normal, warn, stop, E-STOP latched, held, reset, normal again
+  const order = [];
+  for (let i = 0; i <= 12 * 60; i++) { k.tick(i / 60); const p = Number(k.ph()); if (order[order.length - 1] !== p) order.push(p); }
+  assert.deepEqual(order, [0, 1, 2, 3, 4, 5, 0], 'fk-safety phase order over one loop');
   for (const ph of ['1', '2', '3', '5']) assert.deepEqual([...seen[ph]], [''], `ph ${ph} has an empty readout`);
   assert.deepEqual([...seen['0']], ['정상 주행']);
   assert.deepEqual([...seen['4']], ['사람 이탈 · 래칭 유지']);
