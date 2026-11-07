@@ -7,7 +7,7 @@
   'use strict';
   if (!S) return;
   S.register('skadi', {
-    target: [60, -20, 0], dist: 130, yaw: 0.55, pitch: 0.4, fov: 30, autoYaw: 0.02, stillTime: 2.5,
+    target: [60, -20, 0], dist: 130, yaw: 0.55, pitch: 0.4, fov: 30, autoYaw: 0.02, stillTime: 2.5, ground: false,
     fit: { box: [[-14, -60, -28], [130, 22, 28]], fill: 0.98 },
     build(scene, THREE, box) {
       const D = S;

@@ -311,9 +311,9 @@ const BATCH = {
     ['estop', 5.3, 6.1, 'E-STOP 래칭', 'E-STOP latched', '3'],
     ['reset', 6.1, 9.6, '리셋 후 재출발', 'Reset, then moving again', '5']] }
 };
-// floating content (enlarged dentition, tracker) would read as lying on a floor: these scenes opt out of the plate
+// floating content (enlarged dentition, trackers) would read as lying on a floor: these scenes opt out of the plate
 // omfsvr draws its own room floor (plan ruling 7)
-const GROUND_OFF = new Set(['occlusion', 'smcnavi', 'omfsvr']);
+const GROUND_OFF = new Set(['occlusion', 'smcnavi', 'omfsvr', 'skadi']);
 const LABEL_CLASSES = new Set(['s', 's c', 's n', 's o', 's r', 's g']);
 
 function snapshot(built) {
@@ -450,14 +450,15 @@ test('all eight scene sources use the material library', () => {
   for (const name of Object.keys(ko.S.registry)) assert.match(read(`js/scenes/${name}.js`), /matLib\(/, name);
 });
 
-test('skadi: continuous clock, unified camera, shared pointer, no ground option', () => {
+test('skadi: continuous clock, unified camera, shared pointer, floor off (floating tracker)', () => {
   const opts = ko.S.registry.skadi;
   assert.equal(opts.steps, undefined);
   assert.equal(typeof opts.stillTime, 'number');
   assert.equal(opts.fov, 30);
   assert.ok(opts.pitch >= 0.35 && opts.pitch <= 0.45, `pitch ${opts.pitch}`);
   assert.ok(opts.autoYaw === undefined || (opts.autoYaw >= 0.01 && opts.autoYaw <= 0.06));
-  for (const key of ['exposure', 'env', 'groundShadow', 'shadowMap', 'ground']) assert.ok(!(key in opts), key);
+  for (const key of ['exposure', 'env', 'groundShadow', 'shadowMap']) assert.ok(!(key in opts), key);
+  assert.strictEqual(opts.ground, false);
   assert.match(read('js/scenes/skadi.js'), /D\.pointer\(THREE, \{ len: 44, marker: 3 \}\)/);
   for (const env of [ko, en]) {
     const built = buildScene(env, 'skadi');
